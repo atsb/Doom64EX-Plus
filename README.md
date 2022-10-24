@@ -9,6 +9,8 @@ Differences from Kaiser's C++ version on Github.
 * Better performance (especially when compared to the official Nightdive version, which is slow as hell)
 * Secret notifications
 * MAP slots up to MAP40
+* The MEDKIT You Really Need fix
+* Many bugfixes
 
 There are a few bugs still present, which I am slowly fixing.  This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/
 
@@ -39,7 +41,7 @@ Clone this repo
 For Linux, use the build.sh script.
 For cross compilation on Windows, use the build_win_cross.sh
 
-Native Windows does not yet have a script or make approach to build it.  This is due to some bugs that appear on 64bit, so the cross compilation is the official way to build it currently.
+For Windows, use the provided Visual Studio project file for 32bit builds.
 
 ## Usage
 
