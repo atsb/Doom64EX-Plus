@@ -3295,14 +3295,23 @@ void M_ReadSaveStrings(void) {
         // sprintf(name, SAVEGAMENAME"%d.dsg", i);
 
         // handle = open(name, O_RDONLY | 0, 0666);
+#ifdef _WIN32
+        handle = _open(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+#else
         handle = open(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+#endif
         if(handle == -1) {
             dstrcpy(&savegamestrings[i][0],EMPTYSTRING);
             DoomLoadMenu[i].status = 0;
             continue;
         }
+#ifdef _WIN32
+        _read(handle, &savegamestrings[i], MENUSTRINGSIZE);
+        _close(handle);
+#else
         read(handle, &savegamestrings[i], MENUSTRINGSIZE);
         close(handle);
+#endif
         DoomLoadMenu[i].status = 1;
     }
 }

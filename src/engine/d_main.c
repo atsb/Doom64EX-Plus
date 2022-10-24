@@ -1014,10 +1014,6 @@ void D_DoomMain(void) {
     I_Printf("GL_Init: Init OpenGL\n");
     GL_Init();
 
-#ifdef USESYSCONSOLE
-    I_ShowSysConsole(false);
-#endif
-
     // garbage collection
     Z_FreeAlloca();
 

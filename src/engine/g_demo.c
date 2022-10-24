@@ -136,8 +136,12 @@ void G_RecordDemo(const char* name) {
     
     dstrcpy(demoname, name);
     dstrcat(demoname, ".lmp");
-    
-    if(access(demoname, F_OK)) {
+#ifdef _WIN32
+    if (_access(demoname, F_OK))
+#else
+    if (access(demoname, F_OK))
+#endif
+    {
         demofp = fopen(demoname, "wb");
     }
     else {
@@ -145,7 +149,12 @@ void G_RecordDemo(const char* name) {
 
         while(demonum < 10000) {
             sprintf(demoname, "%s%i.lmp", name, demonum);
-            if(access(demoname, F_OK)) {
+#ifdef _WIN32
+            if (_access(demoname, F_OK))
+#else
+            if (access(demoname, F_OK))
+#endif
+            {
                 demofp = fopen(demoname, "wb");
                 break;
             }

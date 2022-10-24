@@ -40,8 +40,6 @@
 // Linux needs strings.h too, for strcasecmp etc.
 #include <strings.h>
 #endif
-#include <assert.h>
-
 #include "psnprntf.h"
 
 // ZONE MEMORY

@@ -137,15 +137,22 @@ dboolean M_WriteFile(char const* name, void* source, int length) {
 dboolean M_WriteTextFile(char const* name, char* source, int length) {
     int handle;
     int count;
-
+#ifdef _WIN32
+    handle = _open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+#else
     handle = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+#endif
 
     if(handle == -1) {
         return false;
     }
-
+#ifdef _WIN32
+    count = _write(handle, source, length);
+    _close(handle);
+#else
     count = write(handle, source, length);
     close(handle);
+#endif
 
     if(count < length) {
         return false;
@@ -299,7 +306,12 @@ void M_ScreenShot(void) {
 
     while(shotnum < 1000) {
         sprintf(name, "sshot%03d.png", shotnum);
-        if(access(name, 0) != 0) {
+#ifdef _WIN32
+        if (_access(name, 0) != 0)
+#else
+        if (access(name, 0) != 0)
+#endif
+        {
             break;
         }
         shotnum++;

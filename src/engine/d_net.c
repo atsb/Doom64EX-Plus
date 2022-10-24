@@ -252,18 +252,10 @@ static void D_NetWait(void) {
     unsigned int id = 0;
 
     if(M_CheckParm("-server") > 0) {
-#ifdef USESYSCONSOLE
-        I_Printf("D_NetWait: Waiting for players..\n\nPress ready key to begin game..\n\n");
-#else
         I_Printf("D_NetWait: Waiting for players..\n\nWhen ready press any key to begin game..\n\n");
-#endif
     }
 
     I_Printf("---------------------------------------------\n\n");
-
-#ifndef USESYSCONSOLE
-	//I_NetWaitScreen();
-#endif
 
     while(net_waiting_for_start) {
         CheckMD5Sums();

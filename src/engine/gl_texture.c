@@ -1023,10 +1023,7 @@ void GL_ResampleTexture(unsigned int *in, int inwidth, int inheight,
             pix1 = (byte *)inrow + p1[j];
             pix2 = (byte *)inrow + p2[j];
             pix3 = (byte *)inrow2 + p1[j];
-
-            if(type == GL_RGBA) {
-                pix4 = (byte *)inrow2 + p2[j];
-            }
+            pix4 = (byte *)inrow2 + p2[j];
 
             ((byte*)(out+j))[0] = (pix1[0] + pix2[0] + pix3[0] + pix4[0]) >> 2;
             ((byte*)(out+j))[1] = (pix1[1] + pix2[1] + pix3[1] + pix4[1]) >> 2;

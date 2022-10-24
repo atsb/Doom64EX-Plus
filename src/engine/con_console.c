@@ -107,20 +107,6 @@ void CON_Init(void) {
 
     console_cmdhead = 0;
     console_nextcmd = 0;
-
-#ifdef USESYSCONSOLE
-    {
-        extern HWND hwndBuffer;
-        char *buff;
-        int i = SendMessage(hwndBuffer, WM_GETTEXTLENGTH, 0, 0);
-
-        buff = Z_Alloca(i);
-
-        SendMessage(hwndBuffer, WM_GETTEXT, i, (LPARAM)buff);
-        CON_AddText(buff);
-    }
-#endif
-
     console_initialized = true;
 }
 
@@ -192,16 +178,6 @@ void CON_AddText(char *text) {
     src = text;
     c = *(src++);
     while(c) {
-#ifdef USESYSCONSOLE
-        if(*src == '\r' && *(src + 1) == '\n') {
-            *src = 0x20;
-            *(src + 1) = '\n';
-        }
-        else if(*src == '\r') {
-            *src = '\n';
-        }
-#endif
-
         if((c == '\n') || (console_linelength >= CON_BUFFERSIZE)) {
             CON_AddLine(console_linebuffer, console_linelength);
             console_linelength = 0;

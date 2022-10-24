@@ -167,11 +167,7 @@ int I_ShutdownWait(void) {
         if(event.type == SDL_QUIT ||
                 (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
             I_ShutdownVideo();
-#ifndef USESYSCONSOLE
-            exit(0);
-#else
             return 1;
-#endif
         }
     }
 

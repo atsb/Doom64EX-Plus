@@ -1,0 +1,6 @@
+version_data = configuration_data()
+version_data.set('FLUIDSYNTH_VERSION', '"1.1.6"')
+version_data.set('FLUIDSYNTH_VERSION_MAJOR', 1)
+version_data.set('FLUIDSYNTH_VERSION_MINOR', 1)
+version_data.set('FLUIDSYNTH_VERSION_MICRO', 6)
+configure_file(configuration : version_data, input : 'version.h.in', output : 'version.h', format : 'cmake@')

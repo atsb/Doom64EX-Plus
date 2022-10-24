@@ -38,15 +38,6 @@
 // Called by DoomMain.
 void I_Init(void);
 
-#ifdef _WIN32
-
-#define USESYSCONSOLE
-
-void I_SpawnSysConsole(void);
-void I_ShowSysConsole(dboolean show);
-
-#endif
-
 
 // Called by D_DoomLoop,
 // returns current time in tics.
