@@ -39,7 +39,7 @@ Clone this repo
     $ git clone https://github.com/atsb/Doom64EX-Plus
     
 For Linux, use the build.sh script.
-For cross compilation on Windows, use the build_win_cross.sh
+For cross compilation for Windows, use the build_win_cross.sh
 
 For Windows, use the provided Visual Studio project file for 32bit builds.
 
