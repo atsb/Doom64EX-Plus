@@ -192,7 +192,7 @@ byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
     // if the data will be outputted as palette index data (non RGB(A))
     if(palette) {
         if(bit_depth == 4 && nopack) {
-            png_set_packing(png_ptr);
+            png_set_alpha_mode(png_ptr, PNG_ALPHA_OPTIMIZED, PNG_DEFAULT_sRGB);
         }
     }
     else {  // data will be outputted as RGB(A) data
@@ -203,15 +203,13 @@ byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
         if(color_type == PNG_COLOR_TYPE_PALETTE) {
             int i = 0;
             png_colorp pal = NULL; //info_ptr->palette;
-            int num_pal = 0;
+            int num_pal = 8;
             png_get_PLTE(png_ptr, info_ptr, &pal, &num_pal);  // FIXME: num_pal not used??
 
             if(palindex) {
                 // palindex specifies each row (16 colors per row) in the palette for 4 bit color textures
                 if(bit_depth == 4) {
-                    for(i = 0; i < 16; i++) {
-                        dmemcpy(&pal[i], &pal[(16 * palindex) + i], sizeof(png_color));
-                    }
+                        dmemcpy(pal, pal + palindex, 8);
                 }
                 else if(bit_depth >= 8) {  // 8 bit and up requires an external palette lump
                     png_colorp pallump;
