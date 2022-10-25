@@ -261,8 +261,8 @@ enum {
 
 menuitem_t MainMenu[]= {
     {1,"New Game",M_NewGame,'n'},
-    {1,"Options",M_Options,'o'},
     {1,"Load Game",M_LoadGame,'l'},
+    {1,"Options",M_Options,'o'},
     {1,"Quit Game",M_QuitDOOM2,'q'},
 };
 
@@ -682,9 +682,9 @@ enum {
 
 menuitem_t OptionsMenu[]= {
     {1,"Controls",M_Controls, 'c'},
-    {1,"Setup",M_Misc, 'e'},
     {1,"Sound",M_Sound,'s'},
-    {1,"Display",M_Display, 'd'},
+    {1,"Setup",M_Misc, 'e'},
+    {1,"HUD",M_Display, 'd'},
     {1,"Video",M_Video, 'v'},
     {1,"Password",M_Password, 'p'},
     {1,"Network",M_Network, 'n'},
@@ -693,8 +693,8 @@ menuitem_t OptionsMenu[]= {
 
 char* OptionHints[opt_end]= {
     "control configuration",
-    "miscellaneous options for gameplay and other features",
     "adjust sound volume",
+    "miscellaneous options for gameplay and other features",
     "settings for heads up display",
     "configure video-specific options",
     "enter a password to access a level",
@@ -954,7 +954,6 @@ CVAR_EXTERNAL(am_drawobjects);
 CVAR_EXTERNAL(am_overlay);
 CVAR_EXTERNAL(r_skybox);
 CVAR_EXTERNAL(r_texnonpowresize);
-CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(compat_collision);
@@ -975,12 +974,11 @@ enum {
     misc_header2,
     misc_aim,
     misc_jump,
+    misc_autorun,
     misc_context,
     misc_header3,
     misc_wipe,
     misc_texresize,
-    misc_frame,
-    misc_autorun,
     misc_combine,
     misc_sprites,
     misc_skybox,
@@ -1009,12 +1007,11 @@ menuitem_t MiscMenu[]= {
     {-1,"Gameplay",0 },
     {2,"Auto Aim:",M_MiscChoice, 'a'},
     {2,"Jumping:",M_MiscChoice, 'j'},
+    {2,"Always Run:",M_MiscChoice, 'z' },
     {2,"Use Context:",M_MiscChoice, 'u'},
     {-1,"Rendering",0 },
     {2,"Screen Melt:",M_MiscChoice, 's' },
     {2,"Texture Fit:",M_MiscChoice,'t' },
-    {2,"Framerate:",M_MiscChoice, 'f' },
-    {2,"Always Run:",M_MiscChoice, 'z' },
     {2,"Use Combiners:",M_MiscChoice, 'c' },
     {2,"Sprite Pitch:",M_MiscChoice,'p'},
     {2,"Skybox:",M_MiscChoice,'k'},
@@ -1042,12 +1039,11 @@ char* MiscHints[misc_end]= {
     NULL,
     "toggle classic style auto-aiming",
     "toggle the ability to jump",
+    "enable autorun",
     "if enabled interactive objects will highlight when near",
     NULL,
     "enable the melt effect when completing a level",
     "set how texture dimentions are stretched",
-    "interpolate between frames to achieve smooth framerate",
-    "Enable autorun",
     "use texture combining - not supported by low-end cards",
     "toggles billboard sprite rendering",
     "toggle skies to render either normally or as skyboxes",
@@ -1071,11 +1067,10 @@ menudefault_t MiscDefault[] = {
     { &m_menufadetime, 0 },
     { &p_autoaim, 1 },
     { &p_allowjump, 0 },
+    { &p_autorun, 1 },
     { &p_usecontext, 0 },
     { &r_wipe, 1 },
     { &r_texnonpowresize, 0 },
-    { &i_interpolateframes, 0 },
-    { &p_autorun, 1 },
     { &r_texturecombiner, 1 },
     { &r_rendersprites, 1 },
     { &r_skybox, 0 },
@@ -1159,10 +1154,6 @@ void M_MiscChoice(int choice) {
     case misc_texresize:
         M_SetOptionValue(choice, 0, 2, 1, &r_texnonpowresize);
         break;
-
-    case misc_frame:
-        M_SetOptionValue(choice, 0, 1, 1, &i_interpolateframes);
-        break;
         
     case misc_autorun:
         M_SetOptionValue(choice, 0, 1, 1, &p_autorun);
@@ -1223,7 +1214,6 @@ void M_MiscChoice(int choice) {
 }
 
 void M_DrawMisc(void) {
-    static const char* frametype[2] = { "Capped", "Smooth" };
     static const char* autoruntype[2] = { "Off", "On" };
     static const char* mapdisplaytype[2] = { "Hide", "Show" };
     static const char* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
@@ -1252,7 +1242,6 @@ void M_DrawMisc(void) {
     DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
     DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
     DRAWMISCITEM(misc_texresize, r_texnonpowresize.value, texresizetype);
-    DRAWMISCITEM(misc_frame, i_interpolateframes.value, frametype);
     DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
     DRAWMISCITEM(misc_combine, r_texturecombiner.value, msgNames);
     DRAWMISCITEM(misc_sprites, r_rendersprites.value - 1, msgNames);
@@ -1462,7 +1451,6 @@ void M_ChangeYAxisMove(int choice) {
 //
 //------------------------------------------------------------------------
 
-void M_ChangeBrightness(int choice);
 void M_ChangeMessages(int choice);
 void M_ToggleHudDraw(int choice);
 void M_ToggleFlashOverlay(int choice);
@@ -1479,13 +1467,10 @@ CVAR_EXTERNAL(st_crosshairopacity);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(st_showpendingweapon);
 CVAR_EXTERNAL(st_showstats);
-CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(m_messages);
 CVAR_EXTERNAL(p_damageindicator);
 
 enum {
-    dbrightness,
-    display_empty1,
     messages,
     statusbar,
     display_flash,
@@ -1494,15 +1479,13 @@ enum {
     display_stats,
     display_crosshair,
     display_opacity,
-    display_empty2,
+    display_empty1,
     e_default,
     display_return,
     display_end
 } display_e;
 
 menuitem_t DisplayMenu[]= {
-    {3,"Brightness",M_ChangeBrightness, 'b'},
-    {-1,"",0},
     {2,"Messages:",M_ChangeMessages, 'm'},
     {2,"Status Bar:",M_ToggleHudDraw, 's'},
     {2,"Hud Flash:",M_ToggleFlashOverlay, 'f'},
@@ -1517,8 +1500,6 @@ menuitem_t DisplayMenu[]= {
 };
 
 char* DisplayHints[display_end]= {
-    "change light color intensity",
-    NULL,
     "toggle messages displaying on hud",
     "change look and style for hud",
     "use texture environment or a simple overlay for flashes",
@@ -1533,7 +1514,6 @@ char* DisplayHints[display_end]= {
 };
 
 menudefault_t DisplayDefault[] = {
-    { &i_brightness, 0 },
     { &m_messages, 1 },
     { &st_drawhud, 1 },
     { &p_damageindicator, 0 },
@@ -1545,8 +1525,7 @@ menudefault_t DisplayDefault[] = {
 };
 
 menuthermobar_t DisplayBars[] = {
-    { display_empty1, 100, &i_brightness },
-    { display_empty2, 255, &st_crosshairopacity },
+    { display_empty1, 255, &st_crosshairopacity },
     { -1, 0 }
 };
 
@@ -1556,8 +1535,8 @@ menu_t DisplayDef = {
     &OptionsDef,
     DisplayMenu,
     M_DrawDisplay,
-    "Display",
-    165,65,
+    "HUD",
+    135,65,
     0,
     false,
     DisplayDefault,
@@ -1576,7 +1555,6 @@ void M_DrawDisplay(void) {
     static const char* hudtype[3] = { "Off", "Classic", "Arranged" };
     static const char* flashtype[2] = { "Environment", "Overlay" };
 
-    M_DrawThermo(DisplayDef.x, DisplayDef.y+LINEHEIGHT*(dbrightness+1), MAXBRIGHTNESS, i_brightness.value);
     Draw_BigText(DisplayDef.x + 140, DisplayDef.y+LINEHEIGHT*messages, MENUCOLORRED,
                  msgNames[(int)m_messages.value]);
     Draw_BigText(DisplayDef.x + 140, DisplayDef.y+LINEHEIGHT*statusbar, MENUCOLORRED,
@@ -1607,29 +1585,6 @@ void M_DrawDisplay(void) {
         Draw_BigText(-1, 432, MENUCOLORWHITE, DisplayDef.hints[itemOn]);
         GL_SetOrthoScale(DisplayDef.scale);
     }
-}
-
-void M_ChangeBrightness(int choice) {
-    switch(choice) {
-    case 0:
-        if(i_brightness.value > 0.0f) {
-            M_SetCvar(&i_brightness, i_brightness.value - 1);
-        }
-        else {
-            i_brightness.value = 0;
-        }
-        break;
-    case 1:
-        if(i_brightness.value < (int)MAXBRIGHTNESS) {
-            M_SetCvar(&i_brightness, i_brightness.value + 1);
-        }
-        else {
-            i_brightness.value = (int)MAXBRIGHTNESS;
-        }
-        break;
-    }
-
-    R_RefreshBrightness();
 }
 
 void M_ChangeMessages(int choice) {
@@ -1694,36 +1649,45 @@ void M_ChangeOpacity(int choice) {
 //
 //------------------------------------------------------------------------
 
+void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
 void M_ChangeWindowed(int choice);
 void M_ChangeRatio(int choice);
 void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
+void M_ChangeInterpolateFrames(int choice);
 void M_DrawVideo(void);
 
 CVAR_EXTERNAL(v_width);
 CVAR_EXTERNAL(v_height);
 CVAR_EXTERNAL(v_windowed);
+CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
+CVAR_EXTERNAL(i_interpolateframes);
 
 enum {
-    video_dgamma,
+    video_dbrightness,
     video_empty1,
+    video_dgamma,
+    video_empty2,
     filter,
     anisotropic,
     windowed,
     ratio,
     resolution,
+    interpolate_frames,
     v_default,
     video_return,
     video_end
 } video_e;
 
 menuitem_t VideoMenu[]= {
+    {3,"Brightness",M_ChangeBrightness, 'b'},
+    {-1,"",0},
     {3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
     {-1,"",0},
     {2,"Filter:",M_ChangeFilter, 'f'},
@@ -1731,17 +1695,33 @@ menuitem_t VideoMenu[]= {
     {2,"Windowed:",M_ChangeWindowed, 'w'},
     {2,"Aspect Ratio:",M_ChangeRatio, 'a'},
     {2,"Resolution:",M_ChangeResolution, 'r'},
+    {2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
     {-2,"Default",M_DoDefaults, 'e'},
-    {1,"Return",M_Return, 0x20},
-    {-1,"",0},
-    {-1,"",0}
+    {1,"/r Return",M_Return, 0x20}
+};
+
+char* VideoHints[video_end] = {
+    "change light color intensity",
+    NULL,
+    "adjust screen gamma",
+    NULL,
+    "toggle texture filtering",
+    "toggle blur reduction on textures\n    viewed under an oblique angle",
+    "toggle windowed mode",
+    "select aspect ratio",
+    "resolution changes will take effect\n       after restarting the game...",
+    "toggle frame interpolation to\n    achieve smooth framerates",
+    "resolution changes will take effect\n       after restarting the game...",
+    "resolution changes will take effect\n       after restarting the game..."
 };
 
 menudefault_t VideoDefault[] = {
+    { &i_brightness, 0 },
     { &i_gamma, 0 },
     { &r_filter, 0 },
     { &r_anisotropic, 0 },
     { &v_windowed, 1 },
+    { &i_interpolateframes, 0 },
     { NULL, -1 }
 };
 
@@ -1764,7 +1744,7 @@ menu_t VideoDef = {
     12,
     0,
     0.65f,
-    NULL,
+    VideoHints,
     VideoBars
 };
 
@@ -1816,10 +1796,11 @@ static const int Resolution16_10[MAX_RES16_10][2] = {
     {   7680,   4800    }
 };
 
-static const float ratioVal[3] = {
+static const float ratioVal[4] = {
     4.0f / 3.0f,
     16.0f / 9.0f,
-    16.0f / 10.0f
+    16.0f / 10.0f,
+    5.0f / 4.0f,
 };
 
 static char gammamsg[21][28] = {
@@ -1908,9 +1889,17 @@ void M_Video(int choice) {
 void M_DrawVideo(void) {
     static const char* filterType[2] = { "Linear", "Nearest" };
     static const char* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
+    static const char* frametype[2] = { "Off", "On" };
     char res[16];
     int y;
 
+    
+    if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
+        (video_dbrightness + 1) - currentMenu->menupageoffset < currentMenu->numpageitems)
+    {
+        y = video_dbrightness - currentMenu->menupageoffset;
+        M_DrawThermo(VideoDef.x, VideoDef.y + LINEHEIGHT * (y + 1), MAXBRIGHTNESS, i_brightness.value);
+    }
     if(currentMenu->menupageoffset <= video_dgamma + 1 &&
             (video_dgamma+1) - currentMenu->menupageoffset < currentMenu->numpageitems) {
         y = video_dgamma - currentMenu->menupageoffset;
@@ -1934,14 +1923,50 @@ void M_DrawVideo(void) {
 
     sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
     DRAWVIDEOITEM(resolution, res);
+    DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
-
-    Draw_Text(145, 308, MENUCOLORWHITE, VideoDef.scale, false,
-              "Changes will take effect\nafter restarting the game..");
-
+    /*
+    Draw_Text(120, 308, MENUCOLORWHITE, VideoDef.scale, false,
+              "Resolution changes will take effect\nafter restarting the game..");
     GL_SetOrthoScale(VideoDef.scale);
+    */
+    if (VideoDef.hints[itemOn] != NULL)
+    {
+        GL_SetOrthoScale(0.55f);
+        Draw_BigText(-1, 380, MENUCOLORWHITE, VideoDef.hints[itemOn]);
+        GL_SetOrthoScale(VideoDef.scale);
+    }
+}
+
+void M_ChangeBrightness(int choice)
+{
+    switch (choice)
+    {
+        case 0:
+            if (i_brightness.value > 0.0f)
+            {
+                M_SetCvar(&i_brightness, i_brightness.value - 1);
+            }
+            else
+            {
+                i_brightness.value = 0;
+            }
+            break;
+        case 1:
+            if (i_brightness.value < (int) MAXBRIGHTNESS)
+            {
+                M_SetCvar(&i_brightness, i_brightness.value + 1);
+            }
+            else
+            {
+                i_brightness.value = (int) MAXBRIGHTNESS;
+            }
+            break;
+    }
+
+    R_RefreshBrightness();
 }
 
 void M_ChangeGammaLevel(int choice) {
@@ -2085,6 +2110,12 @@ void M_ChangeResolution(int choice) {
     }
 
     M_SetResolution();
+}
+
+
+void M_ChangeInterpolateFrames(int choice)
+{
+    M_SetOptionValue(choice, 0, 1, 1, &i_interpolateframes);
 }
 
 //------------------------------------------------------------------------
