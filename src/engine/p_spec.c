@@ -54,8 +54,6 @@
 #include "r_sky.h"
 #include "sc_main.h"
 
-CVAR_EXTERNAL(p_features);
-
 short globalint = 0;
 static byte tryopentype[3];
 
@@ -1618,12 +1616,6 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 
     case 252:
         ok = EV_DoCeiling(line, customCeilingToHeight, CEILSPEED);
-        break;
-
-    case 253:
-        // Unlock Cheat Menu
-        CON_CvarSetValue(p_features.name, 1);
-        ok = 1;
         break;
 
     case 254:

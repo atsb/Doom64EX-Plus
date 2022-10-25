@@ -42,8 +42,6 @@ dboolean doPassword = false;
 const char *passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
 static const int passwordTable[10] = { 1, 8, 9, 5, 6, 2, 7, 0, 4, 3 };
 
-CVAR_EXTERNAL(p_features);
-
 //
 // M_EncodePassItem
 //
@@ -418,11 +416,6 @@ dboolean M_DecodePassword(dboolean checkOnly) {
     // get artifacts
     //
     player->artifacts = ((decode[5] >> 2) & 7);
-
-    //
-    // set cheat menu if password leads to map 01
-    //
-    CON_CvarSetValue(p_features.name, ((decode[0] >> 2) == 1) ? 1.0f : 0.0f);
 
     return true;
 }

@@ -91,7 +91,6 @@ clusterdef_t*       clusterdefs;
 // [kex] cvars
 //
 
-CVAR(p_features, 0);
 CVAR(p_autorun, 1);
 CVAR(p_fdoubleclick, 0);
 CVAR(p_sdoubleclick, 0);
@@ -1477,7 +1476,6 @@ void P_Init(void) {
 //
 
 void P_RegisterCvars(void) {
-    CON_CvarRegister(&p_features);
     CON_CvarRegister(&p_autorun);
     CON_CvarRegister(&p_fdoubleclick);
     CON_CvarRegister(&p_sdoubleclick);

@@ -291,9 +291,9 @@ menu_t MainDef = {
 //------------------------------------------------------------------------
 
 void M_SaveGame(int choice);
-void M_Features(int choice);
 void M_QuitMainMenu(int choice);
 void M_ConfirmRestart(int choice);
+void M_Features(int choice);
 
 enum {
     pause_options = 0,
@@ -310,7 +310,7 @@ menuitem_t PauseMenu[]= {
     {1,"Options",M_Options,'o'},
     {1,"Main Menu",M_QuitMainMenu,'m'},
     {1,"Restart Level",M_ConfirmRestart,'r'},
-    {-3,"Features",M_Features,'f'},
+    {1,"Features",M_Features,'f'},
     {1,"Load Game",M_LoadGame,'l'},
     {1,"Save Game",M_SaveGame,'s'},
     {1,"Quit Game",M_QuitDOOM,'q'},
@@ -614,7 +614,7 @@ menuitem_t NewGameMenu[]= {
     {1,"Bring It On!",M_ChooseSkill, 'r'},
     {1,"I Own Doom!",M_ChooseSkill, 'i'},
     {1,"Watch Me Die!",M_ChooseSkill, 'w'},
-    {-3,"Hardcore!",M_ChooseSkill, 'h'},
+    {1,"Hardcore!",M_ChooseSkill, 'h'},
 };
 
 menu_t NewDef = {
@@ -2419,7 +2419,7 @@ menuitem_t FeaturesMenu[]= {
 menu_t featuresDef = {
     features_end,
     false,
-    &PauseDef,
+    &MainDef,
     FeaturesMenu,
     M_DrawFeaturesMenu,
     "Features",
@@ -2492,12 +2492,12 @@ void M_DoFeature(int choice) {
     case features_levels:
         if(choice) {
             levelwarp++;
-            if(levelwarp >= 31) {
+            if(levelwarp >= 39) {
                 if(choice == 2) {
                     levelwarp = 0;
                 }
                 else {
-                    levelwarp = 31;
+                    levelwarp = 39;
                 }
             }
         }
@@ -5100,8 +5100,6 @@ void M_MenuFadeOut(void) {
 // M_Ticker
 //
 
-CVAR_EXTERNAL(p_features);
-
 void M_Ticker(void) {
     mainmenuactive = (currentMenu == &MainDef) ? true : false;
 
@@ -5119,20 +5117,6 @@ void M_Ticker(void) {
         OptionsDef.prevMenu = &PauseDef;
         LoadDef.prevMenu = &PauseDef;
         SaveDef.prevMenu = &PauseDef;
-    }
-
-    //
-    // hidden features menu
-    //
-    if(currentMenu == &PauseDef) {
-        currentMenu->menuitems[pause_features].status = p_features.value ? 1 : -3;
-    }
-
-    //
-    // hidden hardcore difficulty option
-    //
-    if(currentMenu == &NewDef) {
-        currentMenu->menuitems[nightmare].status = p_features.value ? 1 : -3;
     }
 
 #ifdef _USE_XINPUT  // XINPUT
