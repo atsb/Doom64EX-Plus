@@ -49,9 +49,10 @@ dkms.conf
 *.res
 *.tlog
 *.recipe
-src/engine/Doom64EXPlus/Debug/Doom64EXPlus.vcxproj.FileListAbsolute.txt
-src/engine/Doom64EXPlus/.vs/Doom64EXPlus/v17/.suo
-src/engine/Doom64EXPlus/Doom64EXPlus.vcxproj.user
 *.iobj
 *.ipdb
-src/engine/Doom64EXPlus/Release/Doom64EXPlus.vcxproj.FileListAbsolute.txt
+src/engine/Doom64EXPlus/Release/
+src/engine/Doom64EXPlus/Debug/
+src/engine/Doom64EXPlus/.vs/
+src/engine/Doom64EXPlus/x64/
+src/engine/Doom64EXPlus/Doom64EXPlus.vcxproj.user
