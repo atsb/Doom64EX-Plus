@@ -2450,7 +2450,7 @@ menuitem_t FeaturesMenu[]= {
 menu_t featuresDef = {
     features_end,
     false,
-    &MainDef,
+    &PauseDef,
     FeaturesMenu,
     M_DrawFeaturesMenu,
     "Features",
