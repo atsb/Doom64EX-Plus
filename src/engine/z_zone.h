@@ -44,6 +44,17 @@
 
 // ZONE MEMORY
 
+typedef struct memblock_s memblock_t;
+
+struct memblock_s {
+    int id; // = ZONEID
+    int tag;
+    int size;
+    void** user;
+    memblock_t* prev;
+    memblock_t* next;
+};
+
 // PU - purge tags.
 enum {
     PU_STATIC,  // block is static (remains until explicitly freed)

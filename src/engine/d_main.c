@@ -607,9 +607,6 @@ static void Credits_Drawer(void) {
     case 2:
         Draw_GfxImage(64, 30, "EVIL",
                       D_RGBA(255, 255, 255, (byte)screenalpha), true);
-
-        Draw_GfxImage(40, 52, "FANCRED",
-                      D_RGBA(255, 255, 255, (byte)screenalphatext), true);
         break;
 
     }

@@ -37,17 +37,6 @@
 #define ZONEID    0x1d4a11
 //#define ZONEFILE
 
-typedef struct memblock_s memblock_t;
-
-struct memblock_s {
-    int id; // = ZONEID
-    int tag;
-    int size;
-    void **user;
-    memblock_t *prev;
-    memblock_t *next;
-};
-
 #ifdef ZONEFILE
 
 static FILE *zonelog;
