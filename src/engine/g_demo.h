@@ -44,4 +44,7 @@ extern dboolean         singledemo;
 extern dboolean         endDemo;        // signal recorder to stop on next tick
 extern dboolean         iwadDemo;       // hide hud, end playback after one level
 
+/* VANILLA */
+int G_PlayDemoPtr (int skill, int map); // 800049D0
+int D_RunDemo(char *name, skill_t skill, int map); // 8002B2D0
 #endif

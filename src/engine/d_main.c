@@ -736,26 +736,26 @@ void D_DoomLoop(void) {
             }
 
             iwadDemo = true;
-            G_PlayDemo("DEMO1LMP");
+            exit = D_RunDemo("DEMO1LMP", sk_medium, 3);
             if(gameaction != ga_exitdemo) {
                 continue;
             }
 
             iwadDemo = true;
-            G_PlayDemo("DEMO2LMP");
+            exit = D_RunDemo("DEMO2LMP", sk_medium, 9);
             if(gameaction != ga_exitdemo) {
                 continue;
             }
 
             iwadDemo = true;
-            G_PlayDemo("DEMO3LMP");
+            exit = D_RunDemo("DEMO3LMP", sk_medium, 17);
             if(gameaction != ga_exitdemo) {
                 continue;
             }
 
             if(rundemo4) {
                 iwadDemo = true;
-                G_PlayDemo("DEMO4LMP");
+                exit = D_RunDemo("DEMO4LMP", sk_medium, 32);
                 if(gameaction != ga_exitdemo) {
                     continue;
                 }
