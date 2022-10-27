@@ -346,7 +346,7 @@ int G_PlayDemoPtr (int skill, int map) // 800049D0
 
 	demobuffer = demo_p;
 	
-	demo_p = Z_Malloc(16000, PU_STATIC, NULL);
+	//demo_p = Z_Malloc(16000, PU_STATIC, NULL);
 
 	/* play demo game */
 	G_InitNew (skill, map);
@@ -356,7 +356,7 @@ int G_PlayDemoPtr (int skill, int map) // 800049D0
 	demoplayback = false;
 
 	/* free all tags except the PU_STATIC tag */
-	Z_FreeTags(demo_p, ~PU_STATIC); // (PU_LEVEL | PU_LEVSPEC | PU_CACHE)
+	Z_FreeTags(PU_AUTO, ~PU_STATIC); // (PU_LEVEL | PU_LEVSPEC | PU_CACHE)
 
 	return exit;
 }
@@ -371,7 +371,7 @@ int D_RunDemo(char *name, skill_t skill, int map) // 8002B2D0
   lump = W_GetNumForName(name);
   W_ReadLump(lump, demo_p);
   exit = G_PlayDemoPtr(skill, map);
-  Z_Free(demo_p);
+  //Z_Free(demo_p);
 
   return exit;
 }
