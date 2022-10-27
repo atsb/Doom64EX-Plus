@@ -722,47 +722,46 @@ void D_DoomLoop(void) {
 
     exit = gameaction;
 
-    while(1) {
+    while (1) {
         exit = D_MiniLoop(Title_Start, Title_Stop, Title_Drawer, Title_Ticker);
 
-        if(exit == ga_newgame || exit == ga_loadgame) {
+        if (exit == ga_newgame || exit == ga_loadgame) {
             G_RunGame();
         }
         else {
             D_MiniLoop(Credits_Start, NULL, Credits_Drawer, Credits_Ticker);
 
-            if(gameaction == ga_title) {
+            if (gameaction == ga_title) {
                 continue;
             }
-
-            iwadDemo = true;
-            exit = D_RunDemo("DEMO1LMP", sk_medium, 3);
-            if(gameaction != ga_exitdemo) {
-                continue;
-            }
-
-            iwadDemo = true;
-            exit = D_RunDemo("DEMO2LMP", sk_medium, 9);
-            if(gameaction != ga_exitdemo) {
-                continue;
-            }
-
-            iwadDemo = true;
-            exit = D_RunDemo("DEMO3LMP", sk_medium, 17);
-            if(gameaction != ga_exitdemo) {
-                continue;
-            }
-
-            if(rundemo4) {
+            if (exit != ga_exitdemo)
+            {
                 iwadDemo = true;
-                exit = D_RunDemo("DEMO4LMP", sk_medium, 32);
-                if(gameaction != ga_exitdemo) {
-                    continue;
-                }
+                exit = D_RunDemo("DEMO1LMP", sk_medium, 3);
             }
 
-            G_RunTitleMap();
-            continue;
+            iwadDemo = true;
+            if (exit != ga_exitdemo)
+            {
+                exit = D_RunDemo("DEMO2LMP", sk_medium, 9);
+            }
+
+            iwadDemo = true;
+            if (exit != ga_exitdemo)
+            {
+                exit = D_RunDemo("DEMO3LMP", sk_medium, 17);
+            }
+
+            if (rundemo4) {
+                iwadDemo = true;
+                if (exit != ga_exitdemo)
+                {
+                    exit = D_RunDemo("DEMO4LMP", sk_medium, 32);
+                }
+
+                G_RunTitleMap();
+                continue;
+            }
         }
     }
 }
