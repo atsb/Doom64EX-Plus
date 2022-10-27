@@ -51,8 +51,11 @@ dkms.conf
 *.recipe
 *.iobj
 *.ipdb
-src/engine/Doom64EXPlus/Release/
-src/engine/Doom64EXPlus/Debug/
-src/engine/Doom64EXPlus/.vs/
-src/engine/Doom64EXPlus/x64/
-src/engine/Doom64EXPlus/Doom64EXPlus.vcxproj.user
+
+# Doom 64 EX Plus specific
+/Windows/.vs
+/Windows/Debug
+/Windows/Release
+/Windows/x64
+Windows/Doom64EX-Plus Launcher.vcxproj.user
+Windows/Doom64EXPlus.vcxproj.user
