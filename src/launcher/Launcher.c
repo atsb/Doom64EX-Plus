@@ -27,6 +27,7 @@
 
 #include "Launcher.h"
 #include "tk_lib.h"
+#pragma comment(lib, "comctl32.lib")
 
 HINSTANCE   hAppInst    = NULL;
 HWND        hwndMain    = NULL;
