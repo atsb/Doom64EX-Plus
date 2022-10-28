@@ -40,7 +40,6 @@
 #include "con_console.h"
 #include "m_misc.h"
 #include "g_actions.h"
-#include "r_shaders.h"
 
 int ViewWindowX = 0;
 int ViewWindowY = 0;
