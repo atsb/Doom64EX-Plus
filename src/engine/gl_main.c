@@ -540,14 +540,8 @@ static void CalcViewSize(void) {
 //
 
 typedef enum {
-    OPENGL_VERSION_1_0,
-    OPENGL_VERSION_1_1,
-    OPENGL_VERSION_1_2,
-    OPENGL_VERSION_1_3,
-    OPENGL_VERSION_1_4,
-    OPENGL_VERSION_1_5,
-    OPENGL_VERSION_2_0,
-    OPENGL_VERSION_2_1,
+    OPENGL_VERSION_3_0,
+    OPENGL_VERSION_3_1,
 } glversion_t;
 
 static int GetVersionInt(const char* version) {
@@ -555,34 +549,19 @@ static int GetVersionInt(const char* version) {
     int MinorVersion;
     int versionvar;
 
-    versionvar = OPENGL_VERSION_1_0;
+    versionvar = OPENGL_VERSION_3_0;
 
-    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 2) {
-        if(MajorVersion > 1) {
-            versionvar = OPENGL_VERSION_2_0;
+    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 3) {
+        if(MajorVersion > 3) {
+            versionvar = OPENGL_VERSION_3_0;
 
             if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_2_1;
+                versionvar = OPENGL_VERSION_3_1;
             }
         }
         else {
-            versionvar = OPENGL_VERSION_1_0;
-
-            if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_1_1;
-            }
-            if(MinorVersion > 1) {
-                versionvar = OPENGL_VERSION_1_2;
-            }
-            if(MinorVersion > 2) {
-                versionvar = OPENGL_VERSION_1_3;
-            }
-            if(MinorVersion > 3) {
-                versionvar = OPENGL_VERSION_1_4;
-            }
-            if(MinorVersion > 4) {
-                versionvar = OPENGL_VERSION_1_5;
-            }
+            CON_Warnf("ERROR: OpenGL 3.0 or 3.1 Required\n");
+            return 1;
         }
     }
 
@@ -654,7 +633,7 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_1_2 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
+    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_3_0 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 
     glScaleFactor = 1.0f;
 
