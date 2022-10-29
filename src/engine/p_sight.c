@@ -364,24 +364,30 @@ dboolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
 void P_ScanSights(void) {
     mobj_t* mobj;
 
-	for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next)
-	{
-		// must be killable
-		if (!(mobj->flags & MF_COUNTKILL))
-			continue;
+    for(mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
+        // must be killable
+        if(!(mobj->flags & MF_COUNTKILL)) {
+            continue;
+        }
 
-		// must be about to change states
-		if (mobj->tics != 1)
-			continue;
+        // must have longer tics
+        if(mobj->tics == 1) {
+            continue;
+        }
 
-		mobj->flags &= ~MF_SEETARGET;
+        mobj->flags &= ~MF_SEETARGET;
 
-		// must have a target
-		if (!mobj->target)
-			continue;
+        // must have a target
+        if(!mobj->target) {
+            continue;
+        }
 
-		if (P_CheckSight(mobj, mobj->target))
-			mobj->flags |= MF_SEETARGET;
-	}
+        if(!P_CheckSight(mobj, mobj->target)) {
+            continue;
+        }
+
+        mobj->flags |= MF_SEETARGET;
+    }
 }
+
 

@@ -87,7 +87,7 @@ void dglLogError(const char *message, const char *file, int line) {
 
 static vtx_t *dgl_prevptr = NULL;
 
-void dglSetVertex(vtx_t *vtx) {
+d_inline void dglSetVertex(vtx_t *vtx) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglSetVertex(vtx=0x%p)\n", vtx);
 #endif
@@ -109,7 +109,7 @@ void dglSetVertex(vtx_t *vtx) {
 // dglTriangle
 //
 
-void dglTriangle(int v0, int v1, int v2) {
+d_inline void dglTriangle(int v0, int v1, int v2) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTriangle(v0=%i, v1=%i, v2=%i)\n", v0, v1, v2);
 #endif
@@ -126,7 +126,7 @@ void dglTriangle(int v0, int v1, int v2) {
 // dglDrawGeometry
 //
 
-void dglDrawGeometry(dword count, vtx_t *vtx) {
+d_inline void dglDrawGeometry(dword count, vtx_t *vtx) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglDrawGeometry(count=0x%x, vtx=0x%p)\n", count, vtx);
 #endif
@@ -194,7 +194,7 @@ void dglDrawGeometry(dword count, vtx_t *vtx) {
 // dglViewFrustum
 //
 
-void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
+d_inline void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
     rfloat left;
     rfloat right;
     rfloat bottom;
@@ -239,7 +239,7 @@ void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 // dglSetVertexColor
 //
 
-void dglSetVertexColor(vtx_t *v, rcolor c, word count) {
+d_inline void dglSetVertexColor(vtx_t *v, rcolor c, word count) {
     int i = 0;
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglSetVertexColor(v=0x%p, c=0x%x, count=0x%x)\n", v, c, count);
@@ -253,7 +253,7 @@ void dglSetVertexColor(vtx_t *v, rcolor c, word count) {
 // dglGetColorf
 //
 
-void dglGetColorf(rcolor color, float* argb) {
+d_inline void dglGetColorf(rcolor color, float* argb) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglGetColorf(color=0x%x, argb=0x%p)\n", color, argb);
 #endif
@@ -267,7 +267,7 @@ void dglGetColorf(rcolor color, float* argb) {
 // dglTexCombReplace
 //
 
-void dglTexCombReplace(void) {
+d_inline void dglTexCombReplace(void) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombReplace\n");
 #endif
@@ -281,7 +281,7 @@ void dglTexCombReplace(void) {
 // dglTexCombColor
 //
 
-void dglTexCombColor(int t, rcolor c, int func) {
+d_inline void dglTexCombColor(int t, rcolor c, int func) {
     float f[4];
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombColor(t=0x%x, c=0x%x)\n", t, c);
@@ -300,7 +300,7 @@ void dglTexCombColor(int t, rcolor c, int func) {
 // dglTexCombColorf
 //
 
-void dglTexCombColorf(int t, float* f, int func) {
+d_inline void dglTexCombColorf(int t, float* f, int func) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombColorf(t=0x%x, f=%p)\n", t, f);
 #endif
@@ -317,7 +317,7 @@ void dglTexCombColorf(int t, float* f, int func) {
 // dglTexCombModulate
 //
 
-void dglTexCombModulate(int t, int s) {
+d_inline void dglTexCombModulate(int t, int s) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombFinalize(t=0x%x)\n", t);
 #endif
@@ -333,7 +333,7 @@ void dglTexCombModulate(int t, int s) {
 // dglTexCombAdd
 //
 
-void dglTexCombAdd(int t, int s) {
+d_inline void dglTexCombAdd(int t, int s) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombFinalize(t=0x%x)\n", t);
 #endif
@@ -349,7 +349,7 @@ void dglTexCombAdd(int t, int s) {
 // dglTexCombInterpolate
 //
 
-void dglTexCombInterpolate(int t, float a) {
+d_inline void dglTexCombInterpolate(int t, float a) {
     float f[4];
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombInterpolate(t=0x%x, a=%f)\n", t, a);
@@ -372,7 +372,7 @@ void dglTexCombInterpolate(int t, float a) {
 // dglTexCombReplaceAlpha
 //
 
-void dglTexCombReplaceAlpha(int t) {
+d_inline void dglTexCombReplaceAlpha(int t) {
 #ifdef LOG_GLFUNC_CALLS
     I_Printf("dglTexCombReplaceAlpha(t=0x%x)\n", t);
 #endif

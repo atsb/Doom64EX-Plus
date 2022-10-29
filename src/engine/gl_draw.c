@@ -353,9 +353,6 @@ int Center_Text(const char* string) {
         case 0x20:
             width += 6;
             break;
-        case '\n':
-            width = 0;
-            break;
         case '-':
             width += symboldata[SM_MISCFONT].w;
             break;
@@ -424,7 +421,6 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
     if(x <= -1) {
         x = Center_Text(string);
     }
-    const int ix = x;
 
     y += 14;
 
@@ -446,8 +442,10 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
         vy1 = (float)y;
 
         c = string[i];
-        
-        if(c == 0x20) {
+        if(c == '\n' || c == '\t') {
+            continue;    // villsa: safety check
+        }
+        else if(c == 0x20) {
             x += 6;
             continue;
         }
@@ -478,20 +476,6 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
             }
             if(c == ':') {
                 index = SM_MISCFONT + 5;
-            }
-            if (c == '\t')
-            {
-                while (x % 40)
-                {
-                    x++;
-                }
-                continue;
-            }
-            if (c == '\n')
-            {
-                y += 12;
-                x = ix;
-                continue;
             }
 
             // [kex] use 'printf' style formating for special symbols
