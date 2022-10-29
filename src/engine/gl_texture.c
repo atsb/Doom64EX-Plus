@@ -91,14 +91,14 @@ typedef struct {
 } gl_env_state_t;
 
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
-static int curunit = 0;
+static int curunit = -1;
 
 CVAR_EXTERNAL(r_texnonpowresize);
 CVAR_EXTERNAL(r_fillmode);
 CVAR_CMD(r_texturecombiner, 1) {
     int i;
 
-    curunit = 0;
+    curunit = -1;
 
     for(i = 0; i < GL_MAX_TEX_UNITS; i++) {
         dmemset(&gl_env_state[i], 0, sizeof(gl_env_state_t));
@@ -268,9 +268,10 @@ static void SetTextureImage(byte* data, int bits, int *origwidth, int *origheigh
 
         pad = Z_Calloc(wp * hp * bits, PU_STATIC, 0);
 
-        if(r_texnonpowresize.value >= 2) {
-            // this will probably look like crap
-            GL_ResampleTexture((int*)data, *origwidth, *origheight, (int*)pad, wp, hp, type);
+        if(r_texnonpowresize.value >= 2)
+        {
+            //ATSB - this is much better
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, wp, hp, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
         }
         else {
             int y;
@@ -980,58 +981,3 @@ void GL_ResetTextures(void) {
     curtexture = cursprite = curgfx = -1;
 }
 
-//
-// GL_ResampleTexture
-//
-
-void GL_ResampleTexture(unsigned int *in, int inwidth, int inheight,
-                        unsigned int *out, int outwidth, int outheight,
-                        int type) {
-    int i, j;
-    unsigned int *inrow, *inrow2;
-    unsigned int frac, fracstep;
-    unsigned int p1[1024], p2[1024];
-    byte *pix1, *pix2, *pix3, *pix4;
-    int stride;
-
-    if(type == GL_RGBA) {
-        stride = 4;
-    }
-    else {
-        stride = 3;
-    }
-
-    fracstep = inwidth * 0x10000 / outwidth;
-
-    frac = fracstep >> 2;
-    for(i = 0; i < outwidth; i++) {
-        p1[i] = stride * (frac >> 16);
-        frac += fracstep;
-    }
-    frac = 3 * (fracstep >> 2);
-    for(i = 0; i < outwidth; i++) {
-        p2[i] = stride * (frac >> 16);
-        frac += fracstep;
-    }
-
-    for(i = 0; i < outheight; i++, out += outwidth) {
-        inrow = in + inwidth * (int)((i + 0.25f) * inheight / outheight);
-        inrow2 = in + inwidth * (int)((i + 0.75f) * inheight / outheight);
-        frac = fracstep >> 1;
-
-        for(j = 0; j < outwidth; j++) {
-            pix1 = (byte *)inrow + p1[j];
-            pix2 = (byte *)inrow + p2[j];
-            pix3 = (byte *)inrow2 + p1[j];
-            pix4 = (byte *)inrow2 + p2[j];
-
-            ((byte*)(out+j))[0] = (pix1[0] + pix2[0] + pix3[0] + pix4[0]) >> 2;
-            ((byte*)(out+j))[1] = (pix1[1] + pix2[1] + pix3[1] + pix4[1]) >> 2;
-            ((byte*)(out+j))[2] = (pix1[2] + pix2[2] + pix3[2] + pix4[2]) >> 2;
-
-            if(type == GL_RGBA) {
-                ((byte*)(out+j))[3] = (pix1[3] + pix2[3] + pix3[3] + pix4[3]) >> 2;
-            }
-        }
-    }
-}

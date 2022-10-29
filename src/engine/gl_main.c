@@ -106,12 +106,12 @@ GL_EXT_texture_filter_anisotropic_Define();
 //
 
 static dboolean FindExtension(const char *ext) {
-    const char *extensions = NULL;
-    const char *start;
-    const char *where, *terminator;
+    const byte *extensions = NULL;
+    const byte *start;
+    byte *where, *terminator;
 
     // Extension names should not have spaces.
-    where = strrchr(ext, ' ');
+    where = (byte *) dstrrchr((char*)ext, ' ');
     if(where || *ext == '\0') {
         return 0;
     }
@@ -120,7 +120,7 @@ static dboolean FindExtension(const char *ext) {
 
     start = extensions;
     for(;;) {
-        where = strstr(start, ext);
+        where = (byte *)strstr(start, ext);
         if(!where) {
             break;
         }
@@ -322,10 +322,6 @@ void GL_SetTextureFilter(void) {
 //
 
 void GL_SetDefaultCombiner(void) {
-    if (!usingGL) {
-        return;
-    }
-
     if(has_GL_ARB_multitexture) {
         GL_SetTextureUnit(1, false);
         GL_SetTextureUnit(2, false);
@@ -348,10 +344,6 @@ void GL_SetDefaultCombiner(void) {
 //
 
 void GL_SetColorScale(void) {
-    if (!usingGL) {
-        return;
-    }
-
     int cs = (int)r_colorscale.value;
 
     switch(cs) {
@@ -594,6 +586,7 @@ static int GetVersionInt(const char* version) {
 //
 
 void GL_Init(void) {
+
     gl_vendor = dglGetString(GL_VENDOR);
     I_Printf("GL_VENDOR: %s\n", gl_vendor);
     gl_renderer = dglGetString(GL_RENDERER);
@@ -605,7 +598,7 @@ void GL_Init(void) {
     dglGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &gl_max_texture_units);
     I_Printf("GL_MAX_TEXTURE_UNITS_ARB: %i\n", gl_max_texture_units);
 
-    if(gl_max_texture_units <= 2) {
+    if (gl_max_texture_units <= 2) {
         CON_Warnf("Not enough texture units supported...\n");
     }
 
@@ -638,13 +631,13 @@ void GL_Init(void) {
     GL_EXT_texture_env_combine_Init();
     GL_EXT_texture_filter_anisotropic_Init();
 
-    if(!has_GL_ARB_multitexture) {
+    if (!has_GL_ARB_multitexture) {
         CON_Warnf("GL_ARB_multitexture not supported...\n");
     }
 
     gl_has_combiner = (has_GL_ARB_texture_env_combine | has_GL_EXT_texture_env_combine);
 
-    if(!gl_has_combiner) {
+    if (!gl_has_combiner) {
         CON_Warnf("Texture combiners not supported...\n");
         CON_Warnf("Setting r_texturecombiner to 0\n");
         CON_CvarSetValue(r_texturecombiner.name, 0.0f);
@@ -654,15 +647,18 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_1_2 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
+    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_1_5 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 
     glScaleFactor = 1.0f;
 
-    if(has_GL_EXT_texture_filter_anisotropic) {
+    if (has_GL_EXT_texture_filter_anisotropic) {
         dglGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
     }
 
     usingGL = true;
 
     G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
+
+    /* ATSB - Force VSYNC - Screen Tearing sucks! */
+    SDL_GL_SetSwapInterval(1);
 }

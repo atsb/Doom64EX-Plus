@@ -33,7 +33,6 @@
 #define I_OPNDIR_H__
 
 #ifdef _MSC_VER
-
 #include <direct.h>
 #include <io.h>
 #define F_OK 0

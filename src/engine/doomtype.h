@@ -49,18 +49,12 @@ typedef uint16_t        uint16;
 typedef int32_t         int32;
 typedef uint32_t        uint32;
 
-#ifndef _MSC_VER
-typedef signed long long int64;
-typedef unsigned long long uint64;
-#else
 typedef __int64 int64;
 typedef unsigned __int64 uint64;
-#endif
 
 #include <limits.h>
 #define D_MININT INT_MIN
 #define D_MAXINT INT_MAX
-#endif
 
 #ifndef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -85,5 +79,4 @@ typedef unsigned __int64 uint64;
 #define PATH_SEPARATOR ':'
 
 #endif
-
-
+#endif

@@ -39,12 +39,6 @@
 // build version
 extern const char version_date[];
 
-#ifdef _MSC_VER
-#pragma warning(disable:4761)   // integral size mismatch in argument; conversion supplied
-#pragma warning(error:4701)        // local variable *may* be used without init
-#pragma warning(error:4189)        // initialized but unused variable
-#endif
-
 void        _dprintf(const char *s, ...);
 void        *dmemcpy(void *s1, const void *s2, size_t n);
 void        *dmemset(void *s, dword c, size_t n);
