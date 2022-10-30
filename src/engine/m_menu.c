@@ -1647,6 +1647,7 @@ void M_ChangeRatio(int choice);
 void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
+void M_ChangeVerticalSynchronisation(int choice);
 void M_DrawVideo(void);
 
 CVAR_EXTERNAL(v_width);
@@ -1658,6 +1659,7 @@ CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
+CVAR_EXTERNAL(v_vsync);
 
 enum {
     video_dbrightness,
@@ -1670,6 +1672,7 @@ enum {
     ratio,
     resolution,
     interpolate_frames,
+    vsync,
     v_default,
     video_return,
     video_end
@@ -1686,6 +1689,7 @@ menuitem_t VideoMenu[]= {
     {2,"Aspect Ratio:",M_ChangeRatio, 'a'},
     {2,"Resolution:",M_ChangeResolution, 'r'},
     {2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
+    {2,"Vsync:",M_ChangeVerticalSynchronisation, 'v'},
     {-2,"Default",M_DoDefaults, 'e'},
     {1,"/r Return",M_Return, 0x20}
 };
@@ -1696,22 +1700,24 @@ char* VideoHints[video_end] = {
     "adjust screen gamma",
     NULL,
     "toggle texture filtering",
-    "toggle blur reduction on textures\n    viewed under an oblique angle",
+    "toggle blur reduction on textures",
     "toggle windowed mode",
     "select aspect ratio",
-    "resolution changes will take effect\n       after restarting the game...",
-    "toggle frame interpolation to\n    achieve smooth framerates",
-    "resolution changes will take effect\n       after restarting the game...",
-    "resolution changes will take effect\n       after restarting the game..."
+    "resolution changes will take effect\n after restarting",
+    "toggle frame interpolation to\n achieve smooth framerates",
+    "toggle vertical synchronisation to \n reduce screen tear",
+    "resolution changes will take effect\n after restarting",
+    "resolution changes will take effect\n after restarting"
 };
 
 menudefault_t VideoDefault[] = {
     { &i_brightness, 0 },
     { &i_gamma, 0 },
     { &r_filter, 0 },
-    { &r_anisotropic, 0 },
-    { &v_windowed, 1 },
-    { &i_interpolateframes, 0 },
+    { &r_anisotropic, 1 },
+    { &v_windowed, 0 },
+    { &i_interpolateframes, 1 },
+    { &v_vsync, 1 },
     { NULL, -1 }
 };
 
@@ -1914,6 +1920,7 @@ void M_DrawVideo(void) {
     sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
     DRAWVIDEOITEM(resolution, res);
     DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
+    DRAWVIDEOITEM2(vsync, v_vsync.value, frametype);
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
@@ -2106,6 +2113,11 @@ void M_ChangeResolution(int choice) {
 void M_ChangeInterpolateFrames(int choice)
 {
     M_SetOptionValue(choice, 0, 1, 1, &i_interpolateframes);
+}
+
+void M_ChangeVerticalSynchronisation(int choice)
+{
+    M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
 }
 
 //------------------------------------------------------------------------

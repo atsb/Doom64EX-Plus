@@ -25,9 +25,9 @@
 //-----------------------------------------------------------------------------
 
 #include <math.h>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include <wglext.h>
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -61,6 +61,7 @@ int         DGL_CLAMP = GL_CLAMP;
 float       max_anisotropic = 0;
 dboolean    widescreen = false;
 
+CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_anisotropic);
@@ -659,6 +660,9 @@ void GL_Init(void) {
 
     G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
 
-    /* ATSB - Force VSYNC - Screen Tearing sucks! */
-    SDL_GL_SetSwapInterval(1);
+#ifdef _WIN32
+    wglSwapIntervalEXT(v_vsync.value);
+#else
+    glXSwapIntervalSGI(v_vsync.value);
+#endif
 }
