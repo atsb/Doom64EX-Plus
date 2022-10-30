@@ -963,8 +963,8 @@ typedef enum {
 
 typedef struct {
     spritenum_t    sprite;
-    long            frame;
-    long            tics;
+    int            frame;
+    int            tics;
     actionf_t        action;
     statenum_t    nextstate;
 } state_t;

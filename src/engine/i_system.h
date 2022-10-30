@@ -47,12 +47,12 @@ extern fixed_t rendertic_frac;
 extern int (*I_GetTime)(void);
 void            I_InitClockRate(void);
 int             I_GetTimeMS(void);
-void            I_Sleep(unsigned long usecs);
+void            I_Sleep(unsigned int usecs);
 dboolean        I_StartDisplay(void);
 void            I_EndDisplay(void);
 fixed_t         I_GetTimeFrac(void);
 void            I_GetTime_SaveMS(void);
-unsigned long   I_GetRandomTimeSeed(void);
+unsigned int   I_GetRandomTimeSeed(void);
 
 // Asynchronous interrupt functions should maintain private queues
 // that are read by the synchronous functions

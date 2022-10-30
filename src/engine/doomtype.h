@@ -30,27 +30,21 @@
 #endif
 
 #include <stdint.h>
-
-#ifndef true
-#define true 1
-#endif
-#ifndef false
-#define false 0
-#endif
+#include <limits.h>   
+#include <stdbool.h>
 
 typedef int             dboolean;
-typedef unsigned char   byte;
+typedef uint8_t         byte;
 typedef unsigned short  word;
-typedef unsigned long   dword;
+typedef unsigned int    dword;
 typedef int8_t          int8;
 typedef uint8_t         uint8;
 typedef int16_t         int16;
 typedef uint16_t        uint16;
 typedef int32_t         int32;
 typedef uint32_t        uint32;
-
-typedef __int64 int64;
-typedef unsigned __int64 uint64;
+typedef int64_t	int64;
+typedef uint64_t	uint64;
 
 #include <limits.h>
 #define D_MININT INT_MIN

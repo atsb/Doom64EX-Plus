@@ -263,7 +263,7 @@ void M_CheatArtifacts(player_t* player, char dat[4]) {
 #define CHEAT_ARGS_MAX 8  /* Maximum number of args at end of cheats */
 
 static dboolean M_FindCheats(player_t* plyr, int key) {
-    static unsigned long sr;
+    static unsigned int sr;
     static char argbuf[CHEAT_ARGS_MAX+1], *arg;
     static int init, argsleft, cht;
     int i, ret, matchedbefore;
@@ -295,7 +295,7 @@ static dboolean M_FindCheats(player_t* plyr, int key) {
     if(!init) {
         init = 1;
         for(i=0; cheat[i].cheat; i++) {
-            unsigned long c=0, m=0;
+            unsigned int c=0, m=0;
             const char *p;
 
             for(p=cheat[i].cheat; *p; p++) {

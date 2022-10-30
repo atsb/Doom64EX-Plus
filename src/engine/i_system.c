@@ -65,7 +65,7 @@ static int64    I_GetTime_Scale = 1<<24;
 // I_uSleep
 //
 
-void I_Sleep(unsigned long usecs) {
+void I_Sleep(unsigned int usecs) {
     SDL_Delay(usecs);
 }
 
@@ -162,7 +162,7 @@ void I_EndDisplay(void) {
 //
 
 fixed_t I_GetTimeFrac(void) {
-    unsigned long now;
+    unsigned int now;
     fixed_t frac;
 
     now = SDL_GetTicks();
@@ -337,7 +337,7 @@ int I_GetTimeMS(void) {
 // I_GetRandomTimeSeed
 //
 
-unsigned long I_GetRandomTimeSeed(void) {
+unsigned int I_GetRandomTimeSeed(void) {
     // not exactly random....
     return SDL_GetTicks();
 }

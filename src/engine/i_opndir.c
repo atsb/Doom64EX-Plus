@@ -259,7 +259,7 @@ void rewinddir(DIR * dirp) {
 // Returns the "position" in the "directory stream" which can be used with
 // seekdir to go back to an old entry. We simply return the value in stat.
 //
-long telldir(DIR *dirp) {
+int telldir(DIR *dirp) {
     errno = 0;
 
     if(!dirp) {
@@ -278,7 +278,7 @@ long telldir(DIR *dirp) {
 // have changed while we weren't looking. But that is probably the case with
 // any such system.
 //
-void seekdir(DIR *dirp, long lPos) {
+void seekdir(DIR *dirp, int lPos) {
     errno = 0;
 
     if(!dirp) {

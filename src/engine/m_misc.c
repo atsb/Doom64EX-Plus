@@ -200,9 +200,9 @@ int M_ReadFile(char const* name, byte** buffer) {
 // M_FileLength
 //
 
-long M_FileLength(FILE *handle) {
-    long savedpos;
-    long length;
+int M_FileLength(FILE *handle) {
+    int savedpos;
+    int length;
 
     // save the current position in the file
     savedpos = ftell(handle);
