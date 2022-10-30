@@ -1402,16 +1402,8 @@ void G_SecretExitLevel(int map) {
 
     P_SpawnDelayTimer(&junk, G_CompleteLevel);
     
-    //ATSB: Lost Levels
-    if(gamemap == 32)
-    {
-    	nextmap = 34;
-    }
-    
-    if(gamemap != 32)
-    {
-    	nextmap = map;
-}   }
+    nextmap = map;
+}
 
 //
 // G_RunTitleMap
