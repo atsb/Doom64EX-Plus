@@ -953,7 +953,6 @@ CVAR_EXTERNAL(am_showkeycolors);
 CVAR_EXTERNAL(am_drawobjects);
 CVAR_EXTERNAL(am_overlay);
 CVAR_EXTERNAL(r_skybox);
-CVAR_EXTERNAL(r_texnonpowresize);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(compat_collision);
@@ -978,7 +977,6 @@ enum {
     misc_context,
     misc_header3,
     misc_wipe,
-    misc_texresize,
     misc_combine,
     misc_sprites,
     misc_skybox,
@@ -1043,7 +1041,6 @@ char* MiscHints[misc_end]= {
     "if enabled interactive objects will highlight when near",
     NULL,
     "enable the melt effect when completing a level",
-    "set how texture dimentions are stretched",
     "use texture combining - not supported by low-end cards",
     "toggles billboard sprite rendering",
     "toggle skies to render either normally or as skyboxes",
@@ -1070,7 +1067,6 @@ menudefault_t MiscDefault[] = {
     { &p_autorun, 1 },
     { &p_usecontext, 0 },
     { &r_wipe, 1 },
-    { &r_texnonpowresize, 0 },
     { &r_texturecombiner, 1 },
     { &r_rendersprites, 1 },
     { &r_skybox, 0 },
@@ -1150,10 +1146,6 @@ void M_MiscChoice(int choice) {
     case misc_wipe:
         M_SetOptionValue(choice, 0, 1, 1, &r_wipe);
         break;
-
-    case misc_texresize:
-        M_SetOptionValue(choice, 0, 2, 1, &r_texnonpowresize);
-        break;
         
     case misc_autorun:
         M_SetOptionValue(choice, 0, 1, 1, &p_autorun);
@@ -1217,7 +1209,6 @@ void M_DrawMisc(void) {
     static const char* autoruntype[2] = { "Off", "On" };
     static const char* mapdisplaytype[2] = { "Hide", "Show" };
     static const char* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
-    static const char* texresizetype[3] = { "Auto", "Padded", "Scaled" };
     static const char* rgbscaletype[3] = { "1x", "2x", "4x" };
     static const char* disablesecretmessages[2] = { "Enabled", "Disabled" };
     int y;
@@ -1241,7 +1232,6 @@ void M_DrawMisc(void) {
     DRAWMISCITEM(misc_jump, p_allowjump.value, msgNames);
     DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
     DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
-    DRAWMISCITEM(misc_texresize, r_texnonpowresize.value, texresizetype);
     DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
     DRAWMISCITEM(misc_combine, r_texturecombiner.value, msgNames);
     DRAWMISCITEM(misc_sprites, r_rendersprites.value - 1, msgNames);
