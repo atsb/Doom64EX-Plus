@@ -235,17 +235,24 @@ char *I_GetBaseDir(void) {
  * @note The returning value MUST be freed by the caller.
  */
 
-char *I_GetUserFile(const char *file) {
-    unsigned char *path;
-    unsigned char *userdir;
+ /* ATSB: for some reason, these free() calls cause MSVC builds to bail out
+ *  but are needed for Unix systems to even boot the game.
+ *  whatever...  eventually we will clean up this mess and have
+ *  portable fixed width types everywhere...  one day.
+ */
+char* I_GetUserFile(const char* file) {
+    unsigned char *path, *userdir;
 
     if (!(userdir = I_GetUserDir()))
         return NULL;
 
-    path = (unsigned char*) malloc(512);
+    path = (unsigned char*)malloc(512);
 
     snprintf(path, 511, "%s%s", userdir, file);
-    
+#ifndef _WIN32
+    free(userdir);
+#endif
+
     return path;
 }
 
@@ -255,20 +262,25 @@ char *I_GetUserFile(const char *file) {
  * @return Fully-qualified path or NULL if not found.
  * @note The returning value MUST be freed by the caller.
  */
-
-char *I_FindDataFile(const char *file) {
+char* I_FindDataFile(const char* file) {
     unsigned char *path, *dir;
 
-    path = (unsigned char*) malloc(512);
+    path = (unsigned char*)malloc(512);
 
     if ((dir = I_GetBaseDir())) {
         snprintf(path, 511, "%s%s", dir, file);
+#ifndef _WIN32
+        free(dir);
+#endif
         if (I_FileExists(path))
             return path;
     }
 
     if ((dir = I_GetUserDir())) {
         snprintf(path, 511, "%s%s", dir, file);
+#ifndef _WIN32
+        free(dir);
+#endif
         if (I_FileExists(path))
             return path;
     }
@@ -292,6 +304,9 @@ char *I_FindDataFile(const char *file) {
                 return path;
         }
     }
+#endif
+#ifndef _WIN32
+    free(path);
 #endif
     return NULL;
 }
