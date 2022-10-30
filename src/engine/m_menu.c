@@ -226,6 +226,7 @@ static void M_DrawSmbString(const char* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
 static void M_SetInputString(char* string, int len);
 static void M_Scroll(menu_t* menu, dboolean up);
+static void M_DoVideoReset(int choice);
 
 static dboolean M_SetThumbnail(int which);
 
@@ -1674,6 +1675,7 @@ enum {
     interpolate_frames,
     vsync,
     v_default,
+    v_videoreset,
     video_return,
     video_end
 } video_e;
@@ -1690,6 +1692,7 @@ menuitem_t VideoMenu[]= {
     {2,"Resolution:",M_ChangeResolution, 'r'},
     {2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
     {2,"Vsync:",M_ChangeVerticalSynchronisation, 'v'},
+    {2,"Apply Settings",M_DoVideoReset, 's'},
     {-2,"Default",M_DoDefaults, 'e'},
     {1,"/r Return",M_Return, 0x20}
 };
@@ -1706,8 +1709,7 @@ char* VideoHints[video_end] = {
     "resolution changes will take effect\n after restarting",
     "toggle frame interpolation to\n achieve smooth framerates",
     "toggle vertical synchronisation to \n reduce screen tear",
-    "resolution changes will take effect\n after restarting",
-    "resolution changes will take effect\n after restarting"
+    "apply video settings"
 };
 
 menudefault_t VideoDefault[] = {
@@ -3512,6 +3514,13 @@ static void M_DoDefaults(int choice) {
     }
 
     S_StartSound(NULL, sfx_switch2);
+}
+
+//
+// M_DoVideoReset
+// 
+static void M_DoVideoReset(int choice) {
+    GL_Init();
 }
 
 //

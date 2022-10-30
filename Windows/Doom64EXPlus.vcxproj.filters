@@ -72,9 +72,6 @@
     <ClCompile Include="..\src\engine\i_audio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\engine\i_cpu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\engine\i_main.c">
       <Filter>Source Files</Filter>
     </ClCompile>

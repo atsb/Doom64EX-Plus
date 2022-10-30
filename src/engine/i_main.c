@@ -498,14 +498,6 @@ int main(int argc, char *argv[]) {
     myargc = argc;
     myargv = argv;
 
-    //process affinity mask stuff
-#if defined(_WIN32) || defined(HAVE_SCHED_SETAFFINITY)
-    {
-        extern void I_SetAffinityMask(void);
-        I_SetAffinityMask();
-    }
-#endif
-
     D_DoomMain();
 
     return 0;
