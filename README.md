@@ -16,6 +16,20 @@ There are a few bugs still present, which I am slowly fixing.  This GitHub repo 
 
 But if any contributors wish to help, then GitHub is a better place for it.
 
+# MOD Support
+
+For modders, wanting to make their mods for EX+ there are a few things that deviate from ancient EX.
+
+1. DM_START and DM_END like the remaster, instead of DS_START and DS_END
+2. Graphics tags aren't implemented (like the remaster).  Instead:
+	a. The FIRST tag for graphics MUST BE 'SYMBOLS' (without the quotes)
+	b. The END tag for graphics MUST BE 'MOUNTC' (without the quotes)
+They can be either a tag or a graphic.  This is due to me not flat-out reading all PNG's in a WAD
+but instead, to support the official IWAD, I read the content like this to catch all the graphics that
+EX+ needs, from the IWAD.
+
+No other changes are needed.
+
 # Info
 
 Doom64EX-Plus is a reverse-engineering project aimed to recreate Doom64 as close as possible with additional modding features.
