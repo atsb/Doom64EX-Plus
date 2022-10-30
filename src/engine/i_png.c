@@ -203,13 +203,20 @@ byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
         if(color_type == PNG_COLOR_TYPE_PALETTE) {
             int i = 0;
             png_colorp pal = NULL; //info_ptr->palette;
-            int num_pal = 8;
+            int num_pal = 0;
             png_get_PLTE(png_ptr, info_ptr, &pal, &num_pal);  // FIXME: num_pal not used??
 
             if(palindex) {
                 // palindex specifies each row (16 colors per row) in the palette for 4 bit color textures
                 if(bit_depth == 4) {
-                        dmemcpy(pal, pal + palindex, 8);
+                        unsigned int pindex = (16 * palindex);
+                        if (pindex >= (unsigned int)(num_pal)) {
+                            pindex = 0;
+                        }
+
+                        for (i = 0; i < 16; i++) {
+                            dmemcpy(&pal[i], &pal[pindex + i], sizeof(png_color));
+                        }
                 }
                 else if(bit_depth >= 8) {  // 8 bit and up requires an external palette lump
                     png_colorp pallump;
