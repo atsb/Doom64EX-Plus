@@ -1209,7 +1209,7 @@ void I_InitSequencer(void) {
     //
     doomseq.settings = new_fluid_settings();
     Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
-    Seq_SetConfig(&doomseq, "synth.polyphony", 256);
+    Seq_SetConfig(&doomseq, "synth.polyphony", 2048);
 
     // 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
     // JACK, if it's compiled in. We don't want to start jackd for a game).
