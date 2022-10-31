@@ -4224,17 +4224,6 @@ d_inline static void glGetBufferPointervARB_DEBUG(GLenum target, GLenum pname, v
 #endif // USE_DEBUG_GLFUNCS
 
 //
-// GL_ARB_texture_non_power_of_two
-//
-extern dboolean has_GL_ARB_texture_non_power_of_two;
-
-#define GL_ARB_texture_non_power_of_two_Define() \
-dboolean has_GL_ARB_texture_non_power_of_two = false;
-
-#define GL_ARB_texture_non_power_of_two_Init() \
-has_GL_ARB_texture_non_power_of_two = GL_CheckExtension("GL_ARB_texture_non_power_of_two");
-
-//
 // GL_ARB_texture_env_combine
 //
 extern dboolean has_GL_ARB_texture_env_combine;

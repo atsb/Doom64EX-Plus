@@ -627,7 +627,6 @@ void GL_Init(void) {
 
     GL_ARB_multitexture_Init();
     GL_EXT_compiled_vertex_array_Init();
-    GL_ARB_texture_non_power_of_two_Init();
     GL_ARB_texture_env_combine_Init();
     GL_EXT_texture_env_combine_Init();
     GL_EXT_texture_filter_anisotropic_Init();
