@@ -57,14 +57,12 @@ cheatinfo_t cheat[] = {
     {   "idkfa",    M_CheatKfa,         0   },
     {   "idclip",   M_CheatClip,        0   },
     {   "idpos",    M_CheatMyPos,       0   },
-
     {   "exmap",    M_CheatAllMap,      0   },
     {   "exrage",   M_CheatBerserk,     0   },
     {   "exgivew",  M_CheatGiveWeapon,  -1  },
     {   "exgivek",  M_CheatGiveKey,     -1  },
     {   "exkill",   M_CheatBoyISuck,    0   },
     {   "exgivea",  M_CheatArtifacts,   -1  },
-
     {   NULL,       NULL,               0   }
 };
 
