@@ -48,7 +48,6 @@ typedef struct {
 
 static void M_CheatFa(player_t* player, char dat[4]);
 static void M_CheatBerserk(player_t* player, char dat[4]);
-static void M_CheatWarp(player_t* player, char dat[4]);
 static void M_CheatMyPos(player_t* player, char dat[4]);
 static void M_CheatAllMap(player_t* player, char dat[4]);
 
@@ -57,7 +56,6 @@ cheatinfo_t cheat[] = {
     {   "idfa",     M_CheatFa,          0   },
     {   "idkfa",    M_CheatKfa,         0   },
     {   "idclip",   M_CheatClip,        0   },
-    {   "idclev",   M_CheatWarp,        -2  },
     {   "idpos",    M_CheatMyPos,       0   },
 
     {   "exmap",    M_CheatAllMap,      0   },
@@ -153,26 +151,6 @@ void M_CheatClip(player_t* player, char dat[4]) {
 static void M_CheatBerserk(player_t* player, char dat[4]) {
     P_GivePower(player, pw_strength);
     player->message = GOTBERSERK;
-}
-
-CVAR_EXTERNAL(sv_skill);
-static void M_CheatWarp(player_t* player, char dat[4]) {
-    int map;
-    map = datoi(dat);
-
-    if(map < 1) {
-        return;
-    }
-
-    if(map > 40) {
-        return;
-    }
-
-    // So be it.
-    gameaction = ga_warpquick;
-    gameskill = (int)sv_skill.value;
-    gamemap = nextmap = map;
-    dmemset(passwordData, 0xff, 16);
 }
 
 static void M_CheatMyPos(player_t* player, char dat[4]) {
