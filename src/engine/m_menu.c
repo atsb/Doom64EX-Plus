@@ -992,7 +992,7 @@ enum {
     misc_comp_pain,
     misc_comp_pass,
     misc_comp_grab,
-	misc_disablesecretmessages,
+    misc_disablesecretmessages,
     misc_default,
     misc_return,
     misc_end
@@ -1010,7 +1010,6 @@ menuitem_t MiscMenu[]= {
     {2,"Use Context:",M_MiscChoice, 'u'},
     {-1,"Rendering",0 },
     {2,"Screen Melt:",M_MiscChoice, 's' },
-    {2,"Texture Fit:",M_MiscChoice,'t' },
     {2,"Use Combiners:",M_MiscChoice, 'c' },
     {2,"Sprite Pitch:",M_MiscChoice,'p'},
     {2,"Skybox:",M_MiscChoice,'k'},
