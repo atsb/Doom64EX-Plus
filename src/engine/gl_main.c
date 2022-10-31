@@ -27,7 +27,10 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+
+#ifdef _WIN32
 #include <wglext.h>
+#endif
 
 #include "doomdef.h"
 #include "doomstat.h"
