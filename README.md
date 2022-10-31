@@ -11,6 +11,7 @@ Differences from Kaiser's C++ version on Github.
 * MAP slots up to MAP40
 * The MEDKIT You Really Need fix
 * Many bugfixes
+* Kex - This is pretty much removed.  The only remnants are some comments with [kex] and the rendering stuff that is used in later versions.  I wanted to keep Doom64EX-Plus very close in format to other source ports, for familiarity purposes and ease-of-porting code from Erick's Doom64-RE project.
 
 There are a few bugs still present, which I am slowly fixing.  This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/
 
