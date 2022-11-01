@@ -83,7 +83,8 @@
 #define LINEHEIGHT          18
 #define TEXTLINEHEIGHT      18
 #define MENUCOLORRED        D_RGBA(255, 0, 0, menualphacolor)
-#define MENUCOLORWHITE        D_RGBA(255, 255, 255, menualphacolor)
+#define MENUCOLORWHITE      D_RGBA(255, 255, 255, menualphacolor)
+#define MENUCOLORYELLOW     D_RGBA(194, 174, 28, menualphacolor)
 #define MAXBRIGHTNESS        100
 
 //
@@ -1648,6 +1649,7 @@ void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeVerticalSynchronisation(int choice);
+void M_ChangeAccessibility(int choice);
 void M_DrawVideo(void);
 
 CVAR_EXTERNAL(v_width);
@@ -1660,6 +1662,7 @@ CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_vsync);
+CVAR_EXTERNAL(v_accessibility);
 
 enum {
     video_dbrightness,
@@ -1673,6 +1676,7 @@ enum {
     resolution,
     interpolate_frames,
     vsync,
+    accessibility,
     v_default,
     v_videoreset,
     video_return,
@@ -1691,6 +1695,7 @@ menuitem_t VideoMenu[]= {
     {2,"Resolution:",M_ChangeResolution, 'r'},
     {2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
     {2,"Vsync:",M_ChangeVerticalSynchronisation, 'v'},
+    {2,"Accessibility:",M_ChangeAccessibility, 'y'},
     {2,"Apply Settings",M_DoVideoReset, 's'},
     {-2,"Default",M_DoDefaults, 'e'},
     {1,"/r Return",M_Return, 0x20}
@@ -1708,6 +1713,7 @@ char* VideoHints[video_end] = {
     "resolution changes will take effect\n after restarting",
     "toggle frame interpolation to\n achieve smooth framerates",
     "toggle vertical synchronisation to \n reduce screen tear",
+    "toggle accessibility to \n remove flashing lights",
     "apply video settings"
 };
 
@@ -1719,6 +1725,7 @@ menudefault_t VideoDefault[] = {
     { &v_windowed, 0 },
     { &i_interpolateframes, 1 },
     { &v_vsync, 1 },
+    { &v_accessibility, 0 },
     { NULL, -1 }
 };
 
@@ -1926,6 +1933,7 @@ void M_DrawVideo(void) {
     DRAWVIDEOITEM(resolution, res);
     DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
     DRAWVIDEOITEM2(vsync, v_vsync.value, frametype);
+    DRAWVIDEOITEM2(accessibility, v_accessibility.value, frametype);
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
@@ -2123,6 +2131,11 @@ void M_ChangeInterpolateFrames(int choice)
 void M_ChangeVerticalSynchronisation(int choice)
 {
     M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
+}
+
+void M_ChangeAccessibility(int choice)
+{
+    M_SetOptionValue(choice, 0, 1, 1, &v_accessibility);
 }
 
 //------------------------------------------------------------------------
@@ -3168,12 +3181,12 @@ void M_DrawSave(void) {
             string = savegamestrings[i];
         }
 
-        Draw_BigText(SaveDef.x, SaveDef.y + LINEHEIGHT * i, MENUCOLORRED, string);
+        Draw_BigText(SaveDef.x, SaveDef.y + LINEHEIGHT * i, MENUCOLORYELLOW, string);
     }
 
     if(inputEnter) {
         i = ((int)(160.0f / SaveDef.scale) - Center_Text(inputString)) * 2;
-        Draw_BigText(SaveDef.x + i, (SaveDef.y + LINEHEIGHT * saveSlot) - 2, MENUCOLORWHITE, "/r");
+        Draw_BigText(SaveDef.x + i, (SaveDef.y + LINEHEIGHT * saveSlot) - 2, MENUCOLORYELLOW, "/r");
     }
 }
 
@@ -3283,7 +3296,7 @@ void M_DrawLoad(void) {
 
     for(i = 0; i < load_end; i++)
         Draw_BigText(LoadDef.x, LoadDef.y + LINEHEIGHT * i,
-                     MENUCOLORRED, savegamestrings[i]);
+            MENUCOLORYELLOW, savegamestrings[i]);
 }
 
 
@@ -3989,51 +4002,12 @@ static dboolean M_SetThumbnail(int which) {
 
     //
     // poke into savegame file and fetch
-    // thumbnail, date and stats
+    // date and stats
     //
     if(!P_QuickReadSaveHeader(P_GetSaveGameName(which), thumbnail_date, (int*)data,
                               &thumbnail_skill, &thumbnail_map)) {
         Z_Free(data);
         return 0;
-    }
-
-    //
-    // make a new thumbnail texture
-    //
-    if(thumbnail == 0) {
-        dglGenTextures(1, &thumbnail);
-        dglBindTexture(GL_TEXTURE_2D, thumbnail);
-
-        GL_SetTextureFilter();
-
-        dglTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RGB8,
-            128,
-            128,
-            0,
-            GL_RGB,
-            GL_UNSIGNED_BYTE,
-            data
-        );
-    }
-    else {
-        dglBindTexture(GL_TEXTURE_2D, thumbnail);
-
-        GL_SetTextureFilter();
-
-        dglTexSubImage2D(
-            GL_TEXTURE_2D,
-            0,
-            0,
-            0,
-            128,
-            128,
-            GL_RGB,
-            GL_UNSIGNED_BYTE,
-            data
-        );
     }
 
     Z_Free(data);
@@ -4054,7 +4028,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
     //
     // draw back panels
     //
-    dglColor4ub(32, 32, 32, menualphacolor);
+    dglColor4ub(4, 4, 4, menualphacolor);
     //
     // save game panel
     //
@@ -4065,7 +4039,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
         def->y + 156
     );
     //
-    // thumbnail panel
+    // stats panel
     //
     dglRecti(
         def->x + 272,
@@ -4073,20 +4047,11 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
         def->x + 464,
         def->y + 116
     );
-    //
-    // stats panel
-    //
-    dglRecti(
-        def->x + 272,
-        def->y + 124,
-        def->x + 464,
-        def->y + 176
-    );
 
     //
     // draw outline for panels
     //
-    dglColor4ub(192, 192, 192, menualphacolor);
+    dglColor4ub(240, 86, 84, menualphacolor);
     dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     //
     // save game panel
@@ -4098,7 +4063,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
         def->y + 156
     );
     //
-    // thumbnail panel
+    // stats panel
     //
     dglRecti(
         def->x + 272,
@@ -4106,23 +4071,8 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
         def->x + 464,
         def->y + 116
     );
-    //
-    // stats panel
-    //
-    dglRecti(
-        def->x + 272,
-        def->y + 124,
-        def->x + 464,
-        def->y + 176
-    );
     dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     dglEnable(GL_TEXTURE_2D);
-
-    //
-    // 20120404 villsa - reset active textures just to make sure
-    // we don't end up seeing that thumbnail texture on a wall or something
-    //
-    GL_ResetTextures();
 
     //
     // draw thumbnail texture and stats
@@ -4130,31 +4080,17 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
     if(M_SetThumbnail(itemOn)) {
         char string[128];
 
-        dglBindTexture(GL_TEXTURE_2D, thumbnail);
-
-        dglBegin(GL_POLYGON);
-        dglColor4ub(0xff, 0xff, 0xff, menualphacolor);
-        dglTexCoord2f(0, 0);
-        dglVertex2i(def->x + 288, def->y + -8);
-        dglTexCoord2f(1, 0);
-        dglVertex2i(def->x + 448, def->y + -8);
-        dglTexCoord2f(1, 1);
-        dglVertex2i(def->x + 448, def->y + 112);
-        dglTexCoord2f(0, 1);
-        dglVertex2i(def->x + 288, def->y + 112);
-        dglEnd();
-
         curgfx = -1;
 
         GL_SetOrthoScale(0.35f);
 
-        Draw_BigText(def->x + 444, def->y + 244, MENUCOLORWHITE, thumbnail_date);
+        Draw_BigText(def->x + 440, def->y + 60, MENUCOLORYELLOW, thumbnail_date);
 
         sprintf(string, "Skill: %s", NewGameMenu[thumbnail_skill].name);
-        Draw_BigText(def->x + 444, def->y + 268, MENUCOLORWHITE, string);
+        Draw_BigText(def->x + 440, def->y + 168, MENUCOLORYELLOW, string);
 
         sprintf(string, "Map: %s", P_GetMapInfo(thumbnail_map)->mapname);
-        Draw_BigText(def->x + 444, def->y + 292, MENUCOLORWHITE, string);
+        Draw_BigText(def->x + 440, def->y + 196, MENUCOLORYELLOW, string);
 
         GL_SetOrthoScale(def->scale);
     }

@@ -56,7 +56,7 @@ char *sprnames[NUMSPRITES+1] = {  //0x5FA30
     "A001", "A012", "A010", "A018", "A017", "A026", "A022", "A028",
     "A029", "A035", "A036", "TRE3", "TRE2", "TRE1", "A013", "A019",
     "A004", "A005", "A023", "SAWG", "PUNG", "PISG", "SHT1", "SHT2",
-    "CHGG", "ROCK", "PLAS", "BFGG", "LASR", "RBLD", "GBLD", NULL
+    "CHGG", "ROCK", "PLAS", "BFGG", "LASR", NULL
 };
 
 

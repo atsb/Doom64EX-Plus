@@ -58,6 +58,7 @@ CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_rendersprites);
+CVAR_EXTERNAL(v_accessibility);
 
 static void AddSpriteDrawlist(drawlist_t *dl, visspritelist_t *vis, int texid);
 
@@ -672,15 +673,18 @@ void R_DrawPSprite(pspdef_t *psp, sector_t* sector, player_t *player) {
 
         dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
-        if(!nolights) {
-            GL_UpdateEnvTexture(WHITE);
-            GL_SetTextureUnit(1, true);
-            dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
-        }
+        if (v_accessibility.value < 1)
+        {
+            if (!nolights) {
+                GL_UpdateEnvTexture(WHITE);
+                GL_SetTextureUnit(1, true);
+                dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+            }
 
-        if(st_flashoverlay.value <= 0) {
-            GL_SetTextureUnit(2, true);
-            dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+            if (st_flashoverlay.value <= 0) {
+                GL_SetTextureUnit(2, true);
+                dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+            }
         }
 
         dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);

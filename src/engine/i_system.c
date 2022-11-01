@@ -54,6 +54,7 @@
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
+CVAR(v_accessibility, 0);
 
 // Gibbon - hack from curl to deal with some crap
 #if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
@@ -475,6 +476,7 @@ CVAR_EXTERNAL(i_xinputscheme);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(v_vsync);
+CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
 #ifdef _USE_XINPUT
@@ -487,5 +489,6 @@ void I_RegisterCvars(void) {
     CON_CvarRegister(&i_brightness);
     CON_CvarRegister(&i_interpolateframes);
     CON_CvarRegister(&v_vsync);
+    CON_CvarRegister(&v_accessibility);
 }
 

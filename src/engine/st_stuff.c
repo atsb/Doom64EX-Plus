@@ -55,6 +55,8 @@
 #ifdef _WIN32
 #include "i_xinput.h"
 
+CVAR_EXTERNAL(v_accessibility);
+
 void M_DrawXInputButton(int x, int y, int button);
 
 #endif
@@ -474,17 +476,20 @@ void ST_Ticker(void) {
 //
 
 void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
-    rcolor c = D_RGBA(r, g, b, a);
+    if (v_accessibility.value < 1)
+    {
+        rcolor c = D_RGBA(r, g, b, a);
 
-    GL_SetState(GLSTATE_BLEND, 1);
-    GL_SetOrtho(1);
+        GL_SetState(GLSTATE_BLEND, 1);
+        GL_SetOrtho(1);
 
-    dglDisable(GL_TEXTURE_2D);
-    dglColor4ubv((byte*)&c);
-    dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
-    dglEnable(GL_TEXTURE_2D);
+        dglDisable(GL_TEXTURE_2D);
+        dglColor4ubv((byte*)&c);
+        dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
+        dglEnable(GL_TEXTURE_2D);
 
-    GL_SetState(GLSTATE_BLEND, 0);
+        GL_SetState(GLSTATE_BLEND, 0);
+    }
 }
 
 //
@@ -1117,19 +1122,6 @@ void ST_Init(void) {
     }
 
     dmgmarkers.next = dmgmarkers.prev = &dmgmarkers;
-
-    // setup region-specific messages
-
-    for(i = 0; i < ST_JMESSAGES; i++) {
-        char name[9];
-
-        sprintf(name, "JPMSG%02d", i + 1);
-        st_jmessages[i] = W_CheckNumForName(name);
-
-        if(st_jmessages[i] != -1) {
-            st_hasjmsg = true;
-        }
-    }
 
     // setup weapon display variables
 

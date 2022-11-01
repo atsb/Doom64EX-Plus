@@ -56,6 +56,8 @@
 // plasma cells for a bfg attack
 #define BFGCELLS                40
 
+CVAR_EXTERNAL(v_accessibility);
+
 weaponinfo_t    weaponinfo[NUMWEAPONS] = {
     { am_noammo,    S_SAWUP, S_SAWDOWN, S_SAWA, S_SAW1, S_NULL },    // chainsaw
     { am_noammo,    S_PUNCHUP, S_PUNCHDOWN, S_PUNCH, S_PUNCH1, S_NULL },    // fist
@@ -717,13 +719,15 @@ void A_FireCGun(player_t* player, pspdef_t* psp) {
     // randomize sy
     rand = ((((ammo - 1) & 1) << 1) - 1);
     psp->sy = WEAPONTOP - (rand * (2*FRACUNIT));
+    if (v_accessibility.value < 1)
+    {
+        player->psprites[ps_flash].alpha = 160;
 
-    player->psprites[ps_flash].alpha = 160;
+        P_SetPsprite(player, ps_flash,
+            weaponinfo[player->readyweapon].flashstate + psp->state - &states[S_CHAING1]);
 
-    P_SetPsprite(player, ps_flash,
-                 weaponinfo[player->readyweapon].flashstate + psp->state - &states[S_CHAING1]);
-
-    player->recoilpitch = RECOILPITCH;
+        player->recoilpitch = RECOILPITCH;
+    }
 
     P_BulletSlope(player->mo);
     P_GunShot(player->mo, !player->refire);
