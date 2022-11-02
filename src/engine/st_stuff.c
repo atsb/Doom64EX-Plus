@@ -55,8 +55,6 @@
 #ifdef _WIN32
 #include "i_xinput.h"
 
-CVAR_EXTERNAL(v_accessibility);
-
 void M_DrawXInputButton(int x, int y, int button);
 
 #endif
@@ -73,6 +71,7 @@ CVAR(st_showstats, 0);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(r_texturecombiner);
+CVAR_EXTERNAL(v_accessibility);
 
 //
 // STATUS BAR DATA
