@@ -177,7 +177,6 @@
     <ClCompile Include="..\src\engine\i_video.c" />
     <ClCompile Include="..\src\engine\i_xinput.c" />
     <ClCompile Include="..\src\engine\md5.c" />
-    <ClCompile Include="..\src\engine\m_argv.c" />
     <ClCompile Include="..\src\engine\m_cheat.c" />
     <ClCompile Include="..\src\engine\m_fixed.c" />
     <ClCompile Include="..\src\engine\m_keys.c" />

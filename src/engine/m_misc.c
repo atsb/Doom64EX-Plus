@@ -55,7 +55,7 @@
 #include "gl_texture.h"
 #include "p_saveg.h"
 
-int        myargc;
+int      myargc;
 int8_t** myargv;
 
 //

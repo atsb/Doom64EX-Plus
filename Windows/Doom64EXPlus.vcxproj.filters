@@ -273,9 +273,6 @@
     <ClCompile Include="..\src\engine\sha1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\engine\m_argv.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\engine\deh_ammo.c">
       <Filter>Source Files</Filter>
     </ClCompile>

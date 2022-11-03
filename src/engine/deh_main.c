@@ -24,7 +24,6 @@
 #include "i_opndir.h"
 #include "doomtype.h"
 #include "i_system.h"
-#include "m_argv.h"
 #include "w_wad.h"
 #include "w_file.h"
 #include "m_misc.h"
