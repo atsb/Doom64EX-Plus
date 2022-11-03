@@ -64,7 +64,7 @@
 #include "g_demo.h"
 #include "p_saveg.h"
 #include "gl_draw.h"
-
+#include "deh_main.h"
 #include "net_client.h"
 
 //
@@ -973,6 +973,14 @@ void D_DoomMain(void) {
 
 	I_Printf("W_Init: Init WADfiles.\n");
 	W_Init();
+
+	// Load Dehacked patches specified on the command line with -deh.
+	// Note that there's a very careful and deliberate ordering to how
+	// Dehacked patches are loaded. The order we use is:
+	//  1. IWAD dehacked patches.
+	//  2. Command line dehacked patches specified with -deh.
+	//  3. PWAD dehacked patches in DEHACKED lumps.
+	DEH_ParseCommandLine();
 
 	I_Printf("M_Init: Init miscellaneous info.\n");
 	M_Init();

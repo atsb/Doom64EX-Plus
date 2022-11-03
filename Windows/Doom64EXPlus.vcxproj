@@ -144,6 +144,18 @@
     <ClCompile Include="..\src\engine\am_map.c" />
     <ClCompile Include="..\src\engine\con_console.c" />
     <ClCompile Include="..\src\engine\con_cvar.c" />
+    <ClCompile Include="..\src\engine\deh_ammo.c" />
+    <ClCompile Include="..\src\engine\deh_doom.c" />
+    <ClCompile Include="..\src\engine\deh_frame.c" />
+    <ClCompile Include="..\src\engine\deh_io.c" />
+    <ClCompile Include="..\src\engine\deh_main.c" />
+    <ClCompile Include="..\src\engine\deh_mapping.c" />
+    <ClCompile Include="..\src\engine\deh_misc.c" />
+    <ClCompile Include="..\src\engine\deh_ptr.c" />
+    <ClCompile Include="..\src\engine\deh_str.c" />
+    <ClCompile Include="..\src\engine\deh_text.c" />
+    <ClCompile Include="..\src\engine\deh_thing.c" />
+    <ClCompile Include="..\src\engine\deh_weapon.c" />
     <ClCompile Include="..\src\engine\dgl.c" />
     <ClCompile Include="..\src\engine\d_devstat.c" />
     <ClCompile Include="..\src\engine\d_main.c" />
@@ -165,6 +177,7 @@
     <ClCompile Include="..\src\engine\i_video.c" />
     <ClCompile Include="..\src\engine\i_xinput.c" />
     <ClCompile Include="..\src\engine\md5.c" />
+    <ClCompile Include="..\src\engine\m_argv.c" />
     <ClCompile Include="..\src\engine\m_cheat.c" />
     <ClCompile Include="..\src\engine\m_fixed.c" />
     <ClCompile Include="..\src\engine\m_keys.c" />
@@ -212,6 +225,7 @@
     <ClCompile Include="..\src\engine\r_things.c" />
     <ClCompile Include="..\src\engine\r_wipe.c" />
     <ClCompile Include="..\src\engine\sc_main.c" />
+    <ClCompile Include="..\src\engine\sha1.c" />
     <ClCompile Include="..\src\engine\st_stuff.c" />
     <ClCompile Include="..\src\engine\s_sound.c" />
     <ClCompile Include="..\src\engine\tables.c" />

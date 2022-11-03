@@ -966,6 +966,7 @@ typedef struct {
 	int            tics;
 	actionf_t        action;
 	statenum_t    nextstate;
+	int			  misc1, misc2;
 } state_t;
 
 typedef enum {

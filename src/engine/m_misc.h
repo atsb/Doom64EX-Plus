@@ -24,6 +24,7 @@
 #ifndef __M_MISC__
 #define __M_MISC__
 
+#include <stdbool.h>
 #include "doomtype.h"
 #include "m_fixed.h"
 #include "r_local.h"
@@ -70,6 +71,9 @@ void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
+bool M_StringCopy(char* dest, const char* src, size_t dest_size);
+char* M_StringDuplicate(const char* orig);
+int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 
 //
 // DEFAULTS
