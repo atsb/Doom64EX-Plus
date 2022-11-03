@@ -1,7 +1,12 @@
 Doom64EX-Plus
 ========
 
-Differences from Kaiser's C++ version on Github.
+# Info
+
+Doom64EX-Plus is a reverse-engineering/Continuation project of The Kaiser's Doom64x. aimed to recreate Doom64 as close as possible with additional modding features.
+
+
+# Differences from Kaiser's C++ version on Github.
 
 * Support for the Nightdive IWAD
 * Support for the Lost Levels
@@ -31,12 +36,6 @@ EX+ needs, from the IWAD.
 
 No other changes are needed.
 
-# Info
-
-Doom64EX-Plus is a reverse-engineering project aimed to recreate Doom64 as close as possible with additional modding features.
-
-**NOTE for Linux users:** As of Feb. 24, 2016, the save data is located in `$XDG_DATA_HOME/doom64ex-plus` (typically `~/.local/share/doom64ex-plus`) and not in `~/.doom64ex-plus`. The files can be safely moved to their new home.
-
 ## Dependencies
 
 * SDL2
@@ -47,7 +46,7 @@ Doom64EX-Plus is a reverse-engineering project aimed to recreate Doom64 as close
 
 ## Compiling
 
-### Linux, MSYS and cross compilation.
+### Linux, MSYS, cross compilation and MSVC 2022.
 
 Clone this repo
 
@@ -56,7 +55,7 @@ Clone this repo
 For Linux, use the build.sh script.
 For cross compilation for Windows, use the build_win_cross.sh
 
-For Windows, use the provided Visual Studio project file for 32bit builds.
+For Windows Only, use the provided Visual Studio Project/Solution file for 32bit or 64bit builds.
 
 ## Usage
 
@@ -76,6 +75,8 @@ The data files are:
 * `doom64ex-plus.wad`
 * `doom64.wad`
 * `doomsnd.sf2`
+
+**NOTE for Linux users:** As of Feb. 24, 2016, the save data is located in `$XDG_DATA_HOME/doom64ex-plus` (typically `~/.local/share/doom64ex-plus`) and not in `~/.doom64ex-plus`. The files can be safely moved to their new home.
 
 After this you can play.
 
