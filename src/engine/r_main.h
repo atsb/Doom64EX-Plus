@@ -47,7 +47,7 @@ extern float        viewsin[2];
 extern float        viewcos[2];
 extern float        viewoffset;
 extern int          skytexture;
-extern player_t     *renderplayer;
+extern player_t* renderplayer;
 extern int          logoAlpha;
 extern fixed_t      scrollfrac;
 extern int          vertCount;
@@ -64,13 +64,13 @@ CVAR_EXTERNAL(r_uniformtime);
 CVAR_EXTERNAL(r_drawtrace);
 
 void R_Init(void);
-void R_RenderPlayerView(player_t *player);
-subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
+void R_RenderPlayerView(player_t* player);
+subsector_t* R_PointInSubsector(fixed_t x, fixed_t y);
 angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
 angle_t R_PointToAngle(fixed_t x, fixed_t y);//note difference from sw version
 angle_t R_PointToPitch(fixed_t z1, fixed_t z2, fixed_t dist);
 void R_PrecacheLevel(void);
-int R_PointOnSide(fixed_t x, fixed_t y, node_t *node);
+int R_PointOnSide(fixed_t x, fixed_t y, node_t* node);
 fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, dboolean enable);
 void R_SetupLevel(void);
 void R_SetViewAngleOffset(angle_t angle);

@@ -62,14 +62,14 @@ CVAR(v_accessibility, 0);
 #endif
 
 ticcmd_t        emptycmd;
-static int64    I_GetTime_Scale = 1<<24;
+static int64    I_GetTime_Scale = 1 << 24;
 
 //
 // I_uSleep
 //
 
 void I_Sleep(uint32_t usecs) {
-    SDL_Delay(usecs);
+	SDL_Delay(usecs);
 }
 
 static int basetime = 0;
@@ -79,17 +79,17 @@ static int basetime = 0;
 //
 
 static int I_GetTimeNormal(void) {
-    uint32 ticks;
+	uint32 ticks;
 
-    ticks = SDL_GetTicks();
+	ticks = SDL_GetTicks();
 
-    if(basetime == 0) {
-        basetime = ticks;
-    }
+	if (basetime == 0) {
+		basetime = ticks;
+	}
 
-    ticks -= basetime;
+	ticks -= basetime;
 
-    return (ticks * TICRATE) / 1000;
+	return (ticks * TICRATE) / 1000;
 }
 
 //
@@ -97,7 +97,7 @@ static int I_GetTimeNormal(void) {
 //
 
 static int I_GetTime_Scaled(void) {
-    return (int)((int64) I_GetTimeNormal() * I_GetTime_Scale >> 24);
+	return (int)((int64)I_GetTimeNormal() * I_GetTime_Scale >> 24);
 }
 
 //
@@ -105,8 +105,8 @@ static int I_GetTime_Scaled(void) {
 //
 
 static int I_GetTime_Error(void) {
-    I_Error("I_GetTime_Error: GetTime() used before initialization");
-    return 0;
+	I_Error("I_GetTime_Error: GetTime() used before initialization");
+	return 0;
 }
 
 //
@@ -114,7 +114,7 @@ static int I_GetTime_Error(void) {
 //
 
 void I_InitClockRate(void) {
-    I_GetTime = I_GetTimeNormal;
+	I_GetTime = I_GetTimeNormal;
 }
 
 //
@@ -139,16 +139,16 @@ const float     rendertic_msec = 100 * TICRATE / 100000.0f;
 //
 
 dboolean I_StartDisplay(void) {
-    rendertic_frac = I_GetTimeFrac();
+	rendertic_frac = I_GetTimeFrac();
 
-    if(InDisplay) {
-        return false;
-    }
+	if (InDisplay) {
+		return false;
+	}
 
-    start_displaytime = SDL_GetTicks();
-    InDisplay = true;
+	start_displaytime = SDL_GetTicks();
+	InDisplay = true;
 
-    return true;
+	return true;
 }
 
 //
@@ -156,8 +156,8 @@ dboolean I_StartDisplay(void) {
 //
 
 void I_EndDisplay(void) {
-    displaytime = SDL_GetTicks() - start_displaytime;
-    InDisplay = false;
+	displaytime = SDL_GetTicks() - start_displaytime;
+	InDisplay = false;
 }
 
 //
@@ -165,24 +165,24 @@ void I_EndDisplay(void) {
 //
 
 fixed_t I_GetTimeFrac(void) {
-    uint32_t now;
-    fixed_t frac;
+	uint32_t now;
+	fixed_t frac;
 
-    now = SDL_GetTicks();
+	now = SDL_GetTicks();
 
-    if(rendertic_step == 0) {
-        return FRACUNIT;
-    }
-    else {
-        frac = (fixed_t)((now - rendertic_start + displaytime) * FRACUNIT / rendertic_step);
-        if(frac < 0) {
-            frac = 0;
-        }
-        if(frac > FRACUNIT) {
-            frac = FRACUNIT;
-        }
-        return frac;
-    }
+	if (rendertic_step == 0) {
+		return FRACUNIT;
+	}
+	else {
+		frac = (fixed_t)((now - rendertic_start + displaytime) * FRACUNIT / rendertic_step);
+		if (frac < 0) {
+			frac = 0;
+		}
+		if (frac > FRACUNIT) {
+			frac = FRACUNIT;
+		}
+		return frac;
+	}
 }
 
 //
@@ -190,9 +190,9 @@ fixed_t I_GetTimeFrac(void) {
 //
 
 void I_GetTime_SaveMS(void) {
-    rendertic_start = SDL_GetTicks();
-    rendertic_next = (uint32_t)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
-    rendertic_step = rendertic_next - rendertic_start;
+	rendertic_start = SDL_GetTicks();
+	rendertic_next = (uint32_t)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
+	rendertic_step = rendertic_next - rendertic_start;
 }
 
 //
@@ -200,7 +200,7 @@ void I_GetTime_SaveMS(void) {
 //
 
 ticcmd_t* I_BaseTiccmd(void) {
-    return &emptycmd;
+	return &emptycmd;
 }
 
 /**
@@ -212,11 +212,11 @@ ticcmd_t* I_BaseTiccmd(void) {
  * @note The returning value MUST be freed by the caller.
  */
 
-char *I_GetUserDir(void) {
+int8_t* I_GetUserDir(void) {
 #ifdef _WIN32
-    return I_GetBaseDir();
+	return I_GetBaseDir();
 #else
-    return SDL_GetPrefPath("", "doom64ex-plus");
+	return SDL_GetPrefPath("", "doom64ex-plus");
 #endif
 }
 
@@ -227,8 +227,8 @@ char *I_GetUserDir(void) {
  * @note The returning value MUST be freed by the caller.
  */
 
-char *I_GetBaseDir(void) {
-    return SDL_GetBasePath();
+int8_t* I_GetBaseDir(void) {
+	return SDL_GetBasePath();
 }
 
 /**
@@ -243,20 +243,20 @@ char *I_GetBaseDir(void) {
  *  whatever...  eventually we will clean up this mess and have
  *  portable fixed width types everywhere...  one day.
  */
-char* I_GetUserFile(const char* file) {
-    unsigned char *path, *userdir;
+int8_t* I_GetUserFile(const int8_t* file) {
+	uint8_t* path, * userdir;
 
-    if (!(userdir = I_GetUserDir()))
-        return NULL;
+	if (!(userdir = I_GetUserDir()))
+		return NULL;
 
-    path = (unsigned char*)malloc(512);
+	path = (uint8_t*)malloc(512);
 
-    snprintf(path, 511, "%s%s", userdir, file);
+	snprintf(path, 511, "%s%s", userdir, file);
 #ifndef _WIN32
-    free(userdir);
+	free(userdir);
 #endif
 
-    return path;
+	return path;
 }
 
 /**
@@ -265,53 +265,53 @@ char* I_GetUserFile(const char* file) {
  * @return Fully-qualified path or NULL if not found.
  * @note The returning value MUST be freed by the caller.
  */
-char* I_FindDataFile(const char* file) {
-    unsigned char *path, *dir;
+int8_t* I_FindDataFile(const int8_t* file) {
+	uint8_t* path, * dir;
 
-    path = (unsigned char*)malloc(512);
+	path = (uint8_t*)malloc(512);
 
-    if ((dir = I_GetBaseDir())) {
-        snprintf(path, 511, "%s%s", dir, file);
+	if ((dir = I_GetBaseDir())) {
+		snprintf(path, 511, "%s%s", dir, file);
 #ifndef _WIN32
-        free(dir);
+		free(dir);
 #endif
-        if (I_FileExists(path))
-            return path;
-    }
+		if (I_FileExists(path))
+			return path;
+	}
 
-    if ((dir = I_GetUserDir())) {
-        snprintf(path, 511, "%s%s", dir, file);
+	if ((dir = I_GetUserDir())) {
+		snprintf(path, 511, "%s%s", dir, file);
 #ifndef _WIN32
-        free(dir);
+		free(dir);
 #endif
-        if (I_FileExists(path))
-            return path;
-    }
+		if (I_FileExists(path))
+			return path;
+	}
 
 #if defined(__LINUX__) || defined(__OpenBSD__)
-    {
-        int i;
-        const char *paths[] = {
-                "/usr/local/share/games/doom64ex-plus/",
-                "/usr/local/share/doom64ex-plus/",
-                "/usr/local/share/doom/",
-                "/usr/share/games/doom64ex-plus/",
-                "/usr/share/doom64ex-plus/",
-                "/usr/share/doom/",
-                "/opt/doom64ex-plus/",
-        };
+	{
+		int i;
+		const int8_t* paths[] = {
+				"/usr/local/share/games/doom64ex-plus/",
+				"/usr/local/share/doom64ex-plus/",
+				"/usr/local/share/doom/",
+				"/usr/share/games/doom64ex-plus/",
+				"/usr/share/doom64ex-plus/",
+				"/usr/share/doom/",
+				"/opt/doom64ex-plus/",
+		};
 
-        for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-            snprintf(path, 511, "%s%s", paths[i], file);
-            if (I_FileExists(path))
-                return path;
-        }
-    }
+		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
+			snprintf(path, 511, "%s%s", paths[i], file);
+			if (I_FileExists(path))
+				return path;
+		}
+	}
 #endif
 #ifndef _WIN32
-    free(path);
+	free(path);
 #endif
-    return NULL;
+	return NULL;
 }
 
 /**
@@ -319,10 +319,10 @@ char* I_FindDataFile(const char* file) {
  * @param path Absolute path to check.
  */
 
-dboolean I_FileExists(const char *path)
+dboolean I_FileExists(const int8_t* path)
 {
-    struct stat st;
-    return !stat(path, &st) && S_ISREG(st.st_mode);
+	struct stat st;
+	return !stat(path, &st) && S_ISREG(st.st_mode);
 }
 
 //
@@ -340,15 +340,15 @@ int (*I_GetTime)(void) = I_GetTime_Error;
 //
 
 int I_GetTimeMS(void) {
-    uint32 ticks;
+	uint32 ticks;
 
-    ticks = SDL_GetTicks();
+	ticks = SDL_GetTicks();
 
-    if(basetime == 0) {
-        basetime = ticks;
-    }
+	if (basetime == 0) {
+		basetime = ticks;
+	}
 
-    return ticks - basetime;
+	return ticks - basetime;
 }
 
 //
@@ -356,8 +356,8 @@ int I_GetTimeMS(void) {
 //
 
 uint32_t I_GetRandomTimeSeed(void) {
-    // not exactly random....
-    return SDL_GetTicks();
+	// not exactly random....
+	return SDL_GetTicks();
 }
 
 //
@@ -366,47 +366,47 @@ uint32_t I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
-    I_InitVideo();
-    I_InitClockRate();
+	I_InitVideo();
+	I_InitClockRate();
 }
 
 //
 // I_Error
 //
 
-void I_Error(const char* string, ...) {
-    char buff[1024];
-    va_list    va;
+void I_Error(const int8_t* string, ...) {
+	int8_t buff[1024];
+	va_list    va;
 
-    I_ShutdownSound();
+	I_ShutdownSound();
 
-    va_start(va, string);
-    vsprintf(buff, string, va);
-    va_end(va);
+	va_start(va, string);
+	vsprintf(buff, string, va);
+	va_end(va);
 
-    fprintf(stderr, "Error - %s\n", buff);
-    fflush(stderr);
+	fprintf(stderr, "Error - %s\n", buff);
+	fflush(stderr);
 
-    I_Printf("\n********* ERROR *********\n");
-    I_Printf("%s", buff);
+	I_Printf("\n********* ERROR *********\n");
+	I_Printf("%s", buff);
 
-    if(usingGL) {
-        while(1) {
-            GL_ClearView(0xFF000000);
-            Draw_Text(0, 0, WHITE, 1, 1, "Error - %s\n", buff);
-            GL_SwapBuffers();
+	if (usingGL) {
+		while (1) {
+			GL_ClearView(0xFF000000);
+			Draw_Text(0, 0, WHITE, 1, 1, "Error - %s\n", buff);
+			GL_SwapBuffers();
 
-            if(I_ShutdownWait()) {
-                break;
-            }
+			if (I_ShutdownWait()) {
+				break;
+			}
 
-            I_Sleep(1);
-        }
-    }
-    else {
-        I_ShutdownVideo();
-    }
-    exit(0);    // just in case...
+			I_Sleep(1);
+		}
+	}
+	else {
+		I_ShutdownVideo();
+	}
+	exit(0);    // just in case...
 }
 
 //
@@ -414,53 +414,53 @@ void I_Error(const char* string, ...) {
 //
 
 void I_Quit(void) {
-    if(demorecording) {
-        endDemo = true;
-        G_CheckDemoStatus();
-    }
-    M_SaveDefaults();
-    I_ShutdownSound();
-    I_ShutdownVideo();
+	if (demorecording) {
+		endDemo = true;
+		G_CheckDemoStatus();
+	}
+	M_SaveDefaults();
+	I_ShutdownSound();
+	I_ShutdownVideo();
 
-    exit(0);
+	exit(0);
 }
 
 //
 // I_Printf
 //
 
-void I_Printf(const char* string, ...) {
-    char buff[1024];
-    va_list    va;
+void I_Printf(const int8_t* string, ...) {
+	int8_t buff[1024];
+	va_list    va;
 
-    dmemset(buff, 0, 1024);
+	dmemset(buff, 0, 1024);
 
-    va_start(va, string);
-    vsprintf(buff, string, va);
-    va_end(va);
-    printf("%s", buff);
-    if(console_initialized) {
-        CON_AddText(buff);
-    }
+	va_start(va, string);
+	vsprintf(buff, string, va);
+	va_end(va);
+	printf("%s", buff);
+	if (console_initialized) {
+		CON_AddText(buff);
+	}
 }
 
 //
 // I_BeginRead
 //
 
-dboolean    inshowbusy=false;
+dboolean    inshowbusy = false;
 
 void I_BeginRead(void) {
-    if(!devparm) {
-        return;
-    }
+	if (!devparm) {
+		return;
+	}
 
-    if(inshowbusy) {
-        return;
-    }
-    inshowbusy=true;
-    inshowbusy=false;
-    BusyDisk=true;
+	if (inshowbusy) {
+		return;
+	}
+	inshowbusy = true;
+	inshowbusy = false;
+	BusyDisk = true;
 }
 
 //
@@ -480,15 +480,14 @@ CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
 #ifdef _USE_XINPUT
-    CON_CvarRegister(&i_rsticksensitivity);
-    CON_CvarRegister(&i_rstickthreshold);
-    CON_CvarRegister(&i_xinputscheme);
+	CON_CvarRegister(&i_rsticksensitivity);
+	CON_CvarRegister(&i_rstickthreshold);
+	CON_CvarRegister(&i_xinputscheme);
 #endif
 
-    CON_CvarRegister(&i_gamma);
-    CON_CvarRegister(&i_brightness);
-    CON_CvarRegister(&i_interpolateframes);
-    CON_CvarRegister(&v_vsync);
-    CON_CvarRegister(&v_accessibility);
+	CON_CvarRegister(&i_gamma);
+	CON_CvarRegister(&i_brightness);
+	CON_CvarRegister(&i_interpolateframes);
+	CON_CvarRegister(&v_vsync);
+	CON_CvarRegister(&v_accessibility);
 }
-

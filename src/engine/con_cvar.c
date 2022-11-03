@@ -40,131 +40,131 @@
 #include "g_game.h"
 #include "g_actions.h"
 
-cvar_t  *cvarcap;
+cvar_t* cvarcap;
 
 //
 // CMD_ListCvars
 //
 
 static CMD(ListCvars) {
-    cvar_t *var;
+	cvar_t* var;
 
-    CON_Printf(GREEN, "Available cvars:\n");
+	CON_Printf(GREEN, "Available cvars:\n");
 
-    for(var = cvarcap; var; var = var->next) {
-        CON_Printf(AQUA, "%s\n", var->name);
-    }
+	for (var = cvarcap; var; var = var->next) {
+		CON_Printf(AQUA, "%s\n", var->name);
+	}
 }
 
 //
 // CON_CvarGet
 //
 
-cvar_t *CON_CvarGet(char *name) {
-    cvar_t *var;
+cvar_t* CON_CvarGet(int8_t* name) {
+	cvar_t* var;
 
-    for(var = cvarcap; var; var = var->next) {
-        if(!dstrcmp(name, var->name)) {
-            return var;
-        }
-    }
+	for (var = cvarcap; var; var = var->next) {
+		if (!dstrcmp(name, var->name)) {
+			return var;
+		}
+	}
 
-    return NULL;
+	return NULL;
 }
 
 //
 // CON_CvarValue
 //
 
-float CON_CvarValue(char *name) {
-    cvar_t *var;
+float CON_CvarValue(int8_t* name) {
+	cvar_t* var;
 
-    var = CON_CvarGet(name);
-    if(!var) {
-        return 0;
-    }
+	var = CON_CvarGet(name);
+	if (!var) {
+		return 0;
+	}
 
-    return datof(var->string);
+	return datof(var->string);
 }
 
 //
 // CON_CvarString
 //
 
-char *CON_CvarString(char *name) {
-    cvar_t *var;
+int8_t* CON_CvarString(int8_t* name) {
+	cvar_t* var;
 
-    var = CON_CvarGet(name);
-    if(!var) {
-        return "";
-    }
+	var = CON_CvarGet(name);
+	if (!var) {
+		return "";
+	}
 
-    return var->string;
+	return var->string;
 }
 
 //
 // CON_CvarSet
 //
 
-void CON_CvarSet(char *var_name, char *value) {
-    cvar_t *var;
-    dboolean changed;
+void CON_CvarSet(int8_t* var_name, int8_t* value) {
+	cvar_t* var;
+	dboolean changed;
 
-    var = CON_CvarGet(var_name);
-    if(!var) {
-        // there is an error in C code if this happens
-        CON_Printf(WHITE, "CON_CvarSet: variable %s not found\n", var_name);
-        return;
-    }
+	var = CON_CvarGet(var_name);
+	if (!var) {
+		// there is an error in C code if this happens
+		CON_Printf(WHITE, "CON_CvarSet: variable %s not found\n", var_name);
+		return;
+	}
 
-    changed = dstrcmp(var->string, value);
+	changed = dstrcmp(var->string, value);
 
-    Z_Free(var->string);    // free the old value string
+	Z_Free(var->string);    // free the old value string
 
-    var->string = Z_Malloc(dstrlen(value)+1, PU_STATIC, 0);
-    dstrcpy(var->string, value);
-    var->value = datof(var->string);
+	var->string = Z_Malloc(dstrlen(value) + 1, PU_STATIC, 0);
+	dstrcpy(var->string, value);
+	var->value = datof(var->string);
 
-    if(var->callback) {
-        var->callback(var);
-    }
+	if (var->callback) {
+		var->callback(var);
+	}
 }
 
 //
 // CON_CvarSetValue
 //
 
-void CON_CvarSetValue(char *var_name, float value) {
-    char val[32];
+void CON_CvarSetValue(int8_t* var_name, float value) {
+	int8_t val[32];
 
-    sprintf(val, "%f",value);
-    CON_CvarSet(var_name, val);
+	sprintf(val, "%f", value);
+	CON_CvarSet(var_name, val);
 }
 
 //
 // CON_CvarRegister
 //
 
-void CON_CvarRegister(cvar_t *variable) {
-    char *oldstr;
+void CON_CvarRegister(cvar_t* variable) {
+	int8_t* oldstr;
 
-    // first check to see if it has allready been defined
-    if(CON_CvarGet(variable->name)) {
-        CON_Printf(WHITE, "CON_CvarRegister: Can't register variable %s, already defined\n", variable->name);
-        return;
-    }
+	// first check to see if it has allready been defined
+	if (CON_CvarGet(variable->name)) {
+		CON_Printf(WHITE, "CON_CvarRegister: Can't register variable %s, already defined\n", variable->name);
+		return;
+	}
 
-    // copy the value off, because future sets will Z_Free it
-    oldstr = variable->string;
-    variable->string = Z_Malloc(dstrlen(variable->string)+1, PU_STATIC, 0);
-    dstrcpy(variable->string, oldstr);
-    variable->value = datof(variable->string);
-    variable->defvalue = Z_Malloc(dstrlen(variable->string)+1, PU_STATIC, 0);
-    dstrcpy(variable->defvalue, variable->string);
+	// copy the value off, because future sets will Z_Free it
+	oldstr = variable->string;
+	variable->string = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
+	dstrcpy(variable->string, oldstr);
+	variable->value = datof(variable->string);
+	variable->defvalue = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
+	dstrcpy(variable->defvalue, variable->string);
 
-    // link the variable in
-    variable->next = cvarcap;
-    cvarcap = variable;
+	// link the variable in
+	variable->next = cvarcap;
+	cvarcap = variable;
 }
 
 //
@@ -172,16 +172,15 @@ void CON_CvarRegister(cvar_t *variable) {
 //
 
 void CON_CvarInit(void) {
-    AM_RegisterCvars();
-    R_RegisterCvars();
-    V_RegisterCvars();
-    ST_RegisterCvars();
-    S_RegisterCvars();
-    I_RegisterCvars();
-    M_RegisterCvars();
-    P_RegisterCvars();
-    G_RegisterCvars();
+	AM_RegisterCvars();
+	R_RegisterCvars();
+	V_RegisterCvars();
+	ST_RegisterCvars();
+	S_RegisterCvars();
+	I_RegisterCvars();
+	M_RegisterCvars();
+	P_RegisterCvars();
+	G_RegisterCvars();
 
-    G_AddCommand("listcvars", CMD_ListCvars, 0);
+	G_AddCommand("listcvars", CMD_ListCvars, 0);
 }
-

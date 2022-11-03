@@ -20,12 +20,11 @@
 //
 //-----------------------------------------------------------------------------
 #ifdef RCSID
-static const char rcsid[] = "$Id: m_random.c 1250 2014-01-14 04:12:43Z svkaiser $";
+static const int8_t rcsid[] = "$Id: m_random.c 1250 2014-01-14 04:12:43Z svkaiser $";
 #endif
 
 #include "doomstat.h"
 #include "m_random.h"
-
 
 /*
 ===============
@@ -37,7 +36,7 @@ static const char rcsid[] = "$Id: m_random.c 1250 2014-01-14 04:12:43Z svkaiser 
 ===============
 */
 
-unsigned char rndtable[256] = { // 8005A190
+uint8_t rndtable[256] = { // 8005A190
 	0,   8, 109, 220, 222, 241, 149, 107,  75, 248, 254, 140,  16,  66 ,
 	74,  21, 211,  47,  80, 242, 154,  27, 205, 128, 161,  89,  77,  36 ,
 	95, 110,  85,  48, 212, 140, 211, 249,  22,  79, 200,  50,  28, 188 ,
@@ -78,4 +77,3 @@ void M_ClearRandom(void) // 80002980
 {
 	rndindex = prndindex = 0;
 }
-

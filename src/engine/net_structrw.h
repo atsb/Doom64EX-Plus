@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -26,22 +26,21 @@
 #include "net_defs.h"
 #include "net_packet.h"
 
-extern void NET_WriteSettings(net_packet_t *packet, net_gamesettings_t *settings);
-extern dboolean NET_ReadSettings(net_packet_t *packet, net_gamesettings_t *settings);
+extern void NET_WriteSettings(net_packet_t* packet, net_gamesettings_t* settings);
+extern dboolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings);
 
-extern void NET_WriteQueryData(net_packet_t *packet, net_querydata_t *querydata);
-extern dboolean NET_ReadQueryData(net_packet_t *packet, net_querydata_t *querydata);
+extern void NET_WriteQueryData(net_packet_t* packet, net_querydata_t* querydata);
+extern dboolean NET_ReadQueryData(net_packet_t* packet, net_querydata_t* querydata);
 
-extern void NET_WriteTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff, dboolean lowres_turn);
-extern dboolean NET_ReadTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff, dboolean lowres_turn);
-extern void NET_TiccmdDiff(ticcmd_t *tic1, ticcmd_t *tic2, net_ticdiff_t *diff);
-extern void NET_TiccmdPatch(ticcmd_t *src, net_ticdiff_t *diff, ticcmd_t *dest);
+extern void NET_WriteTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff, dboolean lowres_turn);
+extern dboolean NET_ReadTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff, dboolean lowres_turn);
+extern void NET_TiccmdDiff(ticcmd_t* tic1, ticcmd_t* tic2, net_ticdiff_t* diff);
+extern void NET_TiccmdPatch(ticcmd_t* src, net_ticdiff_t* diff, ticcmd_t* dest);
 
-dboolean NET_ReadFullTiccmd(net_packet_t *packet, net_full_ticcmd_t *cmd, dboolean lowres_turn);
-void NET_WriteFullTiccmd(net_packet_t *packet, net_full_ticcmd_t *cmd, dboolean lowres_turn);
+dboolean NET_ReadFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean lowres_turn);
+void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean lowres_turn);
 
-dboolean NET_ReadMD5Sum(net_packet_t *packet, md5_digest_t digest);
-void NET_WriteMD5Sum(net_packet_t *packet, md5_digest_t digest);
+dboolean NET_ReadMD5Sum(net_packet_t* packet, md5_digest_t digest);
+void NET_WriteMD5Sum(net_packet_t* packet, md5_digest_t digest);
 
 #endif /* #ifndef NET_STRUCTRW_H */
-

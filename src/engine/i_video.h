@@ -22,7 +22,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __I_VIDEO_H__
 #define __I_VIDEO_H__
 
@@ -33,7 +32,7 @@
 
 ////////////Video///////////////
 
-extern SDL_Surface *screen;
+extern SDL_Surface* screen;
 
 void I_InitVideo(void);
 void I_InitScreen(void);

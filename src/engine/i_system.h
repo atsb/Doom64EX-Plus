@@ -21,7 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __I_SYSTEM__
 #define __I_SYSTEM__
 
@@ -37,7 +36,6 @@
 
 // Called by DoomMain.
 void I_Init(void);
-
 
 // Called by D_DoomLoop,
 // returns current time in tics.
@@ -64,25 +62,24 @@ uint32_t   I_GetRandomTimeSeed(void);
 // for normal input.
 ticcmd_t* I_BaseTiccmd(void);
 
-
 // Called by M_Responder when quit is selected.
 // Clean exit, displays sell blurb.
 void I_Quit(void);
 
 void I_BeginRead(void);
-void I_Error(const char *error, ...);
-void I_Printf(const char *msg, ...);
+void I_Error(const int8_t* error, ...);
+void I_Printf(const int8_t* msg, ...);
 
-char *I_GetUserDir(void);
-char *I_GetBaseDir(void);
-char *I_GetUserFile(const char *file);
-char *I_FindDataFile(const char *file);
+int8_t* I_GetUserDir(void);
+int8_t* I_GetBaseDir(void);
+int8_t* I_GetUserFile(const int8_t* file);
+int8_t* I_FindDataFile(const int8_t* file);
 
-dboolean I_FileExists(const char *path);
+dboolean I_FileExists(const int8_t* path);
 
 void I_RegisterCvars(void);
 
-extern FILE    *DebugFile;
+extern FILE* DebugFile;
 extern dboolean    DigiJoy;
 
 #endif

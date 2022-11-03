@@ -37,29 +37,29 @@
 #include "tables.h"
 
 // build version
-extern const char version_date[];
+extern const int8_t version_date[];
 
-void        _dprintf(const char *s, ...);
-void        *dmemcpy(void *s1, const void *s2, size_t n);
-void        *dmemset(void *s, dword c, size_t n);
-char        *dstrcpy(char *dest, const char *src);
-void        dstrncpy(char *dest, const char *src, int maxcount);
-int         dstrcmp(const char *s1, const char *s2);
-int         dstrncmp(const char *s1, const char *s2, int len);
-int         dstricmp(const char *s1, const char *s2);
-int         dstrnicmp(const char *s1, const char *s2, int len);
-void        dstrupr(char *s);
-void        dstrlwr(char *s);
-int         dstrlen(const char *string);
-char        *dstrrchr(char *s, char c);
-void        dstrcat(char *dest, const char *src);
-char        *dstrstr(char *s1, char *s2);
-int         datoi(const char *str);
-float       datof(char *str);
-int         dhtoi(char* str);
+void        _dprintf(const int8_t* s, ...);
+void* dmemcpy(void* s1, const void* s2, size_t n);
+void* dmemset(void* s, dword c, size_t n);
+int8_t* dstrcpy(int8_t* dest, const int8_t* src);
+void        dstrncpy(int8_t* dest, const int8_t* src, int maxcount);
+int         dstrcmp(const int8_t* s1, const int8_t* s2);
+int         dstrncmp(const int8_t* s1, const int8_t* s2, int len);
+int         dstricmp(const int8_t* s1, const int8_t* s2);
+int         dstrnicmp(const int8_t* s1, const int8_t* s2, int len);
+void        dstrupr(int8_t* s);
+void        dstrlwr(int8_t* s);
+int         dstrlen(const int8_t* string);
+int8_t* dstrrchr(int8_t* s, int8_t c);
+void        dstrcat(int8_t* dest, const int8_t* src);
+int8_t* dstrstr(int8_t* s1, int8_t* s2);
+int         datoi(const int8_t* str);
+float       datof(int8_t* str);
+int         dhtoi(int8_t* str);
 dboolean    dfcmp(float f1, float f2);
-int         dsprintf(char *buf, const char *format, ...);
-int         dsnprintf(char *src, size_t n, const char *str, ...);
+int         dsprintf(int8_t* buf, const int8_t* format, ...);
+int         dsnprintf(int8_t* src, size_t n, const int8_t* str, ...);
 
 extern int D_abs(int x);
 extern float D_fabs(float x);
@@ -71,7 +71,6 @@ extern float D_fabs(float x);
 
 // #define macros to provide functions missing in Windows.
 // Outside Windows, we use strings.h for str[n]casecmp.
-
 
 #ifdef _WIN32
 
@@ -108,7 +107,6 @@ extern float D_fabs(float x);
 
 #define MAX_MESSAGE_SIZE 1024
 
-
 // If rangecheck is undefined,
 // most parameter validation debugging code will not be compiled
 //#define RANGECHECK
@@ -137,9 +135,9 @@ extern float D_fabs(float x);
 // playing, gazing at the intermission screen,
 // the game final animation, or a demo.
 typedef enum {
-    GS_NONE,
-    GS_LEVEL,
-    GS_SKIPPABLE
+	GS_NONE,
+	GS_LEVEL,
+	GS_SKIPPABLE
 } gamestate_t;
 
 //
@@ -162,77 +160,66 @@ typedef enum {
 #define MTF_NIGHTMARE       4096   // [kex] Nightmare thing
 
 typedef enum {
-    sk_baby,
-    sk_easy,
-    sk_medium,
-    sk_hard,
-    sk_nightmare
+	sk_baby,
+	sk_easy,
+	sk_medium,
+	sk_hard,
+	sk_nightmare
 } skill_t;
-
-
-
 
 //
 // Key cards.
 //
 typedef enum {
-    it_bluecard,
-    it_yellowcard,
-    it_redcard,
-    it_blueskull,
-    it_yellowskull,
-    it_redskull,
+	it_bluecard,
+	it_yellowcard,
+	it_redcard,
+	it_blueskull,
+	it_yellowskull,
+	it_redskull,
 
-    NUMCARDS
-
+	NUMCARDS
 } card_t;
-
-
 
 // The defined weapons,
 //  including a marker indicating
 //  user has not changed weapon.
 typedef enum {
-    wp_chainsaw,
-    wp_fist,
-    wp_pistol,
-    wp_shotgun,
-    wp_supershotgun,
-    wp_chaingun,
-    wp_missile,
-    wp_plasma,
-    wp_bfg,
-    wp_laser,
-    NUMWEAPONS,
+	wp_chainsaw,
+	wp_fist,
+	wp_pistol,
+	wp_shotgun,
+	wp_supershotgun,
+	wp_chaingun,
+	wp_missile,
+	wp_plasma,
+	wp_bfg,
+	wp_laser,
+	NUMWEAPONS,
 
-    // No pending weapon change.
-    wp_nochange
-
+	// No pending weapon change.
+	wp_nochange
 } weapontype_t;
-
 
 // Ammunition types defined.
 typedef enum {
-    am_clip,    // Pistol / chaingun ammo.
-    am_shell,   // Shotgun / double barreled shotgun.
-    am_cell,    // Plasma rifle, BFG.
-    am_misl,    // Missile launcher.
-    NUMAMMO,
-    am_noammo    // Unlimited for chainsaw / fist.
-
+	am_clip,    // Pistol / chaingun ammo.
+	am_shell,   // Shotgun / double barreled shotgun.
+	am_cell,    // Plasma rifle, BFG.
+	am_misl,    // Missile launcher.
+	NUMAMMO,
+	am_noammo    // Unlimited for chainsaw / fist.
 } ammotype_t;
-
 
 // Power up artifacts.
 typedef enum {
-    pw_invulnerability,
-    pw_strength,
-    pw_invisibility,
-    pw_ironfeet,
-    pw_allmap,
-    pw_infrared,
-    NUMPOWERS
-
+	pw_invulnerability,
+	pw_strength,
+	pw_invisibility,
+	pw_ironfeet,
+	pw_allmap,
+	pw_infrared,
+	NUMPOWERS
 } powertype_t;
 
 #define BONUSADD    4
@@ -242,38 +229,36 @@ typedef enum {
 //  how many seconds till expiration,
 //
 typedef enum {
-    INVULNTICS  = (30*TICRATE),
-    INVISTICS   = (60*TICRATE),
-    INFRATICS   = (120*TICRATE),
-    IRONTICS    = (60*TICRATE),
-    STRTICS     = (3*TICRATE)
-
+	INVULNTICS = (30 * TICRATE),
+	INVISTICS = (60 * TICRATE),
+	INFRATICS = (120 * TICRATE),
+	IRONTICS = (60 * TICRATE),
+	STRTICS = (3 * TICRATE)
 } powerduration_t;
 
 // 20120209 villsa - game flags
 enum {
-    GF_NOMONSTERS       = (1 << 0),
-    GF_FASTMONSTERS     = (1 << 1),
-    GF_RESPAWNMONSTERS  = (1 << 2),
-    GF_RESPAWNPICKUPS   = (1 << 3),
-    GF_ALLOWJUMP        = (1 << 4),
-    GF_ALLOWAUTOAIM     = (1 << 5),
-    GF_LOCKMONSTERS     = (1 << 6),
-    GF_ALLOWCHEATS      = (1 << 7),
-    GF_FRIENDLYFIRE     = (1 << 8),
-    GF_KEEPITEMS        = (1 << 9),
+	GF_NOMONSTERS = (1 << 0),
+	GF_FASTMONSTERS = (1 << 1),
+	GF_RESPAWNMONSTERS = (1 << 2),
+	GF_RESPAWNPICKUPS = (1 << 3),
+	GF_ALLOWJUMP = (1 << 4),
+	GF_ALLOWAUTOAIM = (1 << 5),
+	GF_LOCKMONSTERS = (1 << 6),
+	GF_ALLOWCHEATS = (1 << 7),
+	GF_FRIENDLYFIRE = (1 << 8),
+	GF_KEEPITEMS = (1 << 9),
 };
 
 // 20120209 villsa - compatibility flags
 enum {
-    COMPATF_COLLISION   = (1 << 0),     // don't use maxradius for mobj position checks
-    COMPATF_MOBJPASS    = (1 << 1),     // allow mobjs to stand on top one another
-    COMPATF_LIMITPAIN   = (1 << 2),     // pain elemental limited to 17 lost souls?
-    COMPATF_REACHITEMS  = (1 << 3)      // able to grab high items by bumping
+	COMPATF_COLLISION = (1 << 0),     // don't use maxradius for mobj position checks
+	COMPATF_MOBJPASS = (1 << 1),     // allow mobjs to stand on top one another
+	COMPATF_LIMITPAIN = (1 << 2),     // pain elemental limited to 17 lost souls?
+	COMPATF_REACHITEMS = (1 << 3)      // able to grab high items by bumping
 };
 
 extern dboolean windowpause;
-
 
 //
 // DOOM keyboard definition.
@@ -353,7 +338,6 @@ extern dboolean windowpause;
 //  and max/min values.
 #include "doomtype.h"
 
-
 // Header, generated by sound utility.
 // The utility was written by Dave Taylor.
 //#include "sounds.h"
@@ -362,4 +346,3 @@ extern dboolean windowpause;
 #define MOUSE_BUTTONS        6
 
 #endif          // __DOOMDEF__
-

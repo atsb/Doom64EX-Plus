@@ -22,10 +22,8 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __P_SAVEG__
 #define __P_SAVEG__
-
 
 #ifdef __GNUG__
 #pragma interface
@@ -35,10 +33,10 @@
 #define SAVEGAMETBSIZE  0xC000
 #define SAVESTRINGSIZE  16
 
-char *P_GetSaveGameName(int num);
-dboolean P_WriteSaveGame(char* description, int slot);
-dboolean P_ReadSaveGame(char* name);
-dboolean P_QuickReadSaveHeader(char* name, char* date, int* thumbnail, int* skill, int* map);
+int8_t* P_GetSaveGameName(int num);
+dboolean P_WriteSaveGame(int8_t* description, int slot);
+dboolean P_ReadSaveGame(int8_t* name);
+dboolean P_QuickReadSaveHeader(int8_t* name, int8_t* date, int* thumbnail, int* skill, int* map);
 
 // Persistent storage/archiving.
 // These are the load / save game routines.

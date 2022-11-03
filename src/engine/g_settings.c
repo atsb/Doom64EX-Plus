@@ -39,89 +39,89 @@
 #include "con_console.h"
 #include "i_system.h"
 
-static char *ConfigFileName =
+static int8_t* ConfigFileName =
 #ifdef _WIN32
-    "config.cfg"
+"config.cfg"
 #else
-    NULL
+NULL
 #endif
-    ;
+;
 
-char    DefaultConfig[] =
+int8_t    DefaultConfig[] =
 #include "defconfig.inc"    // wtf?
-    ;
+;
 
 //
 // G_ExecuteMultipleCommands
 //
 
-char *G_GetConfigFileName(void) {
-    return I_GetUserFile("config.cfg");
+int8_t* G_GetConfigFileName(void) {
+	return I_GetUserFile("config.cfg");
 }
 
-void G_ExecuteMultipleCommands(char *data) {
-    char    *p;
-    char    *q;
-    char    c;
-    char    line[1024];
+void G_ExecuteMultipleCommands(int8_t* data) {
+	int8_t* p;
+	int8_t* q;
+	int8_t    c;
+	int8_t    line[1024];
 
-    p=data;
-    c=*p;
-    while(c) {
-        q=line;
-        c=*(p++);
-        while(c&&(c!='\n')) {
-            if(c!='\r') {
-                *(q++)=c;
-            }
-            c=*(p++);
-        }
-        *q=0;
-        if(line[0]) {
-            G_ExecuteCommand(line);
-        }
-    }
+	p = data;
+	c = *p;
+	while (c) {
+		q = line;
+		c = *(p++);
+		while (c && (c != '\n')) {
+			if (c != '\r') {
+				*(q++) = c;
+			}
+			c = *(p++);
+		}
+		*q = 0;
+		if (line[0]) {
+			G_ExecuteCommand(line);
+		}
+	}
 }
 
 //
 // G_ExecuteFile
 //
 
-void G_ExecuteFile(char *name) {
-    FILE    *fh;
-    char    *buff;
-    int        len;
+void G_ExecuteFile(int8_t* name) {
+	FILE* fh;
+	int8_t* buff;
+	int        len;
 
-    if(!name) {
-        I_Error("G_ExecuteFile: No config name specified");
-    }
+	if (!name) {
+		I_Error("G_ExecuteFile: No config name specified");
+	}
 
-    fh = fopen(name, "rb");
+	fh = fopen(name, "rb");
 
-    if(!fh) {
-        fh = fopen(name, "w");
-        if(!fh) {
-            I_Error("G_ExecuteFile: Unable to create %s", name);
-        }
+	if (!fh) {
+		fh = fopen(name, "w");
+		if (!fh) {
+			I_Error("G_ExecuteFile: Unable to create %s", name);
+		}
 
-        fprintf(fh, "%s", DefaultConfig);
-        fclose(fh);
+		fprintf(fh, "%s", DefaultConfig);
+		fclose(fh);
 
-        fh = fopen(name, "rb");
+		fh = fopen(name, "rb");
 
-        if(!fh) {
-            I_Error("G_ExecuteFile: Failed to read %s", name);
-        }
-    }
+		if (!fh) {
+			I_Error("G_ExecuteFile: Failed to read %s", name);
+		}
+	}
 
-    fseek(fh, 0, SEEK_END);
-    len = ftell(fh);
-    fseek(fh, 0, SEEK_SET);
-    buff = Z_Malloc(len + 1, PU_STATIC, NULL);
-    fread(buff, 1, len, fh);
-    buff[len] = 0;
-    G_ExecuteMultipleCommands(buff);
-    Z_Free(buff);
+	fseek(fh, 0, SEEK_END);
+	len = ftell(fh);
+	fseek(fh, 0, SEEK_SET);
+	buff = Z_Malloc(len + 1, PU_STATIC, NULL);
+	fread(buff, 1, len, fh);
+	buff[len] = 0;
+	G_ExecuteMultipleCommands(buff);
+	Z_Free(buff);
 }
 
 //
@@ -129,14 +129,14 @@ void G_ExecuteFile(char *name) {
 //
 
 void G_LoadSettings(void) {
-    int        p;
+	int        p;
 
-    p = M_CheckParm("-config");
-    if(p && (p < myargc - 1)) {
-        if(myargv[p + 1][0] != '-') {
-            ConfigFileName = myargv[p + 1];
-        }
-    }
+	p = M_CheckParm("-config");
+	if (p && (p < myargc - 1)) {
+		if (myargv[p + 1][0] != '-') {
+			ConfigFileName = myargv[p + 1];
+		}
+	}
 
-    G_ExecuteFile(G_GetConfigFileName());
+	G_ExecuteFile(G_GetConfigFileName());
 }

@@ -42,24 +42,24 @@ extern int gl_max_texture_size;
 extern dboolean gl_has_combiner;
 
 typedef struct {
-    rfloat    x;
-    rfloat    y;
-    rfloat    z;
-    rfloat    tu;
-    rfloat    tv;
-    byte r;
-    byte g;
-    byte b;
-    byte a;
+	rfloat    x;
+	rfloat    y;
+	rfloat    z;
+	rfloat    tu;
+	rfloat    tv;
+	byte r;
+	byte g;
+	byte b;
+	byte a;
 } vtx_t;
 
 #define MAXSPRPALSETS       4
 
 typedef struct {
-    byte r;
-    byte g;
-    byte b;
-    byte a;
+	byte r;
+	byte g;
+	byte b;
+	byte a;
 } dPalette_t;
 
 #define GLSTATE_BLEND       0
@@ -85,8 +85,8 @@ extern int DGL_CLAMP;
 
 extern dboolean usingGL;
 
-dboolean GL_CheckExtension(const char *ext);
-void* GL_RegisterProc(const char *address);
+dboolean GL_CheckExtension(const int8_t* ext);
+void* GL_RegisterProc(const int8_t* address);
 void GL_Init(void);
 void GL_ClearView(rcolor clearcolor);
 dboolean GL_GetBool(int x);
@@ -101,10 +101,10 @@ float GL_GetOrthoScale(void);
 void GL_SetState(int bit, dboolean enable);
 void GL_SetDefaultCombiner(void);
 void GL_SetColorScale(void);
-void GL_Set2DQuad(vtx_t *v, float x, float y, int width, int height,
-                  float u1, float u2, float v1, float v2, rcolor c);
-void GL_Draw2DQuad(vtx_t *v, dboolean stretch);
+void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
+	float u1, float u2, float v1, float v2, rcolor c);
+void GL_Draw2DQuad(vtx_t* v, dboolean stretch);
 void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
-                           float u1, float u2, float v1, float v2, rcolor c, dboolean stretch);
+	float u1, float u2, float v1, float v2, rcolor c, dboolean stretch);
 
 #endif

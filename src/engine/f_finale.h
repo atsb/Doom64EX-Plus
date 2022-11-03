@@ -21,10 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __F_FINALE__
 #define __F_FINALE__
-
 
 #include "doomtype.h"
 #include "d_event.h"
@@ -41,7 +39,5 @@ void    IN_Start(void);
 void    IN_Stop(void);
 void    IN_Drawer(void);
 int     IN_Ticker(void);
-
-
 
 #endif

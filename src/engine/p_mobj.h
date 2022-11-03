@@ -22,7 +22,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __P_MOBJ__
 #define __P_MOBJ__
 
@@ -34,7 +33,6 @@
 #include "doomdata.h"
 #include "tables.h"
 #include "info.h"
-
 
 #ifdef __GNUG__
 #pragma interface
@@ -109,153 +107,150 @@
 //
 
 typedef enum {
-    MF_SPECIAL              = 1,            // Call P_SpecialThing when touched.
-    MF_SOLID                = 2,            // Blocks.
-    MF_SHOOTABLE            = 4,            // Can be hit.
-    MF_NOSECTOR             = 8,            // Don't use the sector links (invisible but touchable).
-    MF_NOBLOCKMAP           = 16,           // Don't use the blocklinks (inert but displayable)
-    MF_AMBUSH               = 32,           // Not to be activated by sound, deaf monster.
-    MF_JUSTHIT              = 64,           // Will try to attack right back.
-    MF_JUSTATTACKED         = 128,          // Will take at least one step before attacking.
-    MF_SPAWNCEILING         = 256,          // Hang from ceiling instead of stand on floor.
-    MF_GRAVITY              = 512,          // [d64] Apply gravity (every tic),
-    MF_DROPOFF              = 0x400,        // This allows jumps from high places.
-    MF_PICKUP               = 0x800,        // For players, will pick up items.
-    MF_NOCLIP               = 0x1000,       // Clip through walls (unused)
-    MF_NIGHTMARE            = 0x2000,       // [kex] Enables nightmare mode
-    MF_FLOAT                = 0x4000,       // For active floaters, e.g. cacodemons, pain elementals.
-    MF_TELEPORT             = 0x8000,       // (unused)
-    MF_MISSILE              = 0x10000,      // Player missiles as well as fireballs of various kinds.
-    MF_DROPPED              = 0x20000,      // Dropped by a demon, not level spawned.
-    MF_TRIGTOUCH            = 0x40000,      // [d64] Trigger line special on touch/pickup
-    MF_NOBLOOD              = 0x80000,      // Flag: don't bleed when shot (use puff),
-    MF_CORPSE               = 0x100000,     // Don't stop moving halfway off a step,
-    MF_INFLOAT              = 0x200000,     // don't auto float to target's height.
-    MF_COUNTKILL            = 0x400000,     // On kill, count this enemy object towards intermission kill total.
-    MF_COUNTITEM            = 0x800000,     // On picking up, count this item object towards intermission item total.
-    MF_SKULLFLY             = 0x1000000,    // Special handling: skull in flight.
-    MF_NOTDMATCH            = 0x2000000,    // Don't spawn this object in death match mode (e.g. key cards).
-    MF_SEETARGET            = 0x4000000,    // [d64] Is target visible?
-    MF_COUNTSECRET          = 0x8000000,    // [d64] Count as secret when picked up (for intermissions)
-    MF_RENDERLASER          = 0x10000000,   // [d64] Exclusive to MT_LASERMARKER only
-    MF_TRIGDEATH            = 0x20000000,   // [d64] Trigger line special on death
-    MF_SHADOW               = 0x40000000,   // temporary player invisibility powerup.
-    MF_NOINFIGHTING         = 0x80000000    // [d64] Do not switch targets
-
+	MF_SPECIAL = 1,            // Call P_SpecialThing when touched.
+	MF_SOLID = 2,            // Blocks.
+	MF_SHOOTABLE = 4,            // Can be hit.
+	MF_NOSECTOR = 8,            // Don't use the sector links (invisible but touchable).
+	MF_NOBLOCKMAP = 16,           // Don't use the blocklinks (inert but displayable)
+	MF_AMBUSH = 32,           // Not to be activated by sound, deaf monster.
+	MF_JUSTHIT = 64,           // Will try to attack right back.
+	MF_JUSTATTACKED = 128,          // Will take at least one step before attacking.
+	MF_SPAWNCEILING = 256,          // Hang from ceiling instead of stand on floor.
+	MF_GRAVITY = 512,          // [d64] Apply gravity (every tic),
+	MF_DROPOFF = 0x400,        // This allows jumps from high places.
+	MF_PICKUP = 0x800,        // For players, will pick up items.
+	MF_NOCLIP = 0x1000,       // Clip through walls (unused)
+	MF_NIGHTMARE = 0x2000,       // [kex] Enables nightmare mode
+	MF_FLOAT = 0x4000,       // For active floaters, e.g. cacodemons, pain elementals.
+	MF_TELEPORT = 0x8000,       // (unused)
+	MF_MISSILE = 0x10000,      // Player missiles as well as fireballs of various kinds.
+	MF_DROPPED = 0x20000,      // Dropped by a demon, not level spawned.
+	MF_TRIGTOUCH = 0x40000,      // [d64] Trigger line special on touch/pickup
+	MF_NOBLOOD = 0x80000,      // Flag: don't bleed when shot (use puff),
+	MF_CORPSE = 0x100000,     // Don't stop moving halfway off a step,
+	MF_INFLOAT = 0x200000,     // don't auto float to target's height.
+	MF_COUNTKILL = 0x400000,     // On kill, count this enemy object towards intermission kill total.
+	MF_COUNTITEM = 0x800000,     // On picking up, count this item object towards intermission item total.
+	MF_SKULLFLY = 0x1000000,    // Special handling: skull in flight.
+	MF_NOTDMATCH = 0x2000000,    // Don't spawn this object in death match mode (e.g. key cards).
+	MF_SEETARGET = 0x4000000,    // [d64] Is target visible?
+	MF_COUNTSECRET = 0x8000000,    // [d64] Count as secret when picked up (for intermissions)
+	MF_RENDERLASER = 0x10000000,   // [d64] Exclusive to MT_LASERMARKER only
+	MF_TRIGDEATH = 0x20000000,   // [d64] Trigger line special on death
+	MF_SHADOW = 0x40000000,   // temporary player invisibility powerup.
+	MF_NOINFIGHTING = 0x80000000    // [d64] Do not switch targets
 } mobjflag_t;
 
 typedef enum {
-    BF_MOBJSTAND        = 1,    // Standing on top of thing?
-    BF_MOBJPASS         = 2,    // Able to pass under thing?
-    BF_MIDPOINTONLY     = 4     // Only check sector where mobj's midpoint is inside
-
+	BF_MOBJSTAND = 1,    // Standing on top of thing?
+	BF_MOBJPASS = 2,    // Able to pass under thing?
+	BF_MIDPOINTONLY = 4     // Only check sector where mobj's midpoint is inside
 } mobjblockflag_t;
 
 // Map Object definition
 
 struct mobj_s;
-typedef void (*mobjfunc_t)(struct mobj_s *mo);
+typedef void (*mobjfunc_t)(struct mobj_s* mo);
 
 typedef struct mobj_s {
-    // Info for drawing: position.
-    fixed_t             x;
-    fixed_t             y;
-    fixed_t             z;
+	// Info for drawing: position.
+	fixed_t             x;
+	fixed_t             y;
+	fixed_t             z;
 
-    // [d64] mobj tag
-    int                 tid;
+	// [d64] mobj tag
+	int                 tid;
 
-    // More list: links in sector (if needed)
-    struct mobj_s*      snext;
-    struct mobj_s*      sprev;
+	// More list: links in sector (if needed)
+	struct mobj_s* snext;
+	struct mobj_s* sprev;
 
-    //More drawing info: to determine current sprite.
-    angle_t             angle;    // orientation
-    angle_t             pitch;  // [kex] pitch orientation; for looking up/down
-    spritenum_t         sprite;    // used to find patch_t and flip value
-    int                 frame;    // might be ORed with FF_FULLBRIGHT
+	//More drawing info: to determine current sprite.
+	angle_t             angle;    // orientation
+	angle_t             pitch;  // [kex] pitch orientation; for looking up/down
+	spritenum_t         sprite;    // used to find patch_t and flip value
+	int                 frame;    // might be ORed with FF_FULLBRIGHT
 
-    // Interaction info, by BLOCKMAP.
-    // Links in blocks (if needed).
-    struct mobj_s*      bnext;
-    struct mobj_s*      bprev;
+	// Interaction info, by BLOCKMAP.
+	// Links in blocks (if needed).
+	struct mobj_s* bnext;
+	struct mobj_s* bprev;
 
-    struct subsector_s* subsector;
+	struct subsector_s* subsector;
 
-    // The closest interval over all contacted Sectors.
-    fixed_t             floorz;
-    fixed_t             ceilingz;
+	// The closest interval over all contacted Sectors.
+	fixed_t             floorz;
+	fixed_t             ceilingz;
 
-    // For movement checking.
-    fixed_t             radius;
-    fixed_t             height;
+	// For movement checking.
+	fixed_t             radius;
+	fixed_t             height;
 
-    // Momentums, used to update position.
-    fixed_t             momx;
-    fixed_t             momy;
-    fixed_t             momz;
+	// Momentums, used to update position.
+	fixed_t             momx;
+	fixed_t             momy;
+	fixed_t             momz;
 
-    // If == validcount, already checked.
-    int                 validcount;
+	// If == validcount, already checked.
+	int                 validcount;
 
-    mobjtype_t          type;
-    mobjinfo_t*         info;    // &mobjinfo[mobj->type]
+	mobjtype_t          type;
+	mobjinfo_t* info;    // &mobjinfo[mobj->type]
 
-    int                 tics;    // state tic counter
-    state_t*            state;
-    dword               flags;
-    int                 health;
+	int                 tics;    // state tic counter
+	state_t* state;
+	dword               flags;
+	int                 health;
 
-    // [d64] alpha value for rendering
-    int                 alpha;
+	// [d64] alpha value for rendering
+	int                 alpha;
 
-    // [kex] flags for mobj collision
-    mobjblockflag_t     blockflag;
+	// [kex] flags for mobj collision
+	mobjblockflag_t     blockflag;
 
-    // Movement direction, movement generation (zig-zagging).
-    int                 movedir;    // 0-7
-    int                 movecount;    // when 0, select a new dir
+	// Movement direction, movement generation (zig-zagging).
+	int                 movedir;    // 0-7
+	int                 movecount;    // when 0, select a new dir
 
-    // Thing being chased/attacked (or NULL),
-    // also the originator for missiles.
-    struct mobj_s*      target;
+	// Thing being chased/attacked (or NULL),
+	// also the originator for missiles.
+	struct mobj_s* target;
 
-    // Reaction time: if non 0, don't attack yet.
-    // Used by player to freeze a bit after teleporting.
-    int                 reactiontime;
+	// Reaction time: if non 0, don't attack yet.
+	// Used by player to freeze a bit after teleporting.
+	int                 reactiontime;
 
-    // If >0, the target will be chased
-    // no matter what (even if shot)
-    int                 threshold;
+	// If >0, the target will be chased
+	// no matter what (even if shot)
+	int                 threshold;
 
-    // Additional info record for player avatars only.
-    // Only valid if type == MT_PLAYER
-    struct player_s*    player;
+	// Additional info record for player avatars only.
+	// Only valid if type == MT_PLAYER
+	struct player_s* player;
 
-    // For nightmare respawn.
-    mapthing_t          spawnpoint;
+	// For nightmare respawn.
+	mapthing_t          spawnpoint;
 
-    // Thing being chased/attacked for tracers.
-    struct mobj_s*      tracer;
+	// Thing being chased/attacked for tracers.
+	struct mobj_s* tracer;
 
-    // [d64] Mobj linked list: used to seperate from thinkers
-    struct mobj_s*      prev;
-    struct mobj_s*      next;
+	// [d64] Mobj linked list: used to seperate from thinkers
+	struct mobj_s* prev;
+	struct mobj_s* next;
 
-    // [d64] callback routine called at end of P_Tick
-    mobjfunc_t          mobjfunc;
+	// [d64] callback routine called at end of P_Tick
+	mobjfunc_t          mobjfunc;
 
-    // [d64] misc data for various actions
-    void*               extradata;
+	// [d64] misc data for various actions
+	void* extradata;
 
-    // [kex] stuff that happens in between tics
-    fixed_t             frame_x;
-    fixed_t             frame_y;
-    fixed_t             frame_z;
+	// [kex] stuff that happens in between tics
+	fixed_t             frame_x;
+	fixed_t             frame_y;
+	fixed_t             frame_z;
 
-    // [kex] mobj reference id
-    uint32_t        refcount;
-
+	// [kex] mobj reference id
+	uint32_t        refcount;
 } mobj_t;
 
 #endif

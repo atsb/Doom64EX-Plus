@@ -21,18 +21,14 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __P_INTER__
 #define __P_INTER__
-
 
 #ifdef __GNUG__
 #pragma interface
 #endif
 
 dboolean P_GivePower(player_t*, int);
-dboolean P_GiveWeapon(player_t* player, mobj_t *item, weapontype_t weapon, dboolean dropped);
-
-
+dboolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, dboolean dropped);
 
 #endif

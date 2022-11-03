@@ -76,13 +76,13 @@
 // and analog stick movement
 //
 typedef struct {
-    word    data;
-    byte    ltrigger;
-    byte    rtrigger;
-    short   lx;
-    short   ly;
-    short   rx;
-    short   ry;
+	word    data;
+	byte    ltrigger;
+	byte    rtrigger;
+	int16_t   lx;
+	int16_t   ly;
+	int16_t   rx;
+	int16_t   ry;
 } xinputbuttons_t;
 
 //
@@ -91,32 +91,32 @@ typedef struct {
 // state data
 //
 typedef struct {
-    dword           id;
-    xinputbuttons_t buttons;
+	dword           id;
+	xinputbuttons_t buttons;
 } xinputstate_t;
 
 //
 // rumble structure
 //
 typedef struct {
-    word lMotorSpeed;
-    word rMotorSpeed;
+	word lMotorSpeed;
+	word rMotorSpeed;
 } xinputrumble_t;
 
 //
 // kex gamepad structure for xinput
 //
 typedef struct {
-    xinputstate_t   state;                      // gamepad state
-    xinputrumble_t  vibration;                  // rumble data
-    dboolean        connected;                  // is controller connected?
-    dboolean        available;                  // is api available? can be disabled with -noxinput
-    int             oldbuttons;                 // button inputs from previous tic
-    int             refiretic[XINPUT_BUTTONS];  // how long to refire held down buttons?
-    float           rxthreshold;                // right stick x-axis threshold
-    float           rythreshold;                // right stick y-axis threshold
-    word            lMotorWindDown;             // left motor wind down speed
-    word            rMotorWindDown;             // right motor wind down speed
+	xinputstate_t   state;                      // gamepad state
+	xinputrumble_t  vibration;                  // rumble data
+	dboolean        connected;                  // is controller connected?
+	dboolean        available;                  // is api available? can be disabled with -noxinput
+	int             oldbuttons;                 // button inputs from previous tic
+	int             refiretic[XINPUT_BUTTONS];  // how long to refire held down buttons?
+	float           rxthreshold;                // right stick x-axis threshold
+	float           rythreshold;                // right stick y-axis threshold
+	word            lMotorWindDown;             // left motor wind down speed
+	word            rMotorWindDown;             // right motor wind down speed
 } xinputgamepad_t;
 
 extern xinputgamepad_t xgamepad;
@@ -124,7 +124,7 @@ extern int xbtnkeys[XINPUT_BUTTONS + 2][2];
 
 void        I_XInputBindButton(int index, int key);
 void        I_XInputPollEvent(void);
-void        I_XInputReadActions(event_t *ev);
+void        I_XInputReadActions(event_t* ev);
 void        I_XInputVibrate(dboolean leftside, byte amount, int windDown);
 void        I_XInputInit(void);
 void        I_InitXInputCommands(void);

@@ -40,15 +40,13 @@
 //  like some DOOM-alikes ("wt", "WebView") did.
 //
 typedef struct {
-    fixed_t     x;
-    fixed_t     y;
+	fixed_t     x;
+	fixed_t     y;
 
-    // info for occlusion
-    int         validcount;
-    angle_t     clipspan;
-
+	// info for occlusion
+	int         validcount;
+	angle_t     clipspan;
 } vertex_t;
-
 
 // Forward of LineDefs, for Sectors.
 struct line_s;
@@ -60,17 +58,16 @@ struct line_s;
 //  position is prolly just buffered, not
 //  updated.
 typedef struct {
-    fixed_t        x;
-    fixed_t        y;
-    fixed_t        z;
-
+	fixed_t        x;
+	fixed_t        y;
+	fixed_t        z;
 } degenmobj_t;
 
 typedef struct {
-    fixed_t a;
-    fixed_t b;
-    fixed_t c;
-    fixed_t d;
+	fixed_t a;
+	fixed_t b;
+	fixed_t c;
+	fixed_t d;
 } plane_t;
 
 //
@@ -78,138 +75,125 @@ typedef struct {
 // Stores things/mobjs.
 //
 typedef    struct {
-    fixed_t         floorheight;
-    fixed_t         ceilingheight;
-    word            floorpic;
-    word            ceilingpic;
-    short            lightlevel;
-    short           special;
-    short           tag;
+	fixed_t         floorheight;
+	fixed_t         ceilingheight;
+	word            floorpic;
+	word            ceilingpic;
+	int16_t            lightlevel;
+	int16_t           special;
+	int16_t           tag;
 
-    // [d64] color indexes references for the lights lump
-    short           colors[5];
+	// [d64] color indexes references for the lights lump
+	int16_t           colors[5];
 
-    // [d64] special flags for sector
-    word            flags;
+	// [d64] special flags for sector
+	word            flags;
 
-    // [d64] x/y offsets for scrolling flats
-    int             xoffset;
-    int             yoffset;
+	// [d64] x/y offsets for scrolling flats
+	int             xoffset;
+	int             yoffset;
 
-    // 0 = untraversed, 1,2 = sndlines -1
-    int             soundtraversed;
+	// 0 = untraversed, 1,2 = sndlines -1
+	int             soundtraversed;
 
-    // thing that made a sound (or null)
-    mobj_t*         soundtarget;
+	// thing that made a sound (or null)
+	mobj_t* soundtarget;
 
-    // mapblock bounding box for height changes
-    int             blockbox[4];
+	// mapblock bounding box for height changes
+	int             blockbox[4];
 
-    // origin for any sounds played by the sector
-    degenmobj_t     soundorg;
+	// origin for any sounds played by the sector
+	degenmobj_t     soundorg;
 
-    // if == validcount, already checked
-    int             validcount;
+	// if == validcount, already checked
+	int             validcount;
 
-    // list of mobjs in sector
-    mobj_t*         thinglist;
+	// list of mobjs in sector
+	mobj_t* thinglist;
 
-    // thinker_t for reversable actions
-    void*           specialdata;
+	// thinker_t for reversable actions
+	void* specialdata;
 
-    int             linecount;
-    struct line_s** lines;    // [linecount] size
+	int             linecount;
+	struct line_s** lines;    // [linecount] size
 
-    // [kex] stuff that happens in between tics
-    fixed_t         frame_z1[2];
-    fixed_t         frame_z2[2];
+	// [kex] stuff that happens in between tics
+	fixed_t         frame_z1[2];
+	fixed_t         frame_z2[2];
 
-    // [kex] plane/normal info for ceiling and floor
-    plane_t         ceilingplane;
-    plane_t         floorplane;
-
+	// [kex] plane/normal info for ceiling and floor
+	plane_t         ceilingplane;
+	plane_t         floorplane;
 } sector_t;
-
-
-
 
 //
 // The SideDef.
 //
 
 typedef struct {
-    // add this to the calculated texture column
-    fixed_t    textureoffset;
+	// add this to the calculated texture column
+	fixed_t    textureoffset;
 
-    // add this to the calculated texture top
-    fixed_t    rowoffset;
+	// add this to the calculated texture top
+	fixed_t    rowoffset;
 
-    // Texture indices.
-    // We do not maintain names here.
-    short    toptexture;
-    short    bottomtexture;
-    short    midtexture;
+	// Texture indices.
+	// We do not maintain names here.
+	int16_t    toptexture;
+	int16_t    bottomtexture;
+	int16_t    midtexture;
 
-    // Sector the SideDef is facing.
-    sector_t*    sector;
-
+	// Sector the SideDef is facing.
+	sector_t* sector;
 } side_t;
-
-
 
 //
 // Move clipping aid for LineDefs.
 //
 typedef enum {
-    ST_HORIZONTAL,
-    ST_VERTICAL,
-    ST_POSITIVE,
-    ST_NEGATIVE
-
+	ST_HORIZONTAL,
+	ST_VERTICAL,
+	ST_POSITIVE,
+	ST_NEGATIVE
 } slopetype_t;
 
-
 typedef struct line_s {
-    // Vertices, from v1 to v2.
-    vertex_t*       v1;
-    vertex_t*       v2;
+	// Vertices, from v1 to v2.
+	vertex_t* v1;
+	vertex_t* v2;
 
-    // Precalculated v2 - v1 for side checking.
-    fixed_t         dx;
-    fixed_t         dy;
+	// Precalculated v2 - v1 for side checking.
+	fixed_t         dx;
+	fixed_t         dy;
 
-    int             flags;
-    short           special;
-    short           tag;
+	int             flags;
+	int16_t           special;
+	int16_t           tag;
 
-    // Visual appearance: SideDefs.
-    //  sidenum[1] will be -1 if one sided
-    word            sidenum[2];
+	// Visual appearance: SideDefs.
+	//  sidenum[1] will be -1 if one sided
+	word            sidenum[2];
 
-    // Neat. Another bounding box, for the extent
-    //  of the LineDef.
-    fixed_t         bbox[4];
+	// Neat. Another bounding box, for the extent
+	//  of the LineDef.
+	fixed_t         bbox[4];
 
-    // To aid move clipping.
-    slopetype_t     slopetype;
+	// To aid move clipping.
+	slopetype_t     slopetype;
 
-    // Front and back sector.
-    // Note: redundant? Can be retrieved from SideDefs.
-    sector_t*       frontsector;
-    sector_t*       backsector;
+	// Front and back sector.
+	// Note: redundant? Can be retrieved from SideDefs.
+	sector_t* frontsector;
+	sector_t* backsector;
 
-    // if == validcount, already checked
-    int             validcount;
+	// if == validcount, already checked
+	int             validcount;
 
-    // thinker_t for reversable actions
-    void*           specialdata;
+	// thinker_t for reversable actions
+	void* specialdata;
 
-    angle_t         angle;
-
+	angle_t         angle;
 } line_t;
-
-
-
 
 //
 // A SubSector.
@@ -220,11 +204,11 @@ typedef struct line_s {
 //
 // Also includes boundary vertices when gl-friendly nodes used
 typedef struct subsector_s {
-    sector_t*   sector;
-    word        numlines;
-    word        firstline;
-    word        numleafs;
-    word        leaf;
+	sector_t* sector;
+	word        numlines;
+	word        firstline;
+	word        numleafs;
+	word        leaf;
 } subsector_t;
 
 //
@@ -243,119 +227,109 @@ typedef struct subsector_s {
 // for all views: NNNNF0
 //
 typedef struct {
-    // If false use 0 for any position.
-    // Note: as eight entries are available,
-    //  we might as well insert the same name eight times.
-    dboolean    rotate;
+	// If false use 0 for any position.
+	// Note: as eight entries are available,
+	//  we might as well insert the same name eight times.
+	dboolean    rotate;
 
-    // Lump to use for view angles 0-7.
-    short    lump[8];
+	// Lump to use for view angles 0-7.
+	int16_t    lump[8];
 
-    // Flip bit (1 = flip) to use for view angles 0-7.
-    byte    flip[8];
-
+	// Flip bit (1 = flip) to use for view angles 0-7.
+	byte    flip[8];
 } spriteframe_t;
-
-
 
 //
 // A sprite definition:
 //  a number of animation frames.
 //
 typedef struct {
-    int             numframes;
-    spriteframe_t*  spriteframes;
-
+	int             numframes;
+	spriteframe_t* spriteframes;
 } spritedef_t;
-
 
 //
 // The LineSeg.
 //
 typedef struct {
-    vertex_t*       v1;
-    vertex_t*       v2;
+	vertex_t* v1;
+	vertex_t* v2;
 
-    fixed_t         offset;
+	fixed_t         offset;
 
-    angle_t         angle;
+	angle_t         angle;
 
-    side_t*         sidedef;
-    line_t*            linedef;
+	side_t* sidedef;
+	line_t* linedef;
 
-    // Sector references.
-    // Could be retrieved from linedef, too.
-    // backsector is NULL for one sided lines
-    sector_t*        frontsector;
-    sector_t*       backsector;
+	// Sector references.
+	// Could be retrieved from linedef, too.
+	// backsector is NULL for one sided lines
+	sector_t* frontsector;
+	sector_t* backsector;
 
-    fixed_t         length;
-
+	fixed_t         length;
 } seg_t;
-
-
 
 //
 // BSP node.
 //
 typedef struct {
-    // Partition line.
-    fixed_t    x;
-    fixed_t    y;
-    fixed_t    dx;
-    fixed_t    dy;
+	// Partition line.
+	fixed_t    x;
+	fixed_t    y;
+	fixed_t    dx;
+	fixed_t    dy;
 
-    // Bounding box for each child.
-    fixed_t    bbox[2][4];
+	// Bounding box for each child.
+	fixed_t    bbox[2][4];
 
-    // If NF_SUBSECTOR its a subsector.
-    unsigned short children[2];
-
+	// If NF_SUBSECTOR its a subsector.
+	uint16_t children[2];
 } node_t;
 
 //
 // LEAFS structure
 //
 typedef struct {
-    vertex_t    *vertex;
-    seg_t        *seg;
+	vertex_t* vertex;
+	seg_t* seg;
 } leaf_t;
-
 
 //
 // Light Data
 //
 typedef struct {
-    byte base_r;
-    byte base_g;
-    byte base_b;
-    byte active_r;
-    byte active_g;
-    byte active_b;
-    byte r;
-    byte g;
-    byte b;
-    short tag;
+	byte base_r;
+	byte base_g;
+	byte base_b;
+	byte active_r;
+	byte active_g;
+	byte active_b;
+	byte r;
+	byte g;
+	byte b;
+	int16_t tag;
 } light_t;
 
 //
 // Macros
 //
 typedef struct {
-    short id;
-    short tag;
-    short special;
+	int16_t id;
+	int16_t tag;
+	int16_t special;
 } macrodata_t;
 
 typedef struct {
-    short count;
-    macrodata_t* data;
+	int16_t count;
+	macrodata_t* data;
 } macrodef_t;
 
 typedef struct {
-    short macrocount;
-    short specialcount;
-    macrodef_t* def;
+	int16_t macrocount;
+	int16_t specialcount;
+	macrodef_t* def;
 } macroinfo_t;
 
 #endif

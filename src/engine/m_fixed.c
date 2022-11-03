@@ -39,25 +39,23 @@
 fixed_t
 FixedMul
 (fixed_t    a,
- fixed_t    b) {
+	fixed_t    b) {
 #ifdef USE_ASM
-    fixed_t    c;
-    _asm {
-        mov eax, [a]
-        mov ecx, [b]
-        imul ecx
-        shr eax, 16
-        shl edx, 16
-        or eax, edx
-        mov [c], eax
-    }
-    return(c);
+	fixed_t    c;
+	_asm {
+		mov eax, [a]
+		mov ecx, [b]
+		imul ecx
+		shr eax, 16
+		shl edx, 16
+		or eax, edx
+		mov[c], eax
+	}
+	return(c);
 #else
-    return (fixed_t)(((int64) a * (int64) b) >> FRACBITS);
+	return (fixed_t)(((int64)a * (int64)b) >> FRACBITS);
 #endif
 }
-
-
 
 //
 // FixedDiv, C version.
@@ -66,21 +64,18 @@ FixedMul
 fixed_t
 FixedDiv
 (fixed_t    a,
- fixed_t    b) {
-    if((D_abs(a)>>14) >= D_abs(b)) {
-        return (a^b)<0 ? D_MININT : D_MAXINT;
-    }
-    return FixedDiv2(a,b);
-
+	fixed_t    b) {
+	if ((D_abs(a) >> 14) >= D_abs(b)) {
+		return (a ^ b) < 0 ? D_MININT : D_MAXINT;
+	}
+	return FixedDiv2(a, b);
 }
-
-
 
 fixed_t
 FixedDiv2
 (fixed_t    a,
- fixed_t    b) {
-    return (fixed_t)((((int64)a)<<FRACBITS)/b);
+	fixed_t    b) {
+	return (fixed_t)((((int64)a) << FRACBITS) / b);
 }
 
 //
@@ -88,10 +83,10 @@ FixedDiv2
 //
 
 fixed_t FixedDot(fixed_t a1, fixed_t b1,
-                 fixed_t c1, fixed_t a2,
-                 fixed_t b2, fixed_t c2) {
-    return
-        FixedMul(a1, a2) +
-        FixedMul(b1, b2) +
-        FixedMul(c1, c2);
+	fixed_t c1, fixed_t a2,
+	fixed_t b2, fixed_t c2) {
+	return
+		FixedMul(a1, a2) +
+		FixedMul(b1, b2) +
+		FixedMul(c1, c2);
 }

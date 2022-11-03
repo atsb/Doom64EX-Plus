@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -35,256 +35,255 @@
 #include "net_query.h"
 #include "net_structrw.h"
 
-typedef struct 
+typedef struct
 {
-    net_addr_t *addr;
-    net_querydata_t data;
+	net_addr_t* addr;
+	net_querydata_t data;
 } queryresponse_t;
 
-static net_context_t *query_context;
-static queryresponse_t *responders;
+static net_context_t* query_context;
+static queryresponse_t* responders;
 static int num_responses;
 
 // Add a new address to the list of hosts that has responded
 
-static queryresponse_t *AddResponder(net_addr_t *addr, 
-                                     net_querydata_t *data)
+static queryresponse_t* AddResponder(net_addr_t* addr,
+	net_querydata_t* data)
 {
-    queryresponse_t *response;
+	queryresponse_t* response;
 
-    responders = realloc(responders, 
-                         sizeof(queryresponse_t) * (num_responses + 1));
+	responders = realloc(responders,
+		sizeof(queryresponse_t) * (num_responses + 1));
 
-    response = &responders[num_responses];
-    response->addr = addr;
-    response->data = *data;
-    ++num_responses;
+	response = &responders[num_responses];
+	response->addr = addr;
+	response->data = *data;
+	++num_responses;
 
-    return response;
+	return response;
 }
 
 // Returns true if the reply is from a host that has not previously
 // responded.
 
-static dboolean CheckResponder(net_addr_t *addr)
+static dboolean CheckResponder(net_addr_t* addr)
 {
-    int i;
+	int i;
 
-    for (i=0; i<num_responses; ++i)
-    {
-        if (responders[i].addr == addr)
-        {
-            return false;
-        }
-    }
+	for (i = 0; i < num_responses; ++i)
+	{
+		if (responders[i].addr == addr)
+		{
+			return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
 // Transmit a query packet
 
-static void NET_Query_SendQuery(net_addr_t *addr)
+static void NET_Query_SendQuery(net_addr_t* addr)
 {
-    net_packet_t *request;
+	net_packet_t* request;
 
-    request = NET_NewPacket(10);
-    NET_WriteInt16(request, NET_PACKET_TYPE_QUERY);
+	request = NET_NewPacket(10);
+	NET_WriteInt16(request, NET_PACKET_TYPE_QUERY);
 
-    if (addr == NULL)
-    {
-        NET_SendBroadcast(query_context, request);
-    }
-    else
-    {
-        NET_SendPacket(addr, request);
-    }
+	if (addr == NULL)
+	{
+		NET_SendBroadcast(query_context, request);
+	}
+	else
+	{
+		NET_SendPacket(addr, request);
+	}
 
-    NET_FreePacket(request);
+	NET_FreePacket(request);
 }
 
-static void formatted_printf(int wide, char *s, ...)
+static void formatted_printf(int wide, int8_t* s, ...)
 {
-    va_list args;
-    int i;
-    
-    va_start(args, s);
-    i = vprintf(s, args);
-    va_end(args);
+	va_list args;
+	int i;
 
-    while (i < wide) 
-    {
-        putchar(' ');
-        ++i;
-    } 
+	va_start(args, s);
+	i = vprintf(s, args);
+	va_end(args);
+
+	while (i < wide)
+	{
+		putchar(' ');
+		++i;
+	}
 }
 
 static void PrintHeader(void)
 {
-    int i;
+	int i;
 
-    formatted_printf(18, "Address");
-    formatted_printf(8, "Players");
-    puts("Description");
+	formatted_printf(18, "Address");
+	formatted_printf(8, "Players");
+	puts("Description");
 
-    for (i=0; i<70; ++i)
-        putchar('=');
-    putchar('\n');
+	for (i = 0; i < 70; ++i)
+		putchar('=');
+	putchar('\n');
 }
 
-static void PrintResponse(queryresponse_t *response)
+static void PrintResponse(queryresponse_t* response)
 {
-    formatted_printf(18, "%s: ", NET_AddrToString(response->addr));
-    formatted_printf(8, "%i/%i", response->data.num_players, 
-                                 response->data.max_players);
+	formatted_printf(18, "%s: ", NET_AddrToString(response->addr));
+	formatted_printf(8, "%i/%i", response->data.num_players,
+		response->data.max_players);
 
-    if (response->data.server_state)
-    {
-        printf("(game running) ");
-    }
+	if (response->data.server_state)
+	{
+		printf("(game running) ");
+	}
 
-    NET_SafePuts(response->data.description);
+	NET_SafePuts(response->data.description);
 }
 
-static void NET_Query_ParsePacket(net_addr_t *addr, net_packet_t *packet)
+static void NET_Query_ParsePacket(net_addr_t* addr, net_packet_t* packet)
 {
-    uint32_t packet_type;
-    net_querydata_t querydata;
-    queryresponse_t *response;
+	uint32_t packet_type;
+	net_querydata_t querydata;
+	queryresponse_t* response;
 
-    // Have we already received a packet from this host?
+	// Have we already received a packet from this host?
 
-    if (!CheckResponder(addr))
-    {
-        return;
-    }
+	if (!CheckResponder(addr))
+	{
+		return;
+	}
 
-    // Read the header
+	// Read the header
 
-    if (!NET_ReadInt16(packet, &packet_type)
-     || packet_type != NET_PACKET_TYPE_QUERY_RESPONSE)
-    {
-        return;
-    }
+	if (!NET_ReadInt16(packet, &packet_type)
+		|| packet_type != NET_PACKET_TYPE_QUERY_RESPONSE)
+	{
+		return;
+	}
 
-    // Read query data
+	// Read query data
 
-    if (!NET_ReadQueryData(packet, &querydata))
-    {
-        return;
-    }
+	if (!NET_ReadQueryData(packet, &querydata))
+	{
+		return;
+	}
 
-    if (num_responses <= 0)
-    {
-        // If this is the first response, print the table header
+	if (num_responses <= 0)
+	{
+		// If this is the first response, print the table header
 
-        PrintHeader();
-    }
+		PrintHeader();
+	}
 
-    response = AddResponder(addr, &querydata);
+	response = AddResponder(addr, &querydata);
 
-    PrintResponse(response);
+	PrintResponse(response);
 }
 
 static void NET_Query_GetResponse(void)
 {
-    net_addr_t *addr;
-    net_packet_t *packet;
+	net_addr_t* addr;
+	net_packet_t* packet;
 
-    if (NET_RecvPacket(query_context, &addr, &packet))
-    {
-        NET_Query_ParsePacket(addr, packet);
-        NET_FreePacket(packet);
-    }
+	if (NET_RecvPacket(query_context, &addr, &packet))
+	{
+		NET_Query_ParsePacket(addr, packet);
+		NET_FreePacket(packet);
+	}
 }
 
-static net_addr_t *NET_Query_QueryLoop(net_addr_t *addr, 
-                                       dboolean find_one)
+static net_addr_t* NET_Query_QueryLoop(net_addr_t* addr,
+	dboolean find_one)
 {
-    int start_time;
-    int last_send_time;
+	int start_time;
+	int last_send_time;
 
-    last_send_time = -1;
-    start_time = I_GetTimeMS();
+	last_send_time = -1;
+	start_time = I_GetTimeMS();
 
-    while (I_GetTimeMS() < start_time + 5000)
-    {
-        // Send a query once every second
+	while (I_GetTimeMS() < start_time + 5000)
+	{
+		// Send a query once every second
 
-        if (last_send_time < 0 || I_GetTimeMS() > last_send_time + 1000)
-        {
-            NET_Query_SendQuery(addr);
-            last_send_time = I_GetTimeMS();
-        }
+		if (last_send_time < 0 || I_GetTimeMS() > last_send_time + 1000)
+		{
+			NET_Query_SendQuery(addr);
+			last_send_time = I_GetTimeMS();
+		}
 
-        // Check for a response
+		// Check for a response
 
-        NET_Query_GetResponse();
+		NET_Query_GetResponse();
 
-        // Found a response?
+		// Found a response?
 
-        if (find_one && num_responses > 0)
-            break;
-        
-        // Don't thrash the CPU
-        
-        I_Sleep(100);
-    }
+		if (find_one && num_responses > 0)
+			break;
 
-    if (num_responses > 0)
-        return responders[0].addr;
-    else
-        return NULL;
+		// Don't thrash the CPU
+
+		I_Sleep(100);
+	}
+
+	if (num_responses > 0)
+		return responders[0].addr;
+	else
+		return NULL;
 }
 
 void NET_Query_Init(void)
 {
-    query_context = NET_NewContext();
+	query_context = NET_NewContext();
 
-    responders = NULL;
-    num_responses = 0;
+	responders = NULL;
+	num_responses = 0;
 }
 
-void NET_QueryAddress(char *addr)
+void NET_QueryAddress(int8_t* addr)
 {
-    net_addr_t *net_addr;
-    
-    NET_Query_Init();
+	net_addr_t* net_addr;
 
-    net_addr = NET_ResolveAddress(query_context, addr);
+	NET_Query_Init();
 
-    if (net_addr == NULL)
-    {
-        I_Error("NET_QueryAddress: Host '%s' not found!", addr);
-    }
+	net_addr = NET_ResolveAddress(query_context, addr);
 
-    printf("\nQuerying '%s'...\n\n", addr);
+	if (net_addr == NULL)
+	{
+		I_Error("NET_QueryAddress: Host '%s' not found!", addr);
+	}
 
-    if (!NET_Query_QueryLoop(net_addr, true))
-    {
-        I_Error("No response from '%s'", addr);
-    }
+	printf("\nQuerying '%s'...\n\n", addr);
 
-    exit(0);
+	if (!NET_Query_QueryLoop(net_addr, true))
+	{
+		I_Error("No response from '%s'", addr);
+	}
+
+	exit(0);
 }
 
-net_addr_t *NET_FindLANServer(void)
+net_addr_t* NET_FindLANServer(void)
 {
-    NET_Query_Init();
+	NET_Query_Init();
 
-    return NET_Query_QueryLoop(NULL, true);
+	return NET_Query_QueryLoop(NULL, true);
 }
 
 void NET_LANQuery(void)
 {
-    NET_Query_Init();
+	NET_Query_Init();
 
-    printf("\nSearching for servers on local LAN ...\n\n");
+	printf("\nSearching for servers on local LAN ...\n\n");
 
-    if (!NET_Query_QueryLoop(NULL, false))
-    {
-        I_Error("No servers found");
-    }
+	if (!NET_Query_QueryLoop(NULL, false))
+	{
+		I_Error("No servers found");
+	}
 
-    exit(0);
+	exit(0);
 }
-

@@ -23,7 +23,6 @@
 #ifndef __P_MACROS__
 #define __P_MACROS__
 
-
 #ifdef __GNUG__
 #pragma interface
 #endif
@@ -35,19 +34,19 @@ extern int taglistidx;
 
 void P_QueueSpecial(mobj_t* mobj);
 
-extern thinker_t    *macrothinker;
-extern macrodef_t   *macro;
-extern macrodata_t  *nextmacro;
-extern mobj_t       *mobjmacro;
-extern short        macrocounter;
-extern short        macroid;
+extern thinker_t* macrothinker;
+extern macrodef_t* macro;
+extern macrodata_t* nextmacro;
+extern mobj_t* mobjmacro;
+extern int16_t        macrocounter;
+extern int16_t        macroid;
 
 void P_InitMacroVars(void);
 void P_ToggleMacros(int tag, dboolean toggleon);
-void P_MacroDetachThinker(thinker_t *thinker);
+void P_MacroDetachThinker(thinker_t* thinker);
 void P_RunMacros(void);
 
-int P_StartMacro(mobj_t *thing, line_t *line);
+int P_StartMacro(mobj_t* thing, line_t* line);
 int P_SuspendMacro(int tag);
 int P_InitMacroCounter(int counts);
 
