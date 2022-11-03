@@ -28,11 +28,12 @@
 static const char rcsid[] = "$Id: tk_lib.c 337 2009-02-01 21:27:07Z svkaiser $";
 #endif
 
+#include <stdint.h>
 #include "tk_lib.h"
 
 byte* parse;
-unsigned int lastByte;
-unsigned int tkPos = 0;
+uint32_t lastByte;
+uint32_t tkPos = 0;
 int tkLine = 1;
 
 #define MAXSTRSIZE	512

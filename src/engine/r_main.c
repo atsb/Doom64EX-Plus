@@ -74,9 +74,9 @@ fixed_t         scrollfrac;
 int             logoAlpha = 0;
 
 int             vertCount = 0;
-unsigned int    renderTic = 0;
-unsigned int    spriteRenderTic = 0;
-unsigned int    glBindCalls = 0;
+uint32_t    renderTic = 0;
+uint32_t    spriteRenderTic = 0;
+uint32_t    glBindCalls = 0;
 
 dboolean        bRenderSky = false;
 

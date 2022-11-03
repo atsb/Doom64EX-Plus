@@ -77,7 +77,7 @@ static void W_StdC_CloseFile(wad_file_t *wad) {
 // Read data from the specified position in the file into the
 // provided buffer.  Returns the number of bytes read.
 
-size_t W_StdC_Read(wad_file_t *wad, unsigned int offset,
+size_t W_StdC_Read(wad_file_t *wad, uint32_t offset,
                    void *buffer, size_t buffer_len) {
     stdc_wad_file_t *stdc_wad;
     size_t result;
@@ -112,7 +112,7 @@ void W_CloseFile(wad_file_t *wad) {
     wad->file_class->CloseFile(wad);
 }
 
-size_t W_Read(wad_file_t *wad, unsigned int offset,
+size_t W_Read(wad_file_t *wad, uint32_t offset,
               void *buffer, size_t buffer_len) {
     return wad->file_class->Read(wad, offset, buffer, buffer_len);
 }

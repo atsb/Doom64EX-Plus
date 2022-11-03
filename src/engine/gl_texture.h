@@ -80,8 +80,8 @@ void        GL_BindDummyTexture(void);
 void        GL_UpdateEnvTexture(rcolor color);
 void        GL_BindEnvTexture(void);
 dtexture    GL_ScreenToTexture(void);
-void        GL_ResampleTexture(unsigned int *in, int inwidth, int inheight,
-                               unsigned int *out, int outwidth, int outheight,
+void        GL_ResampleTexture(uint32_t *in, int inwidth, int inheight,
+                               uint32_t *out, int outwidth, int outheight,
                                int type);
 
 #endif

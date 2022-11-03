@@ -52,9 +52,9 @@ extern int          logoAlpha;
 extern fixed_t      scrollfrac;
 extern int          vertCount;
 
-extern unsigned int renderTic;
-extern unsigned int spriteRenderTic;
-extern unsigned int glBindCalls;
+extern uint32_t renderTic;
+extern uint32_t spriteRenderTic;
+extern uint32_t glBindCalls;
 
 extern dboolean     bRenderSky;
 

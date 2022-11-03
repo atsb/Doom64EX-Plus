@@ -40,7 +40,7 @@ struct _net_packet_s
     byte *data;
     size_t len;
     size_t alloced;
-    unsigned int pos;
+    uint32_t pos;
 };
 
 struct _net_module_s
@@ -146,7 +146,7 @@ typedef struct
 
 typedef struct
 {
-    unsigned int diff;
+    uint32_t diff;
     ticcmd_t cmd;
 } net_ticdiff_t;
 
@@ -154,8 +154,8 @@ typedef struct
 
 typedef struct 
 {
-    signed int latency;
-    unsigned int seq;
+    int32_t latency;
+    uint32_t seq;
     dboolean playeringame[MAXPLAYERS];
     net_ticdiff_t cmds[MAXPLAYERS];
 } net_full_ticcmd_t;

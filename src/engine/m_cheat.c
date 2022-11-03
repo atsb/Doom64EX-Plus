@@ -43,7 +43,7 @@ typedef struct {
     const char *cheat;
     void (*const func)(player_t*, char[4]);
     const int arg;
-    unsigned int code, mask;
+    uint32_t code, mask;
 } cheatinfo_t;
 
 static void M_CheatFa(player_t* player, char dat[4]);
@@ -239,7 +239,7 @@ void M_CheatArtifacts(player_t* player, char dat[4]) {
 #define CHEAT_ARGS_MAX 8  /* Maximum number of args at end of cheats */
 
 static dboolean M_FindCheats(player_t* plyr, int key) {
-    static unsigned int sr;
+    static uint32_t sr;
     static char argbuf[CHEAT_ARGS_MAX+1], *arg;
     static int init, argsleft, cht;
     int i, ret, matchedbefore;
@@ -271,7 +271,7 @@ static dboolean M_FindCheats(player_t* plyr, int key) {
     if(!init) {
         init = 1;
         for(i=0; cheat[i].cheat; i++) {
-            unsigned int c=0, m=0;
+            uint32_t c=0, m=0;
             const char *p;
 
             for(p=cheat[i].cheat; *p; p++) {

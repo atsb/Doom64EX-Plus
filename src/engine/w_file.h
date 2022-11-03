@@ -42,7 +42,7 @@ typedef struct {
     // Read data from the specified position in the file into the
     // provided buffer.  Returns the number of bytes read.
 
-    size_t (*Read)(wad_file_t *file, unsigned int offset,
+    size_t (*Read)(wad_file_t *file, uint32_t offset,
                    void *buffer, size_t buffer_len);
 
 } wad_file_class_t;
@@ -59,7 +59,7 @@ struct _wad_file_s {
 
     // Length of the file, in bytes.
 
-    unsigned int length;
+    uint32_t length;
 };
 
 // Open the specified file. Returns a pointer to a new wad_file_t
@@ -75,7 +75,7 @@ void W_CloseFile(wad_file_t *wad);
 // data is read from the specified offset from the start of the file.
 // Returns the number of bytes read.
 
-size_t W_Read(wad_file_t *wad, unsigned int offset,
+size_t W_Read(wad_file_t *wad, uint32_t offset,
               void *buffer, size_t buffer_len);
 
 char *W_FindWADByName(char *filename);

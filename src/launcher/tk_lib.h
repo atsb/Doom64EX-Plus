@@ -3,6 +3,7 @@
 #ifndef __TKLIB__
 #define __TKLIB__
 
+#include <stdint.h>
 #include "Launcher.h"
 
 #define MAXSTROKENS	32
@@ -18,8 +19,8 @@ typedef struct
 } tDefTypes_t;
 
 extern byte* parse;
-extern unsigned int lastByte;
-extern unsigned int tkPos;
+extern uint32_t lastByte;
+extern uint32_t tkPos;
 extern int tkLine;
 
 extern char stringToken[32];

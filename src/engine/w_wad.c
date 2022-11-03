@@ -117,9 +117,9 @@ void ExtractFileBase(char* path, char* dest) {
 // W_HashLumpName
 //
 
-unsigned int W_HashLumpName(const char* str) {
-    unsigned int hash = 1315423911;
-    unsigned int i    = 0;
+uint32_t W_HashLumpName(const char* str) {
+    uint32_t hash = 1315423911;
+    uint32_t i    = 0;
 
     for(i = 0; i < 8 && *str != '\0'; str++, i++) {
         hash ^= ((hash << 5) + toupper((int)*str) + (hash >> 2));
@@ -134,7 +134,7 @@ unsigned int W_HashLumpName(const char* str) {
 
 static void W_HashLumps(void) {
     int i;
-    unsigned int hash;
+    uint32_t hash;
 
     for(i = 0; i < numlumps; i++) {
         lumpinfo[i].index = -1;

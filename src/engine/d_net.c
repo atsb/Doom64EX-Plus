@@ -205,7 +205,7 @@ void D_StartGameLoop(void) {
 
 static dboolean had_warning = false;
 static void PrintMD5Digest(char *s, byte *digest) {
-    unsigned int i;
+    uint32_t i;
 
     I_Printf("%s: ", s);
 
@@ -249,7 +249,7 @@ static void CheckMD5Sums(void) {
 
 static void D_NetWait(void) {
     SDL_Event Event;
-    unsigned int id = 0;
+    uint32_t id = 0;
 
     if(M_CheckParm("-server") > 0) {
         I_Printf("D_NetWait: Waiting for players..\n\nWhen ready press any key to begin game..\n\n");

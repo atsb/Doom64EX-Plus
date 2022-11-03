@@ -209,8 +209,8 @@ byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
             if(palindex) {
                 // palindex specifies each row (16 colors per row) in the palette for 4 bit color textures
                 if(bit_depth == 4) {
-                        unsigned int pindex = (16 * palindex);
-                        if (pindex >= (unsigned int)(num_pal)) {
+                        uint32_t pindex = (16 * palindex);
+                        if (pindex >= (uint32_t)(num_pal)) {
                             pindex = 0;
                         }
 

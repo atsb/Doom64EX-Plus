@@ -68,7 +68,7 @@ static int64    I_GetTime_Scale = 1<<24;
 // I_uSleep
 //
 
-void I_Sleep(unsigned int usecs) {
+void I_Sleep(uint32_t usecs) {
     SDL_Delay(usecs);
 }
 
@@ -121,17 +121,17 @@ void I_InitClockRate(void) {
 // FRAME INTERPOLTATION
 //
 
-static unsigned int start_displaytime;
-static unsigned int displaytime;
+static uint32_t start_displaytime;
+static uint32_t displaytime;
 static dboolean InDisplay = false;
 static int saved_gametic = -1;
 
 dboolean realframe = false;
 
 fixed_t         rendertic_frac = 0;
-unsigned int    rendertic_start;
-unsigned int    rendertic_step;
-unsigned int    rendertic_next;
+uint32_t    rendertic_start;
+uint32_t    rendertic_step;
+uint32_t    rendertic_next;
 const float     rendertic_msec = 100 * TICRATE / 100000.0f;
 
 //
@@ -165,7 +165,7 @@ void I_EndDisplay(void) {
 //
 
 fixed_t I_GetTimeFrac(void) {
-    unsigned int now;
+    uint32_t now;
     fixed_t frac;
 
     now = SDL_GetTicks();
@@ -191,7 +191,7 @@ fixed_t I_GetTimeFrac(void) {
 
 void I_GetTime_SaveMS(void) {
     rendertic_start = SDL_GetTicks();
-    rendertic_next = (unsigned int)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
+    rendertic_next = (uint32_t)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
     rendertic_step = rendertic_next - rendertic_start;
 }
 
@@ -355,7 +355,7 @@ int I_GetTimeMS(void) {
 // I_GetRandomTimeSeed
 //
 
-unsigned int I_GetRandomTimeSeed(void) {
+uint32_t I_GetRandomTimeSeed(void) {
     // not exactly random....
     return SDL_GetTicks();
 }

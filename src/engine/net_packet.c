@@ -76,7 +76,7 @@ void NET_FreePacket(net_packet_t *packet)
 // Read a byte from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt8(net_packet_t *packet, unsigned int *data)
+dboolean NET_ReadInt8(net_packet_t *packet, uint32_t *data)
 {
     if (packet->pos + 1 > packet->len)
         return false;
@@ -91,7 +91,7 @@ dboolean NET_ReadInt8(net_packet_t *packet, unsigned int *data)
 // Read a 16-bit integer from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt16(net_packet_t *packet, unsigned int *data)
+dboolean NET_ReadInt16(net_packet_t *packet, uint32_t *data)
 {
     byte *p;
 
@@ -109,7 +109,7 @@ dboolean NET_ReadInt16(net_packet_t *packet, unsigned int *data)
 // Read a 32-bit integer from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt32(net_packet_t *packet, unsigned int *data)
+dboolean NET_ReadInt32(net_packet_t *packet, uint32_t *data)
 {
     byte *p;
 
@@ -126,9 +126,9 @@ dboolean NET_ReadInt32(net_packet_t *packet, unsigned int *data)
 
 // Signed read functions
 
-dboolean NET_ReadSInt8(net_packet_t *packet, signed int *data)
+dboolean NET_ReadSInt8(net_packet_t *packet, int32_t *data)
 {
-    if (NET_ReadInt8(packet,(unsigned int *) data))
+    if (NET_ReadInt8(packet,(uint32_t *) data))
     {
         if (*data & (1 << 7))
         {
@@ -143,9 +143,9 @@ dboolean NET_ReadSInt8(net_packet_t *packet, signed int *data)
     }
 }
 
-dboolean NET_ReadSInt16(net_packet_t *packet, signed int *data)
+dboolean NET_ReadSInt16(net_packet_t *packet, int32_t *data)
 {
-    if (NET_ReadInt16(packet, (unsigned int *) data))
+    if (NET_ReadInt16(packet, (uint32_t *) data))
     {
         if (*data & (1 << 15))
         {
@@ -160,9 +160,9 @@ dboolean NET_ReadSInt16(net_packet_t *packet, signed int *data)
     }
 }
 
-dboolean NET_ReadSInt32(net_packet_t *packet, signed int *data)
+dboolean NET_ReadSInt32(net_packet_t *packet, int32_t *data)
 {
-    if (NET_ReadInt32(packet, (unsigned int *) data))
+    if (NET_ReadInt32(packet, (uint32_t *) data))
     {
         if (*data & (1 << 31))
         {
@@ -231,7 +231,7 @@ static void NET_IncreasePacket(net_packet_t *packet)
 
 // Write a single byte to the packet
 
-void NET_WriteInt8(net_packet_t *packet, unsigned int i)
+void NET_WriteInt8(net_packet_t *packet, uint32_t i)
 {
     if (packet->len + 1 > packet->alloced)
         NET_IncreasePacket(packet);
@@ -242,7 +242,7 @@ void NET_WriteInt8(net_packet_t *packet, unsigned int i)
 
 // Write a 16-bit integer to the packet
 
-void NET_WriteInt16(net_packet_t *packet, unsigned int i)
+void NET_WriteInt16(net_packet_t *packet, uint32_t i)
 {
     byte *p;
     
@@ -260,7 +260,7 @@ void NET_WriteInt16(net_packet_t *packet, unsigned int i)
 
 // Write a single byte to the packet
 
-void NET_WriteInt32(net_packet_t *packet, unsigned int i)
+void NET_WriteInt32(net_packet_t *packet, uint32_t i)
 {
     byte *p;
 

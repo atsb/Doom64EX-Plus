@@ -53,7 +53,7 @@ extern int numlumps;
 
 void            W_Init(void);
 wad_file_t*     W_AddFile(char *filename);
-unsigned int    W_HashLumpName(const char* str);
+uint32_t    W_HashLumpName(const char* str);
 int             W_CheckNumForName(const char* name);
 int             W_GetNumForName(const char* name);
 int             W_LumpLength(int lump);

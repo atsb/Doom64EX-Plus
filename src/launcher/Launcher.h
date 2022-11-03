@@ -17,7 +17,7 @@
 
 typedef unsigned char	byte;
 typedef unsigned short	word;
-typedef unsigned int	uint;
+typedef uint32_t	uint;
 typedef BOOL			bool;
 typedef byte*			cache;
 typedef wchar_t*			path[MAX_PATH];

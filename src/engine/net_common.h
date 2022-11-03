@@ -102,7 +102,7 @@ void NET_Conn_SendPacket(net_connection_t *conn, net_packet_t *packet);
 void NET_Conn_InitClient(net_connection_t *conn, net_addr_t *addr);
 void NET_Conn_InitServer(net_connection_t *conn, net_addr_t *addr);
 dboolean NET_Conn_Packet(net_connection_t *conn, net_packet_t *packet,
-                        unsigned int *packet_type);
+                        uint32_t *packet_type);
 void NET_Conn_Disconnect(net_connection_t *conn);
 void NET_Conn_Run(net_connection_t *conn);
 net_packet_t *NET_Conn_NewReliable(net_connection_t *conn, int packet_type);
@@ -110,7 +110,7 @@ net_packet_t *NET_Conn_NewReliable(net_connection_t *conn, int packet_type);
 // Other miscellaneous common functions
 
 void NET_SafePuts(char *msg);
-unsigned int NET_ExpandTicNum(unsigned int relative, unsigned int b);
+uint32_t NET_ExpandTicNum(uint32_t relative, uint32_t b);
 
 //dboolean NET_ValidGameMode(GameMode_t mode, GameMission_t mission);
 dboolean NET_ValidGameSettings(net_gamesettings_t *settings);
