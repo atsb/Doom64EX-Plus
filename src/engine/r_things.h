@@ -31,21 +31,21 @@
 #include "gl_main.h"
 
 typedef struct {
-    mobj_t* spr;
-    fixed_t dist;
-    float   x;
-    float   y;
-    float   z;
+	mobj_t* spr;
+	fixed_t dist;
+	float   x;
+	float   y;
+	float   z;
 } visspritelist_t;
 
-void R_InitSprites(char** namelist);
-void R_AddSprites(subsector_t *sub);
+void R_InitSprites(int8_t** namelist);
+void R_AddSprites(subsector_t* sub);
 void R_SetupSprites(void);
 void R_ClearSprites(void);
-void R_RenderPlayerSprites(player_t *player);
+void R_RenderPlayerSprites(player_t* player);
 void R_DrawThingBBox(void);
 
-extern spritedef_t    *spriteinfo;
+extern spritedef_t* spriteinfo;
 extern int            numsprites;
 
 #endif

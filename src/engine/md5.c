@@ -104,7 +104,7 @@ MD5_Update(md5_context_t *ctx, byte const *buf, unsigned len)
         memcpy(ctx->in, buf, len);
 }
 
-void MD5_UpdateInt32(md5_context_t *context, unsigned int val)
+void MD5_UpdateInt32(md5_context_t *context, uint32_t val)
 {
         byte buf[4];
 

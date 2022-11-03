@@ -24,7 +24,7 @@
 #ifndef M_SHIFT_H
 #define M_SHIFT_H
 
-extern const char*    shiftxform;
+extern const int8_t* shiftxform;
 void M_InitShiftXForm(void);
 
 #endif

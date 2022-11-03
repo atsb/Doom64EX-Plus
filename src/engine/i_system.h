@@ -21,7 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __I_SYSTEM__
 #define __I_SYSTEM__
 
@@ -38,7 +37,6 @@
 // Called by DoomMain.
 void I_Init(void);
 
-
 // Called by D_DoomLoop,
 // returns current time in tics.
 
@@ -47,12 +45,12 @@ extern fixed_t rendertic_frac;
 extern int (*I_GetTime)(void);
 void            I_InitClockRate(void);
 int             I_GetTimeMS(void);
-void            I_Sleep(unsigned int usecs);
+void            I_Sleep(uint32_t usecs);
 dboolean        I_StartDisplay(void);
 void            I_EndDisplay(void);
 fixed_t         I_GetTimeFrac(void);
 void            I_GetTime_SaveMS(void);
-unsigned int   I_GetRandomTimeSeed(void);
+uint32_t   I_GetRandomTimeSeed(void);
 
 // Asynchronous interrupt functions should maintain private queues
 // that are read by the synchronous functions
@@ -64,25 +62,24 @@ unsigned int   I_GetRandomTimeSeed(void);
 // for normal input.
 ticcmd_t* I_BaseTiccmd(void);
 
-
 // Called by M_Responder when quit is selected.
 // Clean exit, displays sell blurb.
 void I_Quit(void);
 
 void I_BeginRead(void);
-void I_Error(const char *error, ...);
-void I_Printf(const char *msg, ...);
+void I_Error(const int8_t* error, ...);
+void I_Printf(const int8_t* msg, ...);
 
-char *I_GetUserDir(void);
-char *I_GetBaseDir(void);
-char *I_GetUserFile(const char *file);
-char *I_FindDataFile(const char *file);
+int8_t* I_GetUserDir(void);
+int8_t* I_GetBaseDir(void);
+int8_t* I_GetUserFile(const int8_t* file);
+int8_t* I_FindDataFile(const int8_t* file);
 
-dboolean I_FileExists(const char *path);
+dboolean I_FileExists(const int8_t* path);
 
 void I_RegisterCvars(void);
 
-extern FILE    *DebugFile;
+extern FILE* DebugFile;
 extern dboolean    DigiJoy;
 
 #endif

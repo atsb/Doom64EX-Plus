@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -27,9 +27,8 @@
 
 #include "net_defs.h"
 
-extern void NET_QueryAddress(char *addr);
+extern void NET_QueryAddress(int8_t* addr);
 extern void NET_LANQuery(void);
-extern net_addr_t *NET_FindLANServer(void);
+extern net_addr_t* NET_FindLANServer(void);
 
 #endif /* #ifndef NET_QUERY_H */
-

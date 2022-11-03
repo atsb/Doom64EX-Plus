@@ -48,17 +48,17 @@ dboolean    G_CheckDemoStatus(void);
 void        G_ReadDemoTiccmd(ticcmd_t* cmd);
 void        G_WriteDemoTiccmd(ticcmd_t* cmd);
 
-FILE            *demofp;
-byte            *demo_p;
-char            demoname[256];
-dboolean        demorecording   = false;
-dboolean        demoplayback    = false;
-dboolean        netdemo         = false;
-byte*           demobuffer;
-byte*           demoend;
-dboolean        singledemo      = false;    // quit after playing a demo from cmdline
+FILE* demofp;
+byte* demo_p;
+int8_t            demoname[256];
+dboolean        demorecording = false;
+dboolean        demoplayback = false;
+dboolean        netdemo = false;
+byte* demobuffer;
+byte* demoend;
+dboolean        singledemo = false;    // quit after playing a demo from cmdline
 dboolean        endDemo;
-dboolean        iwadDemo        = false;
+dboolean        iwadDemo = false;
 
 extern int      starttime;
 
@@ -71,229 +71,226 @@ extern int      starttime;
 //
 
 void G_ReadDemoTiccmd(ticcmd_t* cmd) {
-    unsigned int lowbyte;
+	uint32_t lowbyte;
 
-    if(*demo_p == DEMOMARKER) {
-        // end of demo data stream
-        G_CheckDemoStatus();
-        return;
-    }
+	if (*demo_p == DEMOMARKER) {
+		// end of demo data stream
+		G_CheckDemoStatus();
+		return;
+	}
 
-    cmd->forwardmove    = ((signed char)*demo_p++);
-    cmd->sidemove       = ((signed char)*demo_p++);
-    lowbyte             = (unsigned char)(*demo_p++);
-    cmd->angleturn      = (((signed int)(*demo_p++)) << 8) + lowbyte;
-    lowbyte             = (unsigned char)(*demo_p++);
-    cmd->pitch          = (((signed int)(*demo_p++)) << 8) + lowbyte;
-    cmd->buttons        = (unsigned char)*demo_p++;
-    cmd->buttons2       = (unsigned char)*demo_p++;
+	cmd->forwardmove = ((int8_t)*demo_p++);
+	cmd->sidemove = ((int8_t)*demo_p++);
+	lowbyte = (uint8_t)(*demo_p++);
+	cmd->angleturn = (((int32_t)(*demo_p++)) << 8) + lowbyte;
+	lowbyte = (uint8_t)(*demo_p++);
+	cmd->pitch = (((int32_t)(*demo_p++)) << 8) + lowbyte;
+	cmd->buttons = (uint8_t)*demo_p++;
+	cmd->buttons2 = (uint8_t)*demo_p++;
 }
-
 
 //
 // G_WriteDemoTiccmd
 //
 
 void G_WriteDemoTiccmd(ticcmd_t* cmd) {
-    char buf[8];
-    signed short angleturn;
-    signed short pitch;
-    char *p = buf;
+	int8_t buf[8];
+	int16_t angleturn;
+	int16_t pitch;
+	int8_t* p = buf;
 
-    angleturn = cmd->angleturn;
-    pitch = cmd->pitch;
-    
-    *p++ = cmd->forwardmove;
-    *p++ = cmd->sidemove;
-    *p++ = angleturn & 0xff;
-    *p++ = (angleturn >> 8) & 0xff;
-    *p++ = pitch & 0xff;
-    *p++ = (pitch >> 8) & 0xff;
-    *p++ = cmd->buttons;
-    *p++ = cmd->buttons2;
+	angleturn = cmd->angleturn;
+	pitch = cmd->pitch;
 
-    if(fwrite(buf, p-buf, 1, demofp) != 1) {
-        I_Error("G_WriteDemoTiccmd: error writing demo");
-    }
-    
-    // alias demo_p to it so we can read it back
-    demo_p = (byte*)buf;
-    G_ReadDemoTiccmd(cmd);    // make SURE it is exactly the same
+	*p++ = cmd->forwardmove;
+	*p++ = cmd->sidemove;
+	*p++ = angleturn & 0xff;
+	*p++ = (angleturn >> 8) & 0xff;
+	*p++ = pitch & 0xff;
+	*p++ = (pitch >> 8) & 0xff;
+	*p++ = cmd->buttons;
+	*p++ = cmd->buttons2;
+
+	if (fwrite(buf, p - buf, 1, demofp) != 1) {
+		I_Error("G_WriteDemoTiccmd: error writing demo");
+	}
+
+	// alias demo_p to it so we can read it back
+	demo_p = (byte*)buf;
+	G_ReadDemoTiccmd(cmd);    // make SURE it is exactly the same
 }
-
-
 
 //
 // G_RecordDemo
 //
 
-void G_RecordDemo(const char* name) {
-    byte *demostart, *dm_p;
-    int i;
-    
-    demofp = NULL;
-    endDemo = false;
-    
-    dstrcpy(demoname, name);
-    dstrcat(demoname, ".lmp");
+void G_RecordDemo(const int8_t* name) {
+	byte* demostart, * dm_p;
+	int i;
+
+	demofp = NULL;
+	endDemo = false;
+
+	dstrcpy(demoname, name);
+	dstrcat(demoname, ".lmp");
 #ifdef _WIN32
-    if (_access(demoname, F_OK))
+	if (_access(demoname, F_OK))
 #else
-    if (access(demoname, F_OK))
+	if (access(demoname, F_OK))
 #endif
-    {
-        demofp = fopen(demoname, "wb");
-    }
-    else {
-        int demonum = 0;
+	{
+		demofp = fopen(demoname, "wb");
+	}
+	else {
+		int demonum = 0;
 
-        while(demonum < 10000) {
-            sprintf(demoname, "%s%i.lmp", name, demonum);
+		while (demonum < 10000) {
+			sprintf(demoname, "%s%i.lmp", name, demonum);
 #ifdef _WIN32
-            if (_access(demoname, F_OK))
+			if (_access(demoname, F_OK))
 #else
-            if (access(demoname, F_OK))
+			if (access(demoname, F_OK))
 #endif
-            {
-                demofp = fopen(demoname, "wb");
-                break;
-            }
-            demonum++;
-        }
+			{
+				demofp = fopen(demoname, "wb");
+				break;
+			}
+			demonum++;
+		}
 
-        // so yeah... dunno how to properly handle this...
-        if(demonum >= 10000) {
-            I_Error("G_RecordDemo: file %s already exists", demoname);
-            return;
-        }
-    }
+		// so yeah... dunno how to properly handle this...
+		if (demonum >= 10000) {
+			I_Error("G_RecordDemo: file %s already exists", demoname);
+			return;
+		}
+	}
 
-    CON_DPrintf("--------Recording %s--------\n", demoname);
+	CON_DPrintf("--------Recording %s--------\n", demoname);
 
-    demostart = dm_p = (byte*) malloc(1000);
+	demostart = dm_p = (byte*)malloc(1000);
 
-    G_InitNew(startskill, startmap);
-    
-    *dm_p++ = gameskill;
-    *dm_p++ = gamemap;
-    *dm_p++ = deathmatch;
-    *dm_p++ = respawnparm;
-    *dm_p++ = respawnitem;
-    *dm_p++ = fastparm;
-    *dm_p++ = nomonsters;
-    *dm_p++ = consoleplayer;
-    
-    *dm_p++ = (byte)((gameflags >> 24) & 0xff);
-    *dm_p++ = (byte)((gameflags >> 16) & 0xff);
-    *dm_p++ = (byte)((gameflags >>  8) & 0xff);
-    *dm_p++ = (byte)( gameflags        & 0xff);
-    
-    *dm_p++ = (byte)((compatflags >> 24) & 0xff);
-    *dm_p++ = (byte)((compatflags >> 16) & 0xff);
-    *dm_p++ = (byte)((compatflags >>  8) & 0xff);
-    *dm_p++ = (byte)( compatflags        & 0xff);
+	G_InitNew(startskill, startmap);
 
-    for(i = 0; i < MAXPLAYERS; i++) {
-        *dm_p++ = playeringame[i];
-    }
-    
-    if(fwrite(demostart, 1, dm_p-demostart, demofp) != (size_t)(dm_p-demostart)) {
-        I_Error("G_RecordDemo: Error writing demo header");
-    }
-    
-    free(demostart);
+	*dm_p++ = gameskill;
+	*dm_p++ = gamemap;
+	*dm_p++ = deathmatch;
+	*dm_p++ = respawnparm;
+	*dm_p++ = respawnitem;
+	*dm_p++ = fastparm;
+	*dm_p++ = nomonsters;
+	*dm_p++ = consoleplayer;
 
-    demorecording = true;
-    usergame = false;
+	*dm_p++ = (byte)((gameflags >> 24) & 0xff);
+	*dm_p++ = (byte)((gameflags >> 16) & 0xff);
+	*dm_p++ = (byte)((gameflags >> 8) & 0xff);
+	*dm_p++ = (byte)(gameflags & 0xff);
 
-    G_RunGame();
-    G_CheckDemoStatus();
+	*dm_p++ = (byte)((compatflags >> 24) & 0xff);
+	*dm_p++ = (byte)((compatflags >> 16) & 0xff);
+	*dm_p++ = (byte)((compatflags >> 8) & 0xff);
+	*dm_p++ = (byte)(compatflags & 0xff);
+
+	for (i = 0; i < MAXPLAYERS; i++) {
+		*dm_p++ = playeringame[i];
+	}
+
+	if (fwrite(demostart, 1, dm_p - demostart, demofp) != (size_t)(dm_p - demostart)) {
+		I_Error("G_RecordDemo: Error writing demo header");
+	}
+
+	free(demostart);
+
+	demorecording = true;
+	usergame = false;
+
+	G_RunGame();
+	G_CheckDemoStatus();
 }
 
 //
 // G_PlayDemo
 //
 
-void G_PlayDemo(const char* name) {
-    int i;
-    int p;
-    char filename[256];
+void G_PlayDemo(const int8_t* name) {
+	int i;
+	int p;
+	int8_t filename[256];
 
-    gameaction = ga_nothing;
-    endDemo = false;
+	gameaction = ga_nothing;
+	endDemo = false;
 
-    p = M_CheckParm("-playdemo");
-    if(p && p < myargc-1) {
-        // 20120107 bkw: add .lmp extension if missing.
-        if(dstrrchr(myargv[p+1], '.')) {
-            dstrcpy(filename, myargv[p+1]);
-        }
-        else {
-            dsprintf(filename, "%s.lmp", myargv[p+1]);
-        }
+	p = M_CheckParm("-playdemo");
+	if (p && p < myargc - 1) {
+		// 20120107 bkw: add .lmp extension if missing.
+		if (dstrrchr(myargv[p + 1], '.')) {
+			dstrcpy(filename, myargv[p + 1]);
+		}
+		else {
+			dsprintf(filename, "%s.lmp", myargv[p + 1]);
+		}
 
-        CON_DPrintf("--------Reading demo %s--------\n", filename);
-        if(M_ReadFile(filename, &demobuffer) == -1) {
-            gameaction = ga_exitdemo;
-            return;
-        }
+		CON_DPrintf("--------Reading demo %s--------\n", filename);
+		if (M_ReadFile(filename, &demobuffer) == -1) {
+			gameaction = ga_exitdemo;
+			return;
+		}
 
-        demo_p = demobuffer;
-    }
-    else {
-        if(W_CheckNumForName(name) == -1) {
-            gameaction = ga_exitdemo;
-            return;
-        }
+		demo_p = demobuffer;
+	}
+	else {
+		if (W_CheckNumForName(name) == -1) {
+			gameaction = ga_exitdemo;
+			return;
+		}
 
-        CON_DPrintf("--------Playing demo %s--------\n", name);
-        demobuffer = demo_p = (byte*) W_CacheLumpName(name, PU_STATIC);
-    }
+		CON_DPrintf("--------Playing demo %s--------\n", name);
+		demobuffer = demo_p = (byte*)W_CacheLumpName(name, PU_STATIC);
+	}
 
-    G_SaveDefaults();
+	G_SaveDefaults();
 
-    startskill      = *demo_p++;
-    startmap        = *demo_p++;
-    deathmatch      = *demo_p++;
-    respawnparm     = *demo_p++;
-    respawnitem     = *demo_p++;
-    fastparm        = *demo_p++;
-    nomonsters      = *demo_p++;
-    consoleplayer   = *demo_p++;
-    
-    gameflags  = *demo_p++ & 0xff;
-    gameflags <<= 8;
-    gameflags += *demo_p++ & 0xff;
-    gameflags <<= 8;
-    gameflags += *demo_p++ & 0xff;
-    gameflags <<= 8;
-    gameflags += *demo_p++ & 0xff;
-    
-    compatflags  = *demo_p++ & 0xff;
-    compatflags <<= 8;
-    compatflags += *demo_p++ & 0xff;
-    compatflags <<= 8;
-    compatflags += *demo_p++ & 0xff;
-    compatflags <<= 8;
-    compatflags += *demo_p++ & 0xff;
+	startskill = *demo_p++;
+	startmap = *demo_p++;
+	deathmatch = *demo_p++;
+	respawnparm = *demo_p++;
+	respawnitem = *demo_p++;
+	fastparm = *demo_p++;
+	nomonsters = *demo_p++;
+	consoleplayer = *demo_p++;
 
-    for(i = 0; i < MAXPLAYERS; i++) {
-        playeringame[i] = *demo_p++;
-    }
+	gameflags = *demo_p++ & 0xff;
+	gameflags <<= 8;
+	gameflags += *demo_p++ & 0xff;
+	gameflags <<= 8;
+	gameflags += *demo_p++ & 0xff;
+	gameflags <<= 8;
+	gameflags += *demo_p++ & 0xff;
 
-    G_InitNew(startskill, startmap);
+	compatflags = *demo_p++ & 0xff;
+	compatflags <<= 8;
+	compatflags += *demo_p++ & 0xff;
+	compatflags <<= 8;
+	compatflags += *demo_p++ & 0xff;
+	compatflags <<= 8;
+	compatflags += *demo_p++ & 0xff;
 
-    if(playeringame[1]) {
-        netgame = true;
-        netdemo = true;
-    }
+	for (i = 0; i < MAXPLAYERS; i++) {
+		playeringame[i] = *demo_p++;
+	}
 
-    precache = true;
-    usergame = false;
-    demoplayback = true;
+	G_InitNew(startskill, startmap);
 
-    G_RunGame();
-    iwadDemo = false;
+	if (playeringame[1]) {
+		netgame = true;
+		netdemo = true;
+	}
+
+	precache = true;
+	usergame = false;
+	demoplayback = true;
+
+	G_RunGame();
+	iwadDemo = false;
 }
 
 //
@@ -303,56 +300,56 @@ void G_PlayDemo(const char* name) {
 //
 
 dboolean G_CheckDemoStatus(void) {
-    if(endDemo) {
-        demorecording = false;
-        fputc(DEMOMARKER, demofp);
-        CON_Printf(WHITE, "G_CheckDemoStatus: Demo recorded\n");
-        fclose(demofp);
-        endDemo = false;
-        return false;
-    }
+	if (endDemo) {
+		demorecording = false;
+		fputc(DEMOMARKER, demofp);
+		CON_Printf(WHITE, "G_CheckDemoStatus: Demo recorded\n");
+		fclose(demofp);
+		endDemo = false;
+		return false;
+	}
 
-    if(demoplayback) {
-        if(singledemo) {
-            I_Quit();
-        }
+	if (demoplayback) {
+		if (singledemo) {
+			I_Quit();
+		}
 
-        netdemo         = false;
-        netgame         = false;
-        deathmatch      = false;
-        playeringame[1] = playeringame[2] = playeringame[3] = 0;
-        respawnparm     = false;
-        respawnitem     = false;
-        fastparm        = false;
-        nomonsters      = false;
-        consoleplayer   = 0;
-        gameaction      = ga_exitdemo;
-        endDemo         = false;
+		netdemo = false;
+		netgame = false;
+		deathmatch = false;
+		playeringame[1] = playeringame[2] = playeringame[3] = 0;
+		respawnparm = false;
+		respawnitem = false;
+		fastparm = false;
+		nomonsters = false;
+		consoleplayer = 0;
+		gameaction = ga_exitdemo;
+		endDemo = false;
 
-        G_ReloadDefaults();
-        return true;
-    }
+		G_ReloadDefaults();
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 /* VANILLA */
 
-int G_PlayDemoPtr (int skill, int map) // 800049D0
+int G_PlayDemoPtr(int skill, int map) // 800049D0
 {
 	int		exit;
 	int		config[13];
 	int     	sensitivity;
 
 	demobuffer = demo_p;
-	
+
 	//demo_p = Z_Malloc(16000, PU_STATIC, NULL);
 
 	/* play demo game */
-	G_InitNew (skill, map);
-	G_DoLoadLevel ();
+	G_InitNew(skill, map);
+	G_DoLoadLevel();
 	demoplayback = true;
-	exit = D_MiniLoop (P_Start, P_Stop, P_Ticker, P_Drawer);
+	exit = D_MiniLoop(P_Start, P_Stop, P_Ticker, P_Drawer);
 	demoplayback = false;
 
 	/* free all tags except the PU_STATIC tag */
@@ -361,18 +358,17 @@ int G_PlayDemoPtr (int skill, int map) // 800049D0
 	return exit;
 }
 
-int D_RunDemo(char *name, skill_t skill, int map) // 8002B2D0
+int D_RunDemo(int8_t* name, skill_t skill, int map) // 8002B2D0
 {
-  int lump;
-  int exit;
+	int lump;
+	int exit;
 
-  demo_p = Z_Malloc(16000, PU_STATIC, NULL);
+	demo_p = Z_Malloc(16000, PU_STATIC, NULL);
 
-  lump = W_GetNumForName(name);
-  W_ReadLump(lump, demo_p);
-  exit = G_PlayDemoPtr(skill, map);
-  //Z_Free(demo_p);
+	lump = W_GetNumForName(name);
+	W_ReadLump(lump, demo_p);
+	exit = G_PlayDemoPtr(skill, map);
+	//Z_Free(demo_p);
 
-  return exit;
+	return exit;
 }
-

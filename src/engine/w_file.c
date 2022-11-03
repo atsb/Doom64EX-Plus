@@ -38,83 +38,82 @@
 #include "w_file.h"
 
 typedef struct {
-    wad_file_t wad;
-    FILE *fstream;
+	wad_file_t wad;
+	FILE* fstream;
 } stdc_wad_file_t;
 
 extern wad_file_class_t stdc_wad_file;
 
-static wad_file_t *W_StdC_OpenFile(char *path) {
-    stdc_wad_file_t *result;
-    FILE *fstream;
+static wad_file_t* W_StdC_OpenFile(int8_t* path) {
+	stdc_wad_file_t* result;
+	FILE* fstream;
 
-    fstream = fopen(path, "rb");
+	fstream = fopen(path, "rb");
 
-    if(fstream == NULL) {
-        return NULL;
-    }
+	if (fstream == NULL) {
+		return NULL;
+	}
 
-    // Create a new stdc_wad_file_t to hold the file handle.
+	// Create a new stdc_wad_file_t to hold the file handle.
 
-    result = (stdc_wad_file_t*) Z_Malloc(sizeof(stdc_wad_file_t), PU_STATIC, 0);
-    result->wad.file_class = &stdc_wad_file;
-    result->wad.mapped = NULL;
-    result->wad.length = M_FileLength(fstream);
-    result->fstream = fstream;
+	result = (stdc_wad_file_t*)Z_Malloc(sizeof(stdc_wad_file_t), PU_STATIC, 0);
+	result->wad.file_class = &stdc_wad_file;
+	result->wad.mapped = NULL;
+	result->wad.length = M_FileLength(fstream);
+	result->fstream = fstream;
 
-    return &result->wad;
+	return &result->wad;
 }
 
-static void W_StdC_CloseFile(wad_file_t *wad) {
-    stdc_wad_file_t *stdc_wad;
+static void W_StdC_CloseFile(wad_file_t* wad) {
+	stdc_wad_file_t* stdc_wad;
 
-    stdc_wad = (stdc_wad_file_t *) wad;
+	stdc_wad = (stdc_wad_file_t*)wad;
 
-    fclose(stdc_wad->fstream);
-    Z_Free(stdc_wad);
+	fclose(stdc_wad->fstream);
+	Z_Free(stdc_wad);
 }
 
 // Read data from the specified position in the file into the
 // provided buffer.  Returns the number of bytes read.
 
-size_t W_StdC_Read(wad_file_t *wad, unsigned int offset,
-                   void *buffer, size_t buffer_len) {
-    stdc_wad_file_t *stdc_wad;
-    size_t result;
+size_t W_StdC_Read(wad_file_t* wad, uint32_t offset,
+	void* buffer, size_t buffer_len) {
+	stdc_wad_file_t* stdc_wad;
+	size_t result;
 
-    stdc_wad = (stdc_wad_file_t *) wad;
+	stdc_wad = (stdc_wad_file_t*)wad;
 
-    // Jump to the specified position in the file.
+	// Jump to the specified position in the file.
 
-    fseek(stdc_wad->fstream, offset, SEEK_SET);
+	fseek(stdc_wad->fstream, offset, SEEK_SET);
 
-    // Read into the buffer.
+	// Read into the buffer.
 
-    result = fread(buffer, 1, buffer_len, stdc_wad->fstream);
+	result = fread(buffer, 1, buffer_len, stdc_wad->fstream);
 
-    return result;
+	return result;
 }
-
 
 wad_file_class_t stdc_wad_file = {
-    W_StdC_OpenFile,
-    W_StdC_CloseFile,
-    W_StdC_Read,
+	W_StdC_OpenFile,
+	W_StdC_CloseFile,
+	W_StdC_Read,
 };
 
-static wad_file_class_t *wad_file_classes = &stdc_wad_file;
+static wad_file_class_t* wad_file_classes = &stdc_wad_file;
 
-wad_file_t *W_OpenFile(char *path) {
-    return stdc_wad_file.OpenFile(path);
+wad_file_t* W_OpenFile(int8_t* path) {
+	return stdc_wad_file.OpenFile(path);
 }
 
-void W_CloseFile(wad_file_t *wad) {
-    wad->file_class->CloseFile(wad);
+void W_CloseFile(wad_file_t* wad) {
+	wad->file_class->CloseFile(wad);
 }
 
-size_t W_Read(wad_file_t *wad, unsigned int offset,
-              void *buffer, size_t buffer_len) {
-    return wad->file_class->Read(wad, offset, buffer, buffer_len);
+size_t W_Read(wad_file_t* wad, uint32_t offset,
+	void* buffer, size_t buffer_len) {
+	return wad->file_class->Read(wad, offset, buffer, buffer_len);
 }
 
 //
@@ -122,26 +121,7 @@ size_t W_Read(wad_file_t *wad, unsigned int offset,
 // Checks availability of IWAD files by name,
 //
 
-char *W_FindIWAD(void) {
-    char *result;
-    char *iwadfile;
-    int iwadparm;
-    int i;
-/*
-    // Check for the -iwad parameter
-    iwadparm = M_CheckParm("-iwad");
-
-    if(iwadparm) {
-        // Search through IWAD dirs for an IWAD with the given name.
-        iwadfile = myargv[iwadparm + 1];
-
-        result = W_FindWADByName(iwadfile);
-
-        if(result == NULL) {
-            I_Error("W_FindIWAD: IWAD file '%s' not found!", iwadfile);
-        }
-    }
-    else*/
-
-    return I_FindDataFile("doom64.wad");
+int8_t* W_FindIWAD(void)
+{
+	return I_FindDataFile("doom64.wad");
 }

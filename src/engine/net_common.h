@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -27,93 +27,89 @@
 #include "net_defs.h"
 #include "net_packet.h"
 
-typedef enum 
+typedef enum
 {
-    // sending syn packets, waiting for an ACK reply 
-    // (client side)
+	// sending syn packets, waiting for an ACK reply
+	// (client side)
 
-    NET_CONN_STATE_CONNECTING,
+	NET_CONN_STATE_CONNECTING,
 
-    // received a syn, sent an ack, waiting for an ack reply
-    // (server side)
+	// received a syn, sent an ack, waiting for an ack reply
+	// (server side)
 
-    NET_CONN_STATE_WAITING_ACK,
-    
-    // successfully connected
+	NET_CONN_STATE_WAITING_ACK,
 
-    NET_CONN_STATE_CONNECTED,
+	// successfully connected
 
-    // sent a DISCONNECT packet, waiting for a DISCONNECT_ACK reply
+	NET_CONN_STATE_CONNECTED,
 
-    NET_CONN_STATE_DISCONNECTING,
+	// sent a DISCONNECT packet, waiting for a DISCONNECT_ACK reply
 
-    // client successfully disconnected
+	NET_CONN_STATE_DISCONNECTING,
 
-    NET_CONN_STATE_DISCONNECTED,
+	// client successfully disconnected
 
-    // We are disconnected, but in a sleep state, waiting for several
-    // seconds.  This is in case the DISCONNECT_ACK we sent failed
-    // to arrive, and we need to send another one.  We keep this as
-    // a valid connection for a few seconds until we are sure that
-    // the other end has successfully disconnected as well.
+	NET_CONN_STATE_DISCONNECTED,
 
-    NET_CONN_STATE_DISCONNECTED_SLEEP,
+	// We are disconnected, but in a sleep state, waiting for several
+	// seconds.  This is in case the DISCONNECT_ACK we sent failed
+	// to arrive, and we need to send another one.  We keep this as
+	// a valid connection for a few seconds until we are sure that
+	// the other end has successfully disconnected as well.
 
+	NET_CONN_STATE_DISCONNECTED_SLEEP,
 } net_connstate_t;
 
 // Reason a connection was terminated
 
 typedef enum
 {
-    // As the result of a local disconnect request
+	// As the result of a local disconnect request
 
-    NET_DISCONNECT_LOCAL,
+	NET_DISCONNECT_LOCAL,
 
-    // As the result of a remote disconnect request
+	// As the result of a remote disconnect request
 
-    NET_DISCONNECT_REMOTE,
+	NET_DISCONNECT_REMOTE,
 
-    // Timeout (no data received in a long time)
+	// Timeout (no data received in a long time)
 
-    NET_DISCONNECT_TIMEOUT,
-
+	NET_DISCONNECT_TIMEOUT,
 } net_disconnect_reason_t;
 
 #define MAX_RETRIES 5
 
 typedef struct net_reliable_packet_s net_reliable_packet_t;
 
-typedef struct 
+typedef struct
 {
-    net_connstate_t state;
-    net_disconnect_reason_t disconnect_reason;
-    net_addr_t *addr;
-    int last_send_time;
-    int num_retries;
-    int keepalive_send_time;
-    int keepalive_recv_time;
-    net_reliable_packet_t *reliable_packets;
-    int reliable_send_seq;
-    int reliable_recv_seq;
+	net_connstate_t state;
+	net_disconnect_reason_t disconnect_reason;
+	net_addr_t* addr;
+	int last_send_time;
+	int num_retries;
+	int keepalive_send_time;
+	int keepalive_recv_time;
+	net_reliable_packet_t* reliable_packets;
+	int reliable_send_seq;
+	int reliable_recv_seq;
 } net_connection_t;
 
-
-void NET_Conn_SendPacket(net_connection_t *conn, net_packet_t *packet);
-void NET_Conn_InitClient(net_connection_t *conn, net_addr_t *addr);
-void NET_Conn_InitServer(net_connection_t *conn, net_addr_t *addr);
-dboolean NET_Conn_Packet(net_connection_t *conn, net_packet_t *packet,
-                        unsigned int *packet_type);
-void NET_Conn_Disconnect(net_connection_t *conn);
-void NET_Conn_Run(net_connection_t *conn);
-net_packet_t *NET_Conn_NewReliable(net_connection_t *conn, int packet_type);
+void NET_Conn_SendPacket(net_connection_t* conn, net_packet_t* packet);
+void NET_Conn_InitClient(net_connection_t* conn, net_addr_t* addr);
+void NET_Conn_InitServer(net_connection_t* conn, net_addr_t* addr);
+dboolean NET_Conn_Packet(net_connection_t* conn, net_packet_t* packet,
+	uint32_t* packet_type);
+void NET_Conn_Disconnect(net_connection_t* conn);
+void NET_Conn_Run(net_connection_t* conn);
+net_packet_t* NET_Conn_NewReliable(net_connection_t* conn, int packet_type);
 
 // Other miscellaneous common functions
 
-void NET_SafePuts(char *msg);
-unsigned int NET_ExpandTicNum(unsigned int relative, unsigned int b);
+void NET_SafePuts(int8_t* msg);
+uint32_t NET_ExpandTicNum(uint32_t relative, uint32_t b);
 
 //dboolean NET_ValidGameMode(GameMode_t mode, GameMission_t mission);
-dboolean NET_ValidGameSettings(net_gamesettings_t *settings);
+dboolean NET_ValidGameSettings(net_gamesettings_t* settings);
 
 #endif /* #ifndef NET_COMMON_H */
-

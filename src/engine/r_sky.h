@@ -27,7 +27,7 @@
 
 #include "p_setup.h"
 
-extern skydef_t*    sky;
+extern skydef_t* sky;
 extern int          skypicnum;
 extern int          skybackdropnum;
 extern int          thunderCounter;
@@ -39,7 +39,7 @@ extern dboolean     skyfadeback;
 // Used for rendering, as well as tracking projectiles etc.
 extern int          skyflatnum;
 
-extern byte*        fireBuffer;
+extern byte* fireBuffer;
 extern dPalette_t   firePal16[256];
 extern int          fireLump;
 

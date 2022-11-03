@@ -21,7 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __D_STATE__
 #define __D_STATE__
 
@@ -38,8 +37,6 @@
 #pragma interface
 #endif
 
-
-
 // ------------------------
 // Command line parameters.
 //
@@ -49,7 +46,6 @@ extern  dboolean    respawnitem;
 extern  dboolean    fastparm;       // checkparm of -fast
 extern  dboolean    nolights;
 extern  dboolean    devparm;        // DEBUG: launched with -devparm
-
 
 // -------------------------------------------
 // Selected skill type, map etc.
@@ -87,7 +83,6 @@ extern int          video_height;
 extern float        video_ratio;
 extern int          window_focused;
 
-
 // -------------------------
 // Status flags for refresh.
 //
@@ -112,22 +107,22 @@ extern  int         ViewWidth;
 extern int          validcount;
 
 extern int          numvertexes;
-extern vertex_t     *vertexes;
+extern vertex_t* vertexes;
 extern int          numsegs;
-extern seg_t        *segs;
+extern seg_t* segs;
 extern int          numsectors;
-extern sector_t     *sectors;
+extern sector_t* sectors;
 extern int          numsubsectors;
-extern subsector_t  *subsectors;
+extern subsector_t* subsectors;
 extern int          numnodes;
-extern node_t       *nodes;
+extern node_t* nodes;
 extern int          numleafs;
-extern leaf_t       *leafs;
+extern leaf_t* leafs;
 extern int          numsides;
-extern side_t       *sides;
+extern side_t* sides;
 extern int          numlines;
-extern line_t       *lines;
-extern light_t      *lights;
+extern line_t* lines;
+extern light_t* lights;
 extern int          numlights;
 extern macroinfo_t  macros;
 
@@ -152,8 +147,6 @@ extern  int         totalsecret;
 extern  int         basetic;
 extern  int         leveltime;      // tics in game play for par
 
-
-
 // --------------------------------------
 // DEMO playback/recording related stuff.
 // No demo, there is a human player in charge?
@@ -170,40 +163,37 @@ extern  dboolean    singledemo;
 
 extern  gamestate_t gamestate;
 
-
-
 //
 // MAPINFO
 //
 
 typedef struct {
-    char        mapname[64];
-    int         mapid;
-    int         music;
-    int         type;
-    int         cluster;
-    int         exitdelay;
-    dboolean    nointermission;
-    dboolean    clearchts;
-    dboolean    forcegodmode;
-    dboolean    contmusexit;
-    int         oldcollision;
-    int         allowjump;
-    int         allowfreelook;
+	int8_t        mapname[64];
+	int         mapid;
+	int         music;
+	int         type;
+	int         cluster;
+	int         exitdelay;
+	dboolean    nointermission;
+	dboolean    clearchts;
+	dboolean    forcegodmode;
+	dboolean    contmusexit;
+	int         oldcollision;
+	int         allowjump;
+	int         allowfreelook;
 } mapdef_t;
 
 typedef struct {
-    int         id;
-    int         music;
-    dboolean    enteronly;
-    short       pic_x;
-    short       pic_y;
-    dboolean    nointermission;
-    dboolean    scrolltextend;
-    char        text[512];
-    char        pic[9];
+	int         id;
+	int         music;
+	dboolean    enteronly;
+	int16_t       pic_x;
+	int16_t       pic_y;
+	dboolean    nointermission;
+	dboolean    scrolltextend;
+	int8_t        text[512];
+	int8_t        pic[9];
 } clusterdef_t;
-
 
 //-----------------------------
 // Internal parameters, fixed.
@@ -211,17 +201,13 @@ typedef struct {
 //  according to user inputs. Partly load from
 //  WAD, partly set at startup time.
 
-
-
 extern  int         gametic;
-
 
 // Bookkeeping on players - state.
 extern  player_t    players[MAXPLAYERS];
 
 // Alive? Disconnected?
 extern  dboolean    playeringame[MAXPLAYERS];
-
 
 // Player spawn spots for deathmatch.
 #define MAX_DM_STARTS   10
@@ -232,22 +218,17 @@ extern  mapthing_t* deathmatch_p;
 // Player spawn spots.
 extern  mapthing_t  playerstarts[MAXPLAYERS];
 
-
 // LUT of ammunition limits for each kind.
 // This doubles with BackPack powerup item.
 extern  int         maxammo[NUMAMMO];
-
-
-
-
 
 //-----------------------------------------
 // Internal parameters, used for engine.
 //
 
 // File handling stuff.
-extern  char        basedefault[1024];
-extern  FILE*       debugfile;
+extern  int8_t        basedefault[1024];
+extern  FILE* debugfile;
 
 // if true, load all graphics at level load
 extern  dboolean    precache;

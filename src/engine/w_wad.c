@@ -65,67 +65,66 @@
 // TYPES
 //
 typedef struct {
-    // Should be "IWAD" or "PWAD".
-    char        identification[4];
-    int            numlumps;
-    int            infotableofs;
+	// Should be "IWAD" or "PWAD".
+	int8_t        identification[4];
+	int            numlumps;
+	int            infotableofs;
 } wadinfo_t;
 
-
 typedef struct {
-    int            filepos;
-    int            size;
-    char        name[8];
+	int            filepos;
+	int            size;
+	int8_t        name[8];
 } filelump_t;
 
 #define MAX_MEMLUMPS    16
 
 // Location of each lump on disk.
-extern lumpinfo_t*    lumpinfo;
+extern lumpinfo_t* lumpinfo;
 int            numlumps;
 
 #define CopyLumps(dest, src, count) dmemcpy(dest, src, (count)*sizeof(lumpinfo_t))
 #define CopyLump(dest, src) CopyLumps(dest, src, 1)
 
-void ExtractFileBase(char* path, char* dest) {
-    char*    src;
-    int        length;
+void ExtractFileBase(int8_t* path, int8_t* dest) {
+	int8_t* src;
+	int        length;
 
-    src = path + dstrlen(path) - 1;
+	src = path + dstrlen(path) - 1;
 
-    // back up until a \ or the start
-    while(src != path
-            && *(src-1) != '\\'
-            && *(src-1) != '/') {
-        src--;
-    }
+	// back up until a \ or the start
+	while (src != path
+		&& *(src - 1) != '\\'
+		&& *(src - 1) != '/') {
+		src--;
+	}
 
-    // copy up to eight characters
-    dmemset(dest,0,8);
-    length = 0;
+	// copy up to eight characters
+	dmemset(dest, 0, 8);
+	length = 0;
 
-    while(*src && *src != '.') {
-        if(++length == 9) {
-            I_Error("Filename base of %s >8 chars",path);
-        }
+	while (*src && *src != '.') {
+		if (++length == 9) {
+			I_Error("Filename base of %s >8 chars", path);
+		}
 
-        *dest++ = toupper((int)*src++);
-    }
+		*dest++ = toupper((int)*src++);
+	}
 }
 
 //
 // W_HashLumpName
 //
 
-unsigned int W_HashLumpName(const char* str) {
-    unsigned int hash = 1315423911;
-    unsigned int i    = 0;
+uint32_t W_HashLumpName(const int8_t* str) {
+	uint32_t hash = 1315423911;
+	uint32_t i = 0;
 
-    for(i = 0; i < 8 && *str != '\0'; str++, i++) {
-        hash ^= ((hash << 5) + toupper((int)*str) + (hash >> 2));
-    }
+	for (i = 0; i < 8 && *str != '\0'; str++, i++) {
+		hash ^= ((hash << 5) + toupper((int)*str) + (hash >> 2));
+	}
 
-    return hash;
+	return hash;
 }
 
 //
@@ -133,19 +132,19 @@ unsigned int W_HashLumpName(const char* str) {
 //
 
 static void W_HashLumps(void) {
-    int i;
-    unsigned int hash;
+	int i;
+	uint32_t hash;
 
-    for(i = 0; i < numlumps; i++) {
-        lumpinfo[i].index = -1;
-        lumpinfo[i].next = -1;
-    }
+	for (i = 0; i < numlumps; i++) {
+		lumpinfo[i].index = -1;
+		lumpinfo[i].next = -1;
+	}
 
-    for(i = 0; i < numlumps; i++) {
-        hash = (W_HashLumpName(lumpinfo[i].name) % numlumps);
-        lumpinfo[i].next = lumpinfo[hash].index;
-        lumpinfo[hash].index = i;
-    }
+	for (i = 0; i < numlumps; i++) {
+		hash = (W_HashLumpName(lumpinfo[i].name) % numlumps);
+		lumpinfo[i].next = lumpinfo[hash].index;
+		lumpinfo[hash].index = i;
+	}
 }
 
 //
@@ -157,108 +156,110 @@ static void W_HashLumps(void) {
 //
 
 void W_Init(void) {
-    char*           iwad;
-    char*           doom64expluswad;
-    wadinfo_t       header;
-    lumpinfo_t*     lump_p;
-    int             i;
-    wad_file_t*     wadfile;
-    int             length;
-    int             startlump;
-    filelump_t*     fileinfo;
-    filelump_t*     filerover;
-    int             p;
+	int8_t* iwad;
+	int8_t* doom64expluswad;
+	wadinfo_t       header;
+	lumpinfo_t* lump_p;
+	int             i;
+	wad_file_t* wadfile;
+	int             length;
+	int             startlump;
+	filelump_t* fileinfo;
+	filelump_t* filerover;
+	int             p;
 
-    // open the file and add to directory
-    iwad = W_FindIWAD();
+	// open the file and add to directory
+	iwad = W_FindIWAD();
 
-    if(iwad == NULL) {
-        I_Error("W_Init: IWAD not found");
-    }
+	if (iwad == NULL) {
+		I_Error("W_Init: IWAD not found");
+	}
 
-    wadfile = W_OpenFile(iwad);
+	wadfile = W_OpenFile(iwad);
 
-    W_Read(wadfile, 0, &header, sizeof(header));
+	W_Read(wadfile, 0, &header, sizeof(header));
 
-    if(dstrnicmp(header.identification,"IWAD",4)) {
-        I_Error("W_Init: Invalid main IWAD id");
-    }
+	if (dstrnicmp(header.identification, "IWAD", 4)) {
+		I_Error("W_Init: Invalid main IWAD id");
+	}
 
-    numlumps = 0;
-    lumpinfo = (lumpinfo_t*) malloc(1); // Will be realloced as lumps are added
+	numlumps = 0;
+	lumpinfo = (lumpinfo_t*)malloc(1); // Will be realloced as lumps are added
 
-    startlump = numlumps;
+	startlump = numlumps;
 
-    header.numlumps = LONG(header.numlumps);
-    header.infotableofs = LONG(header.infotableofs);
-    length = header.numlumps*sizeof(filelump_t);
-    fileinfo = (filelump_t*) Z_Malloc(length, PU_STATIC, 0);
+	header.numlumps = LONG(header.numlumps);
+	header.infotableofs = LONG(header.infotableofs);
+	length = header.numlumps * sizeof(filelump_t);
+	fileinfo = (filelump_t*)Z_Malloc(length, PU_STATIC, 0);
 
-    W_Read(wadfile, header.infotableofs, fileinfo, length);
-    numlumps += header.numlumps;
+	W_Read(wadfile, header.infotableofs, fileinfo, length);
+	numlumps += header.numlumps;
 
-    // Fill in lumpinfo
-    lumpinfo = (lumpinfo_t*) realloc(lumpinfo, numlumps*sizeof(lumpinfo_t));
-    dmemset(lumpinfo, 0, numlumps * sizeof(lumpinfo_t));
+	// Fill in lumpinfo
+	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
+	dmemset(lumpinfo, 0, numlumps * sizeof(lumpinfo_t));
 
-    if(!lumpinfo) {
-        I_Error("W_Init: Couldn't realloc lumpinfo");
-    }
+	if (!lumpinfo) {
+		I_Error("W_Init: Couldn't realloc lumpinfo");
+	}
 
-    lump_p = &lumpinfo[startlump];
-    filerover = fileinfo;
+	lump_p = &lumpinfo[startlump];
+	filerover = fileinfo;
 
-    for(i = startlump; i < numlumps; i++, lump_p++, filerover++) {
-        lump_p->wadfile = wadfile;
-        lump_p->position = LONG(filerover->filepos);
-        lump_p->size = LONG(filerover->size);
-        lump_p->cache = NULL;
-        dmemcpy(lump_p->name, filerover->name, 8);
-    }
+	for (i = startlump; i < numlumps; i++, lump_p++, filerover++) {
+		lump_p->wadfile = wadfile;
+		lump_p->position = LONG(filerover->filepos);
+		lump_p->size = LONG(filerover->size);
+		lump_p->cache = NULL;
+		dmemcpy(lump_p->name, filerover->name, 8);
+	}
 
-    if(!numlumps) {
-        I_Error("W_Init: no files found");
-    }
+	if (!numlumps) {
+		I_Error("W_Init: no files found");
+	}
 
-    lumpinfo = (lumpinfo_t*) realloc(lumpinfo, numlumps*sizeof(lumpinfo_t));
+	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
 
-    Z_Free(fileinfo);
+	Z_Free(fileinfo);
 
-    if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
-        W_MergeFile(doom64expluswad);
-        free(doom64expluswad);
-    } else {
-        I_Error("W_Init: doom64ex-plus.wad not found");
-    }
+	if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
+		W_MergeFile(doom64expluswad);
+		free(doom64expluswad);
+	}
+	else {
+		I_Error("W_Init: doom64ex-plus.wad not found");
+	}
 
-    p = M_CheckParm("-file");
-    if(p) {
-        // the parms after p are wadfile/lump names,
-        // until end of parms or another - preceded parm
-        while(++p != myargc && myargv[p][0] != '-') {
-            char *filename;
-            if ((filename = I_FindDataFile(myargv[p]))) {
-                W_MergeFile(filename);
-                free(filename);
-            } else {
-                W_MergeFile(myargv[p]);
-            }
-        }
-    }
-    // 20120724 villsa - find drag & drop wad files
-    else {
-        for(i = 1; i < myargc; i++) {
-            if(strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
-                char *filename;
-                if ((filename = I_FindDataFile(myargv[i]))) {
-                    W_MergeFile(filename);
-                    free(filename);
-                }
-            }
-        }
-    }
+	p = M_CheckParm("-file");
+	if (p) {
+		// the parms after p are wadfile/lump names,
+		// until end of parms or another - preceded parm
+		while (++p != myargc && myargv[p][0] != '-') {
+			int8_t* filename;
+			if ((filename = I_FindDataFile(myargv[p]))) {
+				W_MergeFile(filename);
+				free(filename);
+			}
+			else {
+				W_MergeFile(myargv[p]);
+			}
+		}
+	}
+	// 20120724 villsa - find drag & drop wad files
+	else {
+		for (i = 1; i < myargc; i++) {
+			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
+				int8_t* filename;
+				if ((filename = I_FindDataFile(myargv[i]))) {
+					W_MergeFile(filename);
+					free(filename);
+				}
+			}
+		}
+	}
 
-    W_HashLumps();
+	W_HashLumps();
 }
 
 //
@@ -270,124 +271,124 @@ void W_Init(void) {
 // Other files are single lumps with the base filename
 //  for the lump name.
 
-wad_file_t *W_AddFile(char *filename) {
-    wadinfo_t   header;
-    lumpinfo_t* lump_p;
-    int         i;
-    wad_file_t* wadfile;
-    int         length;
-    int         startlump;
-    filelump_t* fileinfo;
-    filelump_t* filerover;
+wad_file_t* W_AddFile(int8_t* filename) {
+	wadinfo_t   header;
+	lumpinfo_t* lump_p;
+	int         i;
+	wad_file_t* wadfile;
+	int         length;
+	int         startlump;
+	filelump_t* fileinfo;
+	filelump_t* filerover;
 
-    // open the file and add to directory
+	// open the file and add to directory
 
-    wadfile = W_OpenFile(filename);
+	wadfile = W_OpenFile(filename);
 
-    if(wadfile == NULL) {
-        I_Printf("W_AddFile: couldn't open %s\n", filename);
-        return NULL;
-    }
+	if (wadfile == NULL) {
+		I_Printf("W_AddFile: couldn't open %s\n", filename);
+		return NULL;
+	}
 
-    I_Printf("W_AddFile: Adding %s\n", filename);
+	I_Printf("W_AddFile: Adding %s\n", filename);
 
-    startlump = numlumps;
+	startlump = numlumps;
 
-    if(strcasecmp(filename+dstrlen(filename)-3 , "wad")) {
-        // single lump file
+	if (strcasecmp(filename + dstrlen(filename) - 3, "wad")) {
+		// single lump file
 
-        // fraggle: Swap the filepos and size here.  The WAD directory
-        // parsing code expects a little-endian directory, so will swap
-        // them back.  Effectively we're constructing a "fake WAD directory"
-        // here, as it would appear on disk.
+		// fraggle: Swap the filepos and size here.  The WAD directory
+		// parsing code expects a little-endian directory, so will swap
+		// them back.  Effectively we're constructing a "fake WAD directory"
+		// here, as it would appear on disk.
 
-        fileinfo = (filelump_t*) Z_Malloc(sizeof(filelump_t), PU_STATIC, 0);
-        fileinfo->filepos = LONG(0);
-        fileinfo->size = LONG(wadfile->length);
+		fileinfo = (filelump_t*)Z_Malloc(sizeof(filelump_t), PU_STATIC, 0);
+		fileinfo->filepos = LONG(0);
+		fileinfo->size = LONG(wadfile->length);
 
-        // Name the lump after the base of the filename (without the
-        // extension).
+		// Name the lump after the base of the filename (without the
+		// extension).
 
-        ExtractFileBase(filename, fileinfo->name);
-        numlumps++;
-    }
-    else {
-        // WAD file
-        W_Read(wadfile, 0, &header, sizeof(header));
+		ExtractFileBase(filename, fileinfo->name);
+		numlumps++;
+	}
+	else {
+		// WAD file
+		W_Read(wadfile, 0, &header, sizeof(header));
 
-        if(dstrncmp(header.identification,"PWAD",4) &&
-                dstrncmp(header.identification,"IWAD",4)) {
-            I_Error("W_AddFile: Wad file %s doesn't have valid IWAD or PWAD id\n", filename);
-        }
+		if (dstrncmp(header.identification, "PWAD", 4) &&
+			dstrncmp(header.identification, "IWAD", 4)) {
+			I_Error("W_AddFile: Wad file %s doesn't have valid IWAD or PWAD id\n", filename);
+		}
 
-        header.numlumps = LONG(header.numlumps);
-        header.infotableofs = LONG(header.infotableofs);
-        length = header.numlumps*sizeof(filelump_t);
-        fileinfo = (filelump_t*) Z_Malloc(length, PU_STATIC, 0);
+		header.numlumps = LONG(header.numlumps);
+		header.infotableofs = LONG(header.infotableofs);
+		length = header.numlumps * sizeof(filelump_t);
+		fileinfo = (filelump_t*)Z_Malloc(length, PU_STATIC, 0);
 
-        W_Read(wadfile, header.infotableofs, fileinfo, length);
-        numlumps += header.numlumps;
-    }
+		W_Read(wadfile, header.infotableofs, fileinfo, length);
+		numlumps += header.numlumps;
+	}
 
-    // Fill in lumpinfo
-    lumpinfo = (lumpinfo_t*) realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
+	// Fill in lumpinfo
+	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
 
-    if(lumpinfo == NULL) {
-        I_Error("W_AddFile: Couldn't realloc lumpinfo");
-    }
+	if (lumpinfo == NULL) {
+		I_Error("W_AddFile: Couldn't realloc lumpinfo");
+	}
 
-    lump_p = &lumpinfo[startlump];
+	lump_p = &lumpinfo[startlump];
 
-    filerover = fileinfo;
+	filerover = fileinfo;
 
-    for(i = startlump; i < numlumps; ++i) {
-        lump_p->wadfile = wadfile;
-        lump_p->position = LONG(filerover->filepos);
-        lump_p->size = LONG(filerover->size);
-        lump_p->cache = NULL;
-        dmemcpy(lump_p->name, filerover->name, 8);
+	for (i = startlump; i < numlumps; ++i) {
+		lump_p->wadfile = wadfile;
+		lump_p->position = LONG(filerover->filepos);
+		lump_p->size = LONG(filerover->size);
+		lump_p->cache = NULL;
+		dmemcpy(lump_p->name, filerover->name, 8);
 
-        ++lump_p;
-        ++filerover;
-    }
+		++lump_p;
+		++filerover;
+	}
 
-    Z_Free(fileinfo);
+	Z_Free(fileinfo);
 
-    W_HashLumps();
+	W_HashLumps();
 
-    return wadfile;
+	return wadfile;
 }
 
 static dboolean nonmaplump = false;
 
-filelump_t *mapLump;
+filelump_t* mapLump;
 int numMapLumps;
-byte *mapLumpData = NULL;
+byte* mapLumpData = NULL;
 
 //
 // W_CacheMapLump
 //
 
 void W_CacheMapLump(int map) {
-    char name8[9];
-    int lump;
+	int8_t name8[9];
+	int lump;
 
-    sprintf(name8, "MAP%02d", map);
-    name8[8] = 0;
+	sprintf(name8, "MAP%02d", map);
+	name8[8] = 0;
 
-    lump = W_GetNumForName(name8);
+	lump = W_GetNumForName(name8);
 
-    // check if non-lump map, aka standard doom map storage
-    if(!((lump+1) >= numlumps) && !dstrncmp(lumpinfo[lump+1].name, "THINGS", 8)) {
-        nonmaplump = true;
-        return;
-    }
-    else {
-        mapLumpData = (byte*)W_CacheLumpNum(lump, PU_STATIC);
-    }
+	// check if non-lump map, aka standard doom map storage
+	if (!((lump + 1) >= numlumps) && !dstrncmp(lumpinfo[lump + 1].name, "THINGS", 8)) {
+		nonmaplump = true;
+		return;
+	}
+	else {
+		mapLumpData = (byte*)W_CacheLumpNum(lump, PU_STATIC);
+	}
 
-    numMapLumps = ((wadinfo_t*)mapLumpData)->numlumps;
-    mapLump = (filelump_t*)(mapLumpData + ((wadinfo_t*)mapLumpData)->infotableofs);
+	numMapLumps = ((wadinfo_t*)mapLumpData)->numlumps;
+	mapLump = (filelump_t*)(mapLumpData + ((wadinfo_t*)mapLumpData)->infotableofs);
 }
 
 //
@@ -395,19 +396,19 @@ void W_CacheMapLump(int map) {
 //
 
 void W_FreeMapLump(void) {
-    if(nonmaplump) {
-        Z_FreeTags(PU_MAPLUMP, PU_MAPLUMP);
-    }
+	if (nonmaplump) {
+		Z_FreeTags(PU_MAPLUMP, PU_MAPLUMP);
+	}
 
-    mapLump = NULL;
-    numMapLumps = 0;
-    nonmaplump = false;
+	mapLump = NULL;
+	numMapLumps = 0;
+	nonmaplump = false;
 
-    if(mapLumpData) {
-        Z_Free(mapLumpData);
-    }
+	if (mapLumpData) {
+		Z_Free(mapLumpData);
+	}
 
-    mapLumpData = NULL;
+	mapLumpData = NULL;
 }
 
 //
@@ -415,23 +416,23 @@ void W_FreeMapLump(void) {
 //
 
 int W_MapLumpLength(int lump) {
-    if(nonmaplump) {
-        char name8[9];
-        int l;
+	if (nonmaplump) {
+		int8_t name8[9];
+		int l;
 
-        sprintf(name8, "MAP%02d", gamemap);
-        name8[8] = 0;
+		sprintf(name8, "MAP%02d", gamemap);
+		name8[8] = 0;
 
-        l = W_GetNumForName(name8);
+		l = W_GetNumForName(name8);
 
-        return lumpinfo[l + lump].size;
-    }
+		return lumpinfo[l + lump].size;
+	}
 
-    if(lump >= numMapLumps) {
-        I_Error("W_MapLumpLength: %i out of range", lump);
-    }
+	if (lump >= numMapLumps) {
+		I_Error("W_MapLumpLength: %i out of range", lump);
+	}
 
-    return mapLump[lump].size;
+	return mapLump[lump].size;
 }
 
 //
@@ -439,23 +440,23 @@ int W_MapLumpLength(int lump) {
 //
 
 void* W_GetMapLump(int lump) {
-    if(nonmaplump) {
-        char name8[9];
-        int l;
+	if (nonmaplump) {
+		int8_t name8[9];
+		int l;
 
-        sprintf(name8, "MAP%02d", gamemap);
-        name8[8] = 0;
+		sprintf(name8, "MAP%02d", gamemap);
+		name8[8] = 0;
 
-        l = W_GetNumForName(name8);
+		l = W_GetNumForName(name8);
 
-        return W_CacheLumpNum(l + lump, PU_MAPLUMP);
-    }
+		return W_CacheLumpNum(l + lump, PU_MAPLUMP);
+	}
 
-    if(lump >= numMapLumps) {
-        I_Error("W_GetMapLump: lump %d out of range", lump);
-    }
+	if (lump >= numMapLumps) {
+		I_Error("W_GetMapLump: lump %d out of range", lump);
+	}
 
-    return (mapLumpData + mapLump[lump].filepos);
+	return (mapLumpData + mapLump[lump].filepos);
 }
 
 //
@@ -463,18 +464,18 @@ void* W_GetMapLump(int lump) {
 // Returns -1 if name not found.
 //
 
-int W_CheckNumForName(const char* name) {
-    int i = -1;
+int W_CheckNumForName(const int8_t* name) {
+	int i = -1;
 
-    if(numlumps) {
-        i = lumpinfo[W_HashLumpName(name) % numlumps].index;
-    }
+	if (numlumps) {
+		i = lumpinfo[W_HashLumpName(name) % numlumps].index;
+	}
 
-    while(i >= 0 && dstrncmp(lumpinfo[i].name, name, 8)) {
-        i = lumpinfo[i].next;
-    }
+	while (i >= 0 && dstrncmp(lumpinfo[i].name, name, 8)) {
+		i = lumpinfo[i].next;
+	}
 
-    return i;
+	return i;
 }
 
 //
@@ -482,16 +483,16 @@ int W_CheckNumForName(const char* name) {
 // Calls W_CheckNumForName, but bombs out if not found.
 //
 
-int W_GetNumForName(const char* name) {
-    int    i;
+int W_GetNumForName(const int8_t* name) {
+	int    i;
 
-    i = W_CheckNumForName(name);
+	i = W_CheckNumForName(name);
 
-    if(i == -1) {
-        I_Error("W_GetNumForName: %s not found!", name);
-    }
+	if (i == -1) {
+		I_Error("W_GetNumForName: %s not found!", name);
+	}
 
-    return i;
+	return i;
 }
 
 //
@@ -500,11 +501,11 @@ int W_GetNumForName(const char* name) {
 //
 
 int W_LumpLength(int lump) {
-    if(lump >= numlumps) {
-        I_Error("W_LumpLength: %i >= numlumps",lump);
-    }
+	if (lump >= numlumps) {
+		I_Error("W_LumpLength: %i >= numlumps", lump);
+	}
 
-    return lumpinfo[lump].size;
+	return lumpinfo[lump].size;
 }
 
 //
@@ -513,23 +514,23 @@ int W_LumpLength(int lump) {
 //  which must be >= W_LumpLength().
 //
 
-void W_ReadLump(int lump, void *dest) {
-    int c;
-    lumpinfo_t *l;
+void W_ReadLump(int lump, void* dest) {
+	int c;
+	lumpinfo_t* l;
 
-    if(lump >= numlumps) {
-        I_Error("W_ReadLump: %i >= numlumps", lump);
-    }
+	if (lump >= numlumps) {
+		I_Error("W_ReadLump: %i >= numlumps", lump);
+	}
 
-    l = lumpinfo+lump;
+	l = lumpinfo + lump;
 
-    I_BeginRead();
+	I_BeginRead();
 
-    c = W_Read(l->wadfile, l->position, dest, l->size);
+	c = W_Read(l->wadfile, l->position, dest, l->size);
 
-    if(c < l->size) {
-        I_Error("W_ReadLump: only read %i of %i on lump %i", c, l->size, lump);
-    }
+	if (c < l->size) {
+		I_Error("W_ReadLump: only read %i of %i on lump %i", c, l->size, lump);
+	}
 }
 
 //
@@ -537,97 +538,97 @@ void W_ReadLump(int lump, void *dest) {
 //
 
 void* W_CacheLumpNum(int lump, int tag) {
-    lumpinfo_t *l;
+	lumpinfo_t* l;
 
-    if(lump < 0 || lump >= numlumps) {
-        I_Error("W_CacheLumpNum: lump %i out of range", lump);
-    }
+	if (lump < 0 || lump >= numlumps) {
+		I_Error("W_CacheLumpNum: lump %i out of range", lump);
+	}
 
-    l = &lumpinfo[lump];
+	l = &lumpinfo[lump];
 
-    if(!l->cache) {    // read the lump in
-        Z_Malloc(W_LumpLength(lump), tag, &l->cache);
-        W_ReadLump(lump, l->cache);
-    }
-    else {
-        // [d64] 'touch' static caches
-        if(tag == PU_STATIC) {
-            Z_Touch(l->cache);
-        }
+	if (!l->cache) {    // read the lump in
+		Z_Malloc(W_LumpLength(lump), tag, &l->cache);
+		W_ReadLump(lump, l->cache);
+	}
+	else {
+		// [d64] 'touch' static caches
+		if (tag == PU_STATIC) {
+			Z_Touch(l->cache);
+		}
 
-        // avoid changing PU_STATIC data into PU_CACHE
-        if(tag < Z_CheckTag(l->cache)) {
-            Z_ChangeTag(l->cache, tag);
-        }
-    }
+		// avoid changing PU_STATIC data into PU_CACHE
+		if (tag < Z_CheckTag(l->cache)) {
+			Z_ChangeTag(l->cache, tag);
+		}
+	}
 
-    return l->cache;
+	return l->cache;
 }
 
 //
 // W_CacheLumpName
 //
 
-void* W_CacheLumpName(const char* name, int tag) {
-    return W_CacheLumpNum(W_GetNumForName(name), tag);
+void* W_CacheLumpName(const int8_t* name, int tag) {
+	return W_CacheLumpNum(W_GetNumForName(name), tag);
 }
 
 //
 // W_Checksum
 //
 
-static wad_file_t **open_wadfiles = NULL;
+static wad_file_t** open_wadfiles = NULL;
 static int num_open_wadfiles = 0;
 
-static int GetFileNumber(wad_file_t *handle) {
-    int i;
-    int result;
+static int GetFileNumber(wad_file_t* handle) {
+	int i;
+	int result;
 
-    for(i = 0; i < num_open_wadfiles; ++i) {
-        if(open_wadfiles[i] == handle) {
-            return i;
-        }
-    }
+	for (i = 0; i < num_open_wadfiles; ++i) {
+		if (open_wadfiles[i] == handle) {
+			return i;
+		}
+	}
 
-    // Not found in list.  This is a new file we haven't seen yet.
-    // Allocate another slot for this file.
+	// Not found in list.  This is a new file we haven't seen yet.
+	// Allocate another slot for this file.
 
-    open_wadfiles = (wad_file_t**) realloc(open_wadfiles,
-                            sizeof(wad_file_t *) * (num_open_wadfiles + 1));
-    open_wadfiles[num_open_wadfiles] = handle;
+	open_wadfiles = (wad_file_t**)realloc(open_wadfiles,
+		sizeof(wad_file_t*) * (num_open_wadfiles + 1));
+	open_wadfiles[num_open_wadfiles] = handle;
 
-    result = num_open_wadfiles;
-    ++num_open_wadfiles;
+	result = num_open_wadfiles;
+	++num_open_wadfiles;
 
-    return result;
+	return result;
 }
 
-static void ChecksumAddLump(md5_context_t *md5_context, lumpinfo_t *lump) {
-    char buf[9];
+static void ChecksumAddLump(md5_context_t* md5_context, lumpinfo_t* lump) {
+	int8_t buf[9];
 
-    strncpy(buf, lump->name, 8);
-    buf[8] = '\0';
+	strncpy(buf, lump->name, 8);
+	buf[8] = '\0';
 
-    MD5_UpdateString(md5_context, buf);
-    MD5_UpdateInt32(md5_context, GetFileNumber(lump->wadfile));
-    MD5_UpdateInt32(md5_context, lump->position);
-    MD5_UpdateInt32(md5_context, lump->size);
+	MD5_UpdateString(md5_context, buf);
+	MD5_UpdateInt32(md5_context, GetFileNumber(lump->wadfile));
+	MD5_UpdateInt32(md5_context, lump->position);
+	MD5_UpdateInt32(md5_context, lump->size);
 }
 
 void W_Checksum(md5_digest_t digest) {
-    md5_context_t md5_context;
-    int i;
+	md5_context_t md5_context;
+	int i;
 
-    MD5_Init(&md5_context);
+	MD5_Init(&md5_context);
 
-    num_open_wadfiles = 0;
+	num_open_wadfiles = 0;
 
-    // Go through each entry in the WAD directory, adding information
-    // about each entry to the MD5 hash.
+	// Go through each entry in the WAD directory, adding information
+	// about each entry to the MD5 hash.
 
-    for(i = 0; i < numlumps; ++i) {
-        ChecksumAddLump(&md5_context, &lumpinfo[i]);
-    }
+	for (i = 0; i < numlumps; ++i) {
+		ChecksumAddLump(&md5_context, &lumpinfo[i]);
+	}
 
-    MD5_Final(digest, &md5_context);
+	MD5_Final(digest, &md5_context);
 }

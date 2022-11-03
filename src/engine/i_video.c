@@ -41,7 +41,7 @@
 #include "d_main.h"
 #include "gl_main.h"
 
-SDL_Window      *window;
+SDL_Window* window;
 SDL_GLContext   glContext;
 
 #ifdef _WIN32
@@ -58,7 +58,7 @@ CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 
-static void I_GetEvent(SDL_Event *Event);
+static void I_GetEvent(SDL_Event* Event);
 static void I_ReadMouse(void);
 static void I_InitInputs(void);
 void I_UpdateGrab(void);
@@ -67,7 +67,7 @@ void I_UpdateGrab(void);
 // Video
 //================================================================================
 
-SDL_Surface *screen;
+SDL_Surface* screen;
 int video_width;
 int video_height;
 float video_ratio;
@@ -82,80 +82,80 @@ int mouse_y = 0;
 //
 
 void I_InitScreen(void) {
-    int     newwidth;
-    int     newheight;
-    int     p;
-    uint32  flags = 0;
-    char    title[256];
+	int     newwidth;
+	int     newheight;
+	int     p;
+	uint32  flags = 0;
+	int8_t    title[256];
 
-    InWindow        = (int)v_windowed.value;
-    video_width     = (int)v_width.value;
-    video_height    = (int)v_height.value;
-    video_ratio     = (float)video_width / (float)video_height;
+	InWindow = (int)v_windowed.value;
+	video_width = (int)v_width.value;
+	video_height = (int)v_height.value;
+	video_ratio = (float)video_width / (float)video_height;
 
-    if(M_CheckParm("-window")) {
-        InWindow = true;
-    }
-    if(M_CheckParm("-fullscreen")) {
-        InWindow = false;
-    }
+	if (M_CheckParm("-window")) {
+		InWindow = true;
+	}
+	if (M_CheckParm("-fullscreen")) {
+		InWindow = false;
+	}
 
-    newwidth = newheight = 0;
+	newwidth = newheight = 0;
 
-    p = M_CheckParm("-width");
-    if(p && p < myargc - 1) {
-        newwidth = datoi(myargv[p+1]);
-    }
+	p = M_CheckParm("-width");
+	if (p && p < myargc - 1) {
+		newwidth = datoi(myargv[p + 1]);
+	}
 
-    p = M_CheckParm("-height");
-    if(p && p < myargc - 1) {
-        newheight = datoi(myargv[p+1]);
-    }
+	p = M_CheckParm("-height");
+	if (p && p < myargc - 1) {
+		newheight = datoi(myargv[p + 1]);
+	}
 
-    if(newwidth && newheight) {
-        video_width = newwidth;
-        video_height = newheight;
-        CON_CvarSetValue(v_width.name, (float)video_width);
-        CON_CvarSetValue(v_height.name, (float)video_height);
-    }
+	if (newwidth && newheight) {
+		video_width = newwidth;
+		video_height = newheight;
+		CON_CvarSetValue(v_width.name, (float)video_width);
+		CON_CvarSetValue(v_height.name, (float)video_height);
+	}
 
-    usingGL = false;
+	usingGL = false;
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
-    if(!InWindow) {
-        flags |= SDL_WINDOW_FULLSCREEN;
-    }
+	if (!InWindow) {
+		flags |= SDL_WINDOW_FULLSCREEN;
+	}
 
-    sprintf(title, "Doom64EX-Plus - Version Date: %s", version_date);
-    window = SDL_CreateWindow(title,
-                              SDL_WINDOWPOS_CENTERED,
-                              SDL_WINDOWPOS_CENTERED,
-                              video_width,
-                              video_height,
-                              flags);
+	sprintf(title, "Doom64EX-Plus - Version Date: %s", version_date);
+	window = SDL_CreateWindow(title,
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		video_width,
+		video_height,
+		flags);
 
-    if(window == NULL) {
-        I_Error("I_InitScreen: Failed to create window");
-        return;
-    }
+	if (window == NULL) {
+		I_Error("I_InitScreen: Failed to create window");
+		return;
+	}
 
-    if((glContext = SDL_GL_CreateContext(window)) == NULL) {
-         I_Error("I_InitScreen: Failed to create OpenGL context");
-         return;
-    }
+	if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
+		I_Error("I_InitScreen: Failed to create OpenGL context");
+		return;
+	}
 }
 
 //
@@ -163,17 +163,17 @@ void I_InitScreen(void) {
 //
 
 int I_ShutdownWait(void) {
-    static SDL_Event event;
+	static SDL_Event event;
 
-    while(SDL_PollEvent(&event)) {
-        if(event.type == SDL_QUIT ||
-                (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
-            I_ShutdownVideo();
-            return 1;
-        }
-    }
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT ||
+			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+			I_ShutdownVideo();
+			return 1;
+		}
+	}
 
-    return 0;
+	return 0;
 }
 
 //
@@ -181,17 +181,17 @@ int I_ShutdownWait(void) {
 //
 
 void I_ShutdownVideo(void) {
-    if(glContext) {
-        SDL_GL_DeleteContext(glContext);
-        glContext = NULL;
-    }
+	if (glContext) {
+		SDL_GL_DeleteContext(glContext);
+		glContext = NULL;
+	}
 
-    if(window) {
-        SDL_DestroyWindow(window);
-        window = NULL;
-    }
+	if (window) {
+		SDL_DestroyWindow(window);
+		window = NULL;
+	}
 
-    SDL_Quit();
+	SDL_Quit();
 }
 
 //
@@ -199,20 +199,20 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-    uint32 f = SDL_INIT_VIDEO;
+	uint32 f = SDL_INIT_VIDEO;
 
 #ifdef _DEBUG
-    f |= SDL_INIT_NOPARACHUTE;
+	f |= SDL_INIT_NOPARACHUTE;
 #endif
 
-    if(SDL_Init(f) < 0) {
-        I_Error("ERROR - Failed to initialize SDL");
-        return;
-    }
+	if (SDL_Init(f) < 0) {
+		I_Error("ERROR - Failed to initialize SDL");
+		return;
+	}
 
-    SDL_ShowCursor(0);
-    I_InitInputs();
-    I_InitScreen();
+	SDL_ShowCursor(0);
+	I_InitInputs();
+	I_InitScreen();
 }
 
 //
@@ -220,17 +220,17 @@ void I_InitVideo(void) {
 //
 
 void I_StartTic(void) {
-    SDL_Event Event;
+	SDL_Event Event;
 
-    while(SDL_PollEvent(&Event)) {
-        I_GetEvent(&Event);
-    }
+	while (SDL_PollEvent(&Event)) {
+		I_GetEvent(&Event);
+	}
 
 #ifdef _USE_XINPUT
-    I_XInputPollEvent();
+	I_XInputPollEvent();
 #endif
 
-    I_ReadMouse();
+	I_ReadMouse();
 }
 
 //
@@ -238,10 +238,10 @@ void I_StartTic(void) {
 //
 
 void I_FinishUpdate(void) {
-    I_UpdateGrab();
-    SDL_GL_SwapWindow(window);
+	I_UpdateGrab();
+	SDL_GL_SwapWindow(window);
 
-    BusyDisk = false;
+	BusyDisk = false;
 }
 
 //================================================================================
@@ -261,168 +261,167 @@ dboolean    MouseMode;//false=microsoft, true=mouse systems
 //
 
 static int I_TranslateKey(const int key) {
-    int rc = 0;
+	int rc = 0;
 
-    switch(key) {
-    case SDLK_LEFT:
-        rc = KEY_LEFTARROW;
-        break;
-    case SDLK_RIGHT:
-        rc = KEY_RIGHTARROW;
-        break;
-    case SDLK_DOWN:
-        rc = KEY_DOWNARROW;
-        break;
-    case SDLK_UP:
-        rc = KEY_UPARROW;
-        break;
-    case SDLK_ESCAPE:
-        rc = KEY_ESCAPE;
-        break;
-    case SDLK_RETURN:
-        rc = KEY_ENTER;
-        break;
-    case SDLK_TAB:
-        rc = KEY_TAB;
-        break;
-    case SDLK_F1:
-        rc = KEY_F1;
-        break;
-    case SDLK_F2:
-        rc = KEY_F2;
-        break;
-    case SDLK_F3:
-        rc = KEY_F3;
-        break;
-    case SDLK_F4:
-        rc = KEY_F4;
-        break;
-    case SDLK_F5:
-        rc = KEY_F5;
-        break;
-    case SDLK_F6:
-        rc = KEY_F6;
-        break;
-    case SDLK_F7:
-        rc = KEY_F7;
-        break;
-    case SDLK_F8:
-        rc = KEY_F8;
-        break;
-    case SDLK_F9:
-        rc = KEY_F9;
-        break;
-    case SDLK_F10:
-        rc = KEY_F10;
-        break;
-    case SDLK_F11:
-        rc = KEY_F11;
-        break;
-    case SDLK_F12:
-        rc = KEY_F12;
-        break;
-    case SDLK_BACKSPACE:
-        rc = KEY_BACKSPACE;
-        break;
-    case SDLK_DELETE:
-        rc = KEY_DEL;
-        break;
-    case SDLK_INSERT:
-        rc = KEY_INSERT;
-        break;
-    case SDLK_PAGEUP:
-        rc = KEY_PAGEUP;
-        break;
-    case SDLK_PAGEDOWN:
-        rc = KEY_PAGEDOWN;
-        break;
-    case SDLK_HOME:
-        rc = KEY_HOME;
-        break;
-    case SDLK_END:
-        rc = KEY_END;
-        break;
-    case SDLK_PAUSE:
-        rc = KEY_PAUSE;
-        break;
-    case SDLK_EQUALS:
-        rc = KEY_EQUALS;
-        break;
-    case SDLK_MINUS:
-        rc = KEY_MINUS;
-        break;
-	case SDLK_KP_0:
-        rc = KEY_KEYPAD0;
-        break;
-	case SDLK_KP_1:
-        rc = KEY_KEYPAD1;
-        break;
-	case SDLK_KP_2:
-        rc = KEY_KEYPAD2;
-        break;
-	case SDLK_KP_3:
-        rc = KEY_KEYPAD3;
-        break;
-	case SDLK_KP_4:
-        rc = KEY_KEYPAD4;
-        break;
-	case SDLK_KP_5:
-        rc = KEY_KEYPAD5;
-        break;
-	case SDLK_KP_6:
-        rc = KEY_KEYPAD6;
-        break;
-	case SDLK_KP_7:
-        rc = KEY_KEYPAD7;
-        break;
-	case SDLK_KP_8:
-        rc = KEY_KEYPAD8;
-        break;
-	case SDLK_KP_9:
-        rc = KEY_KEYPAD9;
-        break;
-    case SDLK_KP_PLUS:
-        rc = KEY_KEYPADPLUS;
-        break;
-    case SDLK_KP_MINUS:
-        rc = KEY_KEYPADMINUS;
-        break;
-    case SDLK_KP_DIVIDE:
-        rc = KEY_KEYPADDIVIDE;
-        break;
-    case SDLK_KP_MULTIPLY:
-        rc = KEY_KEYPADMULTIPLY;
-        break;
-    case SDLK_KP_ENTER:
-        rc = KEY_KEYPADENTER;
-        break;
-    case SDLK_KP_PERIOD:
-        rc = KEY_KEYPADPERIOD;
+	switch (key) {
+	case SDLK_LEFT:
+		rc = KEY_LEFTARROW;
 		break;
-    case SDLK_LSHIFT:
-    case SDLK_RSHIFT:
-        rc = KEY_RSHIFT;
-        break;
-    case SDLK_LCTRL:
-    case SDLK_RCTRL:
-        rc = KEY_RCTRL;
-        break;
-    case SDLK_LALT:
-    //case SDLK_LMETA:
-    case SDLK_RALT:
-    //case SDLK_RMETA:
-        rc = KEY_RALT;
-        break;
-    case SDLK_CAPSLOCK:
-        rc = KEY_CAPS;
-        break;
-    default:
-        rc = key;
-        break;
-    }
+	case SDLK_RIGHT:
+		rc = KEY_RIGHTARROW;
+		break;
+	case SDLK_DOWN:
+		rc = KEY_DOWNARROW;
+		break;
+	case SDLK_UP:
+		rc = KEY_UPARROW;
+		break;
+	case SDLK_ESCAPE:
+		rc = KEY_ESCAPE;
+		break;
+	case SDLK_RETURN:
+		rc = KEY_ENTER;
+		break;
+	case SDLK_TAB:
+		rc = KEY_TAB;
+		break;
+	case SDLK_F1:
+		rc = KEY_F1;
+		break;
+	case SDLK_F2:
+		rc = KEY_F2;
+		break;
+	case SDLK_F3:
+		rc = KEY_F3;
+		break;
+	case SDLK_F4:
+		rc = KEY_F4;
+		break;
+	case SDLK_F5:
+		rc = KEY_F5;
+		break;
+	case SDLK_F6:
+		rc = KEY_F6;
+		break;
+	case SDLK_F7:
+		rc = KEY_F7;
+		break;
+	case SDLK_F8:
+		rc = KEY_F8;
+		break;
+	case SDLK_F9:
+		rc = KEY_F9;
+		break;
+	case SDLK_F10:
+		rc = KEY_F10;
+		break;
+	case SDLK_F11:
+		rc = KEY_F11;
+		break;
+	case SDLK_F12:
+		rc = KEY_F12;
+		break;
+	case SDLK_BACKSPACE:
+		rc = KEY_BACKSPACE;
+		break;
+	case SDLK_DELETE:
+		rc = KEY_DEL;
+		break;
+	case SDLK_INSERT:
+		rc = KEY_INSERT;
+		break;
+	case SDLK_PAGEUP:
+		rc = KEY_PAGEUP;
+		break;
+	case SDLK_PAGEDOWN:
+		rc = KEY_PAGEDOWN;
+		break;
+	case SDLK_HOME:
+		rc = KEY_HOME;
+		break;
+	case SDLK_END:
+		rc = KEY_END;
+		break;
+	case SDLK_PAUSE:
+		rc = KEY_PAUSE;
+		break;
+	case SDLK_EQUALS:
+		rc = KEY_EQUALS;
+		break;
+	case SDLK_MINUS:
+		rc = KEY_MINUS;
+		break;
+	case SDLK_KP_0:
+		rc = KEY_KEYPAD0;
+		break;
+	case SDLK_KP_1:
+		rc = KEY_KEYPAD1;
+		break;
+	case SDLK_KP_2:
+		rc = KEY_KEYPAD2;
+		break;
+	case SDLK_KP_3:
+		rc = KEY_KEYPAD3;
+		break;
+	case SDLK_KP_4:
+		rc = KEY_KEYPAD4;
+		break;
+	case SDLK_KP_5:
+		rc = KEY_KEYPAD5;
+		break;
+	case SDLK_KP_6:
+		rc = KEY_KEYPAD6;
+		break;
+	case SDLK_KP_7:
+		rc = KEY_KEYPAD7;
+		break;
+	case SDLK_KP_8:
+		rc = KEY_KEYPAD8;
+		break;
+	case SDLK_KP_9:
+		rc = KEY_KEYPAD9;
+		break;
+	case SDLK_KP_PLUS:
+		rc = KEY_KEYPADPLUS;
+		break;
+	case SDLK_KP_MINUS:
+		rc = KEY_KEYPADMINUS;
+		break;
+	case SDLK_KP_DIVIDE:
+		rc = KEY_KEYPADDIVIDE;
+		break;
+	case SDLK_KP_MULTIPLY:
+		rc = KEY_KEYPADMULTIPLY;
+		break;
+	case SDLK_KP_ENTER:
+		rc = KEY_KEYPADENTER;
+		break;
+	case SDLK_KP_PERIOD:
+		rc = KEY_KEYPADPERIOD;
+		break;
+	case SDLK_LSHIFT:
+	case SDLK_RSHIFT:
+		rc = KEY_RSHIFT;
+		break;
+	case SDLK_LCTRL:
+	case SDLK_RCTRL:
+		rc = KEY_RCTRL;
+		break;
+	case SDLK_LALT:
+		//case SDLK_LMETA:
+	case SDLK_RALT:
+		//case SDLK_RMETA:
+		rc = KEY_RALT;
+		break;
+	case SDLK_CAPSLOCK:
+		rc = KEY_CAPS;
+		break;
+	default:
+		rc = key;
+		break;
+	}
 
-    return rc;
-
+	return rc;
 }
 
 //
@@ -430,10 +429,10 @@ static int I_TranslateKey(const int key) {
 //
 
 static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
-    return 0
-           | (buttonstate & SDL_BUTTON(SDL_BUTTON_LEFT)      ? 1 : 0)
-           | (buttonstate & SDL_BUTTON(SDL_BUTTON_MIDDLE)    ? 2 : 0)
-           | (buttonstate & SDL_BUTTON(SDL_BUTTON_RIGHT)     ? 4 : 0);
+	return 0
+		| (buttonstate & SDL_BUTTON(SDL_BUTTON_LEFT) ? 1 : 0)
+		| (buttonstate & SDL_BUTTON(SDL_BUTTON_MIDDLE) ? 2 : 0)
+		| (buttonstate & SDL_BUTTON(SDL_BUTTON_RIGHT) ? 4 : 0);
 }
 
 //
@@ -441,22 +440,22 @@ static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 //
 
 static void I_ReadMouse(void) {
-    int x, y;
-    Uint8 btn;
-    event_t ev;
-    static Uint8 lastmbtn = 0;
+	int x, y;
+	Uint8 btn;
+	event_t ev;
+	static Uint8 lastmbtn = 0;
 
-    SDL_GetRelativeMouseState(&x, &y);
-    btn = SDL_GetMouseState(&mouse_x, &mouse_y);
+	SDL_GetRelativeMouseState(&x, &y);
+	btn = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-    if(x != 0 || y != 0 || btn || (lastmbtn != btn)) {
-        ev.type = ev_mouse;
-        ev.data1 = I_SDLtoDoomMouseState(btn);
-        ev.data2 = x << 5;
-        ev.data3 = (-y) << 5;
-        ev.data4 = 0;
-        D_PostEvent(&ev);
-    }
+	if (x != 0 || y != 0 || btn || (lastmbtn != btn)) {
+		ev.type = ev_mouse;
+		ev.data1 = I_SDLtoDoomMouseState(btn);
+		ev.data2 = x << 5;
+		ev.data3 = (-y) << 5;
+		ev.data4 = 0;
+		D_PostEvent(&ev);
+	}
 
 	lastmbtn = btn;
 }
@@ -466,7 +465,7 @@ static void I_ReadMouse(void) {
 //
 
 void I_MouseAccelChange(void) {
-    mouse_accelfactor = v_macceleration.value / 200.0f + 1.0f;
+	mouse_accelfactor = v_macceleration.value / 200.0f + 1.0f;
 }
 
 //
@@ -474,15 +473,15 @@ void I_MouseAccelChange(void) {
 //
 
 int I_MouseAccel(int val) {
-    if(!v_macceleration.value) {
-        return val;
-    }
+	if (!v_macceleration.value) {
+		return val;
+	}
 
-    if(val < 0) {
-        return -I_MouseAccel(-val);
-    }
+	if (val < 0) {
+		return -I_MouseAccel(-val);
+	}
 
-    return (int)(pow((double)val, (double)mouse_accelfactor));
+	return (int)(pow((double)val, (double)mouse_accelfactor));
 }
 
 //
@@ -490,8 +489,8 @@ int I_MouseAccel(int val) {
 //
 
 static void I_ActivateMouse(void) {
-    SDL_ShowCursor(0);
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_ShowCursor(0);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 //
@@ -499,12 +498,12 @@ static void I_ActivateMouse(void) {
 //
 
 void I_UpdateGrab(void) {
-    static dboolean currently_grabbed = false;
+	static dboolean currently_grabbed = false;
 	dboolean grab;
 
 	grab = /*window_mouse &&*/ !menuactive
-	&& (gamestate == GS_LEVEL)
-	&& !demoplayback;
+		&& (gamestate == GS_LEVEL)
+		&& !demoplayback;
 
 	if (grab && !currently_grabbed) {
 		SDL_ShowCursor(0);
@@ -524,25 +523,25 @@ void I_UpdateGrab(void) {
 // I_GetEvent
 //
 
-static void I_GetEvent(SDL_Event *Event) {
-    event_t event;
-    uint32 mwheeluptic = 0, mwheeldowntic = 0;
-    uint32 tic = gametic;
+static void I_GetEvent(SDL_Event* Event) {
+	event_t event;
+	uint32 mwheeluptic = 0, mwheeldowntic = 0;
+	uint32 tic = gametic;
 
-    switch(Event->type) {
+	switch (Event->type) {
 	case SDL_KEYDOWN:
-		if(Event->key.repeat)
+		if (Event->key.repeat)
 			break;
-        event.type = ev_keydown;
-        event.data1 = I_TranslateKey(Event->key.keysym.sym);
-        D_PostEvent(&event);
-        break;
+		event.type = ev_keydown;
+		event.data1 = I_TranslateKey(Event->key.keysym.sym);
+		D_PostEvent(&event);
+		break;
 
-    case SDL_KEYUP:
-        event.type = ev_keyup;
-        event.data1 = I_TranslateKey(Event->key.keysym.sym);
-        D_PostEvent(&event);
-        break;
+	case SDL_KEYUP:
+		event.type = ev_keyup;
+		event.data1 = I_TranslateKey(Event->key.keysym.sym);
+		D_PostEvent(&event);
+		break;
 
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
@@ -562,11 +561,13 @@ static void I_GetEvent(SDL_Event *Event) {
 			event.type = ev_keydown;
 			event.data1 = KEY_MWHEELUP;
 			mwheeluptic = tic;
-		} else if (Event->wheel.y < 0) {
+		}
+		else if (Event->wheel.y < 0) {
 			event.type = ev_keydown;
 			event.data1 = KEY_MWHEELDOWN;
 			mwheeldowntic = tic;
-		} else
+		}
+		else
 			break;
 
 		event.data2 = event.data3 = 0;
@@ -596,27 +597,27 @@ static void I_GetEvent(SDL_Event *Event) {
 		}
 		break;
 
-    case SDL_QUIT:
-        I_Quit();
-        break;
+	case SDL_QUIT:
+		I_Quit();
+		break;
 
-    default:
-        break;
-    }
+	default:
+		break;
+	}
 
-    if(mwheeluptic && mwheeluptic + 1 < tic) {
-        event.type = ev_keyup;
-        event.data1 = KEY_MWHEELUP;
-        D_PostEvent(&event);
-        mwheeluptic = 0;
-    }
+	if (mwheeluptic && mwheeluptic + 1 < tic) {
+		event.type = ev_keyup;
+		event.data1 = KEY_MWHEELUP;
+		D_PostEvent(&event);
+		mwheeluptic = 0;
+	}
 
-    if(mwheeldowntic && mwheeldowntic + 1 < tic) {
-        event.type = ev_keyup;
-        event.data1 = KEY_MWHEELDOWN;
-        D_PostEvent(&event);
-        mwheeldowntic = 0;
-    }
+	if (mwheeldowntic && mwheeldowntic + 1 < tic) {
+		event.type = ev_keyup;
+		event.data1 = KEY_MWHEELDOWN;
+		D_PostEvent(&event);
+		mwheeldowntic = 0;
+	}
 }
 
 //
@@ -626,27 +627,25 @@ static void I_GetEvent(SDL_Event *Event) {
 static void I_InitInputs(void) {
 	SDL_PumpEvents();
 
-    I_MouseAccelChange();
+	I_MouseAccelChange();
 
 #ifdef _USE_XINPUT
-    I_XInputInit();
+	I_XInputInit();
 #endif
 }
-
 
 //
 // V_RegisterCvars
 //
 
 void V_RegisterCvars(void) {
-    CON_CvarRegister(&v_msensitivityx);
-    CON_CvarRegister(&v_msensitivityy);
-    CON_CvarRegister(&v_macceleration);
-    CON_CvarRegister(&v_mlook);
-    CON_CvarRegister(&v_mlookinvert);
-    CON_CvarRegister(&v_yaxismove);
-    CON_CvarRegister(&v_width);
-    CON_CvarRegister(&v_height);
-    CON_CvarRegister(&v_windowed);
+	CON_CvarRegister(&v_msensitivityx);
+	CON_CvarRegister(&v_msensitivityy);
+	CON_CvarRegister(&v_macceleration);
+	CON_CvarRegister(&v_mlook);
+	CON_CvarRegister(&v_mlookinvert);
+	CON_CvarRegister(&v_yaxismove);
+	CON_CvarRegister(&v_width);
+	CON_CvarRegister(&v_height);
+	CON_CvarRegister(&v_windowed);
 }
-

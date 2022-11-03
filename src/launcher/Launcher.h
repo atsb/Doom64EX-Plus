@@ -2,6 +2,7 @@
 #define _LAUNCHER_H_
 
 #include <windows.h>
+#include <stdint.h>
 #include <tchar.h>
 #include <stdlib.h>
 #include <commctrl.h>
@@ -15,15 +16,15 @@
 #include <sys/stat.h>
 #include "resource.h"
 
-typedef unsigned char	byte;
-typedef unsigned short	word;
-typedef unsigned int	uint;
+typedef uint8_t	byte;
+typedef uint16_t	word;
+typedef uint32_t	uint;
 typedef BOOL			bool;
-typedef byte*			cache;
-typedef wchar_t*			path[MAX_PATH];
+typedef byte* cache;
+typedef wchar_t* path[MAX_PATH];
 
 enum { false = 0, true };
 
-void L_Complain(wchar_t *fmt, ...);
+void L_Complain(wchar_t* fmt, ...);
 
 #endif

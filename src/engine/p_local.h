@@ -21,7 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __P_LOCAL__
 #define __P_LOCAL__
 
@@ -34,7 +33,6 @@
 
 #define FLOATSPEED        (FRACUNIT*4)
 
-
 #define MAXHEALTH        100
 #define VIEWHEIGHT        (56*FRACUNIT)    //villsa: changed from 41 to 56
 
@@ -45,7 +43,6 @@
 #define MAPBLOCKSHIFT    (FRACBITS+7)
 #define MAPBMASK        (MAPBLOCKSIZE-1)
 #define MAPBTOFRAC        (MAPBLOCKSHIFT-FRACBITS)
-
 
 // player radius for movement checking
 #define PLAYERRADIUS    19*FRACUNIT
@@ -71,8 +68,6 @@
 // follow a player
 #define    BASETHRESHOLD         90
 
-
-
 //
 // P_TICK
 //
@@ -93,39 +88,37 @@ extern fixed_t frame_viewx;
 extern fixed_t frame_viewy;
 extern fixed_t frame_viewz;
 
-
 //
 // P_PSPR
 //
 struct laser_s;
 typedef struct laser_s {
-    fixed_t         x1;
-    fixed_t         y1;
-    fixed_t         z1;
-    fixed_t         x2;
-    fixed_t         y2;
-    fixed_t         z2;
-    fixed_t         slopex;
-    fixed_t         slopey;
-    fixed_t         slopez;
-    fixed_t         dist;
-    fixed_t         distmax;
-    mobj_t*         marker;
-    struct laser_s* next;
-    angle_t         angle;
+	fixed_t         x1;
+	fixed_t         y1;
+	fixed_t         z1;
+	fixed_t         x2;
+	fixed_t         y2;
+	fixed_t         z2;
+	fixed_t         slopex;
+	fixed_t         slopey;
+	fixed_t         slopez;
+	fixed_t         dist;
+	fixed_t         distmax;
+	mobj_t* marker;
+	struct laser_s* next;
+	angle_t         angle;
 } laser_t;
 
 typedef struct {
-    thinker_t   thinker;
-    mobj_t*     dest;
-    laser_t*    laser;
+	thinker_t   thinker;
+	mobj_t* dest;
+	laser_t* laser;
 } laserthinker_t;
 
 void P_SetupPsprites(player_t* curplayer);
 void P_MovePsprites(player_t* curplayer);
 void P_DropWeapon(player_t* player);
-void T_LaserThinker(laserthinker_t *laser);
-
+void T_LaserThinker(laserthinker_t* laser);
 
 //
 // P_USER
@@ -137,21 +130,20 @@ void    P_SetStaticCamera(player_t* player);
 void    P_SetFollowCamera(player_t* player);
 void    P_ClearUserCamera(player_t* player);
 
-
 //
 // P_MOBJ
 //
 #define ONFLOORZ        D_MININT
 #define ONCEILINGZ      D_MAXINT
 
-extern mapthing_t*  spawnlist;
+extern mapthing_t* spawnlist;
 extern int          numspawnlist;
 
-mobj_t*     P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type);
+mobj_t* P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type);
 void        P_SafeRemoveMobj(mobj_t* mobj);
 void        P_RemoveMobj(mobj_t* th);
 void        P_SpawnPlayer(mapthing_t* mthing);
-void        P_SetTarget(mobj_t **mop, mobj_t *targ);
+void        P_SetTarget(mobj_t** mop, mobj_t* targ);
 dboolean    P_SetMobjState(mobj_t* mobj, statenum_t state);
 void        P_MobjThinker(mobj_t* mobj);
 dboolean    P_OnMobjZ(mobj_t* mobj);
@@ -163,49 +155,47 @@ void        P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type);
 void        P_FadeMobj(mobj_t* mobj, int amount, int alpha, int flags);
 int         EV_SpawnMobjTemplate(line_t* line);
 int         EV_FadeOutMobj(line_t* line);
-void        P_SpawnDartMissile(int tid, int type, mobj_t *target);
-mobj_t*     P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
-                           fixed_t xoffs, fixed_t yoffs, fixed_t heightoffs, dboolean aim);
+void        P_SpawnDartMissile(int tid, int type, mobj_t* target);
+mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
+	fixed_t xoffs, fixed_t yoffs, fixed_t heightoffs, dboolean aim);
 
 //
 // P_ENEMY
 //
 void P_NoiseAlert(mobj_t* target, mobj_t* emmiter);
 
-
 //
 // P_MAPUTL
 //
 typedef struct {
-    fixed_t    x;
-    fixed_t    y;
-    fixed_t    dx;
-    fixed_t    dy;
-
+	fixed_t    x;
+	fixed_t    y;
+	fixed_t    dx;
+	fixed_t    dy;
 } divline_t;
 
 typedef struct {
-    fixed_t    frac;        // along trace line
-    dboolean    isaline;
-    union {
-        mobj_t*    thing;
-        line_t*    line;
-    }            d;
+	fixed_t    frac;        // along trace line
+	dboolean    isaline;
+	union {
+		mobj_t* thing;
+		line_t* line;
+	}            d;
 } intercept_t;
 
 #define MAXINTERCEPTS    128
 
 extern intercept_t    intercepts[MAXINTERCEPTS];
-extern intercept_t*    intercept_p;
+extern intercept_t* intercept_p;
 
-typedef dboolean(*traverser_t)(intercept_t *in);
+typedef dboolean(*traverser_t)(intercept_t* in);
 
 fixed_t P_AproxDistance(fixed_t dx, fixed_t dy);
 int     P_PointOnLineSide(fixed_t x, fixed_t y, line_t* line);
 int     P_PointOnDivlineSide(fixed_t x, fixed_t y, divline_t* line);
 void     P_MakeDivline(line_t* li, divline_t* dl);
 fixed_t P_InterceptVector(divline_t* v2, divline_t* v1);
-void    P_GetIntersectPoint(fixed_t *s1, fixed_t *s2, fixed_t *x, fixed_t *y);
+void    P_GetIntersectPoint(fixed_t* s1, fixed_t* s2, fixed_t* x, fixed_t* y);
 int     P_BoxOnLineSide(fixed_t* tmbox, line_t* ld);
 
 extern fixed_t        opentop;
@@ -223,10 +213,9 @@ dboolean    P_BlockThingsIterator(int x, int y, dboolean(*func)(mobj_t*));
 
 extern divline_t    trace;
 
-dboolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int    flags, dboolean(*trav)(intercept_t *));
+dboolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int    flags, dboolean(*trav)(intercept_t*));
 void    P_UnsetThingPosition(mobj_t* thing);
 void    P_SetThingPosition(mobj_t* thing);
-
 
 //
 // P_MAP
@@ -237,9 +226,9 @@ void    P_SetThingPosition(mobj_t* thing);
 extern dboolean     floatok;
 extern fixed_t      tmfloorz;
 extern fixed_t      tmceilingz;
-extern line_t*      tmhitline;
+extern line_t* tmhitline;
 
-dboolean    P_CheckPosition(mobj_t *thing, fixed_t x, fixed_t y);
+dboolean    P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y);
 dboolean    P_TryMove(mobj_t* thing, fixed_t x, fixed_t y);
 dboolean    P_PlayerMove(mobj_t* thing, fixed_t x, fixed_t y);
 dboolean    P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y);
@@ -248,36 +237,32 @@ dboolean    P_CheckSight(mobj_t* t1, mobj_t* t2);
 void        P_ScanSights(void);
 dboolean    P_UseLines(player_t* player, dboolean showcontext);
 dboolean    P_ChangeSector(sector_t* sector, dboolean crunch);
-mobj_t*     P_CheckOnMobj(mobj_t *thing);
+mobj_t* P_CheckOnMobj(mobj_t* thing);
 void        P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t y);
 
 #define MAXSPECIALCROSS 64
 
-extern mobj_t*  linetarget;    // who got hit (or NULL)
-extern mobj_t*  blockthing;
+extern mobj_t* linetarget;    // who got hit (or NULL)
+extern mobj_t* blockthing;
 extern fixed_t  aimfrac;
-extern line_t*  spechit[MAXSPECIALCROSS];
+extern line_t* spechit[MAXSPECIALCROSS];
 extern int      numspechit;
 
-fixed_t P_AimLineAttack(mobj_t*    t1, angle_t angle, fixed_t zheight, fixed_t distance);
-void    P_LineAttack(mobj_t* t1,angle_t angle, fixed_t distance, fixed_t slope, int damage);
+fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t distance);
+void    P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, int damage);
 void    P_RadiusAttack(mobj_t* spot, mobj_t* source, int damage);
-
-
 
 //
 // P_SETUP
 //
-extern byte*        rejectmatrix;    // for fast sight rejection
-extern short*        blockmaplump;    // offsets in blockmap are from here
-extern short*        blockmap;
+extern byte* rejectmatrix;    // for fast sight rejection
+extern int16_t* blockmaplump;    // offsets in blockmap are from here
+extern int16_t* blockmap;
 extern int            bmapwidth;
 extern int            bmapheight;    // in mapblocks
 extern fixed_t        bmaporgx;
 extern fixed_t        bmaporgy;    // origin of block map
-extern mobj_t**        blocklinks;    // for thing chains
-
-
+extern mobj_t** blocklinks;    // for thing chains
 
 //
 // P_INTER
@@ -290,13 +275,9 @@ extern int infraredFactor;
 void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher);
 void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage);
 
-
 //
 // P_SPEC
 //
 #include "p_spec.h"
 
-
 #endif    // __P_LOCAL__
-
-

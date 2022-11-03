@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -29,272 +29,267 @@
 
 static int total_packet_memory = 0;
 
-net_packet_t *NET_NewPacket(int initial_size)
+net_packet_t* NET_NewPacket(int initial_size)
 {
-    net_packet_t *packet;
+	net_packet_t* packet;
 
-    packet = (net_packet_t *) Z_Malloc(sizeof(net_packet_t), PU_STATIC, 0);
-    
-    if (initial_size == 0)
-        initial_size = 256;
+	packet = (net_packet_t*)Z_Malloc(sizeof(net_packet_t), PU_STATIC, 0);
 
-    packet->alloced = initial_size;
-    packet->data = Z_Malloc(initial_size, PU_STATIC, 0);
-    packet->len = 0;
-    packet->pos = 0;
+	if (initial_size == 0)
+		initial_size = 256;
 
-    total_packet_memory += sizeof(net_packet_t) + initial_size;
+	packet->alloced = initial_size;
+	packet->data = Z_Malloc(initial_size, PU_STATIC, 0);
+	packet->len = 0;
+	packet->pos = 0;
 
-    //printf("total packet memory: %i bytes\n", total_packet_memory);
-    //printf("%p: allocated\n", packet);
+	total_packet_memory += sizeof(net_packet_t) + initial_size;
 
-    return packet;
+	//printf("total packet memory: %i bytes\n", total_packet_memory);
+	//printf("%p: allocated\n", packet);
+
+	return packet;
 }
 
 // duplicates an existing packet
 
-net_packet_t *NET_PacketDup(net_packet_t *packet)
+net_packet_t* NET_PacketDup(net_packet_t* packet)
 {
-    net_packet_t *newpacket;
+	net_packet_t* newpacket;
 
-    newpacket = NET_NewPacket(packet->len);
-    memcpy(newpacket->data, packet->data, packet->len);
-    newpacket->len = packet->len;
+	newpacket = NET_NewPacket(packet->len);
+	memcpy(newpacket->data, packet->data, packet->len);
+	newpacket->len = packet->len;
 
-    return newpacket;
+	return newpacket;
 }
 
-void NET_FreePacket(net_packet_t *packet)
+void NET_FreePacket(net_packet_t* packet)
 {
-    //printf("%p: destroyed\n", packet);
-    
-    total_packet_memory -= sizeof(net_packet_t) + packet->alloced;
-    Z_Free(packet->data);
-    Z_Free(packet);
+	//printf("%p: destroyed\n", packet);
+
+	total_packet_memory -= sizeof(net_packet_t) + packet->alloced;
+	Z_Free(packet->data);
+	Z_Free(packet);
 }
 
 // Read a byte from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt8(net_packet_t *packet, unsigned int *data)
+dboolean NET_ReadInt8(net_packet_t* packet, uint32_t* data)
 {
-    if (packet->pos + 1 > packet->len)
-        return false;
+	if (packet->pos + 1 > packet->len)
+		return false;
 
-    *data = packet->data[packet->pos];
+	*data = packet->data[packet->pos];
 
-    packet->pos += 1;
+	packet->pos += 1;
 
-    return true;
+	return true;
 }
 
 // Read a 16-bit integer from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt16(net_packet_t *packet, unsigned int *data)
+dboolean NET_ReadInt16(net_packet_t* packet, uint32_t* data)
 {
-    byte *p;
+	byte* p;
 
-    if (packet->pos + 2 > packet->len)
-        return false;
+	if (packet->pos + 2 > packet->len)
+		return false;
 
-    p = packet->data + packet->pos;
+	p = packet->data + packet->pos;
 
-    *data = (p[0] << 8) | p[1];
-    packet->pos += 2;
+	*data = (p[0] << 8) | p[1];
+	packet->pos += 2;
 
-    return true;
+	return true;
 }
 
 // Read a 32-bit integer from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt32(net_packet_t *packet, unsigned int *data)
+dboolean NET_ReadInt32(net_packet_t* packet, uint32_t* data)
 {
-    byte *p;
+	byte* p;
 
-    if (packet->pos + 4 > packet->len)
-        return false;
+	if (packet->pos + 4 > packet->len)
+		return false;
 
-    p = packet->data + packet->pos;
+	p = packet->data + packet->pos;
 
-    *data = (p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
-    packet->pos += 4;
-    
-    return true;
+	*data = (p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
+	packet->pos += 4;
+
+	return true;
 }
 
 // Signed read functions
 
-dboolean NET_ReadSInt8(net_packet_t *packet, signed int *data)
+dboolean NET_ReadSInt8(net_packet_t* packet, int32_t* data)
 {
-    if (NET_ReadInt8(packet,(unsigned int *) data))
-    {
-        if (*data & (1 << 7))
-        {
-            *data &= ~(1 << 7);
-            *data -= (1 << 7);
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	if (NET_ReadInt8(packet, (uint32_t*)data))
+	{
+		if (*data & (1 << 7))
+		{
+			*data &= ~(1 << 7);
+			*data -= (1 << 7);
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-dboolean NET_ReadSInt16(net_packet_t *packet, signed int *data)
+dboolean NET_ReadSInt16(net_packet_t* packet, int32_t* data)
 {
-    if (NET_ReadInt16(packet, (unsigned int *) data))
-    {
-        if (*data & (1 << 15))
-        {
-            *data &= ~(1 << 15);
-            *data -= (1 << 15);
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	if (NET_ReadInt16(packet, (uint32_t*)data))
+	{
+		if (*data & (1 << 15))
+		{
+			*data &= ~(1 << 15);
+			*data -= (1 << 15);
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-dboolean NET_ReadSInt32(net_packet_t *packet, signed int *data)
+dboolean NET_ReadSInt32(net_packet_t* packet, int32_t* data)
 {
-    if (NET_ReadInt32(packet, (unsigned int *) data))
-    {
-        if (*data & (1 << 31))
-        {
-            *data &= ~(1 << 31);
-            *data -= (1 << 31);
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	if (NET_ReadInt32(packet, (uint32_t*)data))
+	{
+		if (*data & (1 << 31))
+		{
+			*data &= ~(1 << 31);
+			*data -= (1 << 31);
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-// Read a string from the packet.  Returns NULL if a terminating 
+// Read a string from the packet.  Returns NULL if a terminating
 // NUL character was not found before the end of the packet.
 
-char *NET_ReadString(net_packet_t *packet)
+int8_t* NET_ReadString(net_packet_t* packet)
 {
-    char *start;
+	int8_t* start;
 
-    start = (char *) packet->data + packet->pos;
+	start = (int8_t*)packet->data + packet->pos;
 
-    // Search forward for a NUL character
+	// Search forward for a NUL character
 
-    while (packet->pos < packet->len && packet->data[packet->pos] != '\0')
-    {
-        ++packet->pos;
-    }
+	while (packet->pos < packet->len && packet->data[packet->pos] != '\0')
+	{
+		++packet->pos;
+	}
 
-    if (packet->pos >= packet->len)
-    {
-        // Reached the end of the packet
+	if (packet->pos >= packet->len)
+	{
+		// Reached the end of the packet
 
-        return NULL;
-    }
+		return NULL;
+	}
 
-    // packet->data[packet->pos] == '\0': We have reached a terminating
-    // NULL.  Skip past this NULL and continue reading immediately 
-    // after it.
+	// packet->data[packet->pos] == '\0': We have reached a terminating
+	// NULL.  Skip past this NULL and continue reading immediately
+	// after it.
 
-    ++packet->pos;
-    
-    return start;
+	++packet->pos;
+
+	return start;
 }
 
 // Dynamically increases the size of a packet
 
-static void NET_IncreasePacket(net_packet_t *packet)
+static void NET_IncreasePacket(net_packet_t* packet)
 {
-    byte *newdata;
+	byte* newdata;
 
-    total_packet_memory -= packet->alloced;
-   
-    packet->alloced *= 2;
+	total_packet_memory -= packet->alloced;
 
-    newdata = Z_Malloc(packet->alloced, PU_STATIC, 0);
+	packet->alloced *= 2;
 
-    memcpy(newdata, packet->data, packet->len);
+	newdata = Z_Malloc(packet->alloced, PU_STATIC, 0);
 
-    Z_Free(packet->data);
-    packet->data = newdata;
+	memcpy(newdata, packet->data, packet->len);
 
-    total_packet_memory += packet->alloced;
+	Z_Free(packet->data);
+	packet->data = newdata;
+
+	total_packet_memory += packet->alloced;
 }
 
 // Write a single byte to the packet
 
-void NET_WriteInt8(net_packet_t *packet, unsigned int i)
+void NET_WriteInt8(net_packet_t* packet, uint32_t i)
 {
-    if (packet->len + 1 > packet->alloced)
-        NET_IncreasePacket(packet);
+	if (packet->len + 1 > packet->alloced)
+		NET_IncreasePacket(packet);
 
-    packet->data[packet->len] = i;
-    packet->len += 1;
+	packet->data[packet->len] = i;
+	packet->len += 1;
 }
 
 // Write a 16-bit integer to the packet
 
-void NET_WriteInt16(net_packet_t *packet, unsigned int i)
+void NET_WriteInt16(net_packet_t* packet, uint32_t i)
 {
-    byte *p;
-    
-    if (packet->len + 2 > packet->alloced)
-        NET_IncreasePacket(packet);
+	byte* p;
 
-    p = packet->data + packet->len;
+	if (packet->len + 2 > packet->alloced)
+		NET_IncreasePacket(packet);
 
-    p[0] = (i >> 8) & 0xff;
-    p[1] = i & 0xff;
+	p = packet->data + packet->len;
 
-    packet->len += 2;
+	p[0] = (i >> 8) & 0xff;
+	p[1] = i & 0xff;
+
+	packet->len += 2;
 }
-
 
 // Write a single byte to the packet
 
-void NET_WriteInt32(net_packet_t *packet, unsigned int i)
+void NET_WriteInt32(net_packet_t* packet, uint32_t i)
 {
-    byte *p;
+	byte* p;
 
-    if (packet->len + 4 > packet->alloced)
-        NET_IncreasePacket(packet);
+	if (packet->len + 4 > packet->alloced)
+		NET_IncreasePacket(packet);
 
-    p = packet->data + packet->len;
+	p = packet->data + packet->len;
 
-    p[0] = (i >> 24) & 0xff;
-    p[1] = (i >> 16) & 0xff;
-    p[2] = (i >> 8) & 0xff;
-    p[3] = i & 0xff;
+	p[0] = (i >> 24) & 0xff;
+	p[1] = (i >> 16) & 0xff;
+	p[2] = (i >> 8) & 0xff;
+	p[3] = i & 0xff;
 
-    packet->len += 4;
+	packet->len += 4;
 }
 
-void NET_WriteString(net_packet_t *packet, char *string)
+void NET_WriteString(net_packet_t* packet, int8_t* string)
 {
-    byte *p;
+	byte* p;
 
-    // Increase the packet size until large enough to hold the string
+	// Increase the packet size until large enough to hold the string
 
-    while (packet->len + strlen(string) + 1 > packet->alloced)
-    {
-        NET_IncreasePacket(packet);
-    }
+	while (packet->len + strlen(string) + 1 > packet->alloced)
+	{
+		NET_IncreasePacket(packet);
+	}
 
-    p = packet->data + packet->len;
+	p = packet->data + packet->len;
 
-    strcpy((char *) p, string);
+	strcpy((int8_t*)p, string);
 
-    packet->len += strlen(string) + 1;
+	packet->len += strlen(string) + 1;
 }
-
-
-
-

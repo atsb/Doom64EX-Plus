@@ -21,14 +21,13 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __M_PASSWORD_H__
 #define __M_PASSWORD_H__
 
 #include "doomtype.h"
 
 extern byte passwordData[16];
-extern const char *passwordChar;
+extern const int8_t* passwordChar;
 extern dboolean doPassword;
 
 void M_EncodePassword(void);

@@ -38,9 +38,7 @@
 #include "r_local.h"
 #include "z_zone.h"
 
-
 button_t buttonlist[MAXBUTTONS];
-
 
 //
 // P_StartButton
@@ -48,31 +46,31 @@ button_t buttonlist[MAXBUTTONS];
 //
 
 void P_StartButton(line_t* line, bwhere_e w, int texture, int time) {
-    int    i;
+	int    i;
 
-    // See if button is already pressed
-    for(i = 0; i < MAXBUTTONS; i++) {
-        if(buttonlist[i].btimer && buttonlist[i].line == line) {
-            return;
-        }
-    }
+	// See if button is already pressed
+	for (i = 0; i < MAXBUTTONS; i++) {
+		if (buttonlist[i].btimer && buttonlist[i].line == line) {
+			return;
+		}
+	}
 
-    for(i = 0; i < MAXBUTTONS; i++) {
-        if(!buttonlist[i].btimer) {
-            buttonlist[i].line = line;
-            buttonlist[i].where = w;
-            buttonlist[i].btexture = texture;
-            buttonlist[i].btimer = time;
+	for (i = 0; i < MAXBUTTONS; i++) {
+		if (!buttonlist[i].btimer) {
+			buttonlist[i].line = line;
+			buttonlist[i].where = w;
+			buttonlist[i].btexture = texture;
+			buttonlist[i].btimer = time;
 
-            if(SWITCHMASK(line->flags)) {
-                buttonlist[i].soundorg = (mobj_t *)&line->frontsector->soundorg;
-            }
+			if (SWITCHMASK(line->flags)) {
+				buttonlist[i].soundorg = (mobj_t*)&line->frontsector->soundorg;
+			}
 
-            return;
-        }
-    }
+			return;
+		}
+	}
 
-    I_Error("P_StartButton: no button slots left!");
+	I_Error("P_StartButton: no button slots left!");
 }
 
 //
@@ -82,56 +80,54 @@ void P_StartButton(line_t* line, bwhere_e w, int texture, int time) {
 //
 
 void P_ChangeSwitchTexture(line_t* line, int useAgain) {
-    int sound;
-    int swx;
+	int sound;
+	int swx;
 
-    if(SPECIALMASK(line->special) == 52 || SPECIALMASK(line->special) == 124) {
-        sound = sfx_switch2;
-    }
-    else {
-        sound = sfx_switch1;
-    }
+	if (SPECIALMASK(line->special) == 52 || SPECIALMASK(line->special) == 124) {
+		sound = sfx_switch2;
+	}
+	else {
+		sound = sfx_switch1;
+	}
 
-    if(!useAgain) {
-        line->special = 0;
-    }
+	if (!useAgain) {
+		line->special = 0;
+	}
 
-    if(SWITCHMASK(line->flags) == ML_SWITCHX04) {
-        swx = swx_start + (sides[line->sidenum[0]].bottomtexture - swx_start) ^ 1;
+	if (SWITCHMASK(line->flags) == ML_SWITCHX04) {
+		swx = swx_start + (sides[line->sidenum[0]].bottomtexture - swx_start) ^ 1;
 
-        S_StartSound(buttonlist->soundorg, sound);
-        sides[line->sidenum[0]].bottomtexture = swx;
+		S_StartSound(buttonlist->soundorg, sound);
+		sides[line->sidenum[0]].bottomtexture = swx;
 
-        if(useAgain) {
-            P_StartButton(line, bottom, swx, BUTTONTIME);
-        }
+		if (useAgain) {
+			P_StartButton(line, bottom, swx, BUTTONTIME);
+		}
 
-        return;
-    }
-    else if(SWITCHMASK(line->flags) == ML_SWITCHX02) {
-        swx = swx_start + (sides[line->sidenum[0]].toptexture - swx_start) ^ 1;
+		return;
+	}
+	else if (SWITCHMASK(line->flags) == ML_SWITCHX02) {
+		swx = swx_start + (sides[line->sidenum[0]].toptexture - swx_start) ^ 1;
 
-        S_StartSound(buttonlist->soundorg, sound);
-        sides[line->sidenum[0]].toptexture = swx;
+		S_StartSound(buttonlist->soundorg, sound);
+		sides[line->sidenum[0]].toptexture = swx;
 
-        if(useAgain) {
-            P_StartButton(line, top, swx, BUTTONTIME);
-        }
+		if (useAgain) {
+			P_StartButton(line, top, swx, BUTTONTIME);
+		}
 
-        return;
-    }
-    else if(SWITCHMASK(line->flags) == (ML_SWITCHX02 | ML_SWITCHX04)) {
-        swx = swx_start + (sides[line->sidenum[0]].midtexture - swx_start) ^ 1;
+		return;
+	}
+	else if (SWITCHMASK(line->flags) == (ML_SWITCHX02 | ML_SWITCHX04)) {
+		swx = swx_start + (sides[line->sidenum[0]].midtexture - swx_start) ^ 1;
 
-        S_StartSound(buttonlist->soundorg, sound);
-        sides[line->sidenum[0]].midtexture = swx;
+		S_StartSound(buttonlist->soundorg, sound);
+		sides[line->sidenum[0]].midtexture = swx;
 
-        if(useAgain) {
-            P_StartButton(line, middle, swx, BUTTONTIME);
-        }
+		if (useAgain) {
+			P_StartButton(line, middle, swx, BUTTONTIME);
+		}
 
-        return;
-    }
+		return;
+	}
 }
-
-

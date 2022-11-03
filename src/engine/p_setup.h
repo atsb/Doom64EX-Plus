@@ -21,15 +21,12 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef __P_SETUP__
 #define __P_SETUP__
-
 
 #ifdef __GNUG__
 #pragma interface
 #endif
-
 
 // NOT called by W_Ticker. Fixme.
 void P_SetupLevel(int map, int playermask, skill_t skill);
@@ -49,22 +46,22 @@ clusterdef_t* P_GetCluster(int map);
 // [kex] sky definitions
 //
 typedef enum {
-    SKF_CLOUD       = 0x1,
-    SKF_THUNDER     = 0x2,
-    SKF_FIRE        = 0x4,
-    SKF_BACKGROUND  = 0x8,
-    SKF_FADEBACK    = 0x10,
-    SKF_VOID        = 0x20
+	SKF_CLOUD = 0x1,
+	SKF_THUNDER = 0x2,
+	SKF_FIRE = 0x4,
+	SKF_BACKGROUND = 0x8,
+	SKF_FADEBACK = 0x10,
+	SKF_VOID = 0x20
 } skyflags_e;
 
 typedef struct {
-    char        flat[9];
-    int         flags;
-    char        pic[9];
-    char        backdrop[9];
-    rcolor      fogcolor;
-    rcolor      skycolor[3];
-    int         fognear;
+	int8_t        flat[9];
+	int         flags;
+	int8_t        pic[9];
+	int8_t        backdrop[9];
+	rcolor      fogcolor;
+	rcolor      skycolor[3];
+	int         fognear;
 } skydef_t;
 
 #endif
