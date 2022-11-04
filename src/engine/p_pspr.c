@@ -42,6 +42,7 @@
 #include "sounds.h"
 #include "p_pspr.h"
 #include "m_misc.h"
+#include "deh_misc.h"
 
 #define LOWERSPEED                FRACUNIT*7
 #define RAISESPEED                FRACUNIT*7
@@ -178,7 +179,7 @@ dboolean P_CheckAmmo(player_t* player) {
 
 	// Minimal amount for one shot varies.
 	if (player->readyweapon == wp_bfg) {
-		count = BFGCELLS;
+		count = deh_bfg_cells_per_shot;
 	}
 	else if (player->readyweapon == wp_supershotgun) {
 		count = 2;    // Double barrel.

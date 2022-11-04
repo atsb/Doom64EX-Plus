@@ -31,7 +31,6 @@
 #include "deh_io.h"
 
 extern deh_section_t *deh_section_types[];
-extern char *deh_signatures[];
 
 static bool deh_initialized = false;
 
@@ -175,7 +174,6 @@ bool DEH_ParseAssignment(char *line, char **variable_name, char **value)
 
 static bool CheckSignatures(deh_context_t *context)
 {
-    size_t i;
     char *line;
     
     // Read the first line
@@ -185,16 +183,6 @@ static bool CheckSignatures(deh_context_t *context)
     if (line == NULL)
     {
         return false;
-    }
-
-    // Check all signatures to see if one matches
-
-    for (i=0; deh_signatures[i] != NULL; ++i)
-    {
-        if (!strcmp(deh_signatures[i], line))
-        {
-            return true;
-        }
     }
 
     return false;

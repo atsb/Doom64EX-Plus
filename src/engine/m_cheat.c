@@ -38,6 +38,8 @@
 #include "am_map.h"
 #include "m_password.h"
 #include "st_stuff.h"
+#include "deh_main.h"
+#include "deh_misc.h"
 
 typedef struct {
 	const int8_t* cheat;
@@ -73,7 +75,7 @@ void M_CheatGod(player_t* player, int8_t dat[4]) {
 			player->mo->health = 100;
 		}
 
-		player->health = 100;
+		player->health = deh_god_mode_health;
 		player->message = STSTR_DQDON;
 	}
 	else {
@@ -84,19 +86,11 @@ void M_CheatGod(player_t* player, int8_t dat[4]) {
 static void M_CheatFa(player_t* player, int8_t dat[4]) {
 	int i;
 
-	player->armorpoints = 200;
-	player->armortype = 2;
+	player->armorpoints = deh_idfa_armor;
+	player->armortype = deh_idfa_armor_class;
 
 	for (i = 0; i < NUMWEAPONS; i++) {
 		player->weaponowned[i] = true;
-	}
-
-	if (!player->backpack) {
-		for (i = 0; i < NUMAMMO; i++) {
-			player->maxammo[i] *= 2;
-		}
-
-		player->backpack = true;
 	}
 
 	for (i = 0; i < NUMAMMO; i++) {
@@ -109,19 +103,11 @@ static void M_CheatFa(player_t* player, int8_t dat[4]) {
 void M_CheatKfa(player_t* player, int8_t dat[4]) {
 	int i;
 
-	player->armorpoints = 200;
-	player->armortype = 2;
+	player->armorpoints = deh_idkfa_armor;
+	player->armortype = deh_idkfa_armor_class;
 
 	for (i = 0; i < NUMWEAPONS; i++) {
 		player->weaponowned[i] = true;
-	}
-
-	if (!player->backpack) {
-		for (i = 0; i < NUMAMMO; i++) {
-			player->maxammo[i] *= 2;
-		}
-
-		player->backpack = true;
 	}
 
 	for (i = 0; i < NUMAMMO; i++) {
