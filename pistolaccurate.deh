@@ -1,0 +1,17 @@
+Patch File for DeHackEd64
+# Created with WhackEd4 1.0.2
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+
+Frame 15
+Duration = 1
+Next frame = 10
+
+Frame 16
+Duration = 0
+
+Pointer 10 (Frame 16)
+Codep Frame = 2
