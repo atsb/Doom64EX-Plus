@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <ctype.h>
 
 #include "m_misc.h"
@@ -54,12 +55,12 @@ struct deh_context_s
     int linenum;
 
     // Used by DEH_ReadLine:
-    boolean last_was_newline;
+    bool last_was_newline;
     char *readbuffer;
     int readbuffer_size;
 
     // Error handling.
-    boolean had_error;
+    bool had_error;
 };
 
 static deh_context_t *DEH_NewContext(void)
@@ -134,7 +135,7 @@ void DEH_CloseFile(deh_context_t *context)
         fclose(context->stream);
     }
 
-    free(context->filename);
+    //free(context->filename);
     Z_Free(context->readbuffer);
     Z_Free(context);
 }
@@ -221,11 +222,11 @@ static void IncreaseReadBuffer(deh_context_t *context)
 
 // Read a whole line
 
-char *DEH_ReadLine(deh_context_t *context, boolean extended)
+char *DEH_ReadLine(deh_context_t *context, bool extended)
 {
     int c;
     int pos;
-    boolean escaped = false;
+    bool escaped = false;
 
     for (pos = 0;;)
     {
@@ -326,7 +327,7 @@ void DEH_Error(deh_context_t *context, char *msg, ...)
     context->had_error = true;
 }
 
-boolean DEH_HadError(deh_context_t *context)
+bool DEH_HadError(deh_context_t *context)
 {
     return context->had_error;
 }

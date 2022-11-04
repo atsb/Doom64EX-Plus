@@ -300,7 +300,7 @@ static format_arg_t NextFormatArgument(char **str)
 // Check if the specified argument type is a valid replacement for
 // the original.
 
-static boolean ValidArgumentReplacement(format_arg_t original,
+static bool ValidArgumentReplacement(format_arg_t original,
                                         format_arg_t replacement)
 {
     // In general, the original and replacement types should be
@@ -326,7 +326,7 @@ static boolean ValidArgumentReplacement(format_arg_t original,
 
 // Return true if the specified string contains no format arguments.
 
-static boolean ValidFormatReplacement(char *original, char *replacement)
+static bool ValidFormatReplacement(char *original, char *replacement)
 {
     char *rover1;
     char *rover2;

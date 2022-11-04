@@ -76,7 +76,7 @@ static void *GetStructField(void *structptr,
 // Set the value of a particular field in a structure by name
 //
 
-boolean DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
+bool DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
                        void *structptr, char *name, int value)
 {
     deh_mapping_entry_t *entry;
@@ -127,7 +127,7 @@ boolean DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
 // Set the value of a string field in a structure by name
 //
 
-boolean DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
+bool DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
                              void *structptr, char *name, char *value)
 {
     deh_mapping_entry_t *entry;

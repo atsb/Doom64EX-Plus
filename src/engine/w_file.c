@@ -131,7 +131,7 @@ size_t W_Read(wad_file_t* wad, uint32_t offset,
 // Searches WAD search paths for an WAD with a specific filename.
 //
 
-char* W_FindWADByName(char* name) {
+int8_t* W_FindWADByName(int8_t* name) {
 	char* buf;
 	int i;
 	dboolean exists;
@@ -170,7 +170,7 @@ char* W_FindWADByName(char* name) {
 // if not found.
 //
 
-char* W_TryFindWADByName(char* filename) {
+int8_t* W_TryFindWADByName(int8_t* filename) {
 	char* result;
 
 	result = W_FindWADByName(filename);
