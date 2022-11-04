@@ -19,6 +19,12 @@
 #include "deh_defs.h"
 #include "deh_main.h"
 
+char* deh_signatures[] =
+{
+    "Patch File for DeHackEd64",
+    NULL
+};
+
 // deh_ammo.c:
 extern deh_section_t deh_section_ammo;
 // deh_cheat.c:

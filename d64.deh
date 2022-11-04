@@ -1,0 +1,32 @@
+Patch File for DeHackEd64
+# Created with WhackEd4 1.2.4 BETA
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+Ammo 0 (Bullets)
+Max ammo = 500
+Per ammo = 2
+
+Ammo 1 (Shells)
+Max ammo = 600
+
+Ammo 2 (Cells)
+Max ammo = 1000
+
+Ammo 3 (Rockets)
+Max ammo = 900
+
+Misc 0
+IDKFA Armor = 500
+Initial Health = 700
+Megasphere Health = 500
+Max Health = 1000
+Initial Bullets = 20
+IDFA Armor = 500
+BFG Cells/Shot = 1
+Max Armor = 1001
+God Mode Health = 1000
+Monsters Infight = 221
+Soulsphere Health = 255
