@@ -696,7 +696,7 @@ int8_t* OptionHints[opt_end] = {
 	"control configuration",
 	"adjust sound volume",
 	"miscellaneous options for gameplay and other features",
-	"settings for heads up display",
+	"settings for the heads-up display",
 	"configure video-specific options",
 	"enter a password to access a level",
 	"setup options for a hosted session",
@@ -833,7 +833,7 @@ menu_t NetworkDef = {
 	0,
 	false,
 	NetworkDefault,
-	14,
+	15,
 	0,
 	0.5f,
 	NetworkHints,
@@ -2439,29 +2439,29 @@ enum {
 	features_levels = 0,
 	features_invulnerable,
 	features_healthboost,
+	features_securitykeys,
 	features_weapons,
 	features_mapeverything,
-	features_securitykeys,
 	features_lockmonsters,
 	features_noclip,
 	features_wireframe,
 	features_end
 } features_e;
 
-#define FEATURESWARPLEVEL    "Warp To Level:"
-#define FEATURESWARPFUN        "Warp To Fun:"
-#define FEATURESWARPSINGLE  "Warp To Pwad:"
+#define FEATURESWARPLEVEL    "Warp To Level"
+#define FEATURESWARPFUN        "Warp To Fun"
+#define FEATURESWARPSINGLE  "Warp To PWAD"
 
 menuitem_t FeaturesMenu[] = {
 	{2,FEATURESWARPLEVEL,M_DoFeature,'l'},
-	{2,"Invulnerable:",M_DoFeature,'i'},
-	{2,"Health Boost:",M_DoFeature,'h'},
-	{2,"Weapons:",M_DoFeature,'w'},
-	{2,"Map Everything:",M_DoFeature,'m'},
-	{2,"Security Keys:",M_DoFeature,'k'},
-	{2,"Lock Monsters:",M_DoFeature,'o'},
-	{2,"Wall Blocking:",M_DoFeature,'w'},
-	{2,"Wireframe Mode:",M_DoFeature,'r'},
+	{2,"Invulnerable",M_DoFeature,'i'},
+	{2,"Health Boost",M_DoFeature,'h'},
+	{2,"Security Keys",M_DoFeature,'k'},
+	{2,"Weapons",M_DoFeature,'w'},
+	{2,"Map Everything",M_DoFeature,'m'},
+	{2,"Lock Monsters",M_DoFeature,'o'},
+	{2,"Wall Blocking",M_DoFeature,'w'},
+	{2,"Wireframe Mode",M_DoFeature,'r'},
 };
 
 menu_t featuresDef = {
@@ -2780,10 +2780,10 @@ menuitem_t      ControlsItem[NUM_CONTROL_ITEMS];
 static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Movement", NULL},
 	{"Forward", "+forward"},
-	{"Back", "+back"},
+	{"Backward", "+back"},
 	{"Left", "+left"},
 	{"Right", "+right"},
-	{"Strafe", "+strafe"},
+	{"Strafe Modifier", "+strafe"},
 	{"Strafe Left", "+strafeleft"},
 	{"Strafe Right", "+straferight"},
 	{"Action", NULL},
@@ -2804,7 +2804,7 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Rocket Launcher", "weapon 7"},
 	{"Plasma Rifle", "weapon 8"},
 	{"BFG 9000", "weapon 9"},
-	{"Unmaykr", "weapon 10"},
+	{"Unmaker", "weapon 10"},
 	{"Chainsaw", "weapon 1"},
 	{"Automap", NULL},
 	{"Toggle", "automap"},
@@ -2817,7 +2817,7 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Mouse Pan", "+automap_freepan"},
 	{"Follow Mode", "automap_follow"},
 	{"Other", NULL},
-	{"Detatch Camera", "setcamerastatic"},
+	{"Detach Camera", "setcamerastatic"},
 	{"Chasecam", "setcamerachase"},
 	{NULL, NULL}
 };
@@ -2858,15 +2858,14 @@ void M_BuildControlMenu(void) {
 	for (item = 0; item < actions; item++) {
 		dstrcpy(menu->menuitems[item].name, PlayerActions[item].name);
 		if (PlayerActions[item].action) {
-			for (i = dstrlen(PlayerActions[item].name); i < 15; i++) {
+			for (i = dstrlen(PlayerActions[item].name); i < 17; i++) {
 				menu->menuitems[item].name[i] = ' ';
 			}
 
-			menu->menuitems[item].name[15] = ':';
 			menu->menuitems[item].status = 1;
 			menu->menuitems[item].routine = M_ChangeKeyBinding;
 
-			G_GetActionBindings(&menu->menuitems[item].name[16], PlayerActions[item].action);
+			G_GetActionBindings(&menu->menuitems[item].name[17], PlayerActions[item].action);
 		}
 		else {
 			menu->menuitems[item].status = -1;
@@ -2882,14 +2881,14 @@ void M_BuildControlMenu(void) {
     menu->menuitems[actions + i].routine = NULL
 
 	ADD_NONBINDABLE_ITEM(0, "Non-Bindable Keys", -1);
-	ADD_NONBINDABLE_ITEM(1, "Save Game      : F2", 1);
-	ADD_NONBINDABLE_ITEM(2, "Load Game      : F3", 1);
-	ADD_NONBINDABLE_ITEM(3, "Screenshot     : F5", 1);
-	ADD_NONBINDABLE_ITEM(4, "Quicksave      : F6", 1);
-	ADD_NONBINDABLE_ITEM(5, "Quickload      : F7", 1);
-	ADD_NONBINDABLE_ITEM(6, "Change Gamma   : F11", 1);
-	ADD_NONBINDABLE_ITEM(7, "Chat           : t", 1);
-	ADD_NONBINDABLE_ITEM(8, "Console        : 9", 1);
+	ADD_NONBINDABLE_ITEM(1, "Save Game        F2", 1);
+	ADD_NONBINDABLE_ITEM(2, "Load Game        F3", 1);
+	ADD_NONBINDABLE_ITEM(3, "Screenshot       F5", 1);
+	ADD_NONBINDABLE_ITEM(4, "Quicksave        F6", 1);
+	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
+	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
+	ADD_NONBINDABLE_ITEM(7, "Chat             t", 1);
+	ADD_NONBINDABLE_ITEM(8, "Console          9", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {
@@ -2929,7 +2928,7 @@ menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
 #ifdef _USE_XINPUT  // XINPUT
-	{1,"GamePad",M_ControlChoice, 'g'},
+	{1,"Gamepad",M_ControlChoice, 'g'},
 #endif
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -3389,7 +3388,7 @@ menu_t QuickSavePromptDef = {
 	&PauseDef,
 	QuickSavePrompt,
 	NULL,
-	"Overwrite QuickSave?",
+	"Overwrite Quicksave?",
 	144,112,
 	QSP_Yes,
 	false,
@@ -3431,7 +3430,7 @@ menu_t QuickLoadPromptDef = {
 	&PauseDef,
 	QuickLoadPrompt,
 	NULL,
-	"Load QuickSave?",
+	"Load Quicksave?",
 	144,112,
 	QLP_Yes,
 	false,
