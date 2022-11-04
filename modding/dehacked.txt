@@ -5,6 +5,10 @@ I am documenting this as I go (others are welcome to help!).
 
 In this directory you will find an example DEH file to use as reference to create your own.
 
+Patch:
+
+Patch File for DeHackEd64 <- this is what the beginning of the .deh file MUST have
+
 Thing list:
 
 Thing 7 (Mancubus)
