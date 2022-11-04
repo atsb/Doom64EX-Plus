@@ -664,6 +664,6 @@ void GL_Init(void) {
 #ifdef _WIN32
 	wglSwapIntervalEXT(v_vsync.value);
 #else
-	glXSwapIntervalSGI(v_vsync.value);
+	glXSwapIntervalMESA(v_vsync.value);
 #endif
 }
