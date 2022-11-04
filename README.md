@@ -34,6 +34,10 @@ They can either be a tag or a graphic.  This is due to me not flat-out reading a
 
 No other changes are needed.
 
+## Dehacked Support
+
+For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
+
 ## Dependencies
 
 * SDL2

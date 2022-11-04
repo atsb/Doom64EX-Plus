@@ -1,0 +1,31 @@
+DOOM64EX+ supports its own version of DeHackED.
+
+Because of the number of differences between DOOM64 and Classic Doom, every frame, thing, weapon, sprite and code pointer is different (except ammo).
+I am documenting this as I go (others are welcome to help!).
+
+In this directory you will find an example DEH file to use as reference to create your own.
+
+Thing list:
+
+Thing 7 (Mancubus)
+Thing 8 (Trooper)
+Thing 9 (Sargeant)
+Thing 10 (Imp)
+Thing 11 (Nightmare Imp)
+Thing 12 (Cacodemon)
+Thing 13 (Baron of Hell)
+Thing 14 (Hellknight)
+Thing 15 (Lost Soul)
+Thing 16 (Arachnotron)
+Thing 17 (Mother Demon)
+Thing 18 (Cyberdemon)
+Thing 19 (Pain Elemental)
+Thing 20 (Demon)
+Thing 21 (Spectre)
+
+Ammo list:
+
+Ammo 0 (Bullets)
+Ammo 1 (Shells)
+Ammo 2 (Cells)
+Ammo 3 (Rockets)
