@@ -76,13 +76,17 @@ void A_FadeAlpha(mobj_t* mobj);
 //
 // P_SetPsprite
 //
-static void P_SetPsprite(player_t* player, int position, statenum_t stnum) {
-	pspdef_t* psp = &player->psprites[position];
+void P_SetPsprite (player_t* player, int position, statenum_t stnum)
+{
+	pspdef_t* psp;
+	state_t* state;
 
-	do {
-		state_t* state;
+	psp = &player->psprites[position];
 
-		if (!stnum) {
+	do
+	{
+		if (!stnum)
+		{
 			// object removed itself
 			psp->state = NULL;
 			break;
@@ -90,18 +94,28 @@ static void P_SetPsprite(player_t* player, int position, statenum_t stnum) {
 
 		state = &states[stnum];
 		psp->state = state;
-		psp->tics = state->tics;        // could be 0
+		psp->tics = state->tics;	// could be 0
+
+		if (state->misc1)
+		{
+			// coordinate set
+			psp->sx = state->misc1 << FRACBITS;
+			psp->sy = state->misc2 << FRACBITS;
+		}
 
 		// Call action routine.
 		// Modified handling.
-		if (state->action.acp2) {
+		if (state->action.acp2)
+		{
 			state->action.acp2(player, psp);
-			if (!psp->state) {
+			if (!psp->state)
 				break;
-			}
 		}
+
 		stnum = psp->state->nextstate;
-	} while (!psp->tics);     // an initial state of 0 could cycle through
+
+	} while (!psp->tics);
+	// an initial state of 0 could cycle through
 }
 
 //
@@ -243,13 +257,7 @@ void P_FireWeapon(void* data) {
 	}
 
 	P_SetMobjState(player->mo, S_PLAY_ATK1);
-
-	player->psprites[ps_weapon].sx = FRACUNIT;
-	player->psprites[ps_weapon].sy = WEAPONTOP;
 	newstate = weaponinfo[player->readyweapon].atkstate;
-	if (player->refire && player->readyweapon == wp_pistol) {
-		newstate++;
-	}
 	P_SetPsprite(player, ps_weapon, newstate);
 	P_NoiseAlert(player->mo, player->mo);
 }

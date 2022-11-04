@@ -20,7 +20,6 @@
 
 #include "i_opndir.h"
 #include "doomtype.h"
-#include "deh_str.h"
 #include "sha1.h"
 
 void DEH_ParseCommandLine(void);
@@ -31,11 +30,6 @@ int DEH_LoadLumpByName(char *name, bool allow_long, bool allow_error);
 bool DEH_ParseAssignment(char *line, char **variable_name, char **value);
 
 void DEH_Checksum(sha1_digest_t digest);
-
-extern bool deh_allow_extended_strings;
-extern bool deh_allow_long_strings;
-extern bool deh_allow_long_cheats;
-extern bool deh_apply_cheats;
 
 #endif /* #ifndef DEH_MAIN_H */
 

@@ -135,7 +135,7 @@ void DEH_CloseFile(deh_context_t *context)
         fclose(context->stream);
     }
 
-    //free(context->filename);
+    Z_Free(context->filename);
     Z_Free(context->readbuffer);
     Z_Free(context);
 }

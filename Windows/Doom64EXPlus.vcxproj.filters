@@ -264,12 +264,6 @@
     <ClCompile Include="..\src\engine\deh_mapping.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\engine\deh_str.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_text.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\engine\sha1.c">
       <Filter>Source Files</Filter>
     </ClCompile>

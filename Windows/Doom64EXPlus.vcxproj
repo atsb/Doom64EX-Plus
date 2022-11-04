@@ -152,8 +152,6 @@
     <ClCompile Include="..\src\engine\deh_mapping.c" />
     <ClCompile Include="..\src\engine\deh_misc.c" />
     <ClCompile Include="..\src\engine\deh_ptr.c" />
-    <ClCompile Include="..\src\engine\deh_str.c" />
-    <ClCompile Include="..\src\engine\deh_text.c" />
     <ClCompile Include="..\src\engine\deh_thing.c" />
     <ClCompile Include="..\src\engine\deh_weapon.c" />
     <ClCompile Include="..\src\engine\dgl.c" />

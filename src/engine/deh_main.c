@@ -35,22 +35,6 @@ extern char *deh_signatures[];
 
 static bool deh_initialized = false;
 
-// If true, we can parse [STRINGS] sections in BEX format.
-
-bool deh_allow_extended_strings = false;
-
-// If true, we can do long string replacements.
-
-bool deh_allow_long_strings = false;
-
-// If true, we can do cheat replacements longer than the originals.
-
-bool deh_allow_long_cheats = false;
-
-// If false, dehacked cheat replacements are ignored.
-
-bool deh_apply_cheats = true;
-
 void DEH_Checksum(sha1_digest_t digest)
 {
     sha1_context_t sha1_context;
@@ -86,17 +70,6 @@ static void InitializeSections(void)
 
 static void DEH_Init(void)
 {
-    //!
-    // @category mod
-    //
-    // Ignore cheats in dehacked files.
-    //
-
-    if (M_CheckParm("-nocheats") > 0) 
-    {
-	deh_apply_cheats = false;
-    }
-
     // Call init functions for all the section definitions.
     InitializeSections();
 
@@ -110,9 +83,8 @@ static deh_section_t *GetSectionByName(char *name)
     unsigned int i;
 
     // we explicitely do not recognize [STRINGS] sections at all
-    // if extended strings are not allowed
 
-    if (!deh_allow_extended_strings && !strncasecmp("[STRINGS]", name, 9))
+    if (!strncasecmp("[STRINGS]", name, 9))
     {
         return NULL;
     }
@@ -228,55 +200,6 @@ static bool CheckSignatures(deh_context_t *context)
     return false;
 }
 
-// Parses a comment string in a dehacked file.
-
-static void DEH_ParseComment(char *comment)
-{
-    //
-    // Welcome, to the super-secret Chocolate Doom-specific Dehacked
-    // overrides function.
-    //
-    // Putting these magic comments into your Dehacked lumps will
-    // allow you to go beyond the normal limits of Vanilla Dehacked.
-    // Because of this, these comments are deliberately undocumented,
-    // and if you're using them you should be aware that your mod
-    // is not compatible with Vanilla Doom and you're probably a
-    // very naughty person.
-    //
-
-    // Allow comments containing this special value to allow string
-    // replacements longer than those permitted by DOS dehacked.
-    // This allows us to use a dehacked patch for doing string 
-    // replacements for emulating Chex Quest.
-    //
-    // If you use this, your dehacked patch may not work in Vanilla
-    // Doom.
-
-    if (strstr(comment, "*allow-long-strings*") != NULL)
-    {
-        deh_allow_long_strings = true;
-    }
-
-    // Allow magic comments to allow longer cheat replacements than
-    // those permitted by DOS dehacked.  This is also for Chex
-    // Quest.
-
-    if (strstr(comment, "*allow-long-cheats*") != NULL)
-    {
-        deh_allow_long_cheats = true;
-    }
-
-    // Allow magic comments to allow parsing [STRINGS] section
-    // that are usually only found in BEX format files. This allows
-    // for substitution of map and episode names when loading
-    // Freedoom/FreeDM IWADs.
-
-    if (strstr(comment, "*allow-extended-strings*") != NULL)
-    {
-        deh_allow_extended_strings = true;
-    }
-}
-
 // Parses a dehacked file by reading from the context
 
 static void DEH_ParseContext(deh_context_t *context)
@@ -313,14 +236,6 @@ static void DEH_ParseContext(deh_context_t *context)
 
         while (line[0] != '\0' && isspace(line[0]))
             ++line;
-
-        if (line[0] == '#')
-        {
-            // comment
-
-            DEH_ParseComment(line);
-            continue;
-        }
 
         if (IsWhitespace(line))
         {
@@ -378,13 +293,6 @@ int DEH_LoadFile(char *filename)
         DEH_Init();
     }
 
-    // Before parsing a new file, reset special override flags to false.
-    // Magic comments should only apply to the file in which they were
-    // defined, and shouldn't carry over to subsequent files as well.
-    deh_allow_long_strings = false;
-    deh_allow_long_cheats = false;
-    deh_allow_extended_strings = false;
-
     printf(" loading %s\n", filename);
 
     context = DEH_OpenFile(filename);
@@ -418,11 +326,6 @@ int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error)
     {
         DEH_Init();
     }
-
-    // Reset all special flags to defaults.
-    deh_allow_long_strings = allow_long;
-    deh_allow_long_cheats = allow_long;
-    deh_allow_extended_strings = false;
 
     context = DEH_OpenLump(lumpnum);
 
