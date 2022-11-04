@@ -23,13 +23,6 @@
 #include "deh_str.h"
 #include "sha1.h"
 
-// These are the limits that dehacked uses (from dheinit.h in the dehacked
-// source).  If these limits are exceeded, it does not generate an error, but
-// a warning is displayed.
-
-#define DEH_VANILLA_NUMSTATES 966
-#define DEH_VANILLA_NUMSFX 107
-
 void DEH_ParseCommandLine(void);
 int DEH_LoadFile(char *filename);
 int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error);
