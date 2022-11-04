@@ -30,6 +30,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdbool.h>
+
 #ifdef _WIN32
 #include <io.h>
 #endif
@@ -53,7 +55,7 @@
 #include "gl_texture.h"
 #include "p_saveg.h"
 
-int        myargc;
+int      myargc;
 int8_t** myargv;
 
 //
@@ -73,6 +75,52 @@ int M_CheckParm(const int8_t* check) {
 	}
 
 	return 0;
+}
+
+// Safe, portable vsnprintf().
+int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
+{
+	int result;
+
+	if (buf_len < 1)
+	{
+		return 0;
+	}
+
+	// Windows (and other OSes?) has a vsnprintf() that doesn't always
+	// append a trailing \0. So we must do it, and write into a buffer
+	// that is one byte shorter; otherwise this function is unsafe.
+	result = vsnprintf(buf, buf_len, s, args);
+
+	// If truncated, change the final char in the buffer to a \0.
+	// A negative result indicates a truncated buffer on Windows.
+	if (result < 0 || result >= buf_len)
+	{
+		buf[buf_len - 1] = '\0';
+		result = buf_len - 1;
+	}
+
+	return result;
+}
+
+//
+// Safe version of strdup() that checks the string was successfully
+// allocated.
+//
+
+char* M_StringDuplicate(const char* orig)
+{
+	char* result;
+
+	result = strdup(orig);
+
+	if (result == NULL)
+	{
+		I_Error("Failed to duplicate string (length %i)\n",
+			strlen(orig));
+	}
+
+	return result;
 }
 
 //
@@ -339,6 +387,27 @@ void M_ScreenShot(void) {
 	fclose(fh);
 
 	I_Printf("Saved Screenshot %s\n", name);
+}
+
+// Safe string copy function that works like OpenBSD's strlcpy().
+// Returns true if the string was not truncated.
+
+bool M_StringCopy(char* dest, const char* src, size_t dest_size)
+{
+	size_t len;
+
+	if (dest_size >= 1)
+	{
+		dest[dest_size - 1] = '\0';
+		strncpy(dest, src, dest_size - 1);
+	}
+	else
+	{
+		return false;
+	}
+
+	len = strlen(dest);
+	return src[len] == '\0';
 }
 
 //

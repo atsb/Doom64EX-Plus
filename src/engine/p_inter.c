@@ -51,6 +51,9 @@
 #include "tables.h"
 #include "info.h"
 
+#include "deh_main.h"
+#include "deh_misc.h"
+
 CVAR_EXTERNAL(p_damageindicator);
 
 // a weapon is found with two clip loads,
@@ -78,7 +81,7 @@ dboolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 		return false;
 	}
 
-	if (ammo < 0 || ammo > NUMAMMO) {
+	if (ammo > NUMAMMO) {
 		I_Error("P_GiveAmmo: bad type %i", ammo);
 	}
 
@@ -193,10 +196,14 @@ dboolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, dbool
 		return false;
 	}
 
-	if (weaponinfo[weapon].ammo != am_noammo) {
+	if (weaponinfo[weapon].ammo != am_noammo)
+	{
 		// give one clip with a dropped weapon,
 		// two clips with a found weapon
-		gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, dropped ? 1 : 2);
+		if (dropped)
+			gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, 1);
+		else
+			gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, 2);
 	}
 	else {
 		gaveammo = false;
@@ -376,37 +383,35 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 	switch (special->sprite) {
 		// armor
 	case SPR_ARM1:
-		if (!P_GiveArmor(player, 1)) {
+		if (!P_GiveArmor(player, deh_green_armor_class))
 			return;
-		}
+
 		player->message = GOTARMOR;
 		player->messagepic = 23;
 		break;
 
 	case SPR_ARM2:
-		if (!P_GiveArmor(player, 2)) {
+		if (!P_GiveArmor(player, deh_blue_armor_class))
 			return;
-		}
+
 		player->message = GOTMEGA;
 		player->messagepic = 24;
 		break;
 
 		// bonus items
 	case SPR_BON1:
-		player->health += 2;               // can go over 100%
-		if (player->health > 200) {
-			player->health = 200;
-		}
+		player->health++;		// can go over 100%
+		if (player->health > deh_max_health)
+			player->health = deh_max_health;
 		player->mo->health = player->health;
 		player->message = GOTHTHBONUS;
 		player->messagepic = 3;
 		break;
 
 	case SPR_BON2:
-		player->armorpoints += 2;          // can go over 100%
-		if (player->armorpoints > 200) {
-			player->armorpoints = 200;
-		}
+		player->armorpoints++;		// can go over 100%
+		if (player->armorpoints > deh_max_armor)
+			player->armorpoints = deh_max_armor;
 		if (!player->armortype) {
 			player->armortype = 1;
 		}
@@ -415,10 +420,9 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_SOUL:
-		player->health += 100;
-		if (player->health > 200) {
-			player->health = 200;
-		}
+		player->health += deh_soulsphere_health;
+		if (player->health > deh_max_soulsphere)
+			player->health = deh_max_soulsphere;
 		player->mo->health = player->health;
 		player->message = GOTSUPER;
 		player->messagepic = 5;
@@ -426,7 +430,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_MEGA:
-		player->health = 200;
+		player->health = deh_megasphere_health;
 		player->mo->health = player->health;
 		P_GiveArmor(player, 2);
 		player->message = GOTMSPHERE;

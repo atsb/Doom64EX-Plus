@@ -43,6 +43,7 @@
 #include "tables.h"
 #include "r_sky.h"
 #include "con_console.h"
+#include "deh_misc.h"
 
 fixed_t         tmbbox[4];
 mobj_t* tmthing;
@@ -337,13 +338,17 @@ dboolean PIT_CheckThing(mobj_t* thing) {
 
 		if (tmthing->target && tmthing->target->type == thing->type) {
 			// Don't hit same species as originator.
-			if (thing == tmthing->target) {
+			if (thing == tmthing->target)
 				return true;
-			}
 
-			// Explode, but do no damage.
-			// Let players missile other players.
-			if (thing->type != MT_PLAYER) {
+			// sdh: Add deh_species_infighting here.  We can override the
+			// "monsters of the same species cant hurt each other" behavior
+			// through dehacked patches
+
+			if (thing->type != MT_PLAYER && !deh_species_infighting)
+			{
+				// Explode, but do no damage.
+				// Let players missile other players.
 				return false;
 			}
 		}

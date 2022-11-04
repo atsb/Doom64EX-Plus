@@ -60,6 +60,9 @@
 #include "i_video.h"
 #include "g_demo.h"
 
+#include "deh_main.h"
+#include "deh_misc.h"
+
 #define DCLICK_TIME     20
 
 void        G_PlayerReborn(int player);
@@ -1166,11 +1169,11 @@ void G_PlayerReborn(int player) {
 
 	p->usedown = p->attackdown = p->jumpdown = true;  // don't do anything immediately
 	p->playerstate = PST_LIVE;
-	p->health = MAXHEALTH;
+	p->health = deh_initial_health;
 	p->readyweapon = p->pendingweapon = wp_pistol;
 	p->weaponowned[wp_fist] = true;
 	p->weaponowned[wp_pistol] = true;
-	p->ammo[am_clip] = 50;
+	p->ammo[am_clip] = deh_initial_bullets;
 	p->recoilpitch = 0;
 
 	for (i = 0; i < NUMAMMO; i++) {
@@ -1196,6 +1199,7 @@ void G_PlayerReborn(int player) {
 			}
 		}
 	}
+
 }
 
 //

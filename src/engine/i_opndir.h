@@ -27,6 +27,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 //Villsa: Implemented for Doom64EX
 
 #ifndef I_OPNDIR_H__
@@ -104,4 +106,5 @@ void rewinddir(DIR*);
 int telldir(DIR*);
 void seekdir(DIR*, int);
 
+#endif
 #endif
