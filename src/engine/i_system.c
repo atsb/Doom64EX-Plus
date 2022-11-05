@@ -283,13 +283,14 @@ int8_t* I_FindDataFile(const int8_t* file) {
 	{
 		int i;
 		const int8_t* paths[] = {
-				"/usr/local/share/games/doom64ex-plus/",
+			//André: Removed all useless directories, Only The dir usr/local is fine to use.
+				//"/usr/local/share/games/doom64ex-plus/",
 				"/usr/local/share/doom64ex-plus/",
-				"/usr/local/share/doom/",
-				"/usr/share/games/doom64ex-plus/",
-				"/usr/share/doom64ex-plus/",
-				"/usr/share/doom/",
-				"/opt/doom64ex-plus/",
+				//"/usr/local/share/doom/",
+				//"/usr/share/games/doom64ex-plus/",
+				//"/usr/share/doom64ex-plus/",
+				//"/usr/share/doom/",
+				//"/opt/doom64ex-plus/",
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {

@@ -72,17 +72,13 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 You can place the asset data described above to any of the following directories:
 
 * The directory in which `doom64ex-plus` resides
-* `$XDG_DATA_HOME/doom64ex-plus` (eg. `~/.local/share/doom64ex-plus`)
-* `/usr/local/share/games/doom64ex-plus`
-* `/usr/local/share/doom64ex-plus`
-* `/usr/share/games/doom64ex-plus`
-* `/usr/share/doom64ex-plus`
+* `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
 
 Then, you can start playing:
 
     $ doom64ex-plus
 
-**NOTE for Linux users:** As of Feb. 24, 2016, the save data is located in `$XDG_DATA_HOME/doom64ex-plus` (typically `~/.local/share/doom64ex-plus`) and not in `~/.doom64ex-plus`. The files can be safely moved to their new home.
+**NOTE for Linux users:** As of Nov. 5, 2022, the save data is located in `usr/local/share/doom64ex-plus` and not in `~/.local/share/doom64ex-plus`. The files can besecurely moved into their new place.
 
 ### Windows
 
