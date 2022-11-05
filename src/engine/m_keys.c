@@ -54,7 +54,6 @@ static keyinfo_t    Keys[] = {
 	{KEY_EQUALS,            "+"},
 	{KEY_MINUS,             "-"},
 	{KEY_ENTER,             "Enter"},
-	{KEY_CAPS,              "Caps"},
 	{KEY_INSERT,            "Ins"},
 	{KEY_DEL,               "Del"},
 	{KEY_HOME,              "Home"},

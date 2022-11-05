@@ -629,15 +629,9 @@ dboolean G_BindActionByEvent(event_t* ev, int8_t* action) {
 	plist = NULL;
 	switch (ev->type) {
 	case ev_keydown:
-		//
-		// HACK: ignore capslock
-		//
-		if (ev->data1 == KEY_CAPS) {
-			return false;
-		}
 
-		plist = &KeyActions[ev->data1];
-		break;
+	plist = &KeyActions[ev->data1];
+	break;
 
 	case ev_mouse:
 	case ev_mousedown:

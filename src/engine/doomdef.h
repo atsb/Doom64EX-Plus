@@ -302,8 +302,6 @@ extern dboolean windowpause;
 #define KEY_RCTRL               (0x80+0x1d)
 #define KEY_RALT                (0x80+0x38)
 
-#define KEY_CAPS                0xba
-
 #define KEY_INSERT              0xd2
 #define KEY_HOME                0xc7
 #define KEY_PAGEUP              0xc9

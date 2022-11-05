@@ -413,9 +413,6 @@ static int I_TranslateKey(const int key) {
 		//case SDLK_RMETA:
 		rc = KEY_RALT;
 		break;
-	case SDLK_CAPSLOCK:
-		rc = KEY_CAPS;
-		break;
 	default:
 		rc = key;
 		break;

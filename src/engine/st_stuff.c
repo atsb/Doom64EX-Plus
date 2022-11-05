@@ -1265,11 +1265,6 @@ static void ST_FeedChatMsg(event_t* ev) {
 		st_chatOn = false;
 		dmemset(st_chatstring[consoleplayer], 0, len);
 		break;
-	case KEY_CAPS:
-		if (ev->type == ev_keydown) {
-			st_shiftOn ^= 1;
-		}
-		break;
 	case KEY_SHIFT:
 		if (ev->type == ev_keydown) {
 			st_shiftOn = true;
