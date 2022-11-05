@@ -53,7 +53,7 @@ Clone this repo
 
 ### Linux or Cross Plataform Compilation
 
-Use the `build.sh` script for a native build and the `build_win_cross.sh` script for cross compilation for Windows.
+Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
 
 ### Windows
 
