@@ -212,24 +212,15 @@ ticcmd_t* I_BaseTiccmd(void) {
  * @note The returning value MUST be freed by the caller.
  */
 
-int8_t* I_GetUserDir(void) {
-#ifdef _WIN32
-	return I_GetBaseDir();
-#else
+int8_t* I_GetUserDir(void) 
+{
 	return SDL_GetBasePath();
-#endif
 }
 
 /**
  * @brief Get the directory which contains this program.
  *
- * @return Fully-qualified path that ends with a separator or NULL if not found.
- * @note The returning value MUST be freed by the caller.
- */
-
-int8_t* I_GetBaseDir(void) {
-	return SDL_GetBasePath();
-}
+ * @return Fully-qualified path that ends with a separator or NULL if not 
 
 /**
  * @brief Find a regular file in the user-writeable directory.
@@ -270,7 +261,7 @@ int8_t* I_FindDataFile(const int8_t* file) {
 
 	path = (uint8_t*)malloc(512);
 
-	if ((dir = I_GetBaseDir())) {
+	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
 #ifndef _WIN32
 		free(dir);
