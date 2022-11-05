@@ -117,7 +117,7 @@ static dboolean seqready = false;
 // DEFINES
 //
 
-#define MIDI_CHANNELS   64
+#define MIDI_CHANNELS   128
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
