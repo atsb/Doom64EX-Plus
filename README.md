@@ -41,7 +41,6 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 ## Dependencies
 
 * SDL2
-* SDL2_net
 * zlib
 * libpng
 * FluidSynth
@@ -52,9 +51,9 @@ Clone this repo
 
     $ git clone https://github.com/atsb/Doom64EX-Plus
 
-### Linux
+### Linux or Cross Platform Compilation
 
-Use the `build.sh` script for a native build and the `build_win_cross.sh` script for cross compilation for Windows.
+Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
 
 ### Windows
 
@@ -68,7 +67,7 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 * `doom64ex-plus.wad`
 * `doomsnd.sf2`
 
-### Linux
+### Linux 
 
 You can place the asset data described above to any of the following directories:
 
