@@ -1400,12 +1400,12 @@ void M_ChangeSensitivity(int choice) {
 	}
 }
 
-void M_ChangeMouseAccel(int choice) {
-	float slope = 20.0f / 100.0f;
+void M_ChangeMouseAccel(int choice)
+{
 	switch (choice) {
 	case 0:
 		if (v_macceleration.value > 0.0f) {
-			M_SetCvar(&v_macceleration, v_macceleration.value - slope);
+			M_SetCvar(&v_macceleration, v_macceleration.value - 20);
 		}
 		else {
 			CON_CvarSetValue(v_macceleration.name, 0);
@@ -1413,7 +1413,7 @@ void M_ChangeMouseAccel(int choice) {
 		break;
 	case 1:
 		if (v_macceleration.value < 20.0f) {
-			M_SetCvar(&v_macceleration, v_macceleration.value + slope);
+			M_SetCvar(&v_macceleration, v_macceleration.value + 20);
 		}
 		else {
 			CON_CvarSetValue(v_macceleration.name, 20);
@@ -1612,12 +1612,11 @@ void M_ChangeCrosshair(int choice) {
 	M_SetOptionValue(choice, 0, (float)st_crosshairs, 1, &st_crosshair);
 }
 
-void M_ChangeOpacity(int choice) {
-	float slope = 255.0f / 100.0f;
-
+void M_ChangeOpacity(int choice)
+{
 	if (choice) {
 		if (st_crosshairopacity.value < 255.0f) {
-			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value + slope);
+			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value + 255);
 		}
 		else {
 			CON_CvarSetValue(st_crosshairopacity.name, 255);
@@ -1625,7 +1624,7 @@ void M_ChangeOpacity(int choice) {
 	}
 	else {
 		if (st_crosshairopacity.value > 0.0f) {
-			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value - slope);
+			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value - 255);
 		}
 		else {
 			CON_CvarSetValue(st_crosshairopacity.name, 0);
@@ -1977,12 +1976,12 @@ void M_ChangeBrightness(int choice)
 	R_RefreshBrightness();
 }
 
-void M_ChangeGammaLevel(int choice) {
-	float slope = 20.0f / 100.0f;
+void M_ChangeGammaLevel(int choice)
+{
 	switch (choice) {
 	case 0:
 		if (i_gamma.value > 0.0f) {
-			M_SetCvar(&i_gamma, i_gamma.value - slope);
+			M_SetCvar(&i_gamma, i_gamma.value - 20);
 		}
 		else {
 			CON_CvarSetValue(i_gamma.name, 0);
@@ -1990,7 +1989,7 @@ void M_ChangeGammaLevel(int choice) {
 		break;
 	case 1:
 		if (i_gamma.value < 20.0f) {
-			M_SetCvar(&i_gamma, i_gamma.value + slope);
+			M_SetCvar(&i_gamma, i_gamma.value + 20);
 		}
 		else {
 			CON_CvarSetValue(i_gamma.name, 20);
@@ -2286,20 +2285,16 @@ static void M_PasswordDeSelect(void) {
 
 void M_SfxVol(int choice);
 void M_MusicVol(int choice);
-void M_GainOutput(int choice);
 void M_DrawSound(void);
 
 CVAR_EXTERNAL(s_sfxvol);
 CVAR_EXTERNAL(s_musvol);
-CVAR_EXTERNAL(s_gain);
 
 enum {
 	sfx_vol,
 	sfx_empty1,
 	music_vol,
 	sfx_empty2,
-	gain,
-	sfx_empty3,
 	sound_default,
 	sound_return,
 	sound_end
@@ -2310,8 +2305,6 @@ menuitem_t SoundMenu[] = {
 	{-1,"",0},
 	{3,"Music Volume",M_MusicVol,'m'},
 	{-1,"",0},
-	{3,"Gain Output",M_GainOutput,'g'},
-	{-1,"",0},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -2319,14 +2312,12 @@ menuitem_t SoundMenu[] = {
 menudefault_t SoundDefault[] = {
 	{ &s_sfxvol, 80 },
 	{ &s_musvol, 80 },
-	{ &s_gain, 1 },
 	{ NULL, -1 }
 };
 
 menuthermobar_t SoundBars[] = {
 	{ sfx_empty1, 100, &s_sfxvol },
 	{ sfx_empty2, 100, &s_musvol },
-	{ sfx_empty3, 2, &s_gain },
 	{ -1, 0 }
 };
 
@@ -2355,15 +2346,14 @@ void M_Sound(int choice) {
 void M_DrawSound(void) {
 	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 100, s_sfxvol.value);
 	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 100, s_musvol.value);
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (gain + 1), 2, s_gain.value);
 }
 
-void M_SfxVol(int choice) {
-	float slope = 1.0f;
+void M_SfxVol(int choice)
+{
 	switch (choice) {
 	case 0:
 		if (s_sfxvol.value > 0.0f) {
-			M_SetCvar(&s_sfxvol, s_sfxvol.value - slope);
+			M_SetCvar(&s_sfxvol, s_sfxvol.value - 1);
 		}
 		else {
 			CON_CvarSetValue(s_sfxvol.name, 0);
@@ -2371,7 +2361,7 @@ void M_SfxVol(int choice) {
 		break;
 	case 1:
 		if (s_sfxvol.value < 100.0f) {
-			M_SetCvar(&s_sfxvol, s_sfxvol.value + slope);
+			M_SetCvar(&s_sfxvol, s_sfxvol.value + 1);
 		}
 		else {
 			CON_CvarSetValue(s_sfxvol.name, 100);
@@ -2380,12 +2370,12 @@ void M_SfxVol(int choice) {
 	}
 }
 
-void M_MusicVol(int choice) {
-	float slope = 1.0f;
+void M_MusicVol(int choice)
+{
 	switch (choice) {
 	case 0:
 		if (s_musvol.value > 0.0f) {
-			M_SetCvar(&s_musvol, s_musvol.value - slope);
+			M_SetCvar(&s_musvol, s_musvol.value - 1);
 		}
 		else {
 			CON_CvarSetValue(s_musvol.name, 0);
@@ -2393,32 +2383,10 @@ void M_MusicVol(int choice) {
 		break;
 	case 1:
 		if (s_musvol.value < 100.0f) {
-			M_SetCvar(&s_musvol, s_musvol.value + slope);
+			M_SetCvar(&s_musvol, s_musvol.value + 1);
 		}
 		else {
 			CON_CvarSetValue(s_musvol.name, 100);
-		}
-		break;
-	}
-}
-
-void M_GainOutput(int choice) {
-	float slope = 2.0f / 100.0f;
-	switch (choice) {
-	case 0:
-		if (s_gain.value > 0.0f) {
-			M_SetCvar(&s_gain, s_gain.value - slope);
-		}
-		else {
-			CON_CvarSetValue(s_gain.name, 0);
-		}
-		break;
-	case 1:
-		if (s_gain.value < 2.0f) {
-			M_SetCvar(&s_gain, s_gain.value + slope);
-		}
-		else {
-			CON_CvarSetValue(s_gain.name, 2);
 		}
 		break;
 	}
