@@ -190,5 +190,5 @@ int8_t* W_TryFindWADByName(int8_t* filename) {
 
 int8_t* W_FindIWAD(void)
 {
-	return I_FindDataFile("doom64.wad");
+	return I_FindDataFile("DOOM64.WAD");
 }
