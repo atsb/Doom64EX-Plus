@@ -41,7 +41,6 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 ## Dependencies
 
 * SDL2
-~~* SDL2_net~~
 * zlib
 * libpng
 * FluidSynth
