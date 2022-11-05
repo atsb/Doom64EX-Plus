@@ -216,7 +216,7 @@ int8_t* I_GetUserDir(void) {
 #ifdef _WIN32
 	return I_GetBaseDir();
 #else
-	return SDL_GetBasePath("", "doom64ex-plus-save-games");
+	return SDL_GetBasePath();
 #endif
 }
 
