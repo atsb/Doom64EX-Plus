@@ -1,0 +1,12 @@
+Patch File for DeHackEd64
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+Frame 794
+Duration = 1
+
+Frame 795
+Duration = 1

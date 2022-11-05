@@ -1,0 +1,399 @@
+Patch File for DeHackEd64
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+Thing 1 (Player)
+Mass = 1
+
+Thing 2 (Player Bot 1)
+Mass = 1
+
+Thing 3 (Player Bot 2)
+Mass = 1
+
+Thing 4 (Player Bot 3)
+Mass = 1
+
+Thing 5 (Demon)
+Mass = 1
+
+Thing 6 (Spectre)
+Mass = 1
+
+Thing 7 (Mancubus)
+Mass = 1
+
+Thing 8 (Zombieman)
+Mass = 1
+
+Thing 9 (Sargeant)
+Mass = 1
+
+Thing 10 (Imp)
+Mass = 1
+
+Thing 11 (Nightmare Imp)
+Mass = 1
+
+Thing 12 (Cacodemon)
+Mass = 1
+
+Thing 13 (Baron of Hell)
+Mass = 1
+
+Thing 14 (Hell Knight)
+Mass = 1
+
+Thing 15 (Lost Soul)
+Mass = 1
+
+Thing 16 (Arachnotron)
+Mass = 1
+
+Thing 17 (Cyberdemon)
+Mass = 1
+
+Thing 18 (Cyberdemon Title)
+Mass = 1
+
+Thing 19 (Pain Elemental)
+Mass = 1
+
+Thing 20 (Resurrector / Mother Demon)
+Mass = 1
+
+Thing 21 (Camera)
+Mass = 1
+
+Thing 22 (Destination Teleporter)
+Mass = 1
+
+Thing 23 (Destination Projectile)
+Mass = 1
+
+Thing 24 (Fake Item)
+Mass = 1
+
+Thing 25 (Laser Marker)
+Mass = 1
+
+Thing 26 (Rocket Projectile)
+Mass = 1
+
+Thing 27 (Plasma Projectile)
+Mass = 1
+
+Thing 28 (BFG Projectile)
+Mass = 1
+
+Thing 29 (Laser Projectile)
+Mass = 1
+
+Thing 30 (Imp Projectile)
+Mass = 1
+
+Thing 31 (Nightmare Imp Projectile)
+Mass = 1
+
+Thing 32 (Cacodemon Projectile)
+Mass = 1
+
+Thing 33 (Baron of Hell Projectile)
+Mass = 1
+
+Thing 34 (Hell Knight Projectile)
+Mass = 1
+
+Thing 35 (Arachnotron Projectile)
+Mass = 1
+
+Thing 36 (Mancubi Projectile)
+Mass = 1
+
+Thing 37 (Tracer Projectile)
+Mass = 1
+
+Thing 38 (Dart Projectile)
+Mass = 1
+
+Thing 39 (Mother Demon Projectile Ball)
+Mass = 1
+
+Thing 40 (Mother Demon Projectile)
+Mass = 1
+
+Thing 41 (Gray Smoke)
+Mass = 1
+
+Thing 42 (Red Smoke)
+Mass = 1
+
+Thing 43 (Small Smoke)
+Mass = 1
+
+Thing 44 (Blood)
+Mass = 1
+
+Thing 45 (Crushed Gibs)
+Mass = 1
+
+Thing 46 (Teleporter Fog)
+Mass = 1
+
+Thing 47 (BFG Spread)
+Mass = 1
+
+Thing 48 (Armor 1)
+Mass = 1
+
+Thing 49 (Armor 2)
+Mass = 1
+
+Thing 50 (Bonus Health)
+Mass = 1
+
+Thing 51 (Bonus Armor)
+Mass = 1
+
+Thing 52 (Blue Card Key)
+Mass = 1
+
+Thing 53 (Red Card Key)
+Mass = 1
+
+Thing 54 (Yellow Card Key)
+Mass = 1
+
+Thing 55 (Yellow Skull Key)
+Mass = 1
+
+Thing 56 (Red Skull Key)
+Mass = 1
+
+Thing 57 (Blue Skull Key)
+Mass = 1
+
+Thing 58 (Artifact 1)
+Mass = 1
+
+Thing 59 (Artifact 2)
+Mass = 1
+
+Thing 60 (Artifact 3)
+Mass = 1
+
+Thing 61 (Stimpack)
+Mass = 1
+
+Thing 62 (Medkit)
+Mass = 1
+
+Thing 63 (Soul Sphere)
+Mass = 1
+
+Thing 64 (Invulnerability Sphere)
+Mass = 1
+
+Thing 65 (Berserk)
+Mass = 1
+
+Thing 66 (Invisibility Sphere)
+Mass = 1
+
+Thing 67 (Radiation Sphere)
+Mass = 1
+
+Thing 68 (Automap)
+Mass = 1
+
+Thing 69 (Visibility Visor)
+Mass = 1
+
+Thing 70 (Mega Sphere)
+Mass = 1
+
+Thing 71 (Ammo Clip)
+Mass = 1
+
+Thing 72 (Ammo Clip Box)
+Mass = 1
+
+Thing 73 (Ammo Rocket)
+Mass = 1
+
+Thing 74 (Ammo Rocket Box)
+Mass = 1
+
+Thing 75 (Ammo Cell)
+Mass = 1
+
+Thing 76 (Ammo Cell Pack)
+Mass = 1
+
+Thing 77 (Ammo Shell)
+Mass = 1
+
+Thing 78 (Ammo Shell Box)
+Mass = 1
+
+Thing 79 (Ammo Back Pack)
+Mass = 1
+
+Thing 80 (Weapon BFG)
+Mass = 1
+
+Thing 81 (Weapon Chainsaw)
+Mass = 1
+
+Thing 82 (Weapon Chaingun)
+Mass = 1
+
+Thing 83 (Weapon Rocket Launcher)
+Mass = 1
+
+Thing 84 (Weapon Plasma Gun)
+Mass = 1
+
+Thing 85 (Weapon Shotgun)
+Mass = 1
+
+Thing 86 (Weapon Super Shotgun)
+Mass = 1
+
+Thing 87 (Weapon Umaker)
+Mass = 1
+
+Thing 88 (Prop Fire)
+Mass = 1
+
+Thing 89 (Prop Candle)
+Mass = 1
+
+Thing 90 (Prop Barrel)
+Mass = 1
+
+Thing 91 (Explosion 1)
+Mass = 1
+
+Thing 92 (Explosion 2)
+Mass = 1
+
+Thing 93 (Prop Tech Lamp 1)
+Mass = 1
+
+Thing 94 (Prop Tech Lamp 2)
+Mass = 1
+
+Thing 95 (Prop Blue Torch)
+Mass = 1
+
+Thing 96 (Prop Yellow Torch)
+Mass = 1
+
+Thing 97 (Prop Red Torch)
+Mass = 1
+
+Thing 98 (Prop Pole Long)
+Mass = 1
+
+Thing 99 (Prop Pole Short)
+Mass = 1
+
+Thing 100 (Prop Fire Blue)
+Mass = 1
+
+Thing 101 (Prop Fire Red)
+Mass = 1
+
+Thing 102 (Prop Fire Yellow)
+Mass = 1
+
+Thing 103 (Gib Meat Stick)
+Mass = 1
+
+Thing 104 (Gib Meat Hang)
+Mass = 1
+
+Thing 105 (Gib Torso Hang)
+Mass = 1
+
+Thing 106 (Gib Ribs Floor)
+Mass = 1
+
+Thing 107 (Gib Twitching Floor)
+Mass = 1
+
+Thing 108 (Gib Blood Pool)
+Mass = 1
+
+Thing 109 (Gib Bones Floor)
+Mass = 1
+
+Thing 110 (Gib Meat Ribs Floor)
+Mass = 1
+
+Thing 111 (Gib Meat Ribs Cage)
+Mass = 1
+
+Thing 112 (Gib Chain Hook)
+Mass = 1
+
+Thing 113 (Gib Hang Cage)
+Mass = 1
+
+Thing 114 (Gib Chain Pinser)
+Mass = 1
+
+Thing 115 (Gib Chain Arm)
+Mass = 1
+
+Thing 116 (Gib Hang Mace 1)
+Mass = 1
+
+Thing 117 (Gib Head Stick 1)
+Mass = 1
+
+Thing 118 (Gib Head Stick 2)
+Mass = 1
+
+Thing 119 (Gib Double Meat Stick)
+Mass = 1
+
+Thing 120 (Prop Statue 1)
+Mass = 1
+
+Thing 121 (Prop Statue 2)
+Mass = 1
+
+Thing 122 (Prop Tech Pole Long)
+Mass = 1
+
+Thing 123 (Prop Tech Pole Short)
+Mass = 1
+
+Thing 124 (Prop Tree Stump Small)
+Mass = 1
+
+Thing 125 (Prop Tree Stump Large)
+Mass = 1
+
+Thing 126 (Prop Tree)
+Mass = 1
+
+Thing 127 (Prop Bloody Pole)
+Mass = 1
+
+Thing 128 (Gib Hang Mace 2)
+Mass = 1
+
+Thing 129 (Gib Hang White Meat)
+Mass = 1
+
+Thing 130 (Gib Hang Head)
+Mass = 1
+
+Thing 131 (Gib Hang Ribs)
+Mass = 1

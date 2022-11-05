@@ -1,0 +1,36 @@
+Patch File for DeHackEd64
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+Weapon 0 (Fists)
+Ammo type = 5
+
+Weapon 1 (Pistol)
+Ammo type = 5
+
+Weapon 2 (Shotgun)
+Ammo type = 5
+
+Weapon 3 (Chaingun)
+Ammo type = 5
+
+Weapon 4 (Rocket Launcher)
+Ammo type = 5
+
+Weapon 5 (Plasma Gun)
+Ammo type = 5
+
+Weapon 6 (BFG 9000)
+Ammo type = 5
+
+Weapon 7 (Chainsaw)
+Ammo type = 5
+
+Weapon 8 (Super Shotgun)
+Ammo type = 5
+
+Weapon 9 (Unmaker)
+Ammo type = 5

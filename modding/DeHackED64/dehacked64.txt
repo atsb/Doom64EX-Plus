@@ -1,0 +1,21 @@
+Welcome to DeHackED64
+
+DeHackED64 was created to bring the joys of modding Doom to the Doom64 community in the form of DOOM64EX+ and DeHacked64.
+
+This directory serves as both an example of usage and of documentation.
+
+Directories:
+
+Things: This is the complete list of all 'things' in DOOM64 along with their ID and Name.
+Weapons: This is the complete list of all 'weapons' in DOOM64 along with their ID and Name.
+States: This is a list of all popular states and frames.  This is not an exhaustive list as many things
+	such as torches or poles are static entities and do not affect gameplay much.  However
+	these states will slowly be documented.  It takes quite some time to generate this information.
+
+	The files in this States directory are also examples of 'fast attacks'.  So all monsters, all weapons have
+	their frames increased in speed.  Again, as an example and documentation.
+Misc:  This is the complete list of all Misc options available and examples of giving ammo and extra health, etc..
+
+I hope you enjoy DeHackEd64!
+
+~ Gibbon
