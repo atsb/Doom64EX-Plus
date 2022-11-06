@@ -768,14 +768,14 @@ void ST_Drawer(void) {
 		if (st_drawhud.value == 1) {
 			//Draw Ammo counter
 			if (weaponinfo[plyr->readyweapon].ammo != am_noammo) {
-				Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, REDALPHA(0x7f));
+				Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, REDALPHA(0x9f));
 			}
 
 			//Draw Health
-			Draw_Number(49, 215, plyr->health, 0, REDALPHA(0x7f));
+			Draw_Number(49, 215, plyr->health, 0, REDALPHA(0x9f));
 
 			//Draw Armor
-			Draw_Number(271, 215, plyr->armorpoints, 0, REDALPHA(0x7f));
+			Draw_Number(271, 215, plyr->armorpoints, 0, REDALPHA(0x9f));
 		}
 		// arranged hud layout
 		else if (st_drawhud.value >= 2) {
@@ -824,16 +824,16 @@ void ST_Drawer(void) {
 			GL_SetOrthoScale(0.5f);
 
 			//Draw Health
-			Draw_Number(96, 448, plyr->health, 2, REDALPHA(0xC0));
-			Draw_BigText(104, 450, REDALPHA(0xC0), "%");
+			Draw_Number(96, 448, plyr->health, 2, REDALPHA(0xC2));
+			Draw_BigText(104, 450, REDALPHA(0xC2), "%");
 
 			//Draw Armor
-			Draw_Number(96, 424, plyr->armorpoints, 2, REDALPHA(0xC0));
-			Draw_BigText(104, 426, REDALPHA(0xC0), "%");
+			Draw_Number(96, 424, plyr->armorpoints, 2, REDALPHA(0xC2));
+			Draw_BigText(104, 426, REDALPHA(0xC2), "%");
 
 			//Draw Ammo counter
 			if (weaponinfo[wpn].ammo != am_noammo) {
-				Draw_Number(550, 448, plyr->ammo[weaponinfo[wpn].ammo], 1, REDALPHA(0xC0));
+				Draw_Number(550, 448, plyr->ammo[weaponinfo[wpn].ammo], 1, REDALPHA(0xC2));
 			}
 
 			GL_SetOrthoScale(1.0f);
