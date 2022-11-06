@@ -233,6 +233,7 @@ int8_t* I_GetUserDir(void)
  *  but are needed for Unix systems to even boot the game.
  *  whatever...  eventually we will clean up this mess and have
  *  portable fixed width types everywhere...  one day.
+ *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
  */
 int8_t* I_GetUserFile(const int8_t* file) {
 	uint8_t* path, * userdir;
@@ -243,10 +244,13 @@ int8_t* I_GetUserFile(const int8_t* file) {
 	path = (uint8_t*)malloc(512);
 
 	snprintf(path, 511, "%s%s", userdir, file);
-#ifndef _WIN32
-	free(userdir);
-#endif
 
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
+	free(userdir);
+#else
+	SDL_free(userdir);
+#endif
 	return path;
 }
 
@@ -263,8 +267,11 @@ int8_t* I_FindDataFile(const int8_t* file) {
 
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
-#ifndef _WIN32
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
 		free(dir);
+#else
+		SDL_free(dir);
 #endif
 		if (I_FileExists(path))
 			return path;
@@ -272,9 +279,13 @@ int8_t* I_FindDataFile(const int8_t* file) {
 
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
-#ifndef _WIN32
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
 		free(dir);
+#else
+		SDL_free(dir);
 #endif
+
 		if (I_FileExists(path))
 			return path;
 	}
@@ -300,9 +311,14 @@ int8_t* I_FindDataFile(const int8_t* file) {
 		}
 	}
 #endif
-#ifndef _WIN32
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
 	free(path);
+#else
+	SDL_free(path);
 #endif
+	
+
 	return NULL;
 }
 
