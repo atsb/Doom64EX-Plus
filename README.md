@@ -78,7 +78,7 @@ Then, you can start playing:
 
     $ doom64ex-plus
 
-**NOTE for Linux users:** As of Nov. 5, 2022, the save data is located in `usr/local/share/doom64ex-plus` and not in `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.
+**NOTE for Linux users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.
 
 ### Windows
 
