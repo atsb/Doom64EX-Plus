@@ -1981,7 +1981,7 @@ void M_ChangeGammaLevel(int choice)
 	switch (choice) {
 	case 0:
 		if (i_gamma.value > 0.0f) {
-			M_SetCvar(&i_gamma, i_gamma.value - 20);
+			M_SetCvar(&i_gamma, i_gamma.value - 1);
 		}
 		else {
 			CON_CvarSetValue(i_gamma.name, 0);
@@ -1989,7 +1989,7 @@ void M_ChangeGammaLevel(int choice)
 		break;
 	case 1:
 		if (i_gamma.value < 20.0f) {
-			M_SetCvar(&i_gamma, i_gamma.value + 20);
+			M_SetCvar(&i_gamma, i_gamma.value + 1);
 		}
 		else {
 			CON_CvarSetValue(i_gamma.name, 20);
