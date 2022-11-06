@@ -534,7 +534,7 @@ static void CalcViewSize(void) {
 // GetVersionInt
 // Borrowed from prboom+
 //
-
+//TODO Wolf3s: Support more versions like 4.6
 typedef enum {
 	OPENGL_VERSION_1_0,
 	OPENGL_VERSION_1_1,
@@ -660,10 +660,6 @@ void GL_Init(void) {
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
-
-#ifdef _WIN32
-	wglSwapIntervalEXT(v_vsync.value);
-#else
+	//TODO Wolf3s: Remove some SDL_GL...
 	SDL_GL_SetSwapInterval(v_vsync.value);
-#endif
 }
