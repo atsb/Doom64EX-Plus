@@ -1,8 +1,8 @@
-.TH DOOM64EX "6" "January 2012" "Doom64EX" "Games"
+.TH DOOM64EX-Plus "19" "June 2022" "Doom64EX-Plus" "Games"
 .SH NAME
-doom64ex \- recreation of Midway's Doom64 for modern operating systems.
+doom64ex-plus \- Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 .SH SYNOPSIS
-.B doom64ex
+.B doom64ex-plus
 [\fIoptions...\fR]
 .P
 \fBdoom64ex\-wadgen\fR \fI<rom\-file>\fR
@@ -12,9 +12,9 @@ Doom 64 is a unofficial sequel to Doom II for the Nintendo 64.
 \fBdoom64ex\fR faithful recreation of the original game using the Doom source
 code as the base.
 .P
-\fBdoom64ex\fR requires the data (aka WAD)
+\fBdoom64ex-plus\fR requires the data (aka WAD)
 files from the original game. These must be extracted from the Nintendo 64 ROM
-image, using the \fBdoom64ex\-wadgen\fR tool (see \fBDATA FILES\fR, below).
+image, using the \fBdoom64ex-plus\-wadgen\fR tool (see \fBDATA FILES\fR, below).
 .SH OPTIONS
 .SS File Options
 .TP
@@ -26,7 +26,7 @@ Add a PWAD (patch WAD). Used for custom levels, music, etc.
 .TP
 \fB\-config\fR \fI<configfile>\fR
 Use \fIconfigfile\fR instead of the default config file (which is
-\fI~/.doom64ex/config.cfg\fR).
+\fI~/.doom64ex-plus/config.cfg\fR).
 .SS Game Options
 .TP
 \fB\-warp\fR \fI<level>\fR
@@ -109,15 +109,15 @@ Connect to a game hosted by the server.
 Specify network UDP port for \fB\-connect\fR or \fB\-server\fR options. Default
 port is 2342.
 .SH DATA FILES
-\fBdoom64ex\fR (and Doom\-related games in general) load all game resources
+\fBdoom64ex-plus\fR (and Doom\-related games in general) load all game resources
 such as graphics and levels from a file known as an IWAD file. In
 addition, \fBdoom64ex\fR loads its sounds from a SoundFont file.
 .P
 Since Doom 64 is a Nintendo 64 game, the WAD and SF2 files must be generating
-by extracting the data from a Nintendo 64 ROM image. \fBdoom64ex\fR ships
-with a utility called \fBdoom64ex\-wadgen\fR which does this. Usage:
+by extracting the data from a Nintendo 64 ROM image. \fBdoom64ex-plus\fR ships
+with a utility called \fBdoom64ex-plus\-wadgen\fR which does this. Usage:
 .P
-\fBdoom64ex\-wadgen\fR \fI<rom\-file>\fR
+\fBdoom64ex-plus\-wadgen\fR \fI<rom\-file>\fR
 .P
 \fI<rom\-file>\fR must be a Doom64 ROM image, in .z64 format. The files \fRDOOM64.WAD\fB
 and \fRDOOMSND.SF2\fR will be created in the current directory.
@@ -128,13 +128,13 @@ found in \fI/usr/share/games/doom64\fR, \fI/usr/local/share/games/doom64\fR,
 or in the current directory where \fBdoom64ex\fR is started.
 .SH OTHER FILES
 .TP
-\fB~/.doom64ex/\fR
+\fB~/.doom64ex-plus/\fR
 Config file \fBconfig.cfg\fR is located here. Will be created if it
 doesn't already exist. Also, saved games are stored here, as \fBdoomsav\fR\fIn\fR\fB.dsg\fR,
 where \fIn\fR is the save slot, numbered 0 to 7.
 .SH SEE ALSO
-The main \fBdoom64ex\fR documentation is supplied with the source code, and is
-usually installed in /usr/share/doc/doom64ex on most Linux systems.
+The main \fBdoom64ex-plus\fR documentation is supplied with the source code, and is
+usually installed in /usr/share/doc/doom64ex-plus on most Linux systems.
 .SH AUTHORS
 Doom was originally written by id software; when playing with any id main
 wad file, you can see their list of credits, which includes the list of
@@ -143,32 +143,36 @@ others to work on improving the game.
 .P
 In October 1999, id Software re\-released the Doom source code under the
 GNU General Public License.
-.P
-Samuel 'Kaiser' Villarreal <svkaiser@gmail.com>
 .br
-Doom64 EX Author
+Samuel 'Kaiser' Villarreal <svkaiser@gmail.com>
 .P
+Doom64 EX Author
 Paul Brook
 .br
-Author of the Doom3D source port in which Doom64 EX was originally based off of.
+Doom64 EX-Plus Author
+Gibbon 'atsb'
 .P
-James 'Quasar' Haley <haleyjd@hotmail.com>
+DoomEX-Plus Contribuitors
+André Guilherme 'Wolf3s', Thekovic and Erick Vásquez García 'Erick194'
+Author of the Doom3D source port in which Doom64 EX was originally based off of.
 .br
+James 'Quasar' Haley <haleyjd@hotmail.com>
+.P
 For providing wisdom when it comes to working with all the backend stuff such as
 Doom's zone memory allocator. Also provided the macro script compiler utility.
-.P
+.br
 Simon 'Fraggle' Howard
-.br
+.P
 Networking system
-.P
+.br
 Lee Killough
-.br
+.P
 For just about anything that fixed all of Doom's mistakes, bugs, and errors.
-.P
+.br
 Team TNT
-.br
-For all Boom related enhancements and fixes.
 .P
-B. Watson <yalhcru@gmail.com>
+For all Boom related enhancements and fixes.
 .br
+B. Watson <yalhcru@gmail.com>
+.P
 Linux port and various minor bugfixes.
