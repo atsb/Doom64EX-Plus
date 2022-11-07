@@ -30,9 +30,9 @@
 	https://learnopengl.com/Getting-started/Shaders
 */
 
-extern GLuint ID;
-void LoadShader(const char* textureShader, const char* fragmentShader);
-void DestroyShaders(const char* textureShader, const char* fragmentShader);
-dboolean CheckShaderErrors(GLuint shader, GLenum type);
+GLuint ID;
+void GL_LoadShader(const char* textureShader, const char* fragmentShader);
+void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
+dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
 
 #endif //__GL_SHADER__H

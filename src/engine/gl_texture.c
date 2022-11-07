@@ -2,7 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-//
+// Copyright(C) 2022 André Gulherme
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -32,6 +32,7 @@
 #include "z_zone.h"
 #include "gl_texture.h"
 #include "gl_main.h"
+#include "gl_shader.h"
 #include "p_spec.h"
 #include "p_local.h"
 #include "con_console.h"
@@ -241,7 +242,6 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 //
 // GL_SetNewPalette
 //
-
 void GL_SetNewPalette(int id, byte palID) {
 	palettetranslation[id] = palID;
 	/*if(textureptr[id])
