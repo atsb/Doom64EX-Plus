@@ -214,7 +214,27 @@ ticcmd_t* I_BaseTiccmd(void) {
 
 int8_t* I_GetUserDir(void) 
 {
+#ifdef DEFAULT_DIR_ENVVAR && !_WIN32
+  else
+	{					     /* no args given */
+	const char* default_dir;
+	if ((default_dir = getenv(DEFAULT_DIR_ENVVAR)))
+	{
+		if (chdir(default_dir))
+		{
+			fprintf(stderr, "WARNING: Could not change to default directory ($%s = %s)\n", DEFAULT_DIR_ENVVAR, default_dir);
+			perror("chdir");
+		}
+		else
+		{
+			fprintf(stderr, "INFO: Using default directory %s (environment variable %s)\n", default_dir, DEFAULT_DIR_ENVVAR);
+		}
+	}
+  }
+    return default_dir;
+#else  /* def DEFAULT_DIR_ENVVAR */
 	return SDL_GetBasePath();
+#endif
 }
 
 /**
