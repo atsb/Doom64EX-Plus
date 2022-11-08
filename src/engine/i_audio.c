@@ -48,19 +48,8 @@
 #include "i_swap.h"
 #include "con_console.h"    // for cvars
 
-// 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
-
-// 20120203 villsa - cvar for audio driver
-#ifdef _WIN32
-CVAR_CMD(s_driver, dsound)
-#elif __linux__
-CVAR_CMD(s_driver, pulseaudio)
-#elif __APPLE__
-CVAR_CMD(s_driver, coreaudio)
-#else
-CVAR_CMD(s_driver, sndio)
-#endif
+CVAR_CMD(s_driver, DEFAULT_FLUID_DRIVER)
 {
 	int8_t* driver = cvar->string;
 
