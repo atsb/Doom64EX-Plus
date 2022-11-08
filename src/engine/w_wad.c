@@ -329,7 +329,7 @@ void W_Init(void) {
 		I_Error("W_Init: doom64ex-plus.wad not found");
 	}
 
-	p = M_CheckParm("-file", 1);
+	p = M_CheckParm("-file");
 	if (p)
 	{
 		// the parms after p are wadfile/lump names,
