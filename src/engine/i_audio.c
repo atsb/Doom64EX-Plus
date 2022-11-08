@@ -1249,7 +1249,7 @@ void I_InitSequencer(void) {
 			sffound = true;
 		}
 		else {
-			CON_Warnf("CVar s_soundfont doesn't point to a file.", s_soundfont.string);
+			CON_Warnf("CVar s_soundfont doesn't point to a file.\n", s_soundfont.string);
 		}
 	}
 
