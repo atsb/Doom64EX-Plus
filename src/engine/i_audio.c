@@ -49,7 +49,7 @@
 #include "con_console.h"    // for cvars
 
 // 20120203 villsa - cvar for soundfont location
-CVAR(s_soundfont, DOOMSND.SF2);
+CVAR(s_soundfont, doomsnd.sf2);
 
 // 20120203 villsa - cvar for audio driver
 #ifdef _WIN32
