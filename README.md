@@ -38,6 +38,8 @@ No other changes are needed.
 
 For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
 
+## [Discord server](https://discord.gg/Ktxz8nz)
+
 ## Dependencies
 
 * SDL2
