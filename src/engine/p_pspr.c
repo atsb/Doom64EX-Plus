@@ -604,17 +604,15 @@ void P_GunShot(mobj_t* mo, dboolean accurate) {
 //
 // A_FirePistol
 //
-void A_FirePistol(player_t* player, pspdef_t* psp) {
+void A_FirePistol(player_t* player, pspdef_t* psp)
+{
 	S_StartSound(player->mo, sfx_pistol);
 
-	P_SetMobjState(player->mo, S_PLAY_ATK2);
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
-	P_SetPsprite(player,
-		ps_flash,
-		weaponinfo[player->readyweapon].flashstate);
-
+	P_SetPsprite(player, ps_flash, weaponinfo[player->readyweapon].flashstate);
 	P_BulletSlope(player->mo);
+
 	P_GunShot(player->mo, !player->refire);
 }
 
@@ -628,14 +626,10 @@ void A_FireShotgun(player_t* player, pspdef_t* psp) {
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
-
-	P_SetPsprite(player,
-		ps_flash,
-		weaponinfo[player->readyweapon].flashstate);
-
-	P_BulletSlope(player->mo);
-
 	player->recoilpitch = RECOILPITCH;
+
+	P_SetPsprite(player,ps_flash,weaponinfo[player->readyweapon].flashstate);
+	P_BulletSlope(player->mo);
 
 	for (i = 0; i < 7; i++) {
 		P_GunShot(player->mo, false);
