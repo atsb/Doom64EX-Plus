@@ -56,6 +56,7 @@
 #include "md5.h"
 
 #include "w_wad.h"
+#include "w_file.h"
 
 //
 // GLOBALS
@@ -145,121 +146,6 @@ static void W_HashLumps(void) {
 		lumpinfo[i].next = lumpinfo[hash].index;
 		lumpinfo[hash].index = i;
 	}
-}
-
-//
-// LUMP BASED ROUTINES.
-//
-
-//
-// W_Init
-//
-
-void W_Init(void) {
-	int8_t* iwad;
-	int8_t* doom64expluswad;
-	wadinfo_t       header;
-	lumpinfo_t* lump_p;
-	int             i;
-	wad_file_t* wadfile;
-	int             length;
-	int             startlump;
-	filelump_t* fileinfo;
-	filelump_t* filerover;
-	int             p;
-
-	// open the file and add to directory
-	iwad = W_FindIWAD();
-
-	if (iwad == NULL) {
-		I_Error("W_Init: IWAD not found");
-	}
-
-	wadfile = W_OpenFile(iwad);
-
-	W_Read(wadfile, 0, &header, sizeof(header));
-
-	if (dstrnicmp(header.identification, "IWAD", 4)) {
-		I_Error("W_Init: Invalid main IWAD id");
-	}
-
-	numlumps = 0;
-	lumpinfo = (lumpinfo_t*)malloc(1); // Will be realloced as lumps are added
-
-	startlump = numlumps;
-
-	header.numlumps = LONG(header.numlumps);
-	header.infotableofs = LONG(header.infotableofs);
-	length = header.numlumps * sizeof(filelump_t);
-	fileinfo = (filelump_t*)Z_Malloc(length, PU_STATIC, 0);
-
-	W_Read(wadfile, header.infotableofs, fileinfo, length);
-	numlumps += header.numlumps;
-
-	// Fill in lumpinfo
-	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
-	dmemset(lumpinfo, 0, numlumps * sizeof(lumpinfo_t));
-
-	if (!lumpinfo) {
-		I_Error("W_Init: Couldn't realloc lumpinfo");
-	}
-
-	lump_p = &lumpinfo[startlump];
-	filerover = fileinfo;
-
-	for (i = startlump; i < numlumps; i++, lump_p++, filerover++) {
-		lump_p->wadfile = wadfile;
-		lump_p->position = LONG(filerover->filepos);
-		lump_p->size = LONG(filerover->size);
-		lump_p->cache = NULL;
-		dmemcpy(lump_p->name, filerover->name, 8);
-	}
-
-	if (!numlumps) {
-		I_Error("W_Init: no files found");
-	}
-
-	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
-
-	Z_Free(fileinfo);
-
-	if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
-		W_MergeFile(doom64expluswad);
-		free(doom64expluswad);
-	}
-	else {
-		I_Error("W_Init: doom64ex-plus.wad not found");
-	}
-
-	p = M_CheckParm("-file");
-	if (p) {
-		// the parms after p are wadfile/lump names,
-		// until end of parms or another - preceded parm
-		while (++p != myargc && myargv[p][0] != '-') {
-			int8_t* filename;
-			if ((filename = I_FindDataFile(myargv[p]))) {
-				W_MergeFile(filename);
-				free(filename);
-			}
-			else {
-				W_MergeFile(myargv[p]);
-			}
-		}
-	}
-	// 20120724 villsa - find drag & drop wad files
-	else {
-		for (i = 1; i < myargc; i++) {
-			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
-				int8_t* filename;
-				if ((filename = I_FindDataFile(myargv[i]))) {
-					W_MergeFile(filename);
-					free(filename);
-				}
-			}
-		}
-	}
-
-	W_HashLumps();
 }
 
 //
@@ -357,6 +243,118 @@ wad_file_t* W_AddFile(int8_t* filename) {
 	W_HashLumps();
 
 	return wadfile;
+}
+
+//
+// LUMP BASED ROUTINES.
+//
+
+//
+// W_Init
+//
+
+void W_Init(void) {
+	int8_t* iwad;
+	int8_t* doom64expluswad;
+	wadinfo_t       header;
+	lumpinfo_t* lump_p;
+	int             i;
+	wad_file_t* wadfile;
+	int             length;
+	int             startlump;
+	filelump_t* fileinfo;
+	filelump_t* filerover;
+	int             p;
+
+	// open the file and add to directory
+	iwad = W_FindIWAD();
+
+	if (iwad == NULL) {
+		I_Error("W_Init: IWAD not found");
+	}
+
+	wadfile = W_OpenFile(iwad);
+
+	W_Read(wadfile, 0, &header, sizeof(header));
+
+	if (dstrnicmp(header.identification, "IWAD", 4)) {
+		I_Error("W_Init: Invalid main IWAD id");
+	}
+
+	numlumps = 0;
+	lumpinfo = (lumpinfo_t*)malloc(1); // Will be realloced as lumps are added
+
+	startlump = numlumps;
+
+	header.numlumps = LONG(header.numlumps);
+	header.infotableofs = LONG(header.infotableofs);
+	length = header.numlumps * sizeof(filelump_t);
+	fileinfo = (filelump_t*)Z_Malloc(length, PU_STATIC, 0);
+
+	W_Read(wadfile, header.infotableofs, fileinfo, length);
+	numlumps += header.numlumps;
+
+	// Fill in lumpinfo
+	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
+	dmemset(lumpinfo, 0, numlumps * sizeof(lumpinfo_t));
+
+	if (!lumpinfo) {
+		I_Error("W_Init: Couldn't realloc lumpinfo");
+	}
+
+	lump_p = &lumpinfo[startlump];
+	filerover = fileinfo;
+
+	for (i = startlump; i < numlumps; i++, lump_p++, filerover++) {
+		lump_p->wadfile = wadfile;
+		lump_p->position = LONG(filerover->filepos);
+		lump_p->size = LONG(filerover->size);
+		lump_p->cache = NULL;
+		dmemcpy(lump_p->name, filerover->name, 8);
+	}
+
+	if (!numlumps) {
+		I_Error("W_Init: no files found");
+	}
+
+	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
+
+	Z_Free(fileinfo);
+
+	if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
+		W_MergeFile(doom64expluswad);
+		free(doom64expluswad);
+	}
+	else {
+		I_Error("W_Init: doom64ex-plus.wad not found");
+	}
+
+	p = M_CheckParm("-file", 1);
+	if (p)
+	{
+		// the parms after p are wadfile/lump names,
+		// until end of parms or another - preceded parm
+		while (++p != myargc && myargv[p][0] != '-')
+		{
+			int8_t* filename;
+			filename = W_TryFindWADByName(myargv[p]);
+			W_MergeFile(filename);
+			free(filename);
+		}
+	}
+	// 20120724 villsa - find drag & drop wad files
+	else {
+		for (i = 1; i < myargc; i++) {
+			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
+				int8_t* filename;
+				if ((filename = I_FindDataFile(myargv[i]))) {
+					W_MergeFile(filename);
+					free(filename);
+				}
+			}
+		}
+	}
+	W_HashLumps();
 }
 
 static dboolean nonmaplump = false;
