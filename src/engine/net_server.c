@@ -40,7 +40,7 @@
 #include "net_loop.h"
 #include "net_packet.h"
 #include "net_server.h"
-#include "net_structrw.h"
+#include "net_structure.h"
 
 typedef enum
 {

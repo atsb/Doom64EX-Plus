@@ -24,6 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "gl_shader.h"
 #include "doomstat.h"
 #include "r_local.h"
 #include "i_png.h"
@@ -32,7 +33,6 @@
 #include "z_zone.h"
 #include "gl_texture.h"
 #include "gl_main.h"
-#include "gl_shader.h"
 #include "p_spec.h"
 #include "p_local.h"
 #include "con_console.h"
@@ -210,12 +210,11 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	// create a new texture
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
-#ifdef TODO
-        GL_LoadShaders("test.vert", "test.frag");
+#ifdef WIP
+    GL_LoadShader("GLSL/test.vert", "GLSL/test.frag");
 	GLuint VBO, VAO;
 	glGenVertexArrays(1, VAO);
 	glGenBuffers(1, VBO);
-	glGenBuffers(1, &EBO);
 	glBindVertexArray(VAO); 
 	//glBindBuffer(GL_ARRAY_BUFFER, VBO); glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -231,10 +230,10 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-#ifdef TODO
+#ifdef WIP
 	glUseProgram(ID);
+	glDeleteProgram(ID);
 #endif
-
 	GL_CheckFillMode();
 	GL_SetTextureFilter();
 

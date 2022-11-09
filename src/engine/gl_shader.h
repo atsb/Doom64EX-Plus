@@ -21,8 +21,9 @@
 
 #ifndef __GL_SHADER__H
 #define __GL_SHADER__H
-#include "doomtype.h"
 #include <glew.h>
+#include "doomtype.h"
+
 
 /*
 	Based on the following references:

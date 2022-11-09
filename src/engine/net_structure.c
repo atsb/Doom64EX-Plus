@@ -27,7 +27,7 @@
 #include "doomdef.h"
 
 #include "net_packet.h"
-#include "net_structrw.h"
+#include "net_structure.h"
 
 void NET_WriteSettings(net_packet_t* packet, net_gamesettings_t* settings)
 {

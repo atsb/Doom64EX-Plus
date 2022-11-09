@@ -21,40 +21,34 @@
 
 #include "gl_shader.h"
 #include <stdio.h> 
-#include <fnctl.h> //open();, read(); and etc
+#include <fcntl.h> //open();, read(); and etc
 GLuint ID;
 
 void GL_LoadShader(const char* textureShader, const char* fragmentShader) 
 {
-	const char* textureShaderCode;
-	const char* fragmentShaderCode;
-	const char* GLSL_DIR = "GLSL/";
-	//Open the dir GLSL/.
-	int fd = open(GLSL_DIR, O_RWDIR);
-        read(fd, textureShader, sizeof(textureShader));
-	open(fd, fragmentShader, sizeof(fragmentShaderL));
-       //TODO: Add switch case for detect errors in opening file.
-       //
+	const char *textureShaderCode;
+	const char *fragmentShaderCode;
+
 	//Open the shader file.
 	FILE* textureShaderFile = fopen(textureShader, "rb");
 	FILE* fragmentShaderFile = fopen(fragmentShader, "rb");
 
 	//read the shaders code
 	fread(textureShaderCode, sizeof(textureShaderCode), 1, textureShaderFile);
-	fread(fragmentShaderCode, sizeof(fragmentShaderCode), 2, fragmentShaderFile);
+	fread(fragmentShaderCode, sizeof(fragmentShaderCode), 1, fragmentShaderFile);
 
 	if(!textureShaderFile)
 	{
 		printf("Failed to load the texture shader, error: %lu", glGetError());
-         return fclose(textureShaderFile);
+       return fclose(textureShaderFile);
 	}
+
 	else
 	{
 	   
-           fseek(textureShaderfile, sizeof(textureShaderCode, SEEK_SET);
-	   fssek(textureShaderFile, sizeof(textireShaderFile, SEEK_END);
-	     return ftell(textureShaderFile);
-	
+       fseek(textureShaderFile, sizeof(textureShaderCode), SEEK_SET);
+	   fseek(textureShaderFile, sizeof(textureShaderCode), SEEK_END);
+	   return ftell(textureShaderFile);
 	}
 	if(!fragmentShaderFile)
 	{
@@ -64,9 +58,9 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader)
 
 	else
 	{
-           fseek(fragentShaderFile, sizeof(fragmentShaderCode, SEEK_SET);
+       fseek(fragmentShaderFile, sizeof(fragmentShaderCode), SEEK_SET);
 	   fseek(fragmentShaderFile, sizeof(fragmentShaderCode), SEEK_END);
-	   return ftell(fragmemtShaderFile);
+	   return ftell(fragmentShaderFile);
 	}
 	
 	const char* tShaderCode = textureShaderCode;
@@ -74,10 +68,10 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader)
 
 	//Compile the code.
 	uint32 texture, fragment;
-	texture = glCreateShader(GL_TEXTURE_SHADER_NV);
+	texture = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(texture, 1, tShaderCode, NULL);
 	glCompileShader(texture);
-	GL_CheckShaderErrors(texture, GL_TEXTURE_SHADER_NV);
+	GL_CheckShaderErrors(texture, GL_VERTEX_SHADER);
 
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 2, fShaderCode, NULL);
@@ -91,8 +85,6 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader)
 	glAttachShader(ID, texture);
 	glAttachShader(ID, fragment);
 	glLinkProgram(ID);
-	//glUseProgram(ID);
-	//glDeleteProgram(ID);
 	GL_CheckShaderErrors(ID, GL_PROGRAM);
 }
 
@@ -109,7 +101,7 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 
 	switch(type)
 	{
-		case GL_TEXTURE_SHADER_NV:
+		case GL_VERTEX_SHADER:
 		{
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 			if (!success)

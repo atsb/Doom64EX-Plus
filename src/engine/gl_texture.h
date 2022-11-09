@@ -25,7 +25,7 @@
 #define __GL_TEXTURE_H__
 
 #include "gl_main.h"
-#include "gl_shader.h"
+
 extern int                  curtexture;
 extern int                  cursprite;
 extern int                    curtrans;
