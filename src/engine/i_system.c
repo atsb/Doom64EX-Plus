@@ -28,6 +28,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifndef _WIN32
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#endif
+
 #ifdef _WIN32
 #include <direct.h>
 #include <io.h>
