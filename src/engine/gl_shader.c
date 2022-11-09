@@ -91,8 +91,8 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader)
 	glAttachShader(ID, texture);
 	glAttachShader(ID, fragment);
 	glLinkProgram(ID);
-	glUseProgram(ID);
-	glDeleteProgram(ID);
+	//glUseProgram(ID);
+	//glDeleteProgram(ID);
 	GL_CheckShaderErrors(ID, GL_PROGRAM);
 }
 

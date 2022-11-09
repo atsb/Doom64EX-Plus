@@ -210,13 +210,30 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	// create a new texture
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
-
+#ifdef TODO
+        GL_LoadShaders("test.vert", "test.frag");
+	GLuint VBO, VAO;
+	glGenVertexArrays(1, VAO);
+	glGenBuffers(1, VBO);
+	glGenBuffers(1, &EBO);
+	glBindVertexArray(VAO); 
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO); glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
+	glBindVertexArray(0); 
+#endif
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+#ifdef TODO
+	glUseProgram(ID);
+#endif
 
 	GL_CheckFillMode();
 	GL_SetTextureFilter();
