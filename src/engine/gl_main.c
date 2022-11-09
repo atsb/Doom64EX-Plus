@@ -531,9 +531,6 @@ static void CalcViewSize(void) {
 }
 
 //
-// GL_Init
-//
-
 void GL_Init(void) {
 
 	gl_vendor = dglGetString(GL_VENDOR);
@@ -604,10 +601,6 @@ void GL_Init(void) {
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
-
-#ifdef _WIN32
-	wglSwapIntervalEXT(v_vsync.value);
-#else
+	//TODO Wolf3s: Remove some SDL_GL...
 	SDL_GL_SetSwapInterval(v_vsync.value);
-#endif
 }
