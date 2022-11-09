@@ -23,18 +23,6 @@
 #ifndef __I_AUDIO_H__
 #define __I_AUDIO_H__
 
-// 20120107 bkw: Linux users can change the default FluidSynth backend here:
-// ATSB: yuck, lets make this better.
-#ifdef __linux__
-#define DEFAULT_FLUID_DRIVER "alsa"
-#elif _WIN32
-#define DEFAULT_FLUID_DRIVER "dsound"
-#elif __APPLE__
-#define DEFAULT_FLUID_DRIVER "coreaudio"
-#else
-#define DEFAULT_FLUID_DRIVER "sndio"
-#endif
-
 typedef struct {
 	fixed_t x;
 	fixed_t y;
