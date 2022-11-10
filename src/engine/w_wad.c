@@ -339,7 +339,6 @@ void W_Init(void) {
 			int8_t* filename;
 			filename = W_TryFindWADByName(myargv[p]);
 			W_MergeFile(filename);
-			free(filename);
 		}
 	}
 	// 20120724 villsa - find drag & drop wad files
