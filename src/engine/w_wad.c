@@ -346,9 +346,8 @@ void W_Init(void) {
 		for (i = 1; i < myargc; i++) {
 			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
 				int8_t* filename;
-				if ((filename = I_FindDataFile(myargv[i]))) {
+				if ((filename = W_TryFindWADByName(myargv[i]))) {
 					W_MergeFile(filename);
-					free(filename);
 				}
 			}
 		}
