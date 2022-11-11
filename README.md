@@ -47,6 +47,28 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * libpng
 * FluidSynth
 
+## System Requirements - 32 or 64bit
+
+Linux Single Board Computer
+
+- Raspberry Pi 3B
+
+*others may work but are untested*
+
+Linux Desktop / Laptop
+
+- 1.8GHz Dual Core CPU
+- 2GB RAM
+- 80MB Disk Space
+- OpenGL 1.4+ Compliant Video Chip / Card
+
+Windows
+
+- 2.0GHz Dual Core CPU
+- 4GB RAM
+- 80MB Disk Space
+- OpenGL 1.4+ Compliant Video Chip / Card
+
 ## Compiling
 
 Clone this repo
