@@ -100,7 +100,6 @@ GL_EXT_compiled_vertex_array_Define();
 //GL_EXT_multi_draw_arrays_Define();
 //GL_EXT_fog_coord_Define();
 //GL_ARB_vertex_buffer_object_Define();
-GL_ARB_texture_non_power_of_two_Define();
 GL_ARB_texture_env_combine_Define();
 GL_EXT_texture_env_combine_Define();
 GL_EXT_texture_filter_anisotropic_Define();
@@ -110,12 +109,12 @@ GL_EXT_texture_filter_anisotropic_Define();
 //
 
 static dboolean FindExtension(const int8_t* ext) {
-	const byte* extensions = NULL;
-	const byte* start;
-	byte* where, * terminator;
+	const int8_t* extensions = NULL;
+	const int8_t* start;
+	const int8_t* where, * terminator;
 
 	// Extension names should not have spaces.
-	where = (byte*)dstrrchr((int8_t*)ext, ' ');
+	where = strrchr(ext, ' ');
 	if (where || *ext == '\0') {
 		return 0;
 	}
@@ -124,7 +123,7 @@ static dboolean FindExtension(const int8_t* ext) {
 
 	start = extensions;
 	for (;;) {
-		where = (byte*)strstr(start, ext);
+		where = strstr(start, ext);
 		if (!where) {
 			break;
 		}
@@ -326,6 +325,10 @@ void GL_SetTextureFilter(void) {
 //
 
 void GL_SetDefaultCombiner(void) {
+	    if (!usingGL) {
+        return;
+    }
+    
 	if (has_GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, false);
 		GL_SetTextureUnit(2, false);

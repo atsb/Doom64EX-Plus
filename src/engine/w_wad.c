@@ -62,6 +62,10 @@
 // GLOBALS
 //
 
+#ifdef _MSC_VER
+#pragma pack(push, 1)
+#endif
+
 //
 // TYPES
 //
@@ -70,13 +74,17 @@ typedef struct {
 	int8_t        identification[4];
 	int            numlumps;
 	int            infotableofs;
-} wadinfo_t;
+} PACKEDATTR wadinfo_t;
 
 typedef struct {
 	int            filepos;
 	int            size;
 	int8_t        name[8];
-} filelump_t;
+} PACKEDATTR filelump_t;
+
+#ifdef _MSC_VER
+#pragma pack(pop)
+#endif
 
 #define MAX_MEMLUMPS    16
 
