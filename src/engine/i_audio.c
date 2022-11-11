@@ -54,16 +54,16 @@ CVAR(s_soundfont, doomsnd.sf2);
 // ATSB: yuck, lets make this better.
 #ifdef __linux__
 #define DEFAULT_FLUID_DRIVER "pulseaudio"
-CVAR_CMD(s_driver, "pulseaudio")
+CVAR_CMD(s_driver, pulseaudio)
 #elif _WIN32
 #define DEFAULT_FLUID_DRIVER "dsound"
-CVAR_CMD(s_driver, "dsound")
+CVAR_CMD(s_driver, dsound)
 #elif __APPLE__
 #define DEFAULT_FLUID_DRIVER "coreaudio"
-CVAR_CMD(s_driver, "coreaudio")
+CVAR_CMD(s_driver, coreaudio)
 #else
 #define DEFAULT_FLUID_DRIVER "sndio"
-CVAR_CMD(s_driver, "sndio")
+CVAR_CMD(s_driver, sndio)
 #endif
 {
 	int8_t* driver = cvar->string;
