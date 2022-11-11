@@ -5054,13 +5054,6 @@ void M_Ticker(void) {
 	}
 #endif
 
-	//
-	// hide anisotropic option if not supported on video card
-	//
-	if (!has_GL_EXT_texture_filter_anisotropic) {
-		VideoMenu[anisotropic].status = -3;
-	}
-
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&
 		currentMenu->menuitems[0].name != "") {
