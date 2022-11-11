@@ -1750,8 +1750,9 @@ menu_t VideoDef = {
 	VideoBars
 };
 
-#define MAX_RES4_3  13
+#define MAX_RES4_3  14
 static const int Resolution4_3[MAX_RES4_3][2] = {
+	{   256,    192     },	
 	{   320,    240     },
 	{   640,    480     },
 	{   768,    576     },
