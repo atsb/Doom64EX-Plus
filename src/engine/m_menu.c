@@ -1405,7 +1405,7 @@ void M_ChangeMouseAccel(int choice)
 	switch (choice) {
 	case 0:
 		if (v_macceleration.value > 0.0f) {
-			M_SetCvar(&v_macceleration, v_macceleration.value - 20);
+			M_SetCvar(&v_macceleration, v_macceleration.value - 1);
 		}
 		else {
 			CON_CvarSetValue(v_macceleration.name, 0);
@@ -1413,7 +1413,7 @@ void M_ChangeMouseAccel(int choice)
 		break;
 	case 1:
 		if (v_macceleration.value < 20.0f) {
-			M_SetCvar(&v_macceleration, v_macceleration.value + 20);
+			M_SetCvar(&v_macceleration, v_macceleration.value + 1);
 		}
 		else {
 			CON_CvarSetValue(v_macceleration.name, 20);
