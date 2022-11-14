@@ -221,11 +221,9 @@ ticcmd_t* I_BaseTiccmd(void) {
 int8_t* I_GetUserDir(void) 
 {
 #ifdef DOOM_UNIX_INSTALL
-#ifndef _WIN32
 	return SDL_GetPrefPath("", "doom64ex-plus");
-#else
+#elif !defined DOOM_UNIX_INSTALL || defined _WIN32
 	return SDL_GetBasePath();
-#endif
 #endif
 }
 
