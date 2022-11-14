@@ -404,7 +404,7 @@ static dword Chan_GetNextTick(channel_t* chan) {
 
 		//
 		// the N64 version loops infinitely but since the
-		// delta time can only be four bytes long, just loop
+		// delta time can only be four bytes intptr_t, just loop
 		// for the remaining three bytes..
 		//
 		for (i = 0; i < 3; i++) {
@@ -1116,8 +1116,8 @@ static void Seq_Shutdown(doomseq_t* seq) {
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
 	doomseq_t* seq = (doomseq_t*)param;
-	long start = SDL_GetTicks();
-	long delay = 0;
+	intptr_t start = SDL_GetTicks();
+	intptr_t delay = 0;
 	int status;
 	dword count = 0;
 	signalhandler signal;

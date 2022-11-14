@@ -64,7 +64,7 @@
 #endif
 
 struct dirent {
-	long          d_ino;    /* Always zero. */
+	intptr_t          d_ino;    /* Always zero. */
 	uint16_t d_reclen; /* Always zero. */
 	uint16_t d_namlen; /* Length of name in d_name. */
 	int8_t           d_name[FILENAME_MAX]; /* File name. */
@@ -80,12 +80,12 @@ typedef struct {
 	struct _finddata_t dd_dta;
 
 	/* dirent struct to return from dir (NOTE: this makes this thread
-	 * safe as long as only one thread uses a particular DIR struct at
+	 * safe as intptr_t as only one thread uses a particular DIR struct at
 	 * a time) */
 	struct dirent dd_dir;
 
 	/* _findnext handle */
-	long    dd_handle;
+	intptr_t    dd_handle;
 
 	/*
 	 * Status of search:
@@ -103,8 +103,8 @@ DIR* opendir(const int8_t*);
 struct dirent* readdir(DIR*);
 int closedir(DIR*);
 void rewinddir(DIR*);
-long telldir(DIR*);
-void seekdir(DIR*, long);
+intptr_t telldir(DIR*);
+void seekdir(DIR*, intptr_t);
 
 #endif
 #endif

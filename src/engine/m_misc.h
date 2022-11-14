@@ -65,7 +65,7 @@ dboolean M_WriteFile(int8_t const* name, void* source, int length);
 int M_ReadFile(int8_t const* name, byte** buffer);
 void M_NormalizeSlashes(int8_t* str);
 int M_FileExists(int8_t* filename);
-long M_FileLength(FILE* handle);
+intptr_t M_FileLength(FILE* handle);
 dboolean M_WriteTextFile(int8_t const* name, int8_t* source, int length);
 void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);

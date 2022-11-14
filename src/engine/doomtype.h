@@ -35,7 +35,7 @@
 typedef int             dboolean;
 typedef uint8_t         byte;
 typedef uint16_t	word;
-typedef unsigned long	dword;
+typedef intptr_t	dword;
 typedef int8_t          int8;
 typedef uint8_t         uint8;
 typedef int16_t         int16;

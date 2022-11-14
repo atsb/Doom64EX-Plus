@@ -54,7 +54,7 @@ void G_DoLoadLevel(void);
 static FILE* save_stream;
 static byte* savebuffer;
 
-static unsigned long save_offset = 0;
+static intptr_t save_offset = 0;
 
 //
 // P_GetSaveGameName
@@ -125,7 +125,7 @@ static void saveg_write32(int value) {
 //------------------------------------------------------------------------
 
 static void saveg_read_pad(void) {
-	/*unsigned long pos;
+	/*intptr_t pos;
 	int padding;
 	int i;
 
@@ -141,7 +141,7 @@ static void saveg_read_pad(void) {
 }
 
 static void saveg_write_pad(void) {
-	/*unsigned long pos;
+	/*intptr_t pos;
 	int padding;
 	int i;
 
