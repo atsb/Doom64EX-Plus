@@ -5073,7 +5073,7 @@ void M_Ticker(void) {
 		menufadefunc();
 	}
 
-	// auto adjust page offset for intptr_t menu items
+	// auto adjust page offset for long menu items
 	if (currentMenu->numpageitems != -1) {
 		if (itemOn >= (currentMenu->numpageitems + currentMenu->menupageoffset)) {
 			currentMenu->menupageoffset = (itemOn + 1) - currentMenu->numpageitems;

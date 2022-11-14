@@ -72,7 +72,7 @@ typedef enum
 
 	NET_DISCONNECT_REMOTE,
 
-	// Timeout (no data received in a intptr_t time)
+	// Timeout (no data received in a long time)
 
 	NET_DISCONNECT_TIMEOUT,
 } net_disconnect_reason_t;

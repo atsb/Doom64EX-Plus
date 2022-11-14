@@ -1391,7 +1391,7 @@ void NET_SV_CheckDeadlock(net_client_t* client)
 
 	nowtime = I_GetTimeMS();
 
-	// If we haven't received anything for a intptr_t time, it may be a deadlock.
+	// If we haven't received anything for a long time, it may be a deadlock.
 
 	if (nowtime - client->last_gamedata_time > 1000)
 	{

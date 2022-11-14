@@ -316,7 +316,7 @@ int DEH_LoadFile(char *filename)
 }
 
 // Load dehacked file from WAD lump.
-// If allow_long is set, allow intptr_t strings and cheats just for this lump.
+// If allow_long is set, allow long strings and cheats just for this lump.
 
 int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error)
 {

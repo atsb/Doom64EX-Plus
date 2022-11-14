@@ -110,7 +110,7 @@ typedef struct {
 	dboolean        connected;                  // is controller connected?
 	dboolean        available;                  // is api available? can be disabled with -noxinput
 	int             oldbuttons;                 // button inputs from previous tic
-	int             refiretic[XINPUT_BUTTONS];  // how intptr_t to refire held down buttons?
+	int             refiretic[XINPUT_BUTTONS];  // how long to refire held down buttons?
 	float           rxthreshold;                // right stick x-axis threshold
 	float           rythreshold;                // right stick y-axis threshold
 	word            lMotorWindDown;             // left motor wind down speed

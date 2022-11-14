@@ -404,7 +404,7 @@ static dword Chan_GetNextTick(channel_t* chan) {
 
 		//
 		// the N64 version loops infinitely but since the
-		// delta time can only be four bytes intptr_t, just loop
+		// delta time can only be four bytes long, just loop
 		// for the remaining three bytes..
 		//
 		for (i = 0; i < 3; i++) {
