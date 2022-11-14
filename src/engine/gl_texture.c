@@ -313,7 +313,6 @@ static void InitGfxTextures(void) {
 
 int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
 	byte* png;
-	dboolean npot;
 	int lump;
 	int width;
 	int height;

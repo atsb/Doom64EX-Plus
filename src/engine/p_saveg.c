@@ -111,7 +111,7 @@ static int saveg_read32(void) {
 	return result;
 }
 
-static void saveg_write32(int value) {
+static void saveg_write32(intptr_t value) {
 	saveg_write8(value & 0xff);
 	saveg_write8((value >> 8) & 0xff);
 	saveg_write8((value >> 16) & 0xff);

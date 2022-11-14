@@ -519,7 +519,7 @@ int W_LumpLength(int lump) {
 //
 
 void W_ReadLump(int lump, void* dest) {
-	int c;
+	intptr_t c;
 	lumpinfo_t* l;
 
 	if (lump >= numlumps) {
