@@ -34,15 +34,16 @@
 
 typedef int             dboolean;
 typedef uint8_t         byte;
-typedef uint16_t		word;
+typedef uint16_t	word;
+typedef unsigned long	dword;
 typedef int8_t          int8;
 typedef uint8_t         uint8;
 typedef int16_t         int16;
 typedef uint16_t        uint16;
 typedef int32_t         int32;
-typedef uint32_t        uint32, dword, dsize_t;
-typedef int64_t			int64;
-typedef uint64_t		uint64;
+typedef uint32_t        uint32, dsize_t;
+typedef int64_t	int64;
+typedef uint64_t	uint64;
 
 #include <limits.h>
 #define D_MININT INT_MIN
