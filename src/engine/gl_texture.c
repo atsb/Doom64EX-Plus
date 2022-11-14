@@ -442,7 +442,6 @@ static void InitSpriteTextures(void) {
 
 void GL_BindSpriteTexture(int spritenum, int pal) {
 	byte* png;
-	dboolean npot;
 	int w;
 	int h;
 
