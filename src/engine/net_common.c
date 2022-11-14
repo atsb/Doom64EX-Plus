@@ -341,7 +341,7 @@ void NET_Conn_Run(net_connection_t* conn)
 
 		if (nowtime - conn->keepalive_recv_time > CONNECTION_TIMEOUT_LEN * 1000)
 		{
-			// Haven't received any packets from the other end in a long
+			// Haven't received any packets from the other end in a intptr_t
 			// time.  Assume disconnected.
 
 			conn->state = NET_CONN_STATE_DISCONNECTED;
@@ -350,7 +350,7 @@ void NET_Conn_Run(net_connection_t* conn)
 
 		if (nowtime - conn->keepalive_send_time > KEEPALIVE_PERIOD * 1000)
 		{
-			// We have not sent anything in a long time.
+			// We have not sent anything in a intptr_t time.
 			// Send a keepalive.
 
 			packet = NET_NewPacket(10);
