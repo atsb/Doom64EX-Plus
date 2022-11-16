@@ -2288,8 +2288,8 @@ void M_SfxVol(int choice);
 void M_MusicVol(int choice);
 void M_DrawSound(void);
 
-CVAR_EXTERNAL(s_sfxvol);
-CVAR_EXTERNAL(s_musvol);
+//CVAR_EXTERNAL(s_sfxvol);
+//CVAR_EXTERNAL(s_musvol);
 
 enum {
 	sfx_vol,
@@ -2311,14 +2311,14 @@ menuitem_t SoundMenu[] = {
 };
 
 menudefault_t SoundDefault[] = {
-	{ &s_sfxvol, 80 },
-	{ &s_musvol, 80 },
+	//{ &s_sfxvol, 80 },
+	//{ &s_musvol, 80 },
 	{ NULL, -1 }
 };
 
 menuthermobar_t SoundBars[] = {
-	{ sfx_empty1, 100, &s_sfxvol },
-	{ sfx_empty2, 100, &s_musvol },
+	//{ sfx_empty1, 100, &s_sfxvol },
+	//{ sfx_empty2, 100, &s_musvol },
 	{ -1, 0 }
 };
 
@@ -2345,12 +2345,12 @@ void M_Sound(int choice) {
 }
 
 void M_DrawSound(void) {
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 100, s_sfxvol.value);
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 100, s_musvol.value);
+	//M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 100, s_sfxvol.value);
+	//M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 100, s_musvol.value);
 }
 
 void M_SfxVol(int choice)
-{
+{/*
 	switch (choice) {
 	case 0:
 		if (s_sfxvol.value > 0.0f) {
@@ -2369,10 +2369,10 @@ void M_SfxVol(int choice)
 		}
 		break;
 	}
-}
+*/}
 
 void M_MusicVol(int choice)
-{
+{/*
 	switch (choice) {
 	case 0:
 		if (s_musvol.value > 0.0f) {
@@ -2391,7 +2391,7 @@ void M_MusicVol(int choice)
 		}
 		break;
 	}
-}
+*/}
 
 //------------------------------------------------------------------------
 //
