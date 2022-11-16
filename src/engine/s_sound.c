@@ -3,6 +3,7 @@
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
 // Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -58,31 +59,31 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep);
 //
 
 void S_Init(void) {
-
+ I_Init();
 }
 
 //
 // S_SetSoundVolume
 //
 
-void S_SetSoundVolume(float volume) {
-
+void S_SetSoundVolume(int volume) {
+   I_SetSoundVolume(volume);  
 }
 
 //
 // S_SetMusicVolume
 //
 
-void S_SetMusicVolume(float volume) {
-
+void S_SetMusicVolume(int volume) {
+   I_SetMusicVolume(volume);
 }
 
 //
-// S_SetGainOutput
+// S_SetMasterOutput
 //
 
-void S_SetGainOutput(float db) {
-
+void S_SetMasterVolume(int volume) {
+   I_SetMasterVolume(int volume);
 }
 
 //
@@ -114,7 +115,7 @@ void S_ResetSound(void) {
 //
 
 void S_PauseSound(void) {
-
+   I_PauseSound(true);
 }
 
 //
@@ -122,7 +123,7 @@ void S_PauseSound(void) {
 //
 
 void S_ResumeSound(void) {
-
+    I_PauseSound(true);
 }
 
 //
@@ -130,7 +131,7 @@ void S_ResumeSound(void) {
 //
 
 void S_StopSound(mobj_t* origin, int sfx_id) {
-
+  I_StopSound(true);
 }
 
 //
