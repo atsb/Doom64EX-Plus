@@ -47,6 +47,44 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * libpng
 * FluidSynth
 
+## System Requirements - 32 or 64bit
+
+Linux Single Board Computer
+
+- Raspberry Pi 3B
+
+*others may work but are untested*
+
+Linux Desktop / Laptop
+
+- 1.8GHz Dual Core CPU
+- 2GB RAM
+- 80MB Disk Space
+- OpenGL 1.4+ Compliant Video Chip / Card
+
+Windows
+
+- 2.0GHz Dual Core CPU
+- 4GB RAM
+- 80MB Disk Space
+- OpenGL 1.4+ Compliant Video Chip / Card
+
+## Installation
+
+Windows
+
+- Windows does not yet support installing the software, however you are able to manually put the software in any directory
+	of your choosing and it will work fine.
+
+GNU/Linux
+
+- GNU/Linux supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
+	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
+
+Without the macro, it will look inside the current directory that the binary is in.
+
+Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux.
+
 ## Compiling
 
 Clone this repo

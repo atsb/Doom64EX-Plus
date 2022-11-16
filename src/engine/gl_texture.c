@@ -329,7 +329,6 @@ static void InitGfxTextures(void) {
 
 int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
 	byte* png;
-	dboolean npot;
 	int lump;
 	int width;
 	int height;
@@ -458,7 +457,6 @@ static void InitSpriteTextures(void) {
 
 void GL_BindSpriteTexture(int spritenum, int pal) {
 	byte* png;
-	dboolean npot;
 	int w;
 	int h;
 

@@ -305,11 +305,11 @@ dboolean P_CrossBSPNode(int bspnum) {
 //
 
 dboolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
-	int     s1;
-	int     s2;
-	int     pnum;
-	int     bytenum;
-	int     bitnum;
+	intptr_t     s1;
+	intptr_t     s2;
+	intptr_t     pnum;
+	intptr_t     bytenum;
+	unsigned int     bitnum;
 
 	// First check for trivial rejection.
 

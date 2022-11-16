@@ -54,16 +54,16 @@ CVAR(s_soundfont, doomsnd.sf2);
 // ATSB: yuck, lets make this better.
 #ifdef __linux__
 #define DEFAULT_FLUID_DRIVER "pulseaudio"
-CVAR_CMD(s_driver, "pulseaudio")
+CVAR_CMD(s_driver, pulseaudio)
 #elif _WIN32
 #define DEFAULT_FLUID_DRIVER "dsound"
-CVAR_CMD(s_driver, "dsound")
+CVAR_CMD(s_driver, dsound)
 #elif __APPLE__
 #define DEFAULT_FLUID_DRIVER "coreaudio"
-CVAR_CMD(s_driver, "coreaudio")
+CVAR_CMD(s_driver, coreaudio)
 #else
 #define DEFAULT_FLUID_DRIVER "sndio"
-CVAR_CMD(s_driver, "sndio")
+CVAR_CMD(s_driver, sndio)
 #endif
 {
 	int8_t* driver = cvar->string;
@@ -203,8 +203,8 @@ typedef struct {
 	dword       nexttic;
 	dword       lasttic;
 	dword       starttic;
-	Uint32      starttime;
-	Uint32      curtime;
+	intptr_t      starttime;
+	intptr_t      curtime;
 	chanstate_e state;
 	dboolean    paused;
 
@@ -1116,8 +1116,8 @@ static void Seq_Shutdown(doomseq_t* seq) {
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
 	doomseq_t* seq = (doomseq_t*)param;
-	int start = SDL_GetTicks();
-	int delay = 0;
+	intptr_t start = SDL_GetTicks();
+	intptr_t delay = 0;
 	int status;
 	dword count = 0;
 	signalhandler signal;

@@ -20,11 +20,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(_USE_XINPUT)
 #ifndef __I_XINPUT__
 #define __I_XINPUT__
-
-#define _USE_XINPUT
 
 #include <windows.h>
 

@@ -961,12 +961,12 @@ typedef enum {
 } statenum_t;
 
 typedef struct {
-	spritenum_t    sprite;
-	int            frame;
-	int            tics;
-	actionf_t        action;
-	statenum_t    nextstate;
-	int			  misc1, misc2;
+	spritenum_t     sprite;
+	intptr_t            frame;
+	intptr_t            tics;
+	actionf_t       action;
+	statenum_t      nextstate;
+	int		misc1, misc2;
 } state_t;
 
 typedef enum {

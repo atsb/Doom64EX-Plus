@@ -534,6 +534,7 @@ dboolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 			}
 		}
 	}
+	numspechit = 0;
 
 	return true;
 }

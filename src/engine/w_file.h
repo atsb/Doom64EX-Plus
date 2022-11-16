@@ -57,7 +57,7 @@ struct _wad_file_s {
 
 	// Length of the file, in bytes.
 
-	uint32_t length;
+	intptr_t length;
 };
 
 // Open the specified file. Returns a pointer to a new wad_file_t
@@ -77,6 +77,7 @@ size_t W_Read(wad_file_t* wad, uint32_t offset,
 	void* buffer, size_t buffer_len);
 
 int8_t* W_FindWADByName(int8_t* filename);
+int8_t* W_TryFindWADByName(int8_t* filename);
 int8_t* W_FindIWAD(void);
 
 #endif /*__W_FILE__*/

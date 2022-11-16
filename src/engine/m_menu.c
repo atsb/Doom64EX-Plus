@@ -1405,7 +1405,7 @@ void M_ChangeMouseAccel(int choice)
 	switch (choice) {
 	case 0:
 		if (v_macceleration.value > 0.0f) {
-			M_SetCvar(&v_macceleration, v_macceleration.value - 20);
+			M_SetCvar(&v_macceleration, v_macceleration.value - 1);
 		}
 		else {
 			CON_CvarSetValue(v_macceleration.name, 0);
@@ -1413,7 +1413,7 @@ void M_ChangeMouseAccel(int choice)
 		break;
 	case 1:
 		if (v_macceleration.value < 20.0f) {
-			M_SetCvar(&v_macceleration, v_macceleration.value + 20);
+			M_SetCvar(&v_macceleration, v_macceleration.value + 1);
 		}
 		else {
 			CON_CvarSetValue(v_macceleration.name, 20);
@@ -1750,8 +1750,9 @@ menu_t VideoDef = {
 	VideoBars
 };
 
-#define MAX_RES4_3  13
+#define MAX_RES4_3  14
 static const int Resolution4_3[MAX_RES4_3][2] = {
+	{   256,    192     },	
 	{   320,    240     },
 	{   640,    480     },
 	{   768,    576     },
@@ -5053,13 +5054,6 @@ void M_Ticker(void) {
 		currentMenu->menuitems[controls_gamepad].status = xgamepad.connected ? 1 : -3;
 	}
 #endif
-
-	//
-	// hide anisotropic option if not supported on video card
-	//
-	if (!has_GL_EXT_texture_filter_anisotropic) {
-		VideoMenu[anisotropic].status = -3;
-	}
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&
