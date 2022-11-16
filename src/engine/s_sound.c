@@ -123,7 +123,7 @@ void S_PauseSound(void) {
 //
 
 void S_ResumeSound(void) {
-    I_PauseSound(true);
+    I_ResumeSound(true);
 }
 
 //
