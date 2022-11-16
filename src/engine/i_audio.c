@@ -49,11 +49,9 @@
 
 CVAR(s_soundfont, doomsnd.sf2);
 
-void I_Init()
+void I_InitMixer()
 {
-   //int ret = Mix_Init(MIX_DEFAULT_FORMAT);
-
-   if(Mix_Init(MIX_INIT_MIDI) < 0)
+   if(Mix_Init(MIX_INIT_MID) < 0)
    {
      printf("Failed to initialize SDL2_mixer");
    }
@@ -64,23 +62,33 @@ void I_ShutdownSound()
   Mix_Quit();
 }
 
+void I_GetMaxChannels()
+{
+    Mix_AllocateChannels(MIX_CHANNELS);
+}
+
+extern dboolean I_StartMusic(int mus_id)
+{
+    Mix_PlayMusic(&Music, 0);
+    return mus_id;
+}
+
 int I_SetSoundVolume(int volume)
 {
     int channel;
-    Mix_AllocateChannels(channel);
-    return Mix_SetSoundVolume(int volume);
+    Mix_AllocateChannels(MIX_CHANNELS);
+    return Mix_Volume(-1, volume);
 }
 
 int I_SetMusicVolume(int volume)
 {
-  int channel;
-  Mix_AllocateChannels(channel);
-  return Mix_SetMusicVolume(volume);
+  Mix_AllocateChannels(MIX_CHANNELS);
+  return Mix_VolumeMusic(volume);
 }
 
-int I_SetMasterVoulume(int volume)
+int I_SetMasterVolume(int volume)
 {
-  return Mix_SetMasterVolume(volume);
+    return Mix_MasterVolume(volume);
 }
 
 dboolean I_PauseSound(dboolean is_paused)
@@ -102,24 +110,24 @@ dboolean I_PauseSound(dboolean is_paused)
   return is_paused;
 }  
 
-dboolean I_PauseSound(dboolean is_resumed)
+dboolean I_ResumeSound(dboolean is_resumed)
 {
-     if(is_paused == true)
+     if(is_resumed == true)
      {
         Mix_Resume(-1);
-	return is_resumed
+        return is_resumed;
      }
-     if(is_paused == false)
+     if(is_resumed == false)
      {
-       printf("The channel is not resumed";
+       printf("The channel is not resumed");
        return is_resumed;
      }
      else
      {
-       printf("Failed to resume the channel(s), Error: %s", MixGetError();
+       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());
        return false;
      }
- return is_resumed;
+    return is_resumed;
 }
 
 dboolean I_StopSound(dboolean is_stopped)
@@ -131,12 +139,12 @@ dboolean I_StopSound(dboolean is_stopped)
    }
    if(is_stopped == false)
    {
-     printf("The channel(s) is not stopped";
-     return is_stopped
+     printf("The channel(s) is not stopped");
+     return is_stopped;
    }
    else 
    {
-     printf("Failed to stop the channel, Error: %s", Mix_GetError();
+     printf("Failed to stop the channel, Error: %s", Mix_GetError());
    }
    return is_stopped;
 }

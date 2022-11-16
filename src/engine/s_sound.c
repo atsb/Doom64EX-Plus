@@ -59,7 +59,7 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep);
 //
 
 void S_Init(void) {
- I_Init();
+   I_InitMixer();
 }
 
 //
@@ -83,7 +83,7 @@ void S_SetMusicVolume(int volume) {
 //
 
 void S_SetMasterVolume(int volume) {
-   I_SetMasterVolume(int volume);
+	I_SetMasterVolume(volume);
 }
 
 //
