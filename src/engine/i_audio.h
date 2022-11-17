@@ -26,8 +26,8 @@
 
 #include <SDL2/SDL_mixer.h>
 
-extern Mix_Chunk chunk;
-extern Mix_Music Music;
+extern Mix_Chunk *chunk;
+extern Mix_Music *music;
 
 extern void I_InitMixer();
 extern void I_ShutdownSound();
@@ -40,6 +40,6 @@ extern dboolean I_StopSound(dboolean is_stopped);
 extern void I_GetMaxChannels();
 extern dboolean I_StartMusic(const char* name);
 extern void I_LoadSF2();
-extern void I_StopMusic();
+extern dboolean I_StopMusic(dboolean is_stopped);
 
 #endif // __I_AUDIO_H__
