@@ -89,9 +89,9 @@ void I_GetMaxChannels()
 
 dboolean I_StartMusic(dboolean is_started)
 {
-    Mix_music handlemus; //TODO: = mus_id;
+    Mix_Music *handlemus; //TODO: = mus_id;
     const char *name;
-    if(!start =! name)
+    if(!is_started)
     {
        I_printf("Failed to load the music, name: %s", name);
        return is_started = false;
@@ -176,7 +176,7 @@ dboolean I_ResumeSound(dboolean is_resumed)
      }
      else
      {
-       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());-
+       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());
        return is_resumed = false;
      }
     return is_resumed;
