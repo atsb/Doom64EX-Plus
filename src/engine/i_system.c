@@ -396,7 +396,7 @@ void I_Error(const int8_t* string, ...) {
 	int8_t buff[1024];
 	va_list    va;
 
-	//I_ShutdownSound();
+	I_ShutdownSound();
 
 	va_start(va, string);
 	vsprintf(buff, string, va);
@@ -437,7 +437,7 @@ void I_Quit(void) {
 		G_CheckDemoStatus();
 	}
 	M_SaveDefaults();
-	//I_ShutdownSound();
+	I_ShutdownSound();
 	I_ShutdownVideo();
 
 	exit(0);

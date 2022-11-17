@@ -2,6 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -22,6 +23,22 @@
 
 #ifndef __I_AUDIO_H__
 #define __I_AUDIO_H__
+
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Chunk chunk;
+extern Mix_Music Music;
+
+extern void I_InitMixer();
+extern void I_ShutdownSound();
+extern int I_SetMasterVolume(int volume);
+extern int I_SetSoundVolume(int volume);
+extern int I_SetMusicVolume(int volume);
+extern dboolean I_PauseSound(dboolean is_paused);
+extern dboolean I_ResumeSound(dboolean is_resumed);
+extern dboolean I_StopSound(dboolean is_stopped);
+extern void I_GetMaxChannels(void);
+extern dboolean I_StartMusic(int mus_id);
 
 
 #endif // __I_AUDIO_H__

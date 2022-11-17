@@ -2,6 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -37,8 +38,6 @@
 #endif
 
 #include <SDL2/SDL.h>
-#include "fluidsynth.h"
-
 #include "doomtype.h"
 #include "doomdef.h"
 #include "i_system.h"
@@ -49,3 +48,103 @@
 #include "con_console.h"    // for cvars
 
 CVAR(s_soundfont, doomsnd.sf2);
+
+void I_InitMixer()
+{
+   if(Mix_Init(MIX_INIT_MID) < 0)
+   {
+     printf("Failed to initialize SDL2_mixer");
+   }
+}
+
+void I_ShutdownSound()
+{
+  Mix_Quit();
+}
+
+void I_GetMaxChannels()
+{
+    Mix_AllocateChannels(MIX_CHANNELS);
+}
+
+extern dboolean I_StartMusic(int mus_id)
+{
+    Mix_PlayMusic(&Music, 0);
+    return mus_id;
+}
+
+int I_SetSoundVolume(int volume)
+{
+    int channel;
+    Mix_AllocateChannels(MIX_CHANNELS);
+    return Mix_Volume(-1, volume);
+}
+
+int I_SetMusicVolume(int volume)
+{
+  Mix_AllocateChannels(MIX_CHANNELS);
+  return Mix_VolumeMusic(volume);
+}
+
+int I_SetMasterVolume(int volume)
+{
+    return Mix_MasterVolume(volume);
+}
+
+dboolean I_PauseSound(dboolean is_paused)
+{
+   if(is_paused == true)
+   {
+     Mix_Pause(-1); //Get the all channels
+     return is_paused;
+   }
+   if(is_paused == false)
+   {
+     printf("The channel is not paused");
+     return false;
+   }
+   else
+   {
+    printf("Failed to pause the channel(s), Error: s %s", Mix_GetError());
+   }
+  return is_paused;
+}  
+
+dboolean I_ResumeSound(dboolean is_resumed)
+{
+     if(is_resumed == true)
+     {
+        Mix_Resume(-1);
+        return is_resumed;
+     }
+     if(is_resumed == false)
+     {
+       printf("The channel is not resumed");
+       return is_resumed;
+     }
+     else
+     {
+       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());
+       return false;
+     }
+    return is_resumed;
+}
+
+dboolean I_StopSound(dboolean is_stopped)
+{
+   if(is_stopped == true)
+   {
+     Mix_HaltChannel(-1);
+     return is_stopped;
+   }
+   if(is_stopped == false)
+   {
+     printf("The channel(s) is not stopped");
+     return is_stopped;
+   }
+   else 
+   {
+     printf("Failed to stop the channel, Error: %s", Mix_GetError());
+   }
+   return is_stopped;
+}
