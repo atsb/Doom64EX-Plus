@@ -65,7 +65,7 @@ typedef enum {
 
 typedef struct {
 	state_t* state;    // a NULL state means not active
-	int         tics;
+	intptr_t    tics;
 	fixed_t     sx;
 	fixed_t     sy;
 	int         alpha;  // [d64] for rendering
