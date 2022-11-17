@@ -34,10 +34,8 @@
 
 #ifdef _WIN32
 #include <io.h>
-#endif
-
-#ifdef __APPLE__
-#include <unistd.h>
+#else
+#include <unistd.h> 
 #endif
 
 #include <fcntl.h>
