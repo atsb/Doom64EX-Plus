@@ -69,7 +69,7 @@ CVAR(v_accessibility, 0);
 #endif
 
 ticcmd_t        emptycmd;
-static int64    I_GetTime_Scale = 1 << 24;
+static int32    I_GetTime_Scale = 1 << 24;
 
 //
 // I_uSleep
@@ -86,7 +86,7 @@ void I_Sleep(intptr_t usecs) {
 #endif
 }
 
-static Uint64 basetime = 0;
+static Uint32 basetime = 0;
 
 //
 // I_GetTimeNormal
@@ -112,7 +112,7 @@ static int I_GetTimeNormal(void) {
 //
 
 static int I_GetTime_Scaled(void) {
-	return ((int64)I_GetTimeNormal() * I_GetTime_Scale >> 24);
+	return ((int32)I_GetTimeNormal() * I_GetTime_Scale >> 24);
 }
 
 //
