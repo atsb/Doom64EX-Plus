@@ -29,6 +29,11 @@
 #include <ctype.h> // toupper
 #endif
 
+#ifndef _WIN32 // toupper for linux
+#include <ctype.h>
+#include <stdio.h>
+#endif
+
 #include "m_keys.h"
 #include "doomdef.h"
 #include "i_xinput.h"
