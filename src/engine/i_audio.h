@@ -27,7 +27,7 @@
 #include <SDL2/SDL_mixer.h>
 
 extern Mix_Chunk *chunk;
-extern Mix_Music *Music;
+extern Mix_Music *music;
 
 extern void I_InitMixer();
 extern void I_ShutdownSound();
