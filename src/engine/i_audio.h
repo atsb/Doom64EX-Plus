@@ -37,8 +37,9 @@ extern int I_SetMusicVolume(int volume);
 extern dboolean I_PauseSound(dboolean is_paused);
 extern dboolean I_ResumeSound(dboolean is_resumed);
 extern dboolean I_StopSound(dboolean is_stopped);
-extern void I_GetMaxChannels(void);
-extern dboolean I_StartMusic(int mus_id);
-
+extern void I_GetMaxChannels();
+extern dboolean I_StartMusic(const char* name);
+extern void I_LoadSF2();
+extern void I_StopMusic();
 
 #endif // __I_AUDIO_H__

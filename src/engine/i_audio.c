@@ -49,17 +49,37 @@
 
 CVAR(s_soundfont, doomsnd.sf2);
 
+Mix_Chunk *chunk;
+Mix_Music *music;
+
+void I_LoadSF2()
+{
+  dboolean sf2 = false;
+  char *filename = I_FindDataFile("doomsnd.sf2");
+  if(!sf2)
+  {
+    I_Printf("Failed to load: %s", filename);
+  }
+  else
+  {
+     music = Mix_LoadMUS(filename);
+  }
+}
+
 void I_InitMixer()
 {
    if(Mix_Init(MIX_INIT_MID) < 0)
    {
      printf("Failed to initialize SDL2_mixer");
-   }
+   } 
 }
 
 void I_ShutdownSound()
 {
   Mix_Quit();
+  Mix_HaltMusic();
+  Mix_CloseAudio(); 
+  SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
 void I_GetMaxChannels()
@@ -67,10 +87,41 @@ void I_GetMaxChannels()
     Mix_AllocateChannels(MIX_CHANNELS);
 }
 
-extern dboolean I_StartMusic(int mus_id)
+dboolean I_StartMusic(dboolean is_started)
 {
-    Mix_PlayMusic(&Music, 0);
-    return mus_id;
+    Mix_music handlemus; //TODO: = mus_id;
+    const char *name;
+    if(!start =! name)
+    {
+       I_printf("Failed to load the music, name: %s", name);
+       return is_started = false;
+    }
+    else
+    {
+      Mix_PlayMusic(handlemus, 0);
+      name = Mix_GetMusicTitleTag(handlemus);
+      I_printf("Playing the music name, %s", name);
+      return is_started = true;
+    }
+
+    return is_started;
+}
+
+dboolean I_StopMusic(dboolean is_stopped)
+{
+  Mix_Music *free;
+  if(is_stopped)
+  {
+     printf("failed to stop muscic");
+     return is_stopped = false;
+  }
+  else
+  {
+    Mix_FreeMusic(free);
+    return is_stopped = true;
+  }
+
+  return is_stopped;
 }
 
 int I_SetSoundVolume(int volume)
@@ -96,16 +147,17 @@ dboolean I_PauseSound(dboolean is_paused)
    if(is_paused == true)
    {
      Mix_Pause(-1); //Get the all channels
-     return is_paused;
+     return is_paused = true;
    }
-   if(is_paused == false)
+   else if(is_paused == false)
    {
      printf("The channel is not paused");
-     return false;
+     return is_paused = false;
    }
    else
    {
     printf("Failed to pause the channel(s), Error: s %s", Mix_GetError());
+    return is_paused = false;
    }
   return is_paused;
 }  
@@ -115,17 +167,17 @@ dboolean I_ResumeSound(dboolean is_resumed)
      if(is_resumed == true)
      {
         Mix_Resume(-1);
-        return is_resumed;
+        return is_resumed = true;
      }
-     if(is_resumed == false)
+     else if(is_resumed == false)
      {
        printf("The channel is not resumed");
-       return is_resumed;
+       return is_resumed = false;
      }
      else
      {
-       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());
-       return false;
+       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());-
+       return is_resumed = false;
      }
     return is_resumed;
 }
