@@ -28,6 +28,11 @@
 #include <ctype.h>
 #endif
 
+#ifndef _WIN32 // toupper for linux
+#include <ctype.h>
+#include <stdio.h>
+#endif
+
 #include <stdarg.h>
 #include "doomtype.h"
 #include "doomstat.h"

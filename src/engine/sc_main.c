@@ -36,6 +36,11 @@
 #include <ctype.h> // toupper
 #endif
 
+#ifndef _WIN32 // toupper for linux
+#include <ctype.h>
+#include <stdio.h>
+#endif
+
 #include "doomdef.h"
 #include "doomtype.h"
 #include "z_zone.h"

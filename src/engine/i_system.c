@@ -25,20 +25,19 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <SDL2/SDL_timer.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #ifndef _WIN32
-#include <windows.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <time.h>
+#else
+#include <windows.h>
 #include <direct.h>
 #include <io.h>
-#endif
-
-#ifndef _WIN32
-#include <time.h>
 #endif
 
 #include <stdarg.h>
@@ -94,10 +93,10 @@ static Uint64 basetime = 0;
 //
 
 static int I_GetTimeNormal(void) {
-	Uint64 ticks;
-	Uint64 tic_division = 1000;
+	Uint32 ticks;
+	Uint32 tic_division = 1000;
 
-	ticks = SDL_GetTicks64();
+	ticks = SDL_GetTicks();
 
 	if (basetime == 0) {
 		basetime = ticks;
@@ -137,17 +136,17 @@ void I_InitClockRate(void) {
 // FRAME INTERPOLTATION
 //
 
-static uint64_t start_displaytime;
-static uint64_t displaytime;
+static uint32_t start_displaytime;
+static uint32_t displaytime;
 static dboolean InDisplay = false;
 static int saved_gametic = -1;
 
 dboolean realframe = false;
 
 fixed_t         rendertic_frac = 0;
-uint64_t    rendertic_start;
-uint64_t    rendertic_step;
-uint64_t    rendertic_next;
+uint32_t    rendertic_start;
+uint32_t    rendertic_step;
+uint32_t    rendertic_next;
 const float     rendertic_msec = 100 * TICRATE / 100000.0f;
 
 //
@@ -161,7 +160,7 @@ dboolean I_StartDisplay(void) {
 		return false;
 	}
 
-	start_displaytime = SDL_GetTicks64();
+	start_displaytime = SDL_GetTicks();
 	InDisplay = true;
 
 	return true;
@@ -172,7 +171,7 @@ dboolean I_StartDisplay(void) {
 //
 
 void I_EndDisplay(void) {
-	displaytime = SDL_GetTicks64() - start_displaytime;
+	displaytime = SDL_GetTicks() - start_displaytime;
 	InDisplay = false;
 }
 
@@ -184,7 +183,7 @@ fixed_t I_GetTimeFrac(void) {
 	intptr_t now;
 	fixed_t frac;
 
-	now = SDL_GetTicks64();
+	now = SDL_GetTicks();
 
 	if (rendertic_step == 0) {
 		return FRACUNIT;
@@ -206,8 +205,8 @@ fixed_t I_GetTimeFrac(void) {
 //
 
 void I_GetTime_SaveMS(void) {
-	rendertic_start = SDL_GetTicks64();
-	rendertic_next = (uint64_t)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
+	rendertic_start = SDL_GetTicks();
+	rendertic_next = (uint32_t)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
 	rendertic_step = rendertic_next - rendertic_start;
 }
 
@@ -368,9 +367,9 @@ int (*I_GetTime)(void) = I_GetTime_Error;
 //
 
 int I_GetTimeMS(void) {
-	Uint64 ticks;
+	Uint32 ticks;
 
-	ticks = SDL_GetTicks64();
+	ticks = SDL_GetTicks();
 
 	if (basetime == 0) {
 		basetime = ticks;
@@ -385,7 +384,7 @@ int I_GetTimeMS(void) {
 
 intptr_t I_GetRandomTimeSeed(void) {
 	// not exactly random....
-	return SDL_GetTicks64();
+	return SDL_GetTicks();
 }
 
 //
