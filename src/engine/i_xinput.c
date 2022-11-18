@@ -392,7 +392,7 @@ void I_XInputInit(void) {
 	//
 	// locate xinput dynamic link library
 	//
-	if (hInst = LoadLibrary("xinput1_3.dll")) {
+	if (hInst = LoadLibrary(L"xinput1_3.dll")) {
 		//
 		// get routines from module
 		//

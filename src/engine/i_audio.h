@@ -38,7 +38,7 @@ extern dboolean I_PauseSound(dboolean is_paused);
 extern dboolean I_ResumeSound(dboolean is_resumed);
 extern dboolean I_StopSound(dboolean is_stopped);
 extern void I_GetMaxChannels();
-extern dboolean I_StartMusic(const char* name);
+extern dboolean I_StartMusic(dboolean is_started);
 extern void I_LoadSF2();
 extern dboolean I_StopMusic(dboolean is_stopped);
 
