@@ -100,7 +100,7 @@ void S_StartMusic(int mnum) {
 //
 
 void S_StopMusic(void) {
-
+    I_StopMusic(true);
 }
 
 //

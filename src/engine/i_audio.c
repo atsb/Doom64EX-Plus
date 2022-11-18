@@ -43,6 +43,7 @@
 #include "i_system.h"
 #include "i_audio.h"
 #include "w_wad.h"
+#include "m_misc.h"
 #include "z_zone.h"
 #include "i_swap.h"
 #include "con_console.h"    // for cvars
@@ -54,23 +55,27 @@ Mix_Music *music;
 
 void I_LoadSF2()
 {
-  dboolean sf2 = false;
-  char *filename = I_FindDataFile("doomsnd.sf2");
-  if(!sf2)
-  {
-    I_Printf("Failed to load: %s", filename);
-  }
-  else
-  {
-     music = Mix_LoadMUS(filename);
-  }
+    char* soundfont = I_FindDataFile("doomsnd.sf2");
+    if (strlen(soundfont) > 0)
+    {
+        if (M_FileExists(soundfont))
+        {
+            Mix_SetSoundFonts(soundfont);
+            I_Printf("Found soundfont %s\n", soundfont);
+            music = Mix_LoadMUS(soundfont);
+        }
+        else
+        {
+            fprintf(stderr,"I_LoadSF2: Can't find FluidSynth soundfont.\n");
+        }
+    }
 }
 
 void I_InitMixer()
 {
    if(Mix_Init(MIX_INIT_MID) < 0)
    {
-     printf("Failed to initialize SDL2_mixer");
+       I_Printf("Failed to initialize SDL2_mixer\n");
    } 
 }
 
@@ -89,18 +94,18 @@ void I_GetMaxChannels()
 
 dboolean I_StartMusic(dboolean is_started)
 {
-    Mix_Music *handlemus; //TODO: = mus_id;
-    const char *name;
+    Mix_Music *handlemus = NULL; //TODO: = mus_id;
+    const char* name = NULL;
     if(!is_started)
     {
-       I_printf("Failed to load the music, name: %s", name);
+       I_Printf("Failed to load the music, name: %s\n", name);
        return is_started = false;
     }
     else
     {
       Mix_PlayMusic(handlemus, 0);
       name = Mix_GetMusicTitleTag(handlemus);
-      I_printf("Playing the music name, %s", name);
+      I_Printf("Playing the music name, %s\n", name);
       return is_started = true;
     }
 
@@ -110,9 +115,10 @@ dboolean I_StartMusic(dboolean is_started)
 dboolean I_StopMusic(dboolean is_stopped)
 {
   Mix_Music *free;
+  free = NULL;
   if(is_stopped)
   {
-     printf("failed to stop muscic");
+      I_Printf("failed to stop muscic\n");
      return is_stopped = false;
   }
   else
@@ -151,12 +157,12 @@ dboolean I_PauseSound(dboolean is_paused)
    }
    else if(is_paused == false)
    {
-     printf("The channel is not paused");
+     I_Printf("The channel is not paused\n");
      return is_paused = false;
    }
    else
    {
-    printf("Failed to pause the channel(s), Error: s %s", Mix_GetError());
+    I_Printf("Failed to pause the channel(s), Error: s %s\n", Mix_GetError());
     return is_paused = false;
    }
   return is_paused;
@@ -171,12 +177,12 @@ dboolean I_ResumeSound(dboolean is_resumed)
      }
      else if(is_resumed == false)
      {
-       printf("The channel is not resumed");
+       I_Printf("The channel is not resumed\n");
        return is_resumed = false;
      }
      else
      {
-       printf("Failed to resume the channel(s), Error: %s", Mix_GetError());
+       I_Printf("Failed to resume the channel(s), Error: %s\n", Mix_GetError());
        return is_resumed = false;
      }
     return is_resumed;
@@ -191,12 +197,12 @@ dboolean I_StopSound(dboolean is_stopped)
    }
    if(is_stopped == false)
    {
-     printf("The channel(s) is not stopped");
+     I_Printf("The channel(s) is not stopped\n");
      return is_stopped;
    }
    else 
    {
-     printf("Failed to stop the channel, Error: %s", Mix_GetError());
+       I_Printf("Failed to stop the channel, Error: %s\n", Mix_GetError());
    }
    return is_stopped;
 }
