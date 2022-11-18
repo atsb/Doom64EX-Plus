@@ -27,7 +27,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -1087,7 +1086,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
 	doomseq_t* seq = (doomseq_t*)param;
-	intptr_t start = clock();
+	intptr_t start = SDL_GetTicks();
 	intptr_t delay = 0;
 	int status;
 	dword count = 0;
@@ -1117,11 +1116,11 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 		//
 		// play some songs
 		//
-		Seq_RunSong(seq, clock() - start);
+		Seq_RunSong(seq, SDL_GetTicks() - start);
 		count++;
 
 		// try to avoid incremental time de-syncs
-		delay = count - (clock() - start);
+		delay = count - (SDL_GetTicks() - start);
 
 		if (delay > 0) {
 			SDL_Delay(delay);
@@ -1152,7 +1151,7 @@ void I_InitSequencer(void) {
 	// off-sync when uncapped framerates are enabled but for some
 	// reason, calling SDL_GetTicks before initalizing the thread
 	// will reduce the chances of it happening
-	clock();
+	SDL_GetTicks();
 
 	doomseq.thread = SDL_CreateThread(Thread_PlayerHandler, "SynthPlayer", &doomseq);
 	if (doomseq.thread == NULL) {
