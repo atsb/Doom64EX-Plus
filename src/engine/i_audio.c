@@ -106,7 +106,7 @@ static dboolean seqready = false;
 // DEFINES
 //
 
-#define MIDI_CHANNELS   128
+#define MIDI_CHANNELS   64
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
@@ -219,7 +219,6 @@ typedef enum {
 	SEQ_SIGNAL_PAUSE,
 	SEQ_SIGNAL_RESUME,
 	SEQ_SIGNAL_STOPALL,
-	SEQ_SIGNAL_SETGAIN,         // signal the sequencer to update output gain
 	MAXSIGNALTYPES
 } seqsignal_e;
 
@@ -256,26 +255,12 @@ typedef struct {
 	// to be ready again
 	// MP2E 12102013 - Only change using Seq_SetStatus
 	seqsignal_e             signal;
-
-	// 20120316 villsa - gain property (tweakable)
-	float                   gain;
 } doomseq_t;
 
 static doomseq_t doomseq = { 0 };   // doom sequencer
 
 typedef void(*eventhandler)(doomseq_t*, channel_t*);
 typedef int(*signalhandler)(doomseq_t*);
-
-//
-// Seq_SetGain
-//
-// Set the 'master' volume for the sequencer. Affects
-// all sounds that are played
-//
-
-static void Seq_SetGain(doomseq_t* seq) {
-	fluid_synth_set_gain(seq->synth, seq->gain);
-}
 
 //
 // Seq_SetConfig
@@ -650,7 +635,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 		chan->song->tempo =
 			(Chan_GetNextMidiByte(chan) << 16) |
 			(Chan_GetNextMidiByte(chan) << 8) |
-			(Chan_GetNextMidiByte(chan) & 0xff);
+			(Chan_GetNextMidiByte(chan) & 0xff); // 1111
 
 		if (chan->song->tempo == 0) {
 			return;
@@ -663,7 +648,6 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 		// game-specific midi event
 	case MIDI_SEQUENCER:
 		b = Chan_GetNextMidiByte(chan);   // length
-		b = Chan_GetNextMidiByte(chan);   // manufacturer (should be 0)
 		if (!b) {
 			b = Chan_GetNextMidiByte(chan);
 			if (b == 0x23) {
@@ -671,7 +655,6 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 				chan->jump = chan->pos;
 			}
 			else if (b == 0x20) {
-				b = Chan_GetNextMidiByte(chan);
 				b = Chan_GetNextMidiByte(chan);
 
 				// goto jump position
@@ -780,16 +763,6 @@ static int Signal_Resume(doomseq_t* seq) {
 	return 1;
 }
 
-//
-// Signal_UpdateGain
-//
-
-static int Signal_UpdateGain(doomseq_t* seq) {
-		Seq_SetGain(seq);
-		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
-	return 1;
-}
-
 static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 	Signal_Idle,
 	Signal_Shutdown,
@@ -797,8 +770,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 	Signal_Reset,
 	Signal_Pause,
 	Signal_Resume,
-	Signal_StopAll,
-	Signal_UpdateGain
+	Signal_StopAll
 };
 
 //
@@ -1219,13 +1191,7 @@ void I_InitSequencer(void) {
 		sffound = true;
 	}
 
-	//
-	// set state
-	//
-	doomseq.gain = 1.0f;
-
 	Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
-	Seq_SetGain(&doomseq);
 
 	//
 	// if something went terribly wrong, then shutdown everything
@@ -1361,21 +1327,6 @@ void I_ResumeSound(void) {
 	}
 
 	Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESUME);
-	//Seq_WaitOnSignal(&doomseq);
-}
-
-//
-// I_SetGain
-//
-
-void I_SetGain(float db) {
-	if (!seqready) {
-		return;
-	}
-
-	doomseq.gain = db;
-
-	Seq_SetStatus(&doomseq, SEQ_SIGNAL_SETGAIN);
 	//Seq_WaitOnSignal(&doomseq);
 }
 
