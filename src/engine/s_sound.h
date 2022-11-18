@@ -3,6 +3,7 @@
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
 // Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -38,9 +39,9 @@
 //
 void S_Init(void);
 
-void S_SetSoundVolume(float volume);
-void S_SetMusicVolume(float volume);
-void S_SetGainOutput(float db);
+void S_SetSoundVolume(int volume);
+void S_SetMusicVolume(int volume);
+void S_SetMasterVolume(int volume);
 
 void S_ResetSound(void);
 void S_PauseSound(void);

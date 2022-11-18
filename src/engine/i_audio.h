@@ -2,6 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -23,28 +24,22 @@
 #ifndef __I_AUDIO_H__
 #define __I_AUDIO_H__
 
-typedef struct {
-	fixed_t x;
-	fixed_t y;
-	fixed_t z;
-} sndsrc_t;
+#include <SDL2/SDL_mixer.h>
 
-int I_GetMaxChannels(void);
-int I_GetVoiceCount(void);
-sndsrc_t* I_GetSoundSource(int c);
+extern Mix_Chunk *chunk;
+extern Mix_Music *music;
 
-void I_InitSequencer(void);
-void I_ShutdownSound(void);
-void I_UpdateChannel(int c, int volume, int pan);
-void I_RemoveSoundSource(int c);
-void I_SetMusicVolume(float volume);
-void I_SetSoundVolume(float volume);
-void I_ResetSound(void);
-void I_PauseSound(void);
-void I_ResumeSound(void);
-void I_SetGain(float db);
-void I_StopSound(sndsrc_t* origin, int sfx_id);
-void I_StartMusic(int mus_id);
-void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb);
+extern void I_InitMixer();
+extern void I_ShutdownSound();
+extern int I_SetMasterVolume(int volume);
+extern int I_SetSoundVolume(int volume);
+extern int I_SetMusicVolume(int volume);
+extern dboolean I_PauseSound(dboolean is_paused);
+extern dboolean I_ResumeSound(dboolean is_resumed);
+extern dboolean I_StopSound(dboolean is_stopped);
+extern void I_GetMaxChannels();
+extern dboolean I_StartMusic(dboolean is_started);
+extern void I_LoadSF2();
+extern dboolean I_StopMusic(dboolean is_stopped);
 
 #endif // __I_AUDIO_H__
