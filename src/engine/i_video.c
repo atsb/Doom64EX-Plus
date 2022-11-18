@@ -459,6 +459,15 @@ static void I_ReadMouse(void) {
 	lastmbtn = btn;
 }
 
+void I_CenterMouse(void) {
+	// Warp the the screen center
+	SDL_WarpMouseInWindow(screen, (unsigned short)(video_width / 2), (unsigned short)(video_height / 2));
+
+	// Clear any relative movement caused by warping
+	SDL_PumpEvents();
+	SDL_GetRelativeMouseState(NULL, NULL);
+}
+
 //
 // I_MouseAccelChange
 //

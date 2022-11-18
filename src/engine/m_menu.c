@@ -4941,6 +4941,14 @@ void M_ClearMenus(void) {
 		return;
 	}
 
+	// center mouse before clearing menu
+	// so the input code won't try to
+	// re-center the mouse; which can
+	// cause the player's view to warp
+	if (gamestate == GS_LEVEL) {
+		I_CenterMouse();
+	}
+
 	menufadefunc = NULL;
 	nextmenu = NULL;
 	menualphacolor = 0xff;
