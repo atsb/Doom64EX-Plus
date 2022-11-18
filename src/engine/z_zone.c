@@ -250,7 +250,7 @@ void* (Z_Malloc)(int size, int tag, void* user, const int8_t* file, int line) {
 
 	// Hook into the linked list for this tag type
 
-	newblock->tag = tag;
+	newblock->tag = PU_FREE;
 	newblock->id = ZONEID;
 	newblock->user = user;
 	newblock->size = size;
@@ -326,7 +326,7 @@ void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const int8_t* file, 
 		I_Error("Z_Realloc: failed on allocation of %u bytes (%s:%d)", size, file, line);
 	}
 
-	newblock->tag = tag;
+	newblock->tag = PU_FREE;
 	newblock->id = ZONEID;
 	newblock->user = user;
 	newblock->size = size;
