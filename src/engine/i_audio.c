@@ -1099,13 +1099,6 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 		//
 		Seq_RunSong(seq, GetTicks() - start);
 		count++;
-
-		// try to avoid incremental time de-syncs
-		delay = count - (GetTicks() - start);
-
-		if (delay > 0) {
-			SDL_Delay(delay);
-		}
 	}
 
 	return 0;
