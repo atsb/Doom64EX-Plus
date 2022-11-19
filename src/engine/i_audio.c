@@ -976,13 +976,6 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 
 	seq->nsongs = (end - start) + 1;
 
-	//
-	// no midi songs found in iwad?
-	//
-	if (seq->nsongs <= 0) {
-		return false;
-	}
-
 	seq->songs = (song_t*)Z_Calloc(seq->nsongs * sizeof(song_t), PU_STATIC, 0);
 
 	fail = 0;
@@ -1072,13 +1065,6 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 
 		if (signal) {
 			status = signal(seq);
-
-			if (status == 0) {
-				// villsa 12292013 - add a delay here so we don't
-				// thrash the loop while idling
-				SDL_Delay(1);
-				continue;
-			}
 
 			if (status == -1) {
 				return 1;
