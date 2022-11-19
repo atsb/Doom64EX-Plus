@@ -57,8 +57,8 @@ CVAR(s_soundfont, doomsnd.sf2);
 // 20120107 bkw: Linux users can change the default FluidSynth backend here:
 // ATSB: yuck, lets make this better.
 #ifdef __linux__
-#define DEFAULT_FLUID_DRIVER "pulseaudio"
-CVAR_CMD(s_driver, pulseaudio)
+#define DEFAULT_FLUID_DRIVER "alsa"
+CVAR_CMD(s_driver, alsa)
 #elif _WIN32
 #define DEFAULT_FLUID_DRIVER "dsound"
 CVAR_CMD(s_driver, dsound)
@@ -636,7 +636,6 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 
 	case MIDI_SET_TEMPO:
 		b = Chan_GetNextMidiByte(chan);   // length
-
 		if (b != 3) {
 			return;
 		}
@@ -657,6 +656,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 		// game-specific midi event
 	case MIDI_SEQUENCER:
 		b = Chan_GetNextMidiByte(chan);   // length
+		b = Chan_GetNextMidiByte(chan);   // manufacturer (should be 0)
 		if (!b) {
 			b = Chan_GetNextMidiByte(chan);
 			if (b == 0x23) {
@@ -665,7 +665,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 			}
 			else if (b == 0x20) {
 				b = Chan_GetNextMidiByte(chan);
-
+				b = Chan_GetNextMidiByte(chan);   // manufacturer (should be 0)
 				// goto jump position
 				if (chan->jump) {
 					chan->pos = chan->jump;
@@ -1147,14 +1147,14 @@ void I_InitSequencer(void) {
 	// init settings
 	//
 	doomseq.settings = new_fluid_settings();
-	Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
+	Seq_SetConfig(&doomseq, "synth.midi-channels", MIDI_CHANNELS);
 	Seq_SetConfig(&doomseq, "synth.polyphony", 2048);
 
 	// 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
 	// JACK, if it's compiled in. We don't want to start jackd for a game).
 	fluid_settings_setstr(doomseq.settings, "audio.driver", s_driver.string);
 
-	CON_DPrintf("Audio driver: %s\n", s_driver.string);
+	I_Printf("Audio driver: %s\n", s_driver.string);
 
 	//
 	// init synth
@@ -1170,7 +1170,7 @@ void I_InitSequencer(void) {
 	//
 	doomseq.driver = new_fluid_audio_driver(doomseq.settings, doomseq.synth);
 	if (doomseq.driver == NULL) {
-		CON_Warnf("I_InitSequencer: failed to create audio driver");
+		I_Printf("I_InitSequencer: failed to create audio driver");
 		return;
 	}
 
