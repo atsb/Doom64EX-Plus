@@ -111,7 +111,6 @@ static dboolean seqready = false;
 //
 
 #define MIDI_CHANNELS   64
-#define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
 #define MIDI_SEQUENCER  0x7f
@@ -617,17 +616,6 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 	meta = Chan_GetNextMidiByte(chan);
 
 	switch (meta) {
-		// mostly for debugging/logging
-	case MIDI_MESSAGE:
-		b = Chan_GetNextMidiByte(chan);
-		dmemset(string, 0, 256);
-
-		for (i = 0; i < b; i++) {
-			string[i] = Chan_GetNextMidiByte(chan);
-		}
-
-		string[b + 1] = '\n';
-		break;
 
 	case MIDI_END:
 		b = Chan_GetNextMidiByte(chan);
@@ -636,18 +624,11 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 
 	case MIDI_SET_TEMPO:
 		b = Chan_GetNextMidiByte(chan);   // length
-		if (b != 3) {
-			return;
-		}
 
 		chan->song->tempo =
 			(Chan_GetNextMidiByte(chan) << 16) |
 			(Chan_GetNextMidiByte(chan) << 8) |
 			(Chan_GetNextMidiByte(chan) & 0xff); // 1111
-
-		if (chan->song->tempo == 0) {
-			return;
-		}
 
 		chan->song->timediv = Song_GetTimeDivision(chan->song);
 		chan->starttime = chan->curtime;
