@@ -99,21 +99,6 @@ CVAR_CMD(s_driver, sndio)
 	CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
 }
 
-//
-// Mutex
-//
-static SDL_mutex* lock = NULL;
-#define MUTEX_LOCK()    SDL_mutexP(lock);
-#define MUTEX_UNLOCK()  SDL_mutexV(lock);
-
-//
-// Semaphore stuff
-//
-
-static SDL_sem* semaphore = NULL;
-#define SEMAPHORE_LOCK()    if(SDL_SemWait(semaphore) == 0) {
-#define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
-
 // 20120205 villsa - bool to determine if sequencer is ready or not
 static dboolean seqready = false;
 
@@ -121,7 +106,7 @@ static dboolean seqready = false;
 // DEFINES
 //
 
-#define MIDI_CHANNELS   128
+#define MIDI_CHANNELS   64
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
@@ -234,7 +219,6 @@ typedef enum {
 	SEQ_SIGNAL_PAUSE,
 	SEQ_SIGNAL_RESUME,
 	SEQ_SIGNAL_STOPALL,
-	SEQ_SIGNAL_SETGAIN,         // signal the sequencer to update output gain
 	MAXSIGNALTYPES
 } seqsignal_e;
 
@@ -271,26 +255,12 @@ typedef struct {
 	// to be ready again
 	// MP2E 12102013 - Only change using Seq_SetStatus
 	seqsignal_e             signal;
-
-	// 20120316 villsa - gain property (tweakable)
-	float                   gain;
 } doomseq_t;
 
 static doomseq_t doomseq = { 0 };   // doom sequencer
 
 typedef void(*eventhandler)(doomseq_t*, channel_t*);
 typedef int(*signalhandler)(doomseq_t*);
-
-//
-// Seq_SetGain
-//
-// Set the 'master' volume for the sequencer. Affects
-// all sounds that are played
-//
-
-static void Seq_SetGain(doomseq_t* seq) {
-	fluid_synth_set_gain(seq->synth, seq->gain);
-}
 
 //
 // Seq_SetConfig
@@ -313,9 +283,7 @@ static double Song_GetTimeDivision(song_t* song) {
 //
 
 static void Seq_SetStatus(doomseq_t* seq, int status) {
-	MUTEX_LOCK()
 		seq->signal = status;
-	MUTEX_UNLOCK()
 }
 
 //
@@ -667,7 +635,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 		chan->song->tempo =
 			(Chan_GetNextMidiByte(chan) << 16) |
 			(Chan_GetNextMidiByte(chan) << 8) |
-			(Chan_GetNextMidiByte(chan) & 0xff);
+			(Chan_GetNextMidiByte(chan) & 0xff); // 1111
 
 		if (chan->song->tempo == 0) {
 			return;
@@ -680,7 +648,6 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 		// game-specific midi event
 	case MIDI_SEQUENCER:
 		b = Chan_GetNextMidiByte(chan);   // length
-		b = Chan_GetNextMidiByte(chan);   // manufacturer (should be 0)
 		if (!b) {
 			b = Chan_GetNextMidiByte(chan);
 			if (b == 0x23) {
@@ -688,7 +655,6 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 				chan->jump = chan->pos;
 			}
 			else if (b == 0x20) {
-				b = Chan_GetNextMidiByte(chan);
 				b = Chan_GetNextMidiByte(chan);
 
 				// goto jump position
@@ -738,7 +704,6 @@ static int Signal_StopAll(doomseq_t* seq) {
 	channel_t* c;
 	int i;
 
-	SEMAPHORE_LOCK()
 		for (i = 0; i < MIDI_CHANNELS; i++) {
 			c = &playlist[i];
 
@@ -746,7 +711,6 @@ static int Signal_StopAll(doomseq_t* seq) {
 				Chan_RemoveTrackFromPlaylist(seq, c);
 			}
 		}
-	SEMAPHORE_UNLOCK()
 
 		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
 	return 1;
@@ -773,11 +737,9 @@ static int Signal_Pause(doomseq_t* seq) {
 	int i;
 	channel_t* c;
 
-	SEMAPHORE_LOCK()
 		for (i = 0; i < MIDI_CHANNELS; i++) {
 			c = &playlist[i];
 		}
-	SEMAPHORE_UNLOCK()
 
 		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
 	return 1;
@@ -793,26 +755,9 @@ static int Signal_Resume(doomseq_t* seq) {
 	int i;
 	channel_t* c;
 
-	SEMAPHORE_LOCK()
 		for (i = 0; i < MIDI_CHANNELS; i++) {
 			c = &playlist[i];
 		}
-	SEMAPHORE_UNLOCK()
-
-		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
-	return 1;
-}
-
-//
-// Signal_UpdateGain
-//
-
-static int Signal_UpdateGain(doomseq_t* seq) {
-	SEMAPHORE_LOCK()
-
-		Seq_SetGain(seq);
-
-	SEMAPHORE_UNLOCK()
 
 		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
 	return 1;
@@ -825,8 +770,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 	Signal_Reset,
 	Signal_Pause,
 	Signal_Resume,
-	Signal_StopAll,
-	Signal_UpdateGain
+	Signal_StopAll
 };
 
 //
@@ -964,7 +908,6 @@ static void Seq_RunSong(doomseq_t* seq, dword msecs) {
 
 	seq->playtime = msecs;
 
-	SEMAPHORE_LOCK()
 		for (i = 0; i < MIDI_CHANNELS; i++) {
 			chan = &playlist[i];
 
@@ -979,7 +922,6 @@ static void Seq_RunSong(doomseq_t* seq, dword msecs) {
 				Chan_RunSong(seq, chan, msecs);
 			}
 		}
-	SEMAPHORE_UNLOCK()
 }
 
 //
@@ -1170,24 +1112,6 @@ void I_InitSequencer(void) {
 
 	CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
-	//
-	// init mutex
-	//
-	lock = SDL_CreateMutex();
-	if (lock == NULL) {
-		CON_Warnf("I_InitSequencer: failed to create mutex");
-		return;
-	}
-
-	//
-	// init semaphore
-	//
-	semaphore = SDL_CreateSemaphore(1);
-	if (semaphore == NULL) {
-		CON_Warnf("I_InitSequencer: failed to create semaphore");
-		return;
-	}
-
 	dmemset(&doomseq, 0, sizeof(doomseq_t));
 
 	//
@@ -1267,13 +1191,7 @@ void I_InitSequencer(void) {
 		sffound = true;
 	}
 
-	//
-	// set state
-	//
-	doomseq.gain = 1.0f;
-
 	Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
-	Seq_SetGain(&doomseq);
 
 	//
 	// if something went terribly wrong, then shutdown everything
@@ -1413,21 +1331,6 @@ void I_ResumeSound(void) {
 }
 
 //
-// I_SetGain
-//
-
-void I_SetGain(float db) {
-	if (!seqready) {
-		return;
-	}
-
-	doomseq.gain = db;
-
-	Seq_SetStatus(&doomseq, SEQ_SIGNAL_SETGAIN);
-	//Seq_WaitOnSignal(&doomseq);
-}
-
-//
 // I_StartMusic
 //
 
@@ -1440,7 +1343,6 @@ void I_StartMusic(int mus_id) {
 		return;
 	}
 
-	SEMAPHORE_LOCK()
 		song = &doomseq.songs[mus_id];
 	for (i = 0; i < song->ntracks; i++) {
 		chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
@@ -1451,7 +1353,6 @@ void I_StartMusic(int mus_id) {
 
 		chan->volume = doomseq.musicvolume;
 	}
-	SEMAPHORE_UNLOCK()
 }
 
 //
@@ -1467,7 +1368,6 @@ void I_StopSound(sndsrc_t* origin, int sfx_id) {
 		return;
 	}
 
-	SEMAPHORE_LOCK()
 		song = &doomseq.songs[sfx_id];
 	for (i = 0; i < MIDI_CHANNELS; i++) {
 		c = &playlist[i];
@@ -1476,7 +1376,6 @@ void I_StopSound(sndsrc_t* origin, int sfx_id) {
 			c->stop = true;
 		}
 	}
-	SEMAPHORE_UNLOCK()
 }
 
 //
@@ -1496,7 +1395,6 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
 		return;
 	}
 
-	SEMAPHORE_LOCK()
 		song = &doomseq.songs[sfx_id];
 	for (i = 0; i < song->ntracks; i++) {
 		chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
@@ -1510,5 +1408,4 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
 		chan->origin = origin;
 		chan->depth = reverb;
 	}
-	SEMAPHORE_UNLOCK()
 }
