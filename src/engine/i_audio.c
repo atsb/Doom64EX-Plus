@@ -743,15 +743,20 @@ static int Signal_Reset(doomseq_t* seq) {
 //
 
 static int Signal_Pause(doomseq_t* seq) {
-	int i;
-	channel_t* c;
+    int i;
+    channel_t* c;
 
-		for (i = 0; i < MIDI_CHANNELS; i++) {
-			c = &playlist[i];
-		}
+    for(i = 0; i < MIDI_CHANNELS; i++) {
+        c = &playlist[i];
 
-		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
-	return 1;
+        if(c->song && !c->paused) {
+            c->paused = true;
+            Chan_StopTrack(seq, c);
+        }
+    }
+
+    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+    return 1;
 }
 
 //
@@ -761,15 +766,20 @@ static int Signal_Pause(doomseq_t* seq) {
 //
 
 static int Signal_Resume(doomseq_t* seq) {
-	int i;
-	channel_t* c;
+    int i;
+    channel_t* c;
 
-		for (i = 0; i < MIDI_CHANNELS; i++) {
-			c = &playlist[i];
-		}
+    for(i = 0; i < MIDI_CHANNELS; i++) {
+        c = &playlist[i];
 
-		Seq_SetStatus(seq, SEQ_SIGNAL_READY);
-	return 1;
+        if(c->song && c->paused) {
+            c->paused = false;
+            fluid_synth_noteon(seq->synth, c->track->channel, c->key, c->velocity);
+        }
+    }
+
+    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+    return 1;
 }
 
 static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
@@ -787,25 +797,25 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 //
 
 static dboolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
-	if (chan->state == CHAN_STATE_ENDED) {
-		return true;
-	}
-	else if (chan->state == CHAN_STATE_READY && chan->paused) {
-		chan->state = CHAN_STATE_PAUSED;
-		chan->lasttic = chan->nexttic - chan->tics;
-		return true;
-	}
-	else if (chan->state == CHAN_STATE_PAUSED) {
-		if (!chan->paused) {
-			chan->nexttic = chan->tics + chan->lasttic;
-			chan->state = CHAN_STATE_READY;
-		}
-		else {
-			return true;
-		}
-	}
+    if(chan->state == CHAN_STATE_ENDED) {
+        return true;
+    }
+    else if(chan->state == CHAN_STATE_READY && chan->paused) {
+        chan->state = CHAN_STATE_PAUSED;
+        chan->lasttic = chan->nexttic - chan->tics;
+        return true;
+    }
+    else if(chan->state == CHAN_STATE_PAUSED) {
+        if(!chan->paused) {
+            chan->nexttic = chan->tics + chan->lasttic;
+            chan->state = CHAN_STATE_READY;
+        }
+        else {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 //
