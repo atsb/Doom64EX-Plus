@@ -59,6 +59,9 @@ CVAR(s_soundfont, doomsnd.sf2);
 #ifdef __linux__
 #define DEFAULT_FLUID_DRIVER "alsa"
 CVAR_CMD(s_driver, alsa)
+#elif __FreeBSD__ || __OpenBSD__
+#define DEFAULT_FLUID_DRIVER "oss"
+CVAR_CMD(s_driver, oss)
 #elif _WIN32
 #define DEFAULT_FLUID_DRIVER "dsound"
 CVAR_CMD(s_driver, dsound)
