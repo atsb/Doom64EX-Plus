@@ -97,7 +97,7 @@ Use the `build.sh` script for a native build or the `build_win_cross.sh` script 
 
 ## Raspberry Pi 3
 
-Use `build_rpi3_raspbian.sh` For a native build of Raspberry Pi 3B
+Use `build_rpi3_raspbian.sh` for a native build of Raspberry Pi 3B
 
 ## FreeBSD/OpenBSD
 
@@ -115,7 +115,7 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 * `doom64ex-plus.wad`
 * `doomsnd.sf2`
 
-## Linux and FreeBSD/OpenBSD
+## Linux, FreeBSD/OpenBSD and Raspberry pi3
 
 You can place the asset data described above to any of the following directories:
 
