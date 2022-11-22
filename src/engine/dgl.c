@@ -24,7 +24,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __OpenBSD__
+#include <SDL_opengl.h>
+#else
 #include <SDL2/SDL_opengl.h>
+#endif
+
 #include "doomdef.h"
 #include "doomstat.h"
 #include "gl_main.h"
