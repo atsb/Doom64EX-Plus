@@ -40,8 +40,12 @@
 #include <unistd.h>
 #endif
 
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
-#include "fluidsynth.h"
+#endif
+#include <fluidsynth.h>
 
 #include "doomtype.h"
 #include "doomdef.h"

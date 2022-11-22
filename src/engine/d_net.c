@@ -36,7 +36,13 @@
 #include "tables.h"
 #include "m_misc.h"
 #include "con_console.h"
+
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
+
 #include "i_video.h"
 
 #define FEATURE_MULTIPLAYER 1

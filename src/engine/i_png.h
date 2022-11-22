@@ -23,7 +23,7 @@
 #ifndef __I_PNG_H__
 #define __I_PNG_H__
 
-#include "png.h"
+#include <png.h>
 #include "doomtype.h"
 
 byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,

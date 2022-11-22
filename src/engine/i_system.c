@@ -25,7 +25,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __OpenBSD__
+#include <SDL_timer.h>
+#else
 #include <SDL2/SDL_timer.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 

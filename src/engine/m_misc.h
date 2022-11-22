@@ -23,7 +23,7 @@
 
 #ifndef __M_MISC__
 #define __M_MISC__
-
+#include <stdarg.h>
 #include <stdbool.h>
 #include "doomtype.h"
 #include "m_fixed.h"
