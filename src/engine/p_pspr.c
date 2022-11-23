@@ -249,8 +249,7 @@ dboolean P_CheckAmmo(player_t* player) {
 //
 // P_FireWeapon.
 //
-void P_FireWeapon(void* data) {
-	player_t* player = (player_t*)data;
+void P_FireWeapon(player_t* player) {
 	statenum_t    newstate;
 
 	if (!P_CheckAmmo(player)) {
@@ -258,7 +257,12 @@ void P_FireWeapon(void* data) {
 	}
 
 	P_SetMobjState(player->mo, S_PLAY_ATK1);
+	player->psprites[ps_weapon].sx = FRACUNIT;
+	player->psprites[ps_weapon].sy = WEAPONTOP;
 	newstate = weaponinfo[player->readyweapon].atkstate;
+	if (player->refire && player->readyweapon == wp_pistol) {
+		newstate++;
+	}
 	P_SetPsprite(player, ps_weapon, newstate);
 	P_NoiseAlert(player->mo, player->mo);
 }
