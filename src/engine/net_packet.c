@@ -76,7 +76,7 @@ void NET_FreePacket(net_packet_t* packet)
 // Read a byte from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt8(net_packet_t* packet, uint32_t* data)
+dboolean NET_ReadInt8(net_packet_t* packet, int* data)
 {
 	if (packet->pos + 1 > packet->len)
 		return false;
@@ -126,9 +126,9 @@ dboolean NET_ReadInt32(net_packet_t* packet, uint32_t* data)
 
 // Signed read functions
 
-dboolean NET_ReadSInt8(net_packet_t* packet, int32_t* data)
+dboolean NET_ReadSInt8(net_packet_t* packet, int* data)
 {
-	if (NET_ReadInt8(packet, (uint32_t*)data))
+	if (NET_ReadInt8(packet, data))
 	{
 		if (*data & (1 << 7))
 		{
@@ -180,11 +180,11 @@ dboolean NET_ReadSInt32(net_packet_t* packet, int32_t* data)
 // Read a string from the packet.  Returns NULL if a terminating
 // NUL character was not found before the end of the packet.
 
-int8_t* NET_ReadString(net_packet_t* packet)
+char* NET_ReadString(net_packet_t* packet)
 {
-	int8_t* start;
+	char* start;
 
-	start = (int8_t*)packet->data + packet->pos;
+	start = (char*)packet->data + packet->pos;
 
 	// Search forward for a NUL character
 
@@ -276,7 +276,7 @@ void NET_WriteInt32(net_packet_t* packet, uint32_t i)
 	packet->len += 4;
 }
 
-void NET_WriteString(net_packet_t* packet, int8_t* string)
+void NET_WriteString(net_packet_t* packet, char* string)
 {
 	byte* p;
 
@@ -289,7 +289,7 @@ void NET_WriteString(net_packet_t* packet, int8_t* string)
 
 	p = packet->data + packet->len;
 
-	strcpy((int8_t*)p, string);
+	strcpy((char*)p, string);
 
 	packet->len += strlen(string) + 1;
 }

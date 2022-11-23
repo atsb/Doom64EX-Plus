@@ -60,7 +60,7 @@ void NET_AddModule(net_context_t* context, net_module_t* module)
 	++context->num_modules;
 }
 
-net_addr_t* NET_ResolveAddress(net_context_t* context, int8_t* addr)
+net_addr_t* NET_ResolveAddress(net_context_t* context, char* addr)
 {
 	int i;
 	net_addr_t* result;
@@ -117,9 +117,9 @@ dboolean NET_RecvPacket(net_context_t* context,
 // Note: this prints into a static buffer, calling again overwrites
 // the first result
 
-int8_t* NET_AddrToString(net_addr_t* addr)
+char* NET_AddrToString(net_addr_t* addr)
 {
-	static int8_t buf[128];
+	static char buf[128];
 
 	addr->module->AddrToString(addr, buf, sizeof(buf) - 1);
 

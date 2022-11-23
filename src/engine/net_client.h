@@ -39,7 +39,7 @@ void NET_CL_Init(void);
 void NET_CL_StartGame();
 void NET_CL_SendTiccmd(ticcmd_t* ticcmd, int maketic);
 void NET_Init(void);
-void NET_CL_SendCheat(int player, int type, int8_t* buff);
+void NET_CL_SendCheat(int player, int type, char* buff);
 
 extern dboolean net_client_connected;
 extern dboolean net_client_received_wait_data;
@@ -47,10 +47,10 @@ extern dboolean net_client_controller;
 extern uint32_t net_clients_in_game;
 extern uint32_t net_drones_in_game;
 extern dboolean net_waiting_for_start;
-extern int8_t net_player_names[MAXPLAYERS][MAXPLAYERNAME];
-extern int8_t net_player_addresses[MAXPLAYERS][MAXPLAYERNAME];
+extern char net_player_names[MAXPLAYERS][MAXPLAYERNAME];
+extern char net_player_addresses[MAXPLAYERS][MAXPLAYERNAME];
 extern int net_player_number;
-extern int8_t* net_player_name;
+extern char* net_player_name;
 
 extern md5_digest_t net_server_wad_md5sum;
 extern md5_digest_t net_local_wad_md5sum;

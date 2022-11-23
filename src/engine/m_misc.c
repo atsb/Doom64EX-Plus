@@ -54,7 +54,7 @@
 #include "p_saveg.h"
 
 int      myargc;
-int8_t** myargv;
+char** myargv;
 
 //
 // M_CheckParm
@@ -63,7 +63,7 @@ int8_t** myargv;
 // Returns the argument number (1 to argc-1)
 // or 0 if not present
 
-int M_CheckParm(const int8_t* check) {
+int M_CheckParm(const char* check) {
 	int        i;
 
 	for (i = 1; i < myargc; i++) {
@@ -153,7 +153,7 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-dboolean M_WriteFile(int8_t const* name, void* source, int length) {
+dboolean M_WriteFile(char const* name, void* source, int length) {
 	FILE* fp;
 	dboolean result;
 
@@ -178,7 +178,7 @@ dboolean M_WriteFile(int8_t const* name, void* source, int length) {
 // M_WriteTextFile
 //
 
-dboolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
+dboolean M_WriteTextFile(char const* name, char* source, int length) {
 	int handle;
 	int count;
 #ifdef _WIN32
@@ -209,7 +209,7 @@ dboolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
 // M_ReadFile
 //
 
-int M_ReadFile(int8_t const* name, byte** buffer) {
+int M_ReadFile(char const* name, byte** buffer) {
 	FILE* fp;
 
 	errno = 0;
@@ -269,8 +269,8 @@ intptr_t M_FileLength(FILE* handle) {
 // killough 11/98: rewritten
 //
 
-void M_NormalizeSlashes(int8_t* str) {
-	int8_t* p;
+void M_NormalizeSlashes(char* str) {
+	char* p;
 
 	// Convert all slashes/backslashes to DIR_SEPARATOR
 	for (p = str; *p; p++) {
@@ -292,7 +292,7 @@ void M_NormalizeSlashes(int8_t* str) {
 // Check if a wad file exists
 //
 
-int M_FileExists(int8_t* filename) {
+int M_FileExists(char* filename) {
 	FILE* fstream;
 
 	fstream = fopen(filename, "r");
@@ -340,7 +340,7 @@ void M_LoadDefaults(void) {
 //
 
 void M_ScreenShot(void) {
-	int8_t    name[13];
+	char    name[13];
 	int     shotnum = 0;
 	FILE* fh;
 	byte* buff;

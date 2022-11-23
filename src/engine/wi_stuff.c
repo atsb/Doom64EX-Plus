@@ -53,7 +53,7 @@ static int killvalue[MAXPLAYERS];
 static int secretpercent[MAXPLAYERS];
 static int secretvalue[MAXPLAYERS];
 
-static int8_t timevalue[16];
+static char timevalue[16];
 
 static int wi_stage = 0;
 static int wi_counter = 0;
@@ -416,7 +416,7 @@ void WI_Drawer(void) {
 
 	// draw password and name of next map
 	if (wi_stage > 4 && (P_GetMapInfo(nextmap) != NULL)) {
-		int8_t password[20];
+		char password[20];
 		byte* passData;
 		int i = 0;
 		int y = 145;

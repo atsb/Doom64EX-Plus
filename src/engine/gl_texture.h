@@ -71,7 +71,7 @@ void        GL_SetCombineOperandRGB(int operand, int target);
 void        GL_SetCombineOperandAlpha(int operand, int target);
 void        GL_BindWorldTexture(int texnum, int* width, int* height);
 void        GL_BindSpriteTexture(int spritenum, int pal);
-int         GL_BindGfxTexture(const int8_t* name, dboolean alpha);
+int         GL_BindGfxTexture(const char* name, dboolean alpha);
 int         GL_PadTextureDims(int size);
 void        GL_SetNewPalette(int id, byte palID);
 void        GL_DumpTextures(void);

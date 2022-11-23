@@ -77,7 +77,7 @@ CVAR_CMD(s_driver, coreaudio)
 CVAR_CMD(s_driver, sndio)
 #endif
 {
-	int8_t* driver = cvar->string;
+	char* driver = cvar->string;
 
 	// this is absolutely horrible
 	if (!dstrcmp(cvar->defvalue, "default")) {
@@ -130,14 +130,14 @@ static dboolean seqready = false;
 //
 
 typedef struct {
-	int8_t        header[4];
+	char        header[4];
 	int         length;
 	byte* data;
 	byte        channel;
 } track_t;
 
 typedef struct {
-	int8_t        header[4];
+	char        header[4];
 	int         chunksize;
 	int16_t       type;
 	word        ntracks;
@@ -281,7 +281,7 @@ typedef int(*signalhandler)(doomseq_t*);
 // Seq_SetConfig
 //
 
-static void Seq_SetConfig(doomseq_t* seq, int8_t* setting, int value) {
+static void Seq_SetConfig(doomseq_t* seq, char* setting, int value) {
 	fluid_settings_setint(seq->settings, setting, value);
 }
 
@@ -618,7 +618,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 	int meta;
 	int b;
 	int i;
-	int8_t string[256];
+	char string[256];
 
 	meta = Chan_GetNextMidiByte(chan);
 
@@ -1094,7 +1094,7 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 
 void I_InitSequencer(void) {
 	dboolean sffound;
-	int8_t* sfpath;
+	char* sfpath;
 
 	CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 

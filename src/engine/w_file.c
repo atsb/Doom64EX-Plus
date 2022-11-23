@@ -54,7 +54,7 @@ typedef struct {
 
 extern wad_file_class_t stdc_wad_file;
 
-static wad_file_t* W_StdC_OpenFile(int8_t* path) {
+static wad_file_t* W_StdC_OpenFile(char* path) {
 	stdc_wad_file_t* result;
 	FILE* fstream;
 
@@ -113,7 +113,7 @@ wad_file_class_t stdc_wad_file = {
 
 static wad_file_class_t* wad_file_classes = &stdc_wad_file;
 
-wad_file_t* W_OpenFile(int8_t* path) {
+wad_file_t* W_OpenFile(char* path) {
 	return stdc_wad_file.OpenFile(path);
 }
 
@@ -131,7 +131,7 @@ size_t W_Read(wad_file_t* wad, uint32_t offset,
 // Searches WAD search paths for an WAD with a specific filename.
 //
 
-int8_t* W_FindWADByName(int8_t* name) {
+char* W_FindWADByName(char* name) {
 	char* buf;
 	int i;
 	dboolean exists;
@@ -170,8 +170,8 @@ int8_t* W_FindWADByName(int8_t* name) {
 // if not found.
 //
 
-int8_t* W_TryFindWADByName(int8_t* filename) {
-	int8_t* result;
+char* W_TryFindWADByName(char* filename) {
+	char* result;
 
 	result = W_FindWADByName(filename);
 
@@ -188,7 +188,7 @@ int8_t* W_TryFindWADByName(int8_t* filename) {
 // Checks availability of IWAD files by name,
 //
 
-int8_t* W_FindIWAD(void)
+char* W_FindIWAD(void)
 {
 	return I_FindDataFile("DOOM64.WAD");
 }

@@ -51,7 +51,7 @@ void I_StartTic(void);
 void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
-
+dboolean I_UpdateGrab(void);
 ////////////Input//////////////
 
 extern int UseMouse[2];

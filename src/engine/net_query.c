@@ -102,7 +102,7 @@ static void NET_Query_SendQuery(net_addr_t* addr)
 	NET_FreePacket(request);
 }
 
-static void formatted_printf(int wide, int8_t* s, ...)
+static void formatted_printf(int wide, char* s, ...)
 {
 	va_list args;
 	int i;
@@ -244,7 +244,7 @@ void NET_Query_Init(void)
 	num_responses = 0;
 }
 
-void NET_QueryAddress(int8_t* addr)
+void NET_QueryAddress(char* addr)
 {
 	net_addr_t* net_addr;
 

@@ -126,7 +126,7 @@ static dboolean NET_CL_RecvPacket(net_addr_t** addr, net_packet_t** packet)
 	return false;
 }
 
-static void NET_CL_AddrToString(net_addr_t* addr, int8_t* buffer, int buffer_len)
+static void NET_CL_AddrToString(net_addr_t* addr, char* buffer, int buffer_len)
 {
 	snprintf(buffer, buffer_len, "local server");
 }
@@ -135,7 +135,7 @@ static void NET_CL_FreeAddress(net_addr_t* addr)
 {
 }
 
-static net_addr_t* NET_CL_ResolveAddress(int8_t* address)
+static net_addr_t* NET_CL_ResolveAddress(char* address)
 {
 	client_addr.module = &net_loop_client_module;
 
@@ -195,7 +195,7 @@ static dboolean NET_SV_RecvPacket(net_addr_t** addr, net_packet_t** packet)
 	return false;
 }
 
-static void NET_SV_AddrToString(net_addr_t* addr, int8_t* buffer, int buffer_len)
+static void NET_SV_AddrToString(net_addr_t* addr, char* buffer, int buffer_len)
 {
 	snprintf(buffer, buffer_len, "local client");
 }
@@ -204,7 +204,7 @@ static void NET_SV_FreeAddress(net_addr_t* addr)
 {
 }
 
-static net_addr_t* NET_SV_ResolveAddress(int8_t* address)
+static net_addr_t* NET_SV_ResolveAddress(char* address)
 {
 	server_addr.module = &net_loop_server_module;
 	return &server_addr;

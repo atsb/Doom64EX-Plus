@@ -60,8 +60,8 @@ static intptr_t save_offset = 0;
 // P_GetSaveGameName
 //
 
-int8_t* P_GetSaveGameName(int num) {
-	int8_t name[256];
+char* P_GetSaveGameName(int num) {
+	char name[256];
 
 	sprintf(name, SAVEGAMENAME "%d.dsg", num);
 	return I_GetUserFile(name);
@@ -1058,7 +1058,7 @@ static void saveg_read_laserthinker_t(laserthinker_t* laserthinker) {
 //
 //------------------------------------------------------------------------
 
-static int8_t* saveg_gettime(void) {
+static char* saveg_gettime(void) {
 	time_t clock;
 	struct tm* lt;
 
@@ -1067,10 +1067,10 @@ static int8_t* saveg_gettime(void) {
 	return asctime(lt);
 }
 
-static void saveg_write_header(int8_t* description) {
+static void saveg_write_header(char* description) {
 	int i;
 	int size;
-	int8_t date[32];
+	char date[32];
 	byte* tbn;
 
 	for (i = 0; description[i] != '\0'; i++) {
@@ -1211,8 +1211,8 @@ static void saveg_write_marker(int marker) {
 // P_WriteSaveGame
 //
 
-dboolean P_WriteSaveGame(int8_t* description, int slot) {
-	//int8_t name[256];
+dboolean P_WriteSaveGame(char* description, int slot) {
+	//char name[256];
 
 	// setup game save file
 	// sprintf(name, SAVEGAMENAME"%d.dsg", slot);
@@ -1245,7 +1245,7 @@ dboolean P_WriteSaveGame(int8_t* description, int slot) {
 // P_ReadSaveGame
 //
 
-dboolean P_ReadSaveGame(int8_t* name) {
+dboolean P_ReadSaveGame(char* name) {
 	M_ReadFile(name, &savebuffer);
 	save_offset = 0;
 
@@ -1274,7 +1274,7 @@ dboolean P_ReadSaveGame(int8_t* name) {
 // P_QuickReadSaveHeader
 //
 
-dboolean P_QuickReadSaveHeader(int8_t* name, int8_t* date,
+dboolean P_QuickReadSaveHeader(char* name, char* date,
 	int* thumbnail, int* skill, int* map) {
 	int i;
 	int size;
