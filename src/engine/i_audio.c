@@ -323,7 +323,7 @@ static void Seq_SetStatus(doomseq_t* seq, int status) {
 static void Chan_SetMusicVolume(doomseq_t* seq, channel_t* chan) {
 	int vol;
 
-	vol = (int)((chan->volume * seq->musicvolume) / 127.0f);
+	vol = (int)((chan->volume * seq->musicvolume) / 220.0f);
 
 	fluid_synth_cc(seq->synth, chan->track->channel, 0x07, vol);
 }
@@ -338,7 +338,7 @@ static void Chan_SetSoundVolume(doomseq_t* seq, channel_t* chan) {
 	int vol;
 	int pan;
 
-	vol = (int)((chan->volume * seq->soundvolume) / 127.0f);
+	vol = (int)((chan->volume * seq->soundvolume) / 220.0f);
 	pan = chan->pan;
 
 	fluid_synth_cc(seq->synth, chan->id, 0x07, vol);
@@ -503,8 +503,8 @@ static channel_t* Song_AddTrackToPlaylist(doomseq_t* seq, song_t* song, track_t*
 			// channel ids should only be accessed by non-music sounds
 			playlist[i].id = 0x0f + i;
 
-			playlist[i].volume = 127.0f;
-			playlist[i].basevol = 127.0f;
+			playlist[i].volume = 177.0f;
+			playlist[i].basevol = 177.0f;
 			playlist[i].pan = 64;
 			playlist[i].origin = NULL;
 			playlist[i].depth = 0;
@@ -559,11 +559,11 @@ static void Event_ControlChange(doomseq_t* seq, channel_t* chan) {
 
 	if (ctrl == 0x07) {  // update volume
 		if (chan->song->type == 1) {
-			chan->volume = ((float)val * seq->musicvolume) / 127.0f;
+			chan->volume = ((float)val * seq->musicvolume) / 220.0f;
 			Chan_SetMusicVolume(seq, chan);
 		}
 		else {
-			chan->volume = ((float)val * chan->volume) / 127.0f;
+			chan->volume = ((float)val * chan->volume) / 220.0f;
 			Chan_SetSoundVolume(seq, chan);
 		}
 	}
@@ -1125,7 +1125,7 @@ void I_InitSequencer(void) {
 	//
 	doomseq.settings = new_fluid_settings();
 	Seq_SetConfig(&doomseq, "synth.midi-channels", MIDI_CHANNELS);
-	Seq_SetConfig(&doomseq, "synth.polyphony", 2048);
+	Seq_SetConfig(&doomseq, "synth.polyphony", 4096);
 
 	// 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
 	// JACK, if it's compiled in. We don't want to start jackd for a game).
@@ -1269,7 +1269,7 @@ void I_ShutdownSound(void) {
 //
 
 void I_SetMusicVolume(float volume) {
-	doomseq.musicvolume = (volume * 1.125f);
+	doomseq.musicvolume = (volume * 1.825f);
 }
 
 //
@@ -1277,7 +1277,7 @@ void I_SetMusicVolume(float volume) {
 //
 
 void I_SetSoundVolume(float volume) {
-	doomseq.soundvolume = (volume * 0.925f);
+	doomseq.soundvolume = (volume * 1.825f);
 }
 
 //
