@@ -358,6 +358,7 @@ void GL_SetDefaultCombiner(void) {
 
 void GL_SetColorScale(void) {
 	int cs = (int)r_colorscale.value;
+#ifndef __APPLE__
 
 	switch (cs) {
 	case 1:
@@ -370,6 +371,7 @@ void GL_SetColorScale(void) {
 		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 		break;
 	}
+#endif
 }
 
 //
