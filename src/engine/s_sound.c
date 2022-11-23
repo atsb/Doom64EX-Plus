@@ -83,12 +83,6 @@ CVAR_CMD(s_musvol, 80) {
 	}
 	S_SetMusicVolume(cvar->value);
 }
-CVAR_CMD(s_gain, 1) {
-	if (cvar->value < 0.0f) {
-		return;
-	}
-	S_SetGainOutput(cvar->value);
-}
 
 //
 // Internals.
@@ -121,7 +115,6 @@ void S_Init(void) {
 
 	S_SetMusicVolume(s_musvol.value);
 	S_SetSoundVolume(s_sfxvol.value);
-	S_SetGainOutput(s_gain.value);
 }
 
 //
@@ -138,14 +131,6 @@ void S_SetSoundVolume(float volume) {
 
 void S_SetMusicVolume(float volume) {
 	I_SetMusicVolume(volume);
-}
-
-//
-// S_SetGainOutput
-//
-
-void S_SetGainOutput(float db) {
-	I_SetGain(db);
 }
 
 //
@@ -405,7 +390,6 @@ CVAR_EXTERNAL(s_driver);
 void S_RegisterCvars(void) {
 	CON_CvarRegister(&s_sfxvol);
 	CON_CvarRegister(&s_musvol);
-	CON_CvarRegister(&s_gain);
 	CON_CvarRegister(&s_soundfont);
 	CON_CvarRegister(&s_driver);
 }

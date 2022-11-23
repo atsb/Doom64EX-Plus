@@ -55,7 +55,7 @@ Linux Single Board Computer
 
 *others may work but are untested*
 
-Linux Desktop / Laptop
+Linux / *BSD Desktop / Laptop
 
 - 1.8GHz Dual Core CPU
 - 2GB RAM
@@ -64,7 +64,7 @@ Linux Desktop / Laptop
 
 Windows
 
-- 2.0GHz Dual Core CPU
+- 1.8GHz Dual Core CPU
 - 4GB RAM
 - 80MB Disk Space
 - OpenGL 1.4+ Compliant Video Chip / Card
@@ -76,9 +76,9 @@ Windows
 - Windows does not yet support installing the software, however you are able to manually put the software in any directory
 	of your choosing and it will work fine.
 
-GNU/Linux
+GNU/Linux / BSD
 
-- GNU/Linux supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
+- GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
 	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
 
 Without the macro, it will look inside the current directory that the binary is in.
@@ -91,11 +91,23 @@ Clone this repo
 
     $ git clone https://github.com/atsb/Doom64EX-Plus
 
-### Linux or Cross Platform Compilation
+## Linux or Cross Platform Compilation
 
 Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
 
-### Windows
+## Raspberry Pi 3
+
+Use `build_rpi3_raspbian.sh` for a native build of Raspberry Pi 3B
+
+## FreeBSD
+
+Use the `build_freebsd.sh` script for a native build of FreeBSD
+
+## OpenBSD
+
+Use the `build_openbsd.sh` script for a native build of OpenBSD
+
+## Windows
 
 Use the Visual Studio solution and project files provided in the `Windows` directory of the repository for both 32-bit or 64-bit builds.
 
@@ -107,7 +119,7 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 * `doom64ex-plus.wad`
 * `doomsnd.sf2`
 
-### Linux 
+## Linux, FreeBSD/OpenBSD and Raspberry pi3
 
 You can place the asset data described above to any of the following directories:
 
@@ -118,7 +130,8 @@ Then, you can start playing:
 
     $ doom64ex-plus
 
-**NOTE for Linux users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.
+**NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
+`~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
 ### Windows
 

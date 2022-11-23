@@ -37,7 +37,13 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "d_main.h"
+
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
+
 #include "i_video.h"
 #include "m_misc.h"
 #include "i_system.h"
@@ -494,7 +500,7 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 // main
 //
 
-int main(int argc, int8_t* argv[]) {
+int main(int argc, char *argv[]) {
 	myargc = argc;
 	myargv = argv;
 

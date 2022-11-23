@@ -30,8 +30,13 @@
 #include <stdio.h>
 #include <math.h>
 
+#ifdef __OpenBSD__
+#include <SDL.h>
+#include <SDL_opengl.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#endif
 
 #include "m_misc.h"
 #include "doomdef.h"
@@ -58,10 +63,12 @@ CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 
+CVAR_EXTERNAL(m_menumouse);
+
 static void I_GetEvent(SDL_Event* Event);
 static void I_ReadMouse(void);
 static void I_InitInputs(void);
-void I_UpdateGrab(void);
+dboolean I_UpdateGrab(void);
 
 //================================================================================
 // Video
@@ -459,6 +466,15 @@ static void I_ReadMouse(void) {
 	lastmbtn = btn;
 }
 
+void I_CenterMouse(void) {
+	// Warp the the screen center
+	SDL_WarpMouseInWindow(window, (unsigned short)(video_width / 2), (unsigned short)(video_height / 2));
+
+	// Clear any relative movement caused by warping
+	SDL_PumpEvents();
+	SDL_GetRelativeMouseState(NULL, NULL);
+}
+
 //
 // I_MouseAccelChange
 //
@@ -496,7 +512,7 @@ static void I_ActivateMouse(void) {
 // I_UpdateGrab
 //
 
-void I_UpdateGrab(void) {
+dboolean I_UpdateGrab(void) {
 	static dboolean currently_grabbed = false;
 	dboolean grab;
 
@@ -508,6 +524,10 @@ void I_UpdateGrab(void) {
 		SDL_ShowCursor(0);
 		SDL_SetRelativeMouseMode(1);
 		SDL_SetWindowGrab(window, 1);
+	}
+
+	if (!InWindow && m_menumouse.value <= 0) {
+		return true;
 	}
 
 	if (!grab && currently_grabbed) {
@@ -625,7 +645,7 @@ static void I_GetEvent(SDL_Event* Event) {
 
 static void I_InitInputs(void) {
 	SDL_PumpEvents();
-
+	SDL_ShowCursor(m_menumouse.value < 1);
 	I_MouseAccelChange();
 
 #ifdef _USE_XINPUT

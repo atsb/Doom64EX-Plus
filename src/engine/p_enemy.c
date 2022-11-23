@@ -181,7 +181,6 @@ dboolean P_CheckMeleeRange(mobj_t* actor) {
 
 dboolean P_CheckMissileRange(mobj_t* actor) {
 	fixed_t    dist;
-	int        idist;
 
 	if (!(actor->flags & MF_SEETARGET)) {
 		return false;

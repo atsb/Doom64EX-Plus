@@ -241,6 +241,24 @@ CVAR_CMD(m_menufadetime, 0) {
 	}
 }
 
+CVAR_CMD(m_menumouse, 1) {
+	SDL_ShowCursor(cvar->value < 1);
+	if (cvar->value <= 0) {
+		itemSelected = -1;
+		SDL_ShowCursor(cvar->value = 0);
+	}
+}
+
+CVAR_CMD(m_cursorscale, 8) {
+	if (cvar->value < 0) {
+		cvar->value = 0;
+	}
+
+	if (cvar->value > 50) {
+		cvar->value = 50;
+	}
+}
+
 //------------------------------------------------------------------------
 //
 // MAIN MENU
@@ -970,6 +988,8 @@ enum {
 	misc_header1,
 	misc_menufade,
 	misc_empty1,
+	misc_menumouse,
+	misc_cursorsize,
 	misc_empty2,
 	misc_header2,
 	misc_aim,
@@ -1002,6 +1022,8 @@ menuitem_t MiscMenu[] = {
 	{-1,"Menu Options",0 },
 	{3,"Menu Fade Speed",M_MiscChoice, 'm' },
 	{-1,"",0 },
+	{2,"Show Cursor:",M_MiscChoice, 'h'},
+	{3,"Cursor Scale:",M_MiscChoice,'u'},
 	{-1,"",0 },
 	{-1,"Gameplay",0 },
 	{2,"Auto Aim:",M_MiscChoice, 'a'},
@@ -1033,6 +1055,8 @@ int8_t* MiscHints[misc_end] = {
 	NULL,
 	"change transition speeds between switching menus",
 	NULL,
+	"enable menu cursor",
+	"set the size of the menu cursor",
 	NULL,
 	NULL,
 	"toggle classic style auto-aiming",
@@ -1062,6 +1086,8 @@ int8_t* MiscHints[misc_end] = {
 
 menudefault_t MiscDefault[] = {
 	{ &m_menufadetime, 0 },
+	{ &m_menumouse, 1 },
+	{ &m_cursorscale, 8 },
 	{ &p_autoaim, 1 },
 	{ &p_allowjump, 0 },
 	{ &p_autorun, 1 },
@@ -1085,6 +1111,7 @@ menudefault_t MiscDefault[] = {
 
 menuthermobar_t SetupBars[] = {
 	{ misc_empty1, 80, &m_menufadetime },
+	{ misc_empty2, 50, &m_cursorscale },
 	{ -1, 0 }
 };
 
@@ -1129,6 +1156,29 @@ void M_MiscChoice(int choice) {
 				CON_CvarSetValue(m_menufadetime.name, 0);
 			}
 		}
+		break;
+
+	case misc_cursorsize:
+		if (choice) {
+			if (m_cursorscale.value < 50) {
+				M_SetCvar(&m_cursorscale, m_cursorscale.value + 0.5f);
+			}
+			else {
+				CON_CvarSetValue(m_cursorscale.name, 50);
+			}
+		}
+		else {
+			if (m_cursorscale.value > 0.0f) {
+				M_SetCvar(&m_cursorscale, m_cursorscale.value - 0.5f);
+			}
+			else {
+				CON_CvarSetValue(m_cursorscale.name, 0);
+			}
+		}
+		break;
+
+	case misc_menumouse:
+		M_SetOptionValue(choice, 0, 1, 1, &m_menumouse);
 		break;
 
 	case misc_aim:
@@ -1219,6 +1269,12 @@ void M_DrawMisc(void) {
 		M_DrawThermo(MiscDef.x, MiscDef.y + LINEHEIGHT * (y + 1), 80, m_menufadetime.value);
 	}
 
+	if (currentMenu->menupageoffset <= misc_cursorsize + 1 &&
+		(misc_cursorsize + 1) - currentMenu->menupageoffset < currentMenu->numpageitems) {
+		y = misc_cursorsize - currentMenu->menupageoffset;
+		M_DrawThermo(MiscDef.x, MiscDef.y + LINEHEIGHT * (y + 1), 50, m_cursorscale.value);
+	}
+
 #define DRAWMISCITEM(a, b, c) \
     if(currentMenu->menupageoffset <= a && \
         a - currentMenu->menupageoffset < currentMenu->numpageitems) \
@@ -1228,6 +1284,7 @@ void M_DrawMisc(void) {
             c[(int)b]); \
     }
 
+	DRAWMISCITEM(misc_menumouse, m_menumouse.value, msgNames);
 	DRAWMISCITEM(misc_aim, p_autoaim.value, msgNames);
 	DRAWMISCITEM(misc_jump, p_allowjump.value, msgNames);
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
@@ -2345,8 +2402,8 @@ void M_Sound(int choice) {
 }
 
 void M_DrawSound(void) {
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 100, s_sfxvol.value);
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 100, s_musvol.value);
+	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 300, s_sfxvol.value);
+	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 300, s_musvol.value);
 }
 
 void M_SfxVol(int choice)
@@ -2354,18 +2411,18 @@ void M_SfxVol(int choice)
 	switch (choice) {
 	case 0:
 		if (s_sfxvol.value > 0.0f) {
-			M_SetCvar(&s_sfxvol, s_sfxvol.value - 1);
+			M_SetCvar(&s_sfxvol, s_sfxvol.value - 20);
 		}
 		else {
 			CON_CvarSetValue(s_sfxvol.name, 0);
 		}
 		break;
 	case 1:
-		if (s_sfxvol.value < 100.0f) {
-			M_SetCvar(&s_sfxvol, s_sfxvol.value + 1);
+		if (s_sfxvol.value < 300.0f) {
+			M_SetCvar(&s_sfxvol, s_sfxvol.value + 20);
 		}
 		else {
-			CON_CvarSetValue(s_sfxvol.name, 100);
+			CON_CvarSetValue(s_sfxvol.name, 300);
 		}
 		break;
 	}
@@ -2376,18 +2433,18 @@ void M_MusicVol(int choice)
 	switch (choice) {
 	case 0:
 		if (s_musvol.value > 0.0f) {
-			M_SetCvar(&s_musvol, s_musvol.value - 1);
+			M_SetCvar(&s_musvol, s_musvol.value - 20);
 		}
 		else {
 			CON_CvarSetValue(s_musvol.name, 0);
 		}
 		break;
 	case 1:
-		if (s_musvol.value < 100.0f) {
-			M_SetCvar(&s_musvol, s_musvol.value + 1);
+		if (s_musvol.value < 300.0f) {
+			M_SetCvar(&s_musvol, s_musvol.value + 20);
 		}
 		else {
-			CON_CvarSetValue(s_musvol.name, 100);
+			CON_CvarSetValue(s_musvol.name, 300);
 		}
 		break;
 	}
@@ -4232,6 +4289,15 @@ dboolean M_Responder(event_t* ev) {
 			shiftdown = false;
 		}
 	}
+	else if (ev->type == ev_mouse && (ev->data2 | ev->data3)) {
+		// handle mouse-over selection
+		if (m_menumouse.value) {
+			M_CheckDragThermoBar(ev, currentMenu);
+			if (M_CursorHighlightItem(currentMenu)) {
+				itemOn = itemSelected;
+			}
+		}
+	}
 
 	if (ch == -1) {
 		return false;
@@ -4682,6 +4748,33 @@ static void M_DrawMenuSkull(int x, int y) {
 }
 
 //
+// M_DrawCursor
+//
+
+static void M_DrawCursor(int x, int y) {
+	if (m_menumouse.value) {
+		int gfxIdx;
+		float factor;
+		float scale;
+
+		scale = ((m_cursorscale.value + 25.0f) / 100.0f);
+		gfxIdx = GL_BindGfxTexture("CURSOR", true);
+		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
+
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+
+		GL_SetOrthoScale(scale);
+		GL_SetState(GLSTATE_BLEND, 1);
+		GL_SetupAndDraw2DQuad((float)x * factor, (float)y * factor,
+			gfxwidth[gfxIdx], gfxheight[gfxIdx], 0, 1.0f, 0, 1.0f, WHITE, 0);
+
+		GL_SetState(GLSTATE_BLEND, 0);
+		GL_SetOrthoScale(1.0f);
+	}
+}
+
+//
 // M_Drawer
 //
 // Called after the view has been rendered,
@@ -4930,6 +5023,8 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1);
 	}
 #endif
+
+	M_DrawCursor(mouse_x, mouse_y);
 }
 
 //
@@ -4939,6 +5034,14 @@ void M_Drawer(void) {
 void M_ClearMenus(void) {
 	if (!allowclearmenu) {
 		return;
+	}
+
+	// center mouse before clearing menu
+	// so the input code won't try to
+	// re-center the mouse; which can
+	// cause the player's view to warp
+	if (gamestate == GS_LEVEL) {
+		I_CenterMouse();
 	}
 
 	menufadefunc = NULL;
@@ -5149,5 +5252,7 @@ void M_Init(void) {
 //
 
 void M_RegisterCvars(void) {
+	CON_CvarRegister(&m_menumouse);
+	CON_CvarRegister(&m_cursorscale);
 	CON_CvarRegister(&m_menufadetime);
 }

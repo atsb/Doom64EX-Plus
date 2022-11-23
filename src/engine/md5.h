@@ -24,9 +24,12 @@
 #define MD5_H
 
 #include "doomtype.h"
-//#ifdef _WIN32
+#ifdef __OpenBSD__
+#include <SDL_config.h>
+#else 
 #include <SDL2/SDL_config.h>
-//#endif
+#endif
+
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif

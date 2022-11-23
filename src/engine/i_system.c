@@ -25,6 +25,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __OpenBSD__
+#include <SDL_timer.h>
+#else
+#include <SDL2/SDL_timer.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -32,9 +38,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
-#endif
-
-#ifdef _WIN32
+#include <time.h>
+#else
+#include <windows.h>
 #include <direct.h>
 #include <io.h>
 #endif
@@ -68,24 +74,32 @@ CVAR(v_accessibility, 0);
 #endif
 
 ticcmd_t        emptycmd;
-static int64    I_GetTime_Scale = 1 << 24;
+static int32    I_GetTime_Scale = 1 << 24;
 
 //
 // I_uSleep
 //
 
 void I_Sleep(intptr_t usecs) {
-	SDL_Delay(usecs);
+#if defined _WIN32
+	Sleep((DWORD)usecs);
+#else
+	struct timespec tc;
+	tc.tv_sec = usecs / 1000;
+	tc.tv_nsec = (usecs % 1000) * 1000000;
+	nanosleep(&tc, NULL);
+#endif
 }
 
-static int basetime = 0;
+static Uint32 basetime = 0;
 
 //
 // I_GetTimeNormal
 //
 
 static int I_GetTimeNormal(void) {
-	uint32 ticks;
+	Uint32 ticks;
+	Uint32 tic_division = 1000;
 
 	ticks = SDL_GetTicks();
 
@@ -95,7 +109,7 @@ static int I_GetTimeNormal(void) {
 
 	ticks -= basetime;
 
-	return (ticks * TICRATE) / 1000;
+	return (ticks * TICRATE) / tic_division;
 }
 
 //
@@ -103,7 +117,7 @@ static int I_GetTimeNormal(void) {
 //
 
 static int I_GetTime_Scaled(void) {
-	return (int)((int64)I_GetTimeNormal() * I_GetTime_Scale >> 24);
+	return ((int32)I_GetTimeNormal() * I_GetTime_Scale >> 24);
 }
 
 //
@@ -358,7 +372,7 @@ int (*I_GetTime)(void) = I_GetTime_Error;
 //
 
 int I_GetTimeMS(void) {
-	uint32 ticks;
+	Uint32 ticks;
 
 	ticks = SDL_GetTicks();
 

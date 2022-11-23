@@ -25,8 +25,14 @@
 //-----------------------------------------------------------------------------
 
 #include <math.h>
+
+#ifdef __OpenBSD__
+#include <SDL.h>
+#include <SDL_opengl.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#endif
 
 #ifdef _WIN32
 #include <wglext.h>
@@ -352,6 +358,7 @@ void GL_SetDefaultCombiner(void) {
 
 void GL_SetColorScale(void) {
 	int cs = (int)r_colorscale.value;
+#ifndef __APPLE__
 
 	switch (cs) {
 	case 1:
@@ -364,6 +371,7 @@ void GL_SetColorScale(void) {
 		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 		break;
 	}
+#endif
 }
 
 //

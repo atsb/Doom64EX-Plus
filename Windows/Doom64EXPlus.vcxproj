@@ -129,6 +129,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_USE_XINPUT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -169,7 +171,9 @@
     <ClCompile Include="..\src\engine\g_settings.c" />
     <ClCompile Include="..\src\engine\info.c" />
     <ClCompile Include="..\src\engine\in_stuff.c" />
-    <ClCompile Include="..\src\engine\i_audio.c" />
+    <ClCompile Include="..\src\engine\i_audio.c">
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="..\src\engine\i_main.c" />
     <ClCompile Include="..\src\engine\i_png.c" />
     <ClCompile Include="..\src\engine\i_system.c" />
