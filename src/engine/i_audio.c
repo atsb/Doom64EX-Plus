@@ -323,7 +323,7 @@ static void Seq_SetStatus(doomseq_t* seq, int status) {
 static void Chan_SetMusicVolume(doomseq_t* seq, channel_t* chan) {
 	int vol;
 
-	vol = (int)((chan->volume * seq->musicvolume) / 220.0f);
+	vol = (int)((chan->volume * seq->musicvolume) / 320.0f);
 
 	fluid_synth_cc(seq->synth, chan->track->channel, 0x07, vol);
 }
@@ -338,7 +338,7 @@ static void Chan_SetSoundVolume(doomseq_t* seq, channel_t* chan) {
 	int vol;
 	int pan;
 
-	vol = (int)((chan->volume * seq->soundvolume) / 220.0f);
+	vol = (int)((chan->volume * seq->soundvolume) / 320.0f);
 	pan = chan->pan;
 
 	fluid_synth_cc(seq->synth, chan->id, 0x07, vol);
@@ -559,11 +559,11 @@ static void Event_ControlChange(doomseq_t* seq, channel_t* chan) {
 
 	if (ctrl == 0x07) {  // update volume
 		if (chan->song->type == 1) {
-			chan->volume = ((float)val * seq->musicvolume) / 220.0f;
+			chan->volume = ((float)val * seq->musicvolume) / 320.0f;
 			Chan_SetMusicVolume(seq, chan);
 		}
 		else {
-			chan->volume = ((float)val * chan->volume) / 220.0f;
+			chan->volume = ((float)val * chan->volume) / 320.0f;
 			Chan_SetSoundVolume(seq, chan);
 		}
 	}
