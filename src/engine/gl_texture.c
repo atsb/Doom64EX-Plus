@@ -210,9 +210,9 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	// create a new texture
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
-#ifdef WIP
+
     GL_LoadShader("GLSL/test.vert", "GLSL/test.frag");
-	GLuint VBO, VAO;
+	GLuint VBO = 0, VAO = 0; 
 	glGenVertexArrays(1, VAO);
 	glGenBuffers(1, VBO);
 	glBindVertexArray(VAO); 
@@ -223,17 +223,16 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
 	glBindVertexArray(0); 
-#endif
+
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-#ifdef WIP
+
 	glUseProgram(ID);
-	glDeleteProgram(ID);
-#endif
+
 	GL_CheckFillMode();
 	GL_SetTextureFilter();
 

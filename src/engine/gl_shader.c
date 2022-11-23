@@ -21,60 +21,19 @@
 
 #include "gl_shader.h"
 #include <stdio.h> 
-#include <fcntl.h> //open();, read(); and etc
 GLuint ID;
 
 void GL_LoadShader(const char* textureShader, const char* fragmentShader) 
 {
-	const char *textureShaderCode;
-	const char *fragmentShaderCode;
-
-	//Open the shader file.
-	FILE* textureShaderFile = fopen(textureShader, "rb");
-	FILE* fragmentShaderFile = fopen(fragmentShader, "rb");
-
-	//read the shaders code
-	fread(textureShaderCode, sizeof(textureShaderCode), 1, textureShaderFile);
-	fread(fragmentShaderCode, sizeof(fragmentShaderCode), 1, fragmentShaderFile);
-
-	if(!textureShaderFile)
-	{
-		printf("Failed to load the texture shader, error: %lu", glGetError());
-       return fclose(textureShaderFile);
-	}
-
-	else
-	{
-	   
-       fseek(textureShaderFile, sizeof(textureShaderCode), SEEK_SET);
-	   fseek(textureShaderFile, sizeof(textureShaderCode), SEEK_END);
-	   return ftell(textureShaderFile);
-	}
-	if(!fragmentShaderFile)
-	{
-		printf("Failed to load the fragment shader, error: %lu", glGetError());
-		return fclose(fragmentShaderFile);
-	}
-
-	else
-	{
-       fseek(fragmentShaderFile, sizeof(fragmentShaderCode), SEEK_SET);
-	   fseek(fragmentShaderFile, sizeof(fragmentShaderCode), SEEK_END);
-	   return ftell(fragmentShaderFile);
-	}
-	
-	const char* tShaderCode = textureShaderCode;
-	const char* fShaderCode = fragmentShaderCode;
-
 	//Compile the code.
 	uint32 texture, fragment;
 	texture = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(texture, 1, tShaderCode, NULL);
+	glShaderSource(texture, 1, textureShader, NULL);
 	glCompileShader(texture);
 	GL_CheckShaderErrors(texture, GL_VERTEX_SHADER);
 
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment, 2, fShaderCode, NULL);
+	glShaderSource(fragment, 2, fragmentShader, NULL);
 	glCompileShader(fragment);
 	GL_CheckShaderErrors(fragment, GL_FRAGMENT_SHADER);
 
@@ -85,7 +44,7 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader)
 	glAttachShader(ID, texture);
 	glAttachShader(ID, fragment);
 	glLinkProgram(ID);
-	GL_CheckShaderErrors(ID, GL_PROGRAM);
+	GL_CheckShaderErrors(ID, GL_LINK_STATUS);
 }
 
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
@@ -123,7 +82,7 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 			}
 		}
 		
-		case GL_PROGRAM:
+		case GL_LINK_STATUS:
 		{
 			glGetShaderiv(shader, GL_LINK_STATUS, &success);
 			if (!success)
