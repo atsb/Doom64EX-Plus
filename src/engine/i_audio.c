@@ -27,9 +27,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef __LINUX__
-#include <time.h>
-#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,12 +37,8 @@
 #include <unistd.h>
 #endif
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
 #include <SDL2/SDL.h>
-#endif
-#include <fluidsynth.h>
+#include "fluidsynth.h"
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -56,58 +49,51 @@
 #include "i_swap.h"
 #include "con_console.h"    // for cvars
 
+// 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
 
-// 20120107 bkw: Linux users can change the default FluidSynth backend here:
-// ATSB: yuck, lets make this better.
-#ifdef __linux__
-#define DEFAULT_FLUID_DRIVER "alsa"
-CVAR_CMD(s_driver, alsa)
-#elif __FreeBSD__ || __OpenBSD__
-#define DEFAULT_FLUID_DRIVER "oss"
-CVAR_CMD(s_driver, oss)
-#elif _WIN32
-#define DEFAULT_FLUID_DRIVER "dsound"
+// 20120203 villsa - cvar for audio driver
+#ifdef _WIN32
 CVAR_CMD(s_driver, dsound)
+#elif __linux__
+CVAR_CMD(s_driver, pulseaudio)
 #elif __APPLE__
-#define DEFAULT_FLUID_DRIVER "coreaudio"
 CVAR_CMD(s_driver, coreaudio)
 #else
-#define DEFAULT_FLUID_DRIVER "sndio"
 CVAR_CMD(s_driver, sndio)
 #endif
 {
-	char* driver = cvar->string;
+    char* driver = cvar->string;
 
-	// this is absolutely horrible
-	if (!dstrcmp(cvar->defvalue, "default")) {
-		cvar->defvalue = DEFAULT_FLUID_DRIVER;
-	}
+    // this is absolutely horrible
+    if(!dstrcmp(cvar->defvalue, "default")) {
+        cvar->defvalue = DEFAULT_FLUID_DRIVER;
+    }
 
-	// same as above
-	if (!dstrcmp(driver, "default")) {
-		CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
-		return;
-	}
+    // same as above
+    if(!dstrcmp(driver, "default")) {
+        CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
+        return;
+    }
 
-	if (!dstrcmp(driver, "jack") ||
-		!dstrcmp(driver, "alsa") ||
-		!dstrcmp(driver, "oss") ||
-		!dstrcmp(driver, "pulseaudio") ||
-		!dstrcmp(driver, "coreaudio") ||
-		!dstrcmp(driver, "dsound") ||
-		!dstrcmp(driver, "portaudio") ||
-		!dstrcmp(driver, "sndio") ||
-		!dstrcmp(driver, "sndman") ||
-		!dstrcmp(driver, "dart") ||
-		!dstrcmp(driver, "file")
-		) {
-		return;
-	}
+    if(!dstrcmp(driver, "jack")        ||
+            !dstrcmp(driver, "alsa")        ||
+            !dstrcmp(driver, "oss")         ||
+            !dstrcmp(driver, "pulseaudio")  ||
+            !dstrcmp(driver, "coreaudio")   ||
+            !dstrcmp(driver, "dsound")      ||
+            !dstrcmp(driver, "portaudio")   ||
+            !dstrcmp(driver, "sndio")       ||
+            !dstrcmp(driver, "sndman")      ||
+            !dstrcmp(driver, "dart")        ||
+            !dstrcmp(driver, "file")
+      ) {
+        return;
+    }
 
-	CON_Warnf("Invalid driver name\n");
-	CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
-	CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
+    CON_Warnf("Invalid driver name\n");
+    CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
+    CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
 }
 
 //
@@ -301,19 +287,6 @@ typedef int(*signalhandler)(doomseq_t*);
 
 static void Seq_SetGain(doomseq_t* seq) {
     fluid_synth_set_gain(seq->synth, seq->gain);
-}
-
-//
-// Seq_SetReverb
-//
-
-static void Seq_SetReverb(doomseq_t* seq,
-                          float size,
-                          float damp,
-                          float width,
-                          float level) {
-    fluid_synth_set_reverb(seq->synth, size, damp, width, level);
-    fluid_synth_set_reverb_on(seq->synth, 1);
 }
 
 //
@@ -800,11 +773,6 @@ static int Signal_Pause(doomseq_t* seq) {
     SEMAPHORE_LOCK()
     for(i = 0; i < MIDI_CHANNELS; i++) {
         c = &playlist[i];
-
-        if(c->song && !c->paused) {
-            c->paused = true;
-            Chan_StopTrack(seq, c);
-        }
     }
     SEMAPHORE_UNLOCK()
 
@@ -825,11 +793,6 @@ static int Signal_Resume(doomseq_t* seq) {
     SEMAPHORE_LOCK()
     for(i = 0; i < MIDI_CHANNELS; i++) {
         c = &playlist[i];
-
-        if(c->song && c->paused) {
-            c->paused = false;
-            fluid_synth_noteon(seq->synth, c->track->channel, c->key, c->velocity);
-        }
     }
     SEMAPHORE_UNLOCK()
 
@@ -1058,12 +1021,13 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
     int i;
     int start;
     int end;
+    int fail;
 
     seq->nsongs = 0;
     i = 0;
 
-    start = W_GetNumForName("DS_START") + 1;
-    end = W_GetNumForName("DS_END") - 1;
+    start = W_GetNumForName("DM_START") + 1;
+    end = W_GetNumForName("DM_END") - 1;
 
     seq->nsongs = (end - start) + 1;
 
@@ -1076,6 +1040,7 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 
     seq->songs = (song_t*)Z_Calloc(seq->nsongs * sizeof(song_t), PU_STATIC, 0);
 
+    fail = 0;
     for(i = 0; i < seq->nsongs; i++) {
         song_t* song;
 
@@ -1089,7 +1054,8 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 
         dmemcpy(song, song->data, 0x0e);
         if(dstrncmp(song->header, "MThd", 4)) {
-            return false;
+            fail++;
+            continue;
         }
 
         song->chunksize = I_SwapBE32(song->chunksize);
@@ -1100,8 +1066,13 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
         song->tempo     = 480000;
 
         if(!Song_RegisterTracks(song)) {
-            return false;    // bad midi lump?
+            fail++;
+            continue;
         }
+    }
+
+    if (fail) {
+        I_Printf("Failed to load %d MIDI tracks.\n", fail);
     }
 
     return true;
@@ -1191,6 +1162,9 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 //
 
 void I_InitSequencer(void) {
+    dboolean sffound;
+    char *sfpath;
+
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
     //
@@ -1264,44 +1238,30 @@ void I_InitSequencer(void) {
     //
     // load soundfont
     //
-#ifdef _WIN32
-    doomseq.sfont_id = fluid_synth_sfload(
-                           doomseq.synth, s_soundfont.string, 1);
 
-    CON_DPrintf("Loading %s\\%s\n", I_DoomExeDir(), s_soundfont.string);
+    sffound = false;
+    if (s_soundfont.string[0]) {
+        if (I_FileExists(s_soundfont.string)) {
+            I_Printf("Found SoundFont %s\n", s_soundfont.string);
+            doomseq.sfont_id = fluid_synth_sfload(doomseq.synth, s_soundfont.string, 1);
 
-#else
-    // 20120111 bkw: look in the same places as doom64.wad. Someday this needs
-    // to be a config file setting and not hard-coded.
-    // 20120203 villsa - done :)
-    {
-        struct stat buf;
-        char *sfpath;
+            CON_DPrintf("Loading %s\n", s_soundfont.string);
 
-        // 20120126 bkw: stat the files instead of trying to fluid_synth_sfload
-        // each one, to avoid "fluidsynth: cant't load soundfont" messages.
-        if(!stat("doomsnd.sf2", &buf)) {
-            sfpath = "doomsnd.sf2";
+            sffound = true;
+        } else {
+            CON_Warnf("CVar s_soundfont doesn't point to a file.", s_soundfont.string);
         }
-        else if(!stat("/usr/local/share/games/doom64ex-plus/doomsnd.sf2", &buf)) {
-            sfpath = "/usr/local/share/games/doom64ex-plus/doomsnd.sf2";
-        }
-        else if(!stat("/usr/share/games/doom64ex-plus/doomsnd.sf2", &buf)) {
-            sfpath = "/usr/share/games/doom64ex-plus/doomsnd.sf2";
-        }
-        else if(!stat("/usr/local/share/doom64ex-plus/doomsnd.sf2", &buf)) {
-            sfpath = "/usr/local/share/doom64ex-plus/doomsnd.sf2";
-        }
-        else {
-            sfpath = s_soundfont.string;
-        }
+    }
 
+    if (!sffound && (sfpath = I_FindDataFile("doomsnd.sf2"))) {
         I_Printf("Found SoundFont %s\n", sfpath);
         doomseq.sfont_id = fluid_synth_sfload(doomseq.synth, sfpath, 1);
 
         CON_DPrintf("Loading %s\n", sfpath);
+
+        free(sfpath);
+        sffound = true;
     }
-#endif
 
     //
     // set state
@@ -1310,7 +1270,6 @@ void I_InitSequencer(void) {
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
     Seq_SetGain(&doomseq);
-    Seq_SetReverb(&doomseq, 0.65f, 0.0f, 2.0f, 1.0f);
 
     //
     // if something went terribly wrong, then shutdown everything
@@ -1549,3 +1508,4 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
     }
     SEMAPHORE_UNLOCK()
 }
+
