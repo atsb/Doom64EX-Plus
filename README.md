@@ -140,9 +140,8 @@ You can place the asset data described above to any of the following directories
 
 ## macOS
 
-You can place the asset data described above to any of the following directories:
+You can place the asset data described above to:
 
-* The directory in which `doom64ex-plus` resides
 * `/Users/*user*/Library/Application Support/doom64ex-plus`
 
 Then, you can start playing:
