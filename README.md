@@ -61,14 +61,14 @@ Linux / *BSD Desktop / Laptop
 - 1.8GHz Dual Core CPU
 - 2GB RAM
 - 80MB Disk Space
-- OpenGL 1.4+ Compliant Video Chip / Card
+- OpenGL 2.1+ Compliant Video Chip / Card
 
 Windows
 
 - 1.8GHz Dual Core CPU
 - 4GB RAM
 - 80MB Disk Space
-- OpenGL 1.4+ Compliant Video Chip / Card
+- OpenGL 2.1+ Compliant Video Chip / Card
 
 macOS
 
