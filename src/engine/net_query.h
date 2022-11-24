@@ -27,7 +27,7 @@
 
 #include "net_defs.h"
 
-extern void NET_QueryAddress(int8_t* addr);
+extern void NET_QueryAddress(char* addr);
 extern void NET_LANQuery(void);
 extern net_addr_t* NET_FindLANServer(void);
 

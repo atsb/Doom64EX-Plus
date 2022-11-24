@@ -67,7 +67,7 @@ struct dirent {
 	intptr_t          d_ino;    /* Always zero. */
 	uint16_t d_reclen; /* Always zero. */
 	uint16_t d_namlen; /* Length of name in d_name. */
-	int8_t           d_name[FILENAME_MAX]; /* File name. */
+	char           d_name[FILENAME_MAX]; /* File name. */
 };
 
 /*
@@ -96,10 +96,10 @@ typedef struct {
 	int dd_stat;
 
 	/* given path for dir with search pattern (struct is extended) */
-	int8_t dd_name[1];
+	char dd_name[1];
 } DIR;
 
-DIR* opendir(const int8_t*);
+DIR* opendir(const char*);
 struct dirent* readdir(DIR*);
 int closedir(DIR*);
 void rewinddir(DIR*);

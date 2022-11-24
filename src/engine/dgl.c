@@ -51,10 +51,10 @@ CVAR_EXTERNAL(r_drawtris);
 //
 
 #ifdef USE_DEBUG_GLFUNCS
-void dglLogError(const int8_t* message, const int8_t* file, int line) {
+void dglLogError(const char* message, const char* file, int line) {
 	GLint err = glGetError();
 	if (err != GL_NO_ERROR) {
-		int8_t str[64];
+		char str[64];
 
 		switch (err) {
 		case GL_INVALID_ENUM:

@@ -55,7 +55,7 @@ static dboolean     castattacking;
 static dPalette_t   finalePal;
 
 typedef struct {
-	int8_t* name;
+	char* name;
 	mobjtype_t type;
 } castinfo_t;
 

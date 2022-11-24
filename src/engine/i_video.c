@@ -68,7 +68,6 @@ CVAR_EXTERNAL(m_menumouse);
 static void I_GetEvent(SDL_Event* Event);
 static void I_ReadMouse(void);
 static void I_InitInputs(void);
-dboolean I_UpdateGrab(void);
 
 //================================================================================
 // Video
@@ -93,7 +92,7 @@ void I_InitScreen(void) {
 	int     newheight;
 	int     p;
 	uint32  flags = 0;
-	int8_t    title[256];
+	char    title[256];
 
 	InWindow = (int)v_windowed.value;
 	video_width = (int)v_width.value;
@@ -536,6 +535,8 @@ dboolean I_UpdateGrab(void) {
 	}
 
 	currently_grabbed = grab;
+
+	return currently_grabbed;
 }
 
 //

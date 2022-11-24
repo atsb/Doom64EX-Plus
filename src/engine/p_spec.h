@@ -35,7 +35,7 @@ extern int16_t globalint;
 
 typedef struct {
 	int         delay;
-	int8_t        name[9];
+	char        name[9];
 	int         frames;
 	int         speed;
 	dboolean    reverse;

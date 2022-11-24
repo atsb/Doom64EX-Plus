@@ -153,7 +153,7 @@ static void NET_Conn_ParseDisconnectACK(net_connection_t* conn,
 
 static void NET_Conn_ParseReject(net_connection_t* conn, net_packet_t* packet)
 {
-	int8_t* msg;
+	char* msg;
 
 	msg = NET_ReadString(packet);
 
@@ -176,7 +176,7 @@ static void NET_Conn_ParseReject(net_connection_t* conn, net_packet_t* packet)
 
 static void NET_Conn_ParseReliableACK(net_connection_t* conn, net_packet_t* packet)
 {
-	uint32_t seq;
+	int seq;
 
 	if (!NET_ReadInt8(packet, &seq))
 	{
@@ -190,7 +190,7 @@ static void NET_Conn_ParseReliableACK(net_connection_t* conn, net_packet_t* pack
 
 	// Is this an acknowledgement for the first packet in the list?
 
-	if (seq == (uint32_t)((conn->reliable_packets->seq + 1) & 0xff))
+	if (seq == ((conn->reliable_packets->seq + 1) & 0xff))
 	{
 		net_reliable_packet_t* rp;
 
@@ -212,7 +212,7 @@ static void NET_Conn_ParseReliableACK(net_connection_t* conn, net_packet_t* pack
 static dboolean NET_Conn_ReliablePacket(net_connection_t* conn,
 	net_packet_t* packet)
 {
-	uint32_t seq;
+	int seq;
 	net_packet_t* reply;
 	dboolean result;
 
@@ -223,7 +223,7 @@ static dboolean NET_Conn_ReliablePacket(net_connection_t* conn,
 		return true;
 	}
 
-	if (seq != (uint32_t)(conn->reliable_recv_seq & 0xff))
+	if (seq != (conn->reliable_recv_seq & 0xff))
 	{
 		// This is not the next expected packet in the sequence!
 		//
@@ -513,9 +513,9 @@ uint32_t NET_ExpandTicNum(uint32_t relative, uint32_t b)
 // "Safe" version of puts, for displaying messages received from the
 // network.
 
-void NET_SafePuts(int8_t* s)
+void NET_SafePuts(char* s)
 {
-	int8_t* p;
+	char* p;
 
 	// Do not do a straight "puts" of the string, as this could be
 	// dangerous (sending control codes to terminals can do all
