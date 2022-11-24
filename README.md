@@ -42,10 +42,11 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 
 ## Dependencies
 
-* SDL2
-* zlib
-* libpng
+* SDL2 and SDL2_net
+* ZLib
+* LibPNG
 * FluidSynth
+* OpenGL
 
 ## System Requirements - 32 or 64bit
 
@@ -69,6 +70,13 @@ Windows
 - 80MB Disk Space
 - OpenGL 1.4+ Compliant Video Chip / Card
 
+macOS
+
+- mid-2013 macbook air or better (also arm64 systems)
+- 4GB RAM
+- 80MB Disk Space
+- OpenGL 2.1+ Compliant Video Chip / Card
+
 ## Installation
 
 Windows
@@ -83,7 +91,7 @@ GNU/Linux / BSD
 
 Without the macro, it will look inside the current directory that the binary is in.
 
-Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux.
+Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux or macOS.
 
 ## Compiling
 
@@ -94,6 +102,10 @@ Clone this repo
 ## Linux or Cross Platform Compilation
 
 Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
+
+## macOS
+
+Use `build_macos.sh` for a native build of macOS - please note, use the -DDOOM_UNIX_INSTALL so that the dependent files are read/written from /Users/*user*/Library/Application Support/doom64ex-plus directory.
 
 ## Raspberry Pi 3
 
@@ -125,6 +137,13 @@ You can place the asset data described above to any of the following directories
 
 * The directory in which `doom64ex-plus` resides
 * `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
+
+## macOS
+
+You can place the asset data described above to any of the following directories:
+
+* The directory in which `doom64ex-plus` resides
+* `/Users/*user*/Library/Application Support/doom64ex-plus`
 
 Then, you can start playing:
 
