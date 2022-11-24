@@ -2402,8 +2402,8 @@ void M_Sound(int choice) {
 }
 
 void M_DrawSound(void) {
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 300, s_sfxvol.value);
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 300, s_musvol.value);
+	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 100, s_sfxvol.value);
+	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 100, s_musvol.value);
 }
 
 void M_SfxVol(int choice)
@@ -2411,18 +2411,18 @@ void M_SfxVol(int choice)
 	switch (choice) {
 	case 0:
 		if (s_sfxvol.value > 0.0f) {
-			M_SetCvar(&s_sfxvol, s_sfxvol.value - 20);
+			M_SetCvar(&s_sfxvol, s_sfxvol.value - 1);
 		}
 		else {
 			CON_CvarSetValue(s_sfxvol.name, 0);
 		}
 		break;
 	case 1:
-		if (s_sfxvol.value < 300.0f) {
-			M_SetCvar(&s_sfxvol, s_sfxvol.value + 20);
+		if (s_sfxvol.value < 100.0f) {
+			M_SetCvar(&s_sfxvol, s_sfxvol.value + 1);
 		}
 		else {
-			CON_CvarSetValue(s_sfxvol.name, 300);
+			CON_CvarSetValue(s_sfxvol.name, 100);
 		}
 		break;
 	}
@@ -2433,18 +2433,18 @@ void M_MusicVol(int choice)
 	switch (choice) {
 	case 0:
 		if (s_musvol.value > 0.0f) {
-			M_SetCvar(&s_musvol, s_musvol.value - 20);
+			M_SetCvar(&s_musvol, s_musvol.value - 1);
 		}
 		else {
 			CON_CvarSetValue(s_musvol.name, 0);
 		}
 		break;
 	case 1:
-		if (s_musvol.value < 300.0f) {
-			M_SetCvar(&s_musvol, s_musvol.value + 20);
+		if (s_musvol.value < 100.0f) {
+			M_SetCvar(&s_musvol, s_musvol.value + 1);
 		}
 		else {
-			CON_CvarSetValue(s_musvol.name, 300);
+			CON_CvarSetValue(s_musvol.name, 100);
 		}
 		break;
 	}
