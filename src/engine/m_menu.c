@@ -4908,7 +4908,7 @@ void M_Drawer(void) {
 		// if menu item is static but has text, then display it as gray text
 		// used for subcategories
 		//
-		else if (currentMenu->menuitems[i].name != "") {
+		else if (currentMenu->menuitems[i].name != NULL) {
 			if (!currentMenu->smallfont) {
 				Draw_BigText(
 					-1,
@@ -5160,7 +5160,7 @@ void M_Ticker(void) {
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&
-		currentMenu->menuitems[0].name != "") {
+		currentMenu->menuitems[0].name != NULL) {
 		// bump page offset up
 		if (itemOn == 1) {
 			currentMenu->menupageoffset = 0;
