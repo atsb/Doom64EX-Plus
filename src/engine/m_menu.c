@@ -97,15 +97,15 @@ dboolean            mainmenuactive = false;
 dboolean            allowclearmenu = true;              // can user hit escape to clear menu?
 
 static dboolean     newmenu = false;    // 20120323 villsa
-static int8_t* messageBindCommand;
+static char* messageBindCommand;
 static int          quickSaveSlot;                      // -1 = no quicksave slot picked!
 static int          saveSlot;                           // which slot to save in
-static int8_t         savegamestrings[10][MENUSTRINGSIZE];
+static char         savegamestrings[10][MENUSTRINGSIZE];
 static dboolean     alphaprevmenu = false;
 static int          menualphacolor = 0xff;
 
-static int8_t         inputString[MENUSTRINGSIZE];
-static int8_t         oldInputString[MENUSTRINGSIZE];
+static char         inputString[MENUSTRINGSIZE];
+static char         oldInputString[MENUSTRINGSIZE];
 static dboolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
@@ -122,8 +122,8 @@ void(*menufadefunc)(void) = NULL;
 // static variables
 //
 
-static int8_t     MenuBindBuff[256];
-static int8_t     MenuBindMessage[256];
+static char     MenuBindBuff[256];
+static char     MenuBindMessage[256];
 static dboolean MenuBindActive = false;
 static dboolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
@@ -144,13 +144,13 @@ typedef struct {
 	// 1 = ok, 2 = arrows ok, 3 = for sliders
 	int16_t status;
 
-	int8_t name[64];
+	char name[64];
 
 	// choice = menu item #
 	void (*routine)(int choice);
 
 	// hotkey in menu
-	int8_t alphaKey;
+	char alphaKey;
 } menuitem_t;
 
 typedef struct {
@@ -170,7 +170,7 @@ typedef struct menu_s {
 	struct menu_s* prevMenu;          // previous menu
 	menuitem_t* menuitems;         // menu items
 	void (*routine)(void);                  // draw routine
-	int8_t                title[64];
+	char                title[64];
 	int16_t               x;
 	int16_t               y;                  // x,y of menu
 	int16_t               lastOn;             // last item user was on in menu
@@ -179,13 +179,13 @@ typedef struct menu_s {
 	int16_t               numpageitems;       // number of items to display per page
 	int16_t               menupageoffset;
 	float               scale;
-	int8_t** hints;
+	char** hints;
 	menuthermobar_t* thermobars;
 } menu_t;
 
 typedef struct {
-	int8_t* name;
-	int8_t* action;
+	char* name;
+	char* action;
 } menuaction_t;
 
 int16_t           itemOn;                 // menu item skull is on
@@ -193,7 +193,7 @@ int16_t           itemSelected;
 int16_t           skullAnimCounter;       // skull animation counter
 int16_t           whichSkull;             // which skull to draw
 
-int8_t    msgNames[2][4] = { "Off","On" };
+char    msgNames[2][4] = { "Off","On" };
 
 // current menudef
 static menu_t* currentMenu;
@@ -213,9 +213,9 @@ void M_ClearMenus(void);
 void M_QuickSave(void);
 void M_QuickLoad(void);
 
-static int M_StringWidth(const int8_t* string);
-static int M_StringHeight(const int8_t* string);
-static int M_BigStringWidth(const int8_t* string);
+static int M_StringWidth(const char* string);
+static int M_StringHeight(const char* string);
+static int M_BigStringWidth(const char* string);
 
 static void M_DrawThermo(int x, int y, int thermWidth, float thermDot);
 static void M_DoDefaults(int choice);
@@ -223,9 +223,9 @@ static void M_Return(int choice);
 static void M_ReturnToOptions(int choice);
 static void M_SetCvar(cvar_t* cvar, float value);
 static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t* cvar);
-static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item);
+static void M_DrawSmbString(const char* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
-static void M_SetInputString(int8_t* string, int len);
+static void M_SetInputString(char* string, int len);
 static void M_Scroll(menu_t* menu, dboolean up);
 static void M_DoVideoReset(int choice);
 
@@ -710,7 +710,7 @@ menuitem_t OptionsMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* OptionHints[opt_end] = {
+char* OptionHints[opt_end] = {
 	"control configuration",
 	"adjust sound volume",
 	"miscellaneous options for gameplay and other features",
@@ -822,7 +822,7 @@ menudefault_t NetworkDefault[] = {
 	{ NULL, -1 }
 };
 
-int8_t* NetworkHints[network_end] = {
+char* NetworkHints[network_end] = {
 	NULL,
 	"set a name for yourself",
 	NULL,
@@ -901,7 +901,7 @@ void M_NetworkChoice(int choice) {
 
 void M_DrawNetwork(void) {
 	int y;
-	static const int8_t* respawnitemstrings[11] = {
+	static const char* respawnitemstrings[11] = {
 		"Off",
 		"1 Minute",
 		"2 Minutes",
@@ -915,7 +915,7 @@ void M_DrawNetwork(void) {
 		"10 Minutes"
 	};
 
-	static const int8_t* networkscalestrings[3] = {
+	static const char* networkscalestrings[3] = {
 		"x 1",
 		"x 2",
 		"x 3"
@@ -1051,7 +1051,7 @@ menuitem_t MiscMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* MiscHints[misc_end] = {
+char* MiscHints[misc_end] = {
 	NULL,
 	"change transition speeds between switching menus",
 	NULL,
@@ -1256,11 +1256,11 @@ void M_MiscChoice(int choice) {
 }
 
 void M_DrawMisc(void) {
-	static const int8_t* autoruntype[2] = { "Off", "On" };
-	static const int8_t* mapdisplaytype[2] = { "Hide", "Show" };
-	static const int8_t* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
-	static const int8_t* rgbscaletype[3] = { "1x", "2x", "4x" };
-	static const int8_t* disablesecretmessages[2] = { "Enabled", "Disabled" };
+	static const char* autoruntype[2] = { "Off", "On" };
+	static const char* mapdisplaytype[2] = { "Hide", "Show" };
+	static const char* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
+	static const char* rgbscaletype[3] = { "1x", "2x", "4x" };
+	static const char* disablesecretmessages[2] = { "Enabled", "Disabled" };
 	int y;
 
 	if (currentMenu->menupageoffset <= misc_menufade + 1 &&
@@ -1546,7 +1546,7 @@ menuitem_t DisplayMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* DisplayHints[display_end] = {
+char* DisplayHints[display_end] = {
 	"toggle messages displaying on hud",
 	"change look and style for hud",
 	"use texture environment or a simple overlay for flashes",
@@ -1599,8 +1599,8 @@ void M_Display(int choice) {
 }
 
 void M_DrawDisplay(void) {
-	static const int8_t* hudtype[3] = { "Off", "Classic", "Arranged" };
-	static const int8_t* flashtype[2] = { "Environment", "Overlay" };
+	static const char* hudtype[3] = { "Off", "Classic", "Arranged" };
+	static const char* flashtype[2] = { "Environment", "Overlay" };
 
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * messages, MENUCOLORRED,
 		msgNames[(int)m_messages.value]);
@@ -1756,7 +1756,7 @@ menuitem_t VideoMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* VideoHints[video_end] = {
+char* VideoHints[video_end] = {
 	"change light color intensity",
 	NULL,
 	"adjust screen gamma",
@@ -1867,7 +1867,7 @@ static const float ratioVal[4] = {
 	5.0f / 4.0f,
 };
 
-static int8_t gammamsg[21][28] = {
+static char gammamsg[21][28] = {
 	GAMMALVL0,
 	GAMMALVL1,
 	GAMMALVL2,
@@ -1951,10 +1951,10 @@ void M_Video(int choice) {
 }
 
 void M_DrawVideo(void) {
-	static const int8_t* filterType[2] = { "Linear", "Nearest" };
-	static const int8_t* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
-	static const int8_t* frametype[2] = { "Off", "On" };
-	int8_t res[16];
+	static const char* filterType[2] = { "Linear", "Nearest" };
+	static const char* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
+	static const char* frametype[2] = { "Off", "On" };
+	char res[16];
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
@@ -2237,7 +2237,7 @@ void M_Password(int choice) {
 }
 
 void M_DrawPassword(void) {
-	int8_t password[2];
+	char password[2];
 	byte* passData;
 	int i = 0;
 
@@ -2287,7 +2287,7 @@ static void M_PasswordSelect(void) {
 	S_StartSound(NULL, sfx_switch2);
 	passwordData[curPasswordSlot++] = (byte)itemOn;
 	if (curPasswordSlot > 15) {
-		static const int8_t* hecticdemo = "rvnh3ct1cd3m0???";
+		static const char* hecticdemo = "rvnh3ct1cd3m0???";
 		int i;
 
 		for (i = 0; i < 16; i++) {
@@ -2918,7 +2918,7 @@ void M_BuildControlMenu(void) {
 }
 
 void M_ChangeKeyBinding(int choice) {
-	int8_t action[128];
+	char action[128];
 	sprintf(action, "%s %d", PlayerActions[choice].action, 1);
 	dstrcpy(MenuBindBuff, action);
 	messageBindCommand = MenuBindBuff;
@@ -2959,7 +2959,7 @@ menuitem_t ControlsMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* ControlsHints[controls_end] = {
+char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
 #ifdef _USE_XINPUT  // XINPUT
@@ -3194,7 +3194,7 @@ void M_DrawSave(void) {
 	M_DrawSaveGameFrontend(&SaveDef);
 
 	for (i = 0; i < load_end; i++) {
-		int8_t* string;
+		char* string;
 
 		if (i == saveSlot && inputEnter) {
 			string = inputString;
@@ -3325,7 +3325,7 @@ void M_DrawLoad(void) {
 // User wants to load this game
 //
 void M_LoadSelect(int choice) {
-	//int8_t name[256];
+	//char name[256];
 
 	// sprintf(name, SAVEGAMENAME"%d.dsg", choice);
 	// G_LoadGame(name);
@@ -3361,7 +3361,7 @@ void M_LoadGame(int choice) {
 void M_ReadSaveStrings(void) {
 	int     handle;
 	int     i;
-	// int8_t    name[256];
+	// char    name[256];
 
 	for (i = 0; i < load_end; i++) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
@@ -3601,7 +3601,7 @@ static void M_ReturnInstant(void) {
 // M_SetInputString
 //
 
-static void M_SetInputString(int8_t* string, int len) {
+static void M_SetInputString(char* string, int len) {
 	inputEnter = true;
 	dstrcpy(oldInputString, string);
 
@@ -3618,7 +3618,7 @@ static void M_SetInputString(int8_t* string, int len) {
 // M_DrawSmbString
 //
 
-static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item) {
+static void M_DrawSmbString(const char* text, menu_t* menu, int item) {
 	int x;
 	int y;
 
@@ -3632,7 +3632,7 @@ static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item) {
 // Find string width from hu_font chars
 //
 
-static int M_StringWidth(const int8_t* string) {
+static int M_StringWidth(const char* string) {
 	int i;
 	int w = 0;
 	int c;
@@ -3655,7 +3655,7 @@ static int M_StringWidth(const int8_t* string) {
 // Find string height from hu_font chars
 //
 
-static int M_StringHeight(const int8_t* string) {
+static int M_StringHeight(const char* string) {
 	int i;
 	int h;
 	int height = ST_FONTWHSIZE;
@@ -3676,9 +3676,9 @@ static int M_StringHeight(const int8_t* string) {
 // Find string width from bigfont chars
 //
 
-static int M_BigStringWidth(const int8_t* string) {
+static int M_BigStringWidth(const char* string) {
 	int width = 0;
-	int8_t t = 0;
+	char t = 0;
 	int id = 0;
 	int len = 0;
 	int i = 0;
@@ -4008,7 +4008,7 @@ static void M_DrawThermo(int x, int y, int thermWidth, float thermDot) {
 //
 
 static dtexture thumbnail = 0;
-static int8_t thumbnail_date[32];
+static char thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
@@ -4095,7 +4095,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	// draw thumbnail texture and stats
 	//
 	if (M_SetThumbnail(itemOn)) {
-		int8_t string[128];
+		char string[128];
 
 		curgfx = -1;
 
@@ -5236,7 +5236,7 @@ void M_Init(void) {
 		PasswordMenu[i].status = 1;
 		PasswordMenu[i].name[0] = passwordChar[i];
 		PasswordMenu[i].routine = NULL;
-		PasswordMenu[i].alphaKey = (int8_t)passwordChar[i];
+		PasswordMenu[i].alphaKey = (char)passwordChar[i];
 	}
 
 	dmemset(passwordData, 0xff, 16);
