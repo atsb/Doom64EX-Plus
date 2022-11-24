@@ -21,8 +21,10 @@
 //
 //-----------------------------------------------------------------------------
 
+
 #ifndef __S_SOUND__
 #define __S_SOUND__
+
 
 #ifdef __GNUG__
 #pragma interface
@@ -63,10 +65,12 @@ void S_StopSound(mobj_t* origin, int sfx_id);
 
 int S_GetActiveSounds(void);
 
+
 // Start music using <music_id> from sounds.h
 void S_StartMusic(int mnum);
 void S_StopMusic(void);
 
 void S_RegisterCvars(void);
+
 
 #endif
