@@ -113,14 +113,6 @@ static int I_GetTimeNormal(void) {
 }
 
 //
-// I_GetTime_Scaled
-//
-
-static int I_GetTime_Scaled(void) {
-	return ((int32)I_GetTimeNormal() * I_GetTime_Scale >> 24);
-}
-
-//
 // I_GetTime_Error
 //
 
@@ -144,7 +136,6 @@ void I_InitClockRate(void) {
 static uint32_t start_displaytime;
 static uint32_t displaytime;
 static dboolean InDisplay = false;
-static int saved_gametic = -1;
 
 dboolean realframe = false;
 

@@ -357,8 +357,8 @@ void GL_SetDefaultCombiner(void) {
 //
 
 void GL_SetColorScale(void) {
-	int cs = (int)r_colorscale.value;
 #ifndef __APPLE__
+	int cs = (int)r_colorscale.value;
 
 	switch (cs) {
 	case 1:

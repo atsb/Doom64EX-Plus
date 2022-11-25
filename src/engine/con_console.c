@@ -68,7 +68,6 @@ static int          console_head;
 static int          console_lineoffset;
 static int          console_minline;
 static dboolean     console_enabled = false;
-static int          console_pos = 0;//bottom of console, in pixels
 static char         console_linebuffer[CON_BUFFERSIZE];
 static int          console_linelength;
 static dboolean     console_state = CST_UP;

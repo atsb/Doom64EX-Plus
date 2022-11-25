@@ -947,6 +947,7 @@
 					"-I",
 					/opt/local/include,
 					"-DDOOM_UNIX_INSTALL",
+					"-DGL_SILENCE_DEPRECATION",
 				);
 				SDKROOT = macosx;
 			};
@@ -1002,6 +1003,7 @@
 					"-I",
 					/opt/local/include,
 					"-DDOOM_UNIX_INSTALL",
+					"-DGL_SILENCE_DEPRECATION",
 				);
 				SDKROOT = macosx;
 			};

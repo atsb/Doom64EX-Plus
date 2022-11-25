@@ -43,7 +43,6 @@
 
 #define MAX_IWAD_DIRS 128
 
-static dboolean iwad_dirs_built = false;
 static char* iwad_dirs[MAX_IWAD_DIRS];
 static int num_iwad_dirs = 0;
 
@@ -110,8 +109,6 @@ wad_file_class_t stdc_wad_file = {
 	W_StdC_CloseFile,
 	W_StdC_Read,
 };
-
-static wad_file_class_t* wad_file_classes = &stdc_wad_file;
 
 wad_file_t* W_OpenFile(char* path) {
 	return stdc_wad_file.OpenFile(path);

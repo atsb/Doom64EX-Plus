@@ -499,15 +499,6 @@ int I_MouseAccel(int val) {
 }
 
 //
-// I_ActivateMouse
-//
-
-static void I_ActivateMouse(void) {
-	SDL_ShowCursor(0);
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-}
-
-//
 // I_UpdateGrab
 //
 

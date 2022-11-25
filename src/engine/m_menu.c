@@ -128,7 +128,6 @@ static dboolean MenuBindActive = false;
 static dboolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
 static dboolean wireframeon = false;
-static dboolean lockmonstersmon = false;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
 static int      m_ScreenSize = 1;
@@ -214,7 +213,6 @@ void M_QuickSave(void);
 void M_QuickLoad(void);
 
 static int M_StringWidth(const char* string);
-static int M_StringHeight(const char* string);
 static int M_BigStringWidth(const char* string);
 
 static void M_DrawThermo(int x, int y, int thermWidth, float thermDot);
@@ -3651,27 +3649,6 @@ static int M_StringWidth(const char* string) {
 }
 
 //
-// M_StringHeight
-// Find string height from hu_font chars
-//
-
-static int M_StringHeight(const char* string) {
-	int i;
-	int h;
-	int height = ST_FONTWHSIZE;
-
-	h = height;
-
-	for (i = 0; i < dstrlen(string); i++) {
-		if (string[i] == '\n') {
-			h += height;
-		}
-	}
-
-	return h;
-}
-
-//
 // M_BigStringWidth
 // Find string width from bigfont chars
 //
@@ -4007,7 +3984,6 @@ static void M_DrawThermo(int x, int y, int thermWidth, float thermDot) {
 // M_SetThumbnail
 //
 
-static dtexture thumbnail = 0;
 static char thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;

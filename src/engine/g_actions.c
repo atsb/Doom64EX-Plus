@@ -85,9 +85,7 @@ alist_t** KeyActions;
 alist_t** MouseActions;
 alist_t** Mouse2Actions;
 
-static int  JoyButtons = 0;
 static int  MouseButtons = 0;
-static int  Mouse2Buttons = 0;
 
 static dboolean OptimizeTree = false;
 dboolean        ButtonAction = false;

@@ -36,7 +36,7 @@ dboolean NET_CL_Connect(net_addr_t* addr);
 void NET_CL_Disconnect(void);
 void NET_CL_Run(void);
 void NET_CL_Init(void);
-void NET_CL_StartGame();
+void NET_CL_StartGame(void);
 void NET_CL_SendTiccmd(ticcmd_t* ticcmd, int maketic);
 void NET_Init(void);
 void NET_CL_SendCheat(int player, int type, char* buff);
