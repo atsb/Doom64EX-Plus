@@ -59,3 +59,5 @@ dkms.conf
 /Windows/x64
 Windows/Doom64EX-Plus Launcher.vcxproj.user
 Windows/Doom64EXPlus.vcxproj.user
+.DS_Store
+src/engine/.DS_Store

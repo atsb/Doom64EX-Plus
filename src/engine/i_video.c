@@ -536,6 +536,8 @@ dboolean I_UpdateGrab(void) {
 	}
 
 	currently_grabbed = grab;
+    
+    return currently_grabbed;
 }
 
 //
