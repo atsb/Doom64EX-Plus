@@ -104,8 +104,10 @@ Clone this repo
 Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
 
 ## macOS
+Install MacPorts and get the dependencies.
 
-Use `build_macos.sh` for a native build of macOS - please note, use the -DDOOM_UNIX_INSTALL so that the dependent files are read/written from /Users/*user*/Library/Application Support/doom64ex-plus directory.
+Then use the XCode project file, which is the only supported way to compile on macOS.  Everything is already defined.
+The IWAD needs to be placed in: /Users/*user*/Library/Application Support/doom64ex-plus directory along with the files found within the Resources directory inside the bundle (.wad and .sf2).
 
 ## Raspberry Pi 3
 
