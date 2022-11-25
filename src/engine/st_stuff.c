@@ -108,7 +108,7 @@ static keyflash_t flashCards[NUMCARDS];    /* INFO FOR FLASHING CARDS & SKULLS *
 static player_t* plyr;   // main player in game
 static int              st_msgtic = 0;
 static int              st_msgalpha = 0xff;
-static int8_t* st_msg = NULL;
+static char* st_msg = NULL;
 static vtx_t            st_vtx[32];
 static int              st_vtxcount = 0;
 static byte             st_flash_r;
@@ -121,7 +121,7 @@ static dboolean         st_wpndisplay_show;
 static byte             st_wpndisplay_alpha;
 static int              st_wpndisplay_ticks;
 
-int8_t* chat_macros[] = {
+char* chat_macros[] = {
 	HUSTR_CHATMACRO0,
 	HUSTR_CHATMACRO1,
 	HUSTR_CHATMACRO2,
@@ -134,7 +134,7 @@ int8_t* chat_macros[] = {
 	HUSTR_CHATMACRO9
 };
 
-int8_t player_names[MAXPLAYERS][MAXPLAYERNAME] = {
+char player_names[MAXPLAYERS][MAXPLAYERNAME] = {
 	HUSTR_PLR1,
 	HUSTR_PLR2,
 	HUSTR_PLR3,
@@ -155,7 +155,7 @@ static const rcolor st_chatcolors[MAXPLAYERS] = {
 #define STCHATY         384
 
 typedef struct {
-	int8_t msg[MAXCHATSIZE];
+	char msg[MAXCHATSIZE];
 	int tics;
 	rcolor color;
 } stchat_t;
@@ -163,7 +163,7 @@ typedef struct {
 static stchat_t stchat[MAXCHATNODES];
 static int st_chatcount = 0;
 dboolean st_chatOn = false;
-static int8_t st_chatstring[MAXPLAYERS][MAXCHATSIZE];
+static char st_chatstring[MAXPLAYERS][MAXCHATSIZE];
 
 #define STQUEUESIZE        256
 static int st_chathead;
@@ -864,7 +864,7 @@ void ST_Drawer(void) {
 		Draw_Text(20, 20, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), 1, false, st_msg);
 	}
 	else if (automapactive) {
-		int8_t str[128];
+		char str[128];
 		mapdef_t* map = P_GetMapInfo(gamemap);
 
 		if (map) {
@@ -925,8 +925,8 @@ void ST_Drawer(void) {
 
 	if (p_usecontext.value) {
 		if (P_UseLines(&players[consoleplayer], true)) {
-			int8_t usestring[16];
-			int8_t contextstring[32];
+			char usestring[16];
+			char contextstring[32];
 			float x;
 
 #ifdef _USE_XINPUT  // XINPUT
@@ -1131,8 +1131,8 @@ void ST_Init(void) {
 // ST_AddChatMsg
 //
 
-void ST_AddChatMsg(int8_t* msg, int player) {
-	int8_t str[MAXCHATSIZE];
+void ST_AddChatMsg(char* msg, int player) {
+	char str[MAXCHATSIZE];
 
 	sprintf(str, "%s: %s", player_names[player], msg);
 	dmemset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
@@ -1151,7 +1151,7 @@ void ST_AddChatMsg(int8_t* msg, int player) {
 // Broadcast message to all clients
 //
 
-void ST_Notification(int8_t* msg) {
+void ST_Notification(char* msg) {
 	int i;
 
 	for (i = 0; i < MAXPLAYERS; i++) {
@@ -1194,7 +1194,7 @@ static void ST_DrawChatText(void) {
 	}
 
 	if (st_chatOn) {
-		int8_t tmp[MAXCHATSIZE];
+		char tmp[MAXCHATSIZE];
 
 		sprintf(tmp, "%s_", st_chatstring[consoleplayer]);
 		Draw_Text(STCHATX, STCHATY + 8, WHITE, 0.5f, false, tmp);
@@ -1205,7 +1205,7 @@ static void ST_DrawChatText(void) {
 // ST_QueueChatChar
 //
 
-static void ST_QueueChatChar(int8_t ch) {
+static void ST_QueueChatChar(char ch) {
 	if (((st_chattail + 1) & (STQUEUESIZE - 1)) == st_chathead) {
 		return;    // the queue is full
 	}
@@ -1218,7 +1218,7 @@ static void ST_QueueChatChar(int8_t ch) {
 // ST_DequeueChatChar
 //
 
-int8_t ST_DequeueChatChar(void) {
+char ST_DequeueChatChar(void) {
 	byte temp;
 
 	if (st_chathead == st_chattail) {
@@ -1251,14 +1251,14 @@ static void ST_FeedChatMsg(event_t* ev) {
 
 	case KEY_ENTER:
 	case KEY_KEYPADENTER:
-		ST_QueueChatChar((int8_t)c);
+		ST_QueueChatChar((char)c);
 		st_chatOn = false;
 		break;
 	case KEY_BACKSPACE:
 		if (ev->type != ev_keydown) {
 			return;
 		}
-		ST_QueueChatChar((int8_t)c);
+		ST_QueueChatChar((char)c);
 		break;
 	case KEY_ESCAPE:
 		len = dstrlen(st_chatstring[consoleplayer]);
@@ -1309,7 +1309,7 @@ static void ST_FeedChatMsg(event_t* ev) {
 		if (st_shiftOn) {
 			c = shiftxform[c];
 		}
-		ST_QueueChatChar((int8_t)c);
+		ST_QueueChatChar((char)c);
 		break;
 	}
 }
@@ -1389,7 +1389,7 @@ static void ST_DisplayName(int playernum) {
 	fixed_t     ypitch;
 	fixed_t     screeny;
 	player_t* player;
-	int8_t        name[MAXPLAYERNAME];
+	char        name[MAXPLAYERNAME];
 	rcolor      color;
 	fixed_t     distance;
 

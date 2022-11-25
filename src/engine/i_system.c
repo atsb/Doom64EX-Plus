@@ -232,7 +232,7 @@ ticcmd_t* I_BaseTiccmd(void) {
  * @note The returning value MUST be freed by the caller.
  */
 
-int8_t* I_GetUserDir(void) 
+char* I_GetUserDir(void) 
 {
 #ifdef DOOM_UNIX_INSTALL
 	return SDL_GetPrefPath("", "doom64ex-plus");
@@ -241,12 +241,11 @@ int8_t* I_GetUserDir(void)
 #endif
 }
 
-/**
+/*
  * @brief Get the directory which contains this program.
  *
  * @return Fully-qualified path that ends with a separator or NULL if not 
 
-/**
  * @brief Find a regular file in the user-writeable directory.
  *
  * @return Fully-qualified path or NULL if not found.
@@ -259,13 +258,13 @@ int8_t* I_GetUserDir(void)
  *  portable fixed width types everywhere...  one day.
  *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
  */
-int8_t* I_GetUserFile(const int8_t* file) {
-	uint8_t* path, * userdir;
+char* I_GetUserFile(char* file) {
+	char* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
 
-	path = (uint8_t*)malloc(512);
+	path = malloc(512);
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
@@ -273,7 +272,7 @@ int8_t* I_GetUserFile(const int8_t* file) {
 #if defined(__LINUX__) || defined(__OpenBSD__)
 	free(userdir);
 #else
-	SDL_free(userdir);
+	SDL_free((void *)userdir);
 #endif
 	return path;
 }
@@ -284,10 +283,10 @@ int8_t* I_GetUserFile(const int8_t* file) {
  * @return Fully-qualified path or NULL if not found.
  * @note The returning value MUST be freed by the caller.
  */
-int8_t* I_FindDataFile(const int8_t* file) {
-	uint8_t* path, * dir;
+char* I_FindDataFile(char* file) {
+	char *path, *dir;
 
-	path = (uint8_t*)malloc(512);
+	path = malloc(512);
 
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
@@ -317,7 +316,7 @@ int8_t* I_FindDataFile(const int8_t* file) {
 #if defined(__LINUX__) || defined(__OpenBSD__)
 	{
 		int i;
-		const int8_t* paths[] = {
+		const char* paths[] = {
 			//André: Removed all useless directories, Only The dir usr/local is fine to use.
 				//"/usr/local/share/games/doom64ex-plus/",
 				"/usr/local/share/doom64ex-plus/",
@@ -351,7 +350,7 @@ int8_t* I_FindDataFile(const int8_t* file) {
  * @param path Absolute path to check.
  */
 
-dboolean I_FileExists(const int8_t* path)
+dboolean I_FileExists(const char* path)
 {
 	struct stat st;
 	return !stat(path, &st) && S_ISREG(st.st_mode);
@@ -406,8 +405,8 @@ void I_Init(void)
 // I_Error
 //
 
-void I_Error(const int8_t* string, ...) {
-	int8_t buff[1024];
+void I_Error(const char* string, ...) {
+	char buff[1024];
 	va_list    va;
 
 	I_ShutdownSound();
@@ -461,8 +460,8 @@ void I_Quit(void) {
 // I_Printf
 //
 
-void I_Printf(const int8_t* string, ...) {
-	int8_t buff[1024];
+void I_Printf(const char* string, ...) {
+	char buff[1024];
 	va_list    va;
 
 	dmemset(buff, 0, 1024);

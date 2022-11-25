@@ -24,33 +24,33 @@
 #define __SC_MAIN__
 
 typedef struct {
-	int8_t    token[512];
+	char    token[512];
 	byte* buffer;
-	int8_t* pointer_start;
-	int8_t* pointer_end;
+	char* pointer_start;
+	char* pointer_end;
 	int     linepos;
 	int     rowpos;
 	int     buffpos;
 	int     buffsize;
-	void (*open)(const int8_t*);
+	void (*open)(const char*);
 	void (*close)(void);
-	void (*compare)(const int8_t*);
+	void (*compare)(const char*);
 	int (*find)(dboolean);
-	int8_t(*fgetchar)(void);
+	char(*fgetchar)(void);
 	void (*rewind)(void);
-	int8_t* (*getstring)(void);
+	char* (*getstring)(void);
 	int (*getint)(void);
 	int (*setdata)(void*, void*);
 	int (*readtokens)(void);
-	void (*error)(const int8_t*);
+	void (*error)(const char*);
 } scparser_t;
 
 extern scparser_t sc_parser;
 
 typedef struct {
-	const int8_t* token;
+	const char* token;
 	int64   ptroffset;
-	int8_t    type;
+	char    type;
 } scdatatable_t;
 
 void SC_Init(void);

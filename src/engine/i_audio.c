@@ -37,8 +37,13 @@
 #include <unistd.h>
 #endif
 
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
-#include "fluidsynth.h"
+#endif
+
+#include <fluidsynth.h>
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -1508,4 +1513,3 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
     }
     SEMAPHORE_UNLOCK()
 }
-
