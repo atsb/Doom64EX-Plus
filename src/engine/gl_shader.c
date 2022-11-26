@@ -23,12 +23,12 @@
 #include <stdio.h> 
 GLuint ID;
 
-void GL_LoadShader(const char* textureShader, const char* fragmentShader) 
+void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
 {
 	//Compile the code.
 	uint32 texture, fragment;
 	texture = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(texture, 1, textureShader, NULL);
+	glShaderSource(texture, 1, vertexShader, NULL);
 	glCompileShader(texture);
 	GL_CheckShaderErrors(texture, GL_VERTEX_SHADER);
 
