@@ -52,6 +52,9 @@ dkms.conf
 *.iobj
 *.ipdb
 
+# macOS files
+*.DS_Store
+
 # Doom 64 EX Plus specific
 /Windows/.vs
 /Windows/Debug
