@@ -43,7 +43,7 @@
 #include <SDL2/SDL.h>
 #endif
 
-#include <fluidsynth.h>
+#include <fluidlite.h>
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -282,6 +282,17 @@ static doomseq_t doomseq = {0};   // doom sequencer
 
 typedef void(*eventhandler)(doomseq_t*, channel_t*);
 typedef int(*signalhandler)(doomseq_t*);
+
+//
+// Audio_Play
+//
+// Callback for SDL
+//
+static void Audio_Play(void* user, Uint8* stream, int len)
+{
+    fluid_synth_t* synth = (fluid_synth_t*)user;
+    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, 2, stream, 1, 2);
+}
 
 //
 // Seq_SetGain
@@ -1099,9 +1110,13 @@ static void Seq_Shutdown(doomseq_t* seq) {
     SDL_WaitThread(seq->thread, NULL);
 
     //
+    // prevent calls to Audio_Play()
+    //
+    SDL_CloseAudio();
+
+    //
     // fluidsynth cleanup stuff
     //
-    delete_fluid_audio_driver(seq->driver);
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
 
@@ -1232,15 +1247,6 @@ void I_InitSequencer(void) {
     }
 
     //
-    // init audio driver
-    //
-    doomseq.driver = new_fluid_audio_driver(doomseq.settings, doomseq.synth);
-    if(doomseq.driver == NULL) {
-        CON_Warnf("I_InitSequencer: failed to create audio driver");
-        return;
-    }
-
-    //
     // load soundfont
     //
 
@@ -1295,6 +1301,24 @@ void I_InitSequencer(void) {
     }
 
     Song_ClearPlaylist();
+
+    if (!SDL_WasInit(0))
+        SDL_Init(0);
+
+    if (!SDL_WasInit(SDL_INIT_AUDIO))
+        SDL_InitSubSystem(SDL_INIT_AUDIO);
+
+    SDL_AudioSpec spec;
+
+    spec.format = AUDIO_S16;
+    spec.freq = 44100;
+    spec.samples = 4096;
+    spec.channels = 2;
+    spec.callback = Audio_Play;
+    spec.userdata = doomseq.synth;
+
+    SDL_OpenAudio(&spec, NULL);
+    SDL_PauseAudio(SDL_FALSE);
 
     // 20120205 villsa - sequencer is now ready
     seqready = true;

@@ -14,8 +14,8 @@
  *  
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307, USA
  */
 
 #ifndef _FLUIDSYNTH_GEN_H
@@ -115,13 +115,13 @@ typedef struct _fluid_gen_t
 } fluid_gen_t;
 
 /**
- * Enum value for 'flags' field of #fluid_gen_t (not really flags).
+ * Enum value for 'flags' field of #_fluid_gen_t (not really flags).
  */
 enum fluid_gen_flags
 {
   GEN_UNUSED,		/**< Generator value is not set */
   GEN_SET,		/**< Generator value is set */
-  GEN_ABS_NRPN		/**< Generator is an absolute value */
+  GEN_ABS_NRPN		/**< DOCME */
 };
 
 FLUIDSYNTH_API int fluid_gen_set_default_values(fluid_gen_t* gen);

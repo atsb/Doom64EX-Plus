@@ -1,4 +1,4 @@
-/* FluidSynth - A Software Synthesizer
+/* FluidLite - A Software Synthesizer
  *
  * Copyright (C) 2003  Peter Hanappe and others.
  *
@@ -14,32 +14,31 @@
  *  
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307, USA
  */
 
-#ifndef _FLUIDSYNTH_SEQBIND_H
-#define _FLUIDSYNTH_SEQBIND_H
+#ifndef _FLUIDLITE_VERSION_H
+#define _FLUIDLITE_VERSION_H
 
-#include "seq.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * @file seqbind.h
- * @brief Functions for binding sequencer objects to other subsystems.
- */
+#define FLUIDLITE_VERSION       "1.2.2"
+#define FLUIDLITE_VERSION_MAJOR 1
+#define FLUIDLITE_VERSION_MINOR 2
+#define FLUIDLITE_VERSION_MICRO 2
 
-FLUIDSYNTH_API 
-short fluid_sequencer_register_fluidsynth(fluid_sequencer_t* seq, fluid_synth_t* synth);
-FLUIDSYNTH_API int
-fluid_sequencer_add_midi_event_to_buffer(void* data, fluid_midi_event_t* event);
+
+FLUIDSYNTH_API void fluid_version(int *major, int *minor, int *micro);
+
+FLUIDSYNTH_API char* fluid_version_str(void);
 
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* _FLUIDSYNTH_SEQBIND_H */
 
+#endif /* _FLUIDLITE_VERSION_H */
