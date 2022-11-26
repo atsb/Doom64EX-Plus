@@ -786,8 +786,8 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 //
 
 static void P_Obituary(mobj_t* source, mobj_t* target) {
-	static int8_t omsg[128];
-	int8_t* name;
+	static char omsg[128];
+	char* name;
 	int i;
 
 	if (!target->player) {

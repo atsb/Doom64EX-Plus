@@ -51,20 +51,20 @@ void NET_WriteSettings(net_packet_t* packet, net_gamesettings_t* settings)
 
 dboolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings)
 {
-	return NET_ReadInt8(packet, (uint32_t*)&settings->ticdup)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->extratics)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->deathmatch)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->nomonsters)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->fast_monsters)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->respawn_monsters)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->respawn_items)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->map)
+	return NET_ReadInt8(packet, (int*)&settings->ticdup)
+		&& NET_ReadInt8(packet, (int*)&settings->extratics)
+		&& NET_ReadInt8(packet, (int*)&settings->deathmatch)
+		&& NET_ReadInt8(packet, (int*)&settings->nomonsters)
+		&& NET_ReadInt8(packet, (int*)&settings->fast_monsters)
+		&& NET_ReadInt8(packet, (int*)&settings->respawn_monsters)
+		&& NET_ReadInt8(packet, (int*)&settings->respawn_items)
+		&& NET_ReadInt8(packet, (int*)&settings->map)
 		&& NET_ReadSInt8(packet, &settings->skill)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->gameversion)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->lowres_turn)
-		&& NET_ReadInt8(packet, (uint32_t*)&settings->new_sync)
+		&& NET_ReadInt8(packet, (int*)&settings->gameversion)
+		&& NET_ReadInt8(packet, (int*)&settings->lowres_turn)
+		&& NET_ReadInt8(packet, (int*)&settings->new_sync)
 		&& NET_ReadInt32(packet, (uint32_t*)&settings->timelimit)
-		&& NET_ReadSInt8(packet, (int32_t*)&settings->loadgame)
+		&& NET_ReadSInt8(packet, (int*)&settings->loadgame)
 		&& NET_ReadInt32(packet, (uint32_t*)&settings->compatflags)
 		&& NET_ReadInt32(packet, (uint32_t*)&settings->gameflags);
 }
@@ -76,11 +76,11 @@ dboolean NET_ReadQueryData(net_packet_t* packet, net_querydata_t* query)
 	query->version = NET_ReadString(packet);
 
 	result = query->version != NULL
-		&& NET_ReadInt8(packet, (uint32_t*)&query->server_state)
-		&& NET_ReadInt8(packet, (uint32_t*)&query->num_players)
-		&& NET_ReadInt8(packet, (uint32_t*)&query->max_players)
-		&& NET_ReadInt8(packet, (uint32_t*)&query->gamemode)
-		&& NET_ReadInt8(packet, (uint32_t*)&query->gamemission);
+		&& NET_ReadInt8(packet, (int*)&query->server_state)
+		&& NET_ReadInt8(packet, (int*)&query->num_players)
+		&& NET_ReadInt8(packet, (int*)&query->max_players)
+		&& NET_ReadInt8(packet, (int*)&query->gamemode)
+		&& NET_ReadInt8(packet, (int*)&query->gamemission);
 
 	if (result)
 	{
@@ -144,8 +144,8 @@ void NET_WriteTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
 dboolean NET_ReadTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
 	dboolean lowres_turn)
 {
-	uint32_t val;
-	int32_t sval;
+	int val;
+	int sval;
 
 	// Read header
 
@@ -278,7 +278,7 @@ void NET_TiccmdPatch(ticcmd_t* src, net_ticdiff_t* diff, ticcmd_t* dest)
 
 dboolean NET_ReadFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean lowres_turn)
 {
-	uint32_t bitfield;
+	int bitfield;
 	int i;
 
 	// Latency
@@ -353,7 +353,7 @@ void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean 
 
 dboolean NET_ReadMD5Sum(net_packet_t* packet, md5_digest_t digest)
 {
-	uint32_t b;
+	int b;
 	int i;
 
 	for (i = 0; i < 16; ++i)

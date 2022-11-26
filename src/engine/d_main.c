@@ -99,9 +99,9 @@ skill_t         startskill;
 int             startmap;
 dboolean        autostart = false;
 FILE* debugfile = NULL;
-//int8_t          wadfile[1024];              // primary wad file
-int8_t            mapdir[1024];               // directory of development maps
-int8_t            basedefault[1024];          // default file
+//char          wadfile[1024];              // primary wad file
+char            mapdir[1024];               // directory of development maps
+char            basedefault[1024];          // default file
 dboolean        rundemo4 = false;    // run demo lump #4?
 int             gameflags = 0;
 int             compatflags = 0;
@@ -516,7 +516,7 @@ static void Title_Stop(void) {
 
 CVAR_EXTERNAL(p_regionmode);
 
-static int8_t* legalpic = "USLEGAL";
+static char* legalpic = "USLEGAL";
 static int legal_x = 32;
 static int legal_y = 72;
 
@@ -758,7 +758,7 @@ void D_DoomLoop(void) {
 }
 
 //      print title for every printed line
-int8_t title[128];
+char title[128];
 
 //
 // Find a Response File
@@ -776,10 +776,10 @@ static void FindResponseFile(void) {
 			int     k;
 			int     index;
 			int     indexinfile;
-			int8_t* infile;
-			int8_t* file;
-			int8_t* moreargs[20];
-			int8_t* firstargv;
+			char* infile;
+			char* file;
+			char* moreargs[20];
+			char* firstargv;
 
 			// READ THE RESPONSE FILE INTO MEMORY
 			handle = fopen(&myargv[i][1], "rb");
@@ -791,7 +791,7 @@ static void FindResponseFile(void) {
 			fseek(handle, 0, SEEK_END);
 			size = ftell(handle);
 			fseek(handle, 0, SEEK_SET);
-			file = (int8_t*)malloc(size);
+			file = (char*)malloc(size);
 			fread(file, size, 1, handle);
 			fclose(handle);
 
@@ -801,8 +801,8 @@ static void FindResponseFile(void) {
 			}
 
 			firstargv = myargv[0];
-			myargv = (int8_t**)malloc(sizeof(int8_t*) * MAXARGVS);
-			dmemset(myargv, 0, sizeof(int8_t*) * MAXARGVS);
+			myargv = (char**)malloc(sizeof(char*) * MAXARGVS);
+			dmemset(myargv, 0, sizeof(char*) * MAXARGVS);
 			myargv[0] = firstargv;
 
 			infile = file;
@@ -850,12 +850,12 @@ static void D_Init(void) {
 	respawnitem = M_CheckParm("-respawnitem");
 	fastparm = M_CheckParm("-fast");
 
-	if (p = M_CheckParm("-setvars")) {
+	if ((p = M_CheckParm("-setvars"))) {
 		p++;
 
 		while (p != myargc && myargv[p][0] != '-') {
-			int8_t* name;
-			int8_t* value;
+			char* name;
+			char* value;
 
 			name = myargv[p++];
 			value = myargv[p++];

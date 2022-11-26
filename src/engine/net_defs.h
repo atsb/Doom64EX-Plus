@@ -65,7 +65,7 @@ struct _net_module_s
 
 	// Converts an address to a string
 
-	void (*AddrToString)(net_addr_t* addr, int8_t* buffer, int buffer_len);
+	void (*AddrToString)(net_addr_t* addr, char* buffer, int buffer_len);
 
 	// Free back an address when no longer in use
 
@@ -73,7 +73,7 @@ struct _net_module_s
 
 	// Try to resolve a name to an address
 
-	net_addr_t* (*ResolveAddress)(int8_t* addr);
+	net_addr_t* (*ResolveAddress)(char* addr);
 };
 
 // net_addr_t
@@ -146,7 +146,7 @@ typedef struct
 
 typedef struct
 {
-	uint32_t diff;
+	int diff;
 	ticcmd_t cmd;
 } net_ticdiff_t;
 
@@ -164,13 +164,13 @@ typedef struct
 
 typedef struct
 {
-	int8_t* version;
+	char* version;
 	int server_state;
 	int num_players;
 	int max_players;
 	int gamemode;
 	int gamemission;
-	int8_t* description;
+	char* description;
 } net_querydata_t;
 
 #endif /* #ifndef NET_DEFS_H */

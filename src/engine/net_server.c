@@ -60,7 +60,7 @@ typedef struct
 	net_addr_t* addr;
 	net_connection_t connection;
 	int last_send_time;
-	int8_t* name;
+	char* name;
 
 	// Last time new gamedata was received from this client
 
@@ -145,9 +145,9 @@ static dboolean ClientConnected(net_client_t* client)
 
 // Send a message to be displayed on a client's console
 
-static void NET_SV_SendConsoleMessage(net_client_t* client, int8_t* s, ...)
+static void NET_SV_SendConsoleMessage(net_client_t* client, char* s, ...)
 {
-	int8_t buf[1024];
+	char buf[1024];
 	va_list args;
 	net_packet_t* packet;
 
@@ -163,9 +163,9 @@ static void NET_SV_SendConsoleMessage(net_client_t* client, int8_t* s, ...)
 
 // Send a message to all clients
 
-static void NET_SV_BroadcastMessage(int8_t* s, ...)
+static void NET_SV_BroadcastMessage(char* s, ...)
 {
-	int8_t buf[1024];
+	char buf[1024];
 	va_list args;
 	int i;
 
@@ -397,7 +397,7 @@ static net_client_t* NET_SV_FindClient(net_addr_t* addr)
 
 // send a rejection packet to a client
 
-static void NET_SV_SendReject(net_addr_t* addr, int8_t* msg)
+static void NET_SV_SendReject(net_addr_t* addr, char* msg)
 {
 	net_packet_t* packet;
 
@@ -410,7 +410,7 @@ static void NET_SV_SendReject(net_addr_t* addr, int8_t* msg)
 
 static void NET_SV_InitNewClient(net_client_t* client,
 	net_addr_t* addr,
-	int8_t* player_name)
+	char* player_name)
 {
 	client->active = true;
 	NET_Conn_InitServer(&client->connection, addr);
@@ -442,10 +442,10 @@ static void NET_SV_ParseSYN(net_packet_t* packet,
 	uint32_t magic;
 	uint32_t cl_gamemode = 0, cl_gamemission = 0;
 	uint32_t cl_recording_lowres = 0;
-	uint32_t cl_drone;
+	int cl_drone;
 	md5_digest_t wad_md5sum;
-	int8_t* player_name;
-	int8_t* client_version;
+	char* player_name;
+	char* client_version;
 	int i;
 
 	// read the magic number
@@ -810,9 +810,9 @@ static void NET_SV_CheckResends(net_client_t* client)
 static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 {
 	net_client_recv_t* recvobj;
-	uint32_t seq;
-	uint32_t ackseq;
-	uint32_t num_tics;
+	int seq;
+	int ackseq;
+	int num_tics;
 	uint32_t nowtime;
 	size_t i;
 	int player;
@@ -944,7 +944,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 static void NET_SV_ParseGameDataACK(net_packet_t* packet, net_client_t* client)
 {
-	uint32_t ackseq;
+	int ackseq;
 
 	if (server_state != SERVER_IN_GAME)
 	{
@@ -1015,7 +1015,7 @@ static void NET_SV_SendTics(net_client_t* client,
 static void NET_SV_ParseResendRequest(net_packet_t* packet, net_client_t* client)
 {
 	uint32_t start, last;
-	uint32_t num_tics;
+	int num_tics;
 	uint32_t i;
 
 	// Read the starting tic and number of tics
@@ -1095,7 +1095,7 @@ void NET_SV_SendQueryResponse(net_addr_t* addr)
 static void NET_SV_ParseCheatRequest(net_packet_t* packet, net_client_t* client)
 {
 	int player;
-	int8_t* buff;
+	char* buff;
 	int type;
 	net_packet_t* packet2;
 	int i;
@@ -1233,7 +1233,7 @@ static void NET_SV_SendWaitingData(net_client_t* client)
 
 	for (i = 0; i < num_players; ++i)
 	{
-		int8_t* addr;
+		char* addr;
 
 		// name
 

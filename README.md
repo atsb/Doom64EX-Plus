@@ -42,10 +42,11 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 
 ## Dependencies
 
-* SDL2
-* zlib
-* libpng
+* SDL2 and SDL2_net
+* ZLib
+* LibPNG
 * FluidSynth
+* OpenGL
 
 ## System Requirements - 32 or 64bit
 
@@ -60,14 +61,21 @@ Linux / *BSD Desktop / Laptop
 - 1.8GHz Dual Core CPU
 - 2GB RAM
 - 80MB Disk Space
-- OpenGL 1.4+ Compliant Video Chip / Card
+- OpenGL 2.1+ Compliant Video Chip / Card
 
 Windows
 
 - 1.8GHz Dual Core CPU
 - 4GB RAM
 - 80MB Disk Space
-- OpenGL 1.4+ Compliant Video Chip / Card
+- OpenGL 2.1+ Compliant Video Chip / Card
+
+macOS
+
+- mid-2013 macbook air or better (also arm64 systems)
+- 4GB RAM
+- 80MB Disk Space
+- OpenGL 2.1+ Compliant Video Chip / Card
 
 ## Installation
 
@@ -83,7 +91,7 @@ GNU/Linux / BSD
 
 Without the macro, it will look inside the current directory that the binary is in.
 
-Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux.
+Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux or macOS.
 
 ## Compiling
 
@@ -94,6 +102,12 @@ Clone this repo
 ## Linux or Cross Platform Compilation
 
 Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
+
+## macOS
+Install MacPorts and get the dependencies.
+
+Then use the XCode project file, which is the only supported way to compile on macOS.  Everything is already defined.
+The IWAD needs to be placed in: /Users/*user*/Library/Application Support/doom64ex-plus directory along with the files found within the Resources directory inside the bundle (.wad and .sf2).
 
 ## Raspberry Pi 3
 
@@ -125,6 +139,12 @@ You can place the asset data described above to any of the following directories
 
 * The directory in which `doom64ex-plus` resides
 * `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
+
+## macOS
+
+You can place the asset data described above to:
+
+* `/Users/*user*/Library/Application Support/doom64ex-plus`
 
 Then, you can start playing:
 

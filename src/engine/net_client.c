@@ -126,8 +126,8 @@ uint32_t net_drones_in_game;
 
 // Names of all players
 
-int8_t net_player_names[MAXPLAYERS][MAXPLAYERNAME];
-int8_t net_player_addresses[MAXPLAYERS][MAXPLAYERNAME];
+char net_player_names[MAXPLAYERS][MAXPLAYERNAME];
+char net_player_addresses[MAXPLAYERS][MAXPLAYERNAME];
 
 // MD5 checksums of the wad directory and dehacked data that the server
 // has sent to us.
@@ -144,7 +144,7 @@ dboolean net_waiting_for_start = false;
 
 // Name that we send to the server
 
-int8_t* net_player_name = NULL;
+char* net_player_name = NULL;
 
 // The last ticcmd constructed
 
@@ -182,7 +182,7 @@ void W_Checksum(md5_digest_t digest);
 
 static void NET_CL_PlayerQuitGame(player_t* player)
 {
-	static int8_t exitmsg[80];
+	static char exitmsg[80];
 
 	// Do this the same way as Vanilla Doom does, to allow dehacked
 	// replacements of this message
@@ -544,12 +544,12 @@ void NET_CL_SendTiccmd(ticcmd_t* ticcmd, int maketic)
 
 static void NET_CL_ParseWaitingData(net_packet_t* packet)
 {
-	uint32_t num_players;
-	uint32_t num_drones;
-	uint32_t is_controller;
+	int num_players;
+	int num_drones;
+	int is_controller;
 	int32_t player_number;
-	int8_t* player_names[MAXPLAYERS];
-	int8_t* player_addr[MAXPLAYERS];
+	char* player_names[MAXPLAYERS];
+	char* player_addr[MAXPLAYERS];
 	md5_digest_t wad_md5sum;
 	size_t i;
 
@@ -618,7 +618,7 @@ static void NET_CL_ParseWaitingData(net_packet_t* packet)
 static void NET_CL_ParseGameStart(net_packet_t* packet)
 {
 	net_gamesettings_t settings;
-	uint32_t num_players;
+	int num_players;
 	int32_t player_number;
 	uint32_t i;
 
@@ -813,7 +813,7 @@ static void NET_CL_CheckResends(void)
 static void NET_CL_ParseGameData(net_packet_t* packet)
 {
 	net_server_recv_t* recvobj;
-	uint32_t seq, num_tics;
+	int seq, num_tics;
 	uint32_t nowtime;
 	int resend_start, resend_end;
 	size_t i;
@@ -922,7 +922,7 @@ static void NET_CL_ParseResendRequest(net_packet_t* packet)
 {
 	static uint32_t start;
 	static uint32_t end;
-	static uint32_t num_tics;
+	static int num_tics;
 
 	if (drone)
 	{
@@ -974,7 +974,7 @@ static void NET_CL_ParseResendRequest(net_packet_t* packet)
 
 static void NET_CL_ParseConsoleMessage(net_packet_t* packet)
 {
-	int8_t* msg;
+	char* msg;
 
 	msg = NET_ReadString(packet);
 
@@ -992,9 +992,9 @@ static void NET_CL_ParseConsoleMessage(net_packet_t* packet)
 
 static void NET_CL_ParseCvarUpdate(net_packet_t* packet)
 {
-	int8_t* cvarname;
-	int8_t* cvarvalue;
-	int8_t str[256];
+	char* cvarname;
+	char* cvarvalue;
+	char str[256];
 
 	cvarname = NET_ReadString(packet);
 	cvarvalue = NET_ReadString(packet);
@@ -1008,7 +1008,7 @@ static void NET_CL_ParseCvarUpdate(net_packet_t* packet)
 static void NET_CL_ParseCheat(net_packet_t* packet)
 {
 	int player;
-	int8_t* buff;
+	char* buff;
 	int type;
 
 	NET_ReadInt8(packet, &player);
@@ -1142,7 +1142,7 @@ static void NET_CL_SendSYN(void)
 	NET_FreePacket(packet);
 }
 
-void NET_CL_SendCheat(int player, int type, int8_t* buff)
+void NET_CL_SendCheat(int player, int type, char* buff)
 {
 	net_packet_t* packet;
 

@@ -39,7 +39,7 @@
 
 static int              f_alpha = 0;
 static int              fInterFadeOut = false;
-static int8_t             fInterString[16][32];
+static char             fInterString[16][32];
 static dboolean         fInterDone = false;
 static int              fInterAlpha = 0;
 static int              fInterSlot = 0;
@@ -85,7 +85,7 @@ void IN_Start(void) {
 
 	// setup intermission text
 	while (k < dstrlen(fcluster->text)) {
-		int8_t c = fcluster->text[k++];
+		char c = fcluster->text[k++];
 
 		if (c == '\n') {
 			j = 0;
