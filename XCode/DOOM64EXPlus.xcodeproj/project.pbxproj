@@ -7,27 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A1E087C293263BF00FB6EB8 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD502930B1AC005B23CA /* libpng16.16.dylib */; };
+		2A1E087D293263BF00FB6EB8 /* libSDL2_net-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4A2930B1AB005B23CA /* libSDL2_net-2.0.0.dylib */; };
+		2A1E087E293263BF00FB6EB8 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD462930B1AA005B23CA /* libSDL2-2.0.0.dylib */; };
+		2A1E0884293263D200FB6EB8 /* libSDL2-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		2A1E0885293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		2A1E0886293263D200FB6EB8 /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		2A1E08912932869900FB6EB8 /* libfluidlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1E087F293263BF00FB6EB8 /* libfluidlite.a */; };
 		2A44CD3E2930B13E005B23CA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3D2930B13E005B23CA /* CoreAudio.framework */; };
 		2A44CD402930B145005B23CA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3F2930B145005B23CA /* OpenGL.framework */; };
-		2A44CD542930B1AC005B23CA /* libvorbisfile.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD412930B1A9005B23CA /* libvorbisfile.3.dylib */; };
-		2A44CD552930B1AC005B23CA /* libFLAC.8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD422930B1A9005B23CA /* libFLAC.8.dylib */; };
-		2A44CD562930B1AC005B23CA /* libreadline.8.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD432930B1AA005B23CA /* libreadline.8.1.dylib */; };
-		2A44CD572930B1AC005B23CA /* libopus.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD442930B1AA005B23CA /* libopus.0.dylib */; };
-		2A44CD582930B1AC005B23CA /* libfluidsynth.3.1.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD452930B1AA005B23CA /* libfluidsynth.3.1.1.dylib */; };
-		2A44CD592930B1AC005B23CA /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD462930B1AA005B23CA /* libSDL2-2.0.0.dylib */; };
-		2A44CD5A2930B1AC005B23CA /* libintl.8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD472930B1AA005B23CA /* libintl.8.dylib */; };
-		2A44CD5B2930B1AC005B23CA /* libpcre.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD482930B1AA005B23CA /* libpcre.1.dylib */; };
-		2A44CD5C2930B1AC005B23CA /* libncurses.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD492930B1AB005B23CA /* libncurses.6.dylib */; };
-		2A44CD5D2930B1AC005B23CA /* libSDL2_net-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4A2930B1AB005B23CA /* libSDL2_net-2.0.0.dylib */; };
-		2A44CD5E2930B1AC005B23CA /* libvorbisenc.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4B2930B1AB005B23CA /* libvorbisenc.2.dylib */; };
-		2A44CD5F2930B1AC005B23CA /* libvorbis.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4C2930B1AB005B23CA /* libvorbis.0.dylib */; };
-		2A44CD602930B1AC005B23CA /* libgthread-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4D2930B1AB005B23CA /* libgthread-2.0.0.dylib */; };
-		2A44CD612930B1AC005B23CA /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4E2930B1AB005B23CA /* libogg.0.dylib */; };
-		2A44CD622930B1AC005B23CA /* libsndfile.1.0.34.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4F2930B1AB005B23CA /* libsndfile.1.0.34.dylib */; };
-		2A44CD632930B1AC005B23CA /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD502930B1AC005B23CA /* libpng16.16.dylib */; };
-		2A44CD642930B1AC005B23CA /* libz.1.2.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD512930B1AC005B23CA /* libz.1.2.13.dylib */; };
-		2A44CD652930B1AC005B23CA /* libglib-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD522930B1AC005B23CA /* libglib-2.0.0.dylib */; };
-		2A44CD662930B1AC005B23CA /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD532930B1AC005B23CA /* libiconv.2.dylib */; };
 		2A44CE282930B570005B23CA /* doom64ex-plus.wad in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE212930B56F005B23CA /* doom64ex-plus.wad */; };
 		2A44CE292930B570005B23CA /* doomsnd.sf2 in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE222930B56F005B23CA /* doomsnd.sf2 */; };
 		2A44CE2A2930B570005B23CA /* AUTHORS in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE232930B56F005B23CA /* AUTHORS */; };
@@ -128,25 +116,6 @@
 		2A44CF4B2930B717005B23CA /* dgl.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEA2930B716005B23CA /* dgl.c */; };
 		2A44CF4C2930B717005B23CA /* r_sky.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEC2930B716005B23CA /* r_sky.c */; };
 		2A44CF4D2930B717005B23CA /* am_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEE2930B717005B23CA /* am_draw.c */; };
-		2A44CF652930F675005B23CA /* libvorbisenc.2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF522930F670005B23CA /* libvorbisenc.2.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF662930F675005B23CA /* libSDL2-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF532930F671005B23CA /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF672930F675005B23CA /* libz.1.2.13.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF542930F671005B23CA /* libz.1.2.13.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF682930F675005B23CA /* libopus.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF552930F671005B23CA /* libopus.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF692930F675005B23CA /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF562930F671005B23CA /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF6A2930F675005B23CA /* libiconv.2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF572930F671005B23CA /* libiconv.2.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF6B2930F675005B23CA /* libfluidsynth.3.1.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF582930F672005B23CA /* libfluidsynth.3.1.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF6C2930F675005B23CA /* libogg.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF592930F672005B23CA /* libogg.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF6D2930F675005B23CA /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF5A2930F672005B23CA /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF6E2930F675005B23CA /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF5B2930F672005B23CA /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF6F2930F675005B23CA /* libncurses.6.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF5C2930F672005B23CA /* libncurses.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF702930F675005B23CA /* libvorbisfile.3.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF5D2930F673005B23CA /* libvorbisfile.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF712930F675005B23CA /* libsndfile.1.0.34.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF5E2930F673005B23CA /* libsndfile.1.0.34.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF722930F675005B23CA /* libFLAC.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF5F2930F673005B23CA /* libFLAC.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF732930F675005B23CA /* libreadline.8.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF602930F673005B23CA /* libreadline.8.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF742930F675005B23CA /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF612930F673005B23CA /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF752930F675005B23CA /* libgthread-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF622930F674005B23CA /* libgthread-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF762930F675005B23CA /* libSDL2_net-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF632930F674005B23CA /* libSDL2_net-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A44CF772930F675005B23CA /* libvorbis.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A44CF642930F674005B23CA /* libvorbis.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5A81D21A8DAEB600AF539F /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -157,31 +126,23 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				2A44CF652930F675005B23CA /* libvorbisenc.2.dylib in CopyFiles */,
-				2A44CF662930F675005B23CA /* libSDL2-2.0.0.dylib in CopyFiles */,
-				2A44CF672930F675005B23CA /* libz.1.2.13.dylib in CopyFiles */,
-				2A44CF682930F675005B23CA /* libopus.0.dylib in CopyFiles */,
-				2A44CF692930F675005B23CA /* libpng16.16.dylib in CopyFiles */,
-				2A44CF6A2930F675005B23CA /* libiconv.2.dylib in CopyFiles */,
-				2A44CF6B2930F675005B23CA /* libfluidsynth.3.1.1.dylib in CopyFiles */,
-				2A44CF6C2930F675005B23CA /* libogg.0.dylib in CopyFiles */,
-				2A44CF6D2930F675005B23CA /* libglib-2.0.0.dylib in CopyFiles */,
-				2A44CF6E2930F675005B23CA /* libpcre.1.dylib in CopyFiles */,
-				2A44CF6F2930F675005B23CA /* libncurses.6.dylib in CopyFiles */,
-				2A44CF702930F675005B23CA /* libvorbisfile.3.dylib in CopyFiles */,
-				2A44CF712930F675005B23CA /* libsndfile.1.0.34.dylib in CopyFiles */,
-				2A44CF722930F675005B23CA /* libFLAC.8.dylib in CopyFiles */,
-				2A44CF732930F675005B23CA /* libreadline.8.1.dylib in CopyFiles */,
-				2A44CF742930F675005B23CA /* libintl.8.dylib in CopyFiles */,
-				2A44CF752930F675005B23CA /* libgthread-2.0.0.dylib in CopyFiles */,
-				2A44CF762930F675005B23CA /* libSDL2_net-2.0.0.dylib in CopyFiles */,
-				2A44CF772930F675005B23CA /* libvorbis.0.dylib in CopyFiles */,
+				2A1E0884293263D200FB6EB8 /* libSDL2-2.0.0.dylib in CopyFiles */,
+				2A1E0885293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib in CopyFiles */,
+				2A1E0886293263D200FB6EB8 /* libpng16.16.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2A1E086E2932604C00FB6EB8 /* libfluidlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfluidlite.a; path = ../src/engine/3rdparty/Libs/macOS/libfluidlite.a; sourceTree = "<group>"; };
+		2A1E0870293260A200FB6EB8 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../src/engine/3rdparty/Libs/macOS/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
+		2A1E0871293260A200FB6EB8 /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "../src/engine/3rdparty/Libs/macOS/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
+		2A1E0872293260A200FB6EB8 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = ../src/engine/3rdparty/Libs/macOS/libpng16.16.dylib; sourceTree = "<group>"; };
+		2A1E087F293263BF00FB6EB8 /* libfluidlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfluidlite.a; path = Libs/libfluidlite.a; sourceTree = "<group>"; };
+		2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "Libs/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
+		2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "Libs/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
+		2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = Libs/libpng16.16.dylib; sourceTree = "<group>"; };
 		2A44CD3D2930B13E005B23CA /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		2A44CD3F2930B145005B23CA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		2A44CD412930B1A9005B23CA /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = Libs/libvorbisfile.3.dylib; sourceTree = "<group>"; };
@@ -394,25 +355,6 @@
 		2A44CEED2930B716005B23CA /* p_local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = p_local.h; path = ../src/engine/p_local.h; sourceTree = "<group>"; };
 		2A44CEEE2930B717005B23CA /* am_draw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = am_draw.c; path = ../src/engine/am_draw.c; sourceTree = "<group>"; };
 		2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = doom64explus.entitlements; sourceTree = "<group>"; };
-		2A44CF522930F670005B23CA /* libvorbisenc.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisenc.2.dylib; path = Libs/libvorbisenc.2.dylib; sourceTree = "<group>"; };
-		2A44CF532930F671005B23CA /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "Libs/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CF542930F671005B23CA /* libz.1.2.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.13.dylib; path = Libs/libz.1.2.13.dylib; sourceTree = "<group>"; };
-		2A44CF552930F671005B23CA /* libopus.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopus.0.dylib; path = Libs/libopus.0.dylib; sourceTree = "<group>"; };
-		2A44CF562930F671005B23CA /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = Libs/libpng16.16.dylib; sourceTree = "<group>"; };
-		2A44CF572930F671005B23CA /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = Libs/libiconv.2.dylib; sourceTree = "<group>"; };
-		2A44CF582930F672005B23CA /* libfluidsynth.3.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfluidsynth.3.1.1.dylib; path = Libs/libfluidsynth.3.1.1.dylib; sourceTree = "<group>"; };
-		2A44CF592930F672005B23CA /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = Libs/libogg.0.dylib; sourceTree = "<group>"; };
-		2A44CF5A2930F672005B23CA /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libglib-2.0.0.dylib"; path = "Libs/libglib-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CF5B2930F672005B23CA /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcre.1.dylib; path = Libs/libpcre.1.dylib; sourceTree = "<group>"; };
-		2A44CF5C2930F672005B23CA /* libncurses.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libncurses.6.dylib; path = Libs/libncurses.6.dylib; sourceTree = "<group>"; };
-		2A44CF5D2930F673005B23CA /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = Libs/libvorbisfile.3.dylib; sourceTree = "<group>"; };
-		2A44CF5E2930F673005B23CA /* libsndfile.1.0.34.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsndfile.1.0.34.dylib; path = Libs/libsndfile.1.0.34.dylib; sourceTree = "<group>"; };
-		2A44CF5F2930F673005B23CA /* libFLAC.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libFLAC.8.dylib; path = Libs/libFLAC.8.dylib; sourceTree = "<group>"; };
-		2A44CF602930F673005B23CA /* libreadline.8.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.8.1.dylib; path = Libs/libreadline.8.1.dylib; sourceTree = "<group>"; };
-		2A44CF612930F673005B23CA /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libintl.8.dylib; path = Libs/libintl.8.dylib; sourceTree = "<group>"; };
-		2A44CF622930F674005B23CA /* libgthread-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libgthread-2.0.0.dylib"; path = "Libs/libgthread-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CF632930F674005B23CA /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "Libs/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CF642930F674005B23CA /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = Libs/libvorbis.0.dylib; sourceTree = "<group>"; };
 		2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DOOM64EX--Info.plist"; sourceTree = "<group>"; };
 		AB5A80C21A8DABE100AF539F /* DOOM64EXPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOOM64EXPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5A81D21A8DAEB600AF539F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -423,25 +365,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A44CD542930B1AC005B23CA /* libvorbisfile.3.dylib in Frameworks */,
-				2A44CD552930B1AC005B23CA /* libFLAC.8.dylib in Frameworks */,
-				2A44CD562930B1AC005B23CA /* libreadline.8.1.dylib in Frameworks */,
-				2A44CD572930B1AC005B23CA /* libopus.0.dylib in Frameworks */,
-				2A44CD582930B1AC005B23CA /* libfluidsynth.3.1.1.dylib in Frameworks */,
-				2A44CD592930B1AC005B23CA /* libSDL2-2.0.0.dylib in Frameworks */,
-				2A44CD5A2930B1AC005B23CA /* libintl.8.dylib in Frameworks */,
-				2A44CD5B2930B1AC005B23CA /* libpcre.1.dylib in Frameworks */,
-				2A44CD5C2930B1AC005B23CA /* libncurses.6.dylib in Frameworks */,
-				2A44CD5D2930B1AC005B23CA /* libSDL2_net-2.0.0.dylib in Frameworks */,
-				2A44CD5E2930B1AC005B23CA /* libvorbisenc.2.dylib in Frameworks */,
-				2A44CD5F2930B1AC005B23CA /* libvorbis.0.dylib in Frameworks */,
-				2A44CD602930B1AC005B23CA /* libgthread-2.0.0.dylib in Frameworks */,
-				2A44CD612930B1AC005B23CA /* libogg.0.dylib in Frameworks */,
-				2A44CD622930B1AC005B23CA /* libsndfile.1.0.34.dylib in Frameworks */,
-				2A44CD632930B1AC005B23CA /* libpng16.16.dylib in Frameworks */,
-				2A44CD642930B1AC005B23CA /* libz.1.2.13.dylib in Frameworks */,
-				2A44CD652930B1AC005B23CA /* libglib-2.0.0.dylib in Frameworks */,
-				2A44CD662930B1AC005B23CA /* libiconv.2.dylib in Frameworks */,
+				2A1E08912932869900FB6EB8 /* libfluidlite.a in Frameworks */,
+				2A1E087C293263BF00FB6EB8 /* libpng16.16.dylib in Frameworks */,
+				2A1E087D293263BF00FB6EB8 /* libSDL2_net-2.0.0.dylib in Frameworks */,
+				2A1E087E293263BF00FB6EB8 /* libSDL2-2.0.0.dylib in Frameworks */,
 				2A44CD402930B145005B23CA /* OpenGL.framework in Frameworks */,
 				2A44CD3E2930B13E005B23CA /* CoreAudio.framework in Frameworks */,
 				AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */,
@@ -454,6 +381,11 @@
 		9F385F2F1C29BFA400BD4F2B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2A1E087F293263BF00FB6EB8 /* libfluidlite.a */,
+				2A1E0872293260A200FB6EB8 /* libpng16.16.dylib */,
+				2A1E0871293260A200FB6EB8 /* libSDL2_net-2.0.0.dylib */,
+				2A1E0870293260A200FB6EB8 /* libSDL2-2.0.0.dylib */,
+				2A1E086E2932604C00FB6EB8 /* libfluidlite.a */,
 				2A44CD422930B1A9005B23CA /* libFLAC.8.dylib */,
 				2A44CD452930B1AA005B23CA /* libfluidsynth.3.1.1.dylib */,
 				2A44CD522930B1AC005B23CA /* libglib-2.0.0.dylib */,
@@ -498,26 +430,10 @@
 		AB5A80B91A8DABE100AF539F = {
 			isa = PBXGroup;
 			children = (
+				2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */,
+				2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */,
+				2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */,
 				2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */,
-				2A44CF5F2930F673005B23CA /* libFLAC.8.dylib */,
-				2A44CF582930F672005B23CA /* libfluidsynth.3.1.1.dylib */,
-				2A44CF5A2930F672005B23CA /* libglib-2.0.0.dylib */,
-				2A44CF622930F674005B23CA /* libgthread-2.0.0.dylib */,
-				2A44CF572930F671005B23CA /* libiconv.2.dylib */,
-				2A44CF612930F673005B23CA /* libintl.8.dylib */,
-				2A44CF5C2930F672005B23CA /* libncurses.6.dylib */,
-				2A44CF592930F672005B23CA /* libogg.0.dylib */,
-				2A44CF552930F671005B23CA /* libopus.0.dylib */,
-				2A44CF5B2930F672005B23CA /* libpcre.1.dylib */,
-				2A44CF562930F671005B23CA /* libpng16.16.dylib */,
-				2A44CF602930F673005B23CA /* libreadline.8.1.dylib */,
-				2A44CF632930F674005B23CA /* libSDL2_net-2.0.0.dylib */,
-				2A44CF532930F671005B23CA /* libSDL2-2.0.0.dylib */,
-				2A44CF5E2930F673005B23CA /* libsndfile.1.0.34.dylib */,
-				2A44CF642930F674005B23CA /* libvorbis.0.dylib */,
-				2A44CF522930F670005B23CA /* libvorbisenc.2.dylib */,
-				2A44CF5D2930F673005B23CA /* libvorbisfile.3.dylib */,
-				2A44CF542930F671005B23CA /* libz.1.2.13.dylib */,
 				2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */,
 				2A44CEEE2930B717005B23CA /* am_draw.c */,
 				2A44CEBA2930B70F005B23CA /* am_draw.h */,
@@ -948,6 +864,7 @@
 					/opt/local/include,
 					"-DDOOM_UNIX_INSTALL",
 				);
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1003,6 +920,7 @@
 					/opt/local/include,
 					"-DDOOM_UNIX_INSTALL",
 				);
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -1029,13 +947,14 @@
 					"$(PROJECT_DIR)/SDL2_image.framework/Headers",
 				);
 				INFOPLIST_FILE = "DOOM64EX--Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.action-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
+					./Libs,
 					"$(inherited)",
 					"$(PROJECT_DIR)/Libs",
 				);
@@ -1069,13 +988,14 @@
 					"$(PROJECT_DIR)/SDL2_image.framework/Headers",
 				);
 				INFOPLIST_FILE = "DOOM64EX--Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.action-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
+					./Libs,
 					"$(inherited)",
 					"$(PROJECT_DIR)/Libs",
 				);
