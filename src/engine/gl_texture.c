@@ -211,7 +211,6 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
 
-    GL_LoadShader("GLSL/test.vert", "GLSL/test.frag");
 	GLuint VBO = 0, VAO = 0; 
 	glGenVertexArrays(1, VAO);
 	glGenBuffers(1, VBO);
