@@ -97,10 +97,6 @@ CVAR_CMD(r_filter, 0) {
 	GL_SetTextureFilter();
 }
 
-CVAR_CMD(r_texnonpowresize, 0) {
-	GL_DumpTextures();
-}
-
 CVAR_CMD(r_anisotropic, 0) {
 	GL_DumpTextures();
 	GL_SetTextureFilter();
@@ -927,7 +923,6 @@ void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_drawtris);
 	CON_CvarRegister(&r_drawmobjbox);
 	CON_CvarRegister(&r_drawtrace);
-	CON_CvarRegister(&r_texnonpowresize);
 	CON_CvarRegister(&r_drawfill);
 	CON_CvarRegister(&r_skybox);
 	CON_CvarRegister(&hud_disablesecretmessages);

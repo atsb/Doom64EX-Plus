@@ -292,19 +292,6 @@ static void Seq_SetStatus(doomseq_t* seq, int status) {
 }
 
 //
-// Seq_WaitOnSignal
-//
-
-/*static void Seq_WaitOnSignal(doomseq_t* seq)
-{
-    while(1)
-    {
-        if(seq->signal == SEQ_SIGNAL_READY)
-            break;
-    }
-}*/
-
-//
 // Chan_SetMusicVolume
 //
 // Should be set by the audio thread
