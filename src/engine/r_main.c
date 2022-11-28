@@ -87,16 +87,10 @@ CVAR(r_fog, 1);
 CVAR(r_wipe, 1);
 CVAR(r_drawtris, 0);
 CVAR(r_drawmobjbox, 0);
-CVAR(r_drawblockmap, 0);
 CVAR(r_drawtrace, 0);
-CVAR(r_rendersprites, 1);
 CVAR(r_drawfill, 0);
 CVAR(r_skybox, 0);
 CVAR(hud_disablesecretmessages, 0);
-
-CVAR_CMD(r_colorscale, 0) {
-	GL_SetColorScale();
-}
 
 CVAR_CMD(r_filter, 0) {
 	GL_DumpTextures();
@@ -112,7 +106,6 @@ CVAR_CMD(r_anisotropic, 0) {
 	GL_SetTextureFilter();
 }
 
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_usecontext);
 
@@ -879,9 +872,7 @@ void R_RenderPlayerView(player_t* player) {
 	//
 	R_RenderWorld();
 
-	if (r_drawblockmap.value) {
-		R_DrawBlockMap();
-	}
+	R_DrawBlockMap();
 
 	if (r_drawmobjbox.value) {
 		R_DrawThingBBox();
@@ -935,13 +926,9 @@ void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_wipe);
 	CON_CvarRegister(&r_drawtris);
 	CON_CvarRegister(&r_drawmobjbox);
-	CON_CvarRegister(&r_drawblockmap);
 	CON_CvarRegister(&r_drawtrace);
-	CON_CvarRegister(&r_texturecombiner);
-	CON_CvarRegister(&r_rendersprites);
 	CON_CvarRegister(&r_texnonpowresize);
 	CON_CvarRegister(&r_drawfill);
 	CON_CvarRegister(&r_skybox);
-	CON_CvarRegister(&r_colorscale);
 	CON_CvarRegister(&hud_disablesecretmessages);
 }

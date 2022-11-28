@@ -57,7 +57,6 @@ static visspritelist_t* vissprite = NULL;
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_texturecombiner);
-CVAR_EXTERNAL(r_rendersprites);
 CVAR_EXTERNAL(v_accessibility);
 
 static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
@@ -394,28 +393,9 @@ static dboolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex)
 	height = (float)spriteheight[spritenum];
 	z2 = z - height;
 
-	// render as billboard?
-	if (r_rendersprites.value >= 2) {
-		float centerz;
-		float centertop;
-		float centerbottom;
-
-		// rotate sprite's pitch from the center of the plane
-		centerz = D_fabs(z - z2) * 0.5f;
-		centertop = -centerz;
-		centerbottom = height - centerz;
-
-		dy1 = (centertop * viewsin[1]);
-		dy2 = (centerbottom * viewsin[1]);
-		dz1 = (centertop * viewcos[1]) + z - (height * 0.5f);
-		dz2 = (centerbottom * viewcos[1]) + z - (height * 0.5f);
-	}
-	// normal rendering
-	else {
-		dy1 = dy2 = 0;
-		dz1 = z2;
-		dz2 = z;
-	}
+	dy1 = dy2 = 0;
+	dz1 = z2;
+	dz2 = z;
 
 	// setup vertex coordinates
 	vertex[0].x = x + (viewsin[0] * dx1 - dy1 * viewcos[0]);
