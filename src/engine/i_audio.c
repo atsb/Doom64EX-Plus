@@ -61,50 +61,6 @@
 // 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
 
-// 20120203 villsa - cvar for audio driver
-#ifdef _WIN32
-CVAR_CMD(s_driver, dsound)
-#elif __linux__
-CVAR_CMD(s_driver, pulseaudio)
-#elif __APPLE__
-CVAR_CMD(s_driver, coreaudio)
-#else
-CVAR_CMD(s_driver, sndio)
-#endif
-{
-    char* driver = cvar->string;
-
-    // this is absolutely horrible
-    if(!dstrcmp(cvar->defvalue, "default")) {
-        cvar->defvalue = DEFAULT_FLUID_DRIVER;
-    }
-
-    // same as above
-    if(!dstrcmp(driver, "default")) {
-        CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
-        return;
-    }
-
-    if(!dstrcmp(driver, "jack")        ||
-            !dstrcmp(driver, "alsa")        ||
-            !dstrcmp(driver, "oss")         ||
-            !dstrcmp(driver, "pulseaudio")  ||
-            !dstrcmp(driver, "coreaudio")   ||
-            !dstrcmp(driver, "dsound")      ||
-            !dstrcmp(driver, "portaudio")   ||
-            !dstrcmp(driver, "sndio")       ||
-            !dstrcmp(driver, "sndman")      ||
-            !dstrcmp(driver, "dart")        ||
-            !dstrcmp(driver, "file")
-      ) {
-        return;
-    }
-
-    CON_Warnf("Invalid driver name\n");
-    CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
-    CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
-}
-
 //
 // Mutex
 //
@@ -1234,12 +1190,6 @@ void I_InitSequencer(void) {
     doomseq.settings = new_fluid_settings();
     Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
     Seq_SetConfig(&doomseq, "synth.polyphony", 256);
-
-    // 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
-    // JACK, if it's compiled in. We don't want to start jackd for a game).
-    fluid_settings_setstr(doomseq.settings, "audio.driver", s_driver.string);
-
-    CON_DPrintf("Audio driver: %s\n", s_driver.string);
 
     //
     // init synth
