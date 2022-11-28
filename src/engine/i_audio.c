@@ -1069,10 +1069,8 @@ static void Seq_Shutdown(doomseq_t* seq) {
     //
     SDL_WaitThread(seq->thread, NULL);
 
-    //
-    // prevent calls to Audio_Play()
-    //
-    SDL_CloseAudio();
+    // Close SDL Audio Device
+    SDL_CloseAudioDevice(1);
 
     //
     // fluidsynth cleanup stuff
@@ -1256,14 +1254,9 @@ void I_InitSequencer(void) {
 
     Song_ClearPlaylist();
 
-    if (!SDL_WasInit(0))
-        SDL_Init(0);
-
-    if (!SDL_WasInit(SDL_INIT_AUDIO))
-        SDL_InitSubSystem(SDL_INIT_AUDIO);
-
+    SDL_Init(SDL_INIT_AUDIO);
     SDL_AudioSpec spec;
-
+    SDL_zero(spec);
     spec.format = AUDIO_S16;
     spec.freq = 44100;
     spec.samples = 4096;
@@ -1271,8 +1264,14 @@ void I_InitSequencer(void) {
     spec.callback = Audio_Play;
     spec.userdata = doomseq.synth;
 
-    SDL_OpenAudio(&spec, NULL);
-    SDL_PauseAudio(SDL_FALSE);
+    int id;
+    if ((id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0)) <= 0)
+    {
+        CON_Warnf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+        exit(-1);
+    }
+
+    SDL_PauseAudioDevice(id, SDL_FALSE);
 
     // 20120205 villsa - sequencer is now ready
     seqready = true;
