@@ -1147,6 +1147,7 @@ static void P_InitMapInfo(void) {
 			mapdef.mapid = 1;
 			mapdef.exitdelay = 15;
 			mapdef.music = -1;
+			mapdef.oldcollision = 1;
 
 			sc_parser.find(false);  // skip map lump name
 
@@ -1193,16 +1194,6 @@ static void P_InitMapInfo(void) {
 						else {
 							mapdef.music = (lump - ds_start);
 						}
-					}
-					else if (!dstricmp(sc_parser.token, "COMPAT_COLLISION")) {
-						if (datoi(sc_parser.getstring()) == 1) {
-							mapdef.oldcollision = 1;
-						}
-						else if (datoi(sc_parser.getstring()) == 0) {
-							mapdef.oldcollision = 2;
-						}
-
-						ok = true;
 					}
 					else if (!dstricmp(sc_parser.token, "ALLOWJUMP")) {
 						if (datoi(sc_parser.getstring()) == 1) {

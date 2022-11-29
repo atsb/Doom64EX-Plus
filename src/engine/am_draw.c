@@ -94,7 +94,6 @@ void AM_EndDraw(void) {
 	if (r_texturecombiner.value > 0 && am_overlay.value) {
 		GL_SetState(GLSTATE_BLEND, 0);
 		GL_SetTextureMode(GL_COMBINE);
-		GL_SetColorScale();
 	}
 
 	GL_SetDefaultCombiner();

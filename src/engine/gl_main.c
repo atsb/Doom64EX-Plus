@@ -75,7 +75,6 @@ CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(st_flashoverlay);
-CVAR_EXTERNAL(r_colorscale);
 
 //
 // CMD_DumpGLExtensions
@@ -350,28 +349,6 @@ void GL_SetDefaultCombiner(void) {
 	else {
 		GL_SetTextureMode(GL_MODULATE);
 	}
-}
-
-//
-// GL_SetColorScale
-//
-
-void GL_SetColorScale(void) {
-	int cs = (int)r_colorscale.value;
-#ifndef __APPLE__
-
-	switch (cs) {
-	case 1:
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
-		break;
-	case 2:
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
-		break;
-	default:
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
-		break;
-	}
-#endif
 }
 
 //

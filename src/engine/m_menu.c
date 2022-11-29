@@ -974,14 +974,8 @@ CVAR_EXTERNAL(am_overlay);
 CVAR_EXTERNAL(r_skybox);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
-CVAR_EXTERNAL(compat_collision);
-CVAR_EXTERNAL(compat_limitpain);
 CVAR_EXTERNAL(compat_mobjpass);
-CVAR_EXTERNAL(compat_grabitems);
 CVAR_EXTERNAL(r_wipe);
-CVAR_EXTERNAL(r_rendersprites);
-CVAR_EXTERNAL(r_texturecombiner);
-CVAR_EXTERNAL(r_colorscale);
 CVAR_EXTERNAL(hud_disablesecretmessages);
 
 enum {
@@ -998,20 +992,14 @@ enum {
 	misc_context,
 	misc_header3,
 	misc_wipe,
-	misc_combine,
-	misc_sprites,
 	misc_skybox,
-	misc_rgbscale,
 	misc_header4,
 	misc_showkey,
 	misc_showlocks,
 	misc_amobjects,
 	misc_amoverlay,
 	misc_header5,
-	misc_comp_collision,
-	misc_comp_pain,
 	misc_comp_pass,
-	misc_comp_grab,
 	misc_disablesecretmessages,
 	misc_default,
 	misc_return,
@@ -1032,20 +1020,14 @@ menuitem_t MiscMenu[] = {
 	{2,"Use Context:",M_MiscChoice, 'u'},
 	{-1,"Rendering",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
-	{2,"Use Combiners:",M_MiscChoice, 'c' },
-	{2,"Sprite Pitch:",M_MiscChoice,'p'},
 	{2,"Skybox:",M_MiscChoice,'k'},
-	{2,"Color Scale:",M_MiscChoice,'o'},
 	{-1,"Automap",0 },
 	{2,"Key Pickups:",M_MiscChoice },
 	{2,"Locked Doors:",M_MiscChoice },
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
-	{2,"Collision:",M_MiscChoice,'c' },
-	{2,"Limit Lost Souls:",M_MiscChoice,'l'},
 	{2,"Tall Actors:",M_MiscChoice,'i'},
-	{2,"Grab High Items:",M_MiscChoice,'g'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
@@ -1065,20 +1047,14 @@ char* MiscHints[misc_end] = {
 	"if enabled interactive objects will highlight when near",
 	NULL,
 	"enable the melt effect when completing a level",
-	"use texture combining - not supported by low-end cards",
-	"toggles billboard sprite rendering",
 	"toggle skies to render either normally or as skyboxes",
-	"scales the overall color RGB",
 	NULL,
 	"display key pickups in automap",
 	"colorize locked doors accordingly to the key in automap",
 	"set how objects are rendered in automap",
 	"render the automap into the player hud",
 	NULL,
-	"surrounding blockmaps are not checked for an object",
-	"limit max amount of lost souls spawned by pain elemental to 17",
 	"emulate infinite height bug for all solid actors",
-	"be able to grab high items by bumping into the sector it sits on",
 	"disable the secret message text",
 	NULL,
 	NULL
@@ -1093,19 +1069,13 @@ menudefault_t MiscDefault[] = {
 	{ &p_autorun, 1 },
 	{ &p_usecontext, 0 },
 	{ &r_wipe, 1 },
-	{ &r_texturecombiner, 1 },
-	{ &r_rendersprites, 1 },
 	{ &r_skybox, 0 },
-	{ &r_colorscale, 0 },
 	{ &hud_disablesecretmessages, 0 },
 	{ &am_showkeymarkers, 0 },
 	{ &am_showkeycolors, 0 },
 	{ &am_drawobjects, 0 },
 	{ &am_overlay, 0 },
-	{ &compat_collision, 1 },
-	{ &compat_limitpain, 1 },
 	{ &compat_mobjpass, 1 },
-	{ &compat_grabitems, 1 },
 	{ NULL, -1 }
 };
 
@@ -1201,20 +1171,8 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &p_autorun);
 		break;
 
-	case misc_combine:
-		M_SetOptionValue(choice, 0, 1, 1, &r_texturecombiner);
-		break;
-
-	case misc_sprites:
-		M_SetOptionValue(choice, 1, 2, 1, &r_rendersprites);
-		break;
-
 	case misc_skybox:
 		M_SetOptionValue(choice, 0, 1, 1, &r_skybox);
-		break;
-
-	case misc_rgbscale:
-		M_SetOptionValue(choice, 0, 2, 1, &r_colorscale);
 		break;
 
 	case misc_disablesecretmessages:
@@ -1237,20 +1195,8 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &am_overlay);
 		break;
 
-	case misc_comp_collision:
-		M_SetOptionValue(choice, 0, 1, 1, &compat_collision);
-		break;
-
-	case misc_comp_pain:
-		M_SetOptionValue(choice, 0, 1, 1, &compat_limitpain);
-		break;
-
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
-		break;
-
-	case misc_comp_grab:
-		M_SetOptionValue(choice, 0, 1, 1, &compat_grabitems);
 		break;
 	}
 }
@@ -1290,18 +1236,12 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
-	DRAWMISCITEM(misc_combine, r_texturecombiner.value, msgNames);
-	DRAWMISCITEM(misc_sprites, r_rendersprites.value - 1, msgNames);
 	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);
-	DRAWMISCITEM(misc_rgbscale, r_colorscale.value, rgbscaletype);
 	DRAWMISCITEM(misc_showkey, am_showkeymarkers.value, mapdisplaytype);
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);
 	DRAWMISCITEM(misc_amobjects, am_drawobjects.value, objectdrawtype);
 	DRAWMISCITEM(misc_amoverlay, am_overlay.value, msgNames);
-	DRAWMISCITEM(misc_comp_collision, compat_collision.value, msgNames);
-	DRAWMISCITEM(misc_comp_pain, compat_limitpain.value, msgNames);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
-	DRAWMISCITEM(misc_comp_grab, compat_grabitems.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 
 #undef DRAWMISCITEM

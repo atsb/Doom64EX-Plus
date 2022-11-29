@@ -35,7 +35,6 @@
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fog);
-CVAR_EXTERNAL(r_rendersprites);
 CVAR_EXTERNAL(st_flashoverlay);
 
 //
@@ -344,9 +343,7 @@ void R_RenderWorld(void) {
 		spriteRenderTic = I_GetTimeMS();
 	}
 
-	if (r_rendersprites.value) {
-		R_SetupSprites();
-	}
+	R_SetupSprites();
 
 	dglDepthMask(GL_FALSE);
 	DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);

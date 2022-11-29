@@ -146,10 +146,7 @@ NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE);
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
 NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
-NETCVAR_PARAM(compat_collision, 1, compatflags, COMPATF_COLLISION);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
-NETCVAR_PARAM(compat_limitpain, 1, compatflags, COMPATF_LIMITPAIN);
-NETCVAR_PARAM(compat_grabitems, 1, compatflags, COMPATF_REACHITEMS);
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
@@ -175,10 +172,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&sv_allowcheats);
 	CON_CvarRegister(&sv_friendlyfire);
 	CON_CvarRegister(&sv_keepitems);
-	CON_CvarRegister(&compat_collision);
 	CON_CvarRegister(&compat_mobjpass);
-	CON_CvarRegister(&compat_limitpain);
-	CON_CvarRegister(&compat_grabitems);
 }
 
 //
@@ -854,10 +848,7 @@ static void G_SetGameFlags(void) {
 	if (p_allowjump.value > 0)      gameflags |= GF_ALLOWJUMP;
 	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
 
-	if (compat_collision.value > 0) compatflags |= COMPATF_COLLISION;
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
-	if (compat_limitpain.value > 0) compatflags |= COMPATF_LIMITPAIN;
-	if (compat_grabitems.value > 0) compatflags |= COMPATF_REACHITEMS;
 }
 
 //

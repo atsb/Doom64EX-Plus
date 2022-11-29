@@ -95,14 +95,9 @@ static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
 CVAR_EXTERNAL(r_fillmode);
-CVAR_CMD(r_texturecombiner, 1) {
-	int i;
-
-	curunit = -1;
-
-	for (i = 0; i < GL_MAX_TEX_UNITS; i++) {
-		dmemset(&gl_env_state[i], 0, sizeof(gl_env_state_t));
-	}
+CVAR_CMD(r_texturecombiner, 0)
+{
+	//ATSB: Stubbed
 }
 
 //
