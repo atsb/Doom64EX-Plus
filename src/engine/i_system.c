@@ -84,7 +84,7 @@ CVAR(v_accessibility, 0);
 #if defined(__LINUX__) || defined(__OpenBSD__)
 #define Free(userdir)	free(userdir);
 #else
-#define Free(userdir)	SDL_free((void *userdir);
+#define Free(userdir)	SDL_free((void *)userdir);
 #endif
 
 
