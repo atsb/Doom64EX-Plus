@@ -227,8 +227,10 @@ char* I_GetUserDir(void)
 {
 #ifdef DOOM_UNIX_INSTALL
 	return SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32
+#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
 	return SDL_GetBasePath();
+#elif defined __ANDROID__
+	return SDL_AndroidGetInternalStoragePath();
 #endif
 }
 

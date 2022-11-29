@@ -85,33 +85,23 @@ static dboolean P_CheckThingCollision(mobj_t* thing) {
 
 	blockdist = thing->radius + tmthing->radius;
 
-	// [d64]: mimic logic from original version
-	if (compatflags & (COMPATF_COLLISION | COMPATF_REACHITEMS)) {
-		fixed_t x, y;
-		fixed_t rx, ry;
+	fixed_t x, y;
+	fixed_t rx, ry;
 
-		x = D_abs(thing->x - tmx);
-		y = D_abs(thing->y - tmy);
+	x = D_abs(thing->x - tmx);
+	y = D_abs(thing->y - tmy);
 
-		rx = blockdist - x;
-		ry = blockdist - x;
+	rx = blockdist - x;
+	ry = blockdist - x;
 
-		if (!(x < y)) {
-			if (((rx - y) + (y >> 1)) <= 0) {
-				// didn't hit it
-				return true;
-			}
-		}
-		else {
-			if (((ry - y) + (x >> 1)) <= 0) {
-				// didn't hit it
-				return true;
-			}
+	if (!(x < y)) {
+		if (((rx - y) + (y >> 1)) <= 0) {
+			// didn't hit it
+			return true;
 		}
 	}
 	else {
-		if (D_abs(thing->x - tmx) >= blockdist ||
-			D_abs(thing->y - tmy) >= blockdist) {
+		if (((ry - y) + (x >> 1)) <= 0) {
 			// didn't hit it
 			return true;
 		}
@@ -130,11 +120,7 @@ d_inline
 static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 	fixed_t extent = MAXRADIUS;
 
-	if (forcecollision != 2) {
-		if (compatflags & COMPATF_COLLISION || forcecollision) {
-			extent = 0;
-		}
-	}
+	extent = 0;
 
 	tmbbox[BOXTOP] = y + thing->radius;
 	tmbbox[BOXBOTTOM] = y - thing->radius;
@@ -369,13 +355,8 @@ dboolean PIT_CheckThing(mobj_t* thing) {
 	// check for special pickup
 	if (thing->flags & MF_SPECIAL) {
 		if (tmflags & MF_PICKUP) {
-			// [kex] compatibility flags added for item grab bug fix
-			if (compatflags & COMPATF_REACHITEMS ||
-				(thing->z <= (tmthing->z + (tmthing->height >> 1)) || thing->flags & MF_NOSECTOR)) {
-				// [d64] store off special thing and return true
-				blockthing = thing;
-				return true;
-			}
+			blockthing = thing;
+			return true;
 		}
 	}
 
