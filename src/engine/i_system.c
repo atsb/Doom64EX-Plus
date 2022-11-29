@@ -60,7 +60,7 @@
 #include "i_audio.h"
 #include "gl_draw.h"
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
 
@@ -73,6 +73,21 @@ CVAR(v_accessibility, 0);
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
+#ifdef DOOM_UNIX_INSTALL
+#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
+#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
+#define GetBasePath()	SDL_GetBasePath();
+#elif defined __ANDROID__
+#define GetBasePath()   SDL_AndroidGetInternalStoragePath();
+#endif
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
+#define Free(userdir)	free(userdir);
+#else
+#define Free(userdir)	SDL_free((void *)userdir);
+#endif
+
+
 ticcmd_t        emptycmd;
 static int32    I_GetTime_Scale = 1 << 24;
 
@@ -81,7 +96,7 @@ static int32    I_GetTime_Scale = 1 << 24;
 //
 
 void I_Sleep(intptr_t usecs) {
-#if defined _WIN32
+#ifdef _WIN32
 	Sleep((DWORD)usecs);
 #else
 	struct timespec tc;
@@ -234,13 +249,7 @@ ticcmd_t* I_BaseTiccmd(void) {
 
 char* I_GetUserDir(void) 
 {
-#ifdef DOOM_UNIX_INSTALL
-	return SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
-	return SDL_GetBasePath();
-#elif defined __ANDROID__
-	return SDL_AndroidGetInternalStoragePath();
-#endif
+	return GetBasePath();
 }
 
 /*
@@ -270,12 +279,8 @@ char* I_GetUserFile(char* file) {
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
+        Free(userdir);
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
-	free(userdir);
-#else
-	SDL_free((void *)userdir);
-#endif
 	return path;
 }
 
@@ -293,23 +298,16 @@ char* I_FindDataFile(char* file) {
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
-		free(dir);
-#else
-		SDL_free(dir);
-#endif
+         Free(dir);
+
 		if (I_FileExists(path))
 			return path;
 	}
 
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
-
-#if defined(__LINUX__) || defined(__OpenBSD__)
-		free(dir);
-#else
-		SDL_free(dir);
-#endif
+           
+          Free(dir);
 
 		if (I_FileExists(path))
 			return path;
@@ -337,13 +335,8 @@ char* I_FindDataFile(char* file) {
 	}
 #endif
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
-	free(path);
-#else
-	SDL_free(path);
-#endif
+	Free(path);
 	
-
 	return NULL;
 }
 
