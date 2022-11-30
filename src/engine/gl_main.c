@@ -59,9 +59,9 @@ int gl_max_texture_units;
 int gl_max_texture_size;
 dboolean gl_has_combiner;
 
-const char* gl_vendor;
-const char* gl_renderer;
-const char* gl_version;
+const int8_t* gl_vendor;
+const int8_t* gl_renderer;
+const int8_t* gl_version;
 
 static float glScaleFactor = 1.0f;
 
@@ -81,11 +81,11 @@ CVAR_EXTERNAL(st_flashoverlay);
 //
 
 static CMD(DumpGLExtensions) {
-	char* string;
+	int8_t* string;
 	int i = 0;
 	int len = 0;
 
-	string = (char*)dglGetString(GL_EXTENSIONS);
+	string = (int8_t*)dglGetString(GL_EXTENSIONS);
 	len = dstrlen(string);
 
 	for (i = 0; i < len; i++) {
@@ -113,10 +113,10 @@ GL_EXT_texture_filter_anisotropic_Define();
 // FindExtension
 //
 
-static dboolean FindExtension(const char* ext) {
-	const char* extensions = NULL;
-	const char* start;
-	const char* where, * terminator;
+static dboolean FindExtension(const int8_t* ext) {
+	const int8_t* extensions = NULL;
+	const int8_t* start;
+	const int8_t* where, * terminator;
 
 	// Extension names should not have spaces.
 	where = strrchr(ext, ' ');
@@ -147,7 +147,7 @@ static dboolean FindExtension(const char* ext) {
 // GL_CheckExtension
 //
 
-dboolean GL_CheckExtension(const char* ext) {
+dboolean GL_CheckExtension(const int8_t* ext) {
 	if (FindExtension(ext)) {
 		CON_Printf(WHITE, "GL Extension: %s = true\n", ext);
 		return true;
@@ -163,7 +163,7 @@ dboolean GL_CheckExtension(const char* ext) {
 // GL_RegisterProc
 //
 
-void* GL_RegisterProc(const char* address) {
+void* GL_RegisterProc(const int8_t* address) {
 	void* proc = SDL_GL_GetProcAddress(address);
 
 	if (!proc) {

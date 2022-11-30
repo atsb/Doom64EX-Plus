@@ -43,7 +43,7 @@
 
 #define MAX_IWAD_DIRS 128
 
-static char* iwad_dirs[MAX_IWAD_DIRS];
+static int8_t* iwad_dirs[MAX_IWAD_DIRS];
 static int num_iwad_dirs = 0;
 
 typedef struct {
@@ -53,7 +53,7 @@ typedef struct {
 
 extern wad_file_class_t stdc_wad_file;
 
-static wad_file_t* W_StdC_OpenFile(char* path) {
+static wad_file_t* W_StdC_OpenFile(int8_t* path) {
 	stdc_wad_file_t* result;
 	FILE* fstream;
 
@@ -110,7 +110,7 @@ wad_file_class_t stdc_wad_file = {
 	W_StdC_Read,
 };
 
-wad_file_t* W_OpenFile(char* path) {
+wad_file_t* W_OpenFile(int8_t* path) {
 	return stdc_wad_file.OpenFile(path);
 }
 
@@ -128,8 +128,8 @@ size_t W_Read(wad_file_t* wad, uint32_t offset,
 // Searches WAD search paths for an WAD with a specific filename.
 //
 
-char* W_FindWADByName(char* name) {
-	char* buf;
+int8_t* W_FindWADByName(int8_t* name) {
+	int8_t* buf;
 	int i;
 	dboolean exists;
 
@@ -167,8 +167,8 @@ char* W_FindWADByName(char* name) {
 // if not found.
 //
 
-char* W_TryFindWADByName(char* filename) {
-	char* result;
+int8_t* W_TryFindWADByName(int8_t* filename) {
+	int8_t* result;
 
 	result = W_FindWADByName(filename);
 
@@ -185,7 +185,7 @@ char* W_TryFindWADByName(char* filename) {
 // Checks availability of IWAD files by name,
 //
 
-char* W_FindIWAD(void)
+int8_t* W_FindIWAD(void)
 {
 	return I_FindDataFile("DOOM64.WAD");
 }

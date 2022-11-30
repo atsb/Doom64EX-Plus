@@ -55,7 +55,7 @@ scparser_t sc_parser;
 // SC_Open
 //
 
-static void SC_Open(const char* name) {
+static void SC_Open(const int8_t* name) {
 	int lump;
 
 	CON_DPrintf("--------SC_Open: Reading %s--------\n", name);
@@ -76,8 +76,8 @@ static void SC_Open(const char* name) {
 
 	CON_DPrintf("%s size: %ikb\n", name, sc_parser.buffsize >> 10);
 
-	sc_parser.pointer_start = (char*)sc_parser.buffer;
-	sc_parser.pointer_end = (char*)sc_parser.buffer + sc_parser.buffsize;
+	sc_parser.pointer_start = (int8_t*)sc_parser.buffer;
+	sc_parser.pointer_end = (int8_t*)sc_parser.buffer + sc_parser.buffsize;
 	sc_parser.linepos = 1;
 	sc_parser.rowpos = 1;
 	sc_parser.buffpos = 0;
@@ -103,7 +103,7 @@ static void SC_Close(void) {
 // SC_Compare
 //
 
-static void SC_Compare(const char* token) {
+static void SC_Compare(const int8_t* token) {
 	sc_parser.find(false);
 	if (dstricmp(sc_parser.token, token)) {
 		I_Error("SC_Compare: Expected '%s', found '%s' (line = %i, pos = %i)",
@@ -123,7 +123,7 @@ static int SC_ReadTokens(void) {
 // SC_GetString
 //
 
-static char* SC_GetString(void) {
+static int8_t* SC_GetString(void) {
 	sc_parser.compare("="); // expect a '='
 	sc_parser.find(false);  // get next token which should be a string
 
@@ -152,7 +152,7 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 	for (i = 0; table[i].token; i++) {
 		if (!dstricmp(table[i].token, sc_parser.token)) {
 			byte* pointer = ((byte*)data + table[i].ptroffset);
-			char* name;
+			int8_t* name;
 			byte rgb[3];
 
 			ok = true;
@@ -160,12 +160,12 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 			switch (table[i].type) {
 			case 's':
 				name = sc_parser.getstring();
-				dstrncpy((char*)pointer, name, dstrlen(name));
+				dstrncpy((int8_t*)pointer, name, dstrlen(name));
 				break;
 			case 'S':
 				name = sc_parser.getstring();
 				dstrupr(name);
-				dstrncpy((char*)pointer, name, dstrlen(name));
+				dstrncpy((int8_t*)pointer, name, dstrlen(name));
 				break;
 			case 'i':
 				*(int*)pointer = sc_parser.getint();
@@ -197,7 +197,7 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 //
 
 static int SC_Find(dboolean forceupper) {
-	char c = 0;
+	int8_t c = 0;
 	int i = 0;
 	dboolean comment = false;
 	dboolean havetoken = false;
@@ -281,7 +281,7 @@ static int SC_Find(dboolean forceupper) {
 // SC_GetChar
 //
 
-static char SC_GetChar(void) {
+static int8_t SC_GetChar(void) {
 	sc_parser.rowpos++;
 	return sc_parser.buffer[sc_parser.buffpos++];
 }
@@ -299,7 +299,7 @@ static void SC_Rewind(void) {
 // SC_Error
 //
 
-static void SC_Error(const char* function) {
+static void SC_Error(const int8_t* function) {
 	if (sc_parser.token[0] < ' ') {
 		return;
 	}

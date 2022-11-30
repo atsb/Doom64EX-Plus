@@ -75,7 +75,7 @@ static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
 static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 	int* dat;
 
-	if (!dstrncmp((char*)chunk->name, "grAb", 4) && chunk->size >= 8) {
+	if (!dstrncmp((int8_t*)chunk->name, "grAb", 4) && chunk->size >= 8) {
 		dat = (int*)png_get_user_chunk_ptr(png_ptr);
 		dat[0] = I_SwapBE32(*(int*)(chunk->data));
 		dat[1] = I_SwapBE32(*(int*)(chunk->data + 4));
@@ -220,7 +220,7 @@ byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
 				}
 				else if (bit_depth >= 8) {  // 8 bit and up requires an external palette lump
 					png_colorp pallump;
-					char palname[9];
+					int8_t palname[9];
 
 					sprintf(palname, "PAL");
 					dstrncpy(palname + 3, lumpinfo[lump].name, 4);

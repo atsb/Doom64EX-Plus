@@ -92,7 +92,7 @@ void I_InitScreen(void) {
 	int     newheight;
 	int     p;
 	uint32  flags = 0;
-	char    title[256];
+	int8_t    title[256];
 
 	InWindow = (int)v_windowed.value;
 	video_width = (int)v_width.value;

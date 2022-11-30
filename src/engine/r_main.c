@@ -345,8 +345,8 @@ void R_SetupLevel(void) {
 //
 
 void R_PrecacheLevel(void) {
-	char* texturepresent;
-	char* spritepresent;
+	int8_t* texturepresent;
+	int8_t* spritepresent;
 	int    i;
 	int j;
 	int    p;
@@ -356,8 +356,8 @@ void R_PrecacheLevel(void) {
 	CON_DPrintf("--------R_PrecacheLevel--------\n");
 	GL_DumpTextures();
 
-	texturepresent = (char*)Z_Alloca(numtextures);
-	spritepresent = (char*)Z_Alloca(NUMSPRITES);
+	texturepresent = (int8_t*)Z_Alloca(numtextures);
+	spritepresent = (int8_t*)Z_Alloca(NUMSPRITES);
 
 	for (i = 0; i < numsides; i++) {
 		texturepresent[sides[i].toptexture] = 1;

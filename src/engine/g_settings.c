@@ -39,7 +39,7 @@
 #include "con_console.h"
 #include "i_system.h"
 
-static char* ConfigFileName =
+static int8_t* ConfigFileName =
 #ifdef _WIN32
 "config.cfg"
 #else
@@ -47,7 +47,7 @@ NULL
 #endif
 ;
 
-char    DefaultConfig[] =
+int8_t    DefaultConfig[] =
 #include "defconfig.inc"    // wtf?
 ;
 
@@ -55,15 +55,15 @@ char    DefaultConfig[] =
 // G_ExecuteMultipleCommands
 //
 
-char* G_GetConfigFileName(void) {
+int8_t* G_GetConfigFileName(void) {
 	return I_GetUserFile("config.cfg");
 }
 
-void G_ExecuteMultipleCommands(char* data) {
-	char* p;
-	char* q;
-	char    c;
-	char    line[1024];
+void G_ExecuteMultipleCommands(int8_t* data) {
+	int8_t* p;
+	int8_t* q;
+	int8_t    c;
+	int8_t    line[1024];
 
 	p = data;
 	c = *p;
@@ -87,9 +87,9 @@ void G_ExecuteMultipleCommands(char* data) {
 // G_ExecuteFile
 //
 
-void G_ExecuteFile(char* name) {
+void G_ExecuteFile(int8_t* name) {
 	FILE* fh;
-	char* buff;
+	int8_t* buff;
 	int        len;
 
 	if (!name) {

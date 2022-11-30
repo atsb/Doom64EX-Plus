@@ -168,7 +168,7 @@ extern  gamestate_t gamestate;
 //
 
 typedef struct {
-	char        mapname[64];
+	int8_t        mapname[64];
 	int         mapid;
 	int         music;
 	int         type;
@@ -191,8 +191,8 @@ typedef struct {
 	int16_t       pic_y;
 	dboolean    nointermission;
 	dboolean    scrolltextend;
-	char        text[512];
-	char        pic[9];
+	int8_t        text[512];
+	int8_t        pic[9];
 } clusterdef_t;
 
 //-----------------------------
@@ -227,7 +227,7 @@ extern  int         maxammo[NUMAMMO];
 //
 
 // File handling stuff.
-extern  char        basedefault[1024];
+extern  int8_t        basedefault[1024];
 extern  FILE* debugfile;
 
 // if true, load all graphics at level load

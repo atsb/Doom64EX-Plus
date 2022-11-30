@@ -53,7 +53,7 @@ static void Z_CloseLogFile(void) {
 	}
 }
 
-static void Z_LogPrintf(const char* msg, ...) {
+static void Z_LogPrintf(const int8_t* msg, ...) {
 	if (zonelog) {
 		va_list ap;
 
@@ -67,7 +67,7 @@ static void Z_LogPrintf(const char* msg, ...) {
 	}
 }
 
-static void Z_LogPuts(const char* msg) {
+static void Z_LogPuts(const int8_t* msg) {
 	if (zonelog) {
 		fputs(msg, zonelog);
 	}
@@ -132,7 +132,7 @@ void Z_Init(void) {
 // Z_Free
 //
 
-void (Z_Free)(void* ptr, const char* file, int line) {
+void (Z_Free)(void* ptr, const int8_t* file, int line) {
 	memblock_t* block;
 
 	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
@@ -221,7 +221,7 @@ static dboolean Z_ClearCache(int size) {
 // You can pass a NULL user if the tag is < PU_PURGELEVEL.
 //
 
-void* (Z_Malloc)(int size, int tag, void* user, const char* file, int line) {
+void* (Z_Malloc)(int size, int tag, void* user, const int8_t* file, int line) {
 	memblock_t* newblock;
 	uint8_t* data;
 	void* result;
@@ -276,7 +276,7 @@ void* (Z_Malloc)(int size, int tag, void* user, const char* file, int line) {
 // Z_Realloc
 //
 
-void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const char* file, int line) {
+void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const int8_t* file, int line) {
 	memblock_t* block;
 	memblock_t* newblock;
 	uint8_t* data;
@@ -352,7 +352,7 @@ void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const char* file, in
 // Z_FreeTags
 //
 
-void (Z_FreeTags)(int lowtag, int hightag, const char* file, int line) {
+void (Z_FreeTags)(int lowtag, int hightag, const int8_t* file, int line) {
 	int i;
 
 	for (i = lowtag; i <= hightag; ++i) {
@@ -395,7 +395,7 @@ void (Z_FreeTags)(int lowtag, int hightag, const char* file, int line) {
 // Z_Calloc
 //
 
-void* (Z_Calloc)(int n1, int tag, void* user, const char* file, int line) {
+void* (Z_Calloc)(int n1, int tag, void* user, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Calloc(file=%s:%d)\n", file, line);
 #endif
@@ -406,7 +406,7 @@ void* (Z_Calloc)(int n1, int tag, void* user, const char* file, int line) {
 // Z_Strdup
 //
 
-char* (Z_Strdup)(const char* s, int tag, void* user, const char* file, int line) {
+int8_t* (Z_Strdup)(const int8_t* s, int tag, void* user, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Strdup(file=%s:%d)\n", file, line);
 #endif
@@ -419,7 +419,7 @@ char* (Z_Strdup)(const char* s, int tag, void* user, const char* file, int line)
 // strdup that uses alloca, for convenience.
 //
 
-char* (Z_Strdupa)(const char* s, const char* file, int line) {
+int8_t* (Z_Strdupa)(const int8_t* s, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Strdupa(file=%s:%d)\n", file, line);
 #endif
@@ -430,7 +430,7 @@ char* (Z_Strdupa)(const char* s, const char* file, int line) {
 // Z_Touch
 //
 
-void (Z_Touch)(void* ptr, const char* file, int line) {
+void (Z_Touch)(void* ptr, const int8_t* file, int line) {
 	memblock_t* block;
 
 	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
@@ -448,7 +448,7 @@ void (Z_Touch)(void* ptr, const char* file, int line) {
 // Z_FreeAlloca
 //
 
-void (Z_FreeAlloca)(const char* file, int line) {
+void (Z_FreeAlloca)(const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_FreeAlloca(file=%s:%d)\n", file, line);
 #endif
@@ -459,7 +459,7 @@ void (Z_FreeAlloca)(const char* file, int line) {
 // Z_Alloca
 //
 
-void* (Z_Alloca)(int n, const char* file, int line) {
+void* (Z_Alloca)(int n, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Alloca(file=%s:%d)\n", file, line);
 #endif
@@ -470,7 +470,7 @@ void* (Z_Alloca)(int n, const char* file, int line) {
 // Z_CheckHeap
 //
 
-void (Z_CheckHeap)(const char* file, int line) {
+void (Z_CheckHeap)(const int8_t* file, int line) {
 	memblock_t* block;
 	memblock_t* prev;
 	int i;
@@ -503,7 +503,7 @@ void (Z_CheckHeap)(const char* file, int line) {
 // Z_CheckTag
 //
 
-int (Z_CheckTag)(void* ptr, const char* file, int line) {
+int (Z_CheckTag)(void* ptr, const int8_t* file, int line) {
 	memblock_t* block;
 
 	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
@@ -521,7 +521,7 @@ int (Z_CheckTag)(void* ptr, const char* file, int line) {
 // Z_ChangeTag
 //
 
-void (Z_ChangeTag)(void* ptr, int tag, const char* file, int line) {
+void (Z_ChangeTag)(void* ptr, int tag, const int8_t* file, int line) {
 	memblock_t* block;
 
 	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));

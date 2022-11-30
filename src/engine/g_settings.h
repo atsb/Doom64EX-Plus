@@ -25,7 +25,7 @@
 #define G_SETTINGS_H
 
 void G_LoadSettings(void);
-void G_ExecuteFile(char* name);
-char* G_GetConfigFileName(void);
+void G_ExecuteFile(int8_t* name);
+int8_t* G_GetConfigFileName(void);
 
 #endif
