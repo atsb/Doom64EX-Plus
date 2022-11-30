@@ -38,12 +38,12 @@
 
 This is some preliminary ARM
 assembler optimisation for some math routines
-Taken from Doom64EX (DS Version) but modified
-for ARMv8 (RPI3).
+Taken from Doom64EX (DS Version).
 
 Meaning:
 
-SMLAL - multiplies integers then adds a 64bit result to the 64bit signed int
+SMULL - multiplies integers then adds a 32bit result to the 64bit signed int
+SMLAL - Same as above but 64bit to 64bit
 @SHIFT - perform a shift operation on FRACBITS
 Move registers (this is the math stuff)
 ORR - perform some bitwise operations
@@ -56,6 +56,15 @@ FixedMul
 (fixed_t    a,
 	fixed_t    b) {
 #if defined __arm__ && !defined __APPLE__ // ALL ARM CPU's but NOT Apple..  the M-Series CPU is fast enough to not need this
+	asm(
+		"SMULL 	 R2, R3, R0, R1\n\t"
+		"@shift  by  FRACBITS\n\t"
+		"MOV	 R1, R2, LSR #16\n\t"
+		"MOV	 R2, R3, LSL #16\n\t"
+		"ORR	 R0, R1, R2\n\t"
+		"BX		 LR"
+	);
+#elif defined __aarch64__ && !defined __APPLE__
 	asm(
 		"SMLAL 	 R2, R3, R0, R1\n\t"
 		"@shift  by  FRACBITS\n\t"
