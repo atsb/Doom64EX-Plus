@@ -34,24 +34,36 @@
 
 #include "m_fixed.h"
 
-// Fixme. __USE_C_FIXED__ or something.
+/* ATSB 
+
+This is some preliminary ARM
+assembler optimisation for some math routines
+Taken from Doom64EX (DS Version) but modified
+for ARMv8 (RPI3).
+
+Meaning:
+
+SMLAL - multiplies integers then adds a 64bit result to the 64bit signed int
+@SHIFT - perform a shift operation on FRACBITS
+Move registers (this is the math stuff)
+ORR - perform some bitwise operations
+BX - branches the instructions and exchanges if need be
+
+*/
 
 fixed_t
 FixedMul
 (fixed_t    a,
 	fixed_t    b) {
-#ifdef USE_ASM
-	fixed_t    c;
-	_asm {
-		mov eax, [a]
-		mov ecx, [b]
-		imul ecx
-		shr eax, 16
-		shl edx, 16
-		or eax, edx
-		mov[c], eax
-	}
-	return(c);
+#if defined __arm__ && !defined __APPLE__ // ALL ARM CPU's but NOT Apple..  the M-Series CPU is fast enough to not need this
+	asm(
+		"SMLAL 	 R2, R3, R0, R1\n\t"
+		"@shift  by  FRACBITS\n\t"
+		"MOV	 R1, R2, LSR #16\n\t"
+		"MOV	 R2, R3, LSL #16\n\t"
+		"ORR	 R0, R1, R2\n\t"
+		"BX		 LR"
+	);
 #else
 	return (fixed_t)(((int64)a * (int64)b) >> FRACBITS);
 #endif
