@@ -1895,22 +1895,17 @@ void P_UpdateSpecials(void) {
 			if (!buttonlist[i].btimer) {
 				switch (buttonlist[i].where) {
 				case top:
-					sides[buttonlist[i].line->sidenum[0]].toptexture =
-						buttonlist[i].btexture ^ 1;
+					buttonlist[i].side->toptexture = buttonlist[i].btexture;
 					break;
-
 				case middle:
-					sides[buttonlist[i].line->sidenum[0]].midtexture =
-						buttonlist[i].btexture ^ 1;
+					buttonlist[i].side->midtexture = buttonlist[i].btexture;
 					break;
-
 				case bottom:
-					sides[buttonlist[i].line->sidenum[0]].bottomtexture =
-						buttonlist[i].btexture ^ 1;
+					buttonlist[i].side->bottomtexture = buttonlist[i].btexture;
 					break;
 				}
 
-				S_StartSound((mobj_t*)&buttonlist[i].line->frontsector->soundorg, sfx_switch1);
+				S_StartSound((mobj_t*)buttonlist[i].soundorg, sfx_switch1);
 				dmemset(&buttonlist[i], 0, sizeof(button_t));
 			}
 		}
