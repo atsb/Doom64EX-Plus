@@ -50,7 +50,7 @@ void        G_WriteDemoTiccmd(ticcmd_t* cmd);
 
 FILE* demofp;
 byte* demo_p;
-char            demoname[256];
+int8_t            demoname[256];
 dboolean        demorecording = false;
 dboolean        demoplayback = false;
 dboolean        netdemo = false;
@@ -79,8 +79,8 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 		return;
 	}
 
-	cmd->forwardmove = ((char)*demo_p++);
-	cmd->sidemove = ((char)*demo_p++);
+	cmd->forwardmove = ((int8_t)*demo_p++);
+	cmd->sidemove = ((int8_t)*demo_p++);
 	lowbyte = (uint8_t)(*demo_p++);
 	cmd->angleturn = (((int32_t)(*demo_p++)) << 8) + lowbyte;
 	lowbyte = (uint8_t)(*demo_p++);
@@ -94,10 +94,10 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 //
 
 void G_WriteDemoTiccmd(ticcmd_t* cmd) {
-	char buf[8];
+	int8_t buf[8];
 	int16_t angleturn;
 	int16_t pitch;
-	char* p = buf;
+	int8_t* p = buf;
 
 	angleturn = cmd->angleturn;
 	pitch = cmd->pitch;
@@ -124,7 +124,7 @@ void G_WriteDemoTiccmd(ticcmd_t* cmd) {
 // G_RecordDemo
 //
 
-void G_RecordDemo(const char* name) {
+void G_RecordDemo(const int8_t* name) {
 	byte* demostart, * dm_p;
 	int i;
 
@@ -211,10 +211,10 @@ void G_RecordDemo(const char* name) {
 // G_PlayDemo
 //
 
-void G_PlayDemo(const char* name) {
+void G_PlayDemo(const int8_t* name) {
 	int i;
 	int p;
-	char filename[256];
+	int8_t filename[256];
 
 	gameaction = ga_nothing;
 	endDemo = false;
@@ -356,7 +356,7 @@ int G_PlayDemoPtr(int skill, int map) // 800049D0
 	return exit;
 }
 
-int D_RunDemo(char* name, skill_t skill, int map) // 8002B2D0
+int D_RunDemo(int8_t* name, skill_t skill, int map) // 8002B2D0
 {
 	int lump;
 	int exit;

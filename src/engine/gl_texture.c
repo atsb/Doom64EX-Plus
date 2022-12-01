@@ -306,7 +306,7 @@ static void InitGfxTextures(void) {
 // GL_BindGfxTexture
 //
 
-int GL_BindGfxTexture(const char* name, dboolean alpha) {
+int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
 	byte* png;
 	int lump;
 	int width;
@@ -383,7 +383,7 @@ static void InitSpriteTextures(void) {
 		for (j = 0; j < NUMSPRITES; j++) {
 			// start looking for external palette lumps
 			if (!dstrncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
-				char palname[9];
+				int8_t palname[9];
 
 				// increase the count if a palette lump is found
 				for (p = 1; p < 10; p++) {

@@ -128,14 +128,6 @@ static int I_GetTimeNormal(void) {
 }
 
 //
-// I_GetTime_Scaled
-//
-
-static int I_GetTime_Scaled(void) {
-	return ((int32)I_GetTimeNormal() * I_GetTime_Scale >> 24);
-}
-
-//
 // I_GetTime_Error
 //
 
@@ -159,7 +151,6 @@ void I_InitClockRate(void) {
 static uint32_t start_displaytime;
 static uint32_t displaytime;
 static dboolean InDisplay = false;
-static int saved_gametic = -1;
 
 dboolean realframe = false;
 
@@ -247,7 +238,7 @@ ticcmd_t* I_BaseTiccmd(void) {
  * @note The returning value MUST be freed by the caller.
  */
 
-char* I_GetUserDir(void) 
+int8_t* I_GetUserDir(void) 
 {
 	return GetBasePath();
 }
@@ -269,8 +260,8 @@ char* I_GetUserDir(void)
  *  portable fixed width types everywhere...  one day.
  *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
  */
-char* I_GetUserFile(char* file) {
-	char* path, * userdir;
+int8_t* I_GetUserFile(int8_t* file) {
+	int8_t* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
@@ -290,8 +281,8 @@ char* I_GetUserFile(char* file) {
  * @return Fully-qualified path or NULL if not found.
  * @note The returning value MUST be freed by the caller.
  */
-char* I_FindDataFile(char* file) {
-	char *path, *dir;
+int8_t* I_FindDataFile(int8_t* file) {
+	int8_t *path, *dir;
 
 	path = malloc(512);
 
@@ -316,7 +307,7 @@ char* I_FindDataFile(char* file) {
 #if defined(__LINUX__) || defined(__OpenBSD__)
 	{
 		int i;
-		const char* paths[] = {
+		const int8_t* paths[] = {
 			//André: Removed all useless directories, Only The dir usr/local is fine to use.
 				//"/usr/local/share/games/doom64ex-plus/",
 				"/usr/local/share/doom64ex-plus/",
@@ -345,7 +336,7 @@ char* I_FindDataFile(char* file) {
  * @param path Absolute path to check.
  */
 
-dboolean I_FileExists(const char* path)
+dboolean I_FileExists(const int8_t* path)
 {
 	struct stat st;
 	return !stat(path, &st) && S_ISREG(st.st_mode);
@@ -400,8 +391,8 @@ void I_Init(void)
 // I_Error
 //
 
-void I_Error(const char* string, ...) {
-	char buff[1024];
+void I_Error(const int8_t* string, ...) {
+	int8_t buff[1024];
 	va_list    va;
 
 	I_ShutdownSound();
@@ -455,8 +446,8 @@ void I_Quit(void) {
 // I_Printf
 //
 
-void I_Printf(const char* string, ...) {
-	char buff[1024];
+void I_Printf(const int8_t* string, ...) {
+	int8_t buff[1024];
 	va_list    va;
 
 	dmemset(buff, 0, 1024);

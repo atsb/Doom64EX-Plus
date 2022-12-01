@@ -44,7 +44,7 @@
 #define FCVT M_Fcvt
 #endif
 
-int psnprintf(char *str, size_t n, const char *format, ...) {
+int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
     va_list args;
     int ret;
 
@@ -158,12 +158,12 @@ int psnprintf(char *str, size_t n, const char *format, ...) {
         break; \
     case 'c': \
         GET_VARS \
-        ncount += pvsnfmt_char(&info, (char)(va_arg(ap, int))); \
+        ncount += pvsnfmt_char(&info, (int8_t)(va_arg(ap, int))); \
         state = STATE_NONE; \
         break; \
     case 's': \
         GET_VARS \
-        ncount += pvsnfmt_str(&info, (const char *)(va_arg(ap, const char *))); \
+        ncount += pvsnfmt_str(&info, (const int8_t *)(va_arg(ap, const int8_t *))); \
         state = STATE_NONE; \
         break; \
     case 'n': \
@@ -179,7 +179,7 @@ int psnprintf(char *str, size_t n, const char *format, ...) {
     } \
     ncount++;
 
-int pvsnprintf(char *str, size_t nmax, const char *format, va_list ap) {
+int pvsnprintf(int8_t *str, size_t nmax, const int8_t *format, va_list ap) {
     /* nmax gives total size of buffer including null
      * null is ALWAYS added, even if buffer too small for format
      * (contrary to C99)
@@ -301,7 +301,7 @@ int pvsnprintf(char *str, size_t nmax, const char *format, va_list ap) {
     return ncount;
 }
 
-int pvsnfmt_char(pvsnfmt_vars *info, char c) {
+int pvsnfmt_char(pvsnfmt_vars *info, int8_t c) {
     if(info->nmax > 1) {
         *(info->pinsertion) = c;
         info->pinsertion += 1;
@@ -311,8 +311,8 @@ int pvsnfmt_char(pvsnfmt_vars *info, char c) {
 }
 
 /* strnlen not available on all platforms.. maybe autoconf it? */
-size_t pstrnlen(const char *s, size_t count) {
-    const char *p = s;
+size_t pstrnlen(const int8_t *s, size_t count) {
+    const int8_t *p = s;
     while(*p && count-- > 0) {
         p++;
     }
@@ -330,8 +330,8 @@ size_t pstrnlen(const char *s, size_t count) {
  *   ap             Argument list
  */
 
-int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
-    const char *str = s;
+int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
+    const int8_t *str = s;
     int nprinted;
     int len;
     int pad = 0;
@@ -366,7 +366,7 @@ int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
 
     /* If right-aligned, print pad */
     if(!(flags & FLAG_LEFT_ALIGN)) {
-        char padchar;
+        int8_t padchar;
         if(flags & FLAG_ZERO_PAD) {
             padchar = '0';
         }
@@ -436,12 +436,12 @@ int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
 int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
     int number = 0;
     unsigned int unumber = 0;
-    char numbersigned = 1;
-    char iszero = 0; /* bool */
+    int8_t numbersigned = 1;
+    int8_t iszero = 0; /* bool */
     int base = 10;   /* haleyjd: default to something valid */
     int len = 0; /* length of number component (no sign or padding) */
-    char char10 = 0;
-    char sign = 0;
+    int8_t char10 = 0;
+    int8_t sign = 0;
     int widthpad = 0;
     int addprefix = 0; /* optional "0x" = 2 */
     int totallen;
@@ -450,15 +450,15 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
     /* Stack used to hold digits, which are generated backwards
      * and need to be popped off in the correct order
      */
-    char numstack[22];    /* largest 64 bit number has 22 octal digits */
-    char *stackpos = numstack;
+    int8_t numstack[22];    /* largest 64 bit number has 22 octal digits */
+    int8_t *stackpos = numstack;
 
-    char fmt       = *info->fmt;
+    int8_t fmt       = *info->fmt;
     int flags      = info->flags;
     int precision  = info->precision;
 
 #define PUSH(x) \
-    *stackpos++ = (char)(x)
+    *stackpos++ = (int8_t)(x)
 
 #define POP() \
     *(--stackpos)
@@ -701,7 +701,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
      */
     temp = len;
     for(; temp > 0; temp--) {
-        char n = POP();
+        int8_t n = POP();
         if(n <= 9) {
             *(info->pinsertion) = n + '0';
             info->pinsertion += 1;
@@ -777,7 +777,7 @@ typedef union DBLBITS_u {
  */
 
 int pvsnfmt_double(pvsnfmt_vars *info, double d) {
-    char *digits;
+    int8_t *digits;
     int sign = 0;
     int dec;
     double value = d;
@@ -786,18 +786,18 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
     int pad = 0;
     //int signwidth = 0;
     int totallen;
-    char signchar = 0;
+    int8_t signchar = 0;
     int leadingzeros = 0;
 
     int printdigits; /* temporary var used in different contexts */
 
     int flags = info->flags;
     int width = info->width;
-    const char fmt = *(info->fmt);
+    const int8_t fmt = *(info->fmt);
     int precision = info->precision;
 
     /* Check for special values first */
-    char *special = 0;
+    int8_t *special = 0;
     if(ISSNAN(value)) {
         special = "NaN";
     }

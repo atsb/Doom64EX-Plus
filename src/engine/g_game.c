@@ -121,7 +121,7 @@ int         turnheld;                       // for accelerative turning
 int         lookheld;
 
 int         savegameslot;
-char        savedescription[32];
+int8_t        savedescription[32];
 
 playercontrols_t    Controls;
 
@@ -1453,13 +1453,13 @@ void G_RunGame(void) {
 	}
 }
 
-char savename[256];
+int8_t savename[256];
 
 //
 // G_LoadGame
 //
 
-void G_LoadGame(const char* name) {
+void G_LoadGame(const int8_t* name) {
 	dstrcpy(savename, name);
 	gameaction = ga_loadgame;
 }
@@ -1486,7 +1486,7 @@ void G_DoLoadGame(void) {
 // Description is a 24 byte text string
 //
 
-void G_SaveGame(int slot, const char* description) {
+void G_SaveGame(int slot, const int8_t* description) {
 	savegameslot = slot;
 	dstrcpy(savedescription, description);
 	sendsave = true;

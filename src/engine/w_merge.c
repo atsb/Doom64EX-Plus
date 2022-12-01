@@ -54,8 +54,8 @@ typedef struct {
 } searchlist_t;
 
 typedef struct {
-	char sprname[4];
-	char frame;
+	int8_t sprname[4];
+	int8_t frame;
 	lumpinfo_t* angle_lumps[8];
 } sprite_frame_t;
 
@@ -81,7 +81,7 @@ static int sprite_frames_alloced;
 //
 // Returns -1 if not found
 
-static int FindInList(searchlist_t* list, const char* name) {
+static int FindInList(searchlist_t* list, const int8_t* name) {
 	int i;
 
 	for (i = 0; i < list->numlumps; ++i) {
@@ -94,8 +94,8 @@ static int FindInList(searchlist_t* list, const char* name) {
 }
 
 static dboolean SetupList(searchlist_t* list, searchlist_t* src_list,
-	const char* startname, const char* endname,
-	const char* startname2, const char* endname2) {
+	const int8_t* startname, const int8_t* endname,
+	const int8_t* startname2, const int8_t* endname2) {
 	int startlump, endlump;
 
 	list->numlumps = 0;
@@ -165,7 +165,7 @@ static void InitSpriteList(void) {
 
 // Find a sprite frame
 
-static sprite_frame_t* FindSpriteFrame(char* name, int frame) {
+static sprite_frame_t* FindSpriteFrame(int8_t* name, int frame) {
 	sprite_frame_t* result;
 	int i;
 
@@ -610,7 +610,7 @@ void W_PrintDirectory(void) {
 
 // Merge in a file by name
 
-void W_MergeFile(char* filename) {
+void W_MergeFile(int8_t* filename) {
 	int old_numlumps;
 
 	old_numlumps = numlumps;

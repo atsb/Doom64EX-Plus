@@ -749,7 +749,7 @@ void P_LoadReject(int lump) {
 	dmemcpy(rejectmatrix, (byte*)W_GetMapLump(lump), size);
 }
 
-static const char* bmaperrormsg;
+static const int8_t* bmaperrormsg;
 
 //
 // P_VerifyBlockMap
@@ -1180,7 +1180,7 @@ static void P_InitMapInfo(void) {
 					// get music track ID
 					//
 					if (!dstricmp(sc_parser.token, "MUSIC")) {
-						char* text;
+						int8_t* text;
 						int ds_start;
 						int ds_end;
 						int lump;
@@ -1255,7 +1255,7 @@ static void P_InitMapInfo(void) {
 				}
 
 				if (!sc_parser.setdata(&cluster, clusterdatatable)) {
-					char* text;
+					int8_t* text;
 
 					//
 					// get music track ID

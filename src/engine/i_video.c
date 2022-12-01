@@ -92,7 +92,7 @@ void I_InitScreen(void) {
 	int     newheight;
 	int     p;
 	uint32  flags = 0;
-	char    title[256];
+	int8_t    title[256];
 
 	InWindow = (int)v_windowed.value;
 	video_width = (int)v_width.value;
@@ -496,15 +496,6 @@ int I_MouseAccel(int val) {
 	}
 
 	return (int)(pow((double)val, (double)mouse_accelfactor));
-}
-
-//
-// I_ActivateMouse
-//
-
-static void I_ActivateMouse(void) {
-	SDL_ShowCursor(0);
-	SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 //

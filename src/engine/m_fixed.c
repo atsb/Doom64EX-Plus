@@ -34,24 +34,42 @@
 
 #include "m_fixed.h"
 
-// Fixme. __USE_C_FIXED__ or something.
+/* ATSB 
+
+This is some preliminary ARM
+assembler optimisation for some math routines
+Taken from Doom64EX (DS Version).
+
+Meaning:
+
+SMULL - multiplies integers then adds a 32bit result to the 64bit signed int
+SMLAL - Same as above but 64bit to 64bit
+Move registers (this is the math stuff)
+ORR - perform some bitwise operations
+BX - branches the instructions and exchanges if need be
+
+*/
 
 fixed_t
 FixedMul
 (fixed_t    a,
 	fixed_t    b) {
-#ifdef USE_ASM
-	fixed_t    c;
-	_asm {
-		mov eax, [a]
-		mov ecx, [b]
-		imul ecx
-		shr eax, 16
-		shl edx, 16
-		or eax, edx
-		mov[c], eax
-	}
-	return(c);
+#if defined __arm__ && !defined __APPLE__
+	asm(
+		"SMULL 	 R2, R3, R0, R1\n\t"
+		"MOV	 R1, R2, LSR #16\n\t"
+		"MOV	 R2, R3, LSL #16\n\t"
+		"ORR	 R0, R1, R2\n\t"
+		"BX		 LR"
+	);
+#elif defined __aarch64__ && !defined __APPLE__
+	asm(
+		"SMLAL 	 R2, R3, R0, R1\n\t"
+		"MOV	 R1, R2, LSR #16\n\t"
+		"MOV	 R2, R3, LSL #16\n\t"
+		"ORR	 R0, R1, R2\n\t"
+		"BX		 LR"
+	);
 #else
 	return (fixed_t)(((int64)a * (int64)b) >> FRACBITS);
 #endif

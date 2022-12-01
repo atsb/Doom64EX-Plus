@@ -49,7 +49,7 @@ intptr_t             numsprites;
 
 spriteframe_t   sprtemp[29];
 int             maxframe;
-char* spritename;
+int8_t* spritename;
 
 static visspritelist_t visspritelist[MAX_SPRITES];
 static visspritelist_t* vissprite = NULL;
@@ -128,8 +128,8 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, dboolean f
 // The rotation character can be 0 to signify no rotations.
 //
 
-void R_InitSprites(char** namelist) {
-	char** check;
+void R_InitSprites(int8_t** namelist) {
+	int8_t** check;
 	int     i;
 	int     l;
 	int     intname;
