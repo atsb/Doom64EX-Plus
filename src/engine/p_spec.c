@@ -1665,7 +1665,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			}
 
 			// triggered dead things can activate line specials
-			if (line->flags & ML_THINGTRIGGER && thing->flags & MF_TRIGDEATH) {
+			if (line->flags & ML_THINGTRIGGER) {
 				return P_InitSpecialLine(thing, line, side);
 			}
 		}
@@ -1675,13 +1675,13 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			return false;
 		}
 
-		// never allow a non-player mobj to use lines with these useflags
-		if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED | MLU_SHOOT | MLU_MACRO)) {
+		// Missiles should NOT trigger specials...
+		if (thing->flags & MF_MISSILE) {
 			return false;
 		}
 
-		// Missiles should NOT trigger specials...
-		if (thing->flags & MF_MISSILE) {
+		// never allow a non-player mobj to use lines with these useflags
+		if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED)) {
 			return false;
 		}
 
