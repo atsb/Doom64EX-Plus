@@ -208,9 +208,9 @@ void P_LoadVertexes(int lump) {
 
 void P_LoadSegs(int lump) {
 	int                 i;
-	mapseg_t* ml;
-	seg_t* li;
-	line_t* ldef;
+	mapseg_t*			ml;
+	seg_t*				li;
+	line_t*				ldef;
 	int                 linedef;
 	int                 side;
 	float               x;
@@ -228,14 +228,19 @@ void P_LoadSegs(int lump) {
 	for (i = 0; i < numsegs; i++, li++, ml++) {
 		li->v1 = &vertexes[(word)SHORT(ml->v1)];
 		li->v2 = &vertexes[(word)SHORT(ml->v2)];
+
 		li->angle = INT2F(SHORT(ml->angle));
 		li->offset = INT2F(SHORT(ml->offset));
+
 		linedef = (word)SHORT(ml->linedef);
 		ldef = &lines[linedef];
 		li->linedef = ldef;
+
 		side = SHORT(ml->side);
 		li->sidedef = &sides[ldef->sidenum[side]];
+
 		li->frontsector = sides[ldef->sidenum[side]].sector;
+
 		if (ldef->flags & ML_TWOSIDED) {
 			li->backsector = sides[ldef->sidenum[side ^ 1]].sector;
 		}
@@ -243,7 +248,8 @@ void P_LoadSegs(int lump) {
 			li->backsector = 0;
 		}
 
-		ldef->angle = (li->angle >> ANGLETOFINESHIFT);
+		if (ldef->v1 == li->v1)
+			ldef->angle = (li->angle >> ANGLETOFINESHIFT);
 
 		x = F2D3D(li->v1->x - li->v2->x);
 		y = F2D3D(li->v1->y - li->v2->y);

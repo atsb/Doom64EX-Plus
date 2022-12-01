@@ -1129,7 +1129,6 @@ void G_PlayerReborn(int player) {
 	dboolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
-	int         artifacts;
 	dboolean    backpack;
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
@@ -1139,7 +1138,6 @@ void G_PlayerReborn(int player) {
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
 	backpack = players[player].backpack;
-	artifacts = players[player].artifacts;
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
 	secretcount = players[player].secretcount;
@@ -1173,20 +1171,6 @@ void G_PlayerReborn(int player) {
 	if (netgame) {
 		for (i = 0; i < NUMCARDS; i++) {
 			players[player].cards[i] = cards[i];
-		}
-
-		if (gameflags & GF_KEEPITEMS) {
-			p->artifacts = artifacts;
-			p->backpack = backpack;
-
-			for (i = 0; i < NUMAMMO; i++) {
-				p->ammo[i] = pammo[i];
-				p->maxammo[i] = pmaxammo[i];
-			}
-
-			for (i = 0; i < NUMWEAPONS; i++) {
-				p->weaponowned[i] = wpns[i];
-			}
 		}
 	}
 
