@@ -600,9 +600,9 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	// get sprite frame/defs
 	sprdef = &spriteinfo[psp->state->sprite];
-	sprframe = &sprdef->spriteframes[psp->state->frame & FF_FRAMEMASK];
+	sprframe = &sprdef->spriteframes[psp->state->info_frame & FF_FRAMEMASK];
 
-	if (psp->state->frame & FF_FULLBRIGHT || nolights) {
+	if (psp->state->info_frame & FF_FULLBRIGHT || nolights) {
 		color = D_RGBA(255, 255, 255, alpha);
 	}
 	else {

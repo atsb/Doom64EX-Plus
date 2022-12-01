@@ -88,7 +88,7 @@ void F_Start(void) {
 
 	castnum = 0;
 	caststate = &states[mobjinfo[castorder[castnum].type].seestate];
-	casttics = caststate->tics;
+	casttics = caststate->info_tics;
 	castdeath = false;
 	castframes = 0;
 	castonmelee = 0;
@@ -144,7 +144,7 @@ int F_Ticker(void) {
 		S_StartSound(NULL, sfx_shotgun);
 		S_StartSound(NULL, mobjinfo[castorder[castnum].type].deathsound);
 		caststate = &states[mobjinfo[castorder[castnum].type].deathstate];
-		casttics = caststate->tics;
+		casttics = caststate->info_tics;
 		castframes = 0;
 		castattacking = false;
 		castdying = false;
@@ -156,7 +156,7 @@ int F_Ticker(void) {
 		return 0;    // not time to change state yet
 	}
 
-	if (caststate->tics == -1 || caststate->nextstate == S_NULL) {
+	if (caststate->info_tics == -1 || caststate->nextstate == S_NULL) {
 		// switch from deathstate to next monster
 
 		castnum++;
@@ -272,7 +272,7 @@ int F_Ticker(void) {
 		}
 	}
 
-	casttics = caststate->tics;
+	casttics = caststate->info_tics;
 	if (casttics == -1) {
 		casttics = TICRATE;
 	}
@@ -291,7 +291,7 @@ void F_Drawer(void) {
 	Draw_Sprite2D(
 		caststate->sprite,
 		castrotation,
-		(caststate->frame & FF_FRAMEMASK),
+		(caststate->info_frame & FF_FRAMEMASK),
 		160,
 		180,
 		1.0f,

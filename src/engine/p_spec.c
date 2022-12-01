@@ -848,8 +848,8 @@ static void P_AlertTaggedMobj(mobj_t* activator, int tid) {
 
 		mo->threshold = 0;
 		mo->state = st;
-		mo->tics = st->tics;
-		mo->frame = st->frame;
+		mo->tics = st->info_tics;
+		mo->frame = st->info_frame;
 		mo->sprite = st->sprite;
 	}
 }
