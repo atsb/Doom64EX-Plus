@@ -1129,7 +1129,6 @@ void G_PlayerReborn(int player) {
 	dboolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
-	dboolean    backpack;
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(dboolean) * NUMCARDS);
@@ -1137,7 +1136,6 @@ void G_PlayerReborn(int player) {
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
-	backpack = players[player].backpack;
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
 	secretcount = players[player].secretcount;
