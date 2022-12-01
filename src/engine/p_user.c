@@ -557,8 +557,8 @@ void P_PlayerTic(mobj_t* mo) {
 	if (!mo->tics) {
 		st = &states[mo->state->nextstate];
 		mo->state = st;
-		mo->tics = st->tics;
-		mo->frame = st->frame;
+		mo->tics = st->info_tics;
+		mo->frame = st->info_frame;
 		mo->sprite = st->sprite;
 
 		if (st->action.acp1) {
