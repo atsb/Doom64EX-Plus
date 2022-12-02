@@ -45,7 +45,7 @@
 
 static int          castrotation = 0;
 static int          castnum;
-static int          casttics;
+static intptr_t     casttics;
 static state_t* caststate;
 static dboolean     castdeath;
 static dboolean     castdying;
