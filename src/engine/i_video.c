@@ -143,6 +143,10 @@ void I_InitScreen(void) {
 
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
+	if (InWindow) {
+		flags |= SDL_WINDOW_BORDERLESS;
+	}
+
 	if (!InWindow) {
 		flags |= SDL_WINDOW_FULLSCREEN;
 	}
