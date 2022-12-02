@@ -333,7 +333,7 @@ dboolean CON_Responder(event_t* ev) {
 	case CST_LOWER:
 		if (ev->type == ev_keydown) {
 			switch (c) {
-			case '9':
+			case SDLK_BACKSLASH:
 				console_state = CST_UP;
 				console_enabled = false;
 				break;
@@ -438,7 +438,7 @@ dboolean CON_Responder(event_t* ev) {
 		// Why the hell do this?  It only works on UK/US keyboards
 		// Gibbon fixes it!
 			//if(c == '`') { <-- BOO!
-		if (c == '9') {
+		if (c == SDLK_BACKSLASH) {
 			if (ev->type == ev_keydown) {
 				console_state = CST_DOWN;
 				console_enabled = true;
