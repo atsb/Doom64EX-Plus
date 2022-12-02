@@ -50,6 +50,7 @@ typedef struct {
 
 static void M_CheatFa(player_t* player, int8_t dat[4]);
 static void M_CheatBerserk(player_t* player, int8_t dat[4]);
+static void M_CheatWarp(player_t* player, int8_t dat[4]);
 static void M_CheatMyPos(player_t* player, int8_t dat[4]);
 static void M_CheatAllMap(player_t* player, int8_t dat[4]);
 
@@ -58,13 +59,14 @@ cheatinfo_t cheat[] = {
 	{   "idfa",     M_CheatFa,          0   },
 	{   "idkfa",    M_CheatKfa,         0   },
 	{   "idclip",   M_CheatClip,        0   },
+	{   "idclev",   M_CheatWarp,        -2  },
 	{   "idpos",    M_CheatMyPos,       0   },
-	{   "exmap",    M_CheatAllMap,      0   },
-	{   "exrage",   M_CheatBerserk,     0   },
-	{   "exgivew",  M_CheatGiveWeapon,  -1  },
-	{   "exgivek",  M_CheatGiveKey,     -1  },
-	{   "exkill",   M_CheatBoyISuck,    0   },
-	{   "exgivea",  M_CheatArtifacts,   -1  },
+	{   "exm",		M_CheatAllMap,      0   },
+	{   "exr",		M_CheatBerserk,     0   },
+	{   "exw",		M_CheatGiveWeapon,  -1  },
+	{   "exg",		M_CheatGiveKey,     -1  },
+	{   "exk",		M_CheatBoyISuck,    0   },
+	{   "exa",		M_CheatArtifacts,   -1  },
 	{   NULL,       NULL,               0   }
 };
 
@@ -135,6 +137,27 @@ void M_CheatClip(player_t* player, int8_t dat[4]) {
 static void M_CheatBerserk(player_t* player, int8_t dat[4]) {
 	P_GivePower(player, pw_strength);
 	player->message = GOTBERSERK;
+}
+
+CVAR_EXTERNAL(sv_skill);
+static void M_CheatWarp(player_t* player, int8_t dat[4]) {
+	int map;
+	map = datoi(dat);
+
+	if (map < 1) {
+		return;
+	}
+
+	if (map > 40) {
+		player->message = "MAP DOES NOT EXIST";
+		return;
+	}
+
+	// So be it.
+	gameaction = ga_warpquick;
+	gameskill = (int)sv_skill.value;
+	gamemap = nextmap = map;
+	dmemset(passwordData, 0xff, 16);
 }
 
 static void M_CheatMyPos(player_t* player, int8_t dat[4]) {
