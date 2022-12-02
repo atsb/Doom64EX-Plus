@@ -81,12 +81,9 @@ uint32_t    glBindCalls = 0;
 dboolean        bRenderSky = false;
 
 CVAR(r_fov, 74.0);
-CVAR(r_uniformtime, 0);
 CVAR(r_fog, 1);
 CVAR(r_wipe, 1);
-CVAR(r_drawtris, 0);
 CVAR(r_drawmobjbox, 0);
-CVAR(r_drawfill, 0);
 CVAR(r_skybox, 0);
 CVAR(hud_disablesecretmessages, 0);
 
@@ -699,15 +696,6 @@ void R_RenderPlayerView(player_t* player) {
 	R_SetupFrame(player);
 
 	//
-	// check for t-junction cracks
-	//
-	if (r_drawfill.value >= 1) {
-		dglClearColor(1, 0, 1, 0);
-		dglClear(GL_COLOR_BUFFER_BIT);
-		bRenderSky = false;
-	}
-
-	//
 	// draw sky
 	//
 	if (bRenderSky) {
@@ -793,14 +781,11 @@ void R_RenderPlayerView(player_t* player) {
 
 void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_fov);
-	CON_CvarRegister(&r_uniformtime);
 	CON_CvarRegister(&r_fog);
 	CON_CvarRegister(&r_filter);
 	CON_CvarRegister(&r_anisotropic);
 	CON_CvarRegister(&r_wipe);
-	CON_CvarRegister(&r_drawtris);
 	CON_CvarRegister(&r_drawmobjbox);
-	CON_CvarRegister(&r_drawfill);
 	CON_CvarRegister(&r_skybox);
 	CON_CvarRegister(&hud_disablesecretmessages);
 }
