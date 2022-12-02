@@ -25,12 +25,6 @@ For modders wanting to make their mods work with EX+, there are a few things tha
 1. DM_START and DM_END tags are used (like the remaster) instead of DS_START and DS_END.
 2. G_START and G_END graphics tags aren't implemented (like the remaster).
 
-## Where are the PWADs?
-
-Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
-You can find them on moddb, just look for the EX+ / EX Plus wads:
-https://www.moddb.com/games/doom-64/downloads/
-
 Instead:
 
 * The **first** tag for graphics **MUST BE** called SYMBOLS.
@@ -39,6 +33,12 @@ Instead:
 They can either be a tag or a graphic.  This is due to me not flat-out reading all PNGs in a WAD but instead, to support the official IWAD, I read the content like this to catch all the graphics that EX+ needs from the IWAD.
 
 No other changes are needed.
+
+## Where are the PWADs?
+
+Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
+You can find them on moddb, just look for the EX+ / EX Plus wads:
+https://www.moddb.com/games/doom-64/downloads/
 
 ## Dehacked Support
 
