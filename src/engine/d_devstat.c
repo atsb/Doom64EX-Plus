@@ -226,10 +226,6 @@ static dboolean freelook = false;
 dboolean D_DevKeyResponder(event_t* ev) {
 	if (ev->type == ev_keydown) {
 		switch (ev->data1) {
-		case KEY_F7:    // toggle wireframe
-			R_DrawWireframe(r_fillmode.value ? 1 : 0);
-			return true;
-
 		case KEY_F9:    // toggle display stats
 			showstats ^= 1;
 			return true;

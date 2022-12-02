@@ -127,7 +127,6 @@ static int8_t     MenuBindMessage[256];
 static dboolean MenuBindActive = false;
 static dboolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
-static dboolean wireframeon = false;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
 static int      m_ScreenSize = 1;
@@ -2408,7 +2407,6 @@ enum {
 	features_mapeverything,
 	features_lockmonsters,
 	features_noclip,
-	features_wireframe,
 	features_end
 } features_e;
 
@@ -2425,7 +2423,6 @@ menuitem_t FeaturesMenu[] = {
 	{2,"Map Everything",M_DoFeature,'m'},
 	{2,"Lock Monsters",M_DoFeature,'o'},
 	{2,"Wall Blocking",M_DoFeature,'w'},
-	{2,"Wireframe Mode",M_DoFeature,'r'},
 };
 
 menu_t featuresDef = {
@@ -2460,9 +2457,6 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);
-
-	/*Wireframe Mode*/
-	M_DrawSmbString(msgNames[wireframeon], &featuresDef, features_wireframe);
 
 	/*Invulnerable*/
 	M_DrawSmbString(msgNames[players[consoleplayer].cheats & CF_GODMODE ? 1 : 0],
@@ -2585,11 +2579,6 @@ void M_DoFeature(int choice) {
 		else {
 			CON_CvarSetValue(sv_lockmonsters.name, 0);
 		}
-		break;
-
-	case features_wireframe:
-		R_DrawWireframe(choice);
-		wireframeon = choice;
 		break;
 	}
 
