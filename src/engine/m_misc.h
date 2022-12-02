@@ -38,7 +38,7 @@
 #endif
 
 extern  int    myargc;
-extern  int8_t** myargv;
+extern  char** myargv;
 
 // Returns the position of the given parameter
 // in the arg list (0 if not found).

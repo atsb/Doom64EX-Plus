@@ -54,7 +54,7 @@
 #include "p_saveg.h"
 
 int      myargc;
-int8_t** myargv;
+char**   myargv;
 
 //
 // M_CheckParm
