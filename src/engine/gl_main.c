@@ -465,12 +465,7 @@ void GL_SetState(int bit, dboolean enable) {
 //
 
 void GL_CheckFillMode(void) {
-	if (r_fillmode.value <= 0) {
-		GL_SetState(GLSTATE_TEXTURE0, 0);
-	}
-	else if (r_fillmode.value > 0) {
-		GL_SetState(GLSTATE_TEXTURE0, 1);
-	}
+	GL_SetState(GLSTATE_TEXTURE0, 1);
 }
 
 //
@@ -556,8 +551,6 @@ void GL_Init(void) {
 
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-
-	r_fillmode.value = 1.0f;
 
 	GL_ARB_multitexture_Init();
 	GL_EXT_compiled_vertex_array_Init();

@@ -500,7 +500,7 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 // main
 //
 
-int main(int argc, int8_t *argv[]) {
+int main(int argc, char *argv[]) {
 	myargc = argc;
 	myargv = argv;
 

@@ -34,6 +34,12 @@ They can either be a tag or a graphic.  This is due to me not flat-out reading a
 
 No other changes are needed.
 
+## Where are the PWADs?
+
+Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
+You can find them on moddb, just look for the EX+ / EX Plus wads:
+https://www.moddb.com/games/doom-64/downloads/
+
 ## Dehacked Support
 
 For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
