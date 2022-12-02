@@ -148,7 +148,7 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 		return;
 	}
 
-	if (map > 40) {
+	if (map > 33 || map > 40) {
 		player->message = "MAP DOES NOT EXIST";
 		return;
 	}
