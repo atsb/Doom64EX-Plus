@@ -27,6 +27,7 @@
 
 #include "doomstat.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "con_console.h"
 #include "z_zone.h"
 #include "i_system.h"
@@ -178,6 +179,7 @@ void CON_CvarInit(void) {
 	ST_RegisterCvars();
 	S_RegisterCvars();
 	I_RegisterCvars();
+	ISDL_RegisterKeyCvars();
 	M_RegisterCvars();
 	P_RegisterCvars();
 	G_RegisterCvars();

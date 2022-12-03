@@ -44,6 +44,7 @@
 #include <fcntl.h>
 #include "doomdef.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "m_cheat.h"
 #include "m_misc.h"
@@ -127,7 +128,6 @@ static int8_t     MenuBindMessage[256];
 static dboolean MenuBindActive = false;
 static dboolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
-static dboolean wireframeon = false;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
 static int      m_ScreenSize = 1;
@@ -2178,7 +2178,7 @@ void M_DrawPassword(void) {
 	byte* passData;
 	int i = 0;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
 #endif
 	{
@@ -2407,7 +2407,6 @@ enum {
 	features_mapeverything,
 	features_lockmonsters,
 	features_noclip,
-	features_wireframe,
 	features_end
 } features_e;
 
@@ -2424,7 +2423,6 @@ menuitem_t FeaturesMenu[] = {
 	{2,"Map Everything",M_DoFeature,'m'},
 	{2,"Lock Monsters",M_DoFeature,'o'},
 	{2,"Wall Blocking",M_DoFeature,'w'},
-	{2,"Wireframe Mode",M_DoFeature,'r'},
 };
 
 menu_t featuresDef = {
@@ -2459,9 +2457,6 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);
-
-	/*Wireframe Mode*/
-	M_DrawSmbString(msgNames[wireframeon], &featuresDef, features_wireframe);
 
 	/*Invulnerable*/
 	M_DrawSmbString(msgNames[players[consoleplayer].cheats & CF_GODMODE ? 1 : 0],
@@ -2585,17 +2580,12 @@ void M_DoFeature(int choice) {
 			CON_CvarSetValue(sv_lockmonsters.name, 0);
 		}
 		break;
-
-	case features_wireframe:
-		R_DrawWireframe(choice);
-		wireframeon = choice;
-		break;
 	}
 
 	S_StartSound(NULL, sfx_switch2);
 }
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 #include "g_controls.h"
 
@@ -2880,7 +2870,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	controls_gamepad,
 #endif
 	controls_return,
@@ -2890,7 +2880,7 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{1,"Gamepad",M_ControlChoice, 'g'},
 #endif
 	{1,"/r Return",M_Return, 0x20}
@@ -2899,7 +2889,7 @@ menuitem_t ControlsMenu[] = {
 int8_t* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	"configure gamepad functionality",
 #endif
 	NULL
@@ -2932,7 +2922,7 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
@@ -4036,7 +4026,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 const symboldata_t xinputbutons[12] = {
 	{ 0, 0, 15, 16 },   // B
@@ -4218,7 +4208,7 @@ dboolean M_Responder(event_t* ev) {
 		return false;
 	}
 
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 	switch (ch) {
 	case BUTTON_DPAD_UP:
@@ -4917,7 +4907,7 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (xgamepad.connected && currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
@@ -5064,7 +5054,7 @@ void M_Ticker(void) {
 		SaveDef.prevMenu = &PauseDef;
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	//
 	// hide mouse menu if gamepad controller is plugged in
 	//

@@ -249,7 +249,7 @@ void AM_DrawLeafs(float scale) {
 	//
 	// process draw list
 	//
-	DL_BeginDrawList(!am_ssect.value && r_fillmode.value, 0);
+	DL_BeginDrawList(!am_ssect.value && 1);
 
 	if (r_texturecombiner.value > 0) {
 		if (!nolights) {
@@ -340,9 +340,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, dboolean solid, byte r, byte g, 
 		return;
 	}
 
-	if (r_fillmode.value) {
-		dglPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
-	}
+	dglPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
 
 	dglSetVertex(tri);
 	dglTriangle(0, 1, 2);
@@ -350,9 +348,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, dboolean solid, byte r, byte g, 
 	dglDrawGeometry(3, tri);
 	dglEnable(GL_TEXTURE_2D);
 
-	if (r_fillmode.value) {
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	if (devparm) {
 		vertCount += 3;

@@ -731,21 +731,6 @@ P_PathTraverse
 	int        mapystep;
 	int        count;
 
-	if (r_drawtrace.value) {
-		tracedrawer_t* tdrawer;
-
-		tdrawer = Z_Malloc(sizeof(*tdrawer), PU_LEVSPEC, 0);
-		P_AddThinker(&tdrawer->thinker);
-		tdrawer->thinker.function.acp1 = (actionf_p1)T_TraceDrawer;
-		tdrawer->tic = gametic + 32;
-		tdrawer->x1 = x1;
-		tdrawer->x2 = x2;
-		tdrawer->y1 = y1;
-		tdrawer->y2 = y2;
-		tdrawer->z = viewz;
-		tdrawer->flags = flags;
-	}
-
 	earlyout = flags & PT_EARLYOUT;
 
 	D_IncValidCount();

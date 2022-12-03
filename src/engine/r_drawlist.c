@@ -237,14 +237,9 @@ int DL_GetDrawListSize(int tag) {
 // DL_BeginDrawList
 //
 
-void DL_BeginDrawList(dboolean t, dboolean a) {
+void DL_BeginDrawList(dboolean t) {
 	dglSetVertex(drawVertex);
-
 	GL_SetTextureUnit(0, t);
-
-	if (a) {
-		dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
-	}
 }
 
 //

@@ -59,9 +59,7 @@ extern uint32_t glBindCalls;
 extern dboolean     bRenderSky;
 
 CVAR_EXTERNAL(r_fov);
-CVAR_EXTERNAL(r_fillmode);
 CVAR_EXTERNAL(r_uniformtime);
-CVAR_EXTERNAL(r_drawtrace);
 
 void R_Init(void);
 void R_RenderPlayerView(player_t* player);
@@ -75,7 +73,6 @@ fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, dboolean enable);
 void R_SetupLevel(void);
 void R_SetViewAngleOffset(angle_t angle);
 void R_SetViewOffset(int offset);
-void R_DrawWireframe(dboolean enable);    //villsa
 void R_RegisterCvars(void);
 void R_SetViewMatrix(void);
 void R_RenderWorld(void);
