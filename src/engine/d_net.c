@@ -44,6 +44,7 @@
 #endif
 
 #include "i_video.h"
+#include "i_sdlinput.h"
 
 #define FEATURE_MULTIPLAYER 1
 

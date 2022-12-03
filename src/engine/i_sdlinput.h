@@ -1,10 +1,10 @@
 // Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 1993-1997 Id Software, Inc.
 // Copyright(C) 2005 Simon Howard
-// Copyright(C) 2007-2012 Samuel Villarreal
-//
+// Copyright(C) 2007-2014 Samuel Villarreal
+// Copyright(C) 2022
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -21,25 +21,36 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-
-#ifndef __I_VIDEO_H__
-#define __I_VIDEO_H__
+//
+// DESCRIPTION:
+//    SDL Input
+//
+//-----------------------------------------------------------------------------
 
 #ifdef __OpenBSD__
 #include <SDL.h>
 #else
 #include <SDL2/SDL.h>
 #endif
+#include "doomtype.h"
+////////////Input//////////////
 
-#include "d_event.h"
+extern int UseMouse[2];
+extern int UseJoystick;
+extern int mouse_x;
+extern int mouse_y;
 
-////////////Video///////////////
+int I_MouseAccel(int val);
+void I_MouseAccelChange(void);
 
-extern SDL_Surface* screen;
-extern SDL_Window* window;
-void I_InitVideo(void);
-void I_InitScreen(void);
-void I_ShutdownVideo(void);
-void V_RegisterCvars();
+void ISDL_RegisterKeyCvars(void);
 
-#endif
+static void I_GetEvent(SDL_Event* Event);
+static void I_ReadMouse(void);
+static void I_InitInputs(void);
+
+void I_StartTic(void);
+void I_FinishUpdate(void);
+int I_ShutdownWait(void);
+void I_CenterMouse(void);
+dboolean I_UpdateGrab(void);

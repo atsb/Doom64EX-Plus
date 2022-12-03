@@ -929,7 +929,7 @@ void ST_Drawer(void) {
 			int8_t contextstring[32];
 			float x;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 			if (xgamepad.connected) {
 				M_DrawXInputButton(140, 156, XINPUT_GAMEPAD_A);
 				Draw_Text(213, 214, WHITEALPHA(0xA0), 0.75, false, "Use");

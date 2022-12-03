@@ -415,7 +415,7 @@ dboolean G_ActionResponder(event_t* ev) {
 		G_DoCmdMouseMove(ev->data2, ev->data3);
 		break;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case ev_gamepad:
 		I_XInputReadActions(ev);
 		break;

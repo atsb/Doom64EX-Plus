@@ -51,6 +51,7 @@
 #include "doomdef.h"
 #include "m_misc.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_net.h"
 #include "g_demo.h"
 #include "d_main.h"
@@ -84,7 +85,7 @@ CVAR(v_accessibility, 0);
 #if defined(__LINUX__) || defined(__OpenBSD__)
 #define Free(userdir)	free(userdir);
 #else
-#define Free(userdir)	SDL_free((void *)userdir);
+#define Free(userdir)	SDL_free(userdir);
 #endif
 
 
@@ -484,7 +485,7 @@ void I_BeginRead(void) {
 // I_RegisterCvars
 //
 
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_rstickthreshold);
 CVAR_EXTERNAL(i_xinputscheme);
@@ -496,12 +497,11 @@ CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)
 	CON_CvarRegister(&i_rsticksensitivity);
 	CON_CvarRegister(&i_rstickthreshold);
 	CON_CvarRegister(&i_xinputscheme);
 #endif
-
 	CON_CvarRegister(&i_gamma);
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_interpolateframes);

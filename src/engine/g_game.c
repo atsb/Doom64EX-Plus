@@ -58,6 +58,7 @@
 #include "g_local.h"
 #include "m_password.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "g_demo.h"
 
 #include "deh_main.h"

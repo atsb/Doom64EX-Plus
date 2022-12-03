@@ -49,6 +49,7 @@
 #include "con_console.h"
 #include "m_misc.h"
 #include "g_actions.h"
+#include "i_sdlinput.h"
 
 int ViewWindowX = 0;
 int ViewWindowY = 0;
