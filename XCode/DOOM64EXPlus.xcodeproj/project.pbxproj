@@ -116,6 +116,8 @@
 		2A44CF4B2930B717005B23CA /* dgl.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEA2930B716005B23CA /* dgl.c */; };
 		2A44CF4C2930B717005B23CA /* r_sky.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEC2930B716005B23CA /* r_sky.c */; };
 		2A44CF4D2930B717005B23CA /* am_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEE2930B717005B23CA /* am_draw.c */; };
+		2AB7DEC9293B9E1E009A3CA3 /* libz.1.2.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD512930B1AC005B23CA /* libz.1.2.13.dylib */; };
+		2AB7DECB293B9E2E009A3CA3 /* libz.1.2.13.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5A81D21A8DAEB600AF539F /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +128,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
+				2AB7DECB293B9E2E009A3CA3 /* libz.1.2.13.dylib in CopyFiles */,
 				2A1E0884293263D200FB6EB8 /* libSDL2-2.0.0.dylib in CopyFiles */,
 				2A1E0885293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib in CopyFiles */,
 				2A1E0886293263D200FB6EB8 /* libpng16.16.dylib in CopyFiles */,
@@ -356,6 +359,7 @@
 		2A44CEEE2930B717005B23CA /* am_draw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = am_draw.c; path = ../src/engine/am_draw.c; sourceTree = "<group>"; };
 		2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = doom64explus.entitlements; sourceTree = "<group>"; };
 		2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DOOM64EX--Info.plist"; sourceTree = "<group>"; };
+		2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.13.dylib; path = Libs/libz.1.2.13.dylib; sourceTree = "<group>"; };
 		AB5A80C21A8DABE100AF539F /* DOOM64EXPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOOM64EXPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5A81D21A8DAEB600AF539F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -365,6 +369,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AB7DEC9293B9E1E009A3CA3 /* libz.1.2.13.dylib in Frameworks */,
 				2A1E08912932869900FB6EB8 /* libfluidlite.a in Frameworks */,
 				2A1E087C293263BF00FB6EB8 /* libpng16.16.dylib in Frameworks */,
 				2A1E087D293263BF00FB6EB8 /* libSDL2_net-2.0.0.dylib in Frameworks */,
@@ -430,6 +435,7 @@
 		AB5A80B91A8DABE100AF539F = {
 			isa = PBXGroup;
 			children = (
+				2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */,
 				2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */,
 				2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */,
 				2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */,
@@ -955,11 +961,15 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					./Libs,
-					"$(inherited)",
 					"$(PROJECT_DIR)/Libs",
 				);
 				MARKETING_VERSION = 3.6.5.1;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-I",
+					/opt/local/include,
+					"-DDOOM_UNIX_INSTALL",
+				);
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = "DOOM64EX+";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -996,11 +1006,15 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					./Libs,
-					"$(inherited)",
 					"$(PROJECT_DIR)/Libs",
 				);
 				MARKETING_VERSION = 3.6.5.1;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-I",
+					/opt/local/include,
+					"-DDOOM_UNIX_INSTALL",
+				);
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = "DOOM64EX+";

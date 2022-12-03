@@ -89,7 +89,6 @@ CVAR(v_accessibility, 0);
 
 
 ticcmd_t        emptycmd;
-static int32    I_GetTime_Scale = 1 << 24;
 
 //
 // I_uSleep

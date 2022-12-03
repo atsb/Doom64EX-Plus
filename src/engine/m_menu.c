@@ -1203,7 +1203,6 @@ void M_DrawMisc(void) {
 	static const int8_t* autoruntype[2] = { "Off", "On" };
 	static const int8_t* mapdisplaytype[2] = { "Hide", "Show" };
 	static const int8_t* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
-	static const int8_t* rgbscaletype[3] = { "1x", "2x", "4x" };
 	static const int8_t* disablesecretmessages[2] = { "Enabled", "Disabled" };
 	int y;
 

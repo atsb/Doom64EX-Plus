@@ -30,6 +30,10 @@
 #include <SDL2/SDL_opengl.h>
 #endif
 
+#ifdef __APPLE__
+#include <math.h>
+#endif
+
 #include "doomdef.h"
 #include "doomstat.h"
 #include "gl_main.h"
