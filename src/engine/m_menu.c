@@ -44,6 +44,7 @@
 #include <fcntl.h>
 #include "doomdef.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "m_cheat.h"
 #include "m_misc.h"
@@ -2178,7 +2179,7 @@ void M_DrawPassword(void) {
 	byte* passData;
 	int i = 0;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
 #endif
 	{
@@ -2585,7 +2586,7 @@ void M_DoFeature(int choice) {
 	S_StartSound(NULL, sfx_switch2);
 }
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 #include "g_controls.h"
 
@@ -2870,7 +2871,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	controls_gamepad,
 #endif
 	controls_return,
@@ -2880,7 +2881,7 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{1,"Gamepad",M_ControlChoice, 'g'},
 #endif
 	{1,"/r Return",M_Return, 0x20}
@@ -2889,7 +2890,7 @@ menuitem_t ControlsMenu[] = {
 int8_t* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	"configure gamepad functionality",
 #endif
 	NULL
@@ -2922,7 +2923,7 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
@@ -4026,7 +4027,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 const symboldata_t xinputbutons[12] = {
 	{ 0, 0, 15, 16 },   // B
@@ -4208,7 +4209,7 @@ dboolean M_Responder(event_t* ev) {
 		return false;
 	}
 
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 	switch (ch) {
 	case BUTTON_DPAD_UP:
@@ -4907,7 +4908,7 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (xgamepad.connected && currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
@@ -5054,7 +5055,7 @@ void M_Ticker(void) {
 		SaveDef.prevMenu = &PauseDef;
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	//
 	// hide mouse menu if gamepad controller is plugged in
 	//

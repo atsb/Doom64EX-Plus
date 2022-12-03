@@ -40,6 +40,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "sounds.h"
 #include "m_shift.h"

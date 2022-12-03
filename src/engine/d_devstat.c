@@ -37,7 +37,7 @@
 #include "d_englsh.h"
 #include "r_drawlist.h"
 #include "i_video.h"
-
+#include "i_sdlinput.h"
 static dboolean showstats = true;
 
 extern word statindice;
