@@ -118,6 +118,7 @@
 		2A44CF4D2930B717005B23CA /* am_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEE2930B717005B23CA /* am_draw.c */; };
 		2AB7DEC9293B9E1E009A3CA3 /* libz.1.2.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD512930B1AC005B23CA /* libz.1.2.13.dylib */; };
 		2AB7DECB293B9E2E009A3CA3 /* libz.1.2.13.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		2AB7DECE293BD848009A3CA3 /* i_sdlinput.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AB7DECD293BD825009A3CA3 /* i_sdlinput.c */; };
 		AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5A81D21A8DAEB600AF539F /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -360,6 +361,8 @@
 		2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = doom64explus.entitlements; sourceTree = "<group>"; };
 		2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DOOM64EX--Info.plist"; sourceTree = "<group>"; };
 		2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.13.dylib; path = Libs/libz.1.2.13.dylib; sourceTree = "<group>"; };
+		2AB7DECC293BD825009A3CA3 /* i_sdlinput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_sdlinput.h; path = ../src/engine/i_sdlinput.h; sourceTree = "<group>"; };
+		2AB7DECD293BD825009A3CA3 /* i_sdlinput.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_sdlinput.c; path = ../src/engine/i_sdlinput.c; sourceTree = "<group>"; };
 		AB5A80C21A8DABE100AF539F /* DOOM64EXPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOOM64EXPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5A81D21A8DAEB600AF539F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -435,6 +438,8 @@
 		AB5A80B91A8DABE100AF539F = {
 			isa = PBXGroup;
 			children = (
+				2AB7DECD293BD825009A3CA3 /* i_sdlinput.c */,
+				2AB7DECC293BD825009A3CA3 /* i_sdlinput.h */,
 				2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */,
 				2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */,
 				2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */,
@@ -714,6 +719,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AB7DECE293BD848009A3CA3 /* i_sdlinput.c in Sources */,
 				2A44CF382930B717005B23CA /* p_switch.c in Sources */,
 				2A44CEFC2930B717005B23CA /* deh_thing.c in Sources */,
 				2A44CEF12930B717005B23CA /* i_main.c in Sources */,
