@@ -1046,28 +1046,8 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 //
 
 static void Seq_Shutdown(doomseq_t* seq) {
-    //
-    // signal the sequencer to shut down
-    //
-    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
-
-    //
-    // wait until the audio thread is finished
-    //
-    SDL_WaitThread(seq->thread, NULL);
-
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
-
-    //
-    // fluidsynth cleanup stuff
-    //
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
 }
 
 //
