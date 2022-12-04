@@ -143,20 +143,20 @@ CVAR_EXTERNAL(sv_skill);
 static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	int map;
 	map = datoi(dat);
+	gameskill = (int)sv_skill.value;
+	gamemap = nextmap = map;
 
 	if (map < 1) {
 		return;
 	}
 
-	if (!map) {
+	if (map > 40) {
 		player->message = "MAP DOES NOT EXIST";
 		return;
 	}
 
 	// So be it.
-	gameaction = ga_warpquick;
-	gameskill = (int)sv_skill.value;
-	gamemap = nextmap = map;
+	G_DeferedInitNew(gameskill, map);
 	dmemset(passwordData, 0xff, 16);
 }
 
