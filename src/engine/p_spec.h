@@ -170,22 +170,24 @@ dboolean    P_ChangeLightByTag(int tag1, int tag2);
 int         P_DoSectorLightChange(line_t* line, int16_t tag);
 void        P_FadeInBrightness(void);
 
-typedef enum {
+typedef enum
+{
 	top,
 	middle,
 	bottom
 } bwhere_e;
 
-typedef struct {
-	line_t* line;
-	bwhere_e    where;
-	int         btexture;
-	int         btimer;
+typedef struct
+{
+	side_t* side;  //old line_t		*line;
+	bwhere_e	where;
+	int			btexture;
+	int			btimer;
 	mobj_t* soundorg;
 } button_t;
 
 // max # of wall switches in a level
-#define MAXSWITCHES       11
+#define MAXSWITCHES       50
 
 // 4 players, 4 buttons each at once, max.
 #define MAXBUTTONS        16

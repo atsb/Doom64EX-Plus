@@ -93,15 +93,9 @@ typedef struct {
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
-CVAR_EXTERNAL(r_fillmode);
-CVAR_CMD(r_texturecombiner, 1) {
-	int i;
-
-	curunit = -1;
-
-	for (i = 0; i < GL_MAX_TEX_UNITS; i++) {
-		dmemset(&gl_env_state[i], 0, sizeof(gl_env_state_t));
-	}
+CVAR_CMD(r_texturecombiner, 0)
+{
+	//ATSB: Stubbed
 }
 
 //
@@ -174,10 +168,6 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	byte* png;
 	int w;
 	int h;
-
-	if (r_fillmode.value <= 0) {
-		return;
-	}
 
 	// get translation index
 	texnum = texturetranslation[texnum];
@@ -444,10 +434,6 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	int w;
 	int h;
 
-	if (r_fillmode.value <= 0) {
-		return;
-	}
-
 	if ((spritenum == cursprite) && (pal == curtrans)) {
 		return;
 	}
@@ -577,10 +563,6 @@ static dtexture envtexture = 0;
 void GL_BindEnvTexture(void) {
 	rcolor rgb[16];
 
-	if (r_fillmode.value <= 0) {
-		return;
-	}
-
 	dmemset(rgb, 0xff, sizeof(rcolor) * 16);
 
 	if (envtexture == 0) {
@@ -611,10 +593,6 @@ void GL_UpdateEnvTexture(rcolor color) {
 	int i;
 
 	if (!has_GL_ARB_multitexture) {
-		return;
-	}
-
-	if (r_fillmode.value <= 0) {
 		return;
 	}
 
@@ -669,10 +647,6 @@ void GL_UnloadTexture(dtexture* texture) {
 
 void GL_SetTextureUnit(int unit, dboolean enable) {
 	if (!has_GL_ARB_multitexture) {
-		return;
-	}
-
-	if (r_fillmode.value <= 0) {
 		return;
 	}
 

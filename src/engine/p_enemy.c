@@ -354,14 +354,13 @@ void T_MobjExplode(mobjexp_t* mexp) {
 // returns false if the move is blocked.
 //
 
-fixed_t xspeed[8] = { FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000 };
+fixed_t	xspeed[8] = { FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000 };
 fixed_t yspeed[8] = { 0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000 };
 
 dboolean P_Move(mobj_t* actor) {
 	fixed_t    tryx;
 	fixed_t    tryy;
-	line_t* ld;
-	dboolean   try_ok;
+	line_t*		ld;
 	dboolean   good;
 
 	if (actor->movedir == DI_NODIR) {
@@ -379,9 +378,7 @@ dboolean P_Move(mobj_t* actor) {
 	tryx = actor->x + actor->info->speed * xspeed[actor->movedir];
 	tryy = actor->y + actor->info->speed * yspeed[actor->movedir];
 
-	try_ok = P_TryMove(actor, tryx, tryy);
-
-	if (!try_ok) {
+	if (!P_TryMove(actor, tryx, tryy)) {
 		// open any specials
 		if (actor->flags & MF_FLOAT && floatok) {
 			// must adjust height
@@ -391,8 +388,6 @@ dboolean P_Move(mobj_t* actor) {
 			else {
 				actor->z -= FLOATSPEED;
 			}
-
-			//actor->flags |= MF_INFLOAT;
 			return true;
 		}
 
@@ -402,6 +397,7 @@ dboolean P_Move(mobj_t* actor) {
 
 		actor->movedir = DI_NODIR;
 		good = false;
+
 		while (numspechit--) {
 			ld = spechit[numspechit];
 			// if the special is not a door that can be opened,
@@ -415,8 +411,6 @@ dboolean P_Move(mobj_t* actor) {
 		numspechit = 0;
 		return good;
 	}
-	//else
-	//actor->flags &= ~MF_INFLOAT;
 
 	return true;
 }
@@ -434,9 +428,8 @@ dboolean P_Move(mobj_t* actor) {
 //
 
 dboolean P_TryWalk(mobj_t* actor) {
-	if (!P_Move(actor)) {
+	if (!P_Move(actor))
 		return false;
-	}
 
 	actor->movecount = P_Random() & 7;
 	return true;
@@ -911,27 +904,23 @@ void A_Tracer(mobj_t* actor) {
 // A_OnDeathTrigger
 //
 
-void A_OnDeathTrigger(mobj_t* actor) {
-	mobj_t* mo;
+void A_OnDeathTrigger(mobj_t* mo)
+{
+	mobj_t	*mo2;
 
-	if (!(actor->flags & MF_TRIGDEATH)) {
+	if (!(mo->flags & MF_TRIGDEATH)) {
 		return;
 	}
 
-	A_Fall(actor);
-
-	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
-		if (mo->player) {
-			continue;
-		}
-
-		if (mo != actor && mo->tid == actor->tid &&
-			mo->flags & MF_SHOOTABLE && mo->health > 0) {
+	for (mo2 = mobjhead.next; mo2 != &mobjhead; mo2 = mo2->next)
+	{
+		if ((mo2->tid == mo->tid) && (mo2->health > 0))
+		{
 			return;
 		}
 	}
 
-	P_QueueSpecial(actor);
+	P_QueueSpecial(mo);
 }
 
 //
@@ -1581,12 +1570,8 @@ void A_PainShootSkull(mobj_t* actor, angle_t angle) {
 		}
 	}
 
-	//
-	// if there are all ready 17 skulls on the level,
-	// don't spit another one
-	// 20120212 villsa - new compatibility flag to disable limit
-	//
-	if (compatflags & COMPATF_LIMITPAIN && count > 0x11) {
+	// if there are all ready 17 skulls on the level, don't spit another one
+	if (count >= 17) {
 		return;
 	}
 

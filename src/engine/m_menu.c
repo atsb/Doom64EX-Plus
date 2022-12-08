@@ -44,6 +44,7 @@
 #include <fcntl.h>
 #include "doomdef.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "m_cheat.h"
 #include "m_misc.h"
@@ -127,8 +128,6 @@ static int8_t     MenuBindMessage[256];
 static dboolean MenuBindActive = false;
 static dboolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
-static dboolean wireframeon = false;
-static dboolean lockmonstersmon = false;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
 static int      m_ScreenSize = 1;
@@ -214,7 +213,6 @@ void M_QuickSave(void);
 void M_QuickLoad(void);
 
 static int M_StringWidth(const int8_t* string);
-static int M_StringHeight(const int8_t* string);
 static int M_BigStringWidth(const int8_t* string);
 
 static void M_DrawThermo(int x, int y, int thermWidth, float thermDot);
@@ -974,14 +972,8 @@ CVAR_EXTERNAL(am_overlay);
 CVAR_EXTERNAL(r_skybox);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
-CVAR_EXTERNAL(compat_collision);
-CVAR_EXTERNAL(compat_limitpain);
 CVAR_EXTERNAL(compat_mobjpass);
-CVAR_EXTERNAL(compat_grabitems);
 CVAR_EXTERNAL(r_wipe);
-CVAR_EXTERNAL(r_rendersprites);
-CVAR_EXTERNAL(r_texturecombiner);
-CVAR_EXTERNAL(r_colorscale);
 CVAR_EXTERNAL(hud_disablesecretmessages);
 
 enum {
@@ -998,20 +990,14 @@ enum {
 	misc_context,
 	misc_header3,
 	misc_wipe,
-	misc_combine,
-	misc_sprites,
 	misc_skybox,
-	misc_rgbscale,
 	misc_header4,
 	misc_showkey,
 	misc_showlocks,
 	misc_amobjects,
 	misc_amoverlay,
 	misc_header5,
-	misc_comp_collision,
-	misc_comp_pain,
 	misc_comp_pass,
-	misc_comp_grab,
 	misc_disablesecretmessages,
 	misc_default,
 	misc_return,
@@ -1032,20 +1018,14 @@ menuitem_t MiscMenu[] = {
 	{2,"Use Context:",M_MiscChoice, 'u'},
 	{-1,"Rendering",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
-	{2,"Use Combiners:",M_MiscChoice, 'c' },
-	{2,"Sprite Pitch:",M_MiscChoice,'p'},
 	{2,"Skybox:",M_MiscChoice,'k'},
-	{2,"Color Scale:",M_MiscChoice,'o'},
 	{-1,"Automap",0 },
 	{2,"Key Pickups:",M_MiscChoice },
 	{2,"Locked Doors:",M_MiscChoice },
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
-	{2,"Collision:",M_MiscChoice,'c' },
-	{2,"Limit Lost Souls:",M_MiscChoice,'l'},
 	{2,"Tall Actors:",M_MiscChoice,'i'},
-	{2,"Grab High Items:",M_MiscChoice,'g'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
@@ -1065,20 +1045,14 @@ int8_t* MiscHints[misc_end] = {
 	"if enabled interactive objects will highlight when near",
 	NULL,
 	"enable the melt effect when completing a level",
-	"use texture combining - not supported by low-end cards",
-	"toggles billboard sprite rendering",
 	"toggle skies to render either normally or as skyboxes",
-	"scales the overall color RGB",
 	NULL,
 	"display key pickups in automap",
 	"colorize locked doors accordingly to the key in automap",
 	"set how objects are rendered in automap",
 	"render the automap into the player hud",
 	NULL,
-	"surrounding blockmaps are not checked for an object",
-	"limit max amount of lost souls spawned by pain elemental to 17",
 	"emulate infinite height bug for all solid actors",
-	"be able to grab high items by bumping into the sector it sits on",
 	"disable the secret message text",
 	NULL,
 	NULL
@@ -1093,19 +1067,13 @@ menudefault_t MiscDefault[] = {
 	{ &p_autorun, 1 },
 	{ &p_usecontext, 0 },
 	{ &r_wipe, 1 },
-	{ &r_texturecombiner, 1 },
-	{ &r_rendersprites, 1 },
 	{ &r_skybox, 0 },
-	{ &r_colorscale, 0 },
 	{ &hud_disablesecretmessages, 0 },
 	{ &am_showkeymarkers, 0 },
 	{ &am_showkeycolors, 0 },
 	{ &am_drawobjects, 0 },
 	{ &am_overlay, 0 },
-	{ &compat_collision, 1 },
-	{ &compat_limitpain, 1 },
 	{ &compat_mobjpass, 1 },
-	{ &compat_grabitems, 1 },
 	{ NULL, -1 }
 };
 
@@ -1201,20 +1169,8 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &p_autorun);
 		break;
 
-	case misc_combine:
-		M_SetOptionValue(choice, 0, 1, 1, &r_texturecombiner);
-		break;
-
-	case misc_sprites:
-		M_SetOptionValue(choice, 1, 2, 1, &r_rendersprites);
-		break;
-
 	case misc_skybox:
 		M_SetOptionValue(choice, 0, 1, 1, &r_skybox);
-		break;
-
-	case misc_rgbscale:
-		M_SetOptionValue(choice, 0, 2, 1, &r_colorscale);
 		break;
 
 	case misc_disablesecretmessages:
@@ -1237,20 +1193,8 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &am_overlay);
 		break;
 
-	case misc_comp_collision:
-		M_SetOptionValue(choice, 0, 1, 1, &compat_collision);
-		break;
-
-	case misc_comp_pain:
-		M_SetOptionValue(choice, 0, 1, 1, &compat_limitpain);
-		break;
-
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
-		break;
-
-	case misc_comp_grab:
-		M_SetOptionValue(choice, 0, 1, 1, &compat_grabitems);
 		break;
 	}
 }
@@ -1259,7 +1203,6 @@ void M_DrawMisc(void) {
 	static const int8_t* autoruntype[2] = { "Off", "On" };
 	static const int8_t* mapdisplaytype[2] = { "Hide", "Show" };
 	static const int8_t* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
-	static const int8_t* rgbscaletype[3] = { "1x", "2x", "4x" };
 	static const int8_t* disablesecretmessages[2] = { "Enabled", "Disabled" };
 	int y;
 
@@ -1290,18 +1233,12 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
-	DRAWMISCITEM(misc_combine, r_texturecombiner.value, msgNames);
-	DRAWMISCITEM(misc_sprites, r_rendersprites.value - 1, msgNames);
 	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);
-	DRAWMISCITEM(misc_rgbscale, r_colorscale.value, rgbscaletype);
 	DRAWMISCITEM(misc_showkey, am_showkeymarkers.value, mapdisplaytype);
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);
 	DRAWMISCITEM(misc_amobjects, am_drawobjects.value, objectdrawtype);
 	DRAWMISCITEM(misc_amoverlay, am_overlay.value, msgNames);
-	DRAWMISCITEM(misc_comp_collision, compat_collision.value, msgNames);
-	DRAWMISCITEM(misc_comp_pain, compat_limitpain.value, msgNames);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
-	DRAWMISCITEM(misc_comp_grab, compat_grabitems.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 
 #undef DRAWMISCITEM
@@ -2241,7 +2178,7 @@ void M_DrawPassword(void) {
 	byte* passData;
 	int i = 0;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
 #endif
 	{
@@ -2462,7 +2399,6 @@ void M_DrawFeaturesMenu(void);
 CVAR_EXTERNAL(sv_lockmonsters);
 
 enum {
-	features_levels = 0,
 	features_invulnerable,
 	features_healthboost,
 	features_securitykeys,
@@ -2470,16 +2406,10 @@ enum {
 	features_mapeverything,
 	features_lockmonsters,
 	features_noclip,
-	features_wireframe,
 	features_end
 } features_e;
 
-#define FEATURESWARPLEVEL    "Warp To Level"
-#define FEATURESWARPFUN        "Warp To Fun"
-#define FEATURESWARPSINGLE  "Warp To PWAD"
-
 menuitem_t FeaturesMenu[] = {
-	{2,FEATURESWARPLEVEL,M_DoFeature,'l'},
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
@@ -2487,7 +2417,6 @@ menuitem_t FeaturesMenu[] = {
 	{2,"Map Everything",M_DoFeature,'m'},
 	{2,"Lock Monsters",M_DoFeature,'o'},
 	{2,"Wall Blocking",M_DoFeature,'w'},
-	{2,"Wireframe Mode",M_DoFeature,'r'},
 };
 
 menu_t featuresDef = {
@@ -2517,14 +2446,8 @@ void M_Features(int choice) {
 void M_DrawFeaturesMenu(void) {
 	mapdef_t* map = P_GetMapInfo(levelwarp + 1);
 
-	/*Warp To Level*/
-	M_DrawSmbString(map->mapname, &featuresDef, features_levels);
-
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);
-
-	/*Wireframe Mode*/
-	M_DrawSmbString(msgNames[wireframeon], &featuresDef, features_wireframe);
 
 	/*Invulnerable*/
 	M_DrawSmbString(msgNames[players[consoleplayer].cheats & CF_GODMODE ? 1 : 0],
@@ -2545,43 +2468,12 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Full Keys*/
 	M_DrawSmbString(showfullitemvalue[2] ? "100%%" : "-", &featuresDef, features_securitykeys);
-
-	switch (map->type) {
-	case 0:
-		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPLEVEL);
-		break;
-	case 1:
-		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPFUN);
-		break;
-	case 2:
-		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPSINGLE);
-		break;
-	}
 }
 
 void M_DoFeature(int choice) {
 	int i = 0;
 
 	switch (itemOn) {
-	case features_levels:
-		if (choice) {
-			levelwarp++;
-			if (levelwarp >= 39) {
-				if (choice == 2) {
-					levelwarp = 0;
-				}
-				else {
-					levelwarp = 39;
-				}
-			}
-		}
-		else {
-			levelwarp--;
-			if (levelwarp <= 0) {
-				levelwarp = 0;
-			}
-		}
-		break;
 
 	case features_invulnerable:
 		if (choice) {
@@ -2648,17 +2540,12 @@ void M_DoFeature(int choice) {
 			CON_CvarSetValue(sv_lockmonsters.name, 0);
 		}
 		break;
-
-	case features_wireframe:
-		R_DrawWireframe(choice);
-		wireframeon = choice;
-		break;
 	}
 
 	S_StartSound(NULL, sfx_switch2);
 }
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 #include "g_controls.h"
 
@@ -2943,7 +2830,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	controls_gamepad,
 #endif
 	controls_return,
@@ -2953,7 +2840,7 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{1,"Gamepad",M_ControlChoice, 'g'},
 #endif
 	{1,"/r Return",M_Return, 0x20}
@@ -2962,7 +2849,7 @@ menuitem_t ControlsMenu[] = {
 int8_t* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	"configure gamepad functionality",
 #endif
 	NULL
@@ -2995,7 +2882,7 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
@@ -3651,27 +3538,6 @@ static int M_StringWidth(const int8_t* string) {
 }
 
 //
-// M_StringHeight
-// Find string height from hu_font chars
-//
-
-static int M_StringHeight(const int8_t* string) {
-	int i;
-	int h;
-	int height = ST_FONTWHSIZE;
-
-	h = height;
-
-	for (i = 0; i < dstrlen(string); i++) {
-		if (string[i] == '\n') {
-			h += height;
-		}
-	}
-
-	return h;
-}
-
-//
 // M_BigStringWidth
 // Find string width from bigfont chars
 //
@@ -4007,7 +3873,6 @@ static void M_DrawThermo(int x, int y, int thermWidth, float thermDot) {
 // M_SetThumbnail
 //
 
-static dtexture thumbnail = 0;
 static int8_t thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
@@ -4121,7 +3986,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 const symboldata_t xinputbutons[12] = {
 	{ 0, 0, 15, 16 },   // B
@@ -4303,7 +4168,7 @@ dboolean M_Responder(event_t* ev) {
 		return false;
 	}
 
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 	switch (ch) {
 	case BUTTON_DPAD_UP:
@@ -4551,17 +4416,7 @@ dboolean M_Responder(event_t* ev) {
 				}
 
 				currentMenu->lastOn = itemOn;
-				if (currentMenu == &featuresDef) {
-					if (currentMenu->menuitems[itemOn].routine == M_DoFeature &&
-						itemOn == features_levels) {
-						gameaction = ga_warplevel;
-						gamemap = nextmap = levelwarp + 1;
-						M_ClearMenus();
-						dmemset(passwordData, 0xff, 16);
-						return true;
-					}
-				}
-				else if (currentMenu->menuitems[itemOn].status >= 2 ||
+				if (currentMenu->menuitems[itemOn].status >= 2 ||
 					currentMenu->menuitems[itemOn].status == -2) {
 					currentMenu->menuitems[itemOn].routine(2);
 				}
@@ -4908,7 +4763,7 @@ void M_Drawer(void) {
 		// if menu item is static but has text, then display it as gray text
 		// used for subcategories
 		//
-		else if (currentMenu->menuitems[i].name != "") {
+		else if (currentMenu->menuitems[i].name != NULL) {
 			if (!currentMenu->smallfont) {
 				Draw_BigText(
 					-1,
@@ -5002,7 +4857,7 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (xgamepad.connected && currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
@@ -5149,7 +5004,7 @@ void M_Ticker(void) {
 		SaveDef.prevMenu = &PauseDef;
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	//
 	// hide mouse menu if gamepad controller is plugged in
 	//
@@ -5160,7 +5015,7 @@ void M_Ticker(void) {
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&
-		currentMenu->menuitems[0].name != "") {
+		currentMenu->menuitems[0].name != NULL) {
 		// bump page offset up
 		if (itemOn == 1) {
 			currentMenu->menupageoffset = 0;

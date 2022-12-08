@@ -71,17 +71,23 @@ static dboolean nosound = false;
 static dboolean nomusic = false;
 static int lastmusic = 0;
 
-CVAR_CMD(s_sfxvol, 80) {
-	if (cvar->value < 0.0f) {
-		return;
-	}
-	S_SetSoundVolume(cvar->value);
+CVAR_CMD(s_sfxvol, 80)  {
+    if(cvar->value < 0.0f) {
+        return;
+    }
+    S_SetSoundVolume(cvar->value);
 }
-CVAR_CMD(s_musvol, 80) {
-	if (cvar->value < 0.0f) {
-		return;
-	}
-	S_SetMusicVolume(cvar->value);
+CVAR_CMD(s_musvol, 80)  {
+    if(cvar->value < 0.0f) {
+        return;
+    }
+    S_SetMusicVolume(cvar->value);
+}
+CVAR_CMD(s_gain, 1)     {
+    if(cvar->value < 0.0f) {
+        return;
+    }
+    S_SetGainOutput(cvar->value);
 }
 
 //
@@ -97,24 +103,25 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep);
 //
 
 void S_Init(void) {
-	if (M_CheckParm("-nosound")) {
-		nosound = true;
-		CON_DPrintf("Sounds disabled\n");
-	}
+    if(M_CheckParm("-nosound")) {
+        nosound = true;
+        CON_DPrintf("Sounds disabled\n");
+    }
 
-	if (M_CheckParm("-nomusic")) {
-		nomusic = true;
-		CON_DPrintf("Music disabled\n");
-	}
+    if(M_CheckParm("-nomusic")) {
+        nomusic = true;
+        CON_DPrintf("Music disabled\n");
+    }
 
-	if (nosound && nomusic) {
-		return;
-	}
+    if(nosound && nomusic) {
+        return;
+    }
 
-	I_InitSequencer();
+    I_InitSequencer();
 
-	S_SetMusicVolume(s_musvol.value);
-	S_SetSoundVolume(s_sfxvol.value);
+    S_SetMusicVolume(s_musvol.value);
+    S_SetSoundVolume(s_sfxvol.value);
+    S_SetGainOutput(s_gain.value);
 }
 
 //
@@ -122,7 +129,7 @@ void S_Init(void) {
 //
 
 void S_SetSoundVolume(float volume) {
-	I_SetSoundVolume(volume);
+    I_SetSoundVolume(volume);
 }
 
 //
@@ -130,7 +137,15 @@ void S_SetSoundVolume(float volume) {
 //
 
 void S_SetMusicVolume(float volume) {
-	I_SetMusicVolume(volume);
+    I_SetMusicVolume(volume);
+}
+
+//
+// S_SetGainOutput
+//
+
+void S_SetGainOutput(float db) {
+    I_SetGain(db);
 }
 
 //
@@ -138,16 +153,16 @@ void S_SetMusicVolume(float volume) {
 //
 
 void S_StartMusic(int mnum) {
-	if (nomusic) {
-		return;
-	}
+    if(nomusic) {
+        return;
+    }
 
-	if (mnum <= -1) {
-		return;
-	}
+    if(mnum <= -1) {
+        return;
+    }
 
-	I_StartMusic(mnum);
-	lastmusic = mnum;
+    I_StartMusic(mnum);
+    lastmusic = mnum;
 }
 
 //
@@ -155,8 +170,8 @@ void S_StartMusic(int mnum) {
 //
 
 void S_StopMusic(void) {
-	I_StopSound(NULL, lastmusic);
-	lastmusic = 0;
+    I_StopSound(NULL, lastmusic);
+    lastmusic = 0;
 }
 
 //
@@ -164,19 +179,19 @@ void S_StopMusic(void) {
 //
 
 void S_ResetSound(void) {
-	int i;
+    int i;
 
-	if (nosound && nomusic) {
-		return;
-	}
+    if(nosound && nomusic) {
+        return;
+    }
 
-	I_ResetSound();
+    I_ResetSound();
 
-	// villsa 12282013 - make sure we clear all sound sources
-	// during level transition
-	for (i = 0; i < I_GetMaxChannels(); i++) {
-		I_RemoveSoundSource(i);
-	}
+    // villsa 12282013 - make sure we clear all sound sources
+    // during level transition
+    for(i = 0; i < I_GetMaxChannels(); i++) {
+        I_RemoveSoundSource(i);
+    }
 }
 
 //
@@ -184,11 +199,11 @@ void S_ResetSound(void) {
 //
 
 void S_PauseSound(void) {
-	if (nosound && nomusic) {
-		return;
-	}
+    if(nosound && nomusic) {
+        return;
+    }
 
-	I_PauseSound();
+    I_PauseSound();
 }
 
 //
@@ -196,11 +211,11 @@ void S_PauseSound(void) {
 //
 
 void S_ResumeSound(void) {
-	if (nosound && nomusic) {
-		return;
-	}
+    if(nosound && nomusic) {
+        return;
+    }
 
-	I_ResumeSound();
+    I_ResumeSound();
 }
 
 //
@@ -208,7 +223,7 @@ void S_ResumeSound(void) {
 //
 
 void S_StopSound(mobj_t* origin, int sfx_id) {
-	I_StopSound((sndsrc_t*)origin, sfx_id);
+    I_StopSound((sndsrc_t*)origin, sfx_id);
 }
 
 //
@@ -216,7 +231,7 @@ void S_StopSound(mobj_t* origin, int sfx_id) {
 //
 
 int S_GetActiveSounds(void) {
-	return I_GetVoiceCount();
+    return I_GetVoiceCount();
 }
 
 //
@@ -224,18 +239,18 @@ int S_GetActiveSounds(void) {
 //
 
 void S_RemoveOrigin(mobj_t* origin) {
-	int     channels;
-	mobj_t* source;
-	int     i;
+    int     channels;
+    mobj_t* source;
+    int     i;
 
-	channels = I_GetMaxChannels();
+    channels = I_GetMaxChannels();
 
-	for (i = 0; i < channels; i++) {
-		source = (mobj_t*)I_GetSoundSource(i);
-		if (origin == source) {
-			I_RemoveSoundSource(i);
-		}
-	}
+    for(i = 0; i < channels; i++) {
+        source = (mobj_t*)I_GetSoundSource(i);
+        if(origin == source) {
+            I_RemoveSoundSource(i);
+        }
+    }
 }
 
 //
@@ -243,41 +258,41 @@ void S_RemoveOrigin(mobj_t* origin) {
 //
 
 void S_UpdateSounds(void) {
-	int     i;
-	int     audible;
-	int     volume;
-	int     sep;
-	mobj_t* source;
-	int     channels;
+    int     i;
+    int     audible;
+    int     volume;
+    int     sep;
+    mobj_t* source;
+    int     channels;
 
-	channels = I_GetMaxChannels();
+    channels = I_GetMaxChannels();
 
-	for (i = 0; i < channels; i++) {
-		source = (mobj_t*)I_GetSoundSource(i);
+    for(i = 0; i < channels; i++) {
+        source = (mobj_t*)I_GetSoundSource(i);
 
-		if (source == NULL) {
-			continue;
-		}
+        if(source == NULL) {
+            continue;
+        }
 
-		// initialize parameters
-		volume = NORM_VOLUME;
-		sep = NORM_SEP;
+        // initialize parameters
+        volume = NORM_VOLUME;
+        sep = NORM_SEP;
 
-		// check non-local sounds for distance clipping
-		// or modify their params
-		if (source == players[consoleplayer].mo &&
-			players[consoleplayer].cameratarget == players[consoleplayer].mo) {
-			audible = 1;
-			sep = NORM_SEP;
-		}
-		else {
-			audible = S_AdjustSoundParams(source->x, source->y, &volume, &sep);
-		}
+        // check non-local sounds for distance clipping
+        // or modify their params
+        if(source == players[consoleplayer].mo &&
+                players[consoleplayer].cameratarget == players[consoleplayer].mo) {
+            audible = 1;
+            sep = NORM_SEP;
+        }
+        else {
+            audible = S_AdjustSoundParams(source->x, source->y, &volume, &sep);
+        }
 
-		if (audible) {
-			I_UpdateChannel(i, volume, sep);
-		}
-	}
+        if(audible) {
+            I_UpdateChannel(i, volume, sep);
+        }
+    }
 }
 
 //
@@ -285,41 +300,41 @@ void S_UpdateSounds(void) {
 //
 
 void S_StartSound(mobj_t* origin, int sfx_id) {
-	int volume;
-	int sep;
-	int reverb;
+    int volume;
+    int sep;
+    int reverb;
 
-	if (nosound) {
-		return;
-	}
+    if(nosound) {
+        return;
+    }
 
-	if (origin && origin != players[consoleplayer].cameratarget) {
-		if (!S_AdjustSoundParams(origin->x, origin->y, &volume, &sep)) {
-			return;
-		}
-	}
-	else {
-		sep = NORM_SEP;
-		volume = NORM_VOLUME;
-	}
+    if(origin && origin != players[consoleplayer].cameratarget) {
+        if(!S_AdjustSoundParams(origin->x, origin->y, &volume, &sep)) {
+            return;
+        }
+    }
+    else {
+        sep = NORM_SEP;
+        volume = NORM_VOLUME;
+    }
 
-	reverb = 0;
+    reverb = 0;
 
-	if (origin) {
-		subsector_t* subsector;
+    if(origin) {
+        subsector_t* subsector;
 
-		subsector = R_PointInSubsector(origin->x, origin->y);
+        subsector = R_PointInSubsector(origin->x, origin->y);
 
-		if (subsector->sector->flags & MS_REVERB) {
-			reverb = 16;
-		}
-		else if (subsector->sector->flags & MS_REVERBHEAVY) {
-			reverb = 32;
-		}
-	}
+        if(subsector->sector->flags & MS_REVERB) {
+            reverb = 16;
+        }
+        else if(subsector->sector->flags & MS_REVERBHEAVY) {
+            reverb = 32;
+        }
+    }
 
-	// Assigns the handle to one of the channels in the mix/output buffer.
-	I_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
+    // Assigns the handle to one of the channels in the mix/output buffer.
+    I_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
 }
 
 //
@@ -332,53 +347,54 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
 //
 
 int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep) {
-	fixed_t     approx_dist;
-	angle_t     angle;
-	mobj_t* listener;
-	player_t* player;
+    fixed_t     approx_dist;
+    angle_t     angle;
+    mobj_t*        listener;
+    player_t*    player;
 
-	player = &players[consoleplayer];
+    player = &players[consoleplayer];
 
-	listener = player->cameratarget;
+    listener = player->cameratarget;
 
-	// calculate the distance to sound origin
-	//  and clip it if necessary
+    // calculate the distance to sound origin
+    //  and clip it if necessary
 
-	// From _GG1_ p.428. Appox. eucledian distance fast.
-	approx_dist = P_AproxDistance(listener->x - x, listener->y - y);
+    // From _GG1_ p.428. Appox. eucledian distance fast.
+    approx_dist = P_AproxDistance(listener->x - x, listener->y - y);
 
-	if (approx_dist > S_CLIPPING_DIST) {
-		return 0;
-	}
+    if(approx_dist > S_CLIPPING_DIST) {
+        return 0;
+    }
 
-	if (listener->x != x || listener->y != y) {
-		// angle of source to listener
-		angle = R_PointToAngle2(listener->x, listener->y, x, y);
+    if(listener->x != x || listener->y != y) {
+        // angle of source to listener
+        angle = R_PointToAngle2(listener->x, listener->y, x, y);
 
-		if (angle <= listener->angle) {
-			angle += 0xffffffff;
-		}
-		angle -= listener->angle;
+        if(angle <= listener->angle) {
+            angle += 0xffffffff;
+        }
+        angle -= listener->angle;
 
-		// stereo separation
-		*sep = (NORM_VOLUME + 1) - (FixedMul(S_STEREO_SWING, dsin(angle)) >> FRACBITS);
-	}
-	else {
-		*sep = NORM_SEP;
-	}
+        // stereo separation
+        *sep = (NORM_VOLUME + 1) - (FixedMul(S_STEREO_SWING, dsin(angle)) >> FRACBITS);
+    }
+    else {
+        *sep = NORM_SEP;
+    }
 
-	// volume calculation
-	if (approx_dist < S_CLOSE_DIST) {
-		*vol = NORM_VOLUME;
-	}
-	else {
-		// distance effect
-		approx_dist >>= FRACBITS;
-		*vol = (((-approx_dist << 7) + (approx_dist)) + S_MAX_DIST) / S_ATTENUATOR;
-	}
+    // volume calculation
+    if(approx_dist < S_CLOSE_DIST) {
+        *vol = NORM_VOLUME;
+    }
+    else {
+        // distance effect
+        approx_dist >>= FRACBITS;
+        *vol = (((-approx_dist << 7) + (approx_dist)) + S_MAX_DIST) / S_ATTENUATOR;
+    }
 
-	return (*vol > 0);
+    return (*vol > 0);
 }
+
 
 //
 // S_RegisterCvars
@@ -388,8 +404,12 @@ CVAR_EXTERNAL(s_soundfont);
 CVAR_EXTERNAL(s_driver);
 
 void S_RegisterCvars(void) {
-	CON_CvarRegister(&s_sfxvol);
-	CON_CvarRegister(&s_musvol);
-	CON_CvarRegister(&s_soundfont);
-	CON_CvarRegister(&s_driver);
+    CON_CvarRegister(&s_sfxvol);
+    CON_CvarRegister(&s_musvol);
+    CON_CvarRegister(&s_gain);
+    CON_CvarRegister(&s_soundfont);
 }
+
+
+
+

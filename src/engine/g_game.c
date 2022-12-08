@@ -58,6 +58,7 @@
 #include "g_local.h"
 #include "m_password.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "g_demo.h"
 
 #include "deh_main.h"
@@ -146,10 +147,7 @@ NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE);
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
 NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
-NETCVAR_PARAM(compat_collision, 1, compatflags, COMPATF_COLLISION);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
-NETCVAR_PARAM(compat_limitpain, 1, compatflags, COMPATF_LIMITPAIN);
-NETCVAR_PARAM(compat_grabitems, 1, compatflags, COMPATF_REACHITEMS);
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
@@ -175,10 +173,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&sv_allowcheats);
 	CON_CvarRegister(&sv_friendlyfire);
 	CON_CvarRegister(&sv_keepitems);
-	CON_CvarRegister(&compat_collision);
 	CON_CvarRegister(&compat_mobjpass);
-	CON_CvarRegister(&compat_limitpain);
-	CON_CvarRegister(&compat_grabitems);
 }
 
 //
@@ -555,7 +550,6 @@ void G_SaveDefaults(void) {
 //
 
 void G_ReloadDefaults(void) {
-	I_GetRandomTimeSeed() + gametic;
 	gameflags = savegameflags;
 	compatflags = savecompatflags;
 }
@@ -855,10 +849,7 @@ static void G_SetGameFlags(void) {
 	if (p_allowjump.value > 0)      gameflags |= GF_ALLOWJUMP;
 	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
 
-	if (compat_collision.value > 0) compatflags |= COMPATF_COLLISION;
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
-	if (compat_limitpain.value > 0) compatflags |= COMPATF_LIMITPAIN;
-	if (compat_grabitems.value > 0) compatflags |= COMPATF_REACHITEMS;
 }
 
 //
@@ -896,7 +887,6 @@ void G_DoLoadLevel(void) {
 		return;
 	}
 
-	forcecollision = map->oldcollision;
 	forcejump = map->allowjump;
 	forcefreelook = map->allowfreelook;
 
@@ -1139,8 +1129,6 @@ void G_PlayerReborn(int player) {
 	dboolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
-	int         artifacts;
-	dboolean    backpack;
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(dboolean) * NUMCARDS);
@@ -1148,8 +1136,6 @@ void G_PlayerReborn(int player) {
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
-	backpack = players[player].backpack;
-	artifacts = players[player].artifacts;
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
 	secretcount = players[player].secretcount;
@@ -1183,20 +1169,6 @@ void G_PlayerReborn(int player) {
 	if (netgame) {
 		for (i = 0; i < NUMCARDS; i++) {
 			players[player].cards[i] = cards[i];
-		}
-
-		if (gameflags & GF_KEEPITEMS) {
-			p->artifacts = artifacts;
-			p->backpack = backpack;
-
-			for (i = 0; i < NUMAMMO; i++) {
-				p->ammo[i] = pammo[i];
-				p->maxammo[i] = pmaxammo[i];
-			}
-
-			for (i = 0; i < NUMWEAPONS; i++) {
-				p->weaponowned[i] = wpns[i];
-			}
 		}
 	}
 
@@ -1622,8 +1594,8 @@ void G_SetFastParms(int fast_pending) {
 		/* only change if necessary */
 		if ((fast = fast_pending)) {
 			for (i = S_SARG_STND; i <= S_SARG_PAIN2; i++) {
-				if (states[i].tics != 1) { // killough 4/10/98
-					states[i].tics >>= 1;    // don't change 1->0 since it causes cycles
+				if (states[i].info_tics != 1) { // killough 4/10/98
+					states[i].info_tics >>= 1;    // don't change 1->0 since it causes cycles
 				}
 			}
 			mobjinfo[MT_PROJ_BRUISER1].speed = 20 * FRACUNIT;
@@ -1633,7 +1605,7 @@ void G_SetFastParms(int fast_pending) {
 		}
 		else {
 			for (i = S_SARG_STND; i <= S_SARG_PAIN2; i++) {
-				states[i].tics <<= 1;
+				states[i].info_tics <<= 1;
 			}
 
 			mobjinfo[MT_PROJ_BRUISER1].speed = 15 * FRACUNIT;

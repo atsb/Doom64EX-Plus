@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#if defined(_WIN32) && defined(_USE_XINPUT)
+#if defined(_WIN32) && defined(USE_XINPUT)
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -69,10 +69,10 @@ dboolean P_SetMobjState(mobj_t* mobj, statenum_t state) {
 		}
 
 		st = &states[state];
-		mobj->frame = st->frame;
+		mobj->frame = st->info_frame;
 
 		mobj->state = st;
-		mobj->tics = st->tics;
+		mobj->tics = st->info_tics;
 		mobj->sprite = st->sprite;
 
 		// Modified handling.
@@ -630,9 +630,9 @@ mobj_t* P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type) {
 
 	st = &states[info->spawnstate];
 	mobj->state = st;
-	mobj->tics = st->tics;
+	mobj->tics = st->info_tics;
 	mobj->sprite = st->sprite;
-	mobj->frame = st->frame;
+	mobj->frame = st->info_frame;
 
 	P_SetThingPosition(mobj);   // set subsector and/or block links
 

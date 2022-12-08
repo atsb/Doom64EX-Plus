@@ -25,7 +25,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __OpenBSD__
+#include <SDL_timer.h>
+#else
 #include <SDL2/SDL_timer.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -46,6 +51,7 @@
 #include "doomdef.h"
 #include "m_misc.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_net.h"
 #include "g_demo.h"
 #include "d_main.h"
@@ -55,7 +61,7 @@
 #include "i_audio.h"
 #include "gl_draw.h"
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
 
@@ -68,15 +74,29 @@ CVAR(v_accessibility, 0);
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
+#ifdef DOOM_UNIX_INSTALL
+#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
+#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
+#define GetBasePath()	SDL_GetBasePath();
+#elif defined __ANDROID__
+#define GetBasePath()   SDL_AndroidGetInternalStoragePath();
+#endif
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
+#define Free(userdir)	free(userdir);
+#else
+#define Free(userdir)	SDL_free(userdir);
+#endif
+
+
 ticcmd_t        emptycmd;
-static int32    I_GetTime_Scale = 1 << 24;
 
 //
 // I_uSleep
 //
 
 void I_Sleep(intptr_t usecs) {
-#if defined _WIN32
+#ifdef _WIN32
 	Sleep((DWORD)usecs);
 #else
 	struct timespec tc;
@@ -108,14 +128,6 @@ static int I_GetTimeNormal(void) {
 }
 
 //
-// I_GetTime_Scaled
-//
-
-static int I_GetTime_Scaled(void) {
-	return ((int32)I_GetTimeNormal() * I_GetTime_Scale >> 24);
-}
-
-//
 // I_GetTime_Error
 //
 
@@ -139,7 +151,6 @@ void I_InitClockRate(void) {
 static uint32_t start_displaytime;
 static uint32_t displaytime;
 static dboolean InDisplay = false;
-static int saved_gametic = -1;
 
 dboolean realframe = false;
 
@@ -229,19 +240,14 @@ ticcmd_t* I_BaseTiccmd(void) {
 
 int8_t* I_GetUserDir(void) 
 {
-#ifdef DOOM_UNIX_INSTALL
-	return SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32
-	return SDL_GetBasePath();
-#endif
+	return GetBasePath();
 }
 
-/**
+/*
  * @brief Get the directory which contains this program.
  *
  * @return Fully-qualified path that ends with a separator or NULL if not 
 
-/**
  * @brief Find a regular file in the user-writeable directory.
  *
  * @return Fully-qualified path or NULL if not found.
@@ -254,22 +260,18 @@ int8_t* I_GetUserDir(void)
  *  portable fixed width types everywhere...  one day.
  *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
  */
-int8_t* I_GetUserFile(const int8_t* file) {
-	uint8_t* path, * userdir;
+int8_t* I_GetUserFile(int8_t* file) {
+	int8_t* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
 
-	path = (uint8_t*)malloc(512);
+	path = malloc(512);
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
+        Free(userdir);
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
-	free(userdir);
-#else
-	SDL_free(userdir);
-#endif
 	return path;
 }
 
@@ -279,31 +281,24 @@ int8_t* I_GetUserFile(const int8_t* file) {
  * @return Fully-qualified path or NULL if not found.
  * @note The returning value MUST be freed by the caller.
  */
-int8_t* I_FindDataFile(const int8_t* file) {
-	uint8_t* path, * dir;
+int8_t* I_FindDataFile(int8_t* file) {
+	int8_t *path, *dir;
 
-	path = (uint8_t*)malloc(512);
+	path = malloc(512);
 
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
-		free(dir);
-#else
-		SDL_free(dir);
-#endif
+         Free(dir);
+
 		if (I_FileExists(path))
 			return path;
 	}
 
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
-
-#if defined(__LINUX__) || defined(__OpenBSD__)
-		free(dir);
-#else
-		SDL_free(dir);
-#endif
+           
+          Free(dir);
 
 		if (I_FileExists(path))
 			return path;
@@ -331,13 +326,8 @@ int8_t* I_FindDataFile(const int8_t* file) {
 	}
 #endif
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
-	free(path);
-#else
-	SDL_free(path);
-#endif
+	Free(path);
 	
-
 	return NULL;
 }
 
@@ -494,7 +484,7 @@ void I_BeginRead(void) {
 // I_RegisterCvars
 //
 
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_rstickthreshold);
 CVAR_EXTERNAL(i_xinputscheme);
@@ -506,12 +496,11 @@ CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)
 	CON_CvarRegister(&i_rsticksensitivity);
 	CON_CvarRegister(&i_rstickthreshold);
 	CON_CvarRegister(&i_xinputscheme);
 #endif
-
 	CON_CvarRegister(&i_gamma);
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_interpolateframes);

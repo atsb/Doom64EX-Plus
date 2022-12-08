@@ -37,7 +37,13 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "d_main.h"
+
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
+
 #include "i_video.h"
 #include "m_misc.h"
 #include "i_system.h"

@@ -35,7 +35,12 @@
 #include "r_main.h"
 #include "i_system.h"
 #include "gl_texture.h"
+
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h> // Gibbon - for *
+#endif
 
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2
@@ -63,7 +68,6 @@ static int          console_head;
 static int          console_lineoffset;
 static int          console_minline;
 static dboolean     console_enabled = false;
-static int          console_pos = 0;//bottom of console, in pixels
 static int8_t         console_linebuffer[CON_BUFFERSIZE];
 static int          console_linelength;
 static dboolean     console_state = CST_UP;
@@ -329,7 +333,7 @@ dboolean CON_Responder(event_t* ev) {
 	case CST_LOWER:
 		if (ev->type == ev_keydown) {
 			switch (c) {
-			case '9':
+			case SDLK_BACKSLASH:
 				console_state = CST_UP;
 				console_enabled = false;
 				break;
@@ -434,7 +438,7 @@ dboolean CON_Responder(event_t* ev) {
 		// Why the hell do this?  It only works on UK/US keyboards
 		// Gibbon fixes it!
 			//if(c == '`') { <-- BOO!
-		if (c == '9') {
+		if (c == SDLK_BACKSLASH) {
 			if (ev->type == ev_keydown) {
 				console_state = CST_DOWN;
 				console_enabled = true;

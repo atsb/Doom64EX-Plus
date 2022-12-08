@@ -71,8 +71,8 @@ void I_Error(const int8_t* error, ...);
 void I_Printf(const int8_t* msg, ...);
 
 int8_t* I_GetUserDir(void);
-int8_t* I_GetUserFile(const int8_t* file);
-int8_t* I_FindDataFile(const int8_t* file);
+int8_t* I_GetUserFile(int8_t* file);
+int8_t* I_FindDataFile(int8_t* file);
 
 dboolean I_FileExists(const int8_t* path);
 

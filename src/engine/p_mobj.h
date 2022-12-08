@@ -169,7 +169,7 @@ typedef struct mobj_s {
 	angle_t             angle;    // orientation
 	angle_t             pitch;  // [kex] pitch orientation; for looking up/down
 	spritenum_t         sprite;    // used to find patch_t and flip value
-	dword                 frame;    // might be ORed with FF_FULLBRIGHT
+	int                 frame;    // might be ORed with FF_FULLBRIGHT
 
 	// Interaction info, by BLOCKMAP.
 	// Links in blocks (if needed).
@@ -197,9 +197,9 @@ typedef struct mobj_s {
 	mobjtype_t          type;
 	mobjinfo_t* info;    // &mobjinfo[mobj->type]
 
-	dword                 tics;    // state tic counter
+	intptr_t			tics;    // state tic counter
 	state_t* state;
-	dword               flags;
+	intptr_t			flags;
 	int                 health;
 
 	// [d64] alpha value for rendering

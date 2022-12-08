@@ -54,7 +54,7 @@
 #include "p_saveg.h"
 
 int      myargc;
-int8_t** myargv;
+char**   myargv;
 
 //
 // M_CheckParm
@@ -76,7 +76,7 @@ int M_CheckParm(const int8_t* check) {
 }
 
 // Safe, portable vsnprintf().
-int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
+int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args)
 {
 	int result;
 
@@ -90,7 +90,7 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
 	// that is one byte shorter; otherwise this function is unsafe.
 	result = vsnprintf(buf, buf_len, s, args);
 
-	// If truncated, change the final char in the buffer to a \0.
+	// If truncated, change the final int8_t in the buffer to a \0.
 	// A negative result indicates a truncated buffer on Windows.
 	if (result < 0 || result >= buf_len)
 	{
@@ -106,9 +106,9 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
 // allocated.
 //
 
-char* M_StringDuplicate(const char* orig)
+int8_t* M_StringDuplicate(const int8_t* orig)
 {
-	char* result;
+	int8_t* result;
 
 	result = strdup(orig);
 
@@ -390,7 +390,7 @@ void M_ScreenShot(void) {
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-bool M_StringCopy(char* dest, const char* src, size_t dest_size)
+bool M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size)
 {
 	size_t len;
 

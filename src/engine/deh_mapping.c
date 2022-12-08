@@ -65,7 +65,7 @@ static void *GetStructField(void *structptr,
                             deh_mapping_t *mapping,
                             deh_mapping_entry_t *entry)
 {
-    unsigned int offset;
+    intptr_t offset;
 
     offset = (uint8_t *)entry->location - (uint8_t *)mapping->base;
 
@@ -98,9 +98,6 @@ bool DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
     }
 
     location = GetStructField(structptr, mapping, entry);
-
-    //       printf("Setting %p::%s to %i (%i bytes)\n",
-    //               structptr, name, value, entry->size);
 
     // Set field content based on its type:
 

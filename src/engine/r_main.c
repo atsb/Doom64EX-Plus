@@ -81,30 +81,15 @@ uint32_t    glBindCalls = 0;
 dboolean        bRenderSky = false;
 
 CVAR(r_fov, 74.0);
-CVAR(r_fillmode, 1);
-CVAR(r_uniformtime, 0);
 CVAR(r_fog, 1);
 CVAR(r_wipe, 1);
-CVAR(r_drawtris, 0);
 CVAR(r_drawmobjbox, 0);
-CVAR(r_drawblockmap, 0);
-CVAR(r_drawtrace, 0);
-CVAR(r_rendersprites, 1);
-CVAR(r_drawfill, 0);
 CVAR(r_skybox, 0);
 CVAR(hud_disablesecretmessages, 0);
-
-CVAR_CMD(r_colorscale, 0) {
-	GL_SetColorScale();
-}
 
 CVAR_CMD(r_filter, 0) {
 	GL_DumpTextures();
 	GL_SetTextureFilter();
-}
-
-CVAR_CMD(r_texnonpowresize, 0) {
-	GL_DumpTextures();
 }
 
 CVAR_CMD(r_anisotropic, 0) {
@@ -112,24 +97,8 @@ CVAR_CMD(r_anisotropic, 0) {
 	GL_SetTextureFilter();
 }
 
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_usecontext);
-
-//
-// CMD_Wireframe
-//
-
-static CMD(Wireframe) {
-	dboolean b;
-
-	if (!param[0]) {
-		return;
-	}
-
-	b = datoi(param[0]) & 1;
-	R_DrawWireframe(b);
-}
 
 //
 // R_PointToAngle
@@ -292,8 +261,6 @@ void R_Init(void) {
 
 	GL_InitTextures();
 	GL_ResetTextures();
-
-	G_AddCommand("wireframe", CMD_Wireframe, 0);
 }
 
 //
@@ -531,20 +498,6 @@ static void R_SetViewClipping(angle_t angle) {
 }
 
 //
-// R_DrawWireframe
-//
-
-void R_DrawWireframe(dboolean enable) {
-	if (enable == true) {
-		CON_CvarSetValue(r_fillmode.name, 0);
-	}
-	else {  //Turn off wireframe and set device back to the way it was
-		CON_CvarSetValue(r_fillmode.name, 1);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-}
-
-//
 // R_Interpolate
 //
 
@@ -579,85 +532,6 @@ static void R_DrawReadDisk(void) {
 	Draw_Text(296, 8, WHITE, 1, 0, "**");
 
 	BusyDisk = true;
-}
-
-//
-// R_DrawBlockMap
-//
-
-static void R_DrawBlockMap(void) {
-	float   fx;
-	float   fy;
-	float   fz;
-	int     x;
-	int     y;
-	mobj_t* mo;
-
-	dglDisable(GL_TEXTURE_2D);
-	dglDepthRange(0.0f, 0.0f);
-	dglColor4ub(0, 128, 255, 255);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	mo = players[displayplayer].mo;
-	fz = F2D3D(mo->floorz);
-
-	for (x = bmaporgx; x < ((bmapwidth << MAPBLOCKSHIFT) + bmaporgx); x += INT2F(MAPBLOCKUNITS)) {
-		for (y = bmaporgy; y < ((bmapheight << MAPBLOCKSHIFT) + bmaporgy); y += INT2F(MAPBLOCKUNITS)) {
-			fx = F2D3D(x);
-			fy = F2D3D(y);
-
-			dglBegin(GL_POLYGON);
-			dglVertex3f(fx, fy, fz);
-			dglVertex3f(fx + MAPBLOCKUNITS, fy, fz);
-			dglVertex3f(fx + MAPBLOCKUNITS, fy + MAPBLOCKUNITS, fz);
-			dglVertex3f(fx, fy + MAPBLOCKUNITS, fz);
-			dglEnd();
-		}
-	}
-
-	dglDepthRange(0.0f, 1.0f);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	dglEnable(GL_TEXTURE_2D);
-}
-
-//
-// R_DrawRayTrace
-//
-
-static void R_DrawRayTrace(void) {
-	thinker_t* thinker;
-	tracedrawer_t* tdrawer;
-
-	for (thinker = thinkercap.next; thinker != &thinkercap; thinker = thinker->next) {
-		if (thinker->function.acp1 == (actionf_p1)T_TraceDrawer) {
-			rcolor c = WHITE;
-
-			tdrawer = ((tracedrawer_t*)thinker);
-
-			if (tdrawer->flags == PT_ADDLINES) {
-				c = D_RGBA(0, 0xff, 0, 0xff);
-			}
-			else if (tdrawer->flags == PT_ADDTHINGS) {
-				c = D_RGBA(0, 0, 0xff, 0xff);
-			}
-			else if (tdrawer->flags == PT_EARLYOUT) {
-				c = D_RGBA(0xff, 0, 0, 0xff);
-			}
-			else if (tdrawer->flags == (PT_ADDLINES | PT_ADDTHINGS)) {
-				c = D_RGBA(0, 0xff, 0xff, 0xff);
-			}
-
-			dglDepthRange(0.0f, 0.0f);
-			dglDisable(GL_TEXTURE_2D);
-			dglColor4ubv((byte*)&c);
-			dglBegin(GL_LINES);
-			dglVertex3f(F2D3D(tdrawer->x1), F2D3D(tdrawer->y1), F2D3D(tdrawer->z) - 8);
-			dglVertex3f(F2D3D(tdrawer->x2), F2D3D(tdrawer->y2), F2D3D(tdrawer->z) - 8);
-			dglEnd();
-			dglEnable(GL_TEXTURE_2D);
-			dglDepthRange(0.0f, 1.0f);
-		}
-	}
 }
 
 //
@@ -806,9 +680,6 @@ static void R_DrawContextWall(line_t* line) {
 //
 
 void R_RenderPlayerView(player_t* player) {
-	if (!r_fillmode.value) {
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
 
 	if (devparm) {
 		renderTic = I_GetTimeMS();
@@ -823,15 +694,6 @@ void R_RenderPlayerView(player_t* player) {
 	// setup draw frame
 	//
 	R_SetupFrame(player);
-
-	//
-	// check for t-junction cracks
-	//
-	if (r_drawfill.value >= 1) {
-		dglClearColor(1, 0, 1, 0);
-		dglClear(GL_COLOR_BUFFER_BIT);
-		bRenderSky = false;
-	}
 
 	//
 	// draw sky
@@ -879,16 +741,8 @@ void R_RenderPlayerView(player_t* player) {
 	//
 	R_RenderWorld();
 
-	if (r_drawblockmap.value) {
-		R_DrawBlockMap();
-	}
-
 	if (r_drawmobjbox.value) {
 		R_DrawThingBBox();
-	}
-
-	if (r_drawtrace.value) {
-		R_DrawRayTrace();
 	}
 
 	if (p_usecontext.value) {
@@ -927,21 +781,11 @@ void R_RenderPlayerView(player_t* player) {
 
 void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_fov);
-	CON_CvarRegister(&r_fillmode);
-	CON_CvarRegister(&r_uniformtime);
 	CON_CvarRegister(&r_fog);
 	CON_CvarRegister(&r_filter);
 	CON_CvarRegister(&r_anisotropic);
 	CON_CvarRegister(&r_wipe);
-	CON_CvarRegister(&r_drawtris);
 	CON_CvarRegister(&r_drawmobjbox);
-	CON_CvarRegister(&r_drawblockmap);
-	CON_CvarRegister(&r_drawtrace);
-	CON_CvarRegister(&r_texturecombiner);
-	CON_CvarRegister(&r_rendersprites);
-	CON_CvarRegister(&r_texnonpowresize);
-	CON_CvarRegister(&r_drawfill);
 	CON_CvarRegister(&r_skybox);
-	CON_CvarRegister(&r_colorscale);
 	CON_CvarRegister(&hud_disablesecretmessages);
 }

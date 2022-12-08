@@ -25,8 +25,14 @@
 //-----------------------------------------------------------------------------
 
 #include <math.h>
+
+#ifdef __OpenBSD__
+#include <SDL.h>
+#include <SDL_opengl.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#endif
 
 #ifdef _WIN32
 #include <wglext.h>
@@ -43,6 +49,7 @@
 #include "con_console.h"
 #include "m_misc.h"
 #include "g_actions.h"
+#include "i_sdlinput.h"
 
 int ViewWindowX = 0;
 int ViewWindowY = 0;
@@ -69,7 +76,6 @@ CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(st_flashoverlay);
-CVAR_EXTERNAL(r_colorscale);
 
 //
 // CMD_DumpGLExtensions
@@ -347,26 +353,6 @@ void GL_SetDefaultCombiner(void) {
 }
 
 //
-// GL_SetColorScale
-//
-
-void GL_SetColorScale(void) {
-	int cs = (int)r_colorscale.value;
-
-	switch (cs) {
-	case 1:
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
-		break;
-	case 2:
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
-		break;
-	default:
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
-		break;
-	}
-}
-
-//
 // GL_Set2DQuad
 //
 
@@ -480,12 +466,7 @@ void GL_SetState(int bit, dboolean enable) {
 //
 
 void GL_CheckFillMode(void) {
-	if (r_fillmode.value <= 0) {
-		GL_SetState(GLSTATE_TEXTURE0, 0);
-	}
-	else if (r_fillmode.value > 0) {
-		GL_SetState(GLSTATE_TEXTURE0, 1);
-	}
+	GL_SetState(GLSTATE_TEXTURE0, 1);
 }
 
 //
@@ -571,8 +552,6 @@ void GL_Init(void) {
 
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-
-	r_fillmode.value = 1.0f;
 
 	GL_ARB_multitexture_Init();
 	GL_EXT_compiled_vertex_array_Init();

@@ -24,9 +24,9 @@
 #define __I_AUDIO_H__
 
 typedef struct {
-	fixed_t x;
-	fixed_t y;
-	fixed_t z;
+    fixed_t x;
+    fixed_t y;
+    fixed_t z;
 } sndsrc_t;
 
 int I_GetMaxChannels(void);

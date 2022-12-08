@@ -40,6 +40,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "sounds.h"
 #include "m_shift.h"
@@ -850,7 +851,7 @@ static void D_Init(void) {
 	respawnitem = M_CheckParm("-respawnitem");
 	fastparm = M_CheckParm("-fast");
 
-	if (p = M_CheckParm("-setvars")) {
+	if ((p = M_CheckParm("-setvars"))) {
 		p++;
 
 		while (p != myargc && myargv[p][0] != '-') {

@@ -533,7 +533,7 @@ static void PrintStack(void) {
                     DWORD stackint = *stackstart;
 
                     for(j = 0; j < 4; ++j) {
-                        char c = (char)(stackint & 0xFF);
+                        int8_t c = (int8_t)(stackint & 0xFF);
                         if(c < 0x20 || c > 0x7E) {
                             c = '.';
                         }

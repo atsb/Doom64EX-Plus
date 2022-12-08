@@ -25,38 +25,21 @@
 #ifndef __I_VIDEO_H__
 #define __I_VIDEO_H__
 
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
-#include "d_event.h"
+#endif
 
-#define SDL_BPP        32
+#include "d_event.h"
 
 ////////////Video///////////////
 
 extern SDL_Surface* screen;
-
+extern SDL_Window* window;
 void I_InitVideo(void);
 void I_InitScreen(void);
 void I_ShutdownVideo(void);
-//
-// Called by D_DoomLoop,
-// called before processing each tic in a frame.
-// Quick syncronous operations are performed here.
-// Can call D_PostEvent.
-void I_StartTic(void);
-void I_FinishUpdate(void);
-int I_ShutdownWait(void);
-void I_CenterMouse(void);
-
-////////////Input//////////////
-
-extern int UseMouse[2];
-extern int UseJoystick;
-extern int mouse_x;
-extern int mouse_y;
-
-int I_MouseAccel(int val);
-void I_MouseAccelChange(void);
-
-void V_RegisterCvars(void);
+void V_RegisterCvars();
 
 #endif

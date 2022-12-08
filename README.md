@@ -34,6 +34,12 @@ They can either be a tag or a graphic.  This is due to me not flat-out reading a
 
 No other changes are needed.
 
+## Where are the PWADs?
+
+Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
+You can find them on moddb, just look for the EX+ / EX Plus wads:
+https://www.moddb.com/games/doom-64/downloads/
+
 ## Dehacked Support
 
 For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
@@ -42,10 +48,11 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 
 ## Dependencies
 
-* SDL2
-* zlib
-* libpng
+* SDL2 and SDL2_net
+* ZLib
+* LibPNG
 * FluidSynth
+* OpenGL
 
 ## System Requirements - 32 or 64bit
 
@@ -55,19 +62,26 @@ Linux Single Board Computer
 
 *others may work but are untested*
 
-Linux Desktop / Laptop
+Linux / *BSD Desktop / Laptop
 
 - 1.8GHz Dual Core CPU
 - 2GB RAM
 - 80MB Disk Space
-- OpenGL 1.4+ Compliant Video Chip / Card
+- OpenGL 2.1+ Compliant Video Chip / Card
 
 Windows
 
-- 2.0GHz Dual Core CPU
+- 1.8GHz Dual Core CPU
 - 4GB RAM
 - 80MB Disk Space
-- OpenGL 1.4+ Compliant Video Chip / Card
+- OpenGL 2.1+ Compliant Video Chip / Card
+
+macOS
+
+- mid-2013 macbook air or better (also arm64 systems)
+- 4GB RAM
+- 80MB Disk Space
+- OpenGL 2.1+ Compliant Video Chip / Card
 
 ## Installation
 
@@ -76,14 +90,14 @@ Windows
 - Windows does not yet support installing the software, however you are able to manually put the software in any directory
 	of your choosing and it will work fine.
 
-GNU/Linux
+GNU/Linux / BSD
 
-- GNU/Linux supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
+- GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
 	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
 
 Without the macro, it will look inside the current directory that the binary is in.
 
-Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux.
+Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux or macOS.
 
 ## Compiling
 
@@ -91,11 +105,29 @@ Clone this repo
 
     $ git clone https://github.com/atsb/Doom64EX-Plus
 
-### Linux or Cross Platform Compilation
+## Linux or Cross Platform Compilation
 
 Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
 
-### Windows
+## macOS
+Install MacPorts and get the dependencies.
+
+Then use the XCode project file, which is the only supported way to compile on macOS.  Everything is already defined.
+The IWAD needs to be placed in: /Users/*user*/Library/Application Support/doom64ex-plus directory along with the files found within the Resources directory inside the bundle (.wad and .sf2).
+
+## Raspberry Pi 3
+
+Use `build_rpi3_raspbian.sh` for a native build of Raspberry Pi 3B
+
+## FreeBSD
+
+Use the `build_freebsd.sh` script for a native build of FreeBSD
+
+## OpenBSD
+
+Use the `build_openbsd.sh` script for a native build of OpenBSD
+
+## Windows
 
 Use the Visual Studio solution and project files provided in the `Windows` directory of the repository for both 32-bit or 64-bit builds.
 
@@ -107,18 +139,25 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 * `doom64ex-plus.wad`
 * `doomsnd.sf2`
 
-### Linux 
+## Linux, FreeBSD/OpenBSD and Raspberry pi3
 
 You can place the asset data described above to any of the following directories:
 
 * The directory in which `doom64ex-plus` resides
 * `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
 
+## macOS
+
+You can place the asset data described above to:
+
+* `/Users/*user*/Library/Application Support/doom64ex-plus`
+
 Then, you can start playing:
 
     $ doom64ex-plus
 
-**NOTE for Linux users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.
+**NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
+`~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
 ### Windows
 

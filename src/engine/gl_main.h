@@ -23,7 +23,11 @@
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
 
+#ifdef __OpenBSD__
+#include <SDL_opengl.h>
+#else
 #include <SDL2/SDL_opengl.h>
+#endif
 
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
@@ -100,7 +104,6 @@ void GL_SetOrthoScale(float scale);
 float GL_GetOrthoScale(void);
 void GL_SetState(int bit, dboolean enable);
 void GL_SetDefaultCombiner(void);
-void GL_SetColorScale(void);
 void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
 	float u1, float u2, float v1, float v2, rcolor c);
 void GL_Draw2DQuad(vtx_t* v, dboolean stretch);

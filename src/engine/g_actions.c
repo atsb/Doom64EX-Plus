@@ -85,9 +85,7 @@ alist_t** KeyActions;
 alist_t** MouseActions;
 alist_t** Mouse2Actions;
 
-static int  JoyButtons = 0;
 static int  MouseButtons = 0;
-static int  Mouse2Buttons = 0;
 
 static dboolean OptimizeTree = false;
 dboolean        ButtonAction = false;
@@ -417,7 +415,7 @@ dboolean G_ActionResponder(event_t* ev) {
 		G_DoCmdMouseMove(ev->data2, ev->data3);
 		break;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case ev_gamepad:
 		I_XInputReadActions(ev);
 		break;
