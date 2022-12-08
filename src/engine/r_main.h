@@ -59,7 +59,6 @@ extern uint32_t glBindCalls;
 extern dboolean     bRenderSky;
 
 CVAR_EXTERNAL(r_fov);
-CVAR_EXTERNAL(r_uniformtime);
 
 void R_Init(void);
 void R_RenderPlayerView(player_t* player);

@@ -904,27 +904,23 @@ void A_Tracer(mobj_t* actor) {
 // A_OnDeathTrigger
 //
 
-void A_OnDeathTrigger(mobj_t* actor) {
-	mobj_t* mo;
+void A_OnDeathTrigger(mobj_t* mo)
+{
+	mobj_t	*mo2;
 
-	if (!(actor->flags & MF_TRIGDEATH)) {
+	if (!(mo->flags & MF_TRIGDEATH)) {
 		return;
 	}
 
-	A_Fall(actor);
-
-	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
-		if (mo->player) {
-			continue;
-		}
-
-		if (mo != actor && mo->tid == actor->tid &&
-			mo->flags & MF_SHOOTABLE && mo->health > 0) {
+	for (mo2 = mobjhead.next; mo2 != &mobjhead; mo2 = mo2->next)
+	{
+		if ((mo2->tid == mo->tid) && (mo2->health > 0))
+		{
 			return;
 		}
 	}
 
-	P_QueueSpecial(actor);
+	P_QueueSpecial(mo);
 }
 
 //

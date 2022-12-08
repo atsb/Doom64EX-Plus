@@ -178,7 +178,6 @@ typedef struct {
 	dboolean    clearchts;
 	dboolean    forcegodmode;
 	dboolean    contmusexit;
-	int         oldcollision;
 	int         allowjump;
 	int         allowfreelook;
 } mapdef_t;

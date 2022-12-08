@@ -1153,7 +1153,6 @@ static void P_InitMapInfo(void) {
 			mapdef.mapid = 1;
 			mapdef.exitdelay = 15;
 			mapdef.music = -1;
-			mapdef.oldcollision = 1;
 
 			sc_parser.find(false);  // skip map lump name
 

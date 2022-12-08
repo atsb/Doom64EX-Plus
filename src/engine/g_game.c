@@ -887,7 +887,6 @@ void G_DoLoadLevel(void) {
 		return;
 	}
 
-	forcecollision = map->oldcollision;
 	forcejump = map->allowjump;
 	forcefreelook = map->allowfreelook;
 

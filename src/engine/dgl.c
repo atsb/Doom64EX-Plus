@@ -48,8 +48,6 @@ word statindice = 0;
 static word indicecnt = 0;
 static word drawIndices[MAXINDICES];
 
-CVAR_EXTERNAL(r_drawtris);
-
 //
 // dglLogError
 //
@@ -148,48 +146,6 @@ void dglDrawGeometry(dword count, vtx_t* vtx) {
 
 	if (has_GL_EXT_compiled_vertex_array) {
 		dglUnlockArraysEXT();
-	}
-
-	if (r_drawtris.value) {
-		dword j = 0;
-		byte b;
-
-		for (j = 0; j < count; j++) {
-			vtx[j].r = 0xff;
-			vtx[j].g = 0xff;
-			vtx[j].b = 0xff;
-			vtx[j].a = 0xff;
-		}
-
-		dglGetBooleanv(GL_FOG, &b);
-
-		if (b) {
-			dglDisable(GL_FOG);
-		}
-
-		dglDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		dglDisable(GL_TEXTURE_2D);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		dglDepthRange(0.0f, 0.0f);
-
-		if (has_GL_EXT_compiled_vertex_array) {
-			dglLockArraysEXT(0, count);
-		}
-
-		dglDrawElements(GL_TRIANGLES, indicecnt, GL_UNSIGNED_SHORT, drawIndices);
-
-		if (has_GL_EXT_compiled_vertex_array) {
-			dglUnlockArraysEXT();
-		}
-
-		dglDepthRange(0.0f, 1.0f);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		dglEnable(GL_TEXTURE_2D);
-
-		if (b) {
-			dglEnable(GL_FOG);
-		}
 	}
 
 	if (devparm) {
