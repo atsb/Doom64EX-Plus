@@ -154,6 +154,7 @@
     <ClCompile Include="..\src\engine\deh_mapping.c" />
     <ClCompile Include="..\src\engine\deh_misc.c" />
     <ClCompile Include="..\src\engine\deh_ptr.c" />
+    <ClCompile Include="..\src\engine\deh_str.c" />
     <ClCompile Include="..\src\engine\deh_thing.c" />
     <ClCompile Include="..\src\engine\deh_weapon.c" />
     <ClCompile Include="..\src\engine\dgl.c" />
@@ -238,6 +239,7 @@
     <ClCompile Include="..\src\engine\z_zone.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\engine\deh_str.h" />
     <ClInclude Include="..\src\engine\dgl.h" />
     <ClInclude Include="..\src\engine\doomdata.h" />
     <ClInclude Include="..\src\engine\doomdef.h" />

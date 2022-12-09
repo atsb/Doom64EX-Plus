@@ -40,6 +40,7 @@
 #include "st_stuff.h"
 #include "deh_main.h"
 #include "deh_misc.h"
+#include "deh_str.h"
 
 typedef struct {
 	const int8_t* cheat;
@@ -141,23 +142,30 @@ static void M_CheatBerserk(player_t* player, int8_t dat[4]) {
 
 CVAR_EXTERNAL(sv_skill);
 static void M_CheatWarp(player_t* player, int8_t dat[4]) {
+	char	lumpname[9];
+	int		lumpnum;
 	int map;
 	map = datoi(dat);
 	gameskill = (int)sv_skill.value;
 	gamemap = nextmap = map;
 
-	if (map < 1) {
-		return;
+	extern int P_GetNumForMap(int map, boolean critical);
+
+	if (map < 1)
+	{
+		return false;
 	}
 
-	if (map > 40) {
-		player->message = "MAP DOES NOT EXIST";
-		return;
-	}
+	DEH_snprintf(lumpname, 9, "MAP%i", map);
+	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
 
-	// So be it.
-	G_DeferedInitNew(gameskill, map);
-	dmemset(passwordData, 0xff, 16);
+	if (lumpnum)
+	{
+		// So be it.
+		player->message = "Warping to Level...";
+		G_DeferedInitNew(gameskill, map);
+		dmemset(passwordData, 0xff, 16);
+	}
 }
 
 static void M_CheatMyPos(player_t* player, int8_t dat[4]) {
