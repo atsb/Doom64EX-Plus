@@ -153,7 +153,7 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 
 	if (map < 1)
 	{
-		return false;
+		return;
 	}
 
 	DEH_snprintf(lumpname, 9, "MAP%i", map);
