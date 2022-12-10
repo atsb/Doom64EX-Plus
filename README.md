@@ -105,9 +105,9 @@ Clone this repo
 
     $ git clone https://github.com/atsb/Doom64EX-Plus
 
-## Linux or Cross Platform Compilation
+## Linux
 
-Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
+Use the `build.sh` script for a native build.
 
 ## macOS
 Install MacPorts and get the dependencies.
