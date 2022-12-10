@@ -110,6 +110,10 @@ Clone this repo
 Use the `build.sh` script for a native build.
 
 ## macOS
+Install it from MacSourcePorts:
+https://macsourceports.com/game/doom64
+
+Or if you feel adventurous, read below:
 Install MacPorts and get the dependencies.
 
 Then use the XCode project file, which is the only supported way to compile on macOS.  Everything is already defined.
