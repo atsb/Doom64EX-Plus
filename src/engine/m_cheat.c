@@ -149,8 +149,6 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	gameskill = (int)sv_skill.value;
 	gamemap = nextmap = map;
 
-	extern int P_GetNumForMap(int map, boolean critical);
-
 	if (map < 1)
 	{
 		return;
