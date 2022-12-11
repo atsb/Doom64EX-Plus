@@ -252,7 +252,7 @@ enum {
 
 // 20120209 villsa - compatibility flags
 enum {
-	COMPATF_MOBJPASS = (1 << 1),     // allow mobjs to stand on top one another
+	COMPATF_MOBJPASS = (1 << 1)     // allow mobjs to stand on top one another
 };
 
 extern dboolean windowpause;
