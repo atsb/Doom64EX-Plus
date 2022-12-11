@@ -153,104 +153,105 @@ struct mobj_s;
 typedef void (*mobjfunc_t)(struct mobj_s* mo);
 
 typedef struct mobj_s {
-	// Info for drawing: position.
-	fixed_t             x;
-	fixed_t             y;
-	fixed_t             z;
+    // Info for drawing: position.
+    fixed_t             x;
+    fixed_t             y;
+    fixed_t             z;
 
-	// [d64] mobj tag
-	int                 tid;
+    // [d64] mobj tag
+    int                 tid;
 
-	// More list: links in sector (if needed)
-	struct mobj_s* snext;
-	struct mobj_s* sprev;
+    // More list: links in sector (if needed)
+    struct mobj_s* snext;
+    struct mobj_s* sprev;
 
-	//More drawing info: to determine current sprite.
-	angle_t             angle;    // orientation
-	angle_t             pitch;  // [kex] pitch orientation; for looking up/down
-	spritenum_t         sprite;    // used to find patch_t and flip value
-	int                 frame;    // might be ORed with FF_FULLBRIGHT
+    //More drawing info: to determine current sprite.
+    angle_t             angle;    // orientation
+    angle_t             pitch;  // [kex] pitch orientation; for looking up/down
+    spritenum_t         sprite;    // used to find patch_t and flip value
+    int                 frame;    // might be ORed with FF_FULLBRIGHT
 
-	// Interaction info, by BLOCKMAP.
-	// Links in blocks (if needed).
-	struct mobj_s* bnext;
-	struct mobj_s* bprev;
+    // Interaction info, by BLOCKMAP.
+    // Links in blocks (if needed).
+    struct mobj_s* bnext;
+    struct mobj_s* bprev;
 
-	struct subsector_s* subsector;
+    struct subsector_s* subsector;
 
-	// The closest interval over all contacted Sectors.
-	fixed_t             floorz;
-	fixed_t             ceilingz;
+    // The closest interval over all contacted Sectors.
+    fixed_t             floorz;
+    fixed_t             ceilingz;
 
-	// For movement checking.
-	fixed_t             radius;
-	fixed_t             height;
+    // For movement checking.
+    fixed_t             radius;
+    fixed_t             height;
 
-	// Momentums, used to update position.
-	fixed_t             momx;
-	fixed_t             momy;
-	fixed_t             momz;
+    // Momentums, used to update position.
+    fixed_t             momx;
+    fixed_t             momy;
+    fixed_t             momz;
 
-	// If == validcount, already checked.
-	int                 validcount;
+    // If == validcount, already checked.
+    int                 validcount;
 
-	mobjtype_t          type;
-	mobjinfo_t* info;    // &mobjinfo[mobj->type]
+    mobjtype_t          type;
+    mobjinfo_t* info;    // &mobjinfo[mobj->type]
 
-	intptr_t			tics;    // state tic counter
-	state_t* state;
-	intptr_t			flags;
-	int                 health;
+    int                 tics;    // state tic counter
+    state_t* state;
+    dword               flags;
+    int                 health;
 
-	// [d64] alpha value for rendering
-	int                 alpha;
+    // [d64] alpha value for rendering
+    int                 alpha;
 
-	// [kex] flags for mobj collision
-	mobjblockflag_t     blockflag;
+    // [kex] flags for mobj collision
+    mobjblockflag_t     blockflag;
 
-	// Movement direction, movement generation (zig-zagging).
-	int                 movedir;    // 0-7
-	int                 movecount;    // when 0, select a new dir
+    // Movement direction, movement generation (zig-zagging).
+    int                 movedir;    // 0-7
+    int                 movecount;    // when 0, select a new dir
 
-	// Thing being chased/attacked (or NULL),
-	// also the originator for missiles.
-	struct mobj_s* target;
+    // Thing being chased/attacked (or NULL),
+    // also the originator for missiles.
+    struct mobj_s* target;
 
-	// Reaction time: if non 0, don't attack yet.
-	// Used by player to freeze a bit after teleporting.
-	int                 reactiontime;
+    // Reaction time: if non 0, don't attack yet.
+    // Used by player to freeze a bit after teleporting.
+    int                 reactiontime;
 
-	// If >0, the target will be chased
-	// no matter what (even if shot)
-	int                 threshold;
+    // If >0, the target will be chased
+    // no matter what (even if shot)
+    int                 threshold;
 
-	// Additional info record for player avatars only.
-	// Only valid if type == MT_PLAYER
-	struct player_s* player;
+    // Additional info record for player avatars only.
+    // Only valid if type == MT_PLAYER
+    struct player_s* player;
 
-	// For nightmare respawn.
-	mapthing_t          spawnpoint;
+    // For nightmare respawn.
+    mapthing_t          spawnpoint;
 
-	// Thing being chased/attacked for tracers.
-	struct mobj_s* tracer;
+    // Thing being chased/attacked for tracers.
+    struct mobj_s* tracer;
 
-	// [d64] Mobj linked list: used to seperate from thinkers
-	struct mobj_s* prev;
-	struct mobj_s* next;
+    // [d64] Mobj linked list: used to seperate from thinkers
+    struct mobj_s* prev;
+    struct mobj_s* next;
 
-	// [d64] callback routine called at end of P_Tick
-	mobjfunc_t          mobjfunc;
+    // [d64] callback routine called at end of P_Tick
+    mobjfunc_t          mobjfunc;
 
-	// [d64] misc data for various actions
-	void* extradata;
+    // [d64] misc data for various actions
+    void* extradata;
 
-	// [kex] stuff that happens in between tics
-	fixed_t             frame_x;
-	fixed_t             frame_y;
-	fixed_t             frame_z;
+    // [kex] stuff that happens in between tics
+    fixed_t             frame_x;
+    fixed_t             frame_y;
+    fixed_t             frame_z;
 
-	// [kex] mobj reference id
-	uint32_t        refcount;
+    // [kex] mobj reference id
+    unsigned int        refcount;
+
 } mobj_t;
 
 #endif
