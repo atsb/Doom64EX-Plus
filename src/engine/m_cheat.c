@@ -165,7 +165,6 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	if (lumpnum)
 	{
 		// So be it.
-		player->message = "Warping to Level...";
 		G_DeferedInitNew(gameskill, map);
 		dmemset(passwordData, 0xff, 16);
 	}
