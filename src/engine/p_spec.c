@@ -811,24 +811,6 @@ static void P_AlertTaggedMobj(mobj_t* activator, int tid) {
 			continue;
 		}
 
-		// 20120610 villsa - check for killable things only
-		if (!(mo->flags & MF_COUNTKILL)) {
-			continue;
-		}
-
-		// [kex] TODO - there's no check if the mobj is already dead but
-		// if it is, then just revive it. May need to add a feature
-		// to skip dead mobjs sometime in the future
-		if (mo->health <= 0) {
-			mobjinfo_t* info = &mobjinfo[mo->type];
-
-			mo->health = info->spawnhealth;
-			mo->flags = info->flags;
-			mo->height = info->height;
-			mo->radius = info->radius;
-			mo->blockflag = BF_MOBJPASS;
-		}
-
 		st = &states[mo->info->seestate];
 
 		// 03022014 villsa - handle checks if activator is not a player
@@ -1818,6 +1800,8 @@ int             levelTimeCount;
 extern line_t** linespeciallist;
 extern int16_t    numlinespecials;
 
+#define SCROLLLIMIT (FRACUNIT*127)
+
 void P_UpdateSpecials(void) {
 	int         i;
 	line_t* line;
@@ -1835,22 +1819,30 @@ void P_UpdateSpecials(void) {
 	P_CyclePicAnims();
 
 	// ANIMATE LINE SPECIALS
-	for (i = 0; i < numlinespecials; i++) {
+	for (i = 0; i < numlinespecials; i++)
+	{
 		line = linespeciallist[i];
-		if (line->flags & ML_SCROLLRIGHT) {
+
+		if (line->flags & ML_SCROLLRIGHT)
+		{
 			sides[line->sidenum[0]].textureoffset += FRACUNIT;
+			sides[line->sidenum[0]].textureoffset &= SCROLLLIMIT;
 		}
-
-		if (line->flags & ML_SCROLLLEFT) {
+		else if (line->flags & ML_SCROLLLEFT)
+		{
 			sides[line->sidenum[0]].textureoffset -= FRACUNIT;
+			sides[line->sidenum[0]].textureoffset &= SCROLLLIMIT;
 		}
 
-		if (line->flags & ML_SCROLLUP) {
+		if (line->flags & ML_SCROLLUP)
+		{
 			sides[line->sidenum[0]].rowoffset += FRACUNIT;
+			sides[line->sidenum[0]].rowoffset &= SCROLLLIMIT;
 		}
-
-		if (line->flags & ML_SCROLLDOWN) {
+		else if (line->flags & ML_SCROLLDOWN)
+		{
 			sides[line->sidenum[0]].rowoffset -= FRACUNIT;
+			sides[line->sidenum[0]].rowoffset &= SCROLLLIMIT;
 		}
 	}
 
@@ -1875,10 +1867,10 @@ void P_UpdateSpecials(void) {
 				sector->xoffset -= speed;
 			}
 			if (sector->flags & MS_SCROLLUP) {
-				sector->yoffset += speed;
+				sector->yoffset -= speed;
 			}
 			if (sector->flags & MS_SCROLLDOWN) {
-				sector->yoffset -= speed;
+				sector->yoffset += speed;
 			}
 		}
 	}
