@@ -280,7 +280,7 @@ long telldir(DIR *dirp) {
 // have changed while we weren't looking. But that is probably the case with
 // any such system.
 //
-void seekdir(DIR *dirp, int lPos) {
+void seekdir(DIR *dirp, long lPos) {
     errno = 0;
 
     if(!dirp) {

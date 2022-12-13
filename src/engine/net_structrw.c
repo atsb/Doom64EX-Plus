@@ -132,7 +132,7 @@ void NET_WriteTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
 	if (diff->diff & NET_TICDIFF_BUTTONS)
 		NET_WriteInt8(packet, diff->cmd.buttons);
 	if (diff->diff & NET_TICDIFF_CONSISTANCY)
-		NET_WriteInt8(packet, diff->cmd.consistancy);
+		NET_WriteInt8(packet, diff->cmd.consistency);
 	if (diff->diff & NET_TICDIFF_CHATCHAR)
 		NET_WriteInt8(packet, diff->cmd.chatchar);
 	if (diff->diff & NET_TICDIFF_BUTTONS2)
@@ -195,7 +195,7 @@ dboolean NET_ReadTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
 	{
 		if (!NET_ReadInt8(packet, &val))
 			return false;
-		diff->cmd.consistancy = val;
+		diff->cmd.consistency = val;
 	}
 
 	if (diff->diff & NET_TICDIFF_CHATCHAR)
@@ -235,7 +235,7 @@ void NET_TiccmdDiff(ticcmd_t* tic1, ticcmd_t* tic2, net_ticdiff_t* diff)
 		diff->diff |= NET_TICDIFF_TURN;
 	if (tic1->buttons != tic2->buttons)
 		diff->diff |= NET_TICDIFF_BUTTONS;
-	if (tic1->consistancy != tic2->consistancy)
+	if (tic1->consistency != tic2->consistency)
 		diff->diff |= NET_TICDIFF_CONSISTANCY;
 	if (tic2->chatchar != 0)
 		diff->diff |= NET_TICDIFF_CHATCHAR;
@@ -260,7 +260,7 @@ void NET_TiccmdPatch(ticcmd_t* src, net_ticdiff_t* diff, ticcmd_t* dest)
 	if (diff->diff & NET_TICDIFF_BUTTONS)
 		dest->buttons = diff->cmd.buttons;
 	if (diff->diff & NET_TICDIFF_CONSISTANCY)
-		dest->consistancy = diff->cmd.consistancy;
+		dest->consistency = diff->cmd.consistency;
 
 	if (diff->diff & NET_TICDIFF_CHATCHAR)
 		dest->chatchar = diff->cmd.chatchar;

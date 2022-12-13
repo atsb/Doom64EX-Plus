@@ -326,8 +326,8 @@ dboolean I_UpdateGrab(void) {
 
 void I_GetEvent(SDL_Event* Event) {
 	event_t event;
-	uint32 mwheeluptic = 0, mwheeldowntic = 0;
-	uint32 tic = gametic;
+	uint32_t mwheeluptic = 0, mwheeldowntic = 0;
+	uint32_t tic = gametic;
 
 	switch (Event->type) {
 	case SDL_KEYDOWN:

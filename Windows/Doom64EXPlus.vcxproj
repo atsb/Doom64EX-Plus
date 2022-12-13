@@ -259,7 +259,6 @@
     <ClInclude Include="..\src\engine\g_settings.h" />
     <ClInclude Include="..\src\engine\info.h" />
     <ClInclude Include="..\src\engine\i_audio.h" />
-    <ClInclude Include="..\src\engine\i_opndir.h" />
     <ClInclude Include="..\src\engine\i_png.h" />
     <ClInclude Include="..\src\engine\i_sdlinput.h" />
     <ClInclude Include="..\src\engine\i_swap.h" />

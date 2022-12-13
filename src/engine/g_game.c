@@ -105,7 +105,7 @@ static int      savecompatflags = 0;
 int             totalkills, totalitems, totalsecret;
 dboolean        precache = true;     // if true, load all graphics at start
 
-byte            consistancy[MAXPLAYERS][BACKUPTICS];
+byte            consistency[MAXPLAYERS][BACKUPTICS];
 
 #define MAXPLMOVE       (forwardmove[1])
 #define TURBOTHRESHOLD  0x32
@@ -182,7 +182,7 @@ void G_RegisterCvars(void) {
 
 static CMD(Button) {
 	playercontrols_t* pc;
-	int64 key;
+	int64_t			  key;
 
 	pc = &Controls;
 
@@ -573,7 +573,7 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	pc = &Controls;
 	dmemset(cmd, 0, sizeof(ticcmd_t));
 
-	cmd->consistancy = consistancy[consoleplayer][maketic % BACKUPTICS];
+	cmd->consistency = consistency[consoleplayer][maketic % BACKUPTICS];
 
 	if (pc->key[PCKEY_RUN]) {
 		speed = 1;
@@ -1043,15 +1043,15 @@ void G_Ticker(void) {
 
 				if (netgame && !netdemo && !(gametic % ticdup)) {
 					if (gametic > BACKUPTICS
-						&& consistancy[i][buf] != cmd->consistancy) {
+						&& consistency[i][buf] != cmd->consistency) {
 						I_Error("consistency failure (%i should be %i)",
-							cmd->consistancy, consistancy[i][buf], consoleplayer);
+							cmd->consistency, consistency[i][buf], consoleplayer);
 					}
 					if (players[i].mo) {
-						consistancy[i][buf] = players[i].mo->x;
+						consistency[i][buf] = players[i].mo->x;
 					}
 					else {
-						consistancy[i][buf] = 0;
+						consistency[i][buf] = 0;
 					}
 				}
 			}

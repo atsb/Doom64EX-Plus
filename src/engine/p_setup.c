@@ -1107,23 +1107,23 @@ void P_SetupLevel(int map, int playermask, skill_t skill) {
 //
 
 static scdatatable_t mapdatatable[] = {
-	{   "CLASSTYPE", (int64) & ((mapdef_t*)0)->type,                 'i' },
-	{   "LEVELNUM", (int64) & ((mapdef_t*)0)->mapid,                'i' },
-	{   "CLUSTER", (int64) & ((mapdef_t*)0)->cluster,              'i' },
-	{   "EXITDELAY", (int64) & ((mapdef_t*)0)->exitdelay,            'i' },
-	{   "NOINTERMISSION", (int64) & ((mapdef_t*)0)->nointermission,       'b' },
-	{   "CLEARCHEATS", (int64) & ((mapdef_t*)0)->clearchts,            'b' },
-	{   "CONTINUEMUSICONEXIT", (int64) & ((mapdef_t*)0)->contmusexit,          'b' },
-	{   "FORCEGODMODE", (int64) & ((mapdef_t*)0)->forcegodmode,         'b' },
+	{   "CLASSTYPE", (int64_t) & ((mapdef_t*)0)->type,                 'i' },
+	{   "LEVELNUM", (int64_t) & ((mapdef_t*)0)->mapid,                'i' },
+	{   "CLUSTER", (int64_t) & ((mapdef_t*)0)->cluster,              'i' },
+	{   "EXITDELAY", (int64_t) & ((mapdef_t*)0)->exitdelay,            'i' },
+	{   "NOINTERMISSION", (int64_t) & ((mapdef_t*)0)->nointermission,       'b' },
+	{   "CLEARCHEATS", (int64_t) & ((mapdef_t*)0)->clearchts,            'b' },
+	{   "CONTINUEMUSICONEXIT", (int64_t) & ((mapdef_t*)0)->contmusexit,          'b' },
+	{   "FORCEGODMODE", (int64_t) & ((mapdef_t*)0)->forcegodmode,         'b' },
 	{   NULL,                   0,                                          0   }
 };
 
 static scdatatable_t clusterdatatable[] = {
-	{   "PIC", (int64) & ((clusterdef_t*)0)->pic,              'S' },
-	{   "NOINTERMISSION", (int64) & ((clusterdef_t*)0)->nointermission,   'b' },
-	{   "SCROLLTEXTEND", (int64) & ((clusterdef_t*)0)->scrolltextend,    'b' },
-	{   "PIC_X", (int64) & ((clusterdef_t*)0)->pic_x,            'i' },
-	{   "PIC_Y", (int64) & ((clusterdef_t*)0)->pic_y,            'i' },
+	{   "PIC", (int64_t) & ((clusterdef_t*)0)->pic,              'S' },
+	{   "NOINTERMISSION", (int64_t) & ((clusterdef_t*)0)->nointermission,   'b' },
+	{   "SCROLLTEXTEND", (int64_t) & ((clusterdef_t*)0)->scrolltextend,    'b' },
+	{   "PIC_X", (int64_t) & ((clusterdef_t*)0)->pic_x,            'i' },
+	{   "PIC_Y", (int64_t) & ((clusterdef_t*)0)->pic_y,            'i' },
 	{   NULL,                   0,                                          0   }
 };
 
@@ -1355,13 +1355,13 @@ clusterdef_t* P_GetCluster(int map) {
 //
 
 static scdatatable_t skydatatable[] = {
-	{   "PIC", (int64) & ((skydef_t*)0)->pic,          'S' },
-	{   "BACKPIC", (int64) & ((skydef_t*)0)->backdrop,     'S' },
-	{   "FOGFACTOR", (int64) & ((skydef_t*)0)->fognear,      'i' },
-	{   "FOGCOLOR", (int64) & ((skydef_t*)0)->fogcolor,     'c' },
-	{   "BASECOLOR", (int64) & ((skydef_t*)0)->skycolor[2],  'c' },
-	{   "HIGHCOLOR", (int64) & ((skydef_t*)0)->skycolor[0],  'c' },
-	{   "LOWCOLOR", (int64) & ((skydef_t*)0)->skycolor[1],  'c' },
+	{   "PIC", (int64_t) & ((skydef_t*)0)->pic,          'S' },
+	{   "BACKPIC", (int64_t) & ((skydef_t*)0)->backdrop,     'S' },
+	{   "FOGFACTOR", (int64_t) & ((skydef_t*)0)->fognear,      'i' },
+	{   "FOGCOLOR", (int64_t) & ((skydef_t*)0)->fogcolor,     'c' },
+	{   "BASECOLOR", (int64_t) & ((skydef_t*)0)->skycolor[2],  'c' },
+	{   "HIGHCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[0],  'c' },
+	{   "LOWCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[1],  'c' },
 	{   NULL,           0,                                  0   }
 };
 

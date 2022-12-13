@@ -95,7 +95,7 @@ ticcmd_t        emptycmd;
 // I_uSleep
 //
 
-void I_Sleep(intptr_t usecs) {
+void I_Sleep(unsigned long usecs) {
 #ifdef _WIN32
 	Sleep((DWORD)usecs);
 #else
@@ -191,7 +191,7 @@ void I_EndDisplay(void) {
 //
 
 fixed_t I_GetTimeFrac(void) {
-	intptr_t now;
+	unsigned long now;
 	fixed_t frac;
 
 	now = SDL_GetTicks();
@@ -372,7 +372,7 @@ int I_GetTimeMS(void) {
 // I_GetRandomTimeSeed
 //
 
-intptr_t I_GetRandomTimeSeed(void) {
+unsigned long I_GetRandomTimeSeed(void) {
 	// not exactly random....
 	return SDL_GetTicks();
 }
