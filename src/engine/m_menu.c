@@ -86,7 +86,6 @@
 #define MENUCOLORRED        D_RGBA(255, 0, 0, menualphacolor)
 #define MENUCOLORWHITE      D_RGBA(255, 255, 255, menualphacolor)
 #define MENUCOLORYELLOW     D_RGBA(194, 174, 28, menualphacolor)
-#define MAXBRIGHTNESS        100
 
 //
 // defaulted values
@@ -1898,7 +1897,7 @@ void M_DrawVideo(void) {
 		(video_dbrightness + 1) - currentMenu->menupageoffset < currentMenu->numpageitems)
 	{
 		y = video_dbrightness - currentMenu->menupageoffset;
-		M_DrawThermo(VideoDef.x, VideoDef.y + LINEHEIGHT * (y + 1), MAXBRIGHTNESS, i_brightness.value);
+		M_DrawThermo(VideoDef.x, VideoDef.y + LINEHEIGHT * (y + 1), 300, i_brightness.value);
 	}
 	if (currentMenu->menupageoffset <= video_dgamma + 1 &&
 		(video_dgamma + 1) - currentMenu->menupageoffset < currentMenu->numpageitems) {
@@ -1953,17 +1952,17 @@ void M_ChangeBrightness(int choice)
 		}
 		else
 		{
-			i_brightness.value = 0;
+			CON_CvarSetValue(i_brightness.name, 0);
 		}
 		break;
 	case 1:
-		if (i_brightness.value < (int)MAXBRIGHTNESS)
+		if (i_brightness.value < 300.0f)
 		{
 			M_SetCvar(&i_brightness, i_brightness.value + 1);
 		}
 		else
 		{
-			i_brightness.value = (int)MAXBRIGHTNESS;
+			CON_CvarSetValue(i_brightness.name, 300);
 		}
 		break;
 	}
