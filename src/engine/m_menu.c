@@ -44,6 +44,7 @@
 #include <fcntl.h>
 #include "doomdef.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "m_cheat.h"
 #include "m_misc.h"
@@ -97,15 +98,15 @@ dboolean            mainmenuactive = false;
 dboolean            allowclearmenu = true;              // can user hit escape to clear menu?
 
 static dboolean     newmenu = false;    // 20120323 villsa
-static char* messageBindCommand;
+static int8_t* messageBindCommand;
 static int          quickSaveSlot;                      // -1 = no quicksave slot picked!
 static int          saveSlot;                           // which slot to save in
-static char         savegamestrings[10][MENUSTRINGSIZE];
+static int8_t         savegamestrings[10][MENUSTRINGSIZE];
 static dboolean     alphaprevmenu = false;
 static int          menualphacolor = 0xff;
 
-static char         inputString[MENUSTRINGSIZE];
-static char         oldInputString[MENUSTRINGSIZE];
+static int8_t         inputString[MENUSTRINGSIZE];
+static int8_t         oldInputString[MENUSTRINGSIZE];
 static dboolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
@@ -122,13 +123,11 @@ void(*menufadefunc)(void) = NULL;
 // static variables
 //
 
-static char     MenuBindBuff[256];
-static char     MenuBindMessage[256];
+static int8_t     MenuBindBuff[256];
+static int8_t     MenuBindMessage[256];
 static dboolean MenuBindActive = false;
 static dboolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
-static dboolean wireframeon = false;
-static dboolean lockmonstersmon = false;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
 static int      m_ScreenSize = 1;
@@ -144,13 +143,13 @@ typedef struct {
 	// 1 = ok, 2 = arrows ok, 3 = for sliders
 	int16_t status;
 
-	char name[64];
+	int8_t name[64];
 
 	// choice = menu item #
 	void (*routine)(int choice);
 
 	// hotkey in menu
-	char alphaKey;
+	int8_t alphaKey;
 } menuitem_t;
 
 typedef struct {
@@ -170,7 +169,7 @@ typedef struct menu_s {
 	struct menu_s* prevMenu;          // previous menu
 	menuitem_t* menuitems;         // menu items
 	void (*routine)(void);                  // draw routine
-	char                title[64];
+	int8_t                title[64];
 	int16_t               x;
 	int16_t               y;                  // x,y of menu
 	int16_t               lastOn;             // last item user was on in menu
@@ -179,13 +178,13 @@ typedef struct menu_s {
 	int16_t               numpageitems;       // number of items to display per page
 	int16_t               menupageoffset;
 	float               scale;
-	char** hints;
+	int8_t** hints;
 	menuthermobar_t* thermobars;
 } menu_t;
 
 typedef struct {
-	char* name;
-	char* action;
+	int8_t* name;
+	int8_t* action;
 } menuaction_t;
 
 int16_t           itemOn;                 // menu item skull is on
@@ -193,7 +192,7 @@ int16_t           itemSelected;
 int16_t           skullAnimCounter;       // skull animation counter
 int16_t           whichSkull;             // which skull to draw
 
-char    msgNames[2][4] = { "Off","On" };
+int8_t    msgNames[2][4] = { "Off","On" };
 
 // current menudef
 static menu_t* currentMenu;
@@ -213,9 +212,8 @@ void M_ClearMenus(void);
 void M_QuickSave(void);
 void M_QuickLoad(void);
 
-static int M_StringWidth(const char* string);
-static int M_StringHeight(const char* string);
-static int M_BigStringWidth(const char* string);
+static int M_StringWidth(const int8_t* string);
+static int M_BigStringWidth(const int8_t* string);
 
 static void M_DrawThermo(int x, int y, int thermWidth, float thermDot);
 static void M_DoDefaults(int choice);
@@ -223,9 +221,9 @@ static void M_Return(int choice);
 static void M_ReturnToOptions(int choice);
 static void M_SetCvar(cvar_t* cvar, float value);
 static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t* cvar);
-static void M_DrawSmbString(const char* text, menu_t* menu, int item);
+static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
-static void M_SetInputString(char* string, int len);
+static void M_SetInputString(int8_t* string, int len);
 static void M_Scroll(menu_t* menu, dboolean up);
 static void M_DoVideoReset(int choice);
 
@@ -710,7 +708,7 @@ menuitem_t OptionsMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-char* OptionHints[opt_end] = {
+int8_t* OptionHints[opt_end] = {
 	"control configuration",
 	"adjust sound volume",
 	"miscellaneous options for gameplay and other features",
@@ -822,7 +820,7 @@ menudefault_t NetworkDefault[] = {
 	{ NULL, -1 }
 };
 
-char* NetworkHints[network_end] = {
+int8_t* NetworkHints[network_end] = {
 	NULL,
 	"set a name for yourself",
 	NULL,
@@ -901,7 +899,7 @@ void M_NetworkChoice(int choice) {
 
 void M_DrawNetwork(void) {
 	int y;
-	static const char* respawnitemstrings[11] = {
+	static const int8_t* respawnitemstrings[11] = {
 		"Off",
 		"1 Minute",
 		"2 Minutes",
@@ -915,7 +913,7 @@ void M_DrawNetwork(void) {
 		"10 Minutes"
 	};
 
-	static const char* networkscalestrings[3] = {
+	static const int8_t* networkscalestrings[3] = {
 		"x 1",
 		"x 2",
 		"x 3"
@@ -1033,7 +1031,7 @@ menuitem_t MiscMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-char* MiscHints[misc_end] = {
+int8_t* MiscHints[misc_end] = {
 	NULL,
 	"change transition speeds between switching menus",
 	NULL,
@@ -1202,11 +1200,10 @@ void M_MiscChoice(int choice) {
 }
 
 void M_DrawMisc(void) {
-	static const char* autoruntype[2] = { "Off", "On" };
-	static const char* mapdisplaytype[2] = { "Hide", "Show" };
-	static const char* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
-	static const char* rgbscaletype[3] = { "1x", "2x", "4x" };
-	static const char* disablesecretmessages[2] = { "Enabled", "Disabled" };
+	static const int8_t* autoruntype[2] = { "Off", "On" };
+	static const int8_t* mapdisplaytype[2] = { "Hide", "Show" };
+	static const int8_t* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
+	static const int8_t* disablesecretmessages[2] = { "Enabled", "Disabled" };
 	int y;
 
 	if (currentMenu->menupageoffset <= misc_menufade + 1 &&
@@ -1486,7 +1483,7 @@ menuitem_t DisplayMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-char* DisplayHints[display_end] = {
+int8_t* DisplayHints[display_end] = {
 	"toggle messages displaying on hud",
 	"change look and style for hud",
 	"use texture environment or a simple overlay for flashes",
@@ -1539,8 +1536,8 @@ void M_Display(int choice) {
 }
 
 void M_DrawDisplay(void) {
-	static const char* hudtype[3] = { "Off", "Classic", "Arranged" };
-	static const char* flashtype[2] = { "Environment", "Overlay" };
+	static const int8_t* hudtype[3] = { "Off", "Classic", "Arranged" };
+	static const int8_t* flashtype[2] = { "Environment", "Overlay" };
 
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * messages, MENUCOLORRED,
 		msgNames[(int)m_messages.value]);
@@ -1696,7 +1693,7 @@ menuitem_t VideoMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-char* VideoHints[video_end] = {
+int8_t* VideoHints[video_end] = {
 	"change light color intensity",
 	NULL,
 	"adjust screen gamma",
@@ -1807,7 +1804,7 @@ static const float ratioVal[4] = {
 	5.0f / 4.0f,
 };
 
-static char gammamsg[21][28] = {
+static int8_t gammamsg[21][28] = {
 	GAMMALVL0,
 	GAMMALVL1,
 	GAMMALVL2,
@@ -1891,10 +1888,10 @@ void M_Video(int choice) {
 }
 
 void M_DrawVideo(void) {
-	static const char* filterType[2] = { "Linear", "Nearest" };
-	static const char* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
-	static const char* frametype[2] = { "Off", "On" };
-	char res[16];
+	static const int8_t* filterType[2] = { "Linear", "Nearest" };
+	static const int8_t* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
+	static const int8_t* frametype[2] = { "Off", "On" };
+	int8_t res[16];
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
@@ -2177,11 +2174,11 @@ void M_Password(int choice) {
 }
 
 void M_DrawPassword(void) {
-	char password[2];
+	int8_t password[2];
 	byte* passData;
 	int i = 0;
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
 #endif
 	{
@@ -2227,7 +2224,7 @@ static void M_PasswordSelect(void) {
 	S_StartSound(NULL, sfx_switch2);
 	passwordData[curPasswordSlot++] = (byte)itemOn;
 	if (curPasswordSlot > 15) {
-		static const char* hecticdemo = "rvnh3ct1cd3m0???";
+		static const int8_t* hecticdemo = "rvnh3ct1cd3m0???";
 		int i;
 
 		for (i = 0; i < 16; i++) {
@@ -2402,7 +2399,6 @@ void M_DrawFeaturesMenu(void);
 CVAR_EXTERNAL(sv_lockmonsters);
 
 enum {
-	features_levels = 0,
 	features_invulnerable,
 	features_healthboost,
 	features_securitykeys,
@@ -2410,16 +2406,10 @@ enum {
 	features_mapeverything,
 	features_lockmonsters,
 	features_noclip,
-	features_wireframe,
 	features_end
 } features_e;
 
-#define FEATURESWARPLEVEL    "Warp To Level"
-#define FEATURESWARPFUN        "Warp To Fun"
-#define FEATURESWARPSINGLE  "Warp To PWAD"
-
 menuitem_t FeaturesMenu[] = {
-	{2,FEATURESWARPLEVEL,M_DoFeature,'l'},
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
@@ -2427,7 +2417,6 @@ menuitem_t FeaturesMenu[] = {
 	{2,"Map Everything",M_DoFeature,'m'},
 	{2,"Lock Monsters",M_DoFeature,'o'},
 	{2,"Wall Blocking",M_DoFeature,'w'},
-	{2,"Wireframe Mode",M_DoFeature,'r'},
 };
 
 menu_t featuresDef = {
@@ -2457,14 +2446,8 @@ void M_Features(int choice) {
 void M_DrawFeaturesMenu(void) {
 	mapdef_t* map = P_GetMapInfo(levelwarp + 1);
 
-	/*Warp To Level*/
-	M_DrawSmbString(map->mapname, &featuresDef, features_levels);
-
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);
-
-	/*Wireframe Mode*/
-	M_DrawSmbString(msgNames[wireframeon], &featuresDef, features_wireframe);
 
 	/*Invulnerable*/
 	M_DrawSmbString(msgNames[players[consoleplayer].cheats & CF_GODMODE ? 1 : 0],
@@ -2485,43 +2468,12 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Full Keys*/
 	M_DrawSmbString(showfullitemvalue[2] ? "100%%" : "-", &featuresDef, features_securitykeys);
-
-	switch (map->type) {
-	case 0:
-		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPLEVEL);
-		break;
-	case 1:
-		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPFUN);
-		break;
-	case 2:
-		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPSINGLE);
-		break;
-	}
 }
 
 void M_DoFeature(int choice) {
 	int i = 0;
 
 	switch (itemOn) {
-	case features_levels:
-		if (choice) {
-			levelwarp++;
-			if (levelwarp >= 39) {
-				if (choice == 2) {
-					levelwarp = 0;
-				}
-				else {
-					levelwarp = 39;
-				}
-			}
-		}
-		else {
-			levelwarp--;
-			if (levelwarp <= 0) {
-				levelwarp = 0;
-			}
-		}
-		break;
 
 	case features_invulnerable:
 		if (choice) {
@@ -2588,17 +2540,12 @@ void M_DoFeature(int choice) {
 			CON_CvarSetValue(sv_lockmonsters.name, 0);
 		}
 		break;
-
-	case features_wireframe:
-		R_DrawWireframe(choice);
-		wireframeon = choice;
-		break;
 	}
 
 	S_StartSound(NULL, sfx_switch2);
 }
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 #include "g_controls.h"
 
@@ -2858,7 +2805,7 @@ void M_BuildControlMenu(void) {
 }
 
 void M_ChangeKeyBinding(int choice) {
-	char action[128];
+	int8_t action[128];
 	sprintf(action, "%s %d", PlayerActions[choice].action, 1);
 	dstrcpy(MenuBindBuff, action);
 	messageBindCommand = MenuBindBuff;
@@ -2883,7 +2830,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	controls_gamepad,
 #endif
 	controls_return,
@@ -2893,16 +2840,16 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{1,"Gamepad",M_ControlChoice, 'g'},
 #endif
 	{1,"/r Return",M_Return, 0x20}
 };
 
-char* ControlsHints[controls_end] = {
+int8_t* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	"configure gamepad functionality",
 #endif
 	NULL
@@ -2935,7 +2882,7 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
@@ -3134,7 +3081,7 @@ void M_DrawSave(void) {
 	M_DrawSaveGameFrontend(&SaveDef);
 
 	for (i = 0; i < load_end; i++) {
-		char* string;
+		int8_t* string;
 
 		if (i == saveSlot && inputEnter) {
 			string = inputString;
@@ -3265,7 +3212,7 @@ void M_DrawLoad(void) {
 // User wants to load this game
 //
 void M_LoadSelect(int choice) {
-	//char name[256];
+	//int8_t name[256];
 
 	// sprintf(name, SAVEGAMENAME"%d.dsg", choice);
 	// G_LoadGame(name);
@@ -3301,7 +3248,7 @@ void M_LoadGame(int choice) {
 void M_ReadSaveStrings(void) {
 	int     handle;
 	int     i;
-	// char    name[256];
+	// int8_t    name[256];
 
 	for (i = 0; i < load_end; i++) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
@@ -3541,7 +3488,7 @@ static void M_ReturnInstant(void) {
 // M_SetInputString
 //
 
-static void M_SetInputString(char* string, int len) {
+static void M_SetInputString(int8_t* string, int len) {
 	inputEnter = true;
 	dstrcpy(oldInputString, string);
 
@@ -3558,7 +3505,7 @@ static void M_SetInputString(char* string, int len) {
 // M_DrawSmbString
 //
 
-static void M_DrawSmbString(const char* text, menu_t* menu, int item) {
+static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item) {
 	int x;
 	int y;
 
@@ -3572,7 +3519,7 @@ static void M_DrawSmbString(const char* text, menu_t* menu, int item) {
 // Find string width from hu_font chars
 //
 
-static int M_StringWidth(const char* string) {
+static int M_StringWidth(const int8_t* string) {
 	int i;
 	int w = 0;
 	int c;
@@ -3591,34 +3538,13 @@ static int M_StringWidth(const char* string) {
 }
 
 //
-// M_StringHeight
-// Find string height from hu_font chars
-//
-
-static int M_StringHeight(const char* string) {
-	int i;
-	int h;
-	int height = ST_FONTWHSIZE;
-
-	h = height;
-
-	for (i = 0; i < dstrlen(string); i++) {
-		if (string[i] == '\n') {
-			h += height;
-		}
-	}
-
-	return h;
-}
-
-//
 // M_BigStringWidth
 // Find string width from bigfont chars
 //
 
-static int M_BigStringWidth(const char* string) {
+static int M_BigStringWidth(const int8_t* string) {
 	int width = 0;
-	char t = 0;
+	int8_t t = 0;
 	int id = 0;
 	int len = 0;
 	int i = 0;
@@ -3947,8 +3873,7 @@ static void M_DrawThermo(int x, int y, int thermWidth, float thermDot) {
 // M_SetThumbnail
 //
 
-static dtexture thumbnail = 0;
-static char thumbnail_date[32];
+static int8_t thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
@@ -4035,7 +3960,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	// draw thumbnail texture and stats
 	//
 	if (M_SetThumbnail(itemOn)) {
-		char string[128];
+		int8_t string[128];
 
 		curgfx = -1;
 
@@ -4061,7 +3986,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 const symboldata_t xinputbutons[12] = {
 	{ 0, 0, 15, 16 },   // B
@@ -4243,7 +4168,7 @@ dboolean M_Responder(event_t* ev) {
 		return false;
 	}
 
-#ifdef _USE_XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 	switch (ch) {
 	case BUTTON_DPAD_UP:
@@ -4491,17 +4416,7 @@ dboolean M_Responder(event_t* ev) {
 				}
 
 				currentMenu->lastOn = itemOn;
-				if (currentMenu == &featuresDef) {
-					if (currentMenu->menuitems[itemOn].routine == M_DoFeature &&
-						itemOn == features_levels) {
-						gameaction = ga_warplevel;
-						gamemap = nextmap = levelwarp + 1;
-						M_ClearMenus();
-						dmemset(passwordData, 0xff, 16);
-						return true;
-					}
-				}
-				else if (currentMenu->menuitems[itemOn].status >= 2 ||
+				if (currentMenu->menuitems[itemOn].status >= 2 ||
 					currentMenu->menuitems[itemOn].status == -2) {
 					currentMenu->menuitems[itemOn].routine(2);
 				}
@@ -4942,7 +4857,7 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (xgamepad.connected && currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
@@ -5089,7 +5004,7 @@ void M_Ticker(void) {
 		SaveDef.prevMenu = &PauseDef;
 	}
 
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	//
 	// hide mouse menu if gamepad controller is plugged in
 	//
@@ -5176,7 +5091,7 @@ void M_Init(void) {
 		PasswordMenu[i].status = 1;
 		PasswordMenu[i].name[0] = passwordChar[i];
 		PasswordMenu[i].routine = NULL;
-		PasswordMenu[i].alphaKey = (char)passwordChar[i];
+		PasswordMenu[i].alphaKey = (int8_t)passwordChar[i];
 	}
 
 	dmemset(passwordData, 0xff, 16);

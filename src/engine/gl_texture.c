@@ -94,7 +94,6 @@ typedef struct {
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
-CVAR_EXTERNAL(r_fillmode);
 CVAR_CMD(r_texturecombiner, 0)
 {
 	//ATSB: Stubbed
@@ -170,10 +169,6 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	byte* png;
 	int w;
 	int h;
-
-	if (r_fillmode.value <= 0) {
-		return;
-	}
 
 	// get translation index
 	texnum = texturetranslation[texnum];
@@ -320,7 +315,7 @@ static void InitGfxTextures(void) {
 // GL_BindGfxTexture
 //
 
-int GL_BindGfxTexture(const char* name, dboolean alpha) {
+int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
 	byte* png;
 	int lump;
 	int width;
@@ -397,7 +392,7 @@ static void InitSpriteTextures(void) {
 		for (j = 0; j < NUMSPRITES; j++) {
 			// start looking for external palette lumps
 			if (!dstrncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
-				char palname[9];
+				int8_t palname[9];
 
 				// increase the count if a palette lump is found
 				for (p = 1; p < 10; p++) {
@@ -452,10 +447,6 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	byte* png;
 	int w;
 	int h;
-
-	if (r_fillmode.value <= 0) {
-		return;
-	}
 
 	if ((spritenum == cursprite) && (pal == curtrans)) {
 		return;
@@ -586,10 +577,6 @@ static dtexture envtexture = 0;
 void GL_BindEnvTexture(void) {
 	rcolor rgb[16];
 
-	if (r_fillmode.value <= 0) {
-		return;
-	}
-
 	dmemset(rgb, 0xff, sizeof(rcolor) * 16);
 
 	if (envtexture == 0) {
@@ -620,10 +607,6 @@ void GL_UpdateEnvTexture(rcolor color) {
 	int i;
 
 	if (!has_GL_ARB_multitexture) {
-		return;
-	}
-
-	if (r_fillmode.value <= 0) {
 		return;
 	}
 
@@ -678,10 +661,6 @@ void GL_UnloadTexture(dtexture* texture) {
 
 void GL_SetTextureUnit(int unit, dboolean enable) {
 	if (!has_GL_ARB_multitexture) {
-		return;
-	}
-
-	if (r_fillmode.value <= 0) {
 		return;
 	}
 

@@ -34,6 +34,12 @@ They can either be a tag or a graphic.  This is due to me not flat-out reading a
 
 No other changes are needed.
 
+## Where are the PWADs?
+
+Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
+You can find them on moddb, just look for the EX+ / EX Plus wads:
+https://www.moddb.com/games/doom-64/downloads/
+
 ## Dehacked Support
 
 For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
@@ -99,11 +105,15 @@ Clone this repo
 
     $ git clone https://github.com/atsb/Doom64EX-Plus
 
-## Linux or Cross Platform Compilation
+## Linux
 
-Use the `build.sh` script for a native build or the `build_win_cross.sh` script for cross compilation for Windows.
+Use the `build.sh` script for a native build.
 
 ## macOS
+Install it from MacSourcePorts:
+https://macsourceports.com/game/doom64
+
+Or if you feel adventurous, read below:
 Install MacPorts and get the dependencies.
 
 Then use the XCode project file, which is the only supported way to compile on macOS.  Everything is already defined.

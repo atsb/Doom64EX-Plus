@@ -58,6 +58,7 @@
 #include "g_local.h"
 #include "m_password.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "g_demo.h"
 
 #include "deh_main.h"
@@ -121,7 +122,7 @@ int         turnheld;                       // for accelerative turning
 int         lookheld;
 
 int         savegameslot;
-char        savedescription[32];
+int8_t        savedescription[32];
 
 playercontrols_t    Controls;
 
@@ -886,7 +887,6 @@ void G_DoLoadLevel(void) {
 		return;
 	}
 
-	forcecollision = map->oldcollision;
 	forcejump = map->allowjump;
 	forcefreelook = map->allowfreelook;
 
@@ -1129,8 +1129,6 @@ void G_PlayerReborn(int player) {
 	dboolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
-	int         artifacts;
-	dboolean    backpack;
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(dboolean) * NUMCARDS);
@@ -1138,8 +1136,6 @@ void G_PlayerReborn(int player) {
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
-	backpack = players[player].backpack;
-	artifacts = players[player].artifacts;
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
 	secretcount = players[player].secretcount;
@@ -1173,20 +1169,6 @@ void G_PlayerReborn(int player) {
 	if (netgame) {
 		for (i = 0; i < NUMCARDS; i++) {
 			players[player].cards[i] = cards[i];
-		}
-
-		if (gameflags & GF_KEEPITEMS) {
-			p->artifacts = artifacts;
-			p->backpack = backpack;
-
-			for (i = 0; i < NUMAMMO; i++) {
-				p->ammo[i] = pammo[i];
-				p->maxammo[i] = pmaxammo[i];
-			}
-
-			for (i = 0; i < NUMWEAPONS; i++) {
-				p->weaponowned[i] = wpns[i];
-			}
 		}
 	}
 
@@ -1471,13 +1453,13 @@ void G_RunGame(void) {
 	}
 }
 
-char savename[256];
+int8_t savename[256];
 
 //
 // G_LoadGame
 //
 
-void G_LoadGame(const char* name) {
+void G_LoadGame(const int8_t* name) {
 	dstrcpy(savename, name);
 	gameaction = ga_loadgame;
 }
@@ -1504,7 +1486,7 @@ void G_DoLoadGame(void) {
 // Description is a 24 byte text string
 //
 
-void G_SaveGame(int slot, const char* description) {
+void G_SaveGame(int slot, const int8_t* description) {
 	savegameslot = slot;
 	dstrcpy(savedescription, description);
 	sendsave = true;
@@ -1612,8 +1594,8 @@ void G_SetFastParms(int fast_pending) {
 		/* only change if necessary */
 		if ((fast = fast_pending)) {
 			for (i = S_SARG_STND; i <= S_SARG_PAIN2; i++) {
-				if (states[i].tics != 1) { // killough 4/10/98
-					states[i].tics >>= 1;    // don't change 1->0 since it causes cycles
+				if (states[i].info_tics != 1) { // killough 4/10/98
+					states[i].info_tics >>= 1;    // don't change 1->0 since it causes cycles
 				}
 			}
 			mobjinfo[MT_PROJ_BRUISER1].speed = 20 * FRACUNIT;
@@ -1623,7 +1605,7 @@ void G_SetFastParms(int fast_pending) {
 		}
 		else {
 			for (i = S_SARG_STND; i <= S_SARG_PAIN2; i++) {
-				states[i].tics <<= 1;
+				states[i].info_tics <<= 1;
 			}
 
 			mobjinfo[MT_PROJ_BRUISER1].speed = 15 * FRACUNIT;

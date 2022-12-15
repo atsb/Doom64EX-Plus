@@ -27,6 +27,7 @@
 
 #include "doomstat.h"
 #include "i_video.h"
+#include "i_sdlinput.h"
 #include "con_console.h"
 #include "z_zone.h"
 #include "i_system.h"
@@ -60,7 +61,7 @@ static CMD(ListCvars) {
 // CON_CvarGet
 //
 
-cvar_t* CON_CvarGet(char* name) {
+cvar_t* CON_CvarGet(int8_t* name) {
 	cvar_t* var;
 
 	for (var = cvarcap; var; var = var->next) {
@@ -76,7 +77,7 @@ cvar_t* CON_CvarGet(char* name) {
 // CON_CvarValue
 //
 
-float CON_CvarValue(char* name) {
+float CON_CvarValue(int8_t* name) {
 	cvar_t* var;
 
 	var = CON_CvarGet(name);
@@ -91,7 +92,7 @@ float CON_CvarValue(char* name) {
 // CON_CvarString
 //
 
-char* CON_CvarString(char* name) {
+int8_t* CON_CvarString(int8_t* name) {
 	cvar_t* var;
 
 	var = CON_CvarGet(name);
@@ -106,7 +107,7 @@ char* CON_CvarString(char* name) {
 // CON_CvarSet
 //
 
-void CON_CvarSet(char* var_name, char* value) {
+void CON_CvarSet(int8_t* var_name, int8_t* value) {
 	cvar_t* var;
 	dboolean changed;
 
@@ -134,8 +135,8 @@ void CON_CvarSet(char* var_name, char* value) {
 // CON_CvarSetValue
 //
 
-void CON_CvarSetValue(char* var_name, float value) {
-	char val[32];
+void CON_CvarSetValue(int8_t* var_name, float value) {
+	int8_t val[32];
 
 	sprintf(val, "%f", value);
 	CON_CvarSet(var_name, val);
@@ -146,7 +147,7 @@ void CON_CvarSetValue(char* var_name, float value) {
 //
 
 void CON_CvarRegister(cvar_t* variable) {
-	char* oldstr;
+	int8_t* oldstr;
 
 	// first check to see if it has allready been defined
 	if (CON_CvarGet(variable->name)) {
@@ -178,6 +179,7 @@ void CON_CvarInit(void) {
 	ST_RegisterCvars();
 	S_RegisterCvars();
 	I_RegisterCvars();
+	ISDL_RegisterKeyCvars();
 	M_RegisterCvars();
 	P_RegisterCvars();
 	G_RegisterCvars();

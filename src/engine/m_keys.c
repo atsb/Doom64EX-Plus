@@ -40,7 +40,7 @@
 
 typedef struct {
 	int        code;
-	char* name;
+	int8_t* name;
 } keyinfo_t;
 
 static keyinfo_t    Keys[] = {
@@ -119,7 +119,7 @@ static keyinfo_t    Keys[] = {
 	{KEY_MWHEELDOWN,        "MouseWheelDown"},
 
 	// villsa 01052014
-#ifdef _USE_XINPUT  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{BUTTON_DPAD_UP,        "DPadUp"},
 	{BUTTON_DPAD_DOWN,      "DPadDown"},
 	{BUTTON_DPAD_LEFT,      "DPadLeft"},
@@ -145,11 +145,11 @@ static keyinfo_t    Keys[] = {
 // M_GetKeyName
 //
 
-int M_GetKeyName(char* buff, int key) {
+int M_GetKeyName(int8_t* buff, int key) {
 	keyinfo_t* pkey;
 
 	if (((key >= 'a') && (key <= 'z')) || ((key >= '0') && (key <= '9'))) {
-		buff[0] = (char)toupper(key);
+		buff[0] = (int8_t)toupper(key);
 		buff[1] = 0;
 		return true;
 	}

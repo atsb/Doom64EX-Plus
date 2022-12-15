@@ -1,8 +1,10 @@
 // Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2007-2012 Samuel Villarreal
-//
+// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2007-2014 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme 
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -19,40 +21,36 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
+//
+// DESCRIPTION:
+//    SDL Input
+//
+//-----------------------------------------------------------------------------
 
-#ifndef __SC_MAIN__
-#define __SC_MAIN__
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
+#include <SDL2/SDL.h>
+#endif
+#include "doomtype.h"
+////////////Input//////////////
 
-typedef struct {
-	int8_t    token[512];
-	byte* buffer;
-	int8_t* pointer_start;
-	int8_t* pointer_end;
-	int     linepos;
-	int     rowpos;
-	int     buffpos;
-	int     buffsize;
-	void (*open)(const int8_t*);
-	void (*close)(void);
-	void (*compare)(const int8_t*);
-	int (*find)(dboolean);
-	int8_t(*fgetchar)(void);
-	void (*rewind)(void);
-	int8_t* (*getstring)(void);
-	int (*getint)(void);
-	int (*setdata)(void*, void*);
-	int (*readtokens)(void);
-	void (*error)(const int8_t*);
-} scparser_t;
+extern int UseMouse[2];
+extern int UseJoystick;
+extern int mouse_x;
+extern int mouse_y;
 
-extern scparser_t sc_parser;
+int I_MouseAccel(int val);
+void I_MouseAccelChange(void);
 
-typedef struct {
-	const int8_t* token;
-	int64   ptroffset;
-	int8_t    type;
-} scdatatable_t;
+void ISDL_RegisterKeyCvars(void);
 
-void SC_Init(void);
+static void I_GetEvent(SDL_Event* Event);
+static void I_ReadMouse(void);
+static void I_InitInputs(void);
 
-#endif // __SC_MAIN__
+void I_StartTic(void);
+void I_FinishUpdate(void);
+int I_ShutdownWait(void);
+void I_CenterMouse(void);
+dboolean I_UpdateGrab(void);

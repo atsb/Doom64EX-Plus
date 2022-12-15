@@ -46,7 +46,7 @@
 // Draw_GfxImage
 //
 
-void Draw_GfxImage(int x, int y, const char* name, rcolor color, dboolean alpha) {
+void Draw_GfxImage(int x, int y, const int8_t* name, rcolor color, dboolean alpha) {
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
@@ -122,7 +122,7 @@ static vtx_t vtxstring[MAX_MESSAGE_SIZE];
 //
 
 int Draw_Text(int x, int y, rcolor color, float scale,
-	dboolean wrap, const char* string, ...) {
+	dboolean wrap, const int8_t* string, ...) {
 	int c;
 	int i;
 	int vi = 0;
@@ -130,8 +130,7 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	const float size = 0.03125f;
 	float fcol, frow;
 	int start = 0;
-	dboolean fill = false;
-	char msg[MAX_MESSAGE_SIZE];
+	int8_t msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 	const int ix = x;
 
@@ -140,13 +139,6 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	va_end(va);
 
 	GL_SetState(GLSTATE_BLEND, 1);
-
-	if (!r_fillmode.value) {
-		dglEnable(GL_TEXTURE_2D);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		r_fillmode.value = 1.0f;
-		fill = true;
-	}
 
 	GL_BindGfxTexture("SFONT", true);
 
@@ -221,12 +213,6 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	}
 
 	GL_ResetViewport();
-
-	if (fill) {
-		dglDisable(GL_TEXTURE_2D);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		r_fillmode.value = 0.0f;
-	}
 
 	GL_SetState(GLSTATE_BLEND, 0);
 	GL_SetOrthoScale(1.0f);
@@ -339,9 +325,9 @@ const symboldata_t symboldata[] = {  //0x5B9BC
 // Center_Text
 //
 
-int Center_Text(const char* string) {
+int Center_Text(const int8_t* string) {
 	int width = 0;
-	char t = 0;
+	int8_t t = 0;
 	int id = 0;
 	int len = 0;
 	int i = 0;
@@ -404,7 +390,7 @@ int Center_Text(const char* string) {
 // Draw_BigText
 //
 
-int Draw_BigText(int x, int y, rcolor color, const char* string) {
+int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 	int c = 0;
 	int i = 0;
 	int vi = 0;
@@ -578,7 +564,7 @@ void Draw_Number(int x, int y, int num, int type, rcolor c) {
 	int nx = 0;
 	int count;
 	int j;
-	char str[2];
+	int8_t str[2];
 
 	for (count = 0, j = 0; count < 16; count++, j++) {
 		digits[j] = num % 10;
@@ -893,7 +879,7 @@ static const symboldata_t confontmap[256] = {
 //
 
 float Draw_ConsoleText(float x, float y, rcolor color,
-	float scale, const char* string, ...) {
+	float scale, const int8_t* string, ...) {
 	int c = 0;
 	int i = 0;
 	int vi = 0;
@@ -905,7 +891,7 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	float tx2 = 0.0f;
 	float ty1 = 0.0f;
 	float ty2 = 0.0f;
-	char msg[MAX_MESSAGE_SIZE];
+	int8_t msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 	float width;
 	float height;

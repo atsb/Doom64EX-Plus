@@ -290,6 +290,11 @@
     </ClCompile>
     <ClCompile Include="..\src\engine\net_structure.c">
       <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\engine\i_sdlinput.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\deh_str.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -516,7 +521,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\net_structure.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\engine\i_sdlinput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\deh_str.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

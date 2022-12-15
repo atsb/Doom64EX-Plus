@@ -29,15 +29,15 @@
 
 // Add a new WAD and merge it into the main directory
 
-void W_MergeFile(char* filename);
+void W_MergeFile(int8_t* filename);
 
 // NWT-style merging
 
-void W_NWTMergeFile(char* filename, int flags);
+void W_NWTMergeFile(int8_t* filename, int flags);
 
 // Acts the same as NWT's "-merge" option.
 
-void W_NWTDashMerge(char* filename);
+void W_NWTDashMerge(int8_t* filename);
 
 // Debug function that prints the WAD directory.
 

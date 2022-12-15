@@ -811,24 +811,6 @@ static void P_AlertTaggedMobj(mobj_t* activator, int tid) {
 			continue;
 		}
 
-		// 20120610 villsa - check for killable things only
-		if (!(mo->flags & MF_COUNTKILL)) {
-			continue;
-		}
-
-		// [kex] TODO - there's no check if the mobj is already dead but
-		// if it is, then just revive it. May need to add a feature
-		// to skip dead mobjs sometime in the future
-		if (mo->health <= 0) {
-			mobjinfo_t* info = &mobjinfo[mo->type];
-
-			mo->health = info->spawnhealth;
-			mo->flags = info->flags;
-			mo->height = info->height;
-			mo->radius = info->radius;
-			mo->blockflag = BF_MOBJPASS;
-		}
-
 		st = &states[mo->info->seestate];
 
 		// 03022014 villsa - handle checks if activator is not a player
@@ -848,8 +830,8 @@ static void P_AlertTaggedMobj(mobj_t* activator, int tid) {
 
 		mo->threshold = 0;
 		mo->state = st;
-		mo->tics = st->tics;
-		mo->frame = st->frame;
+		mo->tics = st->info_tics;
+		mo->frame = st->info_frame;
 		mo->sprite = st->sprite;
 	}
 }
@@ -1665,7 +1647,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			}
 
 			// triggered dead things can activate line specials
-			if (line->flags & ML_THINGTRIGGER && thing->flags & MF_TRIGDEATH) {
+			if (line->flags & ML_THINGTRIGGER) {
 				return P_InitSpecialLine(thing, line, side);
 			}
 		}
@@ -1675,13 +1657,13 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			return false;
 		}
 
-		// never allow a non-player mobj to use lines with these useflags
-		if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED | MLU_SHOOT | MLU_MACRO)) {
+		// Missiles should NOT trigger specials...
+		if (thing->flags & MF_MISSILE) {
 			return false;
 		}
 
-		// Missiles should NOT trigger specials...
-		if (thing->flags & MF_MISSILE) {
+		// never allow a non-player mobj to use lines with these useflags
+		if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED)) {
 			return false;
 		}
 
@@ -1818,6 +1800,8 @@ int             levelTimeCount;
 extern line_t** linespeciallist;
 extern int16_t    numlinespecials;
 
+#define SCROLLLIMIT (FRACUNIT*127)
+
 void P_UpdateSpecials(void) {
 	int         i;
 	line_t* line;
@@ -1835,22 +1819,30 @@ void P_UpdateSpecials(void) {
 	P_CyclePicAnims();
 
 	// ANIMATE LINE SPECIALS
-	for (i = 0; i < numlinespecials; i++) {
+	for (i = 0; i < numlinespecials; i++)
+	{
 		line = linespeciallist[i];
-		if (line->flags & ML_SCROLLRIGHT) {
+
+		if (line->flags & ML_SCROLLRIGHT)
+		{
 			sides[line->sidenum[0]].textureoffset += FRACUNIT;
+			sides[line->sidenum[0]].textureoffset &= SCROLLLIMIT;
 		}
-
-		if (line->flags & ML_SCROLLLEFT) {
+		else if (line->flags & ML_SCROLLLEFT)
+		{
 			sides[line->sidenum[0]].textureoffset -= FRACUNIT;
+			sides[line->sidenum[0]].textureoffset &= SCROLLLIMIT;
 		}
 
-		if (line->flags & ML_SCROLLUP) {
+		if (line->flags & ML_SCROLLUP)
+		{
 			sides[line->sidenum[0]].rowoffset += FRACUNIT;
+			sides[line->sidenum[0]].rowoffset &= SCROLLLIMIT;
 		}
-
-		if (line->flags & ML_SCROLLDOWN) {
+		else if (line->flags & ML_SCROLLDOWN)
+		{
 			sides[line->sidenum[0]].rowoffset -= FRACUNIT;
+			sides[line->sidenum[0]].rowoffset &= SCROLLLIMIT;
 		}
 	}
 
@@ -1875,10 +1867,10 @@ void P_UpdateSpecials(void) {
 				sector->xoffset -= speed;
 			}
 			if (sector->flags & MS_SCROLLUP) {
-				sector->yoffset += speed;
+				sector->yoffset -= speed;
 			}
 			if (sector->flags & MS_SCROLLDOWN) {
-				sector->yoffset -= speed;
+				sector->yoffset += speed;
 			}
 		}
 	}
@@ -1895,22 +1887,17 @@ void P_UpdateSpecials(void) {
 			if (!buttonlist[i].btimer) {
 				switch (buttonlist[i].where) {
 				case top:
-					sides[buttonlist[i].line->sidenum[0]].toptexture =
-						buttonlist[i].btexture ^ 1;
+					buttonlist[i].side->toptexture = buttonlist[i].btexture;
 					break;
-
 				case middle:
-					sides[buttonlist[i].line->sidenum[0]].midtexture =
-						buttonlist[i].btexture ^ 1;
+					buttonlist[i].side->midtexture = buttonlist[i].btexture;
 					break;
-
 				case bottom:
-					sides[buttonlist[i].line->sidenum[0]].bottomtexture =
-						buttonlist[i].btexture ^ 1;
+					buttonlist[i].side->bottomtexture = buttonlist[i].btexture;
 					break;
 				}
 
-				S_StartSound((mobj_t*)&buttonlist[i].line->frontsector->soundorg, sfx_switch1);
+				S_StartSound((mobj_t*)buttonlist[i].soundorg, sfx_switch1);
 				dmemset(&buttonlist[i], 0, sizeof(button_t));
 			}
 		}

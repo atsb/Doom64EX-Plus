@@ -208,11 +208,6 @@ static dboolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 static void SetupFog(void) {
 	dglFogi(GL_FOG_MODE, GL_LINEAR);
 
-	// don't render fog in wireframe mode
-	if (r_fillmode.value <= 0) {
-		return;
-	}
-
 	if (!skyflatnum) {
 		dglDisable(GL_FOG);
 	}
@@ -295,7 +290,7 @@ void R_RenderWorld(void) {
 
 	dglEnable(GL_DEPTH_TEST);
 
-	DL_BeginDrawList(r_fillmode.value >= 1, r_texturecombiner.value >= 1);
+	DL_BeginDrawList(1);
 
 	// setup texture environment for effects
 	if (r_texturecombiner.value) {

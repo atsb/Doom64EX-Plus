@@ -97,14 +97,14 @@ static dboolean seqready = false;
 //
 
 typedef struct {
-    char        header[4];
+    int8_t        header[4];
     int         length;
     byte*       data;
     byte        channel;
 } track_t;
 
 typedef struct {
-    char        header[4];
+    int8_t        header[4];
     int         chunksize;
     short       type;
     word        ntracks;
@@ -269,7 +269,7 @@ static void Seq_SetGain(doomseq_t* seq) {
 // Seq_SetConfig
 //
 
-static void Seq_SetConfig(doomseq_t* seq, char* setting, int value) {
+static void Seq_SetConfig(doomseq_t* seq, const char* setting, int value) {
     fluid_settings_setint(seq->settings, setting, value);
 }
 
@@ -595,7 +595,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
     int meta;
     int b;
     int i;
-    char string[256];
+    int8_t string[256];
 
     meta = Chan_GetNextMidiByte(chan);
 
@@ -1046,28 +1046,8 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 //
 
 static void Seq_Shutdown(doomseq_t* seq) {
-    //
-    // signal the sequencer to shut down
-    //
-    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
-
-    //
-    // wait until the audio thread is finished
-    //
-    SDL_WaitThread(seq->thread, NULL);
-
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
-
-    //
-    // fluidsynth cleanup stuff
-    //
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
 }
 
 //
@@ -1128,7 +1108,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 
 void I_InitSequencer(void) {
     dboolean sffound;
-    char *sfpath;
+    int8_t *sfpath;
 
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
@@ -1254,7 +1234,7 @@ void I_InitSequencer(void) {
     int id;
     if ((id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0)) <= 0)
     {
-        CON_Warnf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
         exit(-1);
     }
 

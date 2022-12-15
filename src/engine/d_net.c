@@ -44,6 +44,7 @@
 #endif
 
 #include "i_video.h"
+#include "i_sdlinput.h"
 
 #define FEATURE_MULTIPLAYER 1
 
@@ -209,7 +210,7 @@ void D_StartGameLoop(void) {
 //
 
 static dboolean had_warning = false;
-static void PrintMD5Digest(char* s, byte* digest) {
+static void PrintMD5Digest(int8_t* s, byte* digest) {
 	uint32_t i;
 
 	I_Printf("%s: ", s);

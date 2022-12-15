@@ -20,7 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 #ifdef RCSID
-static const char rcsid[] = "$Id: m_random.c 1250 2014-01-14 04:12:43Z svkaiser $";
+static const int8_t rcsid[] = "$Id: m_random.c 1250 2014-01-14 04:12:43Z svkaiser $";
 #endif
 
 #include "doomstat.h"

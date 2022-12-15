@@ -29,8 +29,8 @@
 
 DEH_BEGIN_MAPPING(state_mapping, state_t)
   DEH_MAPPING("Sprite number",    sprite)
-  DEH_MAPPING("Sprite subnumber", frame)
-  DEH_MAPPING("Duration",         tics)
+  DEH_MAPPING("Sprite subnumber", info_frame)
+  DEH_MAPPING("Duration",         info_tics)
   DEH_MAPPING("Next frame",       nextstate)
   DEH_MAPPING("Unknown 1",        misc1)
   DEH_MAPPING("Unknown 2",        misc2)

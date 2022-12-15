@@ -70,7 +70,7 @@ dboolean DL_ProcessSprites(vtxlist_t* vl, int* drawcount);
 
 vtxlist_t* DL_AddVertexList(drawlist_t* dl);
 int DL_GetDrawListSize(int tag);
-void DL_BeginDrawList(dboolean t, dboolean a);
+void DL_BeginDrawList(dboolean t);
 void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*));
 void DL_RenderDrawList(void);
 void DL_Init(void);

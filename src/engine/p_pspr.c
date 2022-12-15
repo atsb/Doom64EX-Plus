@@ -95,7 +95,7 @@ void P_SetPsprite (player_t* player, int position, statenum_t stnum)
 
 		state = &states[stnum];
 		psp->state = state;
-		psp->tics = state->tics;	// could be 0
+		psp->tics = state->info_tics;	// could be 0
 
 		if (state->misc1)
 		{

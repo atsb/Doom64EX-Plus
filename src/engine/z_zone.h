@@ -70,20 +70,20 @@ enum {
 
 #define PU_PURGELEVEL PU_CACHE        /* First purgable tag's level */
 
-void* (Z_Malloc)(int size, int tag, void* user, const char*, int);
-void (Z_Free)(void* ptr, const char*, int);
-void (Z_FreeTags)(int lowtag, int hightag, const char*, int);
-void (Z_ChangeTag)(void* ptr, int tag, const char*, int);
+void* (Z_Malloc)(int size, int tag, void* user, const int8_t*, int);
+void (Z_Free)(void* ptr, const int8_t*, int);
+void (Z_FreeTags)(int lowtag, int hightag, const int8_t*, int);
+void (Z_ChangeTag)(void* ptr, int tag, const int8_t*, int);
 void (Z_Init)(void);
-void* (Z_Calloc)(int n, int tag, void* user, const char*, int);
-void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const char*, int);
-char* (Z_Strdup)(const char* s, int tag, void* user, const char*, int);
-char* (Z_Strdupa)(const char* s, const char* file, int line);
-void* (Z_Alloca)(int n, const char* file, int line);
-void (Z_FreeAlloca)(const char* file, int line);
-void (Z_CheckHeap)(const char*, int);      // killough 3/22/98: add file/line info
-int (Z_CheckTag)(void*, const char*, int);
-void (Z_Touch)(void* ptr, const char*, int);
+void* (Z_Calloc)(int n, int tag, void* user, const int8_t*, int);
+void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const int8_t*, int);
+int8_t* (Z_Strdup)(const int8_t* s, int tag, void* user, const int8_t*, int);
+int8_t* (Z_Strdupa)(const int8_t* s, const int8_t* file, int line);
+void* (Z_Alloca)(int n, const int8_t* file, int line);
+void (Z_FreeAlloca)(const int8_t* file, int line);
+void (Z_CheckHeap)(const int8_t*, int);      // killough 3/22/98: add file/line info
+int (Z_CheckTag)(void*, const int8_t*, int);
+void (Z_Touch)(void* ptr, const int8_t*, int);
 
 #define Z_Free(a)           (Z_Free)        (a,      __FILE__,__LINE__)
 #define Z_FreeTags(a,b)     (Z_FreeTags)    (a,b,    __FILE__,__LINE__)
