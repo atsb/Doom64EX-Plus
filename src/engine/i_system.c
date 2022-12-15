@@ -295,6 +295,17 @@ int8_t* I_FindDataFile(int8_t* file) {
 			return path;
 	}
 
+#ifdef __APPLE__
+	if ((dir = SDL_GetBasePath())) {
+		snprintf(path, 511, "%s%s", dir, file);
+		
+		  Free(dir);
+
+		if (I_FileExists(path))
+			return path;
+	}
+#endif
+
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
            
