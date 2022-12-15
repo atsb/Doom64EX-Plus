@@ -156,6 +156,7 @@ CVAR_EXTERNAL(p_fdoubleclick);
 CVAR_EXTERNAL(p_sdoubleclick);
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
+CVAR_EXTERNAL(m_nospawnsound);
 
 //
 // G_RegisterCvars
@@ -173,6 +174,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&sv_allowcheats);
 	CON_CvarRegister(&sv_friendlyfire);
 	CON_CvarRegister(&sv_keepitems);
+	CON_CvarRegister(&m_nospawnsound);
 	CON_CvarRegister(&compat_mobjpass);
 }
 

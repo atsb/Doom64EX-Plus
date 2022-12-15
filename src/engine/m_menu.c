@@ -974,6 +974,7 @@ CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(compat_mobjpass);
 CVAR_EXTERNAL(r_wipe);
 CVAR_EXTERNAL(hud_disablesecretmessages);
+CVAR_EXTERNAL(m_nospawnsound);
 
 enum {
 	misc_header1,
@@ -995,6 +996,7 @@ enum {
 	misc_showlocks,
 	misc_amobjects,
 	misc_amoverlay,
+	misc_nospawnsound,
 	misc_header5,
 	misc_comp_pass,
 	misc_disablesecretmessages,
@@ -1023,6 +1025,7 @@ menuitem_t MiscMenu[] = {
 	{2,"Locked Doors:",M_MiscChoice },
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
+	{2,"Spawn Sounds:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
@@ -1050,6 +1053,7 @@ int8_t* MiscHints[misc_end] = {
 	"colorize locked doors accordingly to the key in automap",
 	"set how objects are rendered in automap",
 	"render the automap into the player hud",
+	"thing/enemy spawn sound toggle",
 	NULL,
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
@@ -1072,6 +1076,7 @@ menudefault_t MiscDefault[] = {
 	{ &am_showkeycolors, 0 },
 	{ &am_drawobjects, 0 },
 	{ &am_overlay, 0 },
+	{ &m_nospawnsound, 0 },
 	{ &compat_mobjpass, 1 },
 	{ NULL, -1 }
 };
@@ -1192,6 +1197,10 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &am_overlay);
 		break;
 
+	case misc_nospawnsound:
+		M_SetOptionValue(choice, 0, 1, 1, &m_nospawnsound);
+		break;
+
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
@@ -1237,6 +1246,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);
 	DRAWMISCITEM(misc_amobjects, am_drawobjects.value, objectdrawtype);
 	DRAWMISCITEM(misc_amoverlay, am_overlay.value, msgNames);
+	DRAWMISCITEM(misc_nospawnsound, m_nospawnsound.value, disablesecretmessages);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 
