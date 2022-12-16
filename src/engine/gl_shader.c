@@ -20,6 +20,8 @@
 //-----------------------------------------------------------------------------
 
 #include "gl_shader.h"
+#include "con_console.h"
+#include "doomdef.h"
 #include <stdio.h> 
 GLuint ID;
 
@@ -66,7 +68,7 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, &log);
-				printf("Failed to load the shader texture, error log: %s", log);
+				CON_Printf(WHITE, "Failed to load the shader texture, error log: %s", log);
 				return success = false;
 			}
 		}
@@ -77,7 +79,7 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, &log);
-				printf("Failed to load the fragment shader, error log: %s", log);
+				CON_Printf(WHITE, "Failed to load the fragment shader, error log: %s", log);
 				return success = false;
 			}
 		}
@@ -88,14 +90,14 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 			if (!success)
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, &log);
-				printf("Failed to load the fragment shader, error log: %s", log);
+				CON_Printf(WHITE, "Failed to load the fragment shader, error log: %s", log);
 				return success = false;
 			}
 		}
 
 		default:
 		{
-			printf("No errors found hehe");
+			CON_Printf(WHITE, "No errors found");
 			return success = true;
 		}
 	}
