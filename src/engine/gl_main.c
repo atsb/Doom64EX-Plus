@@ -34,10 +34,6 @@
 #include <SDL2/SDL_opengl.h>
 #endif
 
-#ifdef _WIN32
-#include <wglext.h>
-#endif
-
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_video.h"
@@ -583,6 +579,5 @@ void GL_Init(void) {
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
-	//TODO Wolf3s: Remove some SDL_GL...
 	SDL_GL_SetSwapInterval(v_vsync.value);
 }

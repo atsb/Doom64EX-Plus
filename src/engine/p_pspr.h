@@ -64,8 +64,8 @@ typedef enum {
 } psprnum_t;
 
 typedef struct {
-	state_t* state;    // a NULL state means not active
-	intptr_t    tics;
+	state_t*	state;    // a NULL state means not active
+	int         tics;
 	fixed_t     sx;
 	fixed_t     sy;
 	int         alpha;  // [d64] for rendering
@@ -73,6 +73,7 @@ typedef struct {
 	// [kex] stuff that happens in between tics
 	fixed_t     frame_x;
 	fixed_t     frame_y;
+
 } pspdef_t;
 
 typedef struct {

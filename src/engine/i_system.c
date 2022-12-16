@@ -95,7 +95,7 @@ ticcmd_t        emptycmd;
 // I_uSleep
 //
 
-void I_Sleep(intptr_t usecs) {
+void I_Sleep(unsigned long usecs) {
 #ifdef _WIN32
 	Sleep((DWORD)usecs);
 #else
@@ -191,7 +191,7 @@ void I_EndDisplay(void) {
 //
 
 fixed_t I_GetTimeFrac(void) {
-	intptr_t now;
+	unsigned long now;
 	fixed_t frac;
 
 	now = SDL_GetTicks();
@@ -295,6 +295,17 @@ int8_t* I_FindDataFile(int8_t* file) {
 			return path;
 	}
 
+#ifdef __APPLE__
+	if ((dir = SDL_GetBasePath())) {
+		snprintf(path, 511, "%s%s", dir, file);
+		
+		  Free(dir);
+
+		if (I_FileExists(path))
+			return path;
+	}
+#endif
+
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
            
@@ -372,7 +383,7 @@ int I_GetTimeMS(void) {
 // I_GetRandomTimeSeed
 //
 
-intptr_t I_GetRandomTimeSeed(void) {
+unsigned long I_GetRandomTimeSeed(void) {
 	// not exactly random....
 	return SDL_GetTicks();
 }

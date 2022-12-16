@@ -86,7 +86,6 @@
 #define MENUCOLORRED        D_RGBA(255, 0, 0, menualphacolor)
 #define MENUCOLORWHITE      D_RGBA(255, 255, 255, menualphacolor)
 #define MENUCOLORYELLOW     D_RGBA(194, 174, 28, menualphacolor)
-#define MAXBRIGHTNESS        100
 
 //
 // defaulted values
@@ -975,6 +974,7 @@ CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(compat_mobjpass);
 CVAR_EXTERNAL(r_wipe);
 CVAR_EXTERNAL(hud_disablesecretmessages);
+CVAR_EXTERNAL(m_nospawnsound);
 
 enum {
 	misc_header1,
@@ -996,6 +996,7 @@ enum {
 	misc_showlocks,
 	misc_amobjects,
 	misc_amoverlay,
+	misc_nospawnsound,
 	misc_header5,
 	misc_comp_pass,
 	misc_disablesecretmessages,
@@ -1024,6 +1025,7 @@ menuitem_t MiscMenu[] = {
 	{2,"Locked Doors:",M_MiscChoice },
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
+	{2,"Spawn Sounds:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
@@ -1051,6 +1053,7 @@ int8_t* MiscHints[misc_end] = {
 	"colorize locked doors accordingly to the key in automap",
 	"set how objects are rendered in automap",
 	"render the automap into the player hud",
+	"thing/enemy spawn sound toggle",
 	NULL,
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
@@ -1073,6 +1076,7 @@ menudefault_t MiscDefault[] = {
 	{ &am_showkeycolors, 0 },
 	{ &am_drawobjects, 0 },
 	{ &am_overlay, 0 },
+	{ &m_nospawnsound, 0 },
 	{ &compat_mobjpass, 1 },
 	{ NULL, -1 }
 };
@@ -1193,6 +1197,10 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &am_overlay);
 		break;
 
+	case misc_nospawnsound:
+		M_SetOptionValue(choice, 0, 1, 1, &m_nospawnsound);
+		break;
+
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
@@ -1238,6 +1246,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);
 	DRAWMISCITEM(misc_amobjects, am_drawobjects.value, objectdrawtype);
 	DRAWMISCITEM(misc_amoverlay, am_overlay.value, msgNames);
+	DRAWMISCITEM(misc_nospawnsound, m_nospawnsound.value, disablesecretmessages);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 
@@ -1898,7 +1907,7 @@ void M_DrawVideo(void) {
 		(video_dbrightness + 1) - currentMenu->menupageoffset < currentMenu->numpageitems)
 	{
 		y = video_dbrightness - currentMenu->menupageoffset;
-		M_DrawThermo(VideoDef.x, VideoDef.y + LINEHEIGHT * (y + 1), MAXBRIGHTNESS, i_brightness.value);
+		M_DrawThermo(VideoDef.x, VideoDef.y + LINEHEIGHT * (y + 1), 300, i_brightness.value);
 	}
 	if (currentMenu->menupageoffset <= video_dgamma + 1 &&
 		(video_dgamma + 1) - currentMenu->menupageoffset < currentMenu->numpageitems) {
@@ -1953,17 +1962,17 @@ void M_ChangeBrightness(int choice)
 		}
 		else
 		{
-			i_brightness.value = 0;
+			CON_CvarSetValue(i_brightness.name, 0);
 		}
 		break;
 	case 1:
-		if (i_brightness.value < (int)MAXBRIGHTNESS)
+		if (i_brightness.value < 300.0f)
 		{
 			M_SetCvar(&i_brightness, i_brightness.value + 1);
 		}
 		else
 		{
-			i_brightness.value = (int)MAXBRIGHTNESS;
+			CON_CvarSetValue(i_brightness.name, 300);
 		}
 		break;
 	}
