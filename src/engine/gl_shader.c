@@ -20,6 +20,7 @@
 //-----------------------------------------------------------------------------
 
 #include "gl_shader.h"
+
 #include "con_console.h"
 #include "doomdef.h"
 #include <stdio.h> 
@@ -28,7 +29,7 @@ GLuint ID;
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
 {
 	//Compile the code.
-	uint32 texture, fragment;
+	uint32_t texture, fragment;
 	texture = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(texture, 1, vertexShader, NULL);
 	glCompileShader(texture);
@@ -39,11 +40,17 @@ void GL_LoadShader(const char* vertexShader, const char* fragmentShader)
 	glCompileShader(fragment);
 	GL_CheckShaderErrors(fragment, GL_FRAGMENT_SHADER);
 
+	GL_CreateProgram(ID, texture, fragment);
+
 	GL_DestroyShaders(texture, fragment);
 
+}
+
+void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment)
+{
 	//Create The Program.
-	ID = glCreateProgram();
-	glAttachShader(ID, texture);
+	Program_ID = glCreateProgram();
+	glAttachShader(ID, shader);
 	glAttachShader(ID, fragment);
 	glLinkProgram(ID);
 	GL_CheckShaderErrors(ID, GL_LINK_STATUS);

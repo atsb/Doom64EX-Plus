@@ -21,9 +21,11 @@
 
 #ifndef __GL_SHADER__H
 #define __GL_SHADER__H
-#include <glew.h>
 #include "doomtype.h"
-
+#ifdef _WIN32
+#include <glew.h>
+#include <gl/GL.h>
+#endif
 
 /*
 	Based on the following references:
@@ -35,5 +37,5 @@ GLuint ID;
 void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
 dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
-
+void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
 #endif //__GL_SHADER__H
