@@ -83,7 +83,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,7 +102,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -138,7 +138,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,6 +164,7 @@
     <ClCompile Include="..\src\engine\f_finale.c" />
     <ClCompile Include="..\src\engine\gl_draw.c" />
     <ClCompile Include="..\src\engine\gl_main.c" />
+    <ClCompile Include="..\src\engine\gl_shader.c" />
     <ClCompile Include="..\src\engine\gl_texture.c" />
     <ClCompile Include="..\src\engine\g_actions.c" />
     <ClCompile Include="..\src\engine\g_demo.c" />
@@ -197,7 +198,7 @@
     <ClCompile Include="..\src\engine\net_packet.c" />
     <ClCompile Include="..\src\engine\net_query.c" />
     <ClCompile Include="..\src\engine\net_server.c" />
-    <ClCompile Include="..\src\engine\net_structrw.c" />
+    <ClCompile Include="..\src\engine\net_structure.c" />
     <ClCompile Include="..\src\engine\p_ceilng.c" />
     <ClCompile Include="..\src\engine\p_doors.c" />
     <ClCompile Include="..\src\engine\p_enemy.c" />
@@ -250,6 +251,7 @@
     <ClInclude Include="..\src\engine\f_finale.h" />
     <ClInclude Include="..\src\engine\gl_draw.h" />
     <ClInclude Include="..\src\engine\gl_main.h" />
+    <ClInclude Include="..\src\engine\gl_shader.h" />
     <ClInclude Include="..\src\engine\gl_texture.h" />
     <ClInclude Include="..\src\engine\g_actions.h" />
     <ClInclude Include="..\src\engine\g_controls.h" />
@@ -283,7 +285,7 @@
     <ClInclude Include="..\src\engine\net_packet.h" />
     <ClInclude Include="..\src\engine\net_query.h" />
     <ClInclude Include="..\src\engine\net_server.h" />
-    <ClInclude Include="..\src\engine\net_structrw.h" />
+    <ClInclude Include="..\src\engine\net_structure.h" />
     <ClInclude Include="..\src\engine\psnprntf.h" />
     <ClInclude Include="..\src\engine\p_inter.h" />
     <ClInclude Include="..\src\engine\p_local.h" />

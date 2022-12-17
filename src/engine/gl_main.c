@@ -511,9 +511,6 @@ static void CalcViewSize(void) {
 }
 
 //
-// GL_Init
-//
-
 void GL_Init(void) {
 
 	gl_vendor = dglGetString(GL_VENDOR);

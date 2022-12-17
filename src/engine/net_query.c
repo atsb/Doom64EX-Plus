@@ -33,7 +33,7 @@
 #include "net_io.h"
 #include "net_packet.h"
 #include "net_query.h"
-#include "net_structrw.h"
+#include "net_structure.h"
 
 typedef struct
 {
