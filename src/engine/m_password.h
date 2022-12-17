@@ -1,4 +1,3 @@
-// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1997 Midway Home Entertainment, Inc

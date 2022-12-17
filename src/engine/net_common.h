@@ -1,4 +1,3 @@
-// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -20,6 +19,7 @@
 //
 // Common code shared between the client and server
 //
+//------------------------------------------------------------------------------
 
 #ifndef NET_COMMON_H
 #define NET_COMMON_H
