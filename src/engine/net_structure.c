@@ -1,4 +1,3 @@
-// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -20,6 +19,7 @@
 //
 // Reading and writing various structures into packets
 //
+//--------------------------------------------------------------------------------
 
 #include <stdlib.h>
 #include <string.h>
