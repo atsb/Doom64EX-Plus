@@ -24,6 +24,7 @@
 #include "doomtype.h"
 #ifdef _WIN32
 #include <glew.h>
+#include <GL/glu.h>
 #include <gl/GL.h>
 #endif
 
