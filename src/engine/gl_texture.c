@@ -201,7 +201,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
 
-//	GL_LoadShader("GLSL/test.vert", "GLSL/test.frag");
+	//GL_LoadShader("GLSL/D64EXPLUS.vert", "GLSL/D64EXPLUS.frag"); - crashes
 
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
