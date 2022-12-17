@@ -23,7 +23,8 @@
 
 #include "con_console.h"
 #include "doomdef.h"
-#include <stdio.h> 
+#include <stdio.h>
+
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 

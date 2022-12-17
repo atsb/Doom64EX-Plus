@@ -24,8 +24,13 @@
 #include "doomtype.h"
 #ifdef _WIN32
 #include <glew.h>
+#endif
+#ifndef __APPLE__
 #include <GL/glu.h>
-#include <gl/GL.h>
+#include <GL/gl.h>
+#else
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #endif
 
 /*
@@ -34,7 +39,6 @@
 	https://learnopengl.com/Getting-started/Shaders
 */
 
-GLuint ID;
 void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
 dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
