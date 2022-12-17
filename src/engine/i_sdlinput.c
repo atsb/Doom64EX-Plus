@@ -1,3 +1,4 @@
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -493,4 +494,5 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_mlookinvert);
 	CON_CvarRegister(&v_yaxismove);
 }
+
 
