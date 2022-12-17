@@ -579,5 +579,6 @@ void GL_Init(void) {
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
+
 	SDL_GL_SetSwapInterval(v_vsync.value);
 }
