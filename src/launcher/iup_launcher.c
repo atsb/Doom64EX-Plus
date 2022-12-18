@@ -1,4 +1,4 @@
-// Emacs style mode select	 -*- C++ -*-
+// Emacs style mode select	 -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // $Id: Launcher.c 968 2011-09-29 04:35:25Z svkaiser $
@@ -19,7 +19,7 @@
 // $Modfier: Wolf3s  $
 // $Revision: 968 $
 // $Date: 2011-09-29 04:35:25 +0000 (Thu, 29 Sep 2011) $
-// $Modfication Date: 2022-12-12 11:39:10Z +0000 (Thu, 29 Sep 2011) $
+// $Modfication Date: 2022-12-12 11:39:10Z +0000 (Sat, 12 Dec 2022) $
 // 
 // DESCRIPTION:
 //
