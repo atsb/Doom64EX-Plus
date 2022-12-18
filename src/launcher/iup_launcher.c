@@ -369,21 +369,21 @@ void L_CreateDlgSettings(HWND hWnd)
 	if (sPlayerName == "")
 		sPlayerName = L"Player";
 }
-
+#endif
 //**************************************************************
 //**************************************************************
 //	L_SaveConfig
 //**************************************************************
 //**************************************************************
 
-void L_SaveConfig(HWND hWnd)
+void L_SaveConfig(Ihandle *child)
 {
-	L_CreateDlgSettings(hWnd);
+	//L_CreateDlgSettings(child);
 	tk_Open();
 	tk_SaveConfig(LauncherDefaults);
 	tk_Close();
 }
-
+#ifdef WIP
 //**************************************************************
 //**************************************************************
 //	L_CreateExecutableParam
@@ -492,7 +492,6 @@ bool L_CreateExecutableParam(HWND hWnd)
 	return true;
 }
 #endif
-
 //**************************************************************
 //**************************************************************
 //	L_Complain
@@ -506,7 +505,7 @@ void L_Complain(wchar_t* fmt, ...)
 	va_start(va, fmt);
 	vsprintf(buff, fmt, va);
 	va_end(va);
-	IupMessage("Doom64EX-Plus", fmt);
+	IupMessage("Doom64EX+", fmt);
 	exit(1);
 }
 
@@ -657,9 +656,7 @@ int main(int argc, char **argv[])
 {
 	IupOpen(&argc, &argv);
 
-	IupMessageAlarm(hndlMain, "Doom64-EX Plus Launcher", NULL, MainDlgProc);
-
-	IupMessage("Doom64-EX Plus Launcher", NULL);
+	IupMessage("Doom64-EX+ Launcher", NULL);
 
 	IupClose();
 	return EXIT_SUCCESS;
