@@ -472,7 +472,7 @@ static void NET_SV_ParseSYN(net_packet_t* packet,
 		return;
 	}
 
-	if (strcmp(client_version, "Doom64EX+) != 0)
+	if (strcmp(client_version, "Doom64EX+") != 0)
 	{
 		//!
 		// @category net
