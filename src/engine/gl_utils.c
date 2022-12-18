@@ -1,9 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 1993-1997 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
-// Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -20,29 +18,24 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 // 02111-1307, USA.
 //
+// DESCRIPTION:
+//		It stores some OpenGL utils here:
+// 
 //-----------------------------------------------------------------------------
 
-#ifndef __I_VIDEO_H__
-#define __I_VIDEO_H__
-
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
 #include "gl_utils.h"
-#include "d_event.h"
 
-////////////Video///////////////
+void GL_GetVersion(int major, int minor)
+{
+	OGL_WINDOW_HINT(OGL_MAJOR_VERSION, major);
+	OGL_WINDOW_HINT(OGL_MINOR_VERSION, minor);
+}
 
-extern SDL_Surface* screen;
-extern SDL_Window* window;
-void I_InitVideo(void);
-void I_InitScreen(void);
-void I_ShutdownVideo(void);
-void V_RegisterCvars();
-#ifdef USE_GLFW
-void I_ResizeCallback(OGL_DEFS, int width, int height);
-#endif
-
-#endif
+void GL_DestroyWindow(OGL_DEFS)
+{
+	if(Window)
+	{
+		OGL_DESTROY_WINDOW(Window);
+		Window = NULL;
+	}
+}

@@ -11,8 +11,11 @@
 #include <stdarg.h> /* for va_list */
 #include <stdlib.h> /* for fcvt */
 
-#include "SDL.h" // villsa
-
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
+#include <SDL2/SDL.h> // villsa
+#endif
 #include "psnprntf.h"
 
 /* Windows stdlib defines fcvt differently <sigh> */
@@ -28,7 +31,7 @@
 #ifdef __FreeBSD__ // [Kate] Update as necessary
 #define NO_FCVT
 #endif
-#ifdef WIN32
+#ifdef _WIN32
 #ifndef CYGWIN
 #define FCVT _fcvt
 #else

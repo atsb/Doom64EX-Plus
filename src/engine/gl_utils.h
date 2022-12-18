@@ -1,0 +1,142 @@
+// Emacs style mode select   -*- C -*-
+//-----------------------------------------------------------------------------
+//
+// Copyright(C) 2022 André Guilherme
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+// 02111-1307, USA.
+//
+// DESCRIPTION:
+//		It stores some OpenGL utils here:
+// 
+//-----------------------------------------------------------------------------
+
+#include "doomtype.h" //Include all types neccessary.
+
+#ifdef USE_GLFW
+#include "dgl.h"
+#include <GLFW/glfw3.h>
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#endif
+
+//André: Use this as wrapper to all the functions.
+#ifdef USE_GLFW
+
+#define OGL_RED GLFW_RED_BITS
+#define OGL_GREEN GLFW_GREEN_BITS
+#define OGL_BLUE GLFW_BLUE_BITS
+#define OGL_ALPHA GLFW_ALPHA_BITS
+#define OGL_BUFFER GLFW_AUX_BUFFERS
+#define OGL_DOUBLEBUFFER GLFW_DOUBLEBUFFER
+#define OGL_DEPTH GLFW_DEPTH_BITS
+#define OGL_STENCIL GLFW_STENCIL_BITS
+#define OGL_ACCUM_RED GLFW_ACCUM_RED_BITS 
+#define OGL_ACCUM_GREEN GLFW_ACCUM_GREEN_BITS 
+#define OGL_ACCUM_BLUE GLFW_ACCUM_BLUE_BITS
+#define OGL_ACCUM_ALPHA GLFW_ACCUM_ALPHA_BITS 
+#define OGL_STEREO GLFW_STEREO 
+#define OGL_MULTISAMPLE_BUFFERS 0//Dummy
+#define OGL_MULTISAMPLE 0//Dummy
+#define OGL_ACCELERATED 0//Dummy
+#define OGL_RETAINED 0//Dummy
+#define OGL_MAJOR_VERSION GLFW_VERSION_MAJOR
+#define OGL_MINOR_VERSION GLFW_VERSION_MINOR
+#define OGL_CONTEXT GLFW_CONTEXT_CREATION_API
+#define OGL_CONTEXT_FLAGS 0//Dummy
+#define OGL_CONTEXT_PROFILE 0//Dummy
+#define OGL_CURRENT_CONTEXT 0//Dummy
+#define OGL_FRAMEBUFFER 0//Dummy
+#define OGL_CONTEXT_RELEASE GLFW_CONTEXT_RELEASE_BEHAVIOR
+#define OGL_CONTEXT_RESET GLFW_LOSE_CONTEXT_ON_RESET
+#define OGL_CONTEXT_NO_ERROR GLFW_CONTEXT_NO_ERROR
+#define OGL_CONTEXT_FLOATBUFFERS 0//Wip.
+
+#define OGL_WINDOW_HINT(hint, value) glfwWindowHint(hint, value)
+#define OGL_DESTROY_WINDOW(window) glfwTerminate();
+#define OGL_DEFS	\
+GLFWwindow *Window	\
+
+#else
+#define OGL_RED SDL_GL_RED_SIZE
+#define OGL_GREEN SDL_GL_GREEN_SIZE
+#define OGL_BLUE SDL_GL_BLUE_SIZE
+#define OGL_ALPHA SDL_GL_ALPHA_SIZE
+#define OGL_BUFFER SDL_GL_BUFFER_SIZE
+#define OGL_DOUBLEBUFFER SDL_GL_DOUBLEBUFFER
+#define OGL_DEPTH SDL_GL_DEPTH_SIZE
+#define OGL_STENCIL SDL_GL_STENCIL_SIZE
+#define OGL_ACCUM_RED SDL_GL_ACCUM_RED_SIZE
+#define OGL_ACCUM_GREEN SDL_GL_ACCUM_GREEN_SIZE
+#define OGL_ACCUM_BLUE SDL_GL_ACCUM_BLUE_SIZE
+#define OGL_ACCUM_ALPHA SDL_GL_ACCUM_ALPHA_SIZE
+#define OGL_STEREO SDL_GL_STEREO
+#define OGL_MULTISAMPLE_BUFFERS SDL_GL_MULTISAMPLEBUFFERS
+#define OGL_MULTISAMPLE SDL_GL_MULTISAMPLESAMPLES
+#define OGL_ACCELERATED SDL_GL_ACCELERATED_VISUAL
+#define OGL_RETAINED SDL_GL_RETAINED_BACKING
+#define OGL_MAJOR_VERSION SDL_GL_CONTEXT_MAJOR_VERSION
+#define OGL_MINOR_VERSION SDL_GL_CONTEXT_MINOR_VERSION
+#define OGL_CONTEXT SDL_GL_CONTEXT_EGL
+#define OGL_CONTEXT_FLAGS SDL_GL_CONTEXT_FLAGS
+#define OGL_CONTEXT_PROFILE SDL_GL_CONTEXT_PROFILE_MASK
+#define OGL_CURRENT_CONTEXT SDL_GL_SHARE_WITH_CURRENT_CONTEXT
+#define OGL_FRAMEBUFFER SDL_GL_FRAMEBUFFER_SRGB_CAPABLE
+#define OGL_CONTEXT_RELEASE SDL_GL_CONTEXT_RELEASE_BEHAVIOR
+#define OGL_CONTEXT_RESET SDL_GL_CONTEXT_RESET_NOTIFICATION
+#define OGL_CONTEXT_NO_ERROR SDL_GL_CONTEXT_NO_ERROR
+#define OGL_CONTEXT_FLOATBUFFERS SDL_GL_FLOATBUFFERS
+
+#define OGL_WINDOW_HINT(attr, value) SDL_GL_SetAttribute(attr, value)
+#define OGL_DESTROY_WINDOW(context) SDL_GL_DeleteContext(context)
+#define OGL_DEFS    \
+SDL_GLContext   Window
+#endif
+
+typedef enum
+{
+	DGL_RED = OGL_RED,
+	DGL_GREEN = OGL_GREEN,
+	DGL_BLUE = OGL_BLUE,
+	DGL_ALPHA = OGL_ALPHA, 
+	DGL_BUFFER = OGL_BUFFER,
+	DGL_DOUBLE_BUFFER = OGL_DOUBLEBUFFER, 
+	DGL_DEPTH		=	OGL_DEPTH,
+	DGL_STENCIL     = OGL_STENCIL,
+	DGL_ACCUM_RED   = OGL_ACCUM_RED, 
+	DGL_ACCUM_GREEN = OGL_ACCUM_GREEN, 
+	DGL_ACCUM_BLUE = OGL_ACCUM_BLUE,
+	DGL_ACCUM_ALPHA	= OGL_ACCUM_ALPHA, 
+	DGL_STEREO = OGL_STEREO, 
+	DGL_MULTISAMPLE_BUFFERS = OGL_MULTISAMPLE_BUFFERS, 
+	DGL_MULTISAMPLE = OGL_MULTISAMPLE,
+	DGL_ACCELERATED = OGL_ACCELERATED, 
+	DGL_RETAINED = OGL_RETAINED,
+	DGL_MAJOR_VERSION = OGL_MAJOR_VERSION,
+	DGL_MINOR_VERSION =	OGL_MINOR_VERSION, 
+	DGL_CONTEXT = OGL_CONTEXT,
+	DGL_CONTEXT_FLAGS = OGL_CONTEXT_FLAGS, 
+	DGL_CONTEXT_PROFILE = OGL_CONTEXT_PROFILE, 
+	DGL_CURRENT_CONTEXT = OGL_CURRENT_CONTEXT, 
+	DGL_FRAMEBUFFER = OGL_FRAMEBUFFER, 
+	DGL_CONTEXT_RELEASE = OGL_CONTEXT_RELEASE, 
+	DGL_CONTEXT_RESET = OGL_CONTEXT_RESET, 
+	DGL_CONTEXT_NO_ERROR = OGL_CONTEXT_NO_ERROR, 
+	DGL_CONTEXT_FLOAT_BUFFERS = OGL_CONTEXT_FLOATBUFFERS
+} gl_attr;
+
+void GL_GetVersion(int major, int minor);
+void GL_DestroyWindow(OGL_DEFS);

@@ -47,8 +47,9 @@
 #include "d_main.h"
 #include "gl_main.h"
 
+
 SDL_Window* window;
-SDL_GLContext   glContext;
+OGL_DEFS;
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
@@ -66,6 +67,13 @@ dboolean window_focused;
 
 int mouse_x = 0;
 int mouse_y = 0;
+
+#ifdef USE_GLFW
+void I_ResizeCallback(OGL_DEFS, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+#endif
 
 //
 // I_InitScreen
@@ -111,20 +119,19 @@ void I_InitScreen(void) {
 
 	usingGL = false;
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	GL_GetVersion(2, 1);
+	OGL_WINDOW_HINT(DGL_RED, 0);
+	OGL_WINDOW_HINT(DGL_GREEN, 0);
+	OGL_WINDOW_HINT(DGL_BLUE, 0);
+	OGL_WINDOW_HINT(DGL_ALPHA, 0);
+	OGL_WINDOW_HINT(DGL_STENCIL, 0);
+	OGL_WINDOW_HINT(DGL_ACCUM_RED, 0);
+	OGL_WINDOW_HINT(DGL_ACCUM_GREEN, 0);
+	OGL_WINDOW_HINT(DGL_ACCUM_BLUE, 0);
+	OGL_WINDOW_HINT(DGL_ACCUM_ALPHA, 0);
+	OGL_WINDOW_HINT(DGL_BUFFER, 24);
+	OGL_WINDOW_HINT(DGL_DEPTH, 24);
+	OGL_WINDOW_HINT(DGL_DOUBLE_BUFFER, 1);
 
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
@@ -149,10 +156,29 @@ void I_InitScreen(void) {
 		return;
 	}
 
-	if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
+#ifdef USE_GLFW
+	if (glfwInit() < 0)
+	{
+		I_Error("I_InitScreen: Failed to create glfw");
+		GL_DestroyWindow(Window);
+		return;
+	}
+	Window = glfwCreateWindow(video_width, video_height, "Doom64EX+", NULL, NULL);
+	if (Window == NULL)
+	{
+		I_Error("Failed to create GLFW window");
+		GL_DestroyWindow(Window);
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, I_ResizeCallback);
+
+#else
+	if ((Window = SDL_GL_CreateContext(window)) == NULL) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
+#endif
 }
 
 //
@@ -160,10 +186,8 @@ void I_InitScreen(void) {
 //
 
 void I_ShutdownVideo(void) {
-	if (glContext) {
-		SDL_GL_DeleteContext(glContext);
-		glContext = NULL;
-	}
+
+	GL_DestroyWindow(Window);
 
 	if (window) {
 		SDL_DestroyWindow(window);
