@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -162,8 +162,8 @@ typedef struct mobj_s {
     int                 tid;
 
     // More list: links in sector (if needed)
-    struct mobj_s* snext;
-    struct mobj_s* sprev;
+    struct mobj_s*      snext;
+    struct mobj_s*      sprev;
 
     //More drawing info: to determine current sprite.
     angle_t             angle;    // orientation
@@ -173,8 +173,8 @@ typedef struct mobj_s {
 
     // Interaction info, by BLOCKMAP.
     // Links in blocks (if needed).
-    struct mobj_s* bnext;
-    struct mobj_s* bprev;
+    struct mobj_s*      bnext;
+    struct mobj_s*      bprev;
 
     struct subsector_s* subsector;
 
@@ -195,12 +195,12 @@ typedef struct mobj_s {
     int                 validcount;
 
     mobjtype_t          type;
-    mobjinfo_t* info;    // &mobjinfo[mobj->type]
+    mobjinfo_t*         info;    // &mobjinfo[mobj->type]
 
-    int                 tics;    // state tic counter
-    state_t* state;
-    dword               flags;
-    int                 health;
+    int			        tics;	// state tic counter
+    state_t*            state;
+    dword			    flags;
+    int			        health;
 
     // [d64] alpha value for rendering
     int                 alpha;
@@ -214,7 +214,7 @@ typedef struct mobj_s {
 
     // Thing being chased/attacked (or NULL),
     // also the originator for missiles.
-    struct mobj_s* target;
+    struct mobj_s*      target;
 
     // Reaction time: if non 0, don't attack yet.
     // Used by player to freeze a bit after teleporting.
@@ -226,23 +226,23 @@ typedef struct mobj_s {
 
     // Additional info record for player avatars only.
     // Only valid if type == MT_PLAYER
-    struct player_s* player;
+    struct player_s*    player;
 
     // For nightmare respawn.
     mapthing_t          spawnpoint;
 
     // Thing being chased/attacked for tracers.
-    struct mobj_s* tracer;
+    struct mobj_s*      tracer;
 
     // [d64] Mobj linked list: used to seperate from thinkers
-    struct mobj_s* prev;
-    struct mobj_s* next;
+    struct mobj_s*      prev;
+    struct mobj_s*      next;
 
     // [d64] callback routine called at end of P_Tick
     mobjfunc_t          mobjfunc;
 
     // [d64] misc data for various actions
-    void* extradata;
+    void*               extradata;
 
     // [kex] stuff that happens in between tics
     fixed_t             frame_x;

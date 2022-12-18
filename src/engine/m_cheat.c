@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -258,7 +258,7 @@ void M_CheatArtifacts(player_t* player, int8_t dat[4]) {
 #define CHEAT_ARGS_MAX 8  /* Maximum number of args at end of cheats */
 
 static dboolean M_FindCheats(player_t* plyr, int key) {
-	static intptr_t sr;
+	static unsigned long sr;
 	static int8_t argbuf[CHEAT_ARGS_MAX + 1], * arg;
 	static int init, argsleft, cht;
 	int i, ret, matchedbefore;

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -326,8 +326,8 @@ dboolean I_UpdateGrab(void) {
 
 void I_GetEvent(SDL_Event* Event) {
 	event_t event;
-	uint32 mwheeluptic = 0, mwheeldowntic = 0;
-	uint32 tic = gametic;
+	uint32_t mwheeluptic = 0, mwheeldowntic = 0;
+	uint32_t tic = gametic;
 
 	switch (Event->type) {
 	case SDL_KEYDOWN:
@@ -494,4 +494,5 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_mlookinvert);
 	CON_CvarRegister(&v_yaxismove);
 }
+
 

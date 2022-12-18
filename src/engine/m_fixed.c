@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -71,7 +71,7 @@ FixedMul
 		"BX		 LR"
 	);
 #else
-	return (fixed_t)(((int64)a * (int64)b) >> FRACBITS);
+	return (fixed_t)(((int64_t)a * (int64_t)b) >> FRACBITS);
 #endif
 }
 
@@ -93,7 +93,7 @@ fixed_t
 FixedDiv2
 (fixed_t    a,
 	fixed_t    b) {
-	return (fixed_t)((((int64)a) << FRACBITS) / b);
+	return (fixed_t)((((int64_t)a) << FRACBITS) / b);
 }
 
 //

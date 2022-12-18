@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -20,6 +20,7 @@
 //
 // Network client code
 //
+//------------------------------------------------------------------------------
 
 #ifndef NET_CLIENT_H
 #define NET_CLIENT_H

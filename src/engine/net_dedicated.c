@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -18,10 +18,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 // 02111-1307, USA.
 //
-//-----------------------------------------------------------------------------
-//
 // Dedicated server code.
 //
+//-----------------------------------------------------------------------------
 
 #include "doomtype.h"
 #include "i_system.h"

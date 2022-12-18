@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -200,9 +200,10 @@ static dboolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 //
 // SetupFog
 //
-// Sky flats determine how fog is rendered. this includes
-// fog color, distance and density. The factor for fog
-// density is based on values from the original N64 version.
+// Fog is handled via RGB colour combinations.  This includes
+// fog color.  Fog distance and density are included
+// but are not RGB values themselves, but integers.
+// The factor for fog density is based on values from the original N64 version.
 //
 
 static void SetupFog(void) {

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -241,7 +241,7 @@ dboolean    P_ChangeSector(sector_t* sector, dboolean crunch);
 mobj_t* P_CheckOnMobj(mobj_t* thing);
 void        P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t y);
 
-#define MAXSPECIALCROSS 64
+#define MAXSPECIALCROSS 128
 
 extern mobj_t* linetarget;    // who got hit (or NULL)
 extern mobj_t* blockthing;

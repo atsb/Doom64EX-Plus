@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -77,11 +77,11 @@ int         numanimdef;
 animdef_t* animdefs;
 
 static scdatatable_t animdatatable[] = {
-	{   "RESTARTDELAY", (int64) & ((animdef_t*)0)->delay,   'i' },
-	{   "FRAMES", (int64) & ((animdef_t*)0)->frames,  'i' },
-	{   "CYCLEPALETTES", (int64) & ((animdef_t*)0)->palette, 'b' },
-	{   "REWIND", (int64) & ((animdef_t*)0)->reverse, 'b' },
-	{   "SPEED", (int64) & ((animdef_t*)0)->speed,   'i' },
+	{   "RESTARTDELAY", (int64_t) & ((animdef_t*)0)->delay,   'i' },
+	{   "FRAMES", (int64_t) & ((animdef_t*)0)->frames,  'i' },
+	{   "CYCLEPALETTES", (int64_t) & ((animdef_t*)0)->palette, 'b' },
+	{   "REWIND", (int64_t) & ((animdef_t*)0)->reverse, 'b' },
+	{   "SPEED", (int64_t) & ((animdef_t*)0)->speed,   'i' },
 	{   NULL,               0,                              0   }
 };
 

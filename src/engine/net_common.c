@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -20,7 +20,7 @@
 //
 // Common code shared between the client and server
 //
-
+//------------------------------------------------------------------------------
 #include <ctype.h>
 #include <stdlib.h>
 

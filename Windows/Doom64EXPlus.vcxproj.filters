@@ -1,538 +1,183 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="..\src\engine\am_draw.c" />
+    <ClCompile Include="..\src\engine\am_map.c" />
+    <ClCompile Include="..\src\engine\con_console.c" />
+    <ClCompile Include="..\src\engine\con_cvar.c" />
+    <ClCompile Include="..\src\engine\deh_ammo.c" />
+    <ClCompile Include="..\src\engine\deh_doom.c" />
+    <ClCompile Include="..\src\engine\deh_frame.c" />
+    <ClCompile Include="..\src\engine\deh_io.c" />
+    <ClCompile Include="..\src\engine\deh_main.c" />
+    <ClCompile Include="..\src\engine\deh_mapping.c" />
+    <ClCompile Include="..\src\engine\deh_misc.c" />
+    <ClCompile Include="..\src\engine\deh_ptr.c" />
+    <ClCompile Include="..\src\engine\deh_str.c" />
+    <ClCompile Include="..\src\engine\deh_thing.c" />
+    <ClCompile Include="..\src\engine\deh_weapon.c" />
+    <ClCompile Include="..\src\engine\dgl.c" />
+    <ClCompile Include="..\src\engine\d_devstat.c" />
+    <ClCompile Include="..\src\engine\d_main.c" />
+    <ClCompile Include="..\src\engine\d_net.c" />
+    <ClCompile Include="..\src\engine\f_finale.c" />
+    <ClCompile Include="..\src\engine\gl_draw.c" />
+    <ClCompile Include="..\src\engine\gl_main.c" />
+    <ClCompile Include="..\src\engine\gl_shader.c" />
+    <ClCompile Include="..\src\engine\gl_texture.c" />
+    <ClCompile Include="..\src\engine\g_actions.c" />
+    <ClCompile Include="..\src\engine\g_demo.c" />
+    <ClCompile Include="..\src\engine\g_game.c" />
+    <ClCompile Include="..\src\engine\g_settings.c" />
+    <ClCompile Include="..\src\engine\info.c" />
+    <ClCompile Include="..\src\engine\in_stuff.c" />
+    <ClCompile Include="..\src\engine\i_audio.c" />
+    <ClCompile Include="..\src\engine\i_main.c" />
+    <ClCompile Include="..\src\engine\i_png.c" />
+    <ClCompile Include="..\src\engine\i_sdlinput.c" />
+    <ClCompile Include="..\src\engine\i_system.c" />
+    <ClCompile Include="..\src\engine\i_video.c" />
+    <ClCompile Include="..\src\engine\i_xinput.c" />
+    <ClCompile Include="..\src\engine\md5.c" />
+    <ClCompile Include="..\src\engine\m_cheat.c" />
+    <ClCompile Include="..\src\engine\m_fixed.c" />
+    <ClCompile Include="..\src\engine\m_keys.c" />
+    <ClCompile Include="..\src\engine\m_menu.c" />
+    <ClCompile Include="..\src\engine\m_misc.c" />
+    <ClCompile Include="..\src\engine\m_password.c" />
+    <ClCompile Include="..\src\engine\m_random.c" />
+    <ClCompile Include="..\src\engine\m_shift.c" />
+    <ClCompile Include="..\src\engine\net_client.c" />
+    <ClCompile Include="..\src\engine\net_common.c" />
+    <ClCompile Include="..\src\engine\net_dedicated.c" />
+    <ClCompile Include="..\src\engine\net_io.c" />
+    <ClCompile Include="..\src\engine\net_loop.c" />
+    <ClCompile Include="..\src\engine\net_packet.c" />
+    <ClCompile Include="..\src\engine\net_query.c" />
+    <ClCompile Include="..\src\engine\net_server.c" />
+    <ClCompile Include="..\src\engine\net_structure.c" />
+    <ClCompile Include="..\src\engine\p_ceilng.c" />
+    <ClCompile Include="..\src\engine\p_doors.c" />
+    <ClCompile Include="..\src\engine\p_enemy.c" />
+    <ClCompile Include="..\src\engine\p_floor.c" />
+    <ClCompile Include="..\src\engine\p_inter.c" />
+    <ClCompile Include="..\src\engine\p_lights.c" />
+    <ClCompile Include="..\src\engine\p_macros.c" />
+    <ClCompile Include="..\src\engine\p_map.c" />
+    <ClCompile Include="..\src\engine\p_maputl.c" />
+    <ClCompile Include="..\src\engine\p_mobj.c" />
+    <ClCompile Include="..\src\engine\p_plats.c" />
+    <ClCompile Include="..\src\engine\p_pspr.c" />
+    <ClCompile Include="..\src\engine\p_saveg.c" />
+    <ClCompile Include="..\src\engine\p_setup.c" />
+    <ClCompile Include="..\src\engine\p_sight.c" />
+    <ClCompile Include="..\src\engine\p_spec.c" />
+    <ClCompile Include="..\src\engine\p_switch.c" />
+    <ClCompile Include="..\src\engine\p_telept.c" />
+    <ClCompile Include="..\src\engine\p_tick.c" />
+    <ClCompile Include="..\src\engine\p_user.c" />
+    <ClCompile Include="..\src\engine\r_bsp.c" />
+    <ClCompile Include="..\src\engine\r_clipper.c" />
+    <ClCompile Include="..\src\engine\r_drawlist.c" />
+    <ClCompile Include="..\src\engine\r_lights.c" />
+    <ClCompile Include="..\src\engine\r_main.c" />
+    <ClCompile Include="..\src\engine\r_scene.c" />
+    <ClCompile Include="..\src\engine\r_sky.c" />
+    <ClCompile Include="..\src\engine\r_things.c" />
+    <ClCompile Include="..\src\engine\r_wipe.c" />
+    <ClCompile Include="..\src\engine\sc_main.c" />
+    <ClCompile Include="..\src\engine\sha1.c" />
+    <ClCompile Include="..\src\engine\st_stuff.c" />
+    <ClCompile Include="..\src\engine\s_sound.c" />
+    <ClCompile Include="..\src\engine\tables.c" />
+    <ClCompile Include="..\src\engine\wi_stuff.c" />
+    <ClCompile Include="..\src\engine\w_file.c" />
+    <ClCompile Include="..\src\engine\w_merge.c" />
+    <ClCompile Include="..\src\engine\w_wad.c" />
+    <ClCompile Include="..\src\engine\z_zone.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\engine\am_draw.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\am_map.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\con_console.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\con_cvar.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\dgl.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\d_devstat.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\d_main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\d_net.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\f_finale.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\gl_draw.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\gl_main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\gl_texture.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\g_actions.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\g_demo.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\g_game.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\g_settings.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\info.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\in_stuff.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_audio.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_png.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_system.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_video.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_xinput.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\md5.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_cheat.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_fixed.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_keys.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_menu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_misc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_password.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_random.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\m_shift.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_client.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_common.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_dedicated.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_io.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_loop.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_packet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_query.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_server.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\net_structrw.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_ceilng.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_doors.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_enemy.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_floor.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_inter.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_lights.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_macros.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_map.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_maputl.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_mobj.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_plats.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_pspr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_saveg.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_setup.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_sight.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_spec.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_switch.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_telept.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_tick.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\p_user.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_bsp.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_clipper.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_drawlist.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_lights.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_scene.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_sky.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_things.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\r_wipe.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\sc_main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\st_stuff.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\s_sound.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\tables.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\wi_stuff.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\w_file.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\w_merge.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\w_wad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\z_zone.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_io.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_mapping.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\sha1.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_ammo.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_doom.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_frame.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_misc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_ptr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_thing.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_weapon.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\i_sdlinput.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\deh_str.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="..\src\engine\deh_str.h" />
+    <ClInclude Include="..\src\engine\dgl.h" />
+    <ClInclude Include="..\src\engine\doomdata.h" />
+    <ClInclude Include="..\src\engine\doomdef.h" />
+    <ClInclude Include="..\src\engine\doomstat.h" />
+    <ClInclude Include="..\src\engine\doomtype.h" />
+    <ClInclude Include="..\src\engine\d_think.h" />
+    <ClInclude Include="..\src\engine\d_ticcmd.h" />
+    <ClInclude Include="..\src\engine\f_finale.h" />
+    <ClInclude Include="..\src\engine\gl_draw.h" />
+    <ClInclude Include="..\src\engine\gl_main.h" />
+    <ClInclude Include="..\src\engine\gl_shader.h" />
+    <ClInclude Include="..\src\engine\gl_texture.h" />
+    <ClInclude Include="..\src\engine\g_actions.h" />
+    <ClInclude Include="..\src\engine\g_controls.h" />
+    <ClInclude Include="..\src\engine\g_demo.h" />
+    <ClInclude Include="..\src\engine\g_game.h" />
+    <ClInclude Include="..\src\engine\g_local.h" />
+    <ClInclude Include="..\src\engine\g_settings.h" />
+    <ClInclude Include="..\src\engine\info.h" />
+    <ClInclude Include="..\src\engine\i_audio.h" />
+    <ClInclude Include="..\src\engine\i_png.h" />
+    <ClInclude Include="..\src\engine\i_sdlinput.h" />
+    <ClInclude Include="..\src\engine\i_swap.h" />
+    <ClInclude Include="..\src\engine\i_system.h" />
+    <ClInclude Include="..\src\engine\i_video.h" />
+    <ClInclude Include="..\src\engine\i_xinput.h" />
+    <ClInclude Include="..\src\engine\md5.h" />
+    <ClInclude Include="..\src\engine\m_cheat.h" />
+    <ClInclude Include="..\src\engine\m_fixed.h" />
+    <ClInclude Include="..\src\engine\m_keys.h" />
+    <ClInclude Include="..\src\engine\m_menu.h" />
+    <ClInclude Include="..\src\engine\m_misc.h" />
+    <ClInclude Include="..\src\engine\m_password.h" />
+    <ClInclude Include="..\src\engine\m_random.h" />
+    <ClInclude Include="..\src\engine\m_shift.h" />
+    <ClInclude Include="..\src\engine\net_client.h" />
+    <ClInclude Include="..\src\engine\net_common.h" />
+    <ClInclude Include="..\src\engine\net_dedicated.h" />
+    <ClInclude Include="..\src\engine\net_defs.h" />
+    <ClInclude Include="..\src\engine\net_io.h" />
+    <ClInclude Include="..\src\engine\net_loop.h" />
+    <ClInclude Include="..\src\engine\net_packet.h" />
+    <ClInclude Include="..\src\engine\net_query.h" />
+    <ClInclude Include="..\src\engine\net_server.h" />
+    <ClInclude Include="..\src\engine\net_structure.h" />
+    <ClInclude Include="..\src\engine\psnprntf.h" />
+    <ClInclude Include="..\src\engine\p_inter.h" />
+    <ClInclude Include="..\src\engine\p_local.h" />
+    <ClInclude Include="..\src\engine\p_macros.h" />
+    <ClInclude Include="..\src\engine\p_mobj.h" />
+    <ClInclude Include="..\src\engine\p_pspr.h" />
+    <ClInclude Include="..\src\engine\p_saveg.h" />
+    <ClInclude Include="..\src\engine\p_setup.h" />
+    <ClInclude Include="..\src\engine\p_spec.h" />
+    <ClInclude Include="..\src\engine\p_tick.h" />
+    <ClInclude Include="..\src\engine\resource.h" />
+    <ClInclude Include="..\src\engine\r_clipper.h" />
+    <ClInclude Include="..\src\engine\r_drawlist.h" />
+    <ClInclude Include="..\src\engine\r_lights.h" />
+    <ClInclude Include="..\src\engine\r_local.h" />
+    <ClInclude Include="..\src\engine\r_main.h" />
+    <ClInclude Include="..\src\engine\r_sky.h" />
+    <ClInclude Include="..\src\engine\r_things.h" />
+    <ClInclude Include="..\src\engine\r_wipe.h" />
+    <ClInclude Include="..\src\engine\sc_main.h" />
+    <ClInclude Include="..\src\engine\sounds.h" />
+    <ClInclude Include="..\src\engine\st_stuff.h" />
+    <ClInclude Include="..\src\engine\s_sound.h" />
+    <ClInclude Include="..\src\engine\tables.h" />
+    <ClInclude Include="..\src\engine\t_bsp.h" />
+    <ClInclude Include="..\src\engine\wi_stuff.h" />
+    <ClInclude Include="..\src\engine\w_file.h" />
+    <ClInclude Include="..\src\engine\w_merge.h" />
+    <ClInclude Include="..\src\engine\w_wad.h" />
+    <ClInclude Include="..\src\engine\z_zone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\engine\dgl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\doomdata.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\doomdef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\doomstat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\doomtype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\d_think.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\d_ticcmd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\f_finale.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\gl_draw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\gl_main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\gl_texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\g_actions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\g_controls.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\g_demo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\g_game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\g_local.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\g_settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_audio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_opndir.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_png.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_swap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_video.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_xinput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\md5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_cheat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_fixed.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_keys.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_misc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_password.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_random.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\m_shift.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_dedicated.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_defs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_io.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_loop.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_packet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_query.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\net_structrw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\psnprntf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_inter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_local.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_macros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_mobj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_pspr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_saveg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_setup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_spec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\p_tick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_clipper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_drawlist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_lights.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_local.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_sky.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_things.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\r_wipe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\sc_main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\sounds.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\st_stuff.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\s_sound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\t_bsp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\wi_stuff.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\w_file.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\w_merge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\w_wad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\z_zone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\i_sdlinput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\deh_str.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\src\engine\doom64ex-plus.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\src\engine\doom64ex-plus.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <Image Include="..\src\engine\doom64ex-plus.ico" />
   </ItemGroup>
 </Project>

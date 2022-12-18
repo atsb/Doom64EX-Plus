@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1999-2000 Paul Brook
@@ -52,7 +52,7 @@ struct action_s {
 	actionproc_t    proc;
 	action_t* children[2];
 	action_t* parent;
-	int64           data;
+	int64_t           data;
 };
 
 static action_t* Actions = NULL;
@@ -68,7 +68,7 @@ struct alist_s {
 	int8_t* param[MAX_ACTIONPARAM + 1];//NULL terminated list
 };
 
-void G_RunAlias(int64 data, int8_t** param);
+void G_RunAlias(int64_t data, int8_t** param);
 void G_DoOptimizeActionTree(void);
 
 alist_t* CurrentActions[MAX_CURRENTACTIONS];
@@ -955,7 +955,7 @@ static void AddAction(action_t* action) {
 // Adds a new action to the list
 //
 
-void G_AddCommand(int8_t* name, actionproc_t proc, int64 data) {
+void G_AddCommand(int8_t* name, actionproc_t proc, int64_t data) {
 	action_t* action;
 
 	action = (action_t*)Z_Malloc(sizeof(action_t), PU_STATIC, NULL);
@@ -970,7 +970,7 @@ void G_AddCommand(int8_t* name, actionproc_t proc, int64 data) {
 // G_RunAlias
 //
 
-void G_RunAlias(int64 data, int8_t** param) {
+void G_RunAlias(int64_t data, int8_t** param) {
 	AddActions(DoRunActions((alist_t*)data, false));
 }
 
@@ -1053,7 +1053,7 @@ static CMD(Alias) {
 		G_UnregisterAction(param[0]);
 	}
 	else {
-		G_AddCommand(param[0], G_RunAlias, (int64)al);
+		G_AddCommand(param[0], G_RunAlias, (int64_t)al);
 	}
 }
 

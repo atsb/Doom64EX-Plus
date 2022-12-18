@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -37,7 +37,7 @@
 #define I_SwapBE32(x)   SDL_SwapBE32(x)
 
 #define SHORT(x)        ((int16_t)I_SwapLE16(x))
-#define LONG(x)         ((intptr_t)I_SwapLE32(x))
+#define LONG(x)         ((signed long)I_SwapLE32(x))
 
 // Defines for checking the endianness of the system.
 

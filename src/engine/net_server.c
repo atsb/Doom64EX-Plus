@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -20,6 +20,7 @@
 //
 // Network server code
 //
+//-------------------------------------------------------------------------------
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -40,7 +41,7 @@
 #include "net_loop.h"
 #include "net_packet.h"
 #include "net_server.h"
-#include "net_structrw.h"
+#include "net_structure.h"
 
 typedef enum
 {

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -75,7 +75,7 @@ void I_InitScreen(void) {
 	int     newwidth;
 	int     newheight;
 	int     p;
-	uint32  flags = 0;
+	uint32_t  flags = 0;
 	int8_t    title[256];
 
 	InWindow = (int)v_windowed.value;
@@ -177,7 +177,7 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-	uint32 f = SDL_INIT_VIDEO;
+	uint32_t f = SDL_INIT_VIDEO;
 
 #ifdef _DEBUG
 	f |= SDL_INIT_NOPARACHUTE;

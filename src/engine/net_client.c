@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -19,7 +19,8 @@
 // 02111-1307, USA.
 //
 // Network client code
-//
+// 
+//------------------------------------------------------------------------------
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -38,7 +39,7 @@
 #include "net_io.h"
 #include "net_packet.h"
 #include "net_server.h"
-#include "net_structrw.h"
+#include "net_structure.h"
 
 #include "st_stuff.h"
 #include "w_wad.h"

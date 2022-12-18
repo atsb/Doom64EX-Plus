@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -52,6 +52,8 @@ void G_PlayerReborn(int player);
 mobj_t* P_SpawnMapThing(mapthing_t* mthing);
 void P_CreateFadeThinker(mobj_t* mobj, line_t* line);
 void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line);
+
+CVAR(m_nospawnsound, 0);
 
 //
 // P_SetMobjState
@@ -447,7 +449,10 @@ void P_NightmareRespawn(mobj_t* mobj) {
 	}
 
 	// initiate spawn sound
-	S_StartSound(mo, sfx_spawn);
+	if (m_nospawnsound.value != 1)
+	{
+		S_StartSound(mo, sfx_spawn);
+	}
 
 	if (mthing->options & MTF_AMBUSH) {
 		mo->flags |= MF_AMBUSH;
@@ -477,7 +482,11 @@ void P_RespawnSpecials(mobj_t* special) {
 	special->mobjfunc = NULL;
 
 	P_FadeMobj(special, 8, 0xff, (special->flags | MF_SPECIAL));
-	S_StartSound(special, sfx_spawn);
+
+	if (m_nospawnsound.value != 1)
+	{
+		S_StartSound(special, sfx_spawn);
+	}
 }
 
 //
@@ -901,7 +910,10 @@ int EV_SpawnMobjTemplate(line_t* line) {
 
 		mobj->reactiontime = 18;
 
-		S_StartSound(mobj, sfx_spawn);
+		if (m_nospawnsound.value != 1)
+		{
+			S_StartSound(mobj, sfx_spawn);
+		}
 
 		if (mobj->type != MT_DEMON2) {
 			mobj->alpha = 0;

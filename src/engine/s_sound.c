@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -409,6 +409,7 @@ void S_RegisterCvars(void) {
     CON_CvarRegister(&s_gain);
     CON_CvarRegister(&s_soundfont);
 }
+
 
 
 

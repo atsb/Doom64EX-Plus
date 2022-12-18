@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -81,7 +81,7 @@ extern int          deathmatch;
 extern int          video_width;
 extern int          video_height;
 extern float        video_ratio;
-extern int          window_focused;
+extern dboolean     window_focused;
 
 // -------------------------
 // Status flags for refresh.

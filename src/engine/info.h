@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -960,13 +960,15 @@ typedef enum {
 	NUMSTATES
 } statenum_t;
 
-typedef struct {
-	spritenum_t     sprite;
-	int				info_frame;
-	int				info_tics;
-	actionf_t       action;
-	statenum_t      nextstate;
-	int				misc1, misc2;
+typedef struct
+{
+	spritenum_t sprite;
+	long		info_frame;
+	long		info_tics;
+	actionf_t	action;
+	statenum_t	nextstate;
+	int			misc1;
+	int			misc2;
 } state_t;
 
 typedef enum {

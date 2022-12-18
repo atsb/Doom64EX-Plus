@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -1043,7 +1043,7 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 		z = (laser[i]->z1 - laser[i]->z2) >> FRACBITS;
 
 		laser[i]->dist = 0;
-		laser[i]->distmax = (int64)sqrt((x * x) + (y * y) + (z * z));
+		laser[i]->distmax = (int)sqrt((x * x) + (y * y) + (z * z));
 
 		laser[i]->next = NULL;
 		laser[i]->marker = NULL;

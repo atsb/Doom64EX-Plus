@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -146,7 +146,7 @@ static CMD(AutomapSetFlag) {
 	}
 
 	if (data & PCKF_UP) {
-		int64 flags = (data ^ PCKF_UP);
+		int64_t flags = (data ^ PCKF_UP);
 
 		am_flags &= ~flags;
 

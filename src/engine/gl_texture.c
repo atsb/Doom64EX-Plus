@@ -1,8 +1,9 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-//
+// Copyright(C) 2022 André Gulherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -24,6 +25,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "gl_shader.h"
 #include "doomstat.h"
 #include "r_local.h"
 #include "i_png.h"
@@ -200,6 +202,8 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
 
+	//GL_LoadShader("GLSL/D64EXPLUS.vert", "GLSL/D64EXPLUS.frag"); - crashes
+
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
@@ -231,7 +235,6 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 //
 // GL_SetNewPalette
 //
-
 void GL_SetNewPalette(int id, byte palID) {
 	palettetranslation[id] = palID;
 	/*if(textureptr[id])

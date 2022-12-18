@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1999-2000 Paul Brook
@@ -47,8 +47,8 @@ NULL
 #endif
 ;
 
-int8_t    DefaultConfig[] =
-#include "defconfig.inc"    // wtf?
+int8_t    DefaultConfig[] = 
+#include "defconfig.inc"    
 ;
 
 //

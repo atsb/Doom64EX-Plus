@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -47,9 +47,9 @@
 typedef struct memblock_s memblock_t;
 
 struct memblock_s {
-	int id;   // should be ZONEID
-	int tag;  // PU_FREE if this is free
-	int size; // including the header and possibly tiny fragments
+	int id; // = ZONEID
+	int tag;
+	int size;
 	void** user;
 	memblock_t* prev;
 	memblock_t* next;
@@ -61,7 +61,6 @@ enum {
 	PU_MAPLUMP, // block is allocated for data stored in map wads
 	PU_AUTO,
 	PU_AUDIO,   // allocation of midi data
-	PU_FREE,    // a free block
 	PU_LEVEL,   // allocation belongs to level (freed at next level load)
 	PU_LEVSPEC, // used for thinker_t's (same as PU_LEVEL basically)
 	PU_CACHE,   // block is cached (may be implicitly freed at any time!)

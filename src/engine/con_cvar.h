@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -88,4 +88,5 @@ void CON_CvarSetValue(int8_t *var_name, float value);
 cvar_t *CON_CvarGet(int8_t *name);
 
 #endif
+
 

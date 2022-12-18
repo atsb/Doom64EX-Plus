@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1999-2000 Paul Brook
@@ -26,13 +26,13 @@
 
 #define MAX_ACTIONPARAM        2
 
-typedef void (*actionproc_t)(int64 data, int8_t** param);
+typedef void (*actionproc_t)(int64_t data, int8_t** param);
 
-#define CMD(name) void CMD_ ## name(int64 data, int8_t** param)
+#define CMD(name) void CMD_ ## name(int64_t data, int8_t** param)
 
 void        G_InitActions(void);
 dboolean    G_ActionResponder(event_t* ev);
-void        G_AddCommand(int8_t* name, actionproc_t proc, int64 data);
+void        G_AddCommand(int8_t* name, actionproc_t proc, int64_t data);
 void        G_ActionTicker(void);
 void        G_ExecuteCommand(int8_t* action);
 void        G_BindActionByName(int8_t* key, int8_t* action);

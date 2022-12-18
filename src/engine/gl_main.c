@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -32,10 +32,6 @@
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-#endif
-
-#ifdef _WIN32
-#include <wglext.h>
 #endif
 
 #include "doomdef.h"
@@ -515,9 +511,6 @@ static void CalcViewSize(void) {
 }
 
 //
-// GL_Init
-//
-
 void GL_Init(void) {
 
 	gl_vendor = dglGetString(GL_VENDOR);
@@ -587,9 +580,5 @@ void GL_Init(void) {
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
 
-#ifdef _WIN32
-	wglSwapIntervalEXT(v_vsync.value);
-#else
 	SDL_GL_SetSwapInterval(v_vsync.value);
-#endif
 }
