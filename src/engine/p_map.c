@@ -1032,30 +1032,6 @@ dboolean PTR_AimTraverse(intercept_t* in) {
 			}
 		}
 
-		// [kex] d64 bug fix in which lasers ignore side lines when getting aimfrac
-		/*if(aimlaser && !shotsideline)
-		{
-			// check floor heights
-			if(li->frontsector->floorheight != li->backsector->floorheight)
-			{
-				if(linebottomslope > aimslope)
-				{
-					shotsideline = true;
-					return true;    // shot continues
-				}
-			}
-
-			// check ceiling heights
-			if(li->frontsector->ceilingheight != li->backsector->ceilingheight)
-			{
-				if(linetopslope < aimslope)
-				{
-					shotsideline = true;
-					return true;    // shot continues
-				}
-			}
-		}*/
-
 		if (topslope <= bottomslope) {
 			return false;    // stop
 		}
@@ -1322,20 +1298,10 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 
 	attackrange = distance;
 	linetarget = NULL;
-	//aimfrac            = 0;
-	//shotsideline    = false;
-	//aimlaser        = false;
 	flags = PT_ADDLINES | PT_ADDTHINGS;
 
 	if (t1->player) {
 		pitch = dcos(D_abs(t1->pitch - ANG90));
-
-		// [kex] set aimslope for special purposes
-		/*if(distance == LASERRANGE)
-		{
-			aimslope = pitch;
-			aimlaser = true;
-		}*/
 
 		// [kex] check for autoaim option. skip if bfg spray
 		if (distance != (ATTACKRANGE + 1)) {
