@@ -1135,7 +1135,7 @@ static void NET_CL_SendSYN(void)
 	packet = NET_NewPacket(10);
 	NET_WriteInt16(packet, NET_PACKET_TYPE_SYN);
 	NET_WriteInt32(packet, NET_MAGIC_NUMBER);
-	NET_WriteString(packet, "Doom64EX-Plus");
+	NET_WriteString(packet, "Doom64EX+");
 	NET_WriteInt8(packet, drone);
 	NET_WriteMD5Sum(packet, net_local_wad_md5sum);
 	NET_WriteString(packet, net_player_name);
