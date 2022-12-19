@@ -765,31 +765,32 @@ void P_SpawnDelayTimer(line_t* line, void (*func)(void)) {
 //
 
 void T_Quake(quake_t* quake) { // 0x8000EDE8
-	if (!quake->tics--) {
-		P_RemoveThinker(&quake->thinker);
+	if ((--quake->tics) == 0)
+	{
+		S_StopSound(NULL, sfx_quake);
 		quakeviewx = 0;
 		quakeviewy = 0;
-		S_StopSound(NULL, sfx_quake);
+		P_RemoveThinker(&quake->thinker);
 		return;
 	}
 
-	quakeviewx = (((P_Random() & 1) << 24) - 128);
-	quakeviewy = (((P_Random() & 1) << 18) - 2);
+	quakeviewy = (((P_Random() & 1) << 18) - (2 * FRACUNIT));
+	quakeviewx = (((P_Random() & 1) << 24) - (128 * FRACUNIT));
 }
 
 //
 // P_SpawnQuake
 //
 
-static void P_SpawnQuake(line_t* line) {
+static void P_SpawnQuake(int tics) {
 	quake_t* quake;
 
 	quake = Z_Malloc(sizeof(*quake), PU_LEVSPEC, 0);
 	P_AddThinker(&quake->thinker);
 	quake->thinker.function.acp1 = (actionf_p1)T_Quake;
-	quake->tics = line->tag;
+    quake->tics = tics;
 
-	S_StartSound(NULL, sfx_quake);
+	S_StopSound(NULL, sfx_quake);
 }
 
 //
@@ -1448,7 +1449,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 	case 225:
 		// Quake Effect
-		P_SpawnQuake(line);
+		P_SpawnQuake(line->tag);
 		ok = 1;
 		break;
 

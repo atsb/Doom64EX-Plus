@@ -126,8 +126,6 @@ void P_SetPsprite (player_t* player, int position, statenum_t stnum)
 // Uses player
 //
 
-static dboolean pls_buzzing = false;    // [kex] for keeping track when the buzzing is playing
-
 void P_BringUpWeapon(player_t* player) {
 	statenum_t    newstate;
 
@@ -139,7 +137,6 @@ void P_BringUpWeapon(player_t* player) {
 		S_StartSound(player->mo, sfx_sawup);
 	}
 	else if (player->pendingweapon == wp_plasma) {
-		pls_buzzing = true;
 		S_StartSound(player->mo, sfx_electric);
 	}
 
@@ -356,7 +353,6 @@ void A_Lower(player_t* player, pspdef_t* psp) {
 	// [d64] stop plasma buzz
 	//
 	if (player->readyweapon == wp_plasma) {
-		pls_buzzing = false;
 		S_StopSound(NULL, sfx_electric);
 	}
 

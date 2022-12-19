@@ -199,8 +199,8 @@ int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed) {
 	int             secnum;
 	int             rtn;
 	int             i;
-	sector_t* sec;
-	floormove_t* floor;
+	sector_t*		sec;
+	floormove_t*	floor;
 
 	secnum = -1;
 	rtn = 0;
@@ -217,9 +217,6 @@ int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed) {
 		floor = Z_Malloc(sizeof(*floor), PU_LEVSPEC, 0);
 		P_AddThinker(&floor->thinker);
 		sec->specialdata = floor;
-		// Midway assumed that ceiling->instant is true only if the
-		// speed is equal to 2048*FRACUNIT, which doesn't seem very sufficient
-		floor->instant = (speed >= (FLOORSPEED * 1024));
 		floor->thinker.function.acp1 = (actionf_p1)T_MoveFloor;
 		floor->type = floortype;
 		floor->crush = false;
@@ -260,7 +257,8 @@ int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed) {
 			if (floor->floordestheight > sec->ceilingheight) {
 				floor->floordestheight = sec->ceilingheight;
 			}
-			floor->floordestheight -= (8 * FRACUNIT) * (floortype == raiseFloorCrush);
+			if (floortype == raiseFloorCrush)
+				floor->floordestheight -= (8 * FRACUNIT);
 			break;
 
 		case raiseFloorToNearest:
@@ -292,7 +290,7 @@ int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed) {
 			break;
 
 		case customFloorToHeight:
-			floor->direction = (globalint > (floor->sector->floorheight / FRACUNIT)) ? 1 : -1;
+			floor->direction = (globalint > (floor->sector->floorheight)) ? 1 : -1;
 			floor->speed = speed;
 			floor->floordestheight = (globalint * FRACUNIT);
 			break;
@@ -300,29 +298,25 @@ int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed) {
 		case lowerAndChange:
 			floor->direction = -1;
 			floor->speed = speed;
-			floor->floordestheight =
-				P_FindLowestFloorSurrounding(sec);
+			floor->floordestheight = P_FindLowestFloorSurrounding(sec);
 			floor->texture = sec->floorpic;
-
-			for (i = 0; i < sec->linecount; i++) {
-				if (twoSided(secnum, i)) {
-					if (getSide(secnum, i, 0)->sector - sectors == secnum) {
+			for (i = 0; i < sec->linecount; i++)
+			{
+				if (twoSided(secnum, i))
+				{
+					if (getSide(secnum, i, 0)->sector - sectors == secnum)
+					{
 						sec = getSector(secnum, i, 1);
-
-						if (sec->floorheight == floor->floordestheight) {
-							floor->texture = sec->floorpic;
-							floor->newspecial = sec->special;
-							break;
-						}
+						floor->texture = sec->floorpic;
+						floor->newspecial = sec->special;
+						break;
 					}
-					else {
+					else
+					{
 						sec = getSector(secnum, i, 0);
-
-						if (sec->floorheight == floor->floordestheight) {
-							floor->texture = sec->floorpic;
-							floor->newspecial = sec->special;
-							break;
-						}
+						floor->texture = sec->floorpic;
+						floor->newspecial = sec->special;
+						break;
 					}
 				}
 			}
@@ -337,52 +331,51 @@ int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed) {
 // BUILD A STAIRCASE!
 //
 
-int EV_BuildStairs(line_t* line, stair_e type) {
-	int             secnum;
-	int             height;
-	int             i;
-	int             newsecnum;
-	int             texture;
-	int             ok;
-	int             rtn;
-	sector_t* sec;
-	sector_t* tsec;
+int EV_BuildStairs(line_t* line, stair_e type) // 80013DB0
+{
+	int		secnum;
+	int		height;
+	int		i;
+	int		newsecnum;
+	int		texture;
+	int		ok;
+	int		rtn;
+	fixed_t	stairsize;
+	fixed_t	speed;
+	sector_t* sec, * tsec;
 	floormove_t* floor;
-	fixed_t         stairsize;
-	fixed_t         speed;
+
 
 	secnum = -1;
 	rtn = 0;
-	while ((secnum = P_FindSectorFromLineTag(line, secnum)) >= 0) {
+	while ((secnum = P_FindSectorFromLineTag(line->tag, secnum)) >= 0)
+	{
 		sec = &sectors[secnum];
 
-		// ALREADY MOVING?  IF SO, KEEP GOING...
-		if (sec->specialdata) {
+		/* ALREADY MOVING?  IF SO, KEEP GOING... */
+		if (sec->specialdata)
 			continue;
-		}
 
+		/* */
+		/* new floor thinker */
+		/* */
 		rtn = 1;
-
-		// new floor thinker
 		floor = Z_Malloc(sizeof(*floor), PU_LEVSPEC, 0);
 		P_AddThinker(&floor->thinker);
-
 		sec->specialdata = floor;
-
 		floor->thinker.function.acp1 = (actionf_p1)T_MoveFloor;
 		floor->direction = 1;
 		floor->sector = sec;
 		floor->instant = false;
-		stairsize = 0;
-		speed = 0;
 
-		switch (type) {
+		switch (type)
+		{
 		case build8:
-			speed = FLOORSPEED / 2;     // [d64] changed from 4 to 2
+			speed = FLOORSPEED / 2;
 			stairsize = 8 * FRACUNIT;
 			break;
 		case turbo16:
-			speed = FLOORSPEED * 2;     // [d64] changed from 4 to 2
+			speed = FLOORSPEED * 2;
 			stairsize = 16 * FRACUNIT;
 			break;
 		}
@@ -393,58 +386,48 @@ int EV_BuildStairs(line_t* line, stair_e type) {
 
 		texture = sec->floorpic;
 
-		// Find next sector to raise
-		// 1.   Find 2-sided line with same sector side[0]
-		// 2.   Other side is the next sector to raise
-		do {
+		/* */
+		/* Find next sector to raise */
+		/* 1.	Find 2-sided line with same sector side[0] */
+		/* 2.	Other side is the next sector to raise */
+		/* */
+		do
+		{
 			ok = 0;
-			for (i = 0; i < sec->linecount; i++) {
-				if (!((sec->lines[i])->flags & ML_TWOSIDED)) {
+			for (i = 0; i < sec->linecount; i++)
+			{
+				if (!((sec->lines[i])->flags & ML_TWOSIDED))
 					continue;
-				}
 
 				tsec = (sec->lines[i])->frontsector;
 				newsecnum = tsec - sectors;
-
-				if (secnum != newsecnum) {
+				if (secnum != newsecnum)
 					continue;
-				}
 
 				tsec = (sec->lines[i])->backsector;
 				newsecnum = tsec - sectors;
-
-				if (tsec->floorpic != texture) {
+				if (tsec->floorpic != texture)
 					continue;
-				}
 
 				height += stairsize;
-
-				if (tsec->specialdata) {
+				if (tsec->specialdata)
 					continue;
-				}
 
 				sec = tsec;
 				secnum = newsecnum;
-
 				floor = Z_Malloc(sizeof(*floor), PU_LEVSPEC, 0);
 				P_AddThinker(&floor->thinker);
-
 				sec->specialdata = floor;
-
 				floor->thinker.function.acp1 = (actionf_p1)T_MoveFloor;
 				floor->direction = 1;
 				floor->sector = sec;
 				floor->speed = speed;
 				floor->floordestheight = height;
 				floor->instant = false;
-
 				ok = 1;
-
 				break;
 			}
 		} while (ok);
-
-		secnum = -1;
 	}
 	return rtn;
 }
