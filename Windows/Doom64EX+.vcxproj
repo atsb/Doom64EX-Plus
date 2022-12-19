@@ -24,7 +24,7 @@
     <ProjectGuid>{f7595469-0b54-4529-b8fd-b73f4c061494}</ProjectGuid>
     <RootNamespace>Doom64EX+</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Doom64EX+</ProjectName>
+    <ProjectName>DOOM64EX+</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
