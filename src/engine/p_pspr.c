@@ -88,35 +88,23 @@ void P_SetPsprite (player_t* player, int position, statenum_t stnum)
 	{
 		if (!stnum)
 		{
-			// object removed itself
 			psp->state = NULL;
-			break;
+			break;		/* object removed itself */
 		}
 
 		state = &states[stnum];
 		psp->state = state;
-		psp->tics = state->info_tics;	// could be 0
+		psp->tics = state->info_tics;  /* could be 0 */
 
-		if (state->misc1)
-		{
-			// coordinate set
-			psp->sx = state->misc1 << FRACBITS;
-			psp->sy = state->misc2 << FRACBITS;
-		}
-
-		// Call action routine.
-		// Modified handling.
+		/* call action routine */
 		if (state->action.acp2)
 		{
 			state->action.acp2(player, psp);
 			if (!psp->state)
 				break;
 		}
-
 		stnum = psp->state->nextstate;
-
-	} while (!psp->tics);
-	// an initial state of 0 could cycle through
+	} while (!psp->tics);	/* an initial state of 0 could cycle through */
 }
 
 //
