@@ -54,6 +54,7 @@ void P_CreateFadeThinker(mobj_t* mobj, line_t* line);
 void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line);
 
 CVAR(m_nospawnsound, 0);
+CVAR(m_brutal, 0);
 
 //
 // P_SetMobjState

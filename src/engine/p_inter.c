@@ -60,6 +60,7 @@
 
 CVAR_EXTERNAL(p_damageindicator);
 CVAR(m_obituaries, 0);
+CVAR_EXTERNAL(m_brutal);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -936,11 +937,16 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 		}
 	}
 
-	if (target->health < -target->info->spawnhealth
-		&& target->info->xdeathstate) {
+	if ((m_brutal.value == 1 && source && source->player && target->info->xdeathstate && !(demoplayback || demorecording || netgame)))
+	{
 		P_SetMobjState(target, target->info->xdeathstate);
 	}
-	else {
+	else if (target->health < -target->info->spawnhealth && target->info->xdeathstate)
+	{
+		P_SetMobjState(target, target->info->xdeathstate);
+	}
+	else
+	{
 		P_SetMobjState(target, target->info->deathstate);
 	}
 	target->tics -= P_Random() & 3;
