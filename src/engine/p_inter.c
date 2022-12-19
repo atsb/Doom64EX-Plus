@@ -28,6 +28,10 @@
 //-----------------------------------------------------------------------------
 
 // Data.
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "doomdef.h"
 #include "d_englsh.h"
 #include "sounds.h"
@@ -55,6 +59,7 @@
 #include "deh_misc.h"
 
 CVAR_EXTERNAL(p_damageindicator);
+CVAR(m_obituaries, 0);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -763,21 +768,19 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 	}
 
-	if (special->type != MT_FAKEITEM) {
-		if (special->flags & MF_COUNTITEM) {
-			player->itemcount++;
-		}
+	if (special->flags & MF_COUNTITEM) {
+		player->itemcount++;
+	}
 
-		if (special->flags & MF_COUNTSECRET) {
-			player->secretcount++;
-		}
+	if (special->flags & MF_COUNTSECRET) {
+		player->secretcount++;
+	}
 
-		P_RemoveMobj(special);
-		player->bonuscount += BONUSADD;
+	P_RemoveMobj(special);
+	player->bonuscount += BONUSADD;
 
-		if (player == &players[consoleplayer]) {
-			S_StartSound(NULL, sound);
-		}
+	if (player == &players[consoleplayer]) {
+		S_StartSound(NULL, sound);
 	}
 }
 
@@ -786,72 +789,83 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 //
 
 static void P_Obituary(mobj_t* source, mobj_t* target) {
-	static int8_t omsg[128];
-	int8_t* name;
+	static int8_t omsg[512];
 	int i;
 
 	if (!target->player) {
 		return;
 	}
 
-	name = player_names[target->player - players];
+	// Init the random generator
+	srand((unsigned int)time(NULL));
+	int z = rand() % 500;
 
 	if (source != NULL) {
 		switch (source->type) {
 		case MT_POSSESSED1:
-			sprintf(omsg, "%s\nwas tickled to death\nby a Zombieman.", name);
+			if (z < 50) {
+				sprintf(omsg, "Immorpher will write a song\nin your honor.");
+			}
+			else {
+				sprintf(omsg, "you were tickled to death\nby a Zombieman.");
+			}
 			break;
 		case MT_POSSESSED2:
-			sprintf(omsg, "%s\ntook a shotgun to the face.", name);
+			sprintf(omsg, "you took a shotgun to\nthe face.");
 			break;
 		case MT_IMP1:
-			sprintf(omsg, "%s\nwas burned by an Imp.", name);
+			sprintf(omsg, "you were burned\nby an Imp.");
 			break;
 		case MT_IMP2:
-			sprintf(omsg, "%s\nwas killed by a\nNightmare Imp.", name);
+			sprintf(omsg, "you were killed\nby a Nightmare Imp.");
 			break;
 		case MT_DEMON1:
-			sprintf(omsg, "%s\nwas bit by a Demon.", name);
+			sprintf(omsg, "you were chomped\nby a Demon.");
 			break;
 		case MT_DEMON2:
-			sprintf(omsg, "%s\nwas eaten by a Spectre.", name);
+			if (z < 20) {
+				sprintf(omsg, "tried to beat a speedrun.");
+			}
+			else {
+				sprintf(omsg, "you were eaten\nby a Spectre.");
+			}
 			break;
 		case MT_MANCUBUS:
-			sprintf(omsg, "%s\nwas squashed by a Mancubus.", name);
+			sprintf(omsg, "you were squashed\nby a Mancubus.");
 			break;
 		case MT_CACODEMON:
-			sprintf(omsg, "%s\nwas smitten by a Cacodemon.", name);
+			sprintf(omsg, "you were smitten\nby a Cacodemon.");
 			break;
 		case MT_BRUISER1:
-			sprintf(omsg, "%s\nwas bruised by a\nBaron of Hell.", name);
+			sprintf(omsg, "you were bruised\nby a Baron of Hell.");
 			break;
 		case MT_BRUISER2:
-			sprintf(omsg, "%s\nwas splayed by a\nHell Knight.", name);
+			sprintf(omsg, "you were splayed\nby a Hell Knight.");
 			break;
 		case MT_BABY:
-			sprintf(omsg, "%s\nwas vaporized by\nan Arachnotron.", name);
+			sprintf(omsg, "you were vaporized\nby an Arachnotron.");
 			break;
 		case MT_SKULL:
-			sprintf(omsg, "A Lost Soul slammed into\n%s.", name);
+			sprintf(omsg, "A Lost Soul slammed\ninto you.");
 			break;
 		case MT_CYBORG:
-			sprintf(omsg, "%s\nwas splattered by a\nCyberdemon.", name);
+			sprintf(omsg, "you were splattered\nby a Cyberdemon.");
 			break;
 		case MT_RESURRECTOR:
-			sprintf(omsg, "%s\nwas destroyed by \nthe Resurrector.", name);
+			sprintf(omsg, "you were destroyed\nby the Resurrector.");
 			break;
 		case MT_PLAYERBOT1:
 		case MT_PLAYERBOT2:
 		case MT_PLAYERBOT3:
-			sprintf(omsg, "%s\nwas killed by a marine.", name);
+			sprintf(omsg, "you were killed\nby a marine.");
 			break;
 		default:
-			sprintf(omsg, "%s died.", name);
+			sprintf(omsg, "you died.");
 			break;
 		}
 	}
 	else {
-		sprintf(omsg, "%s died.", name);
+		sprintf(omsg, "you died.");
 	}
 
 	for (i = 0; i < MAXPLAYERS; i++) {
@@ -915,7 +929,9 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 		}
 
 		// 20120123 villsa - obituaries!
-		if (netgame) {
+		// Adam 2022 - I want them in singleplayer!
+		if (m_obituaries.value == 1)
+		{
 			P_Obituary(source, target);
 		}
 	}
