@@ -206,26 +206,26 @@ void P_LoadVertexes(int lump) {
 // P_LoadSegs
 //
 
-void P_LoadSegs(int lump) {
-	int                 i;
-	mapseg_t*			ml;
-	seg_t*				li;
-	line_t*				ldef;
-	int                 linedef;
-	int                 side;
-	float               x;
-	float               y;
+void P_LoadSegs(void)
+{
+	int			i;
+	mapseg_t*	ml;
+	seg_t*		li;
+	line_t*		ldef;
+	int			linedef, side;
+	float       x, y;
 
-	numsegs = W_MapLumpLength(lump) / sizeof(mapseg_t);
+	numsegs = W_MapLumpLength(ML_SEGS) / sizeof(mapseg_t);
 	segs = Z_Malloc(numsegs * sizeof(seg_t), PU_LEVEL, 0);
 	dmemset(segs, 0, numsegs * sizeof(seg_t));
 
 	CON_DPrintf("%i segs\n", numsegs);
 
-	ml = (mapseg_t*)W_GetMapLump(lump);
+	ml = (mapseg_t*)W_GetMapLump(ML_SEGS);
 	li = segs;
 
-	for (i = 0; i < numsegs; i++, li++, ml++) {
+	for (i = 0; i < numsegs; i++, li++, ml++)
+	{
 		li->v1 = &vertexes[(word)SHORT(ml->v1)];
 		li->v2 = &vertexes[(word)SHORT(ml->v2)];
 
