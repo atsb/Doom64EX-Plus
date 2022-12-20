@@ -465,7 +465,8 @@ dboolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 		return false;    // solid wall or thing
 	}
 
-	if (!(thing->flags & MF_NOCLIP)) {
+	if (!(thing->flags & MF_NOCLIP))
+	{
 		if (tmceilingz - tmfloorz < thing->height) {
 			return false;    // doesn't fit
 		}
@@ -502,14 +503,17 @@ dboolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 	P_SetThingPosition(thing);
 
 	// if any special lines were hit, do the effect
-	if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP))) {
+	if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP)))
+	{
 		while (numspechit--) {
 			// see if the line was crossed
 			ld = spechit[numspechit];
 			side = P_PointOnLineSide(thing->x, thing->y, ld);
 			oldside = P_PointOnLineSide(oldx, oldy, ld);
-			if (side != oldside) {
-				if (ld->special & MLU_CROSS) {
+			if (side != oldside)
+			{
+				if (!(ld->special & ML_TRIGGERFRONT) || (side))
+				{
 					P_UseSpecialLine(thing, ld, oldside);
 				}
 			}
