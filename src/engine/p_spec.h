@@ -291,9 +291,8 @@ typedef struct {
 	int         topcountdown;
 } vldoor_t;
 
-#define VDOORSPEED        FRACUNIT*2
-#define VDOORBLAZESPEED   FRACUNIT*8
-#define VDOORWAIT         120
+#define	VDOORSPEED	FRACUNIT*2
+#define	VDOORWAIT	120
 
 void    EV_VerticalDoor(line_t* line, mobj_t* thing);
 int     EV_DoDoor(line_t* line, vldoor_e type);
