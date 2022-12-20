@@ -689,7 +689,7 @@ static dboolean PIT_CheckMobjZ(mobj_t* thing) {
 // P_CheckOnMobj
 //
 
-void P_ZMovement(mobj_t* mo, dboolean checkmissile);
+void P_ZMovement(mobj_t* mo);
 
 mobj_t* P_CheckOnMobj(mobj_t* thing) {
 	int    bx, by;
@@ -704,7 +704,7 @@ mobj_t* P_CheckOnMobj(mobj_t* thing) {
 	tmthing = thing;
 	tmflags = thing->flags;
 	oldmo = *thing; // save the old mobj before the fake zmovement
-	P_ZMovement(tmthing, false);
+	P_ZMovement(tmthing);
 
 	tmx = x;
 	tmy = y;

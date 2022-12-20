@@ -54,8 +54,8 @@ void T_FireFlicker(fireflicker_t* flick) {
 		return;
 	}
 
-	if (flick->special != flick->sector->special) {
-		flick->sector->lightlevel = 0;
+	if (flick->sector->special != flick->special)
+	{
 		P_RemoveThinker(&flick->thinker);
 		return;
 	}
