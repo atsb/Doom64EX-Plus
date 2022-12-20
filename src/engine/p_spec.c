@@ -1048,7 +1048,7 @@ void P_SetMovingCamera(player_t* player, line_t* line) {
 
 static dboolean P_ModifyMobjFlags(int tid, int flags) {
 	mobj_t* mo;
-	dboolean ok = false;
+	bool ok = false;
 
 	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
 		// not matching the tid
@@ -1634,7 +1634,7 @@ dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
-	boolean     ok;
+	bool     ok;
 	int         actionType;
 
 	actionType = SPECIALMASK(line->special);

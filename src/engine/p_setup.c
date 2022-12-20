@@ -1052,7 +1052,7 @@ void P_SetupLevel(int map, int playermask, skill_t skill) {
 	P_LoadSubsectors(ML_SSECTORS);
 	P_LoadBlockMap();
 	P_LoadNodes(ML_NODES);
-	P_LoadSegs(ML_SEGS);
+	P_LoadSegs();
 	P_LoadLeafs(ML_LEAFS);
 	P_LoadReject(ML_REJECT);
 	P_LoadLights(ML_LIGHTS);
