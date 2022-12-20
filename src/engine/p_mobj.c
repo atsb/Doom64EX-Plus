@@ -348,11 +348,13 @@ void P_ZMovement(mobj_t* mo, dboolean checkmissile) {
 			}
 		}
 	}
-	else if ((mo->flags & MF_GRAVITY)) {
-		if (mo->momz == 0) {
+	else if ((mo->flags & MF_GRAVITY))
+	{
+		// apply gravity
+		if (mo->momz == 0)
+		{
 			mo->momz = -(GRAVITY/2);
-		}
-		else {
+		} else {
 			mo->momz -= ((GRAVITY/FRACBITS)*3); // [d64]: non-players fall slightly slower
 		}
 	}
