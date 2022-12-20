@@ -761,6 +761,7 @@ void P_SpawnPlayer(mapthing_t* mthing) {
 	p->viewheight = VIEWHEIGHT;
 	p->recoilpitch = 0;
 	p->palette = mthing->type - 1;
+	p->viewz = mobj->z + VIEWHEIGHT;
 	p->cameratarget = p->mo;
 
 	// setup gun psprite
