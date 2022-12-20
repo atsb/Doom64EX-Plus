@@ -103,7 +103,7 @@ Packaging will not be done by myself, but any contributor is welcome to package 
 
 Clone this repo
 
-$ git clone https://github.com/atsb/Doom64EX-Plus
+    $ git clone https://github.com/atsb/Doom64EX-Plus
 
 ## Linux
 
