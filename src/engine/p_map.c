@@ -465,7 +465,8 @@ dboolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 		return false;    // solid wall or thing
 	}
 
-	if (!(thing->flags & MF_NOCLIP)) {
+	if (!(thing->flags & MF_NOCLIP))
+	{
 		if (tmceilingz - tmfloorz < thing->height) {
 			return false;    // doesn't fit
 		}
@@ -502,14 +503,17 @@ dboolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 	P_SetThingPosition(thing);
 
 	// if any special lines were hit, do the effect
-	if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP))) {
+	if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP)))
+	{
 		while (numspechit--) {
 			// see if the line was crossed
 			ld = spechit[numspechit];
 			side = P_PointOnLineSide(thing->x, thing->y, ld);
 			oldside = P_PointOnLineSide(oldx, oldy, ld);
-			if (side != oldside) {
-				if (ld->special & MLU_CROSS) {
+			if (side != oldside)
+			{
+				if (!(ld->special & ML_TRIGGERFRONT) || (side))
+				{
 					P_UseSpecialLine(thing, ld, oldside);
 				}
 			}
@@ -953,9 +957,10 @@ hitslideline:
 //
 // P_LineAttack
 //
-mobj_t* linetarget;     // who got hit (or NULL)
-mobj_t* shootthing;
-//fixed_t         aimfrac;
+mobj_t*			linetarget;     // who got hit (or NULL)
+mobj_t*			shootthing;
+line_t*			shotline;       // 800A56FC
+fixed_t         aimfrac;        // 800A5720
 
 fixed_t         shootdirx;
 fixed_t         shootdiry;
@@ -1004,6 +1009,8 @@ dboolean PTR_AimTraverse(intercept_t* in) {
 		//aimfrac = in->frac;
 
 		if (!(li->flags & ML_TWOSIDED)) {
+			aimfrac = in->frac;
+			shotline = li;
 			return false;    // stop
 		}
 
@@ -1013,6 +1020,8 @@ dboolean PTR_AimTraverse(intercept_t* in) {
 		P_LineOpening(li);
 
 		if (openbottom >= opentop) {
+			aimfrac = in->frac;
+			shotline = li;
 			return false;    // stop
 		}
 
@@ -1033,6 +1042,8 @@ dboolean PTR_AimTraverse(intercept_t* in) {
 		}
 
 		if (topslope <= bottomslope) {
+			shotline = li;
+			aimfrac = in->frac;
 			return false;    // stop
 		}
 
@@ -1074,7 +1085,7 @@ dboolean PTR_AimTraverse(intercept_t* in) {
 
 	aimslope = (thingtopslope + thingbottomslope) >> 1;
 	linetarget = th;
-	//aimfrac = in->frac;
+	aimfrac = in->frac;
 
 	return false;                       // don't go any farther
 }
@@ -1205,6 +1216,8 @@ dboolean PTR_ShootTraverse(intercept_t* in) {
 			P_SpawnPuff(x, y, z);
 		}
 
+		shotline = li;
+
 		// don't go any farther
 		return false;
 	}
@@ -1283,22 +1296,28 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	x2 = t1->x + F2INT(distance) * finecosine[angle];
 	y2 = t1->y + F2INT(distance) * finesine[angle];
 
-	// [d64] new argument for shoot height
-	if (!zheight) {
-		shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT;
-	}
-	else {
-		shootz = t1->z + zheight;
-	}
-
 	// can't shoot outside view angles
 	// [d64] use 120 instead of 100
-	topslope = 120 * FRACUNIT / 160;
+	topslope	= 120 * FRACUNIT / 160;
 	bottomslope = -120 * FRACUNIT / 160;
 
 	attackrange = distance;
-	linetarget = NULL;
-	flags = PT_ADDLINES | PT_ADDTHINGS;
+	linetarget	= NULL;
+	shotline	= NULL;
+	aimfrac		= 0;
+	flags		= PT_ADDLINES | PT_ADDTHINGS;
+
+	// [d64] new argument for shoot height
+	if (!zheight)
+	{
+		shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT;
+	}
+	else
+	{
+		shootz = t1->z + zheight;
+	}
+
+	P_PathTraverse(t1->x, t1->y, x2, y2, flags, PTR_AimTraverse);
 
 	if (t1->player) {
 		pitch = dcos(D_abs(t1->pitch - ANG90));
@@ -1312,9 +1331,8 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 		}
 	}
 
-	P_PathTraverse(t1->x, t1->y, x2, y2, flags, PTR_AimTraverse);
-
-	if (linetarget) {
+	if (linetarget)
+	{
 		return aimslope;
 	}
 
@@ -1341,6 +1359,7 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, in
 	fixed_t y2;
 
 	angle >>= ANGLETOFINESHIFT;
+
 	shootthing = t1;
 	la_damage = damage;
 	x2 = t1->x + F2INT(distance) * finecosine[angle];
@@ -1349,6 +1368,7 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, in
 	attackrange = distance;
 	aimslope = slope;
 	aimpitch = dcos(shootthing->pitch);
+	shotline = NULL;
 
 	//
 	// [kex] - stuff for plane hit detection

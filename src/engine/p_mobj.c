@@ -350,10 +350,10 @@ void P_ZMovement(mobj_t* mo, dboolean checkmissile) {
 	}
 	else if ((mo->flags & MF_GRAVITY)) {
 		if (mo->momz == 0) {
-			mo->momz = -GRAVITY;
+			mo->momz = -(GRAVITY/2);
 		}
 		else {
-			mo->momz -= GRAVITY;
+			mo->momz -= ((GRAVITY/FRACBITS)*3); // [d64]: non-players fall slightly slower
 		}
 	}
 
@@ -1193,13 +1193,19 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	}
 }
 
-//
-// P_SpawnPlayerMissile
-// Tries to aim at a nearby monster
-//
+/*
+================
+=
+= P_SpawnPlayerMissile
+=
+= Tries to aim at a nearby monster
+================
+*/
+extern line_t*	shotline;       // 800A56FC
+extern fixed_t	aimfrac;        // 800A5720
 
 void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
-	mobj_t* th;
+	mobj_t*		th;
 	angle_t     an;
 	fixed_t     x;
 	fixed_t     y;
@@ -1274,7 +1280,9 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	x = source->x + (offset * F2INT(dcos(an)));
 	y = source->y + (offset * F2INT(dsin(an)));
 
-	if (!P_TryMove(th, x, y)) {
+	// [d64]: checking against very close lines?
+	if ((shotline && aimfrac <= 0xC80) || !P_TryMove(th, x, y))
+	{
 		P_ExplodeMissile(th);
 	}
 }

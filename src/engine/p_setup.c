@@ -206,26 +206,26 @@ void P_LoadVertexes(int lump) {
 // P_LoadSegs
 //
 
-void P_LoadSegs(int lump) {
-	int                 i;
-	mapseg_t*			ml;
-	seg_t*				li;
-	line_t*				ldef;
-	int                 linedef;
-	int                 side;
-	float               x;
-	float               y;
+void P_LoadSegs(void)
+{
+	int			i;
+	mapseg_t*	ml;
+	seg_t*		li;
+	line_t*		ldef;
+	int			linedef, side;
+	float       x, y;
 
-	numsegs = W_MapLumpLength(lump) / sizeof(mapseg_t);
+	numsegs = W_MapLumpLength(ML_SEGS) / sizeof(mapseg_t);
 	segs = Z_Malloc(numsegs * sizeof(seg_t), PU_LEVEL, 0);
 	dmemset(segs, 0, numsegs * sizeof(seg_t));
 
 	CON_DPrintf("%i segs\n", numsegs);
 
-	ml = (mapseg_t*)W_GetMapLump(lump);
+	ml = (mapseg_t*)W_GetMapLump(ML_SEGS);
 	li = segs;
 
-	for (i = 0; i < numsegs; i++, li++, ml++) {
+	for (i = 0; i < numsegs; i++, li++, ml++)
+	{
 		li->v1 = &vertexes[(word)SHORT(ml->v1)];
 		li->v2 = &vertexes[(word)SHORT(ml->v2)];
 
@@ -824,28 +824,21 @@ static dboolean P_VerifyBlockMap(int count) {
 // P_LoadBlockMap
 //
 
-void P_LoadBlockMap(int lump) {
-	int         i;
-	int         count;
-	void* mapdata;
-	size_t      len;
+static void P_LoadBlockMap(void) {
+	int		count;
+	int		i;
+	int     length;
+	byte*	src;
 
-	mapdata = W_GetMapLump(lump);
-	len = W_MapLumpLength(lump);
+	length = W_MapLumpLength(ML_BLOCKMAP);
+	blockmaplump = Z_Malloc(length, PU_LEVEL, 0);
+	src = (byte*)W_GetMapLump(ML_BLOCKMAP);
+	memmove(blockmaplump, src, length);
 
-	//
-	// GhostlyDeath <10/3/11> -- Reallocate and copy since
-	// W_GetMapLump() doesn't quite work like we want it to on 64-bit
-	// it works, just the way it is laid out
-	//
-	blockmaplump = Z_Malloc(len, PU_LEVEL, NULL);
-	memmove(blockmaplump, mapdata, len);
-	blockmap = blockmaplump + 4;
-	count = len / 2;
-
-	for (i = 0; i < count; i++) {
+	blockmap = blockmaplump + 4;//skip blockmap header
+	count = length / 2;
+	for (i = 0; i < count; i++)
 		blockmaplump[i] = SHORT(blockmaplump[i]);
-	}
 
 	bmaporgx = INT2F(blockmaplump[0]);
 	bmaporgy = INT2F(blockmaplump[1]);
@@ -1057,9 +1050,9 @@ void P_SetupLevel(int map, int playermask, skill_t skill) {
 	P_LoadSideDefs(ML_SIDEDEFS);
 	P_LoadLineDefs(ML_LINEDEFS);
 	P_LoadSubsectors(ML_SSECTORS);
-	P_LoadBlockMap(ML_BLOCKMAP);
+	P_LoadBlockMap();
 	P_LoadNodes(ML_NODES);
-	P_LoadSegs(ML_SEGS);
+	P_LoadSegs();
 	P_LoadLeafs(ML_LEAFS);
 	P_LoadReject(ML_REJECT);
 	P_LoadLights(ML_LIGHTS);
