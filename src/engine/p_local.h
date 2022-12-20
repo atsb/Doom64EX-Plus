@@ -44,26 +44,27 @@
 #define MAPBMASK        (MAPBLOCKSIZE-1)
 #define MAPBTOFRAC        (MAPBLOCKSHIFT-FRACBITS)
 
-// player radius for movement checking
-#define PLAYERRADIUS    19*FRACUNIT
+/* player radius for movement checking */
+#define	PLAYERRADIUS	16*FRACUNIT
+
 
 // MAXRADIUS is for precalculated sector block boxes
 // the spider demon is larger,
 // but we do not have any moving sectors nearby
-#define MAXRADIUS        32*FRACUNIT
+#define MAXRADIUS       32*FRACUNIT
 
-#define GRAVITY        FRACUNIT
-#define MAXMOVE        (16*FRACUNIT)           // [d64] changed from 30 to 16
-#define STOPSPEED   0x1000
-#define FRICTION    0xd200
+#define	GRAVITY			(FRACUNIT*4)    //like JagDoom
+#define	MAXMOVE			(16*FRACUNIT)
+#define STOPSPEED		0x1000
+#define FRICTION		0xd200
 
 #define USERANGE        (64*FRACUNIT)
-#define MELEERANGE        (80*FRACUNIT)       // [d64] changed from 64 to 80
+#define MELEERANGE      (80*FRACUNIT)       // [d64] changed from 64 to 80
 #define ATTACKRANGE     (16*64*FRACUNIT)
 #define MISSILERANGE    (32*64*FRACUNIT)
-#define LASERRANGE        (4096*FRACUNIT)
-#define LASERAIMHEIGHT    (40*FRACUNIT)
-#define LASERDISTANCE    (30*FRACUNIT)
+#define LASERRANGE      (4096*FRACUNIT)
+#define LASERAIMHEIGHT  (40*FRACUNIT)
+#define LASERDISTANCE   (30*FRACUNIT)
 
 // follow a player
 #define    BASETHRESHOLD         90
