@@ -31,18 +31,18 @@
 #include "m_menu.h"
 #include "t_bsp.h"
 
-#define FLOATSPEED        (FRACUNIT*4)
+#define FLOATSPEED      (FRACUNIT*4)
 
-#define MAXHEALTH        100
-#define VIEWHEIGHT        (56*FRACUNIT)    //villsa: changed from 41 to 56
+#define MAXHEALTH       100
+#define	VIEWHEIGHT		(56*FRACUNIT) //  D64 change to 41
 
 // mapblocks are used to check movement
 // against lines and things
-#define MAPBLOCKUNITS    128
+#define MAPBLOCKUNITS   128
 #define MAPBLOCKSIZE    (MAPBLOCKUNITS*FRACUNIT)
-#define MAPBLOCKSHIFT    (FRACBITS+7)
+#define MAPBLOCKSHIFT   (FRACBITS+7)
 #define MAPBMASK        (MAPBLOCKSIZE-1)
-#define MAPBTOFRAC        (MAPBLOCKSHIFT-FRACBITS)
+#define MAPBTOFRAC      (MAPBLOCKSHIFT-FRACBITS)
 
 /* player radius for movement checking */
 #define	PLAYERRADIUS	16*FRACUNIT
@@ -58,7 +58,7 @@
 #define STOPSPEED		0x1000
 #define FRICTION		0xd200
 
-#define USERANGE        (64*FRACUNIT)
+#define	USERANGE		(70*FRACUNIT)
 #define MELEERANGE      (80*FRACUNIT)       // [d64] changed from 64 to 80
 #define ATTACKRANGE     (16*64*FRACUNIT)
 #define MISSILERANGE    (32*64*FRACUNIT)
@@ -67,7 +67,7 @@
 #define LASERDISTANCE   (30*FRACUNIT)
 
 // follow a player
-#define    BASETHRESHOLD         90
+#define BASETHRESHOLD   90
 
 //
 // P_TICK
