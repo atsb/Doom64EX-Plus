@@ -145,7 +145,6 @@ EV_DoPlat
 	case perpetualRaise:
 		P_ActivateInStasis(line->tag);
 		break;
-
 	default:
 		break;
 	}
@@ -297,7 +296,7 @@ EV_DoPlat
 			break;
 
 		case perpetualRaise:
-			plat->speed = PLATSLOWSPEED;
+			plat->speed = PLATSPEED;
 			plat->low = P_FindLowestFloorSurrounding(sec);
 
 			if (plat->low > sec->floorheight) {
@@ -310,8 +309,8 @@ EV_DoPlat
 				plat->high = sec->floorheight;
 			}
 
-			plat->wait = TICRATE * PLATWAIT;
-			plat->status = P_Random() & 1;
+			plat->wait = 30 * PLATWAIT;
+			plat->status = ((P_Random()&1) << 1) + down;
 
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
