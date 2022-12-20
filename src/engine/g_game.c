@@ -131,7 +131,6 @@ playercontrols_t    Controls;
 mobj_t* bodyque[BODYQUESIZE];
 int         bodyqueslot;
 
-byte forcecollision = 0;
 byte forcejump = 0;
 byte forcefreelook = 0;
 

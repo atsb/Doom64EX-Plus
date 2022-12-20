@@ -145,7 +145,6 @@ EV_DoPlat
 	case perpetualRaise:
 		P_ActivateInStasis(line->tag);
 		break;
-
 	default:
 		break;
 	}
@@ -171,7 +170,7 @@ EV_DoPlat
 
 		switch (type) {
 		case raiseToNearestAndChange:
-			plat->speed = PLATSLOWSPEED;
+			plat->speed = PLATSPEED / 2;
 			sec->floorpic = sides[line->sidenum[0]].sector->floorpic;
 			plat->high = P_FindNextHighestFloor(sec, sec->floorheight);
 			plat->wait = 0;
@@ -183,7 +182,7 @@ EV_DoPlat
 			break;
 
 		case raiseAndChange:
-			plat->speed = PLATSLOWSPEED;
+			plat->speed = PLATSPEED / 2;
 			sec->floorpic = sides[line->sidenum[0]].sector->floorpic;
 			plat->high = sec->floorheight + amount * FRACUNIT;
 			plat->wait = 0;
@@ -193,111 +192,61 @@ EV_DoPlat
 			break;
 
 		case downWaitUpStay:
-			plat->speed = PLATSPEED;
-			plat->low = P_FindLowestFloorSurrounding(sec);
-
-			if (plat->low > sec->floorheight) {
-				plat->low = sec->floorheight;
-			}
-
-			plat->high = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
-			plat->status = down;
-			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
-			break;
-
 		case blazeDWUS:
-			plat->speed = PLATBLAZESPEED;
+			if (type == blazeDWUS)
+				plat->speed = PLATSPEED * 8;
+			else
+				plat->speed = PLATSPEED * 4;
 			plat->low = P_FindLowestFloorSurrounding(sec);
-
-			if (plat->low > sec->floorheight) {
+			if (plat->low > sec->floorheight)
 				plat->low = sec->floorheight;
-			}
-
 			plat->high = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
+			plat->wait = 30 * PLATWAIT;
 			plat->status = down;
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
 
-		case customDownUp:
-			plat->speed = PLATSPEED;
-			plat->low = sec->floorheight - (globalint * FRACUNIT);
-
-			if (plat->low > sec->floorheight) {
-				plat->low = sec->floorheight;
-			}
-
-			plat->high = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
-			plat->status = down;
-			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
-			break;
-
+        case customDownUp:
 		case customDownUpFast:
-			plat->speed = PLATBLAZESPEED;
+			if (type == customDownUpFast)
+				plat->speed = PLATSPEED*8;
+			else
+				plat->speed = PLATSPEED*4;
 			plat->low = sec->floorheight - (globalint * FRACUNIT);
-
-			if (plat->low > sec->floorheight) {
-				plat->low = sec->floorheight;
-			}
-
 			plat->high = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
+			plat->wait = 30*PLATWAIT;
 			plat->status = down;
-			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
+			S_StartSound((mobj_t *)&sec->soundorg,sfx_pstart);
 			break;
 
 		case upWaitDownStay:
-			plat->speed = PLATSPEED;
-			plat->high = P_FindHighestFloorSurrounding(sec);
-			if (plat->high < sec->floorheight) {
-				plat->high = sec->floorheight;
-			}
-			plat->low = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
-			plat->status = up;
-			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
-			break;
-
 		case blazeUWDS:
-			plat->speed = PLATBLAZESPEED;
-			plat->high = P_FindHighestFloorSurrounding(sec);
-			if (plat->high < sec->floorheight) {
-				plat->high = sec->floorheight;
-			}
+			if (type == blazeUWDS)
+				plat->speed = PLATSPEED * 8;
+			else
+				plat->speed = PLATSPEED * 4;
 			plat->low = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
+			plat->high = P_FindHighestFloorSurrounding(sec);
+			plat->wait = 30 * PLATWAIT;
 			plat->status = up;
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
 
 		case customUpDown:
-			plat->speed = PLATSPEED;
-			plat->high = sec->floorheight + (globalint * FRACUNIT);
-			if (plat->high < sec->floorheight) {
-				plat->high = sec->floorheight;
-			}
-			plat->low = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
-			plat->status = up;
-			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
-			break;
-
 		case customUpDownFast:
-			plat->speed = PLATSPEED;
-			plat->high = sec->floorheight + (globalint * FRACUNIT);
-			if (plat->high < sec->floorheight) {
-				plat->high = sec->floorheight;
-			}
+			if (type == customUpDownFast)
+				plat->speed = PLATSPEED * 8;
+			else
+				plat->speed = PLATSPEED * 4;
 			plat->low = sec->floorheight;
-			plat->wait = TICRATE * PLATWAIT;
+			plat->high = sec->floorheight + (globalint * FRACUNIT);
+			plat->wait = 30 * PLATWAIT;
 			plat->status = up;
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
 
 		case perpetualRaise:
-			plat->speed = PLATSLOWSPEED;
+			plat->speed = PLATSPEED;
 			plat->low = P_FindLowestFloorSurrounding(sec);
 
 			if (plat->low > sec->floorheight) {
@@ -310,8 +259,8 @@ EV_DoPlat
 				plat->high = sec->floorheight;
 			}
 
-			plat->wait = TICRATE * PLATWAIT;
-			plat->status = P_Random() & 1;
+			plat->wait = 30 * PLATWAIT;
+			plat->status = ((P_Random()&1) << 1) + down;
 
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
