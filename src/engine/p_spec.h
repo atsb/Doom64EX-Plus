@@ -103,6 +103,13 @@ typedef struct {
 	int          special;
 } strobe_t;
 
+typedef enum
+{
+	PULSENORMAL,
+	PULSESLOW,
+	PULSERANDOM
+} glowtype_e;
+
 typedef struct {
 	thinker_t    thinker;
 	sector_t* sector;
@@ -142,14 +149,12 @@ typedef struct {
 	int inc;
 } lightmorph_t;
 
-#define GLOWSPEED           2
-#define STROBEBRIGHT        1
-#define SUPERFAST           10
-#define FASTDARK            15
-#define SLOWDARK            30
-#define PULSENORMAL         0
-#define PULSESLOW           1
-#define PULSERANDOM         2
+#define GLOWSPEED			2
+#define	STROBEBRIGHT		3
+#define	STROBEBRIGHT2		1
+#define	TURBODARK			4
+#define	FASTDARK			15
+#define	SLOWDARK			30
 
 void        P_SpawnFireFlicker(sector_t* sector);
 void        T_LightFlash(lightflash_t* flash);
@@ -238,11 +243,9 @@ typedef struct {
 	plattype_e   type;
 } plat_t;
 
-#define PLATWAIT        3
-#define PLATSLOWSPEED   (2*FRACUNIT)
-#define PLATSPEED       (8*FRACUNIT)
-#define PLATBLAZESPEED  (16*FRACUNIT)
-#define MAXPLATS        60
+#define	PLATWAIT	3			/* seconds */
+#define	PLATSPEED	(FRACUNIT*2)
+#define MAXPLATS	60
 
 extern plat_t* activeplats[MAXPLATS];
 
