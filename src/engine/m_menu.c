@@ -1297,6 +1297,7 @@ CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
 CVAR_EXTERNAL(v_yaxismove);
+CVAR_EXTERNAL(v_xaxismove);
 CVAR_EXTERNAL(v_macceleration);
 
 enum {
@@ -1309,6 +1310,7 @@ enum {
 	mouse_look,
 	mouse_invert,
 	mouse_yaxismove,
+	mouse_xaxismove,
 	mouse_default,
 	mouse_return,
 	mouse_end
@@ -1335,6 +1337,7 @@ menudefault_t MouseDefault[] = {
 	{ &v_mlook, 0 },
 	{ &v_mlookinvert, 0 },
 	{ &v_yaxismove, 0 },
+	{ &v_xaxismove },
 	{ NULL, -1 }
 };
 
@@ -1375,6 +1378,9 @@ void M_DrawMouse(void) {
 		msgNames[(int)v_mlookinvert.value]);
 	Draw_BigText(MouseDef.x + 144, MouseDef.y + LINEHEIGHT * mouse_yaxismove, MENUCOLORRED,
 		msgNames[(int)v_yaxismove.value]);
+	Draw_BigText(144, MouseDef.x + LINEHEIGHT * mouse_xaxismove, MENUCOLORRED,
+		msgNames[(int)v_xaxismove.value]);
+
 }
 
 void M_ChangeSensitivity(int choice) {
