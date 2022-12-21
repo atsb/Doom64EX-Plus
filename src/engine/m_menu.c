@@ -1290,6 +1290,7 @@ void M_ChangeMouseAccel(int choice);
 void M_ChangeMouseLook(int choice);
 void M_ChangeMouseInvert(int choice);
 void M_ChangeYAxisMove(int choice);
+void M_ChangeXAxisMove(int choice);
 void M_DrawMouse(void);
 
 CVAR_EXTERNAL(v_msensitivityx);
@@ -1326,6 +1327,7 @@ menuitem_t MouseMenu[] = {
 	{2,"Mouse Look:",M_ChangeMouseLook,'l'},
 	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
 	{2,"Y-Axis Move:",M_ChangeYAxisMove, 'y'},
+        {2, "X-Axis Move:", M_ChangeXAxisMove, 'x'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1464,6 +1466,9 @@ void M_ChangeYAxisMove(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_yaxismove);
 }
 
+void M_ChangeXAxisMove(int choice) {
+        M_SetOptionValue(choice, 0, 1, 1, &v_xaxismove);
+}
 //------------------------------------------------------------------------
 //
 // DISPLAY MENU
