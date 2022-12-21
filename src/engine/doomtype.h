@@ -35,7 +35,7 @@
 typedef int             dboolean;
 typedef uint8_t         byte;
 typedef uint16_t		word;
-typedef intptr_t		dword;
+typedef uint64_t		dword;
 
 #include <limits.h>
 #define D_MININT INT_MIN
@@ -53,15 +53,4 @@ typedef intptr_t		dword;
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))
 #endif
 
-#ifdef _WIN32
-
-#define DIR_SEPARATOR '\\'
-#define PATH_SEPARATOR ';'
-
-#else
-
-#define DIR_SEPARATOR '/'
-#define PATH_SEPARATOR ':'
-
-#endif
 #endif

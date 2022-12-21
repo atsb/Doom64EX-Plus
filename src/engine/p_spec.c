@@ -305,7 +305,7 @@ sector_t* getNextSector(line_t* line, sector_t* sec) {
 // P_FindLowestFloorSurrounding()
 // FIND LOWEST FLOOR HEIGHT IN SURROUNDING SECTORS
 //
-fixed_t    P_FindLowestFloorSurrounding(sector_t* sec) {
+fixed_t P_FindLowestFloorSurrounding(sector_t* sec) {
 	int            i;
 	line_t* check;
 	sector_t* other;
@@ -330,7 +330,7 @@ fixed_t    P_FindLowestFloorSurrounding(sector_t* sec) {
 // P_FindHighestFloorSurrounding()
 // FIND HIGHEST FLOOR HEIGHT IN SURROUNDING SECTORS
 //
-fixed_t    P_FindHighestFloorSurrounding(sector_t* sec) {
+fixed_t P_FindHighestFloorSurrounding(sector_t* sec) {
 	int            i;
 	line_t* check;
 	sector_t* other;
@@ -1640,7 +1640,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	actionType = SPECIALMASK(line->special);
 
 	if (actionType == 0)
-		return false;
+		return ok = false;
 
 	player = thing->player;
 
@@ -1651,17 +1651,17 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	{
 		/* Missiles should NOT trigger specials... */
 		if (thing->flags & MF_MISSILE)
-			return false;
+			return ok = false;
 
 		if (!(line->flags & ML_THINGTRIGGER))
 		{
 			/* never open secret doors */
 			if (line->flags & ML_SECRET)
-				return false;
+				return ok = false;
 
 			/* never allow a non-player mobj to use lines with these useflags */
 			if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED))
-				return false;
+				return ok = false;
 
 			/*
 				actionType == 1 // MANUAL DOOR RAISE
@@ -1675,7 +1675,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			if (!((line->special & MLU_USE && actionType == 1) ||
 				(line->special & MLU_CROSS && (actionType == 4 || actionType == 10 || actionType == 39 || actionType == 125)) ||
 				(line->special & MLU_SHOOT && actionType == 2)))
-				return false;
+				return ok = false;
 		}
 	}
 	else {
@@ -1686,7 +1686,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 0;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[0]] = true;
-				return false;
+				return ok = false;
 			}
 		}
 		else if (line->special & MLU_YELLOW) {
@@ -1695,7 +1695,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 1;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[1]] = true;
-				return false;
+				return ok = false;
 			}
 		}
 		else if (line->special & MLU_RED) {
@@ -1704,7 +1704,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 2;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[2]] = true;
-				return false;
+				return ok = false;
 			}
 		}
 	}

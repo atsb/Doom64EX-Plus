@@ -60,10 +60,10 @@
 #include "i_system.h"
 #include "i_audio.h"
 #include "gl_draw.h"
-
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
+#include "i_w3swrapper.h"
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
@@ -74,20 +74,6 @@ CVAR(v_accessibility, 0);
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
-#ifdef DOOM_UNIX_INSTALL
-#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
-#define GetBasePath()	SDL_GetBasePath();
-#elif defined __ANDROID__
-#define GetBasePath()   SDL_AndroidGetInternalStoragePath();
-#endif
-
-#if defined(__LINUX__) || defined(__OpenBSD__)
-#define Free(userdir)	free(userdir);
-#else
-#define Free(userdir)	SDL_free(userdir);
-#endif
-
 
 ticcmd_t        emptycmd;
 
@@ -96,14 +82,7 @@ ticcmd_t        emptycmd;
 //
 
 void I_Sleep(unsigned long usecs) {
-#ifdef _WIN32
-	Sleep((DWORD)usecs);
-#else
-	struct timespec tc;
-	tc.tv_sec = usecs / 1000;
-	tc.tv_nsec = (usecs % 1000) * 1000000;
-	nanosleep(&tc, NULL);
-#endif
+	w3ssleep((DWORD)usecs);
 }
 
 static Uint32 basetime = 0;
@@ -259,6 +238,7 @@ int8_t* I_GetUserDir(void)
  *  whatever...  eventually we will clean up this mess and have
  *  portable fixed width types everywhere...  one day.
  *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
+ *  WOLF3S 21-12-2022: Moved everything to a header file called i_w3swrapper.h.
  */
 int8_t* I_GetUserFile(int8_t* file) {
 	int8_t* path, * userdir;
@@ -289,7 +269,7 @@ int8_t* I_FindDataFile(int8_t* file) {
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
 
-         Free(dir);
+        Free(dir);
 
 		if (I_FileExists(path))
 			return path;
