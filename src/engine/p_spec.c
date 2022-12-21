@@ -765,31 +765,32 @@ void P_SpawnDelayTimer(line_t* line, void (*func)(void)) {
 //
 
 void T_Quake(quake_t* quake) { // 0x8000EDE8
-	if (!quake->tics--) {
-		P_RemoveThinker(&quake->thinker);
+	if ((--quake->tics) == 0)
+	{
+		S_StopSound(NULL, sfx_quake);
 		quakeviewx = 0;
 		quakeviewy = 0;
-		S_StopSound(NULL, sfx_quake);
+		P_RemoveThinker(&quake->thinker);
 		return;
 	}
 
-	quakeviewx = (((P_Random() & 1) << 24) - 128);
-	quakeviewy = (((P_Random() & 1) << 18) - 2);
+	quakeviewy = (((P_Random() & 1) << 18) - (2 * FRACUNIT));
+	quakeviewx = (((P_Random() & 1) << 24) - (128 * FRACUNIT));
 }
 
 //
 // P_SpawnQuake
 //
 
-static void P_SpawnQuake(line_t* line) {
+static void P_SpawnQuake(int tics) {
 	quake_t* quake;
 
 	quake = Z_Malloc(sizeof(*quake), PU_LEVSPEC, 0);
 	P_AddThinker(&quake->thinker);
 	quake->thinker.function.acp1 = (actionf_p1)T_Quake;
-	quake->tics = line->tag;
+    quake->tics = tics;
 
-	S_StartSound(NULL, sfx_quake);
+	S_StopSound(NULL, sfx_quake);
 }
 
 //
@@ -1047,7 +1048,7 @@ void P_SetMovingCamera(player_t* player, line_t* line) {
 
 static dboolean P_ModifyMobjFlags(int tid, int flags) {
 	mobj_t* mo;
-	dboolean ok = false;
+	bool ok = false;
 
 	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
 		// not matching the tid
@@ -1448,7 +1449,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 	case 225:
 		// Quake Effect
-		P_SpawnQuake(line);
+		P_SpawnQuake(line->tag);
 		ok = 1;
 		break;
 
@@ -1632,86 +1633,77 @@ dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 //
 
 dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
-	player_t* p;
+	player_t*	player;
+	bool     ok;
+	int         actionType;
 
-	if (line->flags & ML_TRIGGERFRONT && side == 1) {
+	actionType = SPECIALMASK(line->special);
+
+	if (actionType == 0)
 		return false;
-	}
 
-	// Switches that other things can activate. MT_FAKEITEM has full player privilages.
-	if (!thing->player && thing->type != MT_FAKEITEM) {
-		if (thing->tid == line->tag) {
-			// triggered pickups can activate line specials
-			if (thing->flags & MF_SPECIAL && thing->flags & MF_TRIGTOUCH) {
-				return P_InitSpecialLine(thing, line, side);
-			}
+	player = thing->player;
 
-			// triggered dead things can activate line specials
-			if (line->flags & ML_THINGTRIGGER) {
-				return P_InitSpecialLine(thing, line, side);
-			}
-		}
-
-		// never open secret doors
-		if (line->flags & ML_SECRET) {
+	/* */
+	/*	Switches that other things can activate */
+	/* */
+	if (!player)
+	{
+		/* Missiles should NOT trigger specials... */
+		if (thing->flags & MF_MISSILE)
 			return false;
-		}
 
-		// Missiles should NOT trigger specials...
-		if (thing->flags & MF_MISSILE) {
-			return false;
-		}
-
-		// never allow a non-player mobj to use lines with these useflags
-		if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED)) {
-			return false;
-		}
-
-		if (line->special & MLU_USE) {
-			if (SPECIALMASK(line->special) != 1) {
+		if (!(line->flags & ML_THINGTRIGGER))
+		{
+			/* never open secret doors */
+			if (line->flags & ML_SECRET)
 				return false;
-			}
-		}
-		else if (line->special & MLU_CROSS) {
-			switch (SPECIALMASK(line->special)) {
-			case 4:     // RAISE DOOR
-			case 10:    // RAISE PLATFORM
-			case 39:    // TELEPORT TRIGGER
-			case 125:   // TELEPORT MONSTERONLY TRIGGER
-				break;
 
-			default:
+			/* never allow a non-player mobj to use lines with these useflags */
+			if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED))
 				return false;
-			}
+
+			/*
+				actionType == 1 // MANUAL DOOR RAISE
+				actionType == 2 // OPEN DOOR IMPACT
+				actionType == 4 // RAISE DOOR
+				actionType == 10 // PLAT DOWN-WAIT-UP-STAY TRIGGER
+				actionType == 39 // TELEPORT TRIGGER
+				actionType == 125 // TELEPORT MONSTERONLY TRIGGER
+			*/
+
+			if (!((line->special & MLU_USE && actionType == 1) ||
+				(line->special & MLU_CROSS && (actionType == 4 || actionType == 10 || actionType == 39 || actionType == 125)) ||
+				(line->special & MLU_SHOOT && actionType == 2)))
+				return false;
 		}
 	}
 	else {
-		p = thing->player;
 
 		if (line->special & MLU_BLUE) {
-			if (!p->cards[it_bluecard] && !p->cards[it_blueskull]) {
-				p->message = PD_BLUE;
-				p->messagepic = 0;
+			if (!player->cards[it_bluecard] && !player->cards[it_blueskull]) {
+				player->message = PD_BLUE;
+				player->messagepic = 0;
 				S_StartSound(thing, sfx_noway);
-				p->tryopen[tryopentype[0]] = true;
+				player->tryopen[tryopentype[0]] = true;
 				return false;
 			}
 		}
 		else if (line->special & MLU_YELLOW) {
-			if (!p->cards[it_yellowcard] && !p->cards[it_yellowskull]) {
-				p->message = PD_YELLOW;
-				p->messagepic = 1;
+			if (!player->cards[it_yellowcard] && !player->cards[it_yellowskull]) {
+				player->message = PD_YELLOW;
+				player->messagepic = 1;
 				S_StartSound(thing, sfx_noway);
-				p->tryopen[tryopentype[1]] = true;
+				player->tryopen[tryopentype[1]] = true;
 				return false;
 			}
 		}
 		else if (line->special & MLU_RED) {
-			if (!p->cards[it_redcard] && !p->cards[it_redskull]) {
-				p->message = PD_RED;
-				p->messagepic = 2;
+			if (!player->cards[it_redcard] && !player->cards[it_redskull]) {
+				player->message = PD_RED;
+				player->messagepic = 2;
 				S_StartSound(thing, sfx_noway);
-				p->tryopen[tryopentype[2]] = true;
+				player->tryopen[tryopentype[2]] = true;
 				return false;
 			}
 		}

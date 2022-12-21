@@ -51,7 +51,7 @@ int SlopeDiv(unsigned num, unsigned den) {
 	return ans <= SLOPERANGE ? ans : SLOPERANGE;
 }
 
-fixed_t     finesine[10240];
+fixed_t  finesine[10240];
 fixed_t* finecosine = &finesine[FINEANGLES / 4];
 
 angle_t tantoangle[2049] = {

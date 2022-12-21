@@ -490,11 +490,8 @@ void P_PlayerZMovement(mobj_t* mo) {
     // clip movement
     if (mo->z <= mo->floorz) {
         if (mo->momz < 0) {
-            if (mo->momz < -GRAVITY * 8) {
-                // Squat down.
-                // Decrease viewheight for a moment
-                // after hitting the ground (hard),
-                // and utter appropriate sound.
+            if (mo->momz < -(GRAVITY * 2))	/* squat down */
+            {
                 mo->player->deltaviewheight = mo->momz >> 3;
                 S_StartSound(mo, sfx_oof);
             }
@@ -504,10 +501,10 @@ void P_PlayerZMovement(mobj_t* mo) {
     }
     else {
         if (mo->momz == 0) {
-            mo->momz = -GRAVITY;
+            mo->momz = -(GRAVITY / 2);
         }
         else {
-            mo->momz -= GRAVITY;
+            mo->momz -= (GRAVITY / 4);
         }
     }
 

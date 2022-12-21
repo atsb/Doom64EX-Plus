@@ -34,11 +34,9 @@
 #define M_PI            3.14159265358979323846
 #endif
 
-#define FINEANGLES        8192
-#define FINEMASK        (FINEANGLES-1)
-
-// 0x100000000 to 0x2000
-#define ANGLETOFINESHIFT    19
+#define FINEANGLES			8192
+#define FINEMASK			(FINEANGLES-1)
+#define	ANGLETOFINESHIFT	19	/* 0x100000000 to 0x2000 */
 
 // Binary Angle Measument, BAM.
 #define ANG45            0x20000000

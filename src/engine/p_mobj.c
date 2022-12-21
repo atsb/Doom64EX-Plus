@@ -54,6 +54,7 @@ void P_CreateFadeThinker(mobj_t* mobj, line_t* line);
 void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line);
 
 CVAR(m_nospawnsound, 0);
+CVAR(m_brutal, 0);
 
 //
 // P_SetMobjState
@@ -303,7 +304,7 @@ void P_XYMovement(mobj_t* mo) {
 //
 // P_ZMovement
 //
-void P_ZMovement(mobj_t* mo, dboolean checkmissile) {
+void P_ZMovement(mobj_t* mo) {
 	fixed_t     dist;
 	fixed_t     delta;
 
@@ -312,7 +313,6 @@ void P_ZMovement(mobj_t* mo, dboolean checkmissile) {
 
 	if (mo->flags & MF_FLOAT && mo->target) {
 		// float down towards target if too close
-		//if(!(mo->flags & MF_INFLOAT))
 		{
 			dist = P_AproxDistance(mo->x - mo->target->x,
 				mo->y - mo->target->y);
@@ -338,21 +338,21 @@ void P_ZMovement(mobj_t* mo, dboolean checkmissile) {
 
 		mo->z = mo->floorz;
 
-		if (checkmissile) {
-			if ((mo->flags & MF_MISSILE)
-				&& !(mo->flags & MF_NOCLIP)
-				&& !(mo->type == MT_PROJ_RECTFIRE)) {
-				mo->mobjfunc = P_ExplodeMissile;
-				return;
-			}
+		if ((mo->flags & MF_MISSILE)
+			&& !(mo->flags & MF_NOCLIP)
+			&& !(mo->type == MT_PROJ_RECTFIRE)) {
+			mo->mobjfunc = P_ExplodeMissile;
+			return;
 		}
 	}
-	else if ((mo->flags & MF_GRAVITY)) {
-		if (mo->momz == 0) {
-			mo->momz = -GRAVITY;
-		}
-		else {
-			mo->momz -= GRAVITY;
+	else if ((mo->flags & MF_GRAVITY))
+	{
+		// apply gravity
+		if (mo->momz == 0)
+		{
+			mo->momz = -(GRAVITY / 2);
+		} else {
+			mo->momz -= ((GRAVITY / FRACBITS) * 3); // [d64]: non-players fall slightly slower
 		}
 	}
 
@@ -362,18 +362,13 @@ void P_ZMovement(mobj_t* mo, dboolean checkmissile) {
 			mo->momz = 0;
 		}
 
-		mo->z = mo->ceilingz - mo->height;
-
-		if (!checkmissile) {
-			return;
-		}
-
 		if (mo->flags & MF_MISSILE &&
 			mo->subsector->sector->ceilingpic == skyflatnum) {
 			mo->mobjfunc = P_RemoveMobj;
 			return;
 		}
 
+		mo->z = mo->ceilingz - mo->height;
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)) {
 			mo->mobjfunc = P_ExplodeMissile;
@@ -528,7 +523,8 @@ dboolean P_OnMobjZ(mobj_t* mobj) {
 // P_MobjThinker
 //
 
-void P_MobjThinker(mobj_t* mobj) {
+void P_MobjThinker(mobj_t* mobj)
+{
 	blockthing = NULL;
 
 	// momentum movement
@@ -542,7 +538,7 @@ void P_MobjThinker(mobj_t* mobj) {
 
 	if ((mobj->z != mobj->floorz) || mobj->momz || blockthing) {
 		if (!P_OnMobjZ(mobj)) {
-			P_ZMovement(mobj, true);
+			P_ZMovement(mobj);
 		}
 	}
 
@@ -556,7 +552,7 @@ void P_MobjThinker(mobj_t* mobj) {
 		mobj->tics--;
 
 		// you can cycle through multiple states in a tic
-		if (!mobj->tics) {
+		if (mobj->tics <= 0) {
 			if (!mobj->state) {
 				return;
 			}
@@ -758,6 +754,7 @@ void P_SpawnPlayer(mapthing_t* mthing) {
 	p->viewheight = VIEWHEIGHT;
 	p->recoilpitch = 0;
 	p->palette = mthing->type - 1;
+	p->viewz = mobj->z + VIEWHEIGHT;
 	p->cameratarget = p->mo;
 
 	// setup gun psprite
@@ -982,7 +979,7 @@ int EV_FadeOutMobj(line_t* line) {
 mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	int                 i;
 	int                 bit;
-	mobj_t* mobj;
+	mobj_t*				mobj;
 	fixed_t             x;
 	fixed_t             y;
 	fixed_t             z;
@@ -1192,13 +1189,19 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	}
 }
 
-//
-// P_SpawnPlayerMissile
-// Tries to aim at a nearby monster
-//
+/*
+================
+=
+= P_SpawnPlayerMissile
+=
+= Tries to aim at a nearby monster
+================
+*/
+extern line_t*	shotline;       // 800A56FC
+extern fixed_t	aimfrac;        // 800A5720
 
 void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
-	mobj_t* th;
+	mobj_t*		th;
 	angle_t     an;
 	fixed_t     x;
 	fixed_t     y;
@@ -1273,7 +1276,9 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	x = source->x + (offset * F2INT(dcos(an)));
 	y = source->y + (offset * F2INT(dsin(an)));
 
-	if (!P_TryMove(th, x, y)) {
+	// [d64]: checking against very close lines?
+	if ((shotline && aimfrac <= 0xC80) || !P_TryMove(th, x, y))
+	{
 		P_ExplodeMissile(th);
 	}
 }

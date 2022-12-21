@@ -7,7 +7,7 @@ Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX
 * Support for the IWAD from Nightdive Studios' official remaster
 * Support for the Lost Levels campaign
 * Support for loading PWADs
-* Better performance (especially when compared to Nightdive Studios' official version which is slow as hell)
+* Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
 * The "medkit you REALLY need!" message fix
@@ -159,13 +159,12 @@ You can place the asset data described above to:
 
 Then, you can start playing:
 
-    $ doom64ex-plus
+ $ DOOM64EX+
 
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
 `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
 ### Windows
 
-The asset data files need to be located in the same directory as `Doom64EX-Plus.exe`.
-
-Then, you can start playing by launching `Doom64EX-Plus.exe` (or optionally by using `Doom64EX-Plus Launcher.exe` instead).
+The asset data files need to be located in the same directory as `DOOM64EX+.exe`.
+Then, you can start playing by launching `DOOM64EX+.exe` (or optionally by using `DOOM64EX+ Launcher.exe` instead).

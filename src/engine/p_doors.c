@@ -109,7 +109,7 @@ void T_VerticalDoor(vldoor_t* door) {
 
 			case close30ThenOpen:
 				door->direction = 0;
-				door->topcountdown = 30 * 30;
+				door->topcountdown = TICRATE * 30;
 				break;
 
 			default:
@@ -188,15 +188,17 @@ int EV_DoDoor(line_t* line, vldoor_e type) {
 
 		switch (type) {
 		case blazeClose:
-			door->topheight = P_FindLowestCeilingSurrounding(sec) - 4 * FRACUNIT;
+			door->topheight = P_FindLowestCeilingSurrounding(sec);
+			door->topheight -= 4 * FRACUNIT;
 			door->direction = -1;
-			door->speed = VDOORBLAZESPEED;
+			door->speed = VDOORSPEED * 4;
 			S_StartSound((mobj_t*)&door->sector->soundorg,
 				sfx_door2dwn);
 			break;
 
 		case doorclose:
-			door->topheight = P_FindLowestCeilingSurrounding(sec) - 4 * FRACUNIT;
+			door->topheight = P_FindLowestCeilingSurrounding(sec);
+			door->topheight -= 4 * FRACUNIT;
 			door->direction = -1;
 			S_StartSound((mobj_t*)&door->sector->soundorg,
 				sfx_doordown);
@@ -212,8 +214,9 @@ int EV_DoDoor(line_t* line, vldoor_e type) {
 		case blazeRaise:
 		case blazeOpen:
 			door->direction = 1;
-			door->topheight = P_FindLowestCeilingSurrounding(sec) - 4 * FRACUNIT;
-			door->speed = VDOORBLAZESPEED;
+			door->topheight = P_FindLowestCeilingSurrounding(sec);
+			door->topheight -= 4 * FRACUNIT;
+			door->speed = VDOORSPEED * 4;
 			if (door->topheight != sec->ceilingheight)
 				S_StartSound((mobj_t*)&door->sector->soundorg,
 					sfx_door2up);
@@ -222,7 +225,8 @@ int EV_DoDoor(line_t* line, vldoor_e type) {
 		case normal:
 		case dooropen:
 			door->direction = 1;
-			door->topheight = P_FindLowestCeilingSurrounding(sec) - 4 * FRACUNIT;
+			door->topheight = P_FindLowestCeilingSurrounding(sec);
+			door->topheight -= 4 * FRACUNIT;
 			if (door->topheight != sec->ceilingheight)
 				S_StartSound((mobj_t*)&door->sector->soundorg,
 					sfx_doorup);

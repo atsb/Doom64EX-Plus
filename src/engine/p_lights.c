@@ -54,8 +54,8 @@ void T_FireFlicker(fireflicker_t* flick) {
 		return;
 	}
 
-	if (flick->special != flick->sector->special) {
-		flick->sector->lightlevel = 0;
+	if (flick->sector->special != flick->special)
+	{
 		P_RemoveThinker(&flick->thinker);
 		return;
 	}
@@ -151,23 +151,26 @@ void P_SpawnLightFlash(sector_t* sector) {
 void T_StrobeFlash(strobe_t* flash) {
 	if (v_accessibility.value < 1)
 	{
-		if (--flash->count) {
+		if (--flash->count)
+		{
 			return;
 		}
 
-		if (flash->special != flash->sector->special) {
-			flash->sector->lightlevel = 0;
+		if (flash->sector->special != flash->special)
+		{
 			P_RemoveThinker(&flash->thinker);
 			return;
 		}
 
-		if (flash->sector->lightlevel != 0) {
-			flash->sector->lightlevel = 0;
-			flash->count = flash->darktime;
-		}
-		else {
+		if (flash->sector->lightlevel == 0)
+		{
 			flash->sector->lightlevel = flash->maxlight;
 			flash->count = flash->brighttime;
+		}
+		else
+		{
+			flash->sector->lightlevel = 0;
+			flash->count = flash->darktime;
 		}
 	}
 }
@@ -184,15 +187,13 @@ void P_SpawnStrobeFlash(sector_t* sector, int speed) {
 		strobe_t* flash;
 
 		flash = Z_Malloc(sizeof(*flash), PU_LEVSPEC, 0);
-
 		P_AddThinker(&flash->thinker);
-
-		flash->sector = sector;
-		flash->darktime = speed;
 		flash->thinker.function.acp1 = (actionf_p1)T_StrobeFlash;
+		flash->sector = sector;
 		flash->special = sector->special;
+		flash->brighttime = STROBEBRIGHT;
 		flash->maxlight = 16;
-		flash->brighttime = 3;
+		flash->darktime = speed;
 		flash->count = (P_Random() & 7) + 1;
 	}
 }
@@ -208,15 +209,13 @@ void P_SpawnStrobeAltFlash(sector_t* sector, int speed) {      // 0x80015C44
 		strobe_t* flash;
 
 		flash = Z_Malloc(sizeof(*flash), PU_LEVSPEC, 0);
-
 		P_AddThinker(&flash->thinker);
-
-		flash->sector = sector;
-		flash->darktime = speed;
 		flash->thinker.function.acp1 = (actionf_p1)T_StrobeFlash;
+		flash->sector = sector;
 		flash->special = sector->special;
+		flash->brighttime = STROBEBRIGHT2;
 		flash->maxlight = 127;
-		flash->brighttime = 1;
+		flash->darktime = speed;
 		flash->count = 1;
 	}
 }
@@ -238,7 +237,6 @@ void EV_StartLightStrobing(line_t* line) {
 			if (sec->specialdata) {
 				continue;
 			}
-
 			P_SpawnStrobeFlash(sec, SLOWDARK);
 		}
 	}
@@ -257,52 +255,44 @@ void EV_StartLightStrobing(line_t* line) {
 void T_Glow(glow_t* g) {
 	if (v_accessibility.value < 1)
 	{
-		sector_t* sector;
-
 		if (--g->count) {
 			return;
 		}
 
-		sector = g->sector;
-
-		if (g->special != sector->special) {
-			sector->lightlevel = 0;
+		if (g->sector->special != g->special)
+		{
 			P_RemoveThinker(&g->thinker);
 			return;
 		}
 
 		g->count = 2;
 
-		if (g->direction == -1) {
-			sector->lightlevel -= 2;
-			if (!(sector->lightlevel < g->minlight)) {
-				return;
+		switch (g->direction)
+		{
+		case -1:		/* DOWN */
+			g->sector->lightlevel -= GLOWSPEED;
+			if (g->sector->lightlevel < g->minlight)
+			{
+				g->sector->lightlevel = g->minlight;
+
+				if (g->type == PULSERANDOM)
+					g->maxlight = (P_Random() & 31) + 17;
+
+				g->direction = 1;
 			}
+			break;
+		case 1:			/* UP */
+			g->sector->lightlevel += GLOWSPEED;
+			if (g->maxlight < g->sector->lightlevel)
+			{
+				g->sector->lightlevel = g->maxlight;
 
-			sector->lightlevel = g->minlight;
+				if (g->type == PULSERANDOM)
+					g->minlight = (P_Random() & 15);
 
-			if (g->type == PULSERANDOM) {
-				g->maxlight = (P_Random() & 31) + 17;
+				g->direction = -1;
 			}
-
-			g->direction = 1;
-
-			return;
-		}
-		else if (g->direction == 1) {
-			sector->lightlevel += 2;
-			if (!(g->maxlight < sector->lightlevel)) {
-				return;
-			}
-
-			if (g->type == PULSERANDOM) {
-				g->minlight = (P_Random() & 15);
-			}
-
-			g->direction = -1;
-		}
-		else {
-			return;
+			break;
 		}
 	}
 }
@@ -327,11 +317,15 @@ void P_SpawnGlowingLight(sector_t* sector, byte type) {
 		g->thinker.function.acp1 = (actionf_p1)T_Glow;
 		g->minlight = 0;
 
-		if (g->type == PULSENORMAL) {
+		switch (type)
+		{
+		case PULSENORMAL:
 			g->maxlight = 32;
-		}
-		else if (g->type == PULSERANDOM || g->type == PULSESLOW) {
+			break;
+		case PULSESLOW:
+		case PULSERANDOM:
 			g->maxlight = 48;
+			break;
 		}
 	}
 }
@@ -350,6 +344,7 @@ void P_SpawnGlowingLight(sector_t* sector, byte type) {
 
 void T_Sequence(sequenceGlow_t* seq) {
 	sector_t* sector;
+	int i;
 
 	if (--seq->count) {
 		return;
@@ -357,73 +352,69 @@ void T_Sequence(sequenceGlow_t* seq) {
 
 	sector = seq->sector;
 
-	if (seq->special != sector->special) {
-		sector->lightlevel = 0;
+	if (seq->sector->special != seq->special)
+	{
 		P_RemoveThinker(&seq->thinker);
 		return;
 	}
 
 	seq->count = 1;
 
-	if (seq->start == -1) {
-		sector->lightlevel -= 2;
-		if (sector->lightlevel > 0) {
+	switch (seq->start)
+	{
+	case -1:		/* DOWN */
+		seq->sector->lightlevel -= GLOWSPEED;
+
+		if (seq->sector->lightlevel > 0)
 			return;
-		}
 
-		sector->lightlevel = 0;
+		seq->sector->lightlevel = 0;
 
-		if (seq->headsector == NULL) {
-			sector->special = 0;
-			sector->lightlevel = 0;
+		if (seq->headsector == NULL)
+		{
+			seq->sector->special = 0;
 			P_RemoveThinker(&seq->thinker);
 			return;
 		}
 
 		seq->start = 0;
-	}
-	else if (seq->start == 0) {
-		if (!seq->headsector->lightlevel) {
+		break;
+	case 0:		    /* CHECK */
+		if (!seq->headsector->lightlevel)
 			return;
-		}
 
 		seq->start = 1;
-	}
-	else if (seq->start == 1) {
-		sector->lightlevel += 2;
-		if (sector->lightlevel < (SEQUENCELIGHTMAX + 1)) {
-			sector_t* next = NULL;
-			int i = 0;
-
-			if (sector->lightlevel != 8) {
+		break;
+	case 1:			/* UP */
+		seq->sector->lightlevel += GLOWSPEED;
+		if (seq->sector->lightlevel < (SEQUENCELIGHTMAX + 1))
+		{
+			if (seq->sector->lightlevel != 8)
 				return;
-			}
 
-			if (sector->linecount <= 0) {
+			if (seq->sector->linecount <= 0)
 				return;
-			}
 
-			for (i = 0; i < sector->linecount; i++) {
-				next = sector->lines[i]->backsector;
+			for (i = 0; i < seq->sector->linecount; i++)
+			{
+				sector = seq->sector->lines[i]->backsector;
 
-				if (!next) {
-					continue;
+				if (sector && (sector->special == 0))
+				{
+					if (sector->tag == (seq->sector->tag + 1))
+					{
+						sector->special = seq->sector->special;
+						P_SpawnSequenceLight(sector, false);
+					}
 				}
-				if (next->special) {
-					continue;
-				}
-				if (next->tag != (sector->tag + 1)) {
-					continue;
-				}
-
-				next->special = sector->special;
-				P_SpawnSequenceLight(next, false);
 			}
 		}
-		else {
-			sector->lightlevel = SEQUENCELIGHTMAX;
+		else
+		{
+			seq->sector->lightlevel = SEQUENCELIGHTMAX;
 			seq->start = -1;
 		}
+		break;
 	}
 }
 
@@ -458,9 +449,7 @@ void P_SpawnSequenceLight(sector_t* sector, dboolean first) {
 	}
 
 	seq = Z_Malloc(sizeof(*seq), PU_LEVSPEC, 0);
-
 	P_AddThinker(&seq->thinker);
-
 	seq->thinker.function.acp1 = (actionf_p1)T_Sequence;
 	seq->sector = sector;
 	seq->special = sector->special;

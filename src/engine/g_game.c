@@ -131,7 +131,6 @@ playercontrols_t    Controls;
 mobj_t* bodyque[BODYQUESIZE];
 int         bodyqueslot;
 
-byte forcecollision = 0;
 byte forcejump = 0;
 byte forcefreelook = 0;
 
@@ -157,6 +156,8 @@ CVAR_EXTERNAL(p_sdoubleclick);
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(m_nospawnsound);
+CVAR_EXTERNAL(m_obituaries);
+CVAR_EXTERNAL(m_brutal);
 
 //
 // G_RegisterCvars
@@ -175,6 +176,8 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&sv_friendlyfire);
 	CON_CvarRegister(&sv_keepitems);
 	CON_CvarRegister(&m_nospawnsound);
+	CON_CvarRegister(&m_brutal);
+	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
 }
 
