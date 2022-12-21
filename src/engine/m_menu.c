@@ -1290,6 +1290,7 @@ void M_ChangeMouseAccel(int choice);
 void M_ChangeMouseLook(int choice);
 void M_ChangeMouseInvert(int choice);
 void M_ChangeYAxisMove(int choice);
+void M_ChangeXAxisMove(int choice);
 void M_DrawMouse(void);
 
 CVAR_EXTERNAL(v_msensitivityx);
@@ -1297,6 +1298,7 @@ CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
 CVAR_EXTERNAL(v_yaxismove);
+CVAR_EXTERNAL(v_xaxismove);
 CVAR_EXTERNAL(v_macceleration);
 
 enum {
@@ -1309,6 +1311,7 @@ enum {
 	mouse_look,
 	mouse_invert,
 	mouse_yaxismove,
+	mouse_xaxismove,
 	mouse_default,
 	mouse_return,
 	mouse_end
@@ -1324,6 +1327,7 @@ menuitem_t MouseMenu[] = {
 	{2,"Mouse Look:",M_ChangeMouseLook,'l'},
 	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
 	{2,"Y-Axis Move:",M_ChangeYAxisMove, 'y'},
+        {2, "X-Axis Move:", M_ChangeXAxisMove, 'x'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1335,6 +1339,7 @@ menudefault_t MouseDefault[] = {
 	{ &v_mlook, 0 },
 	{ &v_mlookinvert, 0 },
 	{ &v_yaxismove, 0 },
+	{ &v_xaxismove },
 	{ NULL, -1 }
 };
 
@@ -1375,6 +1380,9 @@ void M_DrawMouse(void) {
 		msgNames[(int)v_mlookinvert.value]);
 	Draw_BigText(MouseDef.x + 144, MouseDef.y + LINEHEIGHT * mouse_yaxismove, MENUCOLORRED,
 		msgNames[(int)v_yaxismove.value]);
+	Draw_BigText(144, MouseDef.x + LINEHEIGHT * mouse_xaxismove, MENUCOLORRED,
+		msgNames[(int)v_xaxismove.value]);
+
 }
 
 void M_ChangeSensitivity(int choice) {
@@ -1458,6 +1466,9 @@ void M_ChangeYAxisMove(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_yaxismove);
 }
 
+void M_ChangeXAxisMove(int choice) {
+        M_SetOptionValue(choice, 0, 1, 1, &v_xaxismove);
+}
 //------------------------------------------------------------------------
 //
 // DISPLAY MENU

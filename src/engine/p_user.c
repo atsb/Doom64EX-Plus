@@ -464,8 +464,8 @@ void P_PlayerXYMovment(mobj_t* mo) {
         mo->momy = 0;
     }
     else {
-        mo->momx = FixedMul(mo->momx, FRICTION);
-        mo->momy = FixedMul(mo->momy, FRICTION);
+	mo->momx = (mo->momx>>8)*(FRICTION>>8);
+	mo->momy = (mo->momy>>8)*(FRICTION>>8);
     }
 }
 
@@ -525,10 +525,6 @@ void P_PlayerZMovement(mobj_t* mo) {
 void P_PlayerTic(mobj_t* mo) {
     state_t* st;
 
-    if (!mo->player) {
-        return;
-    }
-
     blockthing = NULL;
 
     if (mo->player->cheats & CF_CHASECAM) {
@@ -553,9 +549,13 @@ void P_PlayerTic(mobj_t* mo) {
     }
 
     mo->tics--;
+    
+    if (mo->tics > 0)
+	return;	/* not time to cycle yet */
 
     if (!mo->tics) {
         st = &states[mo->state->nextstate];
+        
         mo->state = st;
         mo->tics = st->info_tics;
         mo->frame = st->info_frame;
@@ -589,7 +589,7 @@ void P_PlayerThink(player_t* player) {
     cmd = &player->cmd;
     if (player->mo->flags & MF_JUSTATTACKED) {
         cmd->angleturn = 0;
-        cmd->forwardmove = 0xc800 / 512;
+        cmd->forwardmove = 0xc800;
         cmd->sidemove = 0;
         player->mo->flags &= ~MF_JUSTATTACKED;
     }
@@ -757,12 +757,8 @@ void P_PlayerThink(player_t* player) {
     }
 
     // [d64] - recoil pitch from weapons
-    if (player->recoilpitch >> ANGLETOFINESHIFT) {
-        player->recoilpitch -= (player->recoilpitch >> 2);
-    }
-    else {
-        player->recoilpitch = 0;
-    }
+    if (player->recoilpitch)
+    	player->recoilpitch = (((player->recoilpitch << 2) - player->recoilpitch) >> 2);
 
     // [kex] check cvar for autoaim
     player->autoaim = (gameflags & GF_ALLOWAUTOAIM);
