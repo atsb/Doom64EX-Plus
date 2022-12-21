@@ -165,8 +165,8 @@ typedef struct {
     dword       nexttic;
     dword       lasttic;
     dword       starttic;
-    Uint32      starttime;
-    Uint32      curtime;
+    uint32_t      starttime;
+    uint32_t      curtime;
     chanstate_e state;
     dboolean    paused;
 

@@ -1,8 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 1993-1997 Id Software, Inc.
-// Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -21,31 +20,14 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef _R_THINGS_H_
-#define _R_THINGS_H_
+#include "i_w3swrapper.h"
 
-#include "doomtype.h"
-#include "doomdef.h"
-#include "t_bsp.h"
-#include "d_player.h"
-#include "gl_main.h"
-
-typedef struct {
-	mobj_t* spr;
-	fixed_t dist;
-	float   x;
-	float   y;
-	float   z;
-} visspritelist_t;
-
-void R_InitSprites(int8_t** namelist);
-void R_AddSprites(subsector_t* sub);
-void R_SetupSprites(void);
-void R_ClearSprites(void);
-void R_RenderPlayerSprites(player_t* player);
-void R_DrawThingBBox(void);
-
-extern spritedef_t* spriteinfo;
-extern int            numsprites;
-
+#ifndef _WIN32
+void w3ssleep(usecs)
+{
+	struct timespec tc;
+	tc.tv_sec = usecs / 1000;
+	tc.tv_nsec = (usecs % 1000) * 1000000;
+	nanosleep(&tc, NULL);
+}
 #endif
