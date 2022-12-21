@@ -151,6 +151,7 @@ NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
 CVAR_EXTERNAL(v_yaxismove);
+CVAR_EXTERNAL(v_xaxismove);
 CVAR_EXTERNAL(p_fdoubleclick);
 CVAR_EXTERNAL(p_sdoubleclick);
 CVAR_EXTERNAL(v_msensitivityx);
@@ -654,6 +655,10 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 
 	if ((int)v_yaxismove.value) {
 		forward += pc->mousey;
+	}
+
+	if ((int)v_xaxismove.value) {
+		forward += pc->mousex;
 	}
 
 	if (pc->key[PCKEY_CENTER]) {

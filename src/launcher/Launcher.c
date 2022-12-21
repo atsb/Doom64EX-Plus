@@ -380,7 +380,7 @@ bool L_CreateExecutableParam(HWND hWnd)
 	int					data;
 	POINT* res;
 
-	strcpy(CommandLine, "doom64ex-plus.exe ");
+	strcpy(CommandLine, "DOOM64EX+.exe ");
 
 	if (IsDlgButtonChecked(hWnd, IDC_DEVMODE) == BST_CHECKED)      strcat(CommandLine, " -devparm");
 	if (IsDlgButtonChecked(hWnd, IDC_FASTMONSTERS) == BST_CHECKED) strcat(CommandLine, " -fast");
