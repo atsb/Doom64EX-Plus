@@ -535,7 +535,8 @@ void P_PlayerTic(mobj_t* mo) {
         P_PlayerXYMovment(mo);
     }
 
-    mo->player->onground = (mo->z <= mo->floorz);
+    mo->player->onground = ((mo->floorz < mo->z &&
+        !(mo->blockflag& BF_MOBJSTAND)) ^ 1);
 
     if ((mo->floorz != mo->z) || mo->momz || blockthing) {
         if (!P_OnMobjZ(mo)) {
