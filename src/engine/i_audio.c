@@ -188,8 +188,9 @@ static channel_t playlist[MIDI_CHANNELS];   // channels active in sequencer
 // by the audio thread.
 //
 
-typedef enum {
-    SEQ_SIGNAL_IDLE     = 0,    // idles. does nothing
+typedef int seqsignal_e;
+enum {
+    SEQ_SIGNAL_IDLE = 0,    // idles. does nothing
     SEQ_SIGNAL_SHUTDOWN,        // signal the sequencer to shutdown, cleaning up anything in the process
     SEQ_SIGNAL_READY,           // sequencer will read and play any midi track fed to it
     SEQ_SIGNAL_RESET,
@@ -198,7 +199,7 @@ typedef enum {
     SEQ_SIGNAL_STOPALL,
     SEQ_SIGNAL_SETGAIN,         // signal the sequencer to update output gain
     MAXSIGNALTYPES
-} seqsignal_e;
+};
 
 typedef union {
     sndsrc_t*   valsrc;
@@ -263,6 +264,19 @@ static void Audio_Play(void* user, Uint8* stream, int len)
 
 static void Seq_SetGain(doomseq_t* seq) {
     fluid_synth_set_gain(seq->synth, seq->gain);
+}
+
+//
+// Seq_SetReverb
+//
+
+static void Seq_SetReverb(doomseq_t* seq,
+    float size,
+    float damp,
+    float width,
+    float level) {
+    fluid_synth_set_reverb(seq->synth, size, damp, width, level);
+    fluid_synth_set_reverb_on(seq->synth, 1);
 }
 
 //
@@ -734,12 +748,17 @@ static int Signal_Pause(doomseq_t* seq) {
     channel_t* c;
 
     SEMAPHORE_LOCK()
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-    }
+        for (i = 0; i < MIDI_CHANNELS; i++) {
+            c = &playlist[i];
+
+            if (c->song && !c->paused) {
+                c->paused = true;
+                Chan_StopTrack(seq, c);
+            }
+        }
     SEMAPHORE_UNLOCK()
 
-    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -754,12 +773,17 @@ static int Signal_Resume(doomseq_t* seq) {
     channel_t* c;
 
     SEMAPHORE_LOCK()
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-    }
+        for (i = 0; i < MIDI_CHANNELS; i++) {
+            c = &playlist[i];
+
+            if (c->song && c->paused) {
+                c->paused = false;
+                fluid_synth_noteon(seq->synth, c->track->channel, c->key, c->velocity);
+            }
+        }
     SEMAPHORE_UNLOCK()
 
-    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -1046,8 +1070,29 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 //
 
 static void Seq_Shutdown(doomseq_t* seq) {
+
+    //
+    // signal the sequencer to shut down
+    //
+    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
+
+    //
+    // wait until the audio thread is finished
+    //
+    SDL_WaitThread(seq->thread, NULL);
+
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
+
+    //
+    // fluidsynth cleanup stuff
+    //
+    delete_fluid_synth(seq->synth);
+    delete_fluid_settings(seq->settings);
+
+    seq->synth = NULL;
+    seq->driver = NULL;
+    seq->settings = NULL;
 }
 
 //
@@ -1200,6 +1245,7 @@ void I_InitSequencer(void) {
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
     Seq_SetGain(&doomseq);
+    Seq_SetReverb(&doomseq, 0.65f, 0.0f, 2.0f, 1.0f);
 
     //
     // if something went terribly wrong, then shutdown everything
