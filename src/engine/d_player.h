@@ -132,7 +132,7 @@ typedef struct player_s {
     int             usedown;
 
     // [kex] true if jump button down last tic
-    int             jumpdown;
+    dboolean             jumpdown;
 
     // Bit flags, for cheats and debug.
     // See cheat_t, above.
@@ -151,9 +151,6 @@ typedef struct player_s {
 	
 	// Secret messages.
     int8_t*           secretmessage;
-
-    // [d64] tic for how long message should stay on hud...not used in d64ex
-    // int          messagetic;
 
     // For screen flashing (red or bright).
     int             damagecount;
@@ -174,9 +171,6 @@ typedef struct player_s {
 
     // [d64] Track if player is on the ground or not
     dboolean        onground;
-
-    // [kex] allow autoaim?
-    dboolean        autoaim;
     
     // [kex] display pic as message instead of text
     int             messagepic;

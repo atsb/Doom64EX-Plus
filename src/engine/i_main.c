@@ -26,7 +26,10 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 
 #ifdef _MSC_VER
 #include "i_opndir.h"
@@ -467,9 +470,9 @@ int dsprintf(int8_t* buf, const int8_t* format, ...) {
 
 	va_start(arg, format);
 #ifdef HAVE_VSNPRINTF
-	x = vsnprintf(buf, dstrlen(buf), format, arg);
+	x = w3svsnprintf(buf, dstrlen(buf), format, arg);
 #else
-	x = vsprintf(buf, format, arg);
+	x = w3svsnprintf(buf, format, arg);
 #endif
 	va_end(arg);
 
@@ -486,9 +489,9 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 	va_start(argptr, str);
 
 #ifdef HAVE_VSNPRINTF
-	x = vsnprintf(src, n, str, argptr);
+	x = w3svsnprintf(src, n, str, argptr);
 #else
-	x = vsprintf(src, str, argptr);
+	x = w3svsnprintf(src, str, argptr);
 #endif
 
 	va_end(argptr);

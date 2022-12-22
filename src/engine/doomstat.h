@@ -60,6 +60,7 @@ extern  dboolean    autostart;
 // Selected by user.
 extern  skill_t     gameskill;
 extern  int         gamemap;
+//extern clusterdef_t currentcluster;
 extern  int         nextmap;
 
 // Nightmare mode flag, single player.

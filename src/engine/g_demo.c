@@ -38,7 +38,7 @@
 #ifdef _WIN32
 #include "i_opndir.h"
 #endif
-
+#include "i_w3swrapper.h"
 #if !defined _WIN32
 #include <unistd.h>
 #endif
@@ -133,11 +133,7 @@ void G_RecordDemo(const int8_t* name) {
 
 	dstrcpy(demoname, name);
 	dstrcat(demoname, ".lmp");
-#ifdef _WIN32
-	if (_access(demoname, F_OK))
-#else
-	if (access(demoname, F_OK))
-#endif
+	if (w3saccess(demoname, F_OK))
 	{
 		demofp = fopen(demoname, "wb");
 	}
@@ -146,11 +142,7 @@ void G_RecordDemo(const int8_t* name) {
 
 		while (demonum < 10000) {
 			sprintf(demoname, "%s%i.lmp", name, demonum);
-#ifdef _WIN32
-			if (_access(demoname, F_OK))
-#else
-			if (access(demoname, F_OK))
-#endif
+			if (w3saccess(demoname, F_OK))
 			{
 				demofp = fopen(demoname, "wb");
 				break;

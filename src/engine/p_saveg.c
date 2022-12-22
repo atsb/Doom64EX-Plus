@@ -509,7 +509,6 @@ static void saveg_write_player_t(player_t* p) {
 
     saveg_write32(p->palette);
     saveg_write32(p->onground);
-    saveg_write32(p->autoaim);
 }
 
 static void saveg_read_player_t(player_t* p) {
@@ -579,7 +578,6 @@ static void saveg_read_player_t(player_t* p) {
 
     p->palette = saveg_read32();
     p->onground = saveg_read32();
-    p->autoaim = saveg_read32();
 }
 
 //

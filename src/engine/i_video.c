@@ -38,6 +38,7 @@
 #include <SDL2/SDL_opengl.h>
 #endif
 
+#include "i_w3swrapper.h"
 #include "m_misc.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -46,13 +47,14 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "gl_main.h"
-
 SDL_Window* window;
 SDL_GLContext   glContext;
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
+
+
 
 CVAR(v_width, 640);
 CVAR(v_height, 480);

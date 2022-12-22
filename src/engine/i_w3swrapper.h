@@ -20,12 +20,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#if defined(_SDL_h)
-#error SDL must be included before of i_w3swrapper.h
-#endif
 
 #if defined(__gl_h)
-#error Ogl must be included before of i_w3swrapper.h
+#error "Ogl must be included before of i_w3swrapper.h"
 #endif
 
 #ifdef OLD_MSVC
@@ -35,10 +32,33 @@
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
 
+#ifdef C89
+typedef enum
+{
+	false,
+	true
+} dboolean;
+#else
+#include <stdbool.h>
+typedef bool dboolean;
+#endif
+
+#ifdef _WIN32
+#include <Windows.h>
+typedef BYTE			byte;
+typedef WORD			word;
+typedef DWORD			dword;
+#else
+typedef uint8_t         byte;
+typedef uint16_t		word;
+typedef uint64_t		dword;
+#endif
+
 #ifdef _WIN32
 #define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
 #define w3swrite(handle, buf, maxcharcount) _write(handle, buf, maxcharcount)
 #define w3saccess(filename, accessmode) _access(filename, accessmode)
+#define w3sread(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
 #define w3sclose(filehandle) _close(filehandle)
 #define w3sstrdup(source) _strdup(source)
 #define DIR_SEPARATOR '\\'
@@ -47,6 +67,7 @@
 #define w3sopen(FileName, OpenFlag, ...) open(FileName, OpenFlag, __VA_ARGS__)
 #define w3swrite(handle, buf, maxcharcount) write(handle, buf, maxcharcount)
 #define w3saccess(filename, accessmode) access(filename, accessmode)
+#define w3sclose(filehandle) close(filehandle)
 #define w3sclose(filehandle) close(filehandle)
 #define w3sstrdup(source) strdup(source)
 #define DIR_SEPARATOR '/'
@@ -71,4 +92,13 @@
 #define w3ssleep(usecs) Sleep(usecs)
 #else
 void w3ssleep(usecs);
+#endif
+#ifdef HAVE_VSNPRINTF
+#ifdef WIN32
+#define w3svsnprintf(buffer, buffercount, format, arglist)  _vsnprintf(buffer, buffercount, format, arglist)
+#else
+#define w3svsnprintf(buffer, buffercount, format, arglist) vsnprintf(buffer, buffercount, format, arglist);
+#endif
+#else
+#define w3svsnprintf(buf, format, arg) vsprintf(buf, format, arg)
 #endif

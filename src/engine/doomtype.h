@@ -30,13 +30,10 @@
 
 #include <stdint.h>
 #include <limits.h>
+#ifndef C89
 #include <stdbool.h>
-
-typedef int             dboolean;
-typedef uint8_t         byte;
-typedef uint16_t		word;
-typedef uint64_t		dword;
-
+#endif
+#include "i_w3swrapper.h"
 #include <limits.h>
 #define D_MININT INT_MIN
 #define D_MAXINT INT_MAX

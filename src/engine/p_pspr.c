@@ -724,10 +724,6 @@ void A_BFGSpray(mobj_t* mo) {
 
 		// mo->target is the originator (player) of the missile
 
-		//
-		// [kex] add 1 to distance so autoaim can be forced
-		//
-		P_AimLineAttack(mo->target, an, 0, ATTACKRANGE + 1);
 
 		if (!linetarget) {
 			continue;

@@ -25,7 +25,9 @@
 #define __M_FIXED__
 
 #include "d_keywds.h"
-
+#ifdef USE_FIXEDPTC
+#include <fixedptc.h>
+#endif
 #ifdef __GNUG__
 #pragma interface
 #endif
@@ -33,6 +35,11 @@
 //
 // Fixed point, 32bit as 16.16.
 //
+#ifdef USE_FIXEDPTC
+typedef fixedpt fixed_t;
+#else
+typedef uint32_t fixed_t;
+#endif
 #define FRACBITS        16
 #define FRACUNIT        (1<<FRACBITS)
 
@@ -40,8 +47,6 @@
 #define F2INT(x)        ((x)>>FRACBITS)
 #define FLOATTOFIXED(x) ((fixed_t)((x)*FRACUNIT))
 #define F2D3D(x)         (((float)(x))/FRACUNIT)
-
-typedef int fixed_t;
 
 fixed_t FixedMul(fixed_t a, fixed_t b);
 fixed_t FixedDiv(fixed_t a, fixed_t b);
