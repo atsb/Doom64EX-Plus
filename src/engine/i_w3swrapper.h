@@ -45,20 +45,24 @@ typedef bool dboolean;
 
 #ifdef _WIN32
 #include <Windows.h>
-#ifdef OLD_TYPE
-typedef uint8_t  byte;
-typedef uint16_t word;
-typedef uint64_t dword;
+#ifdef OLD_TYPE //Now it should good to go on xbox platforms.
+typedef BYTE w3suint8_t;
+typedef WORD w3suint16_t;
+typedef DWORD w3suint64_t;
 #else
-typedef UINT8  byte;
-typedef UINT16 word;
-typedef UINT64 dword;
+typedef UINT8  w3suint8_t;
+typedef UINT16 w3suint16_t;
+typedef UINT64 w3suint64_t;
 #endif
 #else
 typedef uint8_t  byte;
 typedef uint16_t word;
 typedef uint64_t dword
 #endif 
+
+typedef w3suint8_t  byte;
+typedef w3suint16_t word;
+typedef w3suint64_t dword
 
 #ifdef _WIN32
 #define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
