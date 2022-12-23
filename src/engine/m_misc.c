@@ -212,7 +212,7 @@ int M_ReadFile(int8_t const* name, byte** buffer) {
 	errno = 0;
 
 	if ((fp = fopen(name, "rb"))) {
-		int length;
+		size_t length;
 
 		I_BeginRead();
 
@@ -222,7 +222,7 @@ int M_ReadFile(int8_t const* name, byte** buffer) {
 
 		*buffer = Z_Malloc(length, PU_STATIC, 0);
 
-		if (fread(*buffer, 1, sizeof(length), sizeof(fp)) == length) {
+		if (fread(*buffer, 1, length, sizeof(fp)) == length) {
 			fclose(fp);
 			return length;
 		}
