@@ -1,7 +1,12 @@
 #ifndef PSNPRINTF_H
 #define PSNPRINTF_H
 
+
+#ifdef _XBOX
+#include <SDL2/SDL_stdinc.h>
+#else
 #include <stdint.h>
+#endif
 
 int psnprintf(int8_t* str, size_t n, const int8_t* format, ...);
 int pvsnprintf(int8_t* str, size_t n, const int8_t* format, va_list ap);

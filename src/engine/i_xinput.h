@@ -24,8 +24,11 @@
 #ifndef __I_XINPUT__
 #define __I_XINPUT__
 
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <windows.h>
-
+#endif
 //
 // use Microsoft's bullcrap annotation macros if not already defined
 //
@@ -33,7 +36,9 @@
 #include "sal.h"
 #endif
 
+#ifndef _XBOX
 #include <xinput.h>
+#endif
 
 #define XINPUT_BUTTONS  14
 #define XINPUT_MAX_STICK_THRESHOLD  32768

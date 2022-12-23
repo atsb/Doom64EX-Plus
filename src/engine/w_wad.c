@@ -28,8 +28,9 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
+#ifndef C89
 #include <stdbool.h>
-
+#endif
 #ifdef _MSC_VER
 #include "i_opndir.h"
 #else
@@ -42,7 +43,11 @@
 
 #ifdef _WIN32
 #include <io.h>
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <windows.h>
+#endif
 #endif
 
 #include "doomtype.h"

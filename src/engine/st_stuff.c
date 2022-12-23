@@ -847,7 +847,6 @@ void ST_Drawer(void) {
 	// Secret messages
 
 	CVAR_EXTERNAL(hud_disablesecretmessages);
-
 	if (st_hasjmsg && st_regionmsg.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		ST_DrawJMessage(plyr->messagepic);
 	}

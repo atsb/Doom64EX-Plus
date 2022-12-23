@@ -163,7 +163,12 @@ Then, you can start playing:
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
 `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
-### Windows
+## Windows
 
 The asset data files need to be located in the same directory as `DOOM64EX+.exe`.
 Then, you can start playing by launching `DOOM64EX+.exe` (or optionally by using `DOOM64EX+ Launcher.exe` instead).
+
+## Xbox
+It`s wip, instructions will be proivided.
+ 
+ 

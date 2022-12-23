@@ -28,6 +28,9 @@
 #ifdef USE_FIXEDPTC
 #include <fixedptc.h>
 #endif
+#ifdef _XBOX
+#include <SDL2/SDL_stdinc.h>
+#endif
 #ifdef __GNUG__
 #pragma interface
 #endif
@@ -35,7 +38,7 @@
 //
 // Fixed point, 32bit as 16.16.
 //
-#ifdef USE_FIXEDPTC
+#ifdef USE_FIXEDPTC 
 typedef fixedpt fixed_t;
 #else
 typedef uint32_t fixed_t;

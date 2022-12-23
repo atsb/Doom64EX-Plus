@@ -11,7 +11,7 @@
 #include <stdarg.h> /* for va_list */
 #include <stdlib.h> /* for fcvt */
 
-#include "SDL.h" // villsa
+#include <SDL2/SDL.h> // villsa
 
 #include "psnprntf.h"
 

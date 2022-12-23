@@ -92,7 +92,7 @@ static dboolean P_CheckThingCollision(mobj_t* thing) {
 	y = D_abs(thing->y - tmy);
 
 	rx = blockdist - x;
-	ry = blockdist - x;
+	ry = blockdist - y;
 
 	if (!(x < y)) {
 		if (((rx - y) + (y >> 1)) <= 0) {

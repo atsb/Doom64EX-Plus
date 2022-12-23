@@ -25,8 +25,11 @@
 #ifndef __INFO__
 #define __INFO__
 
+#ifdef _XBOX
+#include <SDL2/SDL_stdinc.h>
+#else
 #include <stdint.h>
-
+#endif
 // Needed for action function pointer handling.
 #include "d_think.h"
 
