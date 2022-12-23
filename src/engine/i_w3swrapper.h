@@ -45,9 +45,9 @@ typedef bool dboolean;
 
 #ifdef _WIN32
 #include <Windows.h>
-typedef BYTE			byte;
-typedef WORD			word;
-typedef DWORD			dword;
+typedef UINT8			byte;
+typedef UINT16			word;
+typedef UINT64			dword;
 #else
 typedef uint8_t         byte;
 typedef uint16_t		word;
