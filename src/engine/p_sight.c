@@ -309,7 +309,7 @@ dboolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
 	uint64_t     s2;
 	uint64_t     pnum;
 	uint64_t     bytenum;
-	uint32_t    bitnum;
+	uint32_t     bitnum;
 
 	// First check for trivial rejection.
 
