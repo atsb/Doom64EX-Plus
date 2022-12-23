@@ -62,7 +62,7 @@ typedef uint64_t dword
 
 typedef w3suint8_t  byte;
 typedef w3suint16_t word;
-typedef w3suint64_t dword
+typedef w3suint64_t dword;
 
 #ifdef _WIN32
 #define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
