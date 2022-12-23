@@ -20,7 +20,10 @@
 #ifndef DEH_MAPPING_H
 #define DEH_MAPPING_H
 
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 #include "doomtype.h"
 #include "deh_io.h"
 #include "sha1.h"

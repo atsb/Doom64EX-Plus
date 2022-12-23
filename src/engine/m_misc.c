@@ -30,7 +30,10 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 
 #ifdef _WIN32
 #include <io.h>

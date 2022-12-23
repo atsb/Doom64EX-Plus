@@ -28,7 +28,7 @@
 #include "m_fixed.h"
 #include "d_think.h"
 #include "p_mobj.h"
-
+#include "i_w3swrapper.h"
 //
 // INTERNAL MAP TYPES
 //  used by play and refresh

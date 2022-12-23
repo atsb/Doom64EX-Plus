@@ -49,7 +49,6 @@
 #include "gl_draw.h"
 #include "g_actions.h"
 #include "g_controls.h"
-
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif

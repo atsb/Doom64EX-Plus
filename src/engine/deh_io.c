@@ -19,7 +19,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 #include <ctype.h>
 
 #include "m_misc.h"
@@ -212,7 +215,7 @@ static void IncreaseReadBuffer(deh_context_t *context)
     newbuffer_size = context->readbuffer_size * 2;
     newbuffer = Z_Malloc(newbuffer_size, PU_STATIC, NULL);
 
-    memcpy(newbuffer, context->readbuffer, context->readbuffer_size);
+    memcpy(newbuffer, context->readbuffer, sizeof(context->readbuffer_size));
 
     Z_Free(context->readbuffer);
 

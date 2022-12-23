@@ -145,7 +145,6 @@ NETCVAR_PARAM(sv_allowcheats, 0, gameflags, GF_ALLOWCHEATS);
 NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE);
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
-NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
 
 CVAR_EXTERNAL(v_mlook);
@@ -166,7 +165,6 @@ CVAR_EXTERNAL(m_brutal);
 
 void G_RegisterCvars(void) {
 	CON_CvarRegister(&p_allowjump);
-	CON_CvarRegister(&p_autoaim);
 	CON_CvarRegister(&sv_nomonsters);
 	CON_CvarRegister(&sv_fastmonsters);
 	CON_CvarRegister(&sv_respawnitems);
@@ -857,8 +855,6 @@ static void G_SetGameFlags(void) {
 	if (sv_friendlyfire.value > 0)  gameflags |= GF_FRIENDLYFIRE;
 	if (sv_keepitems.value > 0)     gameflags |= GF_KEEPITEMS;
 	if (p_allowjump.value > 0)      gameflags |= GF_ALLOWJUMP;
-	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
-
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
 }
 

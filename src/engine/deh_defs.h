@@ -18,7 +18,10 @@
 #ifndef DEH_DEFS_H
 #define DEH_DEFS_H
 
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 #include "sha1.h"
 
 typedef struct deh_context_s deh_context_t;

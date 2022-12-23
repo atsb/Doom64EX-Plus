@@ -18,7 +18,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 #include <ctype.h>
 
 #include "i_opndir.h"
