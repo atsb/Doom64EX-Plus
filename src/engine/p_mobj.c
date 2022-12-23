@@ -296,8 +296,8 @@ void P_XYMovement(mobj_t* mo) {
 		mo->momy = 0;
 	}
 	else {
-		mo->momx = FixedMul(mo->momx, FRICTION);
-		mo->momy = FixedMul(mo->momy, FRICTION);
+		mo->momx = (mo->momx >> 8) * (FRICTION >> 8);
+		mo->momy = (mo->momy >> 8) * (FRICTION >> 8);
 	}
 }
 
@@ -374,6 +374,12 @@ void P_ZMovement(mobj_t* mo) {
 			mo->mobjfunc = P_ExplodeMissile;
 			return;
 		}
+		
+		if((mo->flags & MF_MISSILE)
+				&& !(mo->flags & MF_NOCLIP)) {
+            mo->mobjfunc = P_ExplodeMissile;
+            return;
+        }
 	}
 }
 
@@ -754,7 +760,6 @@ void P_SpawnPlayer(mapthing_t* mthing) {
 	p->viewheight = VIEWHEIGHT;
 	p->recoilpitch = 0;
 	p->palette = mthing->type - 1;
-	p->viewz = mobj->z + VIEWHEIGHT;
 	p->cameratarget = p->mo;
 
 	// setup gun psprite
@@ -1207,6 +1212,7 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	fixed_t     y;
 	fixed_t     z;
 	fixed_t     slope;
+	int         speed;
 	fixed_t     missileheight;
 	int         offset;
 	fixed_t     frac;
@@ -1229,23 +1235,25 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 		offset = 0;
 	}
 
-	// see which target is to be aimed at
+	/* */
+	/* see which target is to be aimed at */
+	/* */
 	an = source->angle;
-
-	slope = P_AimLineAttack(source, an, missileheight, ATTACKRANGE);
-
-	if (!linetarget) {
+	slope = P_AimLineAttack(source, an, missileheight, 16 * 64 * FRACUNIT);
+	if (!linetarget)
+	{
 		an += 1 << 26;
-		slope = P_AimLineAttack(source, an, missileheight, ATTACKRANGE);
-
-		if (!linetarget) {
+		slope = P_AimLineAttack(source, an, missileheight, 16 * 64 * FRACUNIT);
+		if (!linetarget)
+		{
 			an -= 2 << 26;
-			slope = P_AimLineAttack(source, an, missileheight, ATTACKRANGE);
+			slope = P_AimLineAttack(source, an, missileheight, 16 * 64 * FRACUNIT);
 		}
-	}
-
-	if (!linetarget) {
-		an = source->angle;
+		if (!linetarget)
+		{
+			an = source->angle;
+			slope = 0;
+		}
 	}
 
 	x = source->x;
@@ -1269,12 +1277,14 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 		frac = th->info->speed;
 	}
 
-	th->momx = FixedMul(frac, dcos(an));
-	th->momy = FixedMul(frac, dsin(an));
-	th->momz = FixedMul(th->info->speed, slope);
+	speed = th->info->speed;
 
-	x = source->x + (offset * F2INT(dcos(an)));
-	y = source->y + (offset * F2INT(dsin(an)));
+	th->momx = speed * finecosine[an >> ANGLETOFINESHIFT];
+	th->momy = speed * finesine[an >> ANGLETOFINESHIFT];
+	th->momz = speed * slope;
+
+	x = source->x + (offset * finecosine[an >> ANGLETOFINESHIFT]);
+	y = source->y + (offset * finesine[an >> ANGLETOFINESHIFT]);
 
 	// [d64]: checking against very close lines?
 	if ((shotline && aimfrac <= 0xC80) || !P_TryMove(th, x, y))
@@ -1324,6 +1334,12 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
 	}
 
 	speed = th->info->speed;
+	
+	// [kex] nightmare missiles move faster
+    if(source && source->flags & MF_NIGHTMARE) {
+        th->flags |= MF_NIGHTMARE;
+        speed *= 2;
+    }
 
 	th->angle = an;
 	th->momx = FixedMul(speed, dcos(th->angle));

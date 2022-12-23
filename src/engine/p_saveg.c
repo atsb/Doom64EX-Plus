@@ -213,7 +213,7 @@ static void saveg_setup_mobjread(void) {
     // read and add mobjs
     for (i = 0; i < savegmobjnum; i++) {
         savegmobj[i].index = i + 1;
-        savegmobj[i].mobj = (mobj_t*)Z_Calloc(sizeof(mobj_t), PU_LEVEL, NULL);
+        savegmobj[i].mobj = Z_Calloc(sizeof(mobj_t), PU_LEVEL, NULL);
     }
 }
 
@@ -298,13 +298,14 @@ static void saveg_write_mapthing_t(mapthing_t* mt) {
 //
 
 static void saveg_read_ticcmd_t(ticcmd_t* cmd) {
-    cmd->forwardmove = saveg_read8();
-    cmd->sidemove = saveg_read8();
-    cmd->angleturn = saveg_read16();
-    cmd->pitch = saveg_read16();
-    cmd->chatchar = saveg_read8();
-    cmd->buttons = saveg_read8();
-    cmd->buttons2 = saveg_read8();
+    cmd->forwardmove    = saveg_read8();
+    cmd->sidemove       = saveg_read8();
+    cmd->angleturn      = saveg_read16();
+    cmd->pitch          = saveg_read16();
+    cmd->consistency    = saveg_read8();
+    cmd->chatchar       = saveg_read8();
+    cmd->buttons        = saveg_read8();
+    cmd->buttons2       = saveg_read8();
 }
 
 static void saveg_write_ticcmd_t(ticcmd_t* cmd) {
@@ -312,6 +313,7 @@ static void saveg_write_ticcmd_t(ticcmd_t* cmd) {
     saveg_write8(cmd->sidemove);
     saveg_write16(cmd->angleturn);
     saveg_write16(cmd->pitch);
+    saveg_write8(cmd->consistency);
     saveg_write8(cmd->chatchar);
     saveg_write8(cmd->buttons);
     saveg_write8(cmd->buttons2);
@@ -1250,7 +1252,6 @@ static void saveg_write_marker(int marker) {
 dboolean P_WriteSaveGame(int8_t* description, int slot) {
 
     // setup game save file
-    // sprintf(name, SAVEGAMENAME"%d.dsg", slot);
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
 
     // success?
@@ -1859,7 +1860,7 @@ void P_UnArchiveSpecials(void) {
                 thinker = Z_Malloc(saveg_specials[i].structsize, PU_LEVEL, NULL);
                 saveg_specials[i].readfunc(thinker);
 
-                ((thinker_t*)thinker)->function.acp1 = saveg_specials[i].function;
+                ((thinker_t*)thinker)->function.acp1 = (actionf_p1)saveg_specials[i].function;
                 P_AddThinker(thinker);
 
                 // handle special cases

@@ -525,6 +525,9 @@ void P_PlayerZMovement(mobj_t* mo) {
 void P_PlayerTic(mobj_t* mo) {
     state_t* st;
 
+    if(!mo->player) {
+        return;
+    }
     blockthing = NULL;
 
     if (mo->player->cheats & CF_CHASECAM) {
