@@ -45,14 +45,20 @@ typedef bool dboolean;
 
 #ifdef _WIN32
 #include <Windows.h>
-typedef BYTE			byte;
-typedef WORD			word;
-typedef DWORD			dword;
+#ifdef OLD_TYPE
+typedef uint8_t  byte;
+typedef uint16_t word;
+typedef uint64_t dword;
 #else
-typedef uint8_t         byte;
-typedef uint16_t		word;
-typedef uint64_t		dword;
+typedef UINT8  byte;
+typedef UINT16 word;
+typedef UINT64 dword;
 #endif
+#else
+typedef uint8_t  byte;
+typedef uint16_t word;
+typedef uint64_t dword
+#endif 
 
 #ifdef _WIN32
 #define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
