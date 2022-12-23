@@ -1202,17 +1202,16 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 = Tries to aim at a nearby monster
 ================
 */
-extern line_t*	shotline;       // 800A56FC
+extern line_t* shotline;       // 800A56FC
 extern fixed_t	aimfrac;        // 800A5720
 
 void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
-	mobj_t*		th;
+	mobj_t* th;
 	angle_t     an;
 	fixed_t     x;
 	fixed_t     y;
 	fixed_t     z;
 	fixed_t     slope;
-	int         speed;
 	fixed_t     missileheight;
 	int         offset;
 	fixed_t     frac;
@@ -1235,25 +1234,23 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 		offset = 0;
 	}
 
-	/* */
-	/* see which target is to be aimed at */
-	/* */
+	// see which target is to be aimed at
 	an = source->angle;
-	slope = P_AimLineAttack(source, an, missileheight, 16 * 64 * FRACUNIT);
-	if (!linetarget)
-	{
+
+	slope = P_AimLineAttack(source, an, missileheight, ATTACKRANGE);
+
+	if (!linetarget) {
 		an += 1 << 26;
-		slope = P_AimLineAttack(source, an, missileheight, 16 * 64 * FRACUNIT);
-		if (!linetarget)
-		{
+		slope = P_AimLineAttack(source, an, missileheight, ATTACKRANGE);
+
+		if (!linetarget) {
 			an -= 2 << 26;
-			slope = P_AimLineAttack(source, an, missileheight, 16 * 64 * FRACUNIT);
+			slope = P_AimLineAttack(source, an, missileheight, ATTACKRANGE);
 		}
-		if (!linetarget)
-		{
-			an = source->angle;
-			slope = 0;
-		}
+	}
+
+	if (!linetarget) {
+		an = source->angle;
 	}
 
 	x = source->x;
@@ -1277,11 +1274,9 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 		frac = th->info->speed;
 	}
 
-	speed = th->info->speed;
-
-	th->momx = speed * finecosine[an >> ANGLETOFINESHIFT];
-	th->momy = speed * finesine[an >> ANGLETOFINESHIFT];
-	th->momz = speed * slope;
+	th->momx = FixedMul(frac, dcos(an));
+	th->momy = FixedMul(frac, dsin(an));
+	th->momz = FixedMul(th->info->speed, slope);
 
 	x = source->x + (offset * finecosine[an >> ANGLETOFINESHIFT]);
 	y = source->y + (offset * finesine[an >> ANGLETOFINESHIFT]);
