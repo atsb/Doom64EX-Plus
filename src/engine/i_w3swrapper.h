@@ -65,7 +65,7 @@ typedef uint64_t w3suint64_t;
 #else
 typedef unsigned char w3suint8_t;
 typedef unsigned short w3suint16_t;
-typedef unsigned long long w3suint64_;
+typedef unsigned long long w3suint64_t;
 #endif 
 
 typedef w3suint8_t  byte;
