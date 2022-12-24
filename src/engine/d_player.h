@@ -108,7 +108,7 @@ typedef struct player_s {
     int             powers[NUMPOWERS];
     dboolean        cards[NUMCARDS];
 
-    // [kex] for hud when trying to open a locked door
+    //for hud when trying to open a locked door
     dboolean        tryopen[NUMCARDS];
 
     // [d64] laser artifact flags

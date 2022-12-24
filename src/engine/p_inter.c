@@ -810,6 +810,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			if (z < 50) {
 				sprintf(omsg, "Immorpher will write a song\nin your honor.");
 			}
+			else if (z < 100) {
+				sprintf(omsg, "You got eaten by a wolf called: Wolf3s");
+			}
 			else {
 				sprintf(omsg, "you were tickled to death\nby a Zombieman.");
 			}

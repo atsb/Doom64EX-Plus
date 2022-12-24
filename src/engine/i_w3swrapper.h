@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022 AndrÃ© Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -55,9 +55,9 @@ typedef UINT16 w3suint16_t;
 typedef UINT64 w3suint64_t;
 #endif
 #else
-typedef uint8_t  byte;
-typedef uint16_t word;
-typedef uint64_t dword
+typedef uint8_t  w3suint8_t;
+typedef uint16_t w3suint16_t;
+typedef uint64_t w3suint64_t;
 #endif 
 
 typedef w3suint8_t  byte;
