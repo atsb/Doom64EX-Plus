@@ -173,8 +173,8 @@
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\SDL2\include;..\..\libpng\include"
-				PreprocessorDefinitions="NDEBUG;_XBOX;C89;OLD_TYPE;WIN32_LEAN_AND_MEAN;WINDOWS;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL"
+				AdditionalIncludeDirectories="..\..\SDL2\include;..\..\libpng\include;..\..\fluidlitex\include;..\Xbox\"
+				PreprocessorDefinitions="NDEBUG;_XBOX;C89;OLD_TYPE;WIN32_LEAN_AND_MEAN;WINDOWS;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;_USEFAKEGL01"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="0"
@@ -187,16 +187,15 @@
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
 				CompileAs="1"
-				DisableSpecificWarnings="2143"
 				ShowIncludes="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xapilib.lib d3d8.lib d3dx8.lib xgraphics.lib dsound.lib dmusic.lib xacteng.lib xsndtrk.lib xvoice.lib xonlines.lib xboxkrnl.lib libSDL2.lib libSDL2_mixer.lib libpngX.lib xzlib.lib"
+				AdditionalDependencies="xapilib.lib d3d8.lib d3dx8.lib xgraphics.lib dsound.lib dmusic.lib xacteng.lib xsndtrk.lib xvoice.lib xonlines.lib xboxkrnl.lib libSDL2x.lib libpngX.lib xzlib.lib FluidLiteX.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\SDL2\libs;..\..\libpng\libs"
+				AdditionalLibraryDirectories="..\..\SDL2\libs;..\..\libpng\libs;..\..\fluidlitex\lib\"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="2"
@@ -408,6 +407,18 @@
 		</File>
 		<File
 			RelativePath="..\src\engine\f_finale.h">
+		</File>
+		<File
+			RelativePath=".\fakeglx01.cpp">
+			<FileConfiguration
+				Name="Release|Xbox">
+				<Tool
+					Name="VCCLCompilerTool"
+					CompileAs="2"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\fakeglx01.h">
 		</File>
 		<File
 			RelativePath="..\src\engine\g_actions.c">

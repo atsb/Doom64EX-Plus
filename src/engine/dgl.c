@@ -26,6 +26,8 @@
 
 #ifdef __OpenBSD__
 #include <SDL_opengl.h>
+#elif defined(_XBOX)
+#include "fakeglx01.h"
 #else
 #include <SDL2/SDL_opengl.h>
 #endif

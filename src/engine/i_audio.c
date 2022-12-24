@@ -1266,7 +1266,7 @@ void I_InitSequencer(void) {
     }
 
     Song_ClearPlaylist();
-
+#ifndef _XBOX
     SDL_Init(SDL_INIT_AUDIO);
     SDL_AudioSpec spec;
     SDL_zero(spec);
@@ -1277,15 +1277,15 @@ void I_InitSequencer(void) {
     spec.callback = Audio_Play;
     spec.userdata = doomseq.synth;
 
-    int id;
-    if ((id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0)) <= 0)
+    int id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0);
+    if (id <= 0)
     {
         fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
         exit(-1);
     }
 
     SDL_PauseAudioDevice(id, SDL_FALSE);
-
+#endif
     // 20120205 villsa - sequencer is now ready
     seqready = true;
 }

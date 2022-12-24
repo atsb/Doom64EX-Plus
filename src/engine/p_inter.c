@@ -799,7 +799,7 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 	if (!target->player) {
 		return;
 	}
-
+#ifndef _XBOX
 	// Init the random generator
 	srand((unsigned int)time(NULL));
 	int z = rand() % 500;
@@ -877,6 +877,7 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			players[i].message = omsg;
 		}
 	}
+#endif
 }
 
 //

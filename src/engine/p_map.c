@@ -84,7 +84,7 @@ static dboolean P_CheckThingCollision(mobj_t* thing) {
 	}
 
 	blockdist = thing->radius + tmthing->radius;
-
+#ifndef _XBOX
 	fixed_t x, y;
 	fixed_t rx, ry;
 
@@ -106,7 +106,7 @@ static dboolean P_CheckThingCollision(mobj_t* thing) {
 			return true;
 		}
 	}
-
+#endif
 	return false;
 }
 

@@ -48,6 +48,7 @@ typedef bool dboolean;
 #else
 #include <Windows.h>
 #endif
+
 #ifdef OLD_TYPE
 typedef BYTE byte;
 typedef WORD word;
@@ -62,10 +63,6 @@ typedef uint8_t  byte;
 typedef uint16_t word;
 typedef uint64_t dword
 #endif 
-
-typedef w3suint8_t  byte;
-typedef w3suint16_t word;
-typedef w3suint64_t dword;
 
 #ifdef _WIN32
 #ifndef _XBOX

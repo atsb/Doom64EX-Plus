@@ -848,7 +848,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 	// Sanity checks
 
-	
+#ifndef _XBOX
 	for (size_t i = 0; i < num_tics; ++i)
 	{
 		net_ticdiff_t diff;
@@ -865,9 +865,8 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 		if (index < 0 || index >= BACKUPTICS)
 		{
 			// Not in range of the recv window
-#ifndef _XBOX
+
 			continue;
-#endif
 		}
 
 		recvobj = &recvwindow[index][player];
@@ -877,7 +876,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 		client->last_gamedata_time = nowtime;
 	}
-
+#endif
 	// Higher acknowledgement point?
 
 	if (ackseq > client->acknowledged)
