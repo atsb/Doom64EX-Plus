@@ -1275,23 +1275,19 @@ void I_InitSequencer(void) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
 
+    SDL_AudioDeviceID audio_device;
     SDL_AudioSpec required_spec;
 
+    SDL_memset(&required_spec, 0, sizeof(required_spec));
     required_spec.format = AUDIO_S16;
     required_spec.freq = SAMPLE_RATE;
     required_spec.samples = SAMPLES;
     required_spec.channels = NUM_CHANNELS;
     required_spec.callback = Audio_Play;
     required_spec.userdata = doomseq.synth;
+    audio_device = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0);
 
-    int id;
-    if ((id = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0)) <= 0)
-    {
-        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-        exit(-1);
-    }
-
-    SDL_PauseAudioDevice(id, SDL_FALSE);
+    SDL_PauseAudioDevice(audio_device, SDL_FALSE);
 
     // 20120205 villsa - sequencer is now ready
     seqready = true;
