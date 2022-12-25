@@ -24,11 +24,7 @@
 #define MD5_H
 
 #include "doomtype.h"
-#ifdef __OpenBSD__
-#include <SDL_config.h>
-#else 
-#include <SDL2/SDL_config.h>
-#endif
+#include <SDL_config.h> //Remove this stupid header...
 
 #ifdef HAVE_STDINT_H
 #include <stdint.h>

@@ -106,10 +106,10 @@ typedef w3suint64_t dword;
 #define Free(userdir)	SDL_free(userdir)
 #endif
 
-#ifdef _WIN32
+#ifdef _WIN32 //TBD: Sony Playstation 2 port
 #define w3ssleep(usecs) Sleep(usecs)
 #else
-void w3ssleep(usecs);
+void w3ssleep(dword usecs);
 #endif
 #ifdef HAVE_VSNPRINTF
 #ifdef WIN32

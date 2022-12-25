@@ -22,16 +22,20 @@
 
 #ifndef __GL_SHADER__H
 #define __GL_SHADER__H
+
 #include "doomtype.h"
 #ifdef _WIN32
 #include <glew.h>
 #endif
-#ifndef __APPLE__
-#include <GL/glu.h>
-#include <GL/gl.h>
-#else
+#ifdef __APPLE__ 
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+#elif defined SWITCH
+#include <GL/gl.h>
+#include <GL/glext.h>
+#else
+#include <GL/glu.h>
+#include <GL/gl.h>
 #endif
 
 /*
