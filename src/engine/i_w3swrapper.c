@@ -23,7 +23,7 @@
 #include "i_w3swrapper.h"
 
 #ifndef _WIN32
-void w3ssleep(usecs)
+void w3ssleep(dword usecs)
 {
 	struct timespec tc;
 	tc.tv_sec = usecs / 1000;

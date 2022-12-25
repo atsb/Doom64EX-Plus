@@ -36,11 +36,7 @@
 #include "i_system.h"
 #include "gl_texture.h"
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
-#include <SDL2/SDL.h> // Gibbon - for *
-#endif
+#include <SDL.h> // Gibbon - for \\
 
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2

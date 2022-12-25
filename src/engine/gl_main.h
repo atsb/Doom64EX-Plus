@@ -23,11 +23,7 @@
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
 
-#ifdef __OpenBSD__
 #include <SDL_opengl.h>
-#else
-#include <SDL2/SDL_opengl.h>
-#endif
 
 #ifdef __APPLE__
 #include <OpenGL/glu.h>

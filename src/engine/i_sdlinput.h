@@ -27,11 +27,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef __OpenBSD__
 #include <SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
 #include "doomtype.h"
 ////////////Input//////////////
 

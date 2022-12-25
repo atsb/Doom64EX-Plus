@@ -37,11 +37,7 @@
 #include <unistd.h>
 #endif
 
-#ifdef __OpenBSD__
 #include <SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
 
 #if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
 #include <fluidsynth.h>
@@ -1275,7 +1271,7 @@ void I_InitSequencer(void) {
 
     Song_ClearPlaylist();
 
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
 

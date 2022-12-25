@@ -30,13 +30,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifdef __OpenBSD__
 #include <SDL.h>
 #include <SDL_opengl.h>
-#else
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#endif
 
 #include "i_w3swrapper.h"
 #include "m_misc.h"
