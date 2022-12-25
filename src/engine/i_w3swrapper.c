@@ -21,6 +21,8 @@
 //-----------------------------------------------------------------------------
 
 #include "i_w3swrapper.h"
+#include <stddef.h>
+#include <time.h>
 
 #ifndef _WIN32
 void w3ssleep(dword usecs)
