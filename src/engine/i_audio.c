@@ -89,6 +89,14 @@ static dboolean seqready = false;
 #define MIDI_SET_TEMPO  0x51
 #define MIDI_SEQUENCER  0x7f
 
+#define SAMPLE_RATE 44100
+#define SAMPLE_SIZE 2 //4: Float Buffer   2: Signed Int Buffer
+#define NUM_FRAMES SAMPLE_RATE
+#define SAMPLES 4096
+#define NUM_CHANNELS 2
+#define NUM_SAMPLES (NUM_FRAMES * NUM_CHANNELS)
+#define TIME_INTERVAL 1000000 //1500000:duration us
+
 //
 // MIDI DATA DEFINITIONS
 //
@@ -249,10 +257,10 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 // Callback for SDL
 //
-static void Audio_Play(void* user, Uint8* stream, int len)
+static void Audio_Play(void* data, Uint8* stream, int len)
 {
-    fluid_synth_t* synth = (fluid_synth_t*)user;
-    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, 2, stream, 1, 2);
+    fluid_synth_t* synth = (fluid_synth_t*)data;
+    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
 
 //
@@ -1267,18 +1275,21 @@ void I_InitSequencer(void) {
 
     Song_ClearPlaylist();
 
-    SDL_Init(SDL_INIT_AUDIO);
-    SDL_AudioSpec spec;
-    SDL_zero(spec);
-    spec.format = AUDIO_S16;
-    spec.freq = 44100;
-    spec.samples = 4096;
-    spec.channels = 2;
-    spec.callback = Audio_Play;
-    spec.userdata = doomseq.synth;
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
+        printf("Could not initialize SDL - %s\n", SDL_GetError());
+    }
+
+    SDL_AudioSpec required_spec;
+
+    required_spec.format = AUDIO_S16;
+    required_spec.freq = SAMPLE_RATE;
+    required_spec.samples = SAMPLES;
+    required_spec.channels = NUM_CHANNELS;
+    required_spec.callback = Audio_Play;
+    required_spec.userdata = doomseq.synth;
 
     int id;
-    if ((id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0)) <= 0)
+    if ((id = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0)) <= 0)
     {
         fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
         exit(-1);
