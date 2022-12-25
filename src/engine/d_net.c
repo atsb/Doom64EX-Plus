@@ -37,7 +37,12 @@
 #include "m_misc.h"
 #include "con_console.h"
 
+
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include "i_video.h"
 #include "i_sdlinput.h"

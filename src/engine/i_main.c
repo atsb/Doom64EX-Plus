@@ -41,7 +41,11 @@
 #include "doomstat.h"
 #include "d_main.h"
 
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include "i_video.h"
 #include "m_misc.h"

@@ -37,8 +37,11 @@
 #include <unistd.h>
 #endif
 
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
-
+#endif
 #if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
 #include <fluidsynth.h>
 #else
