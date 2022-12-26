@@ -1469,6 +1469,7 @@ void M_ToggleShowStats(int choice);
 void M_ChangeCrosshair(int choice);
 void M_ChangeOpacity(int choice);
 void M_DrawDisplay(void);
+void M_ChangeHUDColor(int choice);
 
 CVAR_EXTERNAL(st_drawhud);
 CVAR_EXTERNAL(st_crosshair);
@@ -1478,6 +1479,7 @@ CVAR_EXTERNAL(st_showpendingweapon);
 CVAR_EXTERNAL(st_showstats);
 CVAR_EXTERNAL(m_messages);
 CVAR_EXTERNAL(p_damageindicator);
+CVAR_EXTERNAL(st_hud_color);
 
 enum {
 	messages,
@@ -1488,6 +1490,7 @@ enum {
 	display_stats,
 	display_crosshair,
 	display_opacity,
+	display_hud_color,
 	display_empty1,
 	e_default,
 	display_return,
@@ -1503,6 +1506,7 @@ menuitem_t DisplayMenu[] = {
 	{2,"Show Stats:",M_ToggleShowStats, 't'},
 	{2,"Crosshair:",M_ChangeCrosshair, 'c'},
 	{3,"Crosshair Opacity",M_ChangeOpacity, 'o'},
+	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
 	{-1,"",0},
 	{-2,"Default",M_DoDefaults, 'd'},
 	{1,"/r Return",M_Return, 0x20}
@@ -1517,6 +1521,7 @@ int8_t* DisplayHints[display_end] = {
 	"display level stats in automap",
 	"toggle crosshair",
 	"change opacity for crosshairs",
+	"change the hud text colour",
 	NULL,
 	NULL,
 	NULL
@@ -1530,6 +1535,7 @@ menudefault_t DisplayDefault[] = {
 	{ &st_showstats, 0 },
 	{ &st_crosshair, 0 },
 	{ &st_crosshairopacity, 80 },
+	{ &st_hud_color, 0 },
 	{ NULL, -1 }
 };
 
@@ -1563,6 +1569,7 @@ void M_Display(int choice) {
 void M_DrawDisplay(void) {
 	static const int8_t* hudtype[3] = { "Off", "Classic", "Arranged" };
 	static const int8_t* flashtype[2] = { "Environment", "Overlay" };
+	static const int8_t* hud_color[2] = { "Red", "White" };
 
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * messages, MENUCOLORRED,
 		msgNames[(int)m_messages.value]);
@@ -1589,11 +1596,15 @@ void M_DrawDisplay(void) {
 	M_DrawThermo(DisplayDef.x, DisplayDef.y + LINEHEIGHT * (display_opacity + 1),
 		255, st_crosshairopacity.value);
 
+	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
+		hud_color[(int)st_hud_color.value]);
+
 	if (DisplayDef.hints[itemOn] != NULL) {
 		GL_SetOrthoScale(0.5f);
 		Draw_BigText(-1, 432, MENUCOLORWHITE, DisplayDef.hints[itemOn]);
 		GL_SetOrthoScale(DisplayDef.scale);
 	}
+
 }
 
 void M_ChangeMessages(int choice) {
@@ -1649,6 +1660,10 @@ void M_ChangeOpacity(int choice)
 			CON_CvarSetValue(st_crosshairopacity.name, 0);
 		}
 	}
+}
+
+void M_ChangeHUDColor(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &st_hud_color);
 }
 
 //------------------------------------------------------------------------

@@ -65,6 +65,7 @@ CVAR(m_messages, 1);
 CVAR(m_playername, Player);
 CVAR(st_showpendingweapon, 1);
 CVAR(st_showstats, 0);
+CVAR(st_hud_color, 0);
 
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(p_damageindicator);
@@ -768,14 +769,32 @@ void ST_Drawer(void) {
 		if (st_drawhud.value == 1) {
 			//Draw Ammo counter
 			if (weaponinfo[plyr->readyweapon].ammo != am_noammo) {
-				Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, REDALPHA(0x9f));
+				if (st_hud_color.value == 0)
+				{
+					Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, REDALPHA(0x9f));
+				}
+				else if (st_hud_color.value == 1)
+				{
+					Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, WHITEALPHA(0x9f));
+				}
 			}
 
-			//Draw Health
-			Draw_Number(49, 215, plyr->health, 0, REDALPHA(0x9f));
+			if (st_hud_color.value == 0)
+			{
+				//Draw Health
+				Draw_Number(49, 215, plyr->health, 0, REDALPHA(0x9f));
 
-			//Draw Armor
-			Draw_Number(271, 215, plyr->armorpoints, 0, REDALPHA(0x9f));
+				//Draw Armor
+				Draw_Number(271, 215, plyr->armorpoints, 0, REDALPHA(0x9f));
+			}
+			else if (st_hud_color.value == 1)
+			{
+				//Draw Health
+				Draw_Number(49, 215, plyr->health, 0, WHITEALPHA(0x9f));
+
+				//Draw Armor
+				Draw_Number(271, 215, plyr->armorpoints, 0, WHITEALPHA(0x9f));
+			}
 		}
 		// arranged hud layout
 		else if (st_drawhud.value >= 2) {

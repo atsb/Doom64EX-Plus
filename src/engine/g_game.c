@@ -158,6 +158,7 @@ CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
+CVAR_EXTERNAL(st_hud_color);
 
 //
 // G_RegisterCvars
@@ -176,6 +177,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&sv_keepitems);
 	CON_CvarRegister(&m_nospawnsound);
 	CON_CvarRegister(&m_brutal);
+	CON_CvarRegister(&st_hud_color);
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
 }
