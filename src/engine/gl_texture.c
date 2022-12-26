@@ -523,7 +523,6 @@ dtexture GL_ScreenToTexture(void) {
 		width,
 		height
 	);
-
 	return id;
 }
 

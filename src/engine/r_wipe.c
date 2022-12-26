@@ -201,7 +201,7 @@ void WIPE_MeltScreen(void) {
 		for (j = 0; j < 4; j++) {
 			v[j].y += 0.5f;
 		}
-
+		
 		//
 		// update screen buffer
 		//
@@ -215,7 +215,6 @@ void WIPE_MeltScreen(void) {
 			padw,
 			padh
 		);
-
 		GL_SwapBuffers();
 
 		WIPE_RefreshDelay();

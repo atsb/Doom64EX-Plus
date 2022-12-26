@@ -53,8 +53,6 @@ SDL_GLContext   glContext;
 #include "i_xinput.h"
 #endif
 
-
-
 CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
