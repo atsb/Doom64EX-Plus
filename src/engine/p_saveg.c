@@ -27,6 +27,8 @@
 //
 //-----------------------------------------------------------------------------
 
+
+#include <time.h> // [kex] - for saving the date and time
 #include "i_system.h"
 #include "g_game.h"
 #include "z_zone.h"
@@ -296,14 +298,14 @@ static void saveg_write_mapthing_t(mapthing_t* mt) {
 //
 
 static void saveg_read_ticcmd_t(ticcmd_t* cmd) {
-    cmd->forwardmove    = saveg_read8();
-    cmd->sidemove       = saveg_read8();
-    cmd->angleturn      = saveg_read16();
-    cmd->pitch          = saveg_read16();
-    cmd->consistency    = saveg_read8();
-    cmd->chatchar       = saveg_read8();
-    cmd->buttons        = saveg_read8();
-    cmd->buttons2       = saveg_read8();
+    cmd->forwardmove = saveg_read8();
+    cmd->sidemove = saveg_read8();
+    cmd->angleturn = saveg_read16();
+    cmd->pitch = saveg_read16();
+    cmd->consistency = saveg_read8();
+    cmd->chatchar = saveg_read8();
+    cmd->buttons = saveg_read8();
+    cmd->buttons2 = saveg_read8();
 }
 
 static void saveg_write_ticcmd_t(ticcmd_t* cmd) {
