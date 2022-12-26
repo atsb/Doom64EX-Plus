@@ -22,12 +22,11 @@
 
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
-
 #include <SDL_opengl.h>
-
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #endif
+
 
 #include "doomtype.h"
 

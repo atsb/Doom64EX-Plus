@@ -43,6 +43,10 @@ void        G_UnbindAction(int8_t* action);
 int         G_ListCommands(void);
 void        G_OutputBindings(FILE* fh);
 void        G_DoCmdMouseMove(int x, int y);
+#ifdef VITA
+void G_DoCmdGamepadMove(event_t *ev);
+#endif
+
 
 extern dboolean    ButtonAction;
 

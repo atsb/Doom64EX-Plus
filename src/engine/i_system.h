@@ -77,7 +77,6 @@ int8_t* I_FindDataFile(int8_t* file);
 dboolean I_FileExists(const int8_t* path);
 
 void I_RegisterCvars(void);
-
 extern FILE* DebugFile;
 extern dboolean    DigiJoy;
 

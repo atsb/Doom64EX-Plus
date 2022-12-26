@@ -42,9 +42,9 @@
 #else
 #include <SDL.h>
 #endif
-#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
+#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
 #include <fluidsynth.h>
-#else
+#elif defined(VITA)
 #include <fluidlite.h> //ATSB: Fluidlite on WIN32/macOS and some other devices so we can distribute binaries without all the stupid dependencies
 #endif
 

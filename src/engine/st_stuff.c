@@ -481,7 +481,9 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 
 		dglDisable(GL_TEXTURE_2D);
 		dglColor4ubv((byte*)&c);
+#ifndef WIP_VITA			
 		dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
+#endif
 		dglEnable(GL_TEXTURE_2D);
 
 		GL_SetState(GLSTATE_BLEND, 0);
@@ -946,7 +948,7 @@ void ST_Drawer(void) {
 			int8_t contextstring[32];
 			float x;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT) || !defined(VITA) // XINPUT
 			if (xgamepad.connected) {
 				M_DrawXInputButton(140, 156, XINPUT_GAMEPAD_A);
 				Draw_Text(213, 214, WHITEALPHA(0xA0), 0.75, false, "Use");

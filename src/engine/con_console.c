@@ -478,8 +478,9 @@ void CON_Draw(void) {
 
 	dglDisable(GL_TEXTURE_2D);
 	dglColor4ub(0, 0, 0, 128);
+#ifndef WIP_VITA	
 	dglRectf(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD, 0, 0);
-
+#endif
 	GL_SetState(GLSTATE_BLEND, 0);
 
 	dglColor4f(0, 1, 0, 1);
