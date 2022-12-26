@@ -181,10 +181,12 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 	//
 	// try to center view to the dome
 	//
+#ifndef WIP_VITA	
 	dglTranslated(
 		-((float)radius / ((float)NUM_SKY_DOME_FACES / 2.0f)),
 		-((float)radius / (M_PI / 2)),
 		-offset);
+#endif	
 
 	//
 	// front faces are drawn here, so cull the back faces
@@ -475,7 +477,9 @@ static void R_DrawVoidSky(void) {
 
 	dglDisable(GL_TEXTURE_2D);
 	dglColor4ubv((byte*)&sky->skycolor[2]);
+#ifndef WIP_VITA	
 	dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
+#endif	
 	dglEnable(GL_TEXTURE_2D);
 
 	GL_ResetViewport();
@@ -564,7 +568,9 @@ static void R_DrawClouds(void) {
 	dglMatrixMode(GL_MODELVIEW);
 	dglEnable(GL_BLEND);
 	dglPushMatrix();
+#ifndef WIP_VITA	
 	dglTranslated(0.0f, 0.0f, -1.0f);
+#endif	
 	dglTriangle(0, 1, 2);
 	dglTriangle(3, 2, 1);
 	dglDrawGeometry(4, v);

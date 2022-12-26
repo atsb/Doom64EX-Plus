@@ -26,7 +26,6 @@
 #include <math.h>
 
 #include <SDL_opengl.h>
-
 #include "gl_main.h"
 #include "i_system.h"
 

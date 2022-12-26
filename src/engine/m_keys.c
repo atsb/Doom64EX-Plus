@@ -136,7 +136,8 @@ static keyinfo_t    Keys[] = {
 	{BUTTON_Y,              "ButtonY"},
 	{BUTTON_LEFT_TRIGGER,   "LeftTrigger"},
 	{BUTTON_RIGHT_TRIGGER,  "RightTrigger"},
-#elif def    {GAMEPAD_DPAD_UP,    "DPadUp"},
+#elif defined(VITA)    
+	{GAMEPAD_DPAD_UP,    "DPadUp"},
     {GAMEPAD_DPAD_DOWN,  "DPadDown"},
     {GAMEPAD_DPAD_LEFT,  "DPadLeft"},
     {GAMEPAD_DPAD_RIGHT, "DPadRight"},

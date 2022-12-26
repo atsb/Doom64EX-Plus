@@ -29,6 +29,9 @@
 #include <stdint.h>
 #endif
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)
 #else
@@ -87,6 +90,7 @@ typedef w3suint64_t dword;
 #define w3saccess(filename, accessmode) access(filename, accessmode)
 #define w3sclose(filehandle) close(filehandle)
 #define w3sclose(filehandle) close(filehandle)
+#define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define w3sstrdup(source) strdup(source)
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'

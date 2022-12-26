@@ -10,7 +10,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 
 APP_TITLE = Doom64EX+
 APP_DESCRIPTION := An improved modern version of Doom64EX.
-APP_AUTHOR := André (Wolf3s) Guilherme, Adam "Gibbon(atsb)" Bilbough and Svkaiser
+APP_AUTHOR := André (Wolf3s) Guilherme, Adam "Gibbon(atsb)" Bilbough and Samuel "Svkaiser" Villarreal Kaiser
 APP_VERSION := 3.6.6(Dev)
 ICON := doom64ex-plus.png
 WINDRES   = windres.exe

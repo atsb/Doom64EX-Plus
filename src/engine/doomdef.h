@@ -329,7 +329,7 @@ extern dboolean windowpause;
 #define KEY_MWHEELDOWN          (0x80 + 0x6c)
 
 #ifdef VITA
-enum {
+typedef enum {
     GAMEPAD_INVALID = 0,
     GAMEPAD_A = 400, // start after KEY_
     GAMEPAD_B,

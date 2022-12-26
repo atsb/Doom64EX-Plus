@@ -110,7 +110,7 @@ CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_xinputscheme);
 #elif defined(VITA)
-CVAR_EXTERNAL(i_rsticksensitivity);
+float i_rsticksensitivity;
 CVAR_EXTERNAL(i_xinputscheme);
 #endif
 //
@@ -463,8 +463,8 @@ dboolean AM_Responder(event_t* ev) {
 				float x;
 				float y;
 
-				x = (float)ev->data1 * i_rsticksensitivity.value / (1500.0f / scale);
-				y = (float)ev->data2 * i_rsticksensitivity.value / (1500.0f / scale);
+				x = (float)ev->data1 * i_rsticksensitivity / (1500.0f / scale);
+				y = (float)ev->data2 * i_rsticksensitivity / (1500.0f / scale);
 
 				mpanx = (int)x << 16;
 				mpany = (int)y << 16;
@@ -483,14 +483,14 @@ dboolean AM_Responder(event_t* ev) {
 				CMD_AutomapSetFlag(AF_PANGAMEPAD, NULL);
 				break;
 
-			case GAMEPAD_LEFT_SHOULDER:
+			case GAMEPAD_LSHOULDER:
 				if (am_flags & AF_PANGAMEPAD) {
 					CMD_AutomapSetFlag(AF_ZOOMIN, NULL);
 					rc = true;
 				}
 				break;
 
-			case GAMEPAD_RIGHT_SHOULDER:
+			case GAMEPAD_RSHOULDER:
 				if (am_flags & AF_PANGAMEPAD) {
 					CMD_AutomapSetFlag(AF_ZOOMOUT, NULL);
 					rc = true;
@@ -532,11 +532,11 @@ dboolean AM_Responder(event_t* ev) {
 				CMD_AutomapSetFlag(AF_PANGAMEPAD | PCKF_UP, NULL);
 				break;
 
-			case GAMEPAD_LEFT_SHOULDER:
+			case GAMEPAD_LSHOULDER:
 				CMD_AutomapSetFlag(AF_ZOOMIN | PCKF_UP, NULL);
 				break;
 
-			case GAMEPAD_RIGHT_SHOULDER:
+			case GAMEPAD_RSHOULDER:
 				CMD_AutomapSetFlag(AF_ZOOMOUT | PCKF_UP, NULL);
 				break;
 

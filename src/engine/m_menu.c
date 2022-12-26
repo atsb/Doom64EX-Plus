@@ -30,7 +30,6 @@
 #ifndef C89
 #include <stdbool.h>
 #endif
-#include "i_w3swrapper.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -43,8 +42,8 @@
 #else
 #include <dirent.h>
 #endif
-
 #include <fcntl.h>
+#include "i_w3swrapper.h"
 #include "doomdef.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
@@ -763,7 +762,7 @@ void M_DrawNetwork(void);
 
 CVAR_EXTERNAL(m_playername);
 CVAR_EXTERNAL(p_allowjump);
-//André: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
+//Andrï¿½: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
 CVAR_EXTERNAL(sv_nomonsters);
 CVAR_EXTERNAL(sv_fastmonsters);
 CVAR_EXTERNAL(sv_respawnitems);
@@ -2235,7 +2234,7 @@ void M_DrawPassword(void) {
 #if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
 #elif defined(VITA)
-	if(!Video->have_controller())
+	
 #endif
 	{
 		Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
@@ -2738,8 +2737,8 @@ void M_DrawXGamePad(void) {
 void M_XGamePadChoice(int choice);
 void M_DrawXGamePad(void);
 
-CVAR_EXTERNAL(i_rsticksensitivityy);
-CVAR_EXTERNAL(i_rsticksensitivityx);
+cvar_t i_rsticksensitivityy;
+cvar_t i_rsticksensitivityx;
 CVAR_EXTERNAL(i_xinputscheme);
 
 enum {
@@ -2798,16 +2797,16 @@ void M_XGamePadChoice(int choice) {
 	switch (itemOn) {
 	case xgp_sensitivityx:
 		if (choice) {
-			if (i_rsticksensitivity.value < 0.0125f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivity.value + slope1);
+			if (i_rsticksensitivityx.value < 0.0125f) {
+				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityx.value + slope1);
 			}
 			else {
 				CON_CvarSetValue(i_rsticksensitivityx.name, 0.0125f);
 			}
 		}
 		else {
-			if (i_rsticksensitivity.value > 0.001f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivity.value - slope1);
+			if (i_rsticksensitivityy.value > 0.001f) {
+				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityy.value - slope1);
 			}
 			else {
 				CON_CvarSetValue(i_rsticksensitivityx.name, 0.001f);
@@ -2818,7 +2817,7 @@ void M_XGamePadChoice(int choice) {
 	case xgp_sensitivityy:
 		if (choice) {
 			if (i_rsticksensitivityy.value < 10.0f) {
-				M_SetCvar(&ii_rsticksensitivityy, i_rsticksensitivityy.value + slope2);
+				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value + slope2);
 			}
 			else {
 				CON_CvarSetValue(i_rsticksensitivityy.name, 100);
@@ -4087,6 +4086,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	// draw back panels
 	//
 	dglColor4ub(4, 4, 4, menualphacolor);
+#ifndef WIP_VITA	
 	//
 	// save game panel
 	//
@@ -4105,12 +4105,13 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 		def->x + 464,
 		def->y + 116
 	);
-
+#endif
 	//
 	// draw outline for panels
 	//
 	dglColor4ub(240, 86, 84, menualphacolor);
 	dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#ifndef WIP_VITA
 	//
 	// save game panel
 	//
@@ -4129,6 +4130,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 		def->x + 464,
 		def->y + 116
 	);
+#endif
 	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	dglEnable(GL_TEXTURE_2D);
 
@@ -4211,10 +4213,10 @@ void M_DrawXInputButton(int x, int y, int button) {
 	case GAMEPAD_X:
 		index = 3;
 		break;
-	case GAMEPAD_LEFT_SHOULDER:
+	case GAMEPAD_LSHOULDER:
 		index = 4;
 		break;
-	case GAMEPAD_RIGHT_SHOULDER:
+	case GAMEPAD_RSHOULDER:
 		index = 5;
 		break;
 	case GAMEPAD_DPAD_LEFT:
@@ -4235,10 +4237,10 @@ void M_DrawXInputButton(int x, int y, int button) {
 	case GAMEPAD_BACK:
 		index = 11;
 		break;
-	case GAMEPAD_LEFT_TRIGGER:
+	case GAMEPAD_LTRIGGER:
 		index = 4;
 		break;
-	case GAMEPAD_RIGHT_TRIGGER:
+	case GAMEPAD_RTRIGGER:
 		index = 5;
 		break;
 #else		
@@ -5080,7 +5082,7 @@ void M_Drawer(void) {
 
 #if defined(_WIN32) && defined(USE_XINPUT)  || defined(VITA) // XINPUT
 #ifdef VITA
-	if(currentMenu != &MainDef {
+	if(currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
 			M_DrawXInputButton(4, 271, GAMEPAD_B);

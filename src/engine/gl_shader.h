@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022 Andrï¿½ Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -33,6 +33,8 @@
 #elif defined SWITCH
 #include <GL/gl.h>
 #include <GL/glext.h>
+#elif defined(VITA)
+
 #else
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -43,9 +45,10 @@
 	https://www.inf.ufrgs.br/~amaciel/teaching/SIS0384-09-2/exercise9.html
 	https://learnopengl.com/Getting-started/Shaders
 */
-
-void GL_LoadShader(const char* textureShader, const char* fragmentShader);
-void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
-dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
-void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
+#ifndef VITA
+extern void GL_LoadShader(const char* textureShader, const char* fragmentShader);
+extern void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
+extern dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
+extern void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
+#endif
 #endif //__GL_SHADER__H

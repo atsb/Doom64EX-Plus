@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022 Andrï¿½ Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 #include "con_console.h"
 #include "doomdef.h"
 #include <stdio.h>
-
+#ifndef VITA
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
@@ -112,3 +112,4 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 	}
 	return success;
 }
+#endif

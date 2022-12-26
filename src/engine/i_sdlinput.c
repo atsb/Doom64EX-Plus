@@ -3,7 +3,7 @@
 //
 // Copyright(C) 2005 Simon Howard
 // Copyright(C) 2007-2014 Samuel Villarreal
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022 Andrï¿½ Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -35,6 +35,9 @@
 #include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
+#ifdef VITA
+#include <assert.h>
+#endif
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
@@ -58,7 +61,7 @@ dboolean    MouseMode;//false=microsoft, true=mouse systems
 dboolean window_mouse;
 
 #ifdef VITA
-s_deadzone = 8000;
+Sint32 s_deadzone = 8000;
 
 void s_clamp(Sint32 axis)
 {
@@ -70,7 +73,56 @@ void s_clamp(Sint32 axis)
 
 SDL_GameController *s_controller;
 #endif
+#ifdef VITA
+int translate_controller(int state) {
+      switch (state) {
 
+      case SDL_CONTROLLER_BUTTON_A: 
+		return GAMEPAD_A;
+		break;
+      case SDL_CONTROLLER_BUTTON_B: 
+	  	return GAMEPAD_B;
+		break;
+      case SDL_CONTROLLER_BUTTON_X: 
+	  	return GAMEPAD_X;
+		break;
+      case SDL_CONTROLLER_BUTTON_Y: 
+	 	return GAMEPAD_Y;
+		break;
+      case SDL_CONTROLLER_BUTTON_BACK: 
+	  	return GAMEPAD_BACK;
+      	break;
+	  case SDL_CONTROLLER_BUTTON_GUIDE: 
+		return GAMEPAD_GUIDE;
+	  	break;
+      case SDL_CONTROLLER_BUTTON_START: 
+	  	return GAMEPAD_START;
+		break;
+      case SDL_CONTROLLER_BUTTON_LEFTSTICK: 
+	  	return GAMEPAD_LSTICK;
+		break;
+      case SDL_CONTROLLER_BUTTON_RIGHTSTICK: 
+	  	return GAMEPAD_RSTICK;
+		break;
+      case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: 
+	  	return GAMEPAD_LSHOULDER;
+		break;
+      case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: 
+	  	return GAMEPAD_RSHOULDER;
+		break;
+
+      case SDL_CONTROLLER_BUTTON_DPAD_UP: 
+	  	return GAMEPAD_DPAD_UP;
+      case SDL_CONTROLLER_BUTTON_DPAD_DOWN: 
+	  	return GAMEPAD_DPAD_DOWN;
+      case SDL_CONTROLLER_BUTTON_DPAD_LEFT: 
+	  	return GAMEPAD_DPAD_LEFT;
+      case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: 
+	  	return GAMEPAD_DPAD_RIGHT;
+
+      }
+  }
+#endif	
 //
 // I_TranslateKey
 //
@@ -227,29 +279,6 @@ static int I_TranslateKey(const int key) {
 	case SDLK_RALT:
 		rc = KEY_RALT;
 		break;
-#ifdef VITA
-      case SDL_CONTROLLER_BUTTON_A: 
-		return GAMEPAD_A;
-      case SDL_CONTROLLER_BUTTON_B: return GAMEPAD_B;
-      case SDL_CONTROLLER_BUTTON_X: return GAMEPAD_X;
-      case SDL_CONTROLLER_BUTTON_Y: return GAMEPAD_Y;
-
-      case SDL_CONTROLLER_BUTTON_BACK: return GAMEPAD_BACK;
-      case SDL_CONTROLLER_BUTTON_GUIDE: return GAMEPAD_GUIDE;
-      case SDL_CONTROLLER_BUTTON_START: return GAMEPAD_START;
-      case SDL_CONTROLLER_BUTTON_LEFTSTICK: return GAMEPAD_LSTICK;
-      case SDL_CONTROLLER_BUTTON_RIGHTSTICK: return GAMEPAD_RSTICK;
-      case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: return GAMEPAD_LSHOULDER;
-      case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: return GAMEPAD_RSHOULDER;
-
-      case SDL_CONTROLLER_BUTTON_DPAD_UP: return GAMEPAD_DPAD_UP;
-      case SDL_CONTROLLER_BUTTON_DPAD_DOWN: return GAMEPAD_DPAD_DOWN;
-      case SDL_CONTROLLER_BUTTON_DPAD_LEFT: return GAMEPAD_DPAD_LEFT;
-      case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: return GAMEPAD_DPAD_RIGHT;
-
-      default: return GAMEPAD_INVALID;
-
-#endif	
 	default:
 		rc = key;
 		break;
@@ -385,21 +414,22 @@ void I_GetEvent(SDL_Event* Event) {
 
 #ifdef VITA
 			case SDL_CONTROLLERDEVICEADDED:
-                println("SDL: Controller added: {}", SDL_GameControllerNameForIndex(e.cdevice.which));
-                s_controller = SDL_GameControllerOpen(e.cdevice.which);
+                printf("SDL: Controller added: {}", SDL_GameControllerNameForIndex(Event->cdevice.which));
+                s_controller = SDL_GameControllerOpen(Event->cdevice.which);
                 assert(s_controller);
 				break;
 
 			case SDL_CONTROLLERDEVICEREMOVED:
-                println("SDL: Controller removed");
-                s_controller = nullptr;
+                printf("SDL: Controller removed");
+                s_controller = NULL;
                 break;
 
             case SDL_CONTROLLERBUTTONDOWN:
             case SDL_CONTROLLERBUTTONUP:
-                doom.type = (e.type == SDL_CONTROLLERBUTTONDOWN) ? ev_keydown : ev_keyup;
-                doom.data1 = translate_controller_(e.cbutton.button);
-                D_PostEvent(&doom);
+                event.type = ev_keyup;
+				event.data1 = (Event->type == SDL_CONTROLLERBUTTONDOWN) ? ev_keydown : ev_keyup;
+             	translate_controller(Event->cbutton.button);
+                D_PostEvent(&event);
 				break;
 #endif
 
@@ -494,10 +524,10 @@ void I_GetEvent(SDL_Event* Event) {
             ev.data3 = GAMEPAD_RIGHT_STICK;
             D_PostEvent(&ev);
 
-            static bool old_ltrigger = false;
-            static bool old_rtrigger = false;
+            static dboolean old_ltrigger = false;
+            static dboolean old_rtrigger = false;
 
-            auto z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+            int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
             if (z >= 0x4000 && !old_ltrigger) {
                 old_ltrigger = true;
                 ev.type = ev_keydown;

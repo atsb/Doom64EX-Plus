@@ -847,7 +847,7 @@ void G_ClearInput(void) {
 // G_DoCmdGamepadMove
 //
 
-CVAR_EXTERNAL(i_rsticksensitivity);
+extern float i_rsticksensitivity;
 CVAR_EXTERNAL(i_xinputscheme);
 
 void G_DoCmdGamepadMove(event_t *ev)
@@ -869,8 +869,8 @@ void G_DoCmdGamepadMove(event_t *ev)
         // right analog stick
         //
         else if (ev->data3 == GAMEPAD_RIGHT_STICK) {
-            int x = (ev->data1) * i_rsticksensitivity.value * 0.0015f;
-            int y = (ev->data2) * i_rsticksensitivity.value * 0.0015f;
+            int x = (ev->data1) * i_rsticksensitivity * 0.0015f;
+            int y = (ev->data2) * i_rsticksensitivity * 0.0015f;
             pc->mousex += x;
             pc->mousey += y;
         }
