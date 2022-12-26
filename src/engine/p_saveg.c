@@ -467,7 +467,7 @@ static void saveg_write_player_t(player_t* p) {
 
     for (i = 0; i < NUMCARDS; i++) {
         saveg_write32(p->cards[i]);
-        //saveg_write32(p->tryopen[i]);
+        saveg_write32(p->tryopen[i]);
     }
 
     saveg_write32(p->artifacts);
@@ -532,7 +532,7 @@ static void saveg_read_player_t(player_t* p) {
 
     for (i = 0; i < NUMCARDS; i++) {
         p->cards[i] = saveg_read32();
-        //p->tryopen[i] = saveg_read32();
+        p->tryopen[i] = saveg_read32();
     }
 
     p->artifacts = saveg_read32();

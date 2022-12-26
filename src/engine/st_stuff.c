@@ -373,6 +373,7 @@ void ST_Ticker(void) {
 	for (ind = 0; ind < NUMCARDS; ind++) {
 		/* CHECK FOR INITIALIZATION */
 		if (plyr->tryopen[ind]) {
+			plyr->tryopen[ind] = false;
 			flashCards[ind].active = true;
 			flashCards[ind].delay = FLASHDELAY;
 			flashCards[ind].times = FLASHTIMES + 1;
@@ -1080,7 +1081,7 @@ void ST_Init(void) {
 
 	for (i = 0; i < NUMCARDS; i++) {
 		flashCards[i].active = false;
-		//players[consoleplayer].tryopen[i] = false;
+		players[consoleplayer].tryopen[i] = false;
 	}
 
 	// setup hud messages
