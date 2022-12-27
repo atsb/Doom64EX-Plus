@@ -16,7 +16,7 @@ COMMON_OBJS = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CFLAGS  = -Wl,-q  -O3 -g -mtune=cortex-a9 -mfpu=neon \
--I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -fno-optimize-sibling-calls -DVITA -DWIP_VITA -Wall
+-I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -fno-optimize-sibling-calls -DWIP_VITA -Wall
 
 ASFLAGS = $(CFLAGS)
 
