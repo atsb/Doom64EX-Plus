@@ -49,6 +49,10 @@ CVAR_EXTERNAL(am_fulldraw);
 CVAR_EXTERNAL(am_ssect);
 CVAR_EXTERNAL(r_texturecombiner);
 
+#ifdef VITA
+#define GL_TEXTURE0_ARB 0x84C0
+#endif
+
 //
 // AM_BeginDraw
 //

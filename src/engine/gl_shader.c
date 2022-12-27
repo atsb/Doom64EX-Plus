@@ -25,7 +25,7 @@
 #include "con_console.h"
 #include "doomdef.h"
 #include <stdio.h>
-#ifdef WIP
+
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
@@ -112,4 +112,3 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 	}
 	return success;
 }
-#endif

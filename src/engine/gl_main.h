@@ -22,7 +22,11 @@
 
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
+#ifdef VITA
+#include <vitaGL.h>
+#else
 #include <SDL_opengl.h>
+#endif
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #endif
@@ -34,8 +38,11 @@ typedef GLuint        dtexture;
 typedef GLfloat        rfloat;
 typedef GLuint        rcolor;
 typedef GLuint        rbuffer;
+#ifdef VITA
+typedef GLuint         rhandle;
+#else
 typedef GLhandleARB    rhandle;
-
+#endif
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
 extern dboolean gl_has_combiner;

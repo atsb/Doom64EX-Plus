@@ -30,6 +30,8 @@
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#elif defined(VITA)
+#include <vitaGL.h>
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -47,7 +49,9 @@
 #include "m_misc.h"
 #include "g_actions.h"
 #include "i_sdlinput.h"
-
+#ifdef VITA
+#define GL_TEXTURE0_ARB 0x84C0
+#endif
 int ViewWindowX = 0;
 int ViewWindowY = 0;
 int ViewWidth = 0;
@@ -62,6 +66,10 @@ const int8_t* gl_renderer;
 const int8_t* gl_version;
 
 static float glScaleFactor = 1.0f;
+
+#ifdef VITA
+#define GL_FOG_HINT GL_FOG
+#endif
 
 dboolean    usingGL = false;
 float       max_anisotropic = 0;
@@ -99,9 +107,9 @@ static CMD(DumpGLExtensions) {
 
 GL_ARB_multitexture_Define();
 GL_EXT_compiled_vertex_array_Define();
-//GL_EXT_multi_draw_arrays_Define();
-//GL_EXT_fog_coord_Define();
-//GL_ARB_vertex_buffer_object_Define();
+GL_EXT_multi_draw_arrays_Define();
+GL_EXT_fog_coord_Define();
+GL_ARB_vertex_buffer_object_Define();
 GL_ARB_texture_env_combine_Define();
 GL_EXT_texture_env_combine_Define();
 GL_EXT_texture_filter_anisotropic_Define();
@@ -330,14 +338,15 @@ void GL_SetDefaultCombiner(void) {
 	    if (!usingGL) {
         return;
     }
-    
+
+#ifndef VITA    
 	if (has_GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, false);
 		GL_SetTextureUnit(2, false);
 		GL_SetTextureUnit(3, false);
 		GL_SetTextureUnit(0, true);
 	}
-
+#endif
 	GL_CheckFillMode();
 
 	if (r_texturecombiner.value > 0) {
@@ -519,9 +528,13 @@ void GL_Init(void) {
 	I_Printf("GL_VERSION: %s\n", gl_version);
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_max_texture_size);
 	I_Printf("GL_MAX_TEXTURE_SIZE: %i\n", gl_max_texture_size);
+#ifdef VITA
+	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &gl_max_texture_units);
+	I_Printf("GL_MAX_TEXTURE_UNITS: %i\n", gl_max_texture_units);
+#else
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &gl_max_texture_units);
 	I_Printf("GL_MAX_TEXTURE_UNITS_ARB: %i\n", gl_max_texture_units);
-
+#endif
 	if (gl_max_texture_units <= 2) {
 		CON_Warnf("Not enough texture units supported...\n");
 	}
@@ -534,18 +547,21 @@ void GL_Init(void) {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 	glShadeModel(GL_SMOOTH);
+#ifndef VITA	
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+#endif
 	glDepthFunc(GL_LEQUAL);
 	glAlphaFunc(GL_GEQUAL, ALPHACLEARGLOBAL);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glFogi(GL_FOG_MODE, GL_LINEAR);
 	glHint(GL_FOG_HINT, GL_NICEST);
 	glEnable(GL_SCISSOR_TEST);
+#ifndef VITA
 	glEnable(GL_DITHER);
-
+#endif
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-
+#ifndef WIP_VITA
 	GL_ARB_multitexture_Init();
 	GL_EXT_compiled_vertex_array_Init();
 	GL_ARB_texture_env_combine_Init();
@@ -555,6 +571,7 @@ void GL_Init(void) {
 	if (!has_GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");
 	}
+#endif
 
 	gl_has_combiner = (has_GL_ARB_texture_env_combine | has_GL_EXT_texture_env_combine);
 
@@ -567,9 +584,11 @@ void GL_Init(void) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-
+#ifdef VITA
+	GL_VERSION ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+#else
 	GL_VERSION_2_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP;
-
+#endif
 	glScaleFactor = 1.0f;
 
 	if (has_GL_EXT_texture_filter_anisotropic) {

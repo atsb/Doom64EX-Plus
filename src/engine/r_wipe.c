@@ -35,6 +35,10 @@
 #include "m_random.h"
 #include "gl_texture.h"
 #include "doomstat.h"
+#ifdef VITA
+#define GL_TEXTURE_2D				0x0DE1
+#endif
+
 
 void M_ClearMenus(void);    // from m_menu.c
 
@@ -201,8 +205,7 @@ void WIPE_MeltScreen(void) {
 		for (j = 0; j < 4; j++) {
 			v[j].y += 0.5f;
 		}
-
-#ifndef WIP_VITA		
+	
 		//
 		// update screen buffer
 		//
@@ -215,8 +218,7 @@ void WIPE_MeltScreen(void) {
 			0,
 			padw,
 			padh
-		);
-#endif		
+		);	
 		GL_SwapBuffers();
 
 		WIPE_RefreshDelay();

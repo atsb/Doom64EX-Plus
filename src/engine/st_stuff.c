@@ -480,10 +480,8 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 		GL_SetOrtho(1);
 
 		glDisable(GL_TEXTURE_2D);
-		glColor4ubv((byte*)&c);
-#ifndef WIP_VITA			
+		glColor4ubv((byte*)&c);			
 		glRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
-#endif
 		glEnable(GL_TEXTURE_2D);
 
 		GL_SetState(GLSTATE_BLEND, 0);

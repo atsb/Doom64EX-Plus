@@ -34,11 +34,13 @@
 #include <glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#elif defined(VITA)
+#include <vitaGL.h>
 #else
 #include <GL/glu.h>
 #include <GL/gl.h>
 #endif
-#ifdef WIP
+
 /*
 	Based on the following references:
 	https://www.inf.ufrgs.br/~amaciel/teaching/SIS0384-09-2/exercise9.html
@@ -49,5 +51,4 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
 dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
 void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
-#endif
 #endif //__GL_SHADER__H

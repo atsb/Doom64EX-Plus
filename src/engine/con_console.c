@@ -35,6 +35,10 @@
 #include "r_main.h"
 #include "i_system.h"
 #include "gl_texture.h"
+#ifdef VITA
+#include <vitaGL.h>
+#endif
+
 
 #ifdef __APPLE__
 #include <SDL2/SDL.h>

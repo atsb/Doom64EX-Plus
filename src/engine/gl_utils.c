@@ -23,8 +23,6 @@
 
 #include "gl_utils.h"
 
-#include <SDL_opengl.h>
-
 #ifdef __APPLE__
 #include <math.h>
 #endif
@@ -193,7 +191,7 @@ void glViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 	m[11] = -1;
 	m[15] = 0;
 
-	dglMultMatrixf(m);
+	glMultMatrixf(m);
 #ifdef VITA
 	glDepthMask(GL_TRUE);
 #endif

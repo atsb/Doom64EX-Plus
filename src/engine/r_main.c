@@ -47,7 +47,9 @@
 #include "r_drawlist.h"
 #include "gl_draw.h"
 #include "g_actions.h"
-
+#ifdef VITA
+#define GL_POLYGON 0x0009
+#endif
 lumpinfo_t* lumpinfo;
 int             skytexture;
 
@@ -417,7 +419,7 @@ void R_PrecacheLevel(void) {
 	}
 
 	CON_DPrintf("%i sprites cached\n", num);
-
+#ifndef WIP_VITA
 	if (has_GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, true);
 		GL_BindEnvTexture();
@@ -428,7 +430,7 @@ void R_PrecacheLevel(void) {
 		GL_SetTextureUnit(3, true);
 		GL_BindDummyTexture();
 	}
-
+#endif
 	GL_SetDefaultCombiner();
 }
 

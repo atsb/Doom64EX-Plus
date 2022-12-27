@@ -2,7 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022 Andrï¿½ Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -20,161 +20,21 @@
 // 02111-1307, USA.
 // 
 //------------------------------------------------------------------------------
+#ifndef __GL_UTILS__H
+#define __GL_UTILS__H
 
 #include <math.h>
 
-#include <SDL_opengl.h>
-
 #include "gl_main.h"
 #include "i_system.h"
-
-//
-// GL_EXT_compiled_vertex_array
-//
-extern dboolean has_GL_EXT_compiled_vertex_array;
-
-extern PFNGLLOCKARRAYSEXTPROC _glLockArraysEXT;
-extern PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT;
-
-#define GL_EXT_compiled_vertex_array_Define() \
-dboolean has_GL_EXT_compiled_vertex_array = false; \
-PFNGLLOCKARRAYSEXTPROC _glLockArraysEXT = NULL; \
-PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT = NULL
-
-#define GL_EXT_compiled_vertex_array_Init() \
-has_GL_EXT_compiled_vertex_array = GL_CheckExtension("GL_EXT_compiled_vertex_array"); \
-_glLockArraysEXT = GL_RegisterProc("glLockArraysEXT"); \
-_glUnlockArraysEXT = GL_RegisterProc("glUnlockArraysEXT")
-
-//
-// GL_EXT_multi_draw_arrays
-//
-extern dboolean has_GL_EXT_multi_draw_arrays;
-
-extern PFNGLMULTIDRAWARRAYSEXTPROC _glMultiDrawArraysEXT;
-extern PFNGLMULTIDRAWELEMENTSEXTPROC _glMultiDrawElementsEXT;
-
-#define GL_EXT_multi_draw_arrays_Define() \
-dboolean has_GL_EXT_multi_draw_arrays = false; \
-PFNGLMULTIDRAWARRAYSEXTPROC _glMultiDrawArraysEXT = NULL; \
-PFNGLMULTIDRAWELEMENTSEXTPROC _glMultiDrawElementsEXT = NULL
-
-#define GL_EXT_multi_draw_arrays_Init() \
-has_GL_EXT_multi_draw_arrays = GL_CheckExtension("GL_EXT_multi_draw_arrays"); \
-_glMultiDrawArraysEXT = GL_RegisterProc("glMultiDrawArraysEXT"); \
-_glMultiDrawElementsEXT = GL_RegisterProc("glMultiDrawElementsEXT")
-
-//
-// GL_EXT_fog_coord
-//
-extern dboolean has_GL_EXT_fog_coord;
-
-extern PFNGLFOGCOORDFEXTPROC _glFogCoordfEXT;
-extern PFNGLFOGCOORDFVEXTPROC _glFogCoordfvEXT;
-extern PFNGLFOGCOORDDEXTPROC _glFogCoorddEXT;
-extern PFNGLFOGCOORDDVEXTPROC _glFogCoorddvEXT;
-extern PFNGLFOGCOORDPOINTEREXTPROC _glFogCoordPointerEXT;
-
-#define GL_EXT_fog_coord_Define() \
-dboolean has_GL_EXT_fog_coord = false; \
-PFNGLFOGCOORDFEXTPROC _glFogCoordfEXT = NULL; \
-PFNGLFOGCOORDFVEXTPROC _glFogCoordfvEXT = NULL; \
-PFNGLFOGCOORDDEXTPROC _glFogCoorddEXT = NULL; \
-PFNGLFOGCOORDDVEXTPROC _glFogCoorddvEXT = NULL; \
-PFNGLFOGCOORDPOINTEREXTPROC _glFogCoordPointerEXT = NULL
-
-#define GL_EXT_fog_coord_Init() \
-has_GL_EXT_fog_coord = GL_CheckExtension("GL_EXT_fog_coord"); \
-_glFogCoordfEXT = GL_RegisterProc("glFogCoordfEXT"); \
-_glFogCoordfvEXT = GL_RegisterProc("glFogCoordfvEXT"); \
-_glFogCoorddEXT = GL_RegisterProc("glFogCoorddEXT"); \
-_glFogCoorddvEXT = GL_RegisterProc("glFogCoorddvEXT"); \
-_glFogCoordPointerEXT = GL_RegisterProc("glFogCoordPointerEXT")
-
-//
-// GL_ARB_vertex_buffer_object
-//
-extern dboolean has_GL_ARB_vertex_buffer_object;
-
-extern PFNGLBINDBUFFERARBPROC _glBindBufferARB;
-extern PFNGLDELETEBUFFERSARBPROC _glDeleteBuffersARB;
-extern PFNGLGENBUFFERSARBPROC _glGenBuffersARB;
-extern PFNGLISBUFFERARBPROC _glIsBufferARB;
-extern PFNGLBUFFERDATAARBPROC _glBufferDataARB;
-extern PFNGLBUFFERSUBDATAARBPROC _glBufferSubDataARB;
-extern PFNGLGETBUFFERSUBDATAARBPROC _glGetBufferSubDataARB;
-extern PFNGLMAPBUFFERARBPROC _glMapBufferARB;
-extern PFNGLUNMAPBUFFERARBPROC _glUnmapBufferARB;
-extern PFNGLGETBUFFERPARAMETERIVARBPROC _glGetBufferParameterivARB;
-extern PFNGLGETBUFFERPOINTERVARBPROC _glGetBufferPointervARB;
-
-#define GL_ARB_vertex_buffer_object_Define() \
-dboolean has_GL_ARB_vertex_buffer_object = false; \
-PFNGLBINDBUFFERARBPROC _glBindBufferARB = NULL; \
-PFNGLDELETEBUFFERSARBPROC _glDeleteBuffersARB = NULL; \
-PFNGLGENBUFFERSARBPROC _glGenBuffersARB = NULL; \
-PFNGLISBUFFERARBPROC _glIsBufferARB = NULL; \
-PFNGLBUFFERDATAARBPROC _glBufferDataARB = NULL; \
-PFNGLBUFFERSUBDATAARBPROC _glBufferSubDataARB = NULL; \
-PFNGLGETBUFFERSUBDATAARBPROC _glGetBufferSubDataARB = NULL; \
-PFNGLMAPBUFFERARBPROC _glMapBufferARB = NULL; \
-PFNGLUNMAPBUFFERARBPROC _glUnmapBufferARB = NULL; \
-PFNGLGETBUFFERPARAMETERIVARBPROC _glGetBufferParameterivARB = NULL; \
-PFNGLGETBUFFERPOINTERVARBPROC _glGetBufferPointervARB = NULL
-
-#define GL_ARB_vertex_buffer_object_Init() \
-has_GL_ARB_vertex_buffer_object = GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
-_glBindBufferARB = GL_RegisterProc("glBindBufferARB"); \
-_glDeleteBuffersARB = GL_RegisterProc("glDeleteBuffersARB"); \
-_glGenBuffersARB = GL_RegisterProc("glGenBuffersARB"); \
-_glIsBufferARB = GL_RegisterProc("glIsBufferARB"); \
-_glBufferDataARB = GL_RegisterProc("glBufferDataARB"); \
-_glBufferSubDataARB = GL_RegisterProc("glBufferSubDataARB"); \
-_glGetBufferSubDataARB = GL_RegisterProc("glGetBufferSubDataARB"); \
-_glMapBufferARB = GL_RegisterProc("glMapBufferARB"); \
-_glUnmapBufferARB = GL_RegisterProc("glUnmapBufferARB"); \
-_glGetBufferParameterivARB = GL_RegisterProc("glGetBufferParameterivARB"); \
-_glGetBufferPointervARB = GL_RegisterProc("glGetBufferPointervARB")
-
-
-//
-// GL_ARB_texture_env_combine
-//
-extern dboolean has_GL_ARB_texture_env_combine;
-
-#define GL_ARB_texture_env_combine_Define() \
-dboolean has_GL_ARB_texture_env_combine = false;
-
-#define GL_ARB_texture_env_combine_Init() \
-has_GL_ARB_texture_env_combine = GL_CheckExtension("GL_ARB_texture_env_combine");
-
-//
-// GL_EXT_texture_env_combine
-//
-extern dboolean has_GL_EXT_texture_env_combine;
-
-#define GL_EXT_texture_env_combine_Define() \
-dboolean has_GL_EXT_texture_env_combine = false;
-
-#define GL_EXT_texture_env_combine_Init() \
-has_GL_EXT_texture_env_combine = GL_CheckExtension("GL_EXT_texture_env_combine");
-
-//
-// GL_EXT_texture_filter_anisotropic
-//
-extern dboolean has_GL_EXT_texture_filter_anisotropic;
-
-#define GL_EXT_texture_filter_anisotropic_Define() \
-dboolean has_GL_EXT_texture_filter_anisotropic = false;
-
-#define GL_EXT_texture_filter_anisotropic_Init() \
-has_GL_EXT_texture_filter_anisotropic = GL_CheckExtension("GL_EXT_texture_filter_anisotropic");
-
+#ifdef VITA
+#define GL_COMBINE_ARB                    0x8570
+#endif
 //
 // GL_ARB_multitexture
 //
 extern dboolean has_GL_ARB_multitexture;
-
+#ifndef VITA
 extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
 extern PFNGLCLIENTACTIVETEXTUREARBPROC _glClientActiveTextureARB;
 extern PFNGLMULTITEXCOORD1DARBPROC _glMultiTexCoord1dARB;
@@ -209,9 +69,12 @@ extern PFNGLMULTITEXCOORD4IARBPROC _glMultiTexCoord4iARB;
 extern PFNGLMULTITEXCOORD4IVARBPROC _glMultiTexCoord4ivARB;
 extern PFNGLMULTITEXCOORD4SARBPROC _glMultiTexCoord4sARB;
 extern PFNGLMULTITEXCOORD4SVARBPROC _glMultiTexCoord4svARB;
+#endif
 
+#ifndef VITA
 #define GL_ARB_multitexture_Define() \
 dboolean has_GL_ARB_multitexture = false; \
+
 PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL; \
 PFNGLCLIENTACTIVETEXTUREARBPROC _glClientActiveTextureARB = NULL; \
 PFNGLMULTITEXCOORD1DARBPROC _glMultiTexCoord1dARB = NULL; \
@@ -283,12 +146,50 @@ _glMultiTexCoord4iARB = GL_RegisterProc("glMultiTexCoord4iARB"); \
 _glMultiTexCoord4ivARB = GL_RegisterProc("glMultiTexCoord4ivARB"); \
 _glMultiTexCoord4sARB = GL_RegisterProc("glMultiTexCoord4sARB"); \
 _glMultiTexCoord4svARB = GL_RegisterProc("glMultiTexCoord4svARB")
+#endif
+
+
+#define dglActiveTextureARB(texture) _glActiveTextureARB(texture)
+#define dglClientActiveTextureARB(texture) _glClientActiveTextureARB(texture)
+#define dglMultiTexCoord1dARB(target, s) _glMultiTexCoord1dARB(target, s)
+#define dglMultiTexCoord1dvARB(target, v) _glMultiTexCoord1dvARB(target, v)
+#define dglMultiTexCoord1fARB(target, s) _glMultiTexCoord1fARB(target, s)
+#define dglMultiTexCoord1fvARB(target, v) _glMultiTexCoord1fvARB(target, v)
+#define dglMultiTexCoord1iARB(target, s) _glMultiTexCoord1iARB(target, s)
+#define dglMultiTexCoord1ivARB(target, v) _glMultiTexCoord1ivARB(target, v)
+#define dglMultiTexCoord1sARB(target, s) _glMultiTexCoord1sARB(target, s)
+#define dglMultiTexCoord1svARB(target, v) _glMultiTexCoord1svARB(target, v)
+#define dglMultiTexCoord2dARB(target, s, t) _glMultiTexCoord2dARB(target, s, t)
+#define dglMultiTexCoord2dvARB(target, v) _glMultiTexCoord2dvARB(target, v)
+#define dglMultiTexCoord2fARB(target, s, t) _glMultiTexCoord2fARB(target, s, t)
+#define dglMultiTexCoord2fvARB(target, v) _glMultiTexCoord2fvARB(target, v)
+#define dglMultiTexCoord2iARB(target, s, t) _glMultiTexCoord2iARB(target, s, t)
+#define dglMultiTexCoord2ivARB(target, v) _glMultiTexCoord2ivARB(target, v)
+#define dglMultiTexCoord2sARB(target, s, t) _glMultiTexCoord2sARB(target, s, t)
+#define dglMultiTexCoord2svARB(target, v) _glMultiTexCoord2svARB(target, v)
+#define dglMultiTexCoord3dARB(target, s, t, r) _glMultiTexCoord3dARB(target, s, t, r)
+#define dglMultiTexCoord3dvARB(target, v) _glMultiTexCoord3dvARB(target, v)
+#define dglMultiTexCoord3fARB(target, s, t, r) _glMultiTexCoord3fARB(target, s, t, r)
+#define dglMultiTexCoord3fvARB(target, v) _glMultiTexCoord3fvARB(target, v)
+#define dglMultiTexCoord3iARB(target, s, t, r) _glMultiTexCoord3iARB(target, s, t, r)
+#define dglMultiTexCoord3ivARB(target, v) _glMultiTexCoord3ivARB(target, v)
+#define dglMultiTexCoord3sARB(target, s, t, r) _glMultiTexCoord3sARB(target, s, t, r)
+#define dglMultiTexCoord3svARB(target, v) _glMultiTexCoord3svARB(target, v)
+#define dglMultiTexCoord4dARB(target, s, t, r, q) _glMultiTexCoord4dARB(target, s, t, r, q)
+#define dglMultiTexCoord4dvARB(target, v) _glMultiTexCoord4dvARB(target, v)
+#define dglMultiTexCoord4fARB(target, s, t, r, q) _glMultiTexCoord4fARB(target, s, t, r, q)
+#define dglMultiTexCoord4fvARB(target, v) _glMultiTexCoord4fvARB(target, v)
+#define dglMultiTexCoord4iARB(target, s, t, r, q) _glMultiTexCoord4iARB(target, s, t, r, q)
+#define dglMultiTexCoord4ivARB(target, v) _glMultiTexCoord4ivARB(target, v)
+#define dglMultiTexCoord4sARB(target, s, t, r, q) _glMultiTexCoord4sARB(target, s, t, r, q)
+#define dglMultiTexCoord4svARB(target, v) _glMultiTexCoord4svARB(target, v)
 
 //
 // GL_EXT_compiled_vertex_array
 //
 extern dboolean has_GL_EXT_compiled_vertex_array;
 
+#ifndef VITA
 extern PFNGLLOCKARRAYSEXTPROC _glLockArraysEXT;
 extern PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT;
 
@@ -301,9 +202,160 @@ PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT = NULL
 has_GL_EXT_compiled_vertex_array = GL_CheckExtension("GL_EXT_compiled_vertex_array"); \
 _glLockArraysEXT = GL_RegisterProc("glLockArraysEXT"); \
 _glUnlockArraysEXT = GL_RegisterProc("glUnlockArraysEXT")
+#endif
 
 #define glLockArraysEXT(first, count) _glLockArraysEXT(first, count)
 #define glUnlockArraysEXT() _glUnlockArraysEXT()
+
+//
+// GL_EXT_multi_draw_arrays
+//
+extern dboolean has_GL_EXT_multi_draw_arrays;
+
+#ifndef VITA
+extern PFNGLMULTIDRAWARRAYSEXTPROC _glMultiDrawArraysEXT;
+extern PFNGLMULTIDRAWELEMENTSEXTPROC _glMultiDrawElementsEXT;
+
+#define GL_EXT_multi_draw_arrays_Define() \
+dboolean has_GL_EXT_multi_draw_arrays = false; \
+PFNGLMULTIDRAWARRAYSEXTPROC _glMultiDrawArraysEXT = NULL; \
+PFNGLMULTIDRAWELEMENTSEXTPROC _glMultiDrawElementsEXT = NULL
+
+#define GL_EXT_multi_draw_arrays_Init() \
+has_GL_EXT_multi_draw_arrays = GL_CheckExtension("GL_EXT_multi_draw_arrays"); \
+_glMultiDrawArraysEXT = GL_RegisterProc("glMultiDrawArraysEXT"); \
+_glMultiDrawElementsEXT = GL_RegisterProc("glMultiDrawElementsEXT")
+#endif
+
+#define glMultiDrawArraysEXT(mode, first, count, primcount) _glMultiDrawArraysEXT(mode, first, count, primcount)
+#define glMultiDrawElementsEXT(mode, count, type, indices, primcount) _glMultiDrawElementsEXT(mode, count, type, indices, primcount)
+
+//
+// GL_EXT_fog_coord
+//
+extern dboolean has_GL_EXT_fog_coord;
+
+#ifndef VITA
+extern PFNGLFOGCOORDFEXTPROC _glFogCoordfEXT;
+extern PFNGLFOGCOORDFVEXTPROC _glFogCoordfvEXT;
+extern PFNGLFOGCOORDDEXTPROC _glFogCoorddEXT;
+extern PFNGLFOGCOORDDVEXTPROC _glFogCoorddvEXT;
+extern PFNGLFOGCOORDPOINTEREXTPROC _glFogCoordPointerEXT;
+
+#define GL_EXT_fog_coord_Define() \
+dboolean has_GL_EXT_fog_coord = false; \
+PFNGLFOGCOORDFEXTPROC _glFogCoordfEXT = NULL; \
+PFNGLFOGCOORDFVEXTPROC _glFogCoordfvEXT = NULL; \
+PFNGLFOGCOORDDEXTPROC _glFogCoorddEXT = NULL; \
+PFNGLFOGCOORDDVEXTPROC _glFogCoorddvEXT = NULL; \
+PFNGLFOGCOORDPOINTEREXTPROC _glFogCoordPointerEXT = NULL
+
+#define GL_EXT_fog_coord_Init() \
+has_GL_EXT_fog_coord = GL_CheckExtension("GL_EXT_fog_coord"); \
+_glFogCoordfEXT = GL_RegisterProc("glFogCoordfEXT"); \
+_glFogCoordfvEXT = GL_RegisterProc("glFogCoordfvEXT"); \
+_glFogCoorddEXT = GL_RegisterProc("glFogCoorddEXT"); \
+_glFogCoorddvEXT = GL_RegisterProc("glFogCoorddvEXT"); \
+_glFogCoordPointerEXT = GL_RegisterProc("glFogCoordPointerEXT")
+#endif
+
+#define glFogCoordfEXT(coord) _glFogCoordfEXT(coord)
+#define glFogCoordfvEXT(coord) _glFogCoordfvEXT(coord)
+#define glFogCoorddEXT(coord) _glFogCoorddEXT(coord)
+#define glFogCoorddvEXT(coord) _glFogCoorddvEXT(coord)
+#define glFogCoordPointerEXT(type, stride, pointer) _glFogCoordPointerEXT(type, stride, pointer)
+
+//
+// GL_ARB_vertex_buffer_object
+//
+extern dboolean has_GL_ARB_vertex_buffer_object;
+
+#ifndef VITA
+extern PFNGLBINDBUFFERARBPROC _glBindBufferARB;
+extern PFNGLDELETEBUFFERSARBPROC _glDeleteBuffersARB;
+extern PFNGLGENBUFFERSARBPROC _glGenBuffersARB;
+extern PFNGLISBUFFERARBPROC _glIsBufferARB;
+extern PFNGLBUFFERDATAARBPROC _glBufferDataARB;
+extern PFNGLBUFFERSUBDATAARBPROC _glBufferSubDataARB;
+extern PFNGLGETBUFFERSUBDATAARBPROC _glGetBufferSubDataARB;
+extern PFNGLMAPBUFFERARBPROC _glMapBufferARB;
+extern PFNGLUNMAPBUFFERARBPROC _glUnmapBufferARB;
+extern PFNGLGETBUFFERPARAMETERIVARBPROC _glGetBufferParameterivARB;
+extern PFNGLGETBUFFERPOINTERVARBPROC _glGetBufferPointervARB;
+
+#define GL_ARB_vertex_buffer_object_Define() \
+dboolean has_GL_ARB_vertex_buffer_object = false; \
+PFNGLBINDBUFFERARBPROC _glBindBufferARB = NULL; \
+PFNGLDELETEBUFFERSARBPROC _glDeleteBuffersARB = NULL; \
+PFNGLGENBUFFERSARBPROC _glGenBuffersARB = NULL; \
+PFNGLISBUFFERARBPROC _glIsBufferARB = NULL; \
+PFNGLBUFFERDATAARBPROC _glBufferDataARB = NULL; \
+PFNGLBUFFERSUBDATAARBPROC _glBufferSubDataARB = NULL; \
+PFNGLGETBUFFERSUBDATAARBPROC _glGetBufferSubDataARB = NULL; \
+PFNGLMAPBUFFERARBPROC _glMapBufferARB = NULL; \
+PFNGLUNMAPBUFFERARBPROC _glUnmapBufferARB = NULL; \
+PFNGLGETBUFFERPARAMETERIVARBPROC _glGetBufferParameterivARB = NULL; \
+PFNGLGETBUFFERPOINTERVARBPROC _glGetBufferPointervARB = NULL
+
+#define GL_ARB_vertex_buffer_object_Init() \
+has_GL_ARB_vertex_buffer_object = GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
+_glBindBufferARB = GL_RegisterProc("glBindBufferARB"); \
+_glDeleteBuffersARB = GL_RegisterProc("glDeleteBuffersARB"); \
+_glGenBuffersARB = GL_RegisterProc("glGenBuffersARB"); \
+_glIsBufferARB = GL_RegisterProc("glIsBufferARB"); \
+_glBufferDataARB = GL_RegisterProc("glBufferDataARB"); \
+_glBufferSubDataARB = GL_RegisterProc("glBufferSubDataARB"); \
+_glGetBufferSubDataARB = GL_RegisterProc("glGetBufferSubDataARB"); \
+_glMapBufferARB = GL_RegisterProc("glMapBufferARB"); \
+_glUnmapBufferARB = GL_RegisterProc("glUnmapBufferARB"); \
+_glGetBufferParameterivARB = GL_RegisterProc("glGetBufferParameterivARB"); \
+_glGetBufferPointervARB = GL_RegisterProc("glGetBufferPointervARB")
+#endif
+
+#define glBindBufferARB(target, buffer) _glBindBufferARB(target, buffer)
+#define glDeleteBuffersARB(n, buffers) _glDeleteBuffersARB(n, buffers)
+#define glGenBuffersARB(n, buffers) _glGenBuffersARB(n, buffers)
+#define glIsBufferARB(buffer) _glIsBufferARB(buffer)
+#define glBufferDataARB(target, size, data, usage) _glBufferDataARB(target, size, data, usage)
+#define glBufferSubDataARB(target, offset, size, data) _glBufferSubDataARB(target, offset, size, data)
+#define glGetBufferSubDataARB(target, offset, size, data) _glGetBufferSubDataARB(target, offset, size, data)
+#define glMapBufferARB(target, access) _glMapBufferARB(target, access)
+#define glUnmapBufferARB(target) _glUnmapBufferARB(target)
+#define glGetBufferParameterivARB(target, pname, params) _glGetBufferParameterivARB(target, pname, params)
+#define glGetBufferPointervARB(target, pname, params) _glGetBufferPointervARB(target, pname, params)
+
+//
+// GL_ARB_texture_env_combine
+//
+extern dboolean has_GL_ARB_texture_env_combine;
+
+#define GL_ARB_texture_env_combine_Define() \
+dboolean has_GL_ARB_texture_env_combine = false;
+
+#define GL_ARB_texture_env_combine_Init() \
+has_GL_ARB_texture_env_combine = GL_CheckExtension("GL_ARB_texture_env_combine");
+
+//
+// GL_EXT_texture_env_combine
+//
+extern dboolean has_GL_EXT_texture_env_combine;
+
+#define GL_EXT_texture_env_combine_Define() \
+dboolean has_GL_EXT_texture_env_combine = false;
+
+#define GL_EXT_texture_env_combine_Init() \
+has_GL_EXT_texture_env_combine = GL_CheckExtension("GL_EXT_texture_env_combine");
+
+//
+// GL_EXT_texture_filter_anisotropic
+//
+extern dboolean has_GL_EXT_texture_filter_anisotropic;
+
+#define GL_EXT_texture_filter_anisotropic_Define() \
+dboolean has_GL_EXT_texture_filter_anisotropic = false;
+
+#define GL_EXT_texture_filter_anisotropic_Init() \
+has_GL_EXT_texture_filter_anisotropic = GL_CheckExtension("GL_EXT_texture_filter_anisotropic");
 
 void glSetVertex(vtx_t* vtx);
 void glTriangle(int v0, int v1, int v2);
@@ -318,3 +370,5 @@ void glTexCombModulate(int t, int s);
 void glTexCombAdd(int t, int s);
 void glTexCombInterpolate(int t, float a);
 void glTexCombReplaceAlpha(int t);
+
+#endif

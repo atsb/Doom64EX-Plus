@@ -54,11 +54,10 @@
 
 #ifdef VITA
 #include <vitasdk.h>
-//#include <vitaGL.h>
 int _newlib_heap_size_user = 200 * 1024 * 1024;
 
 void early_fatal_error(const char *msg) {
-	//vglInit(0);
+	vglInit(0);
 	SceMsgDialogUserMessageParam msg_param;
 	sceClibMemset(&msg_param, 0, sizeof(SceMsgDialogUserMessageParam));
 	msg_param.buttonType = SCE_MSG_DIALOG_BUTTON_TYPE_OK;
@@ -68,9 +67,9 @@ void early_fatal_error(const char *msg) {
 	param.mode = SCE_MSG_DIALOG_MODE_USER_MSG;
 	param.userMsgParam = &msg_param;
 	sceMsgDialogInit(&param);
-	//while (sceMsgDialogGetStatus() != SCE_COMMON_DIALOG_STATUS_FINISHED) {
-	//	vglSwapBuffers(GL_TRUE);
-	//}
+	while (sceMsgDialogGetStatus() != SCE_COMMON_DIALOG_STATUS_FINISHED) {
+		vglSwapBuffers(GL_TRUE);
+	}
 	sceKernelExitProcess(0);
 }
 #endif

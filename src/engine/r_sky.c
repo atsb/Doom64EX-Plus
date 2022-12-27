@@ -44,6 +44,9 @@
 #include "gl_draw.h"
 #include "r_drawlist.h"
 
+#ifdef VITA
+#define GL_RGBA8 0x8058
+#endif
 skydef_t* sky;
 int         skypicnum = -1;
 int         skybackdropnum = -1;
@@ -181,12 +184,11 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 	//
 	// try to center view to the dome
 	//
-#ifndef WIP_VITA	
 	glTranslated(
 		-((float)radius / ((float)NUM_SKY_DOME_FACES / 2.0f)),
 		-((float)radius / (M_PI / 2)),
 		-offset);
-#endif	
+	
 
 	//
 	// front faces are drawn here, so cull the back faces
@@ -477,9 +479,7 @@ static void R_DrawVoidSky(void) {
 
 	glDisable(GL_TEXTURE_2D);
 	glColor4ubv((byte*)&sky->skycolor[2]);
-#ifndef WIP_VITA	
 	glRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
-#endif	
 	glEnable(GL_TEXTURE_2D);
 
 	GL_ResetViewport();
@@ -568,9 +568,7 @@ static void R_DrawClouds(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_BLEND);
 	glPushMatrix();
-#ifndef WIP_VITA	
 	glTranslated(0.0f, 0.0f, -1.0f);
-#endif	
 	glTriangle(0, 1, 2);
 	glTriangle(3, 2, 1);
 	glDrawGeometry(4, v);

@@ -40,7 +40,13 @@
 #include "g_actions.h"
 
 #define GL_MAX_TEX_UNITS    4
-
+#ifdef VITA
+//André: Hack for the vitalGL textures
+#define GL_SOURCE0_RGB 0x8580
+#define GL_SOURCE0_ALPHA 0x8588
+#define GL_RGB8 0x8051  //This isn´t correct however this the way that we done.
+#define GL_RGBA8 0x8058
+#endif
 int         curtexture;
 int         cursprite;
 int         curtrans;
@@ -512,7 +518,7 @@ dtexture GL_ScreenToTexture(void) {
 		GL_UNSIGNED_BYTE,
 		0
 	);
-#ifndef WIP_VITA
+
 	glCopyTexSubImage2D(
 		GL_TEXTURE_2D,
 		0,
@@ -523,7 +529,7 @@ dtexture GL_ScreenToTexture(void) {
 		width,
 		height
 	);
-#endif
+
 	return id;
 }
 
@@ -602,9 +608,9 @@ void GL_UpdateEnvTexture(rcolor color) {
 	if (lastenvcolor == color) {
 		return;
 	}
-
+#ifndef VITA
 	glActiveTextureARB(GL_TEXTURE1_ARB);
-
+#endif
 	env = color;
 	lastenvcolor = color;
 	c = (byte*)rgb;
@@ -629,8 +635,9 @@ void GL_UpdateEnvTexture(rcolor color) {
 		GL_UNSIGNED_BYTE,
 		(byte*)rgb
 	);
-
+#ifndef VITA
 	glActiveTextureARB(GL_TEXTURE0_ARB);
+#endif
 }
 
 //
@@ -662,8 +669,9 @@ void GL_SetTextureUnit(int unit, dboolean enable) {
 	}
 
 	curunit = unit;
-
+#ifndef VITA
 	glActiveTextureARB(GL_TEXTURE0_ARB + unit);
+#endif
 	GL_SetState(GLSTATE_TEXTURE0 + unit, enable);
 }
 

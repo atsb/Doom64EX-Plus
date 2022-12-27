@@ -37,6 +37,10 @@ CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fog);
 CVAR_EXTERNAL(st_flashoverlay);
 
+#ifdef VITA
+#define  GL_TEXTURE0_ARB				0x84C0
+#endif
+
 //
 // ProcessWalls
 //
