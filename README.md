@@ -140,7 +140,7 @@ Use the Visual Studio solution and project files provided in the `Windows` direc
 Use the deviktro with Makefile.ns to build the nso and nro files.
 
 ## Xbox
-Use the vcproj provided on the xbox folder you need to have the latest Xbox XDK Installed + You will need a Windows XP Machine
+Use the vcproj provided on the xbox folder to compile with vs2003 and you will need to have the latest Xbox XDK Installed + a Windows XP Machine
 to compile it.
 
 ## Usage
@@ -181,5 +181,3 @@ The data files will be atm on: `ux0:/data/DOOM64EX+`
 
 ## Xbox
 At the moment the assets will be on the root.
- 
- 
