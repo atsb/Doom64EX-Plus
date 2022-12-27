@@ -4119,6 +4119,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 		def->x + 464,
 		def->y + 116
 	);
+
 	//
 	// draw outline for panels
 	//
