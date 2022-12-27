@@ -42,10 +42,6 @@
 
 #include <stdlib.h>
 
-#ifdef VITA
-#define GL_TEXTURE0_ARB				0x84C0
-#define GL_POLYGON 0x0009
-#endif
 
 #define MAX_SPRITES    1024
 

@@ -35,9 +35,7 @@
 #include "m_random.h"
 #include "gl_texture.h"
 #include "doomstat.h"
-#ifdef VITA
-#define GL_TEXTURE_2D				0x0DE1
-#endif
+
 
 
 void M_ClearMenus(void);    // from m_menu.c

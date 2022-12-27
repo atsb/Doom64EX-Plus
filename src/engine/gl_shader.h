@@ -24,6 +24,7 @@
 #define __GL_SHADER__H
 
 #include "doomtype.h"
+#ifndef VITA
 #ifdef __APPLE__ 
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -51,4 +52,5 @@ void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
 dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
 void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
+#endif
 #endif //__GL_SHADER__H

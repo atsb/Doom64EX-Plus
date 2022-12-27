@@ -33,8 +33,6 @@
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-#elif defined(VITA)
-#include <vitaGL.h>
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>

@@ -30,8 +30,6 @@
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-#elif defined(VITA)
-#include <vitaGL.h>
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -49,9 +47,6 @@
 #include "m_misc.h"
 #include "g_actions.h"
 #include "i_sdlinput.h"
-#ifdef VITA
-#define GL_TEXTURE0_ARB 0x84C0
-#endif
 int ViewWindowX = 0;
 int ViewWindowY = 0;
 int ViewWidth = 0;
@@ -67,9 +62,6 @@ const int8_t* gl_version;
 
 static float glScaleFactor = 1.0f;
 
-#ifdef VITA
-#define GL_FOG_HINT GL_FOG
-#endif
 
 dboolean    usingGL = false;
 float       max_anisotropic = 0;
@@ -553,7 +545,9 @@ void GL_Init(void) {
 #endif
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
+#ifndef VITA	
 	GL_ARB_multitexture_Init();
+#endif	
 	GL_CheckExtension("GL_EXT_multi_draw_arrays");
 	GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
 	GL_CheckExtension("GL_EXT_fog_coord");

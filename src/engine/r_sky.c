@@ -44,9 +44,6 @@
 #include "gl_draw.h"
 #include "r_drawlist.h"
 
-#ifdef VITA
-#define GL_RGBA8 0x8058
-#endif
 skydef_t* sky;
 int         skypicnum = -1;
 int         skybackdropnum = -1;

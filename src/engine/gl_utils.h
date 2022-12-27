@@ -27,7 +27,6 @@
 #include <math.h>
 
 #include "gl_main.h"
-
 //
 // CUSTOM ROUTINES
 //
@@ -45,6 +44,7 @@ void glTexCombAdd(int t, int s);
 void glTexCombInterpolate(int t, float a);
 void glTexCombReplaceAlpha(int t);
 
+#ifndef VITA
 //
 // GL_ARB_multitexture
 //
@@ -190,5 +190,5 @@ _glMultiTexCoord4svARB = GL_RegisterProc("glMultiTexCoord4svARB")
 #define glMultiTexCoord4ivARB(target, v) _glMultiTexCoord4ivARB(target, v)
 #define glMultiTexCoord4sARB(target, s, t, r, q) _glMultiTexCoord4sARB(target, s, t, r, q)
 #define glMultiTexCoord4svARB(target, v) _glMultiTexCoord4svARB(target, v)
-
+#endif
 #endif

@@ -20,6 +20,10 @@
         "string.h": "c",
         "gl_main.h": "c",
         "gl_utils.h": "c",
-        "gl_shader.h": "c"
+        "gl_shader.h": "c",
+        "con_console.h": "c",
+        "doomtype.h": "c",
+        "gl.h": "c",
+        "sdl_opengl_glext.h": "c"
     }
 }

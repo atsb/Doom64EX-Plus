@@ -47,9 +47,7 @@
 #include "r_drawlist.h"
 #include "gl_draw.h"
 #include "g_actions.h"
-#ifdef VITA
-#define GL_POLYGON 0x0009
-#endif
+
 lumpinfo_t* lumpinfo;
 int             skytexture;
 

@@ -26,6 +26,7 @@
 #include "doomdef.h"
 #include <stdio.h>
 
+#ifndef VITA
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
@@ -112,3 +113,4 @@ dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 	}
 	return success;
 }
+#endif

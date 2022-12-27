@@ -529,7 +529,6 @@ int main(int argc, char *argv[]) {
 	myargc = argc;
 	myargv = argv;
 #ifdef VITA
-#ifndef WIP_VITA
 	// Checking for libshacccg.suprx existence
 	SceIoStat st1, st2;
 	if (!(sceIoGetstat("ur0:/data/libshacccg.suprx", &st1) >= 0 || sceIoGetstat("ur0:/data/external/libshacccg.suprx", &st2) >= 0))
@@ -538,7 +537,6 @@ int main(int argc, char *argv[]) {
 	scePowerSetBusClockFrequency(222);
 	scePowerSetGpuClockFrequency(222);
 	scePowerSetGpuXbarClockFrequency(166);
-#endif
 	printf("Starting up vitaGL\n");
 	vglInitExtended(0x200000, 960, 544, 0x1000000, SCE_GXM_MULTISAMPLE_4X);
 	vglUseCachedMem(GL_TRUE);
