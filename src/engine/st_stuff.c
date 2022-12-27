@@ -52,11 +52,9 @@
 #include "gl_draw.h"
 #include "g_demo.h"
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
-
 void M_DrawXInputButton(int x, int y, int button);
-
 #endif
 CVAR(st_drawhud, 1);
 CVAR(st_crosshair, 0);
@@ -67,6 +65,7 @@ CVAR(m_messages, 1);
 CVAR(m_playername, Player);
 CVAR(st_showpendingweapon, 1);
 CVAR(st_showstats, 0);
+CVAR(st_hud_color, 0);
 
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(p_damageindicator);
@@ -375,6 +374,7 @@ void ST_Ticker(void) {
 	for (ind = 0; ind < NUMCARDS; ind++) {
 		/* CHECK FOR INITIALIZATION */
 		if (plyr->tryopen[ind]) {
+			plyr->tryopen[ind] = false;
 			flashCards[ind].active = true;
 			flashCards[ind].delay = FLASHDELAY;
 			flashCards[ind].times = FLASHTIMES + 1;
@@ -481,7 +481,9 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 
 		dglDisable(GL_TEXTURE_2D);
 		dglColor4ubv((byte*)&c);
+#ifndef WIP_VITA			
 		dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
+#endif
 		dglEnable(GL_TEXTURE_2D);
 
 		GL_SetState(GLSTATE_BLEND, 0);
@@ -767,14 +769,32 @@ void ST_Drawer(void) {
 		if (st_drawhud.value == 1) {
 			//Draw Ammo counter
 			if (weaponinfo[plyr->readyweapon].ammo != am_noammo) {
-				Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, REDALPHA(0x9f));
+				if (st_hud_color.value == 0)
+				{
+					Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, REDALPHA(0x9f));
+				}
+				else if (st_hud_color.value == 1)
+				{
+					Draw_Number(160, 215, plyr->ammo[weaponinfo[plyr->readyweapon].ammo], 0, WHITEALPHA(0x9f));
+				}
 			}
 
-			//Draw Health
-			Draw_Number(49, 215, plyr->health, 0, REDALPHA(0x9f));
+			if (st_hud_color.value == 0)
+			{
+				//Draw Health
+				Draw_Number(49, 215, plyr->health, 0, REDALPHA(0x9f));
 
-			//Draw Armor
-			Draw_Number(271, 215, plyr->armorpoints, 0, REDALPHA(0x9f));
+				//Draw Armor
+				Draw_Number(271, 215, plyr->armorpoints, 0, REDALPHA(0x9f));
+			}
+			else if (st_hud_color.value == 1)
+			{
+				//Draw Health
+				Draw_Number(49, 215, plyr->health, 0, WHITEALPHA(0x9f));
+
+				//Draw Armor
+				Draw_Number(271, 215, plyr->armorpoints, 0, WHITEALPHA(0x9f));
+			}
 		}
 		// arranged hud layout
 		else if (st_drawhud.value >= 2) {
@@ -927,7 +947,7 @@ void ST_Drawer(void) {
 			int8_t contextstring[32];
 			float x;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT) || !defined(VITA) // XINPUT
 			if (xgamepad.connected) {
 				M_DrawXInputButton(140, 156, XINPUT_GAMEPAD_A);
 				Draw_Text(213, 214, WHITEALPHA(0xA0), 0.75, false, "Use");
@@ -1081,7 +1101,7 @@ void ST_Init(void) {
 
 	for (i = 0; i < NUMCARDS; i++) {
 		flashCards[i].active = false;
-		//players[consoleplayer].tryopen[i] = false;
+		players[consoleplayer].tryopen[i] = false;
 	}
 
 	// setup hud messages

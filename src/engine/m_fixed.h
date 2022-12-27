@@ -27,6 +27,8 @@
 #include "d_keywds.h"
 #ifdef USE_FIXEDPTC
 #include <fixedptc.h>
+#else
+#include "i_w3swrapper.h"
 #endif
 #ifdef _XBOX
 #include <SDL2/SDL_stdinc.h>
@@ -41,7 +43,7 @@
 #ifdef USE_FIXEDPTC 
 typedef fixedpt fixed_t;
 #else
-typedef uint32_t fixed_t;
+typedef w3suint64_t fixed_t;
 #endif
 #define FRACBITS        16
 #define FRACUNIT        (1<<FRACBITS)

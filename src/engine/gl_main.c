@@ -26,15 +26,16 @@
 
 #include <math.h>
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#include <SDL_opengl.h>
-#else
+
+#ifdef __APPLE__
 #include <SDL2/SDL.h>
 #ifdef _XBOX
 #include "fakeglx01.h"
 #else
 #include <SDL2/SDL_opengl.h>
+#else
+#include <SDL.h>
+#include <SDL_opengl.h>
 #endif
 #endif
 
@@ -218,7 +219,9 @@ void GL_SetOrtho(dboolean stretch) {
 	}
 
 	dglOrtho(0, width, height, 0, -1, 1);
-
+#ifdef VITA
+	dglDepthMask(GL_FALSE);
+#endif
 	checkortho = (stretch && widescreen) ? 2 : 1;
 }
 

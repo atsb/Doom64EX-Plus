@@ -512,7 +512,7 @@ dtexture GL_ScreenToTexture(void) {
 		GL_UNSIGNED_BYTE,
 		0
 	);
-
+#ifndef WIP_VITA
 	dglCopyTexSubImage2D(
 		GL_TEXTURE_2D,
 		0,
@@ -523,7 +523,7 @@ dtexture GL_ScreenToTexture(void) {
 		width,
 		height
 	);
-
+#endif
 	return id;
 }
 

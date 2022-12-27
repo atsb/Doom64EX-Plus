@@ -22,18 +22,14 @@
 
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
-
-#ifdef __OpenBSD__
 #include <SDL_opengl.h>
-#else
-#ifndef _XBOX
-#include <SDL2/SDL_opengl.h>
-#endif
-#endif
 
 #ifdef __APPLE__
-#include <OpenGL/glu.h>
+#include <SDL2/SDL_opengl.h>
+#else
+#include <SDL_opengl.h>
 #endif
+
 
 #ifdef _XBOX
 #include "fakeglx01.h"

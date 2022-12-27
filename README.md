@@ -135,6 +135,10 @@ Use the `build_openbsd.sh` script for a native build of OpenBSD
 
 Use the Visual Studio solution and project files provided in the `Windows` directory of the repository for both 32-bit or 64-bit builds.
 
+## Nintendo Switch
+
+Use the Makefile.ns to build the nso and nro files.
+
 ## Usage
 
 Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able to play the game. The data files are:

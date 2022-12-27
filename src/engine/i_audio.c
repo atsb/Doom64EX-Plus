@@ -37,15 +37,14 @@
 #include <unistd.h>
 #endif
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
+#ifdef __APPLE__
 #include <SDL2/SDL.h>
-#endif
-
-#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
-#include <fluidsynth.h>
 #else
+#include <SDL.h>
+#endif
+#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
+#include <fluidsynth.h>
+#elif defined(VITA)
 #include <fluidlite.h> //ATSB: Fluidlite on WIN32/macOS and some other devices so we can distribute binaries without all the stupid dependencies
 #endif
 
@@ -88,6 +87,14 @@ static dboolean seqready = false;
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
 #define MIDI_SEQUENCER  0x7f
+
+#define SAMPLE_RATE 44100
+#define SAMPLE_SIZE 2 //4: Float Buffer   2: Signed Int Buffer
+#define NUM_FRAMES SAMPLE_RATE
+#define SAMPLES 4096
+#define NUM_CHANNELS 2
+#define NUM_SAMPLES (NUM_FRAMES * NUM_CHANNELS)
+#define TIME_INTERVAL 1000000 //1500000:duration us
 
 //
 // MIDI DATA DEFINITIONS
@@ -249,10 +256,10 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 // Callback for SDL
 //
-static void Audio_Play(void* user, Uint8* stream, int len)
+static void Audio_Play(void* data, Uint8* stream, int len)
 {
-    fluid_synth_t* synth = (fluid_synth_t*)user;
-    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, 2, stream, 1, 2);
+    fluid_synth_t* synth = (fluid_synth_t*)data;
+    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
 
 //
@@ -1266,26 +1273,25 @@ void I_InitSequencer(void) {
     }
 
     Song_ClearPlaylist();
-#ifndef _XBOX
-    SDL_Init(SDL_INIT_AUDIO);
-    SDL_AudioSpec spec;
-    SDL_zero(spec);
-    spec.format = AUDIO_S16;
-    spec.freq = 44100;
-    spec.samples = 4096;
-    spec.channels = 2;
-    spec.callback = Audio_Play;
-    spec.userdata = doomseq.synth;
 
-    int id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0);
-    if (id <= 0)
-    {
-        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-        exit(-1);
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
+        printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
 
-    SDL_PauseAudioDevice(id, SDL_FALSE);
-#endif
+    SDL_AudioDeviceID audio_device;
+    SDL_AudioSpec required_spec;
+
+    SDL_memset(&required_spec, 0, sizeof(required_spec));
+    required_spec.format = AUDIO_S16;
+    required_spec.freq = SAMPLE_RATE;
+    required_spec.samples = SAMPLES;
+    required_spec.channels = NUM_CHANNELS;
+    required_spec.callback = Audio_Play;
+    required_spec.userdata = doomseq.synth;
+    audio_device = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0);
+
+    SDL_PauseAudioDevice(audio_device, SDL_FALSE);
+
     // 20120205 villsa - sequencer is now ready
     seqready = true;
 }

@@ -25,6 +25,13 @@
 #error "Ogl must be included before of i_w3swrapper.h"
 #endif
 
+#ifdef USE_STDINT 
+#include <stdint.h>
+#endif
+
+#include <fcntl.h>
+#include <unistd.h>
+
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)
 #else
@@ -58,10 +65,14 @@ typedef UINT8  w3suint8_t;
 typedef UINT16 w3suint16_t;
 typedef UINT64 w3suint64_t;
 #endif
-#else
+#elif defined(USE_STDINT)
 typedef uint8_t  w3suint8_t;
 typedef uint16_t w3suint16_t;
 typedef uint64_t w3suint64_t;
+#else
+typedef unsigned char w3suint8_t;
+typedef unsigned short w3suint16_t;
+typedef unsigned long long w3suint64_t;
 #endif 
 
 #ifdef _WIN32
@@ -90,6 +101,7 @@ typedef uint64_t w3suint64_t;
 #define w3saccess(filename, accessmode) access(filename, accessmode)
 #define w3sclose(filehandle) close(filehandle)
 #define w3sclose(filehandle) close(filehandle)
+#define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define w3sstrdup(source) strdup(source)
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
@@ -109,10 +121,10 @@ typedef uint64_t w3suint64_t;
 #define Free(userdir)	SDL_free(userdir)
 #endif
 
-#ifdef _WIN32
+#ifdef _WIN32 //TBD: Sony Playstation 2 port
 #define w3ssleep(usecs) Sleep(usecs)
 #else
-void w3ssleep(usecs);
+void w3ssleep(dword usecs);
 #endif
 #ifdef HAVE_VSNPRINTF
 #ifdef WIN32

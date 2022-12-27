@@ -36,11 +36,11 @@
 #include "i_system.h"
 #include "gl_texture.h"
 
-#ifdef __OpenBSD__
-#include <SDL.h>
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
 #else
-#include <SDL2/SDL.h> // Gibbon - for *
-#endif
+#include <SDL.h> // Gibbon - for *
+#endif 
 
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2
@@ -478,8 +478,9 @@ void CON_Draw(void) {
 
 	dglDisable(GL_TEXTURE_2D);
 	dglColor4ub(0, 0, 0, 128);
+#ifndef WIP_VITA	
 	dglRectf(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD, 0, 0);
-
+#endif
 	GL_SetState(GLSTATE_BLEND, 0);
 
 	dglColor4f(0, 1, 0, 1);

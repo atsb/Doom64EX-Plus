@@ -25,12 +25,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef __OpenBSD__
-#include <SDL_timer.h>
+#ifdef __APPLE__
+#include <SDL2/SDL_timer.h>
 #elif defined(_XBOX)
 #include <time.h>
 #else
-#include <SDL2/SDL_timer.h>
+#include <SDL_timer.h>
 #endif
 
 #include <stdlib.h>
@@ -88,7 +88,7 @@ ticcmd_t        emptycmd;
 //
 
 void I_Sleep(unsigned long usecs) {
-	w3ssleep((DWORD)usecs);
+	w3ssleep((dword)usecs);
 }
 
 static Uint32 basetime = 0;
@@ -306,13 +306,19 @@ int8_t* I_FindDataFile(int8_t* file) {
 		int i;
 		const int8_t* paths[] = {
 			//André: Removed all useless directories, Only The dir usr/local is fine to use.
-				//"/usr/local/share/games/doom64ex-plus/",
 				"/usr/local/share/doom64ex-plus/",
-				//"/usr/local/share/doom/",
-				//"/usr/share/games/doom64ex-plus/",
-				//"/usr/share/doom64ex-plus/",
-				//"/usr/share/doom/",
-				//"/opt/doom64ex-plus/",
+
+		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
+			snprintf(path, 511, "%s%s", paths[i], file);
+			if (I_FileExists(path))
+				return path;
+		}
+	}
+#elif defined(VITA)
+	{
+		int i;
+		const int8_t* paths[] = {
+				"ux0:/data/Doom64EX+/",
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
@@ -321,6 +327,8 @@ int8_t* I_FindDataFile(int8_t* file) {
 				return path;
 		}
 	}
+
+
 #endif
 
 	Free(path);
@@ -481,7 +489,7 @@ void I_BeginRead(void) {
 // I_RegisterCvars
 //
 
-#if defined(_WIN32) && defined(USE_XINPUT)
+#if defined(_WIN32) && defined(USE_XINPUT) || !defined(VITA)
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_rstickthreshold);
 CVAR_EXTERNAL(i_xinputscheme);
@@ -493,7 +501,7 @@ CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
-#if defined(_WIN32) && defined(USE_XINPUT)
+#if defined(_WIN32) && defined(USE_XINPUT) || !defined(VITA)
 	CON_CvarRegister(&i_rsticksensitivity);
 	CON_CvarRegister(&i_rstickthreshold);
 	CON_CvarRegister(&i_xinputscheme);

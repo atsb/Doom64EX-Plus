@@ -41,16 +41,39 @@
 #include "doomstat.h"
 #include "d_main.h"
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
+#ifdef __APPLE__
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
 #endif
 
 #include "i_video.h"
 #include "m_misc.h"
 #include "i_system.h"
 #include "con_console.h"
+
+#ifdef VITA
+#include <vitasdk.h>
+//#include <vitaGL.h>
+int _newlib_heap_size_user = 200 * 1024 * 1024;
+
+void early_fatal_error(const char *msg) {
+	//vglInit(0);
+	SceMsgDialogUserMessageParam msg_param;
+	sceClibMemset(&msg_param, 0, sizeof(SceMsgDialogUserMessageParam));
+	msg_param.buttonType = SCE_MSG_DIALOG_BUTTON_TYPE_OK;
+	msg_param.msg = (const SceChar8*)msg;
+	SceMsgDialogParam param;
+	sceMsgDialogParamInit(&param);
+	param.mode = SCE_MSG_DIALOG_MODE_USER_MSG;
+	param.userMsgParam = &msg_param;
+	sceMsgDialogInit(&param);
+	//while (sceMsgDialogGetStatus() != SCE_COMMON_DIALOG_STATUS_FINISHED) {
+	//	vglSwapBuffers(GL_TRUE);
+	//}
+	sceKernelExitProcess(0);
+}
+#endif
 
 const int8_t version_date[] = __DATE__;
 
@@ -506,7 +529,31 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 int main(int argc, char *argv[]) {
 	myargc = argc;
 	myargv = argv;
-
+#ifdef VITA
+#ifndef WIP_VITA
+	// Checking for libshacccg.suprx existence
+	SceIoStat st1, st2;
+	if (!(sceIoGetstat("ur0:/data/libshacccg.suprx", &st1) >= 0 || sceIoGetstat("ur0:/data/external/libshacccg.suprx", &st2) >= 0))
+		early_fatal_error("Error: Runtime shader compiler (libshacccg.suprx) is not installed.");
+	scePowerSetArmClockFrequency(444);
+	scePowerSetBusClockFrequency(222);
+	scePowerSetGpuClockFrequency(222);
+	scePowerSetGpuXbarClockFrequency(166);
+#endif
+	printf("Starting up vitaGL\n");
+	vglInitExtended(0x200000, 960, 544, 0x1000000, SCE_GXM_MULTISAMPLE_4X);
+	vglUseCachedMem(GL_TRUE);
+	//Init net.
+	sceSysmoduleLoadModule(SCE_SYSMODULE_NET);
+	int ret = sceNetShowNetstat();
+	SceNetInitParam initparam;
+	if (ret == SCE_NET_ERROR_ENOTINIT) {
+		initparam.memory = malloc(141 * 1024);
+		initparam.size = 141 * 1024;
+		initparam.flags = 0;
+		sceNetInit(&initparam);
+	}
+#endif
 	D_DoomMain();
 
 	return 0;
