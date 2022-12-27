@@ -52,12 +52,6 @@ void glTexCombReplaceAlpha(int t);
 //
 extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
 
-#define GL_ARB_multitexture_Define() \
-PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL \
-
-#define GL_ARB_multitexture_Init() \
-_glActiveTextureARB = GL_RegisterProc("glActiveTextureARB") \
-
 #define glActiveTextureARB(texture) _glActiveTextureARB(texture)
 
 #endif

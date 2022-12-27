@@ -95,7 +95,7 @@ static CMD(DumpGLExtensions) {
 	CON_Printf(WHITE, "Written GL_EXTENSIONS.TXT\n");
 }
 
-GL_ARB_multitexture_Define();
+PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL;
 
 
 //
@@ -541,7 +541,7 @@ void GL_Init(void) {
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
 	GL_CheckExtension("GL_ARB_multitexture");
-	GL_ARB_multitexture_Init();
+	_glActiveTextureARB = GL_RegisterProc("glActiveTextureARB");
 	GL_CheckExtension("GL_EXT_multi_draw_arrays");
 	GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
 	GL_CheckExtension("GL_EXT_fog_coord");
