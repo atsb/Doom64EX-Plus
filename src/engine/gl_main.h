@@ -26,7 +26,11 @@
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
+#ifdef __APPLE__
+#include <SDL2/SDL_opengl.h>
+#else
 #include <SDL_opengl.h>
+#endif
 #endif
 
 

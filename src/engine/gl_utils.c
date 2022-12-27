@@ -41,7 +41,6 @@ word statindice = 0;
 static word indicecnt = 0;
 static word drawIndices[MAXINDICES];
 
-
 //
 // glLogError
 //

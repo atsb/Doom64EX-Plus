@@ -25,7 +25,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "gl_shader.h"
+#include "gl_utils.h"
 #include "doomstat.h"
 #include "r_local.h"
 #include "i_png.h"

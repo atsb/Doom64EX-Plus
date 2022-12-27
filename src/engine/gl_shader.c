@@ -22,11 +22,26 @@
 
 #include "gl_shader.h"
 
+#ifdef __APPLE__ 
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#elif defined SWITCH
+#include <GL/gl.h>
+#include <GL/glext.h>
+#elif defined _WIN32
+#include <glew.h>
+#include <GL/glu.h>
+#include <GL/gl.h>
+#else
+#include <GL/glu.h>
+#include <GL/gl.h>
+#endif
+
 #include "con_console.h"
 #include "doomdef.h"
 #include <stdio.h>
 
-#ifndef VITA
+#ifndef VITA 
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
@@ -49,7 +64,7 @@ void GL_LoadShader(const char* vertexShader, const char* fragmentShader)
 
 }
 
-void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment)
+void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment)
 {
 	//Create The Program.
 	Program_ID = glCreateProgram();
@@ -65,7 +80,7 @@ void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
 	glDeleteShader(fragmentShader);
 }
 
-dboolean GL_CheckShaderErrors(GLuint shader, GLenum type)
+dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
 {
 	dboolean success;
 	char log[1024];

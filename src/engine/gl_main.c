@@ -95,9 +95,8 @@ static CMD(DumpGLExtensions) {
 	CON_Printf(WHITE, "Written GL_EXTENSIONS.TXT\n");
 }
 
-// ======================== OGL Extensions ===================================
-
 GL_ARB_multitexture_Define();
+
 
 //
 // FindExtension
@@ -531,23 +530,18 @@ void GL_Init(void) {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 	glShadeModel(GL_SMOOTH);
-#ifndef VITA	
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-#endif
 	glDepthFunc(GL_LEQUAL);
 	glAlphaFunc(GL_GEQUAL, ALPHACLEARGLOBAL);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glFogi(GL_FOG_MODE, GL_LINEAR);
 	glHint(GL_FOG_HINT, GL_NICEST);
 	glEnable(GL_SCISSOR_TEST);
-#ifndef VITA
 	glEnable(GL_DITHER);
-#endif
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-#ifndef VITA	
+	GL_CheckExtension("GL_ARB_multitexture");
 	GL_ARB_multitexture_Init();
-#endif	
 	GL_CheckExtension("GL_EXT_multi_draw_arrays");
 	GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
 	GL_CheckExtension("GL_EXT_fog_coord");

@@ -24,33 +24,15 @@
 #define __GL_SHADER__H
 
 #include "doomtype.h"
-#ifndef VITA
-#ifdef __APPLE__ 
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#elif defined SWITCH
-#include <GL/gl.h>
-#include <GL/glext.h>
-#elif defined _WIN32
-#include <glew.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-#elif defined(VITA)
-#include <vitaGL.h>
-#else
-#include <GL/glu.h>
-#include <GL/gl.h>
-#endif
 
 /*
 	Based on the following references:
 	https://www.inf.ufrgs.br/~amaciel/teaching/SIS0384-09-2/exercise9.html
 	https://learnopengl.com/Getting-started/Shaders
 */
-
 void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
-dboolean GL_CheckShaderErrors(GLuint shader, GLenum type);
-void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
-#endif
+dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type);
+void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment);
+
 #endif //__GL_SHADER__H
