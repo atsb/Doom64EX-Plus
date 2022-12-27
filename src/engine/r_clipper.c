@@ -288,13 +288,10 @@ viewMatrix[g] * projMatrix[h])
 
 void R_FrustrumSetup(void) {
 	float clip[16];
-#ifdef VITA
-    dglGetFloatv(GL_PROJECTION_MATRIX, projMatrix);
-    dglGetFloatv(GL_MODELVIEW_MATRIX, viewMatrix);
-#else
-	dglGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
-	dglGetDoublev(GL_MODELVIEW_MATRIX, viewMatrix);
-#endif
+
+	glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+	glGetDoublev(GL_MODELVIEW_MATRIX, viewMatrix);
+
 	clip[0] = CALCMATRIX(0, 0, 1, 4, 2, 8, 3, 12);
 	clip[1] = CALCMATRIX(0, 1, 1, 5, 2, 9, 3, 13);
 	clip[2] = CALCMATRIX(0, 2, 1, 6, 2, 10, 3, 14);

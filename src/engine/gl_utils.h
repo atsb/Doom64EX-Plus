@@ -1,8 +1,9 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 Andr� Guilherme
-//
+// Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2022 André Guilherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -20,19 +21,37 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef __GL_SHADER__H
-#define __GL_SHADER__H
+#ifndef __GL_UTILS__H
+#define __GL_UTILS__H
 
-#include "doomtype.h"
+#include <math.h>
 
-/*
-	Based on the following references:
-	https://www.inf.ufrgs.br/~amaciel/teaching/SIS0384-09-2/exercise9.html
-	https://learnopengl.com/Getting-started/Shaders
-*/
-void GL_LoadShader(const char* textureShader, const char* fragmentShader);
-void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
-dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type);
-void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment);
+#include "gl_main.h"
 
-#endif //__GL_SHADER__H
+
+//
+// CUSTOM ROUTINES
+//
+void glSetVertex(vtx_t* vtx);
+void glTriangle(int v0, int v1, int v2);
+void glDrawGeometry(dword count, vtx_t* vtx);
+void glViewFrustum(int width, int height, rfloat fovy, rfloat znear);
+void glSetVertexColor(vtx_t* v, rcolor c, word count);
+void glGetColorf(rcolor color, float* argb);
+void glTexCombReplace(void);
+void glTexCombColor(int t, rcolor c, int func);
+void glTexCombColorf(int t, float* f, int func);
+void glTexCombModulate(int t, int s);
+void glTexCombAdd(int t, int s);
+void glTexCombInterpolate(int t, float a);
+void glTexCombReplaceAlpha(int t);
+
+
+//
+// GL_ARB_multitexture
+//
+extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
+
+#define glActiveTextureARB(texture) _glActiveTextureARB(texture)
+
+#endif

@@ -22,9 +22,15 @@
 
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
-#include <SDL_opengl.h>
+
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
+#else
+#ifdef __APPLE__
+#include <SDL2/SDL_opengl.h>
+#else
+#include <SDL_opengl.h>
+#endif
 #endif
 
 
@@ -34,8 +40,11 @@ typedef GLuint        dtexture;
 typedef GLfloat        rfloat;
 typedef GLuint        rcolor;
 typedef GLuint        rbuffer;
+#ifdef VITA
+typedef GLuint         rhandle;
+#else
 typedef GLhandleARB    rhandle;
-
+#endif
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
 extern dboolean gl_has_combiner;
@@ -80,7 +89,6 @@ extern int ViewWindowY;
 
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
 
-extern int DGL_CLAMP;
 
 extern dboolean usingGL;
 

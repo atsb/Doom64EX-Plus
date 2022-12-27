@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "*.ic": "javascript",
+        "*.ids": "javascript",
+        "*.idsq": "javascript",
+        "*.idsv": "javascript",
+        "*.if": "javascript",
+        "*.ijs": "javascript",
+        "*.il": "javascript",
+        "*.ip": "javascript",
+        "*.is": "javascript",
+        "*.it": "javascript",
+        "[0-9]*.config": "javascript",
+        "[0-9]*.model": "javascript",
+        "[0-9]*.view": "javascript",
+        "*.bms": "quickbms",
+        "deh_main.h": "c",
+        "string_view": "c",
+        "kernel.h": "c",
+        "string.h": "c",
+        "gl_main.h": "c",
+        "gl_utils.h": "c",
+        "gl_shader.h": "c",
+        "con_console.h": "c",
+        "doomtype.h": "c",
+        "gl.h": "c",
+        "sdl_opengl_glext.h": "c"
+    }
+}
