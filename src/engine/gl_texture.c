@@ -598,9 +598,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 	if (lastenvcolor == color) {
 		return;
 	}
-#ifndef VITA	
 	glActiveTextureARB(GL_TEXTURE1_ARB);
-#endif
 	env = color;
 	lastenvcolor = color;
 	c = (byte*)rgb;
@@ -624,10 +622,8 @@ void GL_UpdateEnvTexture(rcolor color) {
 		GL_RGBA,
 		GL_UNSIGNED_BYTE,
 		(byte*)rgb
-	);
-#ifndef VITA	
+	);	
 	glActiveTextureARB(GL_TEXTURE0_ARB);
-#endif
 }
 
 //
@@ -655,10 +651,8 @@ void GL_SetTextureUnit(int unit, dboolean enable) {
 		return;
 	}
 
-	curunit = unit;
-#ifndef VITA	
+	curunit = unit;	
 	glActiveTextureARB(GL_TEXTURE0_ARB + unit);
-#endif	
 	GL_SetState(GLSTATE_TEXTURE0 + unit, enable);
 }
 
