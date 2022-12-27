@@ -32,6 +32,8 @@
 #include <glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#elif defined VITA
+
 #else
 #include <GL/glu.h>
 #include <GL/gl.h>
