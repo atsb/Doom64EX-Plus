@@ -1273,7 +1273,7 @@ void I_InitSequencer(void) {
     }
 
     Song_ClearPlaylist();
-
+#ifndef _XBOX
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
@@ -1291,7 +1291,7 @@ void I_InitSequencer(void) {
     audio_device = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0);
 
     SDL_PauseAudioDevice(audio_device, SDL_FALSE);
-
+#endif
     // 20120205 villsa - sequencer is now ready
     seqready = true;
 }

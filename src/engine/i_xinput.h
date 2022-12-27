@@ -19,16 +19,11 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-
 #if defined(_WIN32) && defined(USE_XINPUT)
 #ifndef __I_XINPUT__
 #define __I_XINPUT__
 
-#ifdef _XBOX
-#include <xtl.h>
-#else
 #include <windows.h>
-#endif
 //
 // use Microsoft's bullcrap annotation macros if not already defined
 //
@@ -36,7 +31,6 @@
 #include "sal.h"
 #endif
 
-#ifndef _XBOX
 #include <xinput.h>
 #include "d_event.h"
 #define XINPUT_BUTTONS  14
@@ -131,5 +125,5 @@ void        I_XInputVibrate(dboolean leftside, byte amount, int windDown);
 void        I_XInputInit(void);
 void        I_InitXInputCommands(void);
 
-#endif // __I_XINPUT__
 #endif
+#endif // __I_XINPUT__

@@ -173,8 +173,8 @@
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\SDL2\include;..\..\libpng\include;..\..\fluidlitex\include;..\Xbox\"
-				PreprocessorDefinitions="NDEBUG;_XBOX;C89;OLD_TYPE;WIN32_LEAN_AND_MEAN;WINDOWS;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;_USEFAKEGL01"
+				AdditionalIncludeDirectories="..\src\engine\3rdparty\Xbox\Includes\;..\src\engine\3rdparty\Includes\Xbox\fluidlite\;..\src\engine\3rdparty\Xbox\Includes\SDL2;..\src\engine\3rdparty\Includes"
+				PreprocessorDefinitions="NDEBUG;_XBOX;C89;OLD_TYPE;WIN32_LEAN_AND_MEAN;WINDOWS;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;USE_FIXEDPTC"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="0"
@@ -195,7 +195,7 @@
 				AdditionalDependencies="xapilib.lib d3d8.lib d3dx8.lib xgraphics.lib dsound.lib dmusic.lib xacteng.lib xsndtrk.lib xvoice.lib xonlines.lib xboxkrnl.lib libSDL2x.lib libpngX.lib xzlib.lib FluidLiteX.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\SDL2\libs;..\..\libpng\libs;..\..\fluidlitex\lib\"
+				AdditionalLibraryDirectories="..\src\engine\3rdparty\Xbox\Libs\"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="2"
@@ -334,6 +334,9 @@
 			RelativePath="..\src\engine\d_ticcmd.h">
 		</File>
 		<File
+			RelativePath="..\src\engine\defconfig.inc">
+		</File>
+		<File
 			RelativePath="..\src\engine\deh_ammo.c">
 		</File>
 		<File
@@ -385,12 +388,6 @@
 			RelativePath="..\src\engine\deh_weapon.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\dgl.c">
-		</File>
-		<File
-			RelativePath="..\src\engine\dgl.h">
-		</File>
-		<File
 			RelativePath="..\src\engine\doomdata.h">
 		</File>
 		<File
@@ -407,18 +404,6 @@
 		</File>
 		<File
 			RelativePath="..\src\engine\f_finale.h">
-		</File>
-		<File
-			RelativePath=".\fakeglx01.cpp">
-			<FileConfiguration
-				Name="Release|Xbox">
-				<Tool
-					Name="VCCLCompilerTool"
-					CompileAs="2"/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\fakeglx01.h">
 		</File>
 		<File
 			RelativePath="..\src\engine\g_actions.c">
@@ -463,10 +448,28 @@
 			RelativePath="..\src\engine\gl_main.h">
 		</File>
 		<File
+			RelativePath="..\src\engine\gl_shader.c">
+			<FileConfiguration
+				Name="Release|Xbox"
+				ExcludedFromBuild="TRUE">
+				<Tool
+					Name="VCCLCompilerTool"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\src\engine\gl_shader.h">
+		</File>
+		<File
 			RelativePath="..\src\engine\gl_texture.c">
 		</File>
 		<File
 			RelativePath="..\src\engine\gl_texture.h">
+		</File>
+		<File
+			RelativePath="..\src\engine\gl_utils.c">
+		</File>
+		<File
+			RelativePath="..\src\engine\gl_utils.h">
 		</File>
 		<File
 			RelativePath="..\src\engine\i_audio.c">
@@ -527,12 +530,6 @@
 		</File>
 		<File
 			RelativePath="..\src\engine\i_xinput.c">
-			<FileConfiguration
-				Name="Release|Xbox"
-				ExcludedFromBuild="TRUE">
-				<Tool
-					Name="VCCLCompilerTool"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\src\engine\i_xinput.h">

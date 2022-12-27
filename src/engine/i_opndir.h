@@ -35,7 +35,7 @@
 #define I_OPNDIR_H__
 
 #ifdef _XBOX
-#include <SDL2/SDL_stdinc.h>
+#include <SDL_stdinc.h>
 #else
 #include <stdint.h>
 #endif

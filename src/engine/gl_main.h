@@ -30,11 +30,6 @@
 #include <SDL_opengl.h>
 #endif
 
-
-#ifdef _XBOX
-#include "fakeglx01.h"
-#endif
-
 #include "doomtype.h"
 
 typedef GLuint        dtexture;

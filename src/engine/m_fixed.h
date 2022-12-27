@@ -31,7 +31,7 @@
 #include "i_w3swrapper.h"
 #endif
 #ifdef _XBOX
-#include <SDL2/SDL_stdinc.h>
+#include <SDL_stdinc.h>
 #endif
 #ifdef __GNUG__
 #pragma interface
