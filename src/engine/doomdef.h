@@ -67,7 +67,6 @@ extern float D_fabs(float x);
 #define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
 
 
-
 // #define macros to provide functions missing in Windows.
 // Outside Windows, we use strings.h for str[n]casecmp.
 

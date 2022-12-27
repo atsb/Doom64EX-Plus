@@ -132,15 +132,9 @@ void glDrawGeometry(dword count, vtx_t* vtx) {
 	I_Printf("glDrawGeometry(count=0x%x, vtx=0x%p)\n", count, vtx);
 #endif
 
-	//if (has_GL_EXT_compiled_vertex_array) {
-	//	glLockArraysEXT(0, count);
-	//}
 
 	glDrawElements(GL_TRIANGLES, indicecnt, GL_UNSIGNED_SHORT, drawIndices);
 
-	//if (has_GL_EXT_compiled_vertex_array) {
-	//	glUnlockArraysEXT();
-	//}
 
 	if (devparm) {
 		statindice += indicecnt;

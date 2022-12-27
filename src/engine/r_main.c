@@ -419,8 +419,7 @@ void R_PrecacheLevel(void) {
 	}
 
 	CON_DPrintf("%i sprites cached\n", num);
-#ifndef WIP_VITA
-	if (has_GL_ARB_multitexture) {
+	if (GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, true);
 		GL_BindEnvTexture();
 
@@ -430,7 +429,6 @@ void R_PrecacheLevel(void) {
 		GL_SetTextureUnit(3, true);
 		GL_BindDummyTexture();
 	}
-#endif
 	GL_SetDefaultCombiner();
 }
 

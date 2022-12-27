@@ -106,13 +106,6 @@ static CMD(DumpGLExtensions) {
 // ======================== OGL Extensions ===================================
 
 GL_ARB_multitexture_Define();
-GL_EXT_compiled_vertex_array_Define();
-GL_EXT_multi_draw_arrays_Define();
-GL_EXT_fog_coord_Define();
-GL_ARB_vertex_buffer_object_Define();
-GL_ARB_texture_env_combine_Define();
-GL_EXT_texture_env_combine_Define();
-GL_EXT_texture_filter_anisotropic_Define();
 
 //
 // FindExtension
@@ -320,7 +313,7 @@ void GL_SetTextureFilter(void) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
-	if (has_GL_EXT_texture_filter_anisotropic) {
+	if (GL_EXT_texture_filter_anisotropic) {
 		if (r_anisotropic.value) {
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_anisotropic);
 		}
@@ -338,15 +331,14 @@ void GL_SetDefaultCombiner(void) {
 	    if (!usingGL) {
         return;
     }
-
-#ifndef VITA    
-	if (has_GL_ARB_multitexture) {
+  
+	if (GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, false);
 		GL_SetTextureUnit(2, false);
 		GL_SetTextureUnit(3, false);
 		GL_SetTextureUnit(0, true);
 	}
-#endif
+
 	GL_CheckFillMode();
 
 	if (r_texturecombiner.value > 0) {
@@ -561,19 +553,21 @@ void GL_Init(void) {
 #endif
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-#ifndef WIP_VITA
 	GL_ARB_multitexture_Init();
-	GL_EXT_compiled_vertex_array_Init();
-	GL_ARB_texture_env_combine_Init();
-	GL_EXT_texture_env_combine_Init();
-	GL_EXT_texture_filter_anisotropic_Init();
+	GL_CheckExtension("GL_EXT_multi_draw_arrays");
+	GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
+	GL_CheckExtension("GL_EXT_fog_coord");
+	GL_CheckExtension("GL_EXT_compiled_vertex_array");
+	GL_CheckExtension("GL_ARB_texture_env_combine");
+	GL_CheckExtension("GL_EXT_texture_env_combine");
+	GL_CheckExtension("GL_EXT_texture_filter_anisotropic");
 
-	if (!has_GL_ARB_multitexture) {
+	if (!GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");
 	}
-#endif
 
-	gl_has_combiner = (has_GL_ARB_texture_env_combine | has_GL_EXT_texture_env_combine);
+
+	gl_has_combiner = (GL_ARB_texture_env_combine | GL_EXT_texture_env_combine);
 
 	if (!gl_has_combiner) {
 		CON_Warnf("Texture combiners not supported...\n");
@@ -591,7 +585,7 @@ void GL_Init(void) {
 #endif
 	glScaleFactor = 1.0f;
 
-	if (has_GL_EXT_texture_filter_anisotropic) {
+	if (GL_EXT_texture_filter_anisotropic) {
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
 	}
 
