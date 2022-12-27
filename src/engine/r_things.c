@@ -360,10 +360,10 @@ static dboolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex)
 
 	// [kex] nightmare things have a shade of dark green
 	if (thing->flags & MF_NIGHTMARE) {
-		dglSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
+		glSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
 	}
 	else if ((thing->frame & FF_FULLBRIGHT)) {
-		dglSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
+		glSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
 	}
 	else {
 		R_LightToVertex(vertex,
@@ -447,7 +447,7 @@ static dboolean R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) 
 
 	spritenum = W_GetNumForName("BOLTA0") - s_start;
 
-	dglSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
+	glSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
 
 	// setup texture mapping
 	vertex[0].tu = vertex[1].tu = 0;
@@ -649,23 +649,23 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-		dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+		glTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
 		if (v_accessibility.value < 1)
 		{
 			if (!nolights) {
 				GL_UpdateEnvTexture(WHITE);
 				GL_SetTextureUnit(1, true);
-				dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+				glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
 			}
 
 			if (st_flashoverlay.value <= 0) {
 				GL_SetTextureUnit(2, true);
-				dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+				glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
 			}
 		}
 
-		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
 		GL_SetTextureUnit(0, true);
 	}
@@ -683,10 +683,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	}
 
 	// render
-	dglSetVertex(v);
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
-	dglDrawGeometry(4, v);
+	glSetVertex(v);
+	glTriangle(0, 1, 2);
+	glTriangle(3, 2, 1);
+	glDrawGeometry(4, v);
 
 	GL_ResetViewport();
 
@@ -725,35 +725,35 @@ void R_DrawThingBBox(void) {
 	mobj_t* thing;
 
 #define DRAWBBOXPOLY(b1, b2, z) \
-    dglVertex3f(bbox[b1], bbox[b2], z)
+    glVertex3f(bbox[b1], bbox[b2], z)
 
 #define DRAWBBOXSIDE1(z) \
-    dglBegin(GL_POLYGON); \
+    glBegin(GL_POLYGON); \
     DRAWBBOXPOLY(BOXLEFT, BOXBOTTOM, z); \
     DRAWBBOXPOLY(BOXLEFT, BOXTOP, z); \
     DRAWBBOXPOLY(BOXRIGHT, BOXTOP, z); \
     DRAWBBOXPOLY(BOXRIGHT, BOXBOTTOM, z); \
-    dglEnd()
+    glEnd()
 
 #define DRAWBBOXSIDE2(b3) \
-    dglBegin(GL_POLYGON); \
+    glBegin(GL_POLYGON); \
     DRAWBBOXPOLY(BOXLEFT, b3, z1); \
     DRAWBBOXPOLY(BOXRIGHT, b3, z1); \
     DRAWBBOXPOLY(BOXRIGHT, b3, z2); \
     DRAWBBOXPOLY(BOXLEFT, b3, z2); \
-    dglEnd()
+    glEnd()
 
 #define DRAWBBOXSIDE3(b1) \
-    dglBegin(GL_POLYGON); \
+    glBegin(GL_POLYGON); \
     DRAWBBOXPOLY(b1, BOXBOTTOM, z1); \
     DRAWBBOXPOLY(b1, BOXBOTTOM, z2); \
     DRAWBBOXPOLY(b1, BOXTOP, z2); \
     DRAWBBOXPOLY(b1, BOXTOP, z1); \
-    dglEnd()
+    glEnd()
 
 	GL_SetState(GLSTATE_TEXTURE0, 0);
 	GL_SetState(GLSTATE_CULL, 0);
-	dglDepthRange(0.0f, 0.0f);
+	glDepthRange(0.0f, 0.0f);
 
 	for (i = 0; i < (vissprite - visspritelist); i++) {
 		thing = visspritelist[i].spr;
@@ -770,8 +770,8 @@ void R_DrawThingBBox(void) {
 		z2 = F2D3D(thing->z + thing->height);
 
 		GL_SetState(GLSTATE_BLEND, 1);
-		dglColor4ub(255, 255, 255, 64);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4ub(255, 255, 255, 64);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		DRAWBBOXSIDE1(z1);
 		DRAWBBOXSIDE1(z2);
@@ -781,8 +781,8 @@ void R_DrawThingBBox(void) {
 		DRAWBBOXSIDE3(BOXLEFT);
 
 		GL_SetState(GLSTATE_BLEND, 0);
-		dglColor4ub(255, 255, 255, 255);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glColor4ub(255, 255, 255, 255);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		DRAWBBOXSIDE1(z1);
 		DRAWBBOXSIDE1(z2);
@@ -792,8 +792,8 @@ void R_DrawThingBBox(void) {
 		DRAWBBOXSIDE3(BOXLEFT);
 	}
 
-	dglDepthRange(0.0f, 1.0f);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDepthRange(0.0f, 1.0f);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	GL_SetState(GLSTATE_TEXTURE0, 1);
 	GL_SetState(GLSTATE_CULL, 1);
 	GL_SetState(GLSTATE_BLEND, 0);

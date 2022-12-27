@@ -20,7 +20,6 @@
     <ClCompile Include="..\src\engine\deh_str.c" />
     <ClCompile Include="..\src\engine\deh_thing.c" />
     <ClCompile Include="..\src\engine\deh_weapon.c" />
-    <ClCompile Include="..\src\engine\dgl.c" />
     <ClCompile Include="..\src\engine\f_finale.c" />
     <ClCompile Include="..\src\engine\g_actions.c" />
     <ClCompile Include="..\src\engine\g_demo.c" />
@@ -99,6 +98,7 @@
     <ClCompile Include="..\src\engine\wi_stuff.c" />
     <ClCompile Include="..\src\engine\z_zone.c" />
     <ClCompile Include="..\src\engine\i_w3swrapper.c" />
+    <ClCompile Include="..\src\engine\gl_utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\am_draw.h" />
@@ -120,7 +120,6 @@
     <ClInclude Include="..\src\engine\deh_mapping.h" />
     <ClInclude Include="..\src\engine\deh_misc.h" />
     <ClInclude Include="..\src\engine\deh_str.h" />
-    <ClInclude Include="..\src\engine\dgl.h" />
     <ClInclude Include="..\src\engine\doomdata.h" />
     <ClInclude Include="..\src\engine\doomdef.h" />
     <ClInclude Include="..\src\engine\doomstat.h" />
@@ -196,6 +195,7 @@
     <ClInclude Include="..\src\engine\wi_stuff.h" />
     <ClInclude Include="..\src\engine\z_zone.h" />
     <ClInclude Include="..\src\engine\i_w3swrapper.h" />
+    <ClInclude Include="..\src\engine\gl_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\engine\defconfig.inc" />

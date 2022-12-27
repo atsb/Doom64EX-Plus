@@ -189,9 +189,9 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 	// if texture is already in video ram
 	if (textureptr[texnum][palettetranslation[texnum]]) {
-		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		if (devparm) {
 			glBindCalls++;
 		}
@@ -204,12 +204,12 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 	//GL_LoadShader("GLSL/D64EXPLUS.vert", "GLSL/D64EXPLUS.frag"); - crashes
 
-	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
-	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
-	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
+	glGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
+	glBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	GL_CheckFillMode();
 	GL_SetTextureFilter();
@@ -249,7 +249,7 @@ void GL_SetNewPalette(int id, byte palID) {
 //
 
 static void SetTextureImage(byte* data, int bits, int* origwidth, int* origheight, int format, int type) {
-	dglTexImage2D(
+	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
 		format,
@@ -324,7 +324,7 @@ int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
 
 	// if texture is already in video ram
 	if (gfxptr[gfxid]) {
-		dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+		glBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
 		if (devparm) {
 			glBindCalls++;
 		}
@@ -333,8 +333,8 @@ int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
 
 	png = I_PNGReadData(lump, false, true, alpha, &width, &height, NULL, 0);
 
-	dglGenTextures(1, &gfxptr[gfxid]);
-	dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+	glGenTextures(1, &gfxptr[gfxid]);
+	glBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
 
 	// if alpha is specified, setup the format for only RGBA pixels (4 bytes) per pixel
 	format = alpha ? GL_RGBA8 : GL_RGB8;
@@ -451,9 +451,9 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	// if texture is already in video ram
 	if (spriteptr[spritenum][pal]) {
-		dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+		glBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		if (devparm) {
 			glBindCalls++;
 		}
@@ -462,11 +462,11 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	png = I_PNGReadData(s_start + spritenum, false, true, true, &w, &h, NULL, pal);
 
-	dglGenTextures(1, &spriteptr[spritenum][pal]);
-	dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
+	glGenTextures(1, &spriteptr[spritenum][pal]);
+	glBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	SetTextureImage(png, 4, &w, &h, GL_RGBA8, GL_RGBA);
 	Z_Free(png);
@@ -488,20 +488,20 @@ dtexture GL_ScreenToTexture(void) {
 	int width;
 	int height;
 
-	dglEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
-	dglGenTextures(1, &id);
-	dglBindTexture(GL_TEXTURE_2D, id);
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	width = GL_PadTextureDims(video_width);
 	height = GL_PadTextureDims(video_height);
 
-	dglTexImage2D(
+	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
 		GL_RGB8,
@@ -513,7 +513,7 @@ dtexture GL_ScreenToTexture(void) {
 		0
 	);
 #ifndef WIP_VITA
-	dglCopyTexSubImage2D(
+	glCopyTexSubImage2D(
 		GL_TEXTURE_2D,
 		0,
 		0,
@@ -543,17 +543,17 @@ void GL_BindDummyTexture(void) {
 
 		dmemset(rgb, 0xff, 48);
 
-		dglGenTextures(1, &dummytexture);
-		dglBindTexture(GL_TEXTURE_2D, dummytexture);
-		dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glGenTextures(1, &dummytexture);
+		glBindTexture(GL_TEXTURE_2D, dummytexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		GL_CheckFillMode();
 		GL_SetTextureFilter();
 	}
 	else {
-		dglBindTexture(GL_TEXTURE_2D, dummytexture);
+		glBindTexture(GL_TEXTURE_2D, dummytexture);
 	}
 }
 
@@ -569,17 +569,17 @@ void GL_BindEnvTexture(void) {
 	dmemset(rgb, 0xff, sizeof(rcolor) * 16);
 
 	if (envtexture == 0) {
-		dglGenTextures(1, &envtexture);
-		dglBindTexture(GL_TEXTURE_2D, envtexture);
-		dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)rgb);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glGenTextures(1, &envtexture);
+		glBindTexture(GL_TEXTURE_2D, envtexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)rgb);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		GL_CheckFillMode();
 		GL_SetTextureFilter();
 	}
 	else {
-		dglBindTexture(GL_TEXTURE_2D, envtexture);
+		glBindTexture(GL_TEXTURE_2D, envtexture);
 	}
 }
 
@@ -595,15 +595,15 @@ void GL_UpdateEnvTexture(rcolor color) {
 	byte* c;
 	int i;
 
-	if (!has_GL_ARB_multitexture) {
-		return;
-	}
+	//if (!has_GL_ARB_multitexture) {
+	//	return;
+	//}
 
 	if (lastenvcolor == color) {
 		return;
 	}
 
-	dglActiveTextureARB(GL_TEXTURE1_ARB);
+	glActiveTextureARB(GL_TEXTURE1_ARB);
 
 	env = color;
 	lastenvcolor = color;
@@ -618,7 +618,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 		*c++ = (byte)((env >> 24) & 0xff);
 	}
 
-	dglTexSubImage2D(
+	glTexSubImage2D(
 		GL_TEXTURE_2D,
 		0,
 		0,
@@ -630,7 +630,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 		(byte*)rgb
 	);
 
-	dglActiveTextureARB(GL_TEXTURE0_ARB);
+	glActiveTextureARB(GL_TEXTURE0_ARB);
 }
 
 //
@@ -639,7 +639,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 
 void GL_UnloadTexture(dtexture* texture) {
 	if (*texture != 0) {
-		dglDeleteTextures(1, texture);
+		glDeleteTextures(1, texture);
 		*texture = 0;
 	}
 }
@@ -649,9 +649,9 @@ void GL_UnloadTexture(dtexture* texture) {
 //
 
 void GL_SetTextureUnit(int unit, dboolean enable) {
-	if (!has_GL_ARB_multitexture) {
-		return;
-	}
+	//if (!has_GL_ARB_multitexture) {
+	//	return;
+	//}
 
 	if (unit > 3) {
 		return;
@@ -663,7 +663,7 @@ void GL_SetTextureUnit(int unit, dboolean enable) {
 
 	curunit = unit;
 
-	dglActiveTextureARB(GL_TEXTURE0_ARB + unit);
+	glActiveTextureARB(GL_TEXTURE0_ARB + unit);
 	GL_SetState(GLSTATE_TEXTURE0 + unit, enable);
 }
 
@@ -681,7 +681,7 @@ void GL_SetTextureMode(int mode) {
 	}
 
 	state->mode = mode;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, state->mode);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, state->mode);
 }
 
 //
@@ -698,7 +698,7 @@ void GL_SetCombineState(int combine) {
 	}
 
 	state->combine_rgb = combine;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
+	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
 }
 
 //
@@ -715,7 +715,7 @@ void GL_SetCombineStateAlpha(int combine) {
 	}
 
 	state->combine_alpha = combine;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
+	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
 }
 
 //
@@ -743,7 +743,7 @@ void GL_SetEnvColor(float* param) {
 	state->color[2] = f[2];
 	state->color[3] = f[3];
 
-	dglTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, f);
+	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, f);
 }
 
 //
@@ -760,7 +760,7 @@ void GL_SetCombineSourceRGB(int source, int target) {
 	}
 
 	state->source_rgb[source] = target;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB + source, state->source_rgb[source]);
+	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB + source, state->source_rgb[source]);
 }
 
 //
@@ -777,7 +777,7 @@ void GL_SetCombineSourceAlpha(int source, int target) {
 	}
 
 	state->source_alpha[source] = target;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA + source, state->source_alpha[source]);
+	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA + source, state->source_alpha[source]);
 }
 
 //
@@ -794,7 +794,7 @@ void GL_SetCombineOperandRGB(int operand, int target) {
 	}
 
 	state->operand_rgb[operand] = target;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB + operand, state->operand_rgb[operand]);
+	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB + operand, state->operand_rgb[operand]);
 }
 
 //
@@ -811,7 +811,7 @@ void GL_SetCombineOperandAlpha(int operand, int target) {
 	}
 
 	state->operand_alpha[operand] = target;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA + operand, state->operand_alpha[operand]);
+	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA + operand, state->operand_alpha[operand]);
 }
 
 //

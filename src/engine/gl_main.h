@@ -80,7 +80,6 @@ extern int ViewWindowY;
 
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
 
-extern int DGL_CLAMP;
 
 extern dboolean usingGL;
 

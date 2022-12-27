@@ -27,7 +27,6 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wtypes.h>//only for GUID type
-
 #endif // _WIN32
 
 #include <stdio.h>
@@ -67,7 +66,7 @@ extern float D_fabs(float x);
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
 #define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
 
-#include "dgl.h"
+#include "gl_utils.h"
 
 // #define macros to provide functions missing in Windows.
 // Outside Windows, we use strings.h for str[n]casecmp.
