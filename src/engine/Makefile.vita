@@ -1,5 +1,5 @@
-TARGET		:= Doom64EX+
-TITLE		:= DOOM64EX+1
+TARGET		:= Doom64EXPlus
+TITLE		:= DOOM64EXPlus1
 
 LIBS = -lfluidsynth -lSDL2 -lSDL_net -lvitaGL -lvitashark -lSceShaccCgExt -ltaihen_stub -lSceShaccCg_stub -lfreetype \
 	-lvorbisfile -lvorbis -logg  -lspeexdsp -lmpg123 -lSceCommonDialog_stub -lSceAudio_stub -lSceLibKernel_stub \
@@ -24,14 +24,14 @@ all: $(TARGET).vpk
 
 $(TARGET).vpk: $(TARGET).velf
 	vita-make-fself -c -s $< build/eboot.bin
-	vita-mksfoex -s TITLE_ID=$(TITLE) -d ATTRIBUTE2=12 "Doom64EX+" build/sce_sys/param.sfo
+	vita-mksfoex -s TITLE_ID=$(TITLE) -d ATTRIBUTE2=12 "Doom64EXPlus" build/sce_sys/param.sfo
 	vita-pack-vpk -s build/sce_sys/param.sfo -b build/eboot.bin \
 		--add build/sce_sys/icon0.png=sce_sys/icon0.png \
 		--add build/sce_sys/pic0.png=sce_sys/pic0.png \
 		--add build/sce_sys/bg.png=sce_sys/livearea/contents/bg.png \
 		--add build/sce_sys/startup.png=sce_sys/livearea/contents/startup.png \
 		--add build/sce_sys/template.xml=sce_sys/livearea/contents/template.xml \
-		Doom64EX+.vpk
+		Doom64EXPlus.vpk
 	
 %.velf: %.elf
 	cp $< $<.unstripped.elf
