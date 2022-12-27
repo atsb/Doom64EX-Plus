@@ -2,7 +2,8 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-//
+// Copyright(C) 2022 Andr� Guilherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -17,17 +18,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 // 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
-//
-// DESCRIPTION: Inlined OpenGL-exclusive functions
-//
-//-----------------------------------------------------------------------------
-#ifdef _XBOX
-#include "fakeglx01.h"
-#else
-#include <SDL_opengl.h>
-#endif
+// 
+//------------------------------------------------------------------------------
+
+#include "gl_utils.h"
+
 #ifdef __APPLE__
 #include <math.h>
 #endif
@@ -47,11 +42,11 @@ static word indicecnt = 0;
 static word drawIndices[MAXINDICES];
 
 //
-// dglLogError
+// glLogError
 //
 
 #ifdef USE_DEBUG_GLFUNCS
-void dglLogError(const int8_t* message, const int8_t* file, int line) {
+void glLogError(const int8_t* message, const int8_t* file, int line) {
 	GLint err = glGetError();
 	if (err != GL_NO_ERROR) {
 		int8_t str[64];
@@ -87,36 +82,36 @@ void dglLogError(const int8_t* message, const int8_t* file, int line) {
 #endif
 
 //
-// dglSetVertex
+// glSetVertex
 //
 
-static vtx_t* dgl_prevptr = NULL;
+static vtx_t* gl_prevptr = NULL;
 
-void dglSetVertex(vtx_t* vtx) {
+void glSetVertex(vtx_t* vtx) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglSetVertex(vtx=0x%p)\n", vtx);
+	I_Printf("glSetVertex(vtx=0x%p)\n", vtx);
 #endif
 
 	// 20120623 villsa - avoid redundant calls by checking for
 	// the previous pointer that was set
-	if (dgl_prevptr == vtx) {
+	if (gl_prevptr == vtx) {
 		return;
 	}
 
-	dglTexCoordPointer(2, GL_FLOAT, sizeof(vtx_t), &vtx->tu);
-	dglVertexPointer(3, GL_FLOAT, sizeof(vtx_t), vtx);
-	dglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(vtx_t), &vtx->r);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(vtx_t), &vtx->tu);
+	glVertexPointer(3, GL_FLOAT, sizeof(vtx_t), vtx);
+	glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(vtx_t), &vtx->r);
 
-	dgl_prevptr = vtx;
+	gl_prevptr = vtx;
 }
 
 //
-// dglTriangle
+// glTriangle
 //
 
-void dglTriangle(int v0, int v1, int v2) {
+void glTriangle(int v0, int v1, int v2) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTriangle(v0=%i, v1=%i, v2=%i)\n", v0, v1, v2);
+	I_Printf("glTriangle(v0=%i, v1=%i, v2=%i)\n", v0, v1, v2);
 #endif
 	if (indicecnt + 3 >= MAXINDICES) {
 		I_Error("Triangle indice overflow");
@@ -128,23 +123,17 @@ void dglTriangle(int v0, int v1, int v2) {
 }
 
 //
-// dglDrawGeometry
+// glDrawGeometry
 //
 
-void dglDrawGeometry(dword count, vtx_t* vtx) {
+void glDrawGeometry(dword count, vtx_t* vtx) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglDrawGeometry(count=0x%x, vtx=0x%p)\n", count, vtx);
+	I_Printf("glDrawGeometry(count=0x%x, vtx=0x%p)\n", count, vtx);
 #endif
 
-	if (has_GL_EXT_compiled_vertex_array) {
-		dglLockArraysEXT(0, count);
-	}
 
-	dglDrawElements(GL_TRIANGLES, indicecnt, GL_UNSIGNED_SHORT, drawIndices);
+	glDrawElements(GL_TRIANGLES, indicecnt, GL_UNSIGNED_SHORT, drawIndices);
 
-	if (has_GL_EXT_compiled_vertex_array) {
-		dglUnlockArraysEXT();
-	}
 
 	if (devparm) {
 		statindice += indicecnt;
@@ -154,10 +143,10 @@ void dglDrawGeometry(dword count, vtx_t* vtx) {
 }
 
 //
-// dglViewFrustum
+// glViewFrustum
 //
 
-void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
+void glViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 	rfloat left;
 	rfloat right;
 	rfloat bottom;
@@ -166,7 +155,7 @@ void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 	rfloat m[16];
 
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglViewFrustum(width=%i, height=%i, fovy=%f, znear=%f)\n", width, height, fovy, znear);
+	I_Printf("glViewFrustum(width=%i, height=%i, fovy=%f, znear=%f)\n", width, height, fovy, znear);
 #endif
 
 	aspect = (rfloat)width / (rfloat)height;
@@ -195,20 +184,20 @@ void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 	m[11] = -1;
 	m[15] = 0;
 
-	dglMultMatrixf(m);
+	glMultMatrixf(m);
 #ifdef VITA
-	dglDepthMask(GL_TRUE);
+	glDepthMask(GL_TRUE);
 #endif
 }
 
 //
-// dglSetVertexColor
+// glSetVertexColor
 //
 
-void dglSetVertexColor(vtx_t* v, rcolor c, word count) {
+void glSetVertexColor(vtx_t* v, rcolor c, word count) {
 	int i = 0;
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglSetVertexColor(v=0x%p, c=0x%x, count=0x%x)\n", v, c, count);
+	I_Printf("glSetVertexColor(v=0x%p, c=0x%x, count=0x%x)\n", v, c, count);
 #endif
 	for (i = 0; i < count; i++) {
 		*(rcolor*)&v[i].r = c;
@@ -216,12 +205,12 @@ void dglSetVertexColor(vtx_t* v, rcolor c, word count) {
 }
 
 //
-// dglGetColorf
+// glGetColorf
 //
 
-void dglGetColorf(rcolor color, float* argb) {
+void glGetColorf(rcolor color, float* argb) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglGetColorf(color=0x%x, argb=0x%p)\n", color, argb);
+	I_Printf("glGetColorf(color=0x%x, argb=0x%p)\n", color, argb);
 #endif
 	argb[3] = (float)((color >> 24) & 0xff) / 255.0f;
 	argb[2] = (float)((color >> 16) & 0xff) / 255.0f;
@@ -230,12 +219,12 @@ void dglGetColorf(rcolor color, float* argb) {
 }
 
 //
-// dglTexCombReplace
+// glTexCombReplace
 //
 
-void dglTexCombReplace(void) {
+void glTexCombReplace(void) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombReplace\n");
+	I_Printf("glTexCombReplace\n");
 #endif
 	GL_SetTextureMode(GL_COMBINE_ARB);
 	GL_SetCombineState(GL_REPLACE);
@@ -244,15 +233,15 @@ void dglTexCombReplace(void) {
 }
 
 //
-// dglTexCombColor
+// glTexCombColor
 //
 
-void dglTexCombColor(int t, rcolor c, int func) {
+void glTexCombColor(int t, rcolor c, int func) {
 	float f[4];
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombColor(t=0x%x, c=0x%x)\n", t, c);
+	I_Printf("glTexCombColor(t=0x%x, c=0x%x)\n", t, c);
 #endif
-	dglGetColorf(c, f);
+	glGetColorf(c, f);
 	GL_SetTextureMode(GL_COMBINE_ARB);
 	GL_SetEnvColor(f);
 	GL_SetCombineState(func);
@@ -263,12 +252,12 @@ void dglTexCombColor(int t, rcolor c, int func) {
 }
 
 //
-// dglTexCombColorf
+// glTexCombColorf
 //
 
-void dglTexCombColorf(int t, float* f, int func) {
+void glTexCombColorf(int t, float* f, int func) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombColorf(t=0x%x, f=%p)\n", t, f);
+	I_Printf("glTexCombColorf(t=0x%x, f=%p)\n", t, f);
 #endif
 	GL_SetTextureMode(GL_COMBINE_ARB);
 	GL_SetEnvColor(f);
@@ -280,12 +269,12 @@ void dglTexCombColorf(int t, float* f, int func) {
 }
 
 //
-// dglTexCombModulate
+// glTexCombModulate
 //
 
-void dglTexCombModulate(int t, int s) {
+void glTexCombModulate(int t, int s) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombFinalize(t=0x%x)\n", t);
+	I_Printf("glTexCombFinalize(t=0x%x)\n", t);
 #endif
 	GL_SetTextureMode(GL_COMBINE_ARB);
 	GL_SetCombineState(GL_MODULATE);
@@ -296,12 +285,12 @@ void dglTexCombModulate(int t, int s) {
 }
 
 //
-// dglTexCombAdd
+// glTexCombAdd
 //
 
-void dglTexCombAdd(int t, int s) {
+void glTexCombAdd(int t, int s) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombFinalize(t=0x%x)\n", t);
+	I_Printf("glTexCombFinalize(t=0x%x)\n", t);
 #endif
 	GL_SetTextureMode(GL_COMBINE_ARB);
 	GL_SetCombineState(GL_ADD);
@@ -312,13 +301,13 @@ void dglTexCombAdd(int t, int s) {
 }
 
 //
-// dglTexCombInterpolate
+// glTexCombInterpolate
 //
 
-void dglTexCombInterpolate(int t, float a) {
+void glTexCombInterpolate(int t, float a) {
 	float f[4];
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombInterpolate(t=0x%x, a=%f)\n", t, a);
+	I_Printf("glTexCombInterpolate(t=0x%x, a=%f)\n", t, a);
 #endif
 	f[0] = f[1] = f[2] = 0.0f;
 	f[3] = a;
@@ -335,12 +324,12 @@ void dglTexCombInterpolate(int t, float a) {
 }
 
 //
-// dglTexCombReplaceAlpha
+// glTexCombReplaceAlpha
 //
 
-void dglTexCombReplaceAlpha(int t) {
+void glTexCombReplaceAlpha(int t) {
 #ifdef LOG_GLFUNC_CALLS
-	I_Printf("dglTexCombReplaceAlpha(t=0x%x)\n", t);
+	I_Printf("glTexCombReplaceAlpha(t=0x%x)\n", t);
 #endif
 	GL_SetTextureMode(GL_COMBINE_ARB);
 	GL_SetCombineStateAlpha(GL_MODULATE);

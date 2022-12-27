@@ -41,8 +41,11 @@ typedef GLuint        dtexture;
 typedef GLfloat        rfloat;
 typedef GLuint        rcolor;
 typedef GLuint        rbuffer;
+#ifdef VITA
+typedef GLuint         rhandle;
+#else
 typedef GLhandleARB    rhandle;
-
+#endif
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
 extern dboolean gl_has_combiner;
@@ -87,7 +90,6 @@ extern int ViewWindowY;
 
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
 
-extern int DGL_CLAMP;
 
 extern dboolean usingGL;
 

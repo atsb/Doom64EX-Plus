@@ -2,7 +2,8 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-//
+// Copyright(C) 2022 André Guilherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -20,11 +21,37 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef __D_DEVSTAT_H
-#define __D_DEVSTAT_H
-#include "d_event.h"
-void D_DeveloperDisplay(void);
-void D_BoyISuck(void);
-dboolean D_DevKeyResponder(event_t* ev);
+#ifndef __GL_UTILS__H
+#define __GL_UTILS__H
+
+#include <math.h>
+
+#include "gl_main.h"
+
+
+//
+// CUSTOM ROUTINES
+//
+void glSetVertex(vtx_t* vtx);
+void glTriangle(int v0, int v1, int v2);
+void glDrawGeometry(dword count, vtx_t* vtx);
+void glViewFrustum(int width, int height, rfloat fovy, rfloat znear);
+void glSetVertexColor(vtx_t* v, rcolor c, word count);
+void glGetColorf(rcolor color, float* argb);
+void glTexCombReplace(void);
+void glTexCombColor(int t, rcolor c, int func);
+void glTexCombColorf(int t, float* f, int func);
+void glTexCombModulate(int t, int s);
+void glTexCombAdd(int t, int s);
+void glTexCombInterpolate(int t, float a);
+void glTexCombReplaceAlpha(int t);
+
+
+//
+// GL_ARB_multitexture
+//
+extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
+
+#define glActiveTextureARB(texture) _glActiveTextureARB(texture)
 
 #endif

@@ -38,6 +38,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "z_zone.h"
+#include "i_system.h"
 
 //
 // P_AproxDistance

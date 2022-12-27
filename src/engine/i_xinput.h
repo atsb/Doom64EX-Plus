@@ -38,8 +38,7 @@
 
 #ifndef _XBOX
 #include <xinput.h>
-#endif
-
+#include "d_event.h"
 #define XINPUT_BUTTONS  14
 #define XINPUT_MAX_STICK_THRESHOLD  32768
 

@@ -49,6 +49,7 @@
 #include "m_misc.h"
 #include "sc_main.h"
 #include "con_console.h"
+#include "i_system.h"
 
 scparser_t sc_parser;
 

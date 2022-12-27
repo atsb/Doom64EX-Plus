@@ -74,7 +74,6 @@ extern float D_fabs(float x);
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
 #define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
 
-#include "dgl.h"
 
 // #define macros to provide functions missing in Windows.
 // Outside Windows, we use strings.h for str[n]casecmp.
@@ -364,7 +363,7 @@ typedef enum {
 // DOOM basic types (dboolean),
 //  and max/min values.
 #include "doomtype.h"
-
+#include "gl_utils.h"
 //code assumes MOUSE_BUTTONS<10
 #define MOUSE_BUTTONS        6
 

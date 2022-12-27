@@ -489,10 +489,14 @@ void I_BeginRead(void) {
 // I_RegisterCvars
 //
 
-#if defined(_WIN32) && defined(USE_XINPUT) || !defined(VITA)
+#if defined(_WIN32) && defined(USE_XINPUT)
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_rstickthreshold);
 CVAR_EXTERNAL(i_xinputscheme);
+#elif defined(VITA)
+extern cvar_t i_rsticksensitivityy;
+extern cvar_t i_rsticksensitivityx;
+cvar_t i_xinputscheme;
 #endif
 
 CVAR_EXTERNAL(i_gamma);
@@ -501,9 +505,13 @@ CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
-#if defined(_WIN32) && defined(USE_XINPUT) || !defined(VITA)
+#if defined(_WIN32) && defined(USE_XINPUT) 
 	CON_CvarRegister(&i_rsticksensitivity);
 	CON_CvarRegister(&i_rstickthreshold);
+	CON_CvarRegister(&i_xinputscheme);
+#elif defined(VITA)
+	CON_CvarRegister(& i_rsticksensitivityy);
+	CON_CvarRegister(& i_rsticksensitivityx);
 	CON_CvarRegister(&i_xinputscheme);
 #endif
 	CON_CvarRegister(&i_gamma);
