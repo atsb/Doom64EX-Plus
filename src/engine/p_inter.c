@@ -772,8 +772,10 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 	}
 
-	if (special->flags & MF_COUNTITEM) {
-		player->itemcount++;
+	if (special->type != MT_FAKEITEM) {
+		if (special->flags & MF_COUNTITEM) {
+			player->itemcount++;
+		}
 	}
 
 	if (special->flags & MF_COUNTSECRET) {
