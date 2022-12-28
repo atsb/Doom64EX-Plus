@@ -117,12 +117,9 @@ typedef w3suint64_t dword;
 #else
 void w3ssleep(dword usecs);
 #endif
-#ifdef HAVE_VSNPRINTF
-#ifdef WIN32
-#define w3svsnprintf(buffer, buffercount, format, arglist)  _vsnprintf(buffer, buffercount, format, arglist)
-#else
-#define w3svsnprintf(buffer, buffercount, format, arglist) vsnprintf(buffer, buffercount, format, arglist);
-#endif
-#else
+
+#ifdef NO_VSNPRINTF
 #define w3svsnprintf(buf, format, arg) vsprintf(buf, format, arg)
+#else
+int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif

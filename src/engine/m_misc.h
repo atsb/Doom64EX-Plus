@@ -76,7 +76,6 @@ void M_LoadDefaults(void);
 void M_SaveDefaults(void);
 bool M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size);
 int8_t* M_StringDuplicate(const int8_t* orig);
-int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args);
 
 //
 // DEFAULTS

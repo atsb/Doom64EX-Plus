@@ -81,32 +81,6 @@ int M_CheckParm(const int8_t* check) {
 	return 0;
 }
 
-// Safe, portable vsnprintf().
-int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args)
-{
-	int result;
-
-	if (buf_len < 1)
-	{
-		return 0;
-	}
-
-	// Windows (and other OSes?) has a vsnprintf() that doesn't always
-	// append a trailing \0. So we must do it, and write into a buffer
-	// that is one byte shorter; otherwise this function is unsafe.
-	result = vsnprintf(buf, buf_len, s, args);
-
-	// If truncated, change the final int8_t in the buffer to a \0.
-	// A negative result indicates a truncated buffer on Windows.
-	if (result < 0 || result >= buf_len)
-	{
-		buf[buf_len - 1] = '\0';
-		result = buf_len - 1;
-	}
-
-	return result;
-}
-
 //
 // Safe version of strdup() that checks the string was successfully
 // allocated.
