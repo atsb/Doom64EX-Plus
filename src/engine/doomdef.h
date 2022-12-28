@@ -34,7 +34,6 @@
 #include "doomtype.h"
 #include "d_keywds.h"
 #include "tables.h"
-#include "d_utils.h"
 #include "gl_utils.h"
 
 // #define macros to provide functions missing in Windows.

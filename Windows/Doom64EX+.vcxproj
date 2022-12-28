@@ -161,7 +161,6 @@
     <ClCompile Include="..\src\engine\d_iwad.c" />
     <ClCompile Include="..\src\engine\d_main.c" />
     <ClCompile Include="..\src\engine\d_net.c" />
-    <ClCompile Include="..\src\engine\d_utils.c" />
     <ClCompile Include="..\src\engine\f_finale.c" />
     <ClCompile Include="..\src\engine\gl_draw.c" />
     <ClCompile Include="..\src\engine\gl_main.c" />
@@ -268,7 +267,6 @@
     <ClInclude Include="..\src\engine\d_player.h" />
     <ClInclude Include="..\src\engine\d_think.h" />
     <ClInclude Include="..\src\engine\d_ticcmd.h" />
-    <ClInclude Include="..\src\engine\d_utils.h" />
     <ClInclude Include="..\src\engine\f_finale.h" />
     <ClInclude Include="..\src\engine\gl_draw.h" />
     <ClInclude Include="..\src\engine\gl_main.h" />
