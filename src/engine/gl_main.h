@@ -47,7 +47,7 @@ typedef GLhandleARB    rhandle;
 #endif
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
-extern bool gl_has_combiner;
+extern boolean gl_has_combiner;
 
 typedef struct {
 	rfloat    x;
@@ -90,27 +90,27 @@ extern int ViewWindowY;
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
 
 
-extern bool usingGL;
+extern boolean usingGL;
 
-bool GL_CheckExtension(const int8_t* ext);
+boolean GL_CheckExtension(const int8_t* ext);
 void* GL_RegisterProc(const int8_t* address);
 void GL_Init(void);
 void GL_ClearView(rcolor clearcolor);
-bool GL_GetBool(int x);
+boolean GL_GetBool(int x);
 void GL_CheckFillMode(void);
 void GL_SwapBuffers(void);
 byte* GL_GetScreenBuffer(int x, int y, int width, int height);
 void GL_SetTextureFilter(void);
-void GL_SetOrtho(bool stretch);
+void GL_SetOrtho(boolean stretch);
 void GL_ResetViewport(void);
 void GL_SetOrthoScale(float scale);
 float GL_GetOrthoScale(void);
-void GL_SetState(int bit, bool enable);
+void GL_SetState(int bit, boolean enable);
 void GL_SetDefaultCombiner(void);
 void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
 	float u1, float u2, float v1, float v2, rcolor c);
-void GL_Draw2DQuad(vtx_t* v, bool stretch);
+void GL_Draw2DQuad(vtx_t* v, boolean stretch);
 void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c, bool stretch);
+	float u1, float u2, float v1, float v2, rcolor c, boolean stretch);
 
 #endif

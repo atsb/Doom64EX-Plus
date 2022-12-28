@@ -131,7 +131,7 @@ size_t W_Read(wad_file_t* wad, uint32_t offset,
 int8_t* W_FindWADByName(int8_t* name) {
 	int8_t* buf;
 	int i;
-	bool exists;
+	boolean exists;
 
 	// Absolute path?
 	if (M_FileExists(name)) {

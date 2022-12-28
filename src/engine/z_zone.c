@@ -165,7 +165,7 @@ void (Z_Free)(void* ptr, const int8_t* file, int line) {
 // Returns true if any blocks were freed.
 //
 
-static bool Z_ClearCache(int size) {
+static boolean Z_ClearCache(int size) {
 	memblock_t* block;
 	memblock_t* next_block;
 	int remaining;

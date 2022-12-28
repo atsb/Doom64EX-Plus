@@ -138,10 +138,10 @@ void WI_Stop(void) {
 //
 
 int WI_Ticker(void) {
-	bool    state = false;
+	boolean    state = false;
 	player_t* player;
 	int         i;
-	bool    next = false;
+	boolean    next = false;
 
 	if (wi_advance <= 3) {
 		// check for button presses to skip delays

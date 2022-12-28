@@ -42,7 +42,7 @@ int16_t           macroid = -1;
 int             taglist[MAXQUEUELIST];
 int             taglistidx = 0;
 
-static bool bTriggerOnce = false;
+static boolean bTriggerOnce = false;
 
 //
 // P_QueueSpecial
@@ -111,7 +111,7 @@ void P_MacroDetachThinker(thinker_t* thinker) {
 // something to do with the elusive easter egg found in Breakdown.
 //
 
-void P_ToggleMacros(int tag, bool toggleon) {
+void P_ToggleMacros(int tag, boolean toggleon) {
 	macrodef_t* macro = &macros.def[MACROMASK(tag)];
 
 	if (toggleon) {

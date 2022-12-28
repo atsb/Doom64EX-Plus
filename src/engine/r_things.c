@@ -68,7 +68,7 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 //
 
 void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
-	bool flipped)
+	boolean flipped)
 {
 	int r;
 
@@ -313,7 +313,7 @@ static void R_AddVisSprite(visspritelist_t* vissprite) {
 // R_GenerateSpritePlane
 //
 
-static bool R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) {
+static boolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) {
 	float           x;
 	float           y;
 	float           z;
@@ -427,7 +427,7 @@ static bool R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) {
 // R_GenerateLaserPlane
 //
 
-static bool R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) {
+static boolean R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) {
 	float           x;
 	float           y;
 	float           z;
@@ -538,7 +538,7 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid) {
 //
 
 void R_SetupSprites(void) {
-	bool interpolate = (int)i_interpolateframes.value;
+	boolean interpolate = (int)i_interpolateframes.value;
 	visspritelist_t* vis;
 
 	for (vis = vissprite - 1; vis >= visspritelist; vis--) {

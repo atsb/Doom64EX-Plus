@@ -76,7 +76,7 @@ void NET_FreePacket(net_packet_t* packet)
 // Read a byte from the packet, returning true if read
 // successfully
 
-bool NET_ReadInt8(net_packet_t* packet, int* data)
+boolean NET_ReadInt8(net_packet_t* packet, int* data)
 {
 	if (packet->pos + 1 > packet->len)
 		return false;
@@ -91,7 +91,7 @@ bool NET_ReadInt8(net_packet_t* packet, int* data)
 // Read a 16-bit integer from the packet, returning true if read
 // successfully
 
-bool NET_ReadInt16(net_packet_t* packet, uint32_t* data)
+boolean NET_ReadInt16(net_packet_t* packet, uint32_t* data)
 {
 	byte* p;
 
@@ -109,7 +109,7 @@ bool NET_ReadInt16(net_packet_t* packet, uint32_t* data)
 // Read a 32-bit integer from the packet, returning true if read
 // successfully
 
-bool NET_ReadInt32(net_packet_t* packet, uint32_t* data)
+boolean NET_ReadInt32(net_packet_t* packet, uint32_t* data)
 {
 	byte* p;
 
@@ -126,7 +126,7 @@ bool NET_ReadInt32(net_packet_t* packet, uint32_t* data)
 
 // Signed read functions
 
-bool NET_ReadSInt8(net_packet_t* packet, int* data)
+boolean NET_ReadSInt8(net_packet_t* packet, int* data)
 {
 	if (NET_ReadInt8(packet, data))
 	{
@@ -143,7 +143,7 @@ bool NET_ReadSInt8(net_packet_t* packet, int* data)
 	}
 }
 
-bool NET_ReadSInt16(net_packet_t* packet, int32_t* data)
+boolean NET_ReadSInt16(net_packet_t* packet, int32_t* data)
 {
 	if (NET_ReadInt16(packet, (uint32_t*)data))
 	{
@@ -160,7 +160,7 @@ bool NET_ReadSInt16(net_packet_t* packet, int32_t* data)
 	}
 }
 
-bool NET_ReadSInt32(net_packet_t* packet, int32_t* data)
+boolean NET_ReadSInt32(net_packet_t* packet, int32_t* data)
 {
 	if (NET_ReadInt32(packet, (uint32_t*)data))
 	{

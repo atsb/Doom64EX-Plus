@@ -453,7 +453,7 @@ int dhtoi(int8_t* str) {
 // dfcmp
 //
 
-bool dfcmp(float f1, float f2) {
+boolean dfcmp(float f1, float f2) {
 	float precision = 0.00001f;
 	if (((f1 - precision) < f2) &&
 		((f1 + precision) > f2)) {
@@ -491,10 +491,10 @@ int dsprintf(int8_t* buf, const int8_t* format, ...) {
 	int x;
 
 	va_start(arg, format);
-#ifdef HAVE_VSNPRINTF
-	x = w3svsnprintf(buf, dstrlen(buf), format, arg);
-#else
+#ifdef NO_VSNPRINTF
 	x = w3svsnprintf(buf, format, arg);
+#else
+	x = M_vsnprintf(buf, dstrlen(buf), format, arg);
 #endif
 	va_end(arg);
 
@@ -510,10 +510,10 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 	va_list argptr;
 	va_start(argptr, str);
 
-#ifdef HAVE_VSNPRINTF
-	x = w3svsnprintf(src, n, str, argptr);
-#else
+#ifdef NO_VSNPRINTF
 	x = w3svsnprintf(src, str, argptr);
+#else
+	x = M_vsnprintf(src, n, str, argptr);
 #endif
 
 	va_end(argptr);

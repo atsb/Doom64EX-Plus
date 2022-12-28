@@ -61,7 +61,7 @@ SDL_Surface* screen;
 int video_width;
 int video_height;
 float video_ratio;
-bool window_focused;
+boolean window_focused;
 
 int mouse_x = 0;
 int mouse_y = 0;
