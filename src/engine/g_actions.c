@@ -87,8 +87,8 @@ alist_t** Mouse2Actions;
 
 static int  MouseButtons = 0;
 
-static dboolean OptimizeTree = false;
-dboolean        ButtonAction = false;
+static boolean OptimizeTree = false;
+boolean        ButtonAction = false;
 
 static CMD(Alias);
 static CMD(Unbind);
@@ -228,7 +228,7 @@ void DerefSingleAction(alist_t* al) {
 // Matches user input to see if its valid
 //
 
-alist_t* DoRunActions(alist_t* al, dboolean free) {
+alist_t* DoRunActions(alist_t* al, boolean free) {
 	alist_t* next = NULL;
 	action_t* action;
 	cvar_t* cvar;
@@ -298,7 +298,7 @@ alist_t* DoRunActions(alist_t* al, dboolean free) {
 // TryActions
 //
 
-void TryActions(alist_t* al, dboolean up) {
+void TryActions(alist_t* al, boolean up) {
 	if (!al) {
 		return;
 	}
@@ -389,7 +389,7 @@ static void ProcessButtonActions(alist_t** actions, int b, int ob) {
 // G_ActionResponder
 //
 
-dboolean G_ActionResponder(event_t* ev) {
+boolean G_ActionResponder(event_t* ev) {
 	switch (ev->type) {
 	case ev_keyup:
 	case ev_keydown:
@@ -433,7 +433,7 @@ dboolean G_ActionResponder(event_t* ev) {
 // NextToken
 //
 
-int8_t* NextToken(int8_t* s, dboolean* pquoted) { //null terminates current token
+int8_t* NextToken(int8_t* s, boolean* pquoted) { //null terminates current token
 	int8_t* p;
 
 	p = s;
@@ -474,7 +474,7 @@ alist_t* ParseActions(int8_t* actions) {
 	int         param;
 	alist_t* al;
 	alist_t* alist;
-	dboolean    quoted;
+	boolean    quoted;
 
 	if (!actions) {
 		return NULL;
@@ -624,7 +624,7 @@ static int GetBitNum(int bits) {
 	return -1;
 }
 
-dboolean G_BindActionByEvent(event_t* ev, int8_t* action) {
+boolean G_BindActionByEvent(event_t* ev, int8_t* action) {
 	int     button;
 	alist_t** plist;
 
@@ -1159,7 +1159,7 @@ static CMD(UnbindAll) {
 // IsSameAction
 //
 
-static dboolean IsSameAction(int8_t* cmd, alist_t* al) {
+static boolean IsSameAction(int8_t* cmd, alist_t* al) {
 	if (!al) {
 		return false;
 	}

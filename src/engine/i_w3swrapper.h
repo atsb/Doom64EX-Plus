@@ -44,12 +44,8 @@
 #endif
 
 #include <stdbool.h>
-typedef int dboolean;
 
-// Windows has this already in rpcndr.h
-#ifndef _WIN32
 typedef unsigned char boolean;
-#endif
 
 #ifdef _WIN32
 #include <Windows.h>

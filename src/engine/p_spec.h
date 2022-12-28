@@ -28,7 +28,7 @@
 //
 // End-level timer (-TIMER option)
 //
-extern    dboolean levelTimer;
+extern    boolean levelTimer;
 extern    int    levelTimeCount;
 
 extern int16_t globalint;
@@ -38,8 +38,8 @@ typedef struct {
 	int8_t        name[9];
 	int         frames;
 	int         speed;
-	dboolean    reverse;
-	dboolean    palette;
+	boolean    reverse;
+	boolean    palette;
 } animdef_t;
 
 extern int          numanimdef;
@@ -53,7 +53,7 @@ void        P_AddSectorSpecial(sector_t* sector);
 void        P_SpawnDelayTimer(line_t* line, void (*func)(void));
 
 // when needed
-dboolean    P_UseSpecialLine(mobj_t* thing, line_t* line, int side);
+boolean    P_UseSpecialLine(mobj_t* thing, line_t* line, int side);
 void        P_PlayerInSpecialSector(player_t* player);
 
 int         twoSided(int sector, int line);
@@ -67,13 +67,13 @@ fixed_t     P_FindNextHighestFloor(sector_t* sec, int currentheight);
 fixed_t     P_FindLowestCeilingSurrounding(sector_t* sec);
 fixed_t     P_FindHighestCeilingSurrounding(sector_t* sec);
 int         P_FindSectorFromLineTag(line_t* line, int start);
-dboolean    P_ActivateLineByTag(int tag, mobj_t* activator);
+boolean    P_ActivateLineByTag(int tag, mobj_t* activator);
 
 //
 // SPECIAL
 //
 
-int EV_DoFloorAndCeiling(line_t* line, dboolean fast, dboolean elevatorOrSplit);
+int EV_DoFloorAndCeiling(line_t* line, boolean fast, boolean elevatorOrSplit);
 
 //
 // P_LIGHTS
@@ -168,10 +168,10 @@ void        P_SpawnStrobeAltFlash(sector_t* sector, int speed);
 void        EV_StartLightStrobing(line_t* line);
 void        T_Glow(glow_t* g);
 void        P_SpawnGlowingLight(sector_t* sector, byte type);
-void        P_SpawnSequenceLight(sector_t* sector, dboolean first);
+void        P_SpawnSequenceLight(sector_t* sector, boolean first);
 void        P_CombineLightSpecials(sector_t* sector);
 void        T_Combine(combine_t* combine);
-dboolean    P_ChangeLightByTag(int tag1, int tag2);
+boolean    P_ChangeLightByTag(int tag1, int tag2);
 int         P_DoSectorLightChange(line_t* line, int16_t tag);
 void        P_FadeInBrightness(void);
 
@@ -238,7 +238,7 @@ typedef struct {
 	int          count;
 	plat_e       status;
 	plat_e       oldstatus;
-	dboolean     crush;
+	boolean     crush;
 	int          tag;
 	plattype_e   type;
 } plat_t;
@@ -320,11 +320,11 @@ typedef struct {
 	fixed_t      bottomheight;
 	fixed_t      topheight;
 	fixed_t      speed;
-	dboolean     crush;
+	boolean     crush;
 	int          direction;    // 1 = up, 0 = waiting, -1 = down
 	int          tag;        // ID
 	int          olddirection;
-	dboolean     instant;
+	boolean     instant;
 } ceiling_t;
 
 #define CEILSPEED       FRACUNIT*2
@@ -365,14 +365,14 @@ typedef enum {
 typedef struct {
 	thinker_t    thinker;
 	floor_e      type;
-	dboolean     crush;
+	boolean     crush;
 	sector_t* sector;
 	int          direction;
 	int          newspecial;
 	int16_t        texture;
 	fixed_t      floordestheight;
 	fixed_t      speed;
-	dboolean     instant;
+	boolean     instant;
 } floormove_t;
 
 typedef struct {
@@ -394,13 +394,13 @@ typedef enum {
 } result_e;
 
 result_e T_MovePlane(sector_t* sector, fixed_t speed, fixed_t dest,
-	dboolean crush, int floorOrCeiling, int direction);
+	boolean crush, int floorOrCeiling, int direction);
 
 int EV_BuildStairs(line_t* line, stair_e type);
 int EV_DoFloor(line_t* line, floor_e floortype, fixed_t speed);
 void T_MoveFloor(floormove_t* floor);
 void T_MoveSplitPlane(splitmove_t* split);
-int EV_SplitSector(line_t* line, dboolean sync);
+int EV_SplitSector(line_t* line, boolean sync);
 
 //
 // P_TELEPT

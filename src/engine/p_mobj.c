@@ -61,7 +61,7 @@ CVAR(m_brutal, 0);
 // Returns true if the mobj is still present.
 //
 
-dboolean P_SetMobjState(mobj_t* mobj, statenum_t state) {
+boolean P_SetMobjState(mobj_t* mobj, statenum_t state) {
 	state_t* st;
 
 	do {
@@ -494,7 +494,7 @@ void P_RespawnSpecials(mobj_t* special) {
 // P_OnMobjZ
 //
 
-dboolean P_OnMobjZ(mobj_t* mobj) {
+boolean P_OnMobjZ(mobj_t* mobj) {
 	mobj_t* onmo;
 
 	if (mobj->blockflag & BF_MOBJPASS) {
@@ -888,7 +888,7 @@ void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line) {
 int EV_SpawnMobjTemplate(line_t* line) {
 	mobj_t* mobj;
 	int i;
-	dboolean ok = false;
+	boolean ok = false;
 	mapthing_t* mthing;
 
 	for (i = 0; i < numspawnlist; i++) {
@@ -937,7 +937,7 @@ int EV_SpawnMobjTemplate(line_t* line) {
 
 int EV_FadeOutMobj(line_t* line) {
 	mobj_t* mo;
-	dboolean ok = false;
+	boolean ok = false;
 
 	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
 		// not matching the tid
@@ -1293,7 +1293,7 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 //
 
 mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
-	fixed_t xoffs, fixed_t yoffs, fixed_t heightoffs, dboolean aim) {
+	fixed_t xoffs, fixed_t yoffs, fixed_t heightoffs, boolean aim) {
 	mobj_t* th;
 	angle_t an;
 	int dist;

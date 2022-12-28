@@ -77,8 +77,8 @@ CVAR_EXTERNAL(v_accessibility);
 //
 
 typedef struct {
-	dboolean    active;
-	dboolean    doDraw;
+	boolean    active;
+	boolean    doDraw;
 	int         delay;
 	int         times;
 } keyflash_t;
@@ -115,8 +115,8 @@ static byte             st_flash_g;
 static byte             st_flash_b;
 static byte             st_flash_a;
 static int              st_jmessages[ST_JMESSAGES];   // japan-specific messages
-static dboolean         st_hasjmsg = false;
-static dboolean         st_wpndisplay_show;
+static boolean         st_hasjmsg = false;
+static boolean         st_wpndisplay_show;
 static byte             st_wpndisplay_alpha;
 static int              st_wpndisplay_ticks;
 
@@ -161,7 +161,7 @@ typedef struct {
 
 static stchat_t stchat[MAXCHATNODES];
 static int st_chatcount = 0;
-dboolean st_chatOn = false;
+boolean st_chatOn = false;
 static int8_t st_chatstring[MAXPLAYERS][MAXCHATSIZE];
 
 #define STQUEUESIZE        256
@@ -737,7 +737,7 @@ static void ST_DrawJMessage(int pic) {
 //
 
 void ST_Drawer(void) {
-	dboolean checkautomap;
+	boolean checkautomap;
 
 	//
 	// flash overlay
@@ -1251,7 +1251,7 @@ int8_t ST_DequeueChatChar(void) {
 // ST_FeedChatMsg
 //
 
-static dboolean st_shiftOn = false;
+static boolean st_shiftOn = false;
 static void ST_FeedChatMsg(event_t* ev) {
 	int c;
 
@@ -1373,7 +1373,7 @@ static void ST_EatChatMsg(void) {
 // Respond to keyboard input events, intercept cheats.
 //
 
-dboolean ST_Responder(event_t* ev) {
+boolean ST_Responder(event_t* ev) {
 	M_CheatProcess(plyr, ev);
 
 	if (netgame) {

@@ -363,7 +363,7 @@ void W_Init(void) {
 	W_HashLumps();
 }
 
-static dboolean nonmaplump = false;
+static boolean nonmaplump = false;
 
 filelump_t* mapLump;
 int numMapLumps;

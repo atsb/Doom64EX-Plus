@@ -85,25 +85,25 @@ static int      screenalphatext;
 static int      creditstage;
 static int      creditscreenstage;
 
-dboolean        InWindow;
-dboolean        setWindow = true;
+boolean        InWindow;
+boolean        setWindow = true;
 int             validcount = 1;
-dboolean        windowpause = false;
-dboolean        devparm = false;    // started game with -devparm
-dboolean        nomonsters = false;    // checkparm of -nomonsters
-dboolean        respawnparm = false;    // checkparm of -respawn
-dboolean        respawnitem = false;    // checkparm of -respawnitem
-dboolean        fastparm = false;    // checkparm of -fast
-dboolean        BusyDisk = false;
-dboolean        nolights = false;
+boolean        windowpause = false;
+boolean        devparm = false;    // started game with -devparm
+boolean        nomonsters = false;    // checkparm of -nomonsters
+boolean        respawnparm = false;    // checkparm of -respawn
+boolean        respawnitem = false;    // checkparm of -respawnitem
+boolean        fastparm = false;    // checkparm of -fast
+boolean        BusyDisk = false;
+boolean        nolights = false;
 skill_t         startskill;
 int             startmap;
-dboolean        autostart = false;
+boolean        autostart = false;
 FILE* debugfile = NULL;
 //int8_t          wadfile[1024];              // primary wad file
 int8_t            mapdir[1024];               // directory of development maps
 int8_t            basedefault[1024];          // default file
-dboolean        rundemo4 = false;    // run demo lump #4?
+boolean        rundemo4 = false;    // run demo lump #4?
 int             gameflags = 0;
 int             compatflags = 0;
 
@@ -185,7 +185,7 @@ void D_IncValidCount(void) {
 
 CVAR_EXTERNAL(i_interpolateframes);
 
-extern dboolean renderinframe;
+extern boolean renderinframe;
 extern int      gametime;
 extern int      skiptics;
 
@@ -195,7 +195,7 @@ int             frameskip[4];
 int             oldnettics = 0;
 
 int GetLowTic(void);
-dboolean PlayersInGame(void);
+boolean PlayersInGame(void);
 
 static void D_DrawInterface(void) {
 	if (menuactive) {
