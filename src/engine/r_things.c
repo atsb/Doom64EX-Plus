@@ -49,7 +49,7 @@ spritedef_t* spriteinfo;
 int             numsprites;
 
 spriteframe_t   sprtemp[29];
-int             maxframe;
+int32_t             maxframe;
 int8_t* spritename;
 
 static visspritelist_t visspritelist[MAX_SPRITES];
@@ -67,14 +67,14 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-static void R_InstallSpriteLump(uint32_t lump, uint32_t frame, uint32_t rotation, bool flipped) {
-	uint32_t    r;
+static void R_InstallSpriteLump(int32_t lump, int32_t frame, int32_t rotation, bool flipped) {
+	int32_t    r;
 
 	if (frame >= 29 || rotation > 8) {
 		I_Error("R_InstallSpriteLump: Bad frame characters in lump %i", lump);
 	}
 
-	if ((int)frame > maxframe) {
+	if (frame > maxframe) {
 		maxframe = frame;
 	}
 
