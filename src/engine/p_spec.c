@@ -62,7 +62,7 @@ static byte tryopentype[3];
 //
 
 typedef struct {
-	bool isreverse;
+	boolean isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -504,7 +504,7 @@ int P_FindSectorFromTag(int tag) {
 // P_ActivateLineByTag
 //
 
-bool P_ActivateLineByTag(int tag, mobj_t* activator) {
+boolean P_ActivateLineByTag(int tag, mobj_t* activator) {
 	int i;
 
 	for (i = 0; i < numlines; i++) {
@@ -864,7 +864,7 @@ void T_LookAtCamera(aimcamera_t* camera) {
 // P_SetAimCamera
 //
 
-int P_SetAimCamera(player_t* player, line_t* line, bool aim) {
+int P_SetAimCamera(player_t* player, line_t* line, boolean aim) {
 	mobj_t* mo;
 	aimcamera_t* camera;
 
@@ -1046,7 +1046,7 @@ void P_SetMovingCamera(player_t* player, line_t* line) {
 // This doesn't appear to be used at all
 //
 
-static bool P_ModifyMobjFlags(int tid, int flags) {
+static boolean P_ModifyMobjFlags(int tid, int flags) {
 	mobj_t* mo;
 	bool ok = false;
 
@@ -1600,7 +1600,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 // P_InitSpecialLine
 //
 
-bool P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
+boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 	int ok = 0;
 	int use = line->special & MLU_REPEAT;
 
@@ -1632,7 +1632,7 @@ bool P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 // Only the front sides of lines are usable.
 //
 
-bool P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
+boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
 	bool     ok;
 	int         actionType;
@@ -1787,7 +1787,7 @@ void P_PlayerInSpecialSector(player_t* player) {
 // Animate planes, scroll walls, etc.
 //
 
-bool        levelTimer;
+boolean        levelTimer;
 int             levelTimeCount;
 extern line_t** linespeciallist;
 extern int16_t    numlinespecials;

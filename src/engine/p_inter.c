@@ -80,7 +80,7 @@ int infraredFactor = 0;
 // Returns false if the ammo can't be picked up at all
 //
 
-bool P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
+boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 	int         oldammo;
 
 	if (ammo == am_noammo) {
@@ -178,8 +178,8 @@ bool P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 //
-bool P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, bool dropped) {
-	bool gaveammo, gaveweapon;
+boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, boolean dropped) {
+	boolean gaveammo, gaveweapon;
 
 	if (netgame && (deathmatch != 2) && !dropped) {
 		if (item && item->flags & MF_TRIGTOUCH) {
@@ -235,7 +235,7 @@ bool P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, bool drop
 // P_GiveBody
 // Returns false if the body isn't needed at all
 //
-bool P_GiveBody(player_t* player, int num) {
+boolean P_GiveBody(player_t* player, int num) {
 	if (player->health >= MAXHEALTH) {
 		return false;
 	}
@@ -254,7 +254,7 @@ bool P_GiveBody(player_t* player, int num) {
 // Returns false if the armor is worse
 // than the current armor.
 //
-bool P_GiveArmor(player_t* player, int armortype) {
+boolean P_GiveArmor(player_t* player, int armortype) {
 	int         hits;
 
 	hits = armortype * 100;
@@ -271,7 +271,7 @@ bool P_GiveArmor(player_t* player, int armortype) {
 //
 // P_GiveCard
 //
-static bool P_GiveCard(player_t* player, mobj_t* item, card_t card) {
+static boolean P_GiveCard(player_t* player, mobj_t* item, card_t card) {
 	if (netgame && (item && item->flags & MF_TRIGTOUCH)) {
 		P_SpawnMobj(item->x, item->y, item->z, item->type);
 		return true;
@@ -321,7 +321,7 @@ static bool P_GiveCard(player_t* player, mobj_t* item, card_t card) {
 //
 // P_GivePower
 //
-bool P_GivePower(player_t* player, int power) {
+boolean P_GivePower(player_t* player, int power) {
 	if (power == pw_invulnerability) {
 		player->powers[power] = INVULNTICS;
 		return true;

@@ -47,7 +47,7 @@ typedef enum {
 
 typedef struct {
 	void* data;
-	bool(*callback)(void*, vtx_t*);
+	boolean(*callback)(void*, vtx_t*);
 	dtexture    texid;
 	int         flags;
 	int         params;
@@ -64,14 +64,14 @@ extern drawlist_t drawlist[NUMDRAWLISTS];
 #define MAXDLDRAWCOUNT  0x10000
 extern vtx_t drawVertex[MAXDLDRAWCOUNT];
 
-bool DL_ProcessWalls(vtxlist_t* vl, int* drawcount);
-bool DL_ProcessLeafs(vtxlist_t* vl, int* drawcount);
-bool DL_ProcessSprites(vtxlist_t* vl, int* drawcount);
+boolean DL_ProcessWalls(vtxlist_t* vl, int* drawcount);
+boolean DL_ProcessLeafs(vtxlist_t* vl, int* drawcount);
+boolean DL_ProcessSprites(vtxlist_t* vl, int* drawcount);
 
 vtxlist_t* DL_AddVertexList(drawlist_t* dl);
 int DL_GetDrawListSize(int tag);
-void DL_BeginDrawList(bool t);
-void DL_ProcessDrawList(int tag, bool(*procfunc)(vtxlist_t*, int*));
+void DL_BeginDrawList(boolean t);
+void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*));
 void DL_RenderDrawList(void);
 void DL_Init(void);
 

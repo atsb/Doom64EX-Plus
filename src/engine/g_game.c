@@ -75,35 +75,35 @@ void        G_SetFastParms(int fast_pending);
 gameaction_t    gameaction = 0;
 gamestate_t     gamestate = 0;
 skill_t         gameskill = 0;
-bool        respawnmonsters = false;
-bool        respawnspecials = false;
+boolean        respawnmonsters = false;
+boolean        respawnspecials = false;
 int             gamemap = 0;
 int             nextmap = 0;
-bool        paused = false;
-bool        sendpause = false;    // send a pause event next tic
-bool        sendsave = false;    // send a save event next tic
-bool        usergame = false;    // ok to save / end game
+boolean        paused = false;
+boolean        sendpause = false;    // send a pause event next tic
+boolean        sendsave = false;    // send a save event next tic
+boolean        usergame = false;    // ok to save / end game
 int             starttime = 0;        // for comparative timing purposes
 int             deathmatch = false;    // only if started as net death
-bool        netcheat = false;
-bool        netkill = false;
-bool        netgame = false;    // only true if packets are broadcast
+boolean        netcheat = false;
+boolean        netkill = false;
+boolean        netgame = false;    // only true if packets are broadcast
 int             basetic = 0;
 int             gametic = 0;
 
-bool        playeringame[MAXPLAYERS];
+boolean        playeringame[MAXPLAYERS];
 player_t        players[MAXPLAYERS];
 
 int             consoleplayer;              // player taking events and displaying
 int             displayplayer;              // view being displayed
 
-static bool savenow = false;
+static boolean savenow = false;
 static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
 // for intermission
 int             totalkills, totalitems, totalsecret;
-bool        precache = true;     // if true, load all graphics at start
+boolean        precache = true;     // if true, load all graphics at start
 
 byte            consistency[MAXPLAYERS][BACKUPTICS];
 
@@ -968,7 +968,7 @@ void G_DoLoadLevel(void) {
 // Get info needed to make ticcmd_ts for the players.
 //
 
-bool G_Responder(event_t* ev) {
+boolean G_Responder(event_t* ev) {
 	// Handle level specific ticcmds
 	if (gamestate == GS_LEVEL) {
 		// allow spy mode changes even during the demo
@@ -1176,14 +1176,14 @@ void G_PlayerReborn(int player) {
 	int         killcount;
 	int         itemcount;
 	int         secretcount;
-	bool    cards[NUMCARDS];
-	bool    wpns[NUMWEAPONS];
+	boolean    cards[NUMCARDS];
+	boolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
-	dmemcpy(cards, players[player].cards, sizeof(bool) * NUMCARDS);
-	dmemcpy(wpns, players[player].weaponowned, sizeof(bool) * NUMWEAPONS);
+	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
+	dmemcpy(wpns, players[player].weaponowned, sizeof(boolean) * NUMWEAPONS);
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
@@ -1232,7 +1232,7 @@ void G_PlayerReborn(int player) {
 // because something is occupying it
 //
 
-bool G_CheckSpot(int playernum, mapthing_t* mthing) {
+boolean G_CheckSpot(int playernum, mapthing_t* mthing) {
 	fixed_t         x;
 	fixed_t         y;
 	subsector_t* ss;

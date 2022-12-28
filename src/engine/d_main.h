@@ -53,6 +53,6 @@ void D_PostEvent(event_t* ev);
 
 void D_IncValidCount(void);
 
-extern bool BusyDisk;
+extern boolean BusyDisk;
 
 #endif

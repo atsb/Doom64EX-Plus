@@ -93,22 +93,22 @@
 // defaulted values
 //
 
-bool            allowmenu = true;                   // can menu be accessed?
-bool            menuactive = false;
-bool            mainmenuactive = false;
-bool            allowclearmenu = true;              // can user hit escape to clear menu?
+boolean            allowmenu = true;                   // can menu be accessed?
+boolean            menuactive = false;
+boolean            mainmenuactive = false;
+boolean            allowclearmenu = true;              // can user hit escape to clear menu?
 
-static bool     newmenu = false;    // 20120323 villsa
+static boolean     newmenu = false;    // 20120323 villsa
 static int8_t* messageBindCommand;
 static int          quickSaveSlot;                      // -1 = no quicksave slot picked!
 static int          saveSlot;                           // which slot to save in
 static int8_t         savegamestrings[10][MENUSTRINGSIZE];
-static bool     alphaprevmenu = false;
+static boolean     alphaprevmenu = false;
 static int          menualphacolor = 0xff;
 
 static int8_t         inputString[MENUSTRINGSIZE];
 static int8_t         oldInputString[MENUSTRINGSIZE];
-static bool     inputEnter = false;
+static boolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
 
@@ -126,8 +126,8 @@ void(*menufadefunc)(void) = NULL;
 
 static int8_t     MenuBindBuff[256];
 static int8_t     MenuBindMessage[256];
-static bool MenuBindActive = false;
-static bool showfullitemvalue[3] = { false, false, false };
+static boolean MenuBindActive = false;
+static boolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
@@ -166,7 +166,7 @@ typedef struct {
 
 typedef struct menu_s {
 	int16_t               numitems;           // # of menu items
-	bool            textonly;
+	boolean            textonly;
 	struct menu_s* prevMenu;          // previous menu
 	menuitem_t* menuitems;         // menu items
 	void (*routine)(void);                  // draw routine
@@ -174,7 +174,7 @@ typedef struct menu_s {
 	int16_t               x;
 	int16_t               y;                  // x,y of menu
 	int16_t               lastOn;             // last item user was on in menu
-	bool            smallfont;          // draw text using small fonts
+	boolean            smallfont;          // draw text using small fonts
 	menudefault_t* defaultitems;      // pointer to default values for cvars
 	int16_t               numpageitems;       // number of items to display per page
 	int16_t               menupageoffset;
@@ -225,10 +225,10 @@ static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t
 static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
 static void M_SetInputString(int8_t* string, int len);
-static void M_Scroll(menu_t* menu, bool up);
+static void M_Scroll(menu_t* menu, boolean up);
 static void M_DoVideoReset(int choice);
 
-static bool M_SetThumbnail(int which);
+static boolean M_SetThumbnail(int which);
 
 CVAR_CMD(m_menufadetime, 0) {
 	if (cvar->value < 0) {
@@ -2225,7 +2225,7 @@ menu_t PasswordDef = {
 	NULL
 };
 
-static bool passInvalid = false;
+static boolean passInvalid = false;
 static int        curPasswordSlot = 0;
 static int        passInvalidTic = 0;
 
@@ -2248,6 +2248,8 @@ void M_DrawPassword(void) {
 
 #if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
+#elif defined(VITA)
+	
 #endif
 	{
 		Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
@@ -3790,7 +3792,7 @@ static int M_BigStringWidth(const int8_t* string) {
 // Allow scrolling through multi-page menus via mouse wheel
 //
 
-static void M_Scroll(menu_t* menu, bool up) {
+static void M_Scroll(menu_t* menu, boolean up) {
 	if (menu->numpageitems != -1) {
 		if (!up) {
 			menu->menupageoffset++;
@@ -3906,7 +3908,7 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 // Really need a better and more efficient menu system
 //
 
-static bool M_CursorHighlightItem(menu_t* menu) {
+static boolean M_CursorHighlightItem(menu_t* menu) {
 	float scrnx;
 	float scrny;
 	float mx;
@@ -4065,7 +4067,7 @@ static int8_t thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
-static bool M_SetThumbnail(int which) {
+static boolean M_SetThumbnail(int which) {
 	byte* data;
 
 	data = Z_Malloc(SAVEGAMETBSIZE, PU_STATIC, 0);
@@ -4352,9 +4354,9 @@ void M_DrawXInputButton(int x, int y, int button) {
 // M_Responder
 //
 
-static bool shiftdown = false;
+static boolean shiftdown = false;
 
-bool M_Responder(event_t* ev) {
+boolean M_Responder(event_t* ev) {
 	int ch;
 	int i;
 
@@ -4733,7 +4735,7 @@ bool M_Responder(event_t* ev) {
 // M_StartControlPanel
 //
 
-void M_StartControlPanel(bool forcenext) {
+void M_StartControlPanel(boolean forcenext) {
 	if (!allowmenu) {
 		return;
 	}

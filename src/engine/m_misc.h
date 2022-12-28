@@ -64,12 +64,12 @@ M_AddToBox
 	fixed_t    x,
 	fixed_t    y);
 
-bool M_WriteFile(int8_t const* name, void* source, int length);
+boolean M_WriteFile(int8_t const* name, void* source, int length);
 int M_ReadFile(int8_t const* name, byte** buffer);
 void M_NormalizeSlashes(int8_t* str);
 int M_FileExists(int8_t* filename);
 long M_FileLength(FILE* handle);
-bool M_WriteTextFile(int8_t const* name, int8_t* source, int length);
+boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length);
 void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
@@ -87,5 +87,7 @@ extern int      viewwidth;
 extern int      viewheight;
 
 extern int8_t* chat_macros[];
+
+//extern boolean HighSound;
 
 #endif

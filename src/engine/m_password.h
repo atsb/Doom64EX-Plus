@@ -28,9 +28,9 @@
 
 extern byte passwordData[16];
 extern const int8_t* passwordChar;
-extern bool doPassword;
+extern boolean doPassword;
 
 void M_EncodePassword(void);
-bool M_DecodePassword(bool checkOnly);
+boolean M_DecodePassword(boolean checkOnly);
 
 #endif  // __M_PASSWORD_H__
