@@ -172,7 +172,7 @@ int M_GetKeyName(int8_t* buff, int key) {
 	}
 	for (pkey = Keys; pkey->name; pkey++) {
 		if (pkey->code == key) {
-			strcpy(buff, pkey->name);
+			dstrcpy(buff, pkey->name);
 			return true;
 		}
 	}

@@ -1137,7 +1137,7 @@ static void P_InitMapInfo(void) {
 		//
 		// find map block
 		//
-		if (!stricmp(sc_parser.token, "MAP")) {
+		if (!dstricmp(sc_parser.token, "MAP")) {
 			memset(&mapdef, 0, sizeof(mapdef_t));
 
 			//
@@ -1151,7 +1151,7 @@ static void P_InitMapInfo(void) {
 
 			// read level name
 			sc_parser.find(false);
-			strncpy(mapdef.mapname, sc_parser.token, strlen(sc_parser.token));
+			dstrncpy(mapdef.mapname, sc_parser.token, dstrlen(sc_parser.token));
 
 			sc_parser.compare("{");  // must expect open bracket
 
@@ -1171,7 +1171,7 @@ static void P_InitMapInfo(void) {
 					//
 					// get music track ID
 					//
-					if (!stricmp(sc_parser.token, "MUSIC")) {
+					if (!dstricmp(sc_parser.token, "MUSIC")) {
 						int8_t* text;
 						int ds_start;
 						int ds_end;
@@ -1193,7 +1193,7 @@ static void P_InitMapInfo(void) {
 							mapdef.music = (lump - ds_start);
 						}
 					}
-					else if (!stricmp(sc_parser.token, "ALLOWJUMP")) {
+					else if (!dstricmp(sc_parser.token, "ALLOWJUMP")) {
 						if (atoi(sc_parser.getstring()) == 1) {
 							mapdef.allowjump = 1;
 						}
@@ -1203,7 +1203,7 @@ static void P_InitMapInfo(void) {
 
 						ok = true;
 					}
-					else if (!stricmp(sc_parser.token, "ALLOWFREELOOK")) {
+					else if (!dstricmp(sc_parser.token, "ALLOWFREELOOK")) {
 						if (atoi(sc_parser.getstring()) == 1) {
 							mapdef.allowfreelook = 1;
 						}
@@ -1228,7 +1228,7 @@ static void P_InitMapInfo(void) {
 		//
 		// find cluster block
 		//
-		else if (!stricmp(sc_parser.token, "CLUSTER")) {
+		else if (!dstricmp(sc_parser.token, "CLUSTER")) {
 			memset(&cluster, 0, sizeof(clusterdef_t));
 
 			sc_parser.find(false);
@@ -1252,7 +1252,7 @@ static void P_InitMapInfo(void) {
 					//
 					// get music track ID
 					//
-					if (!stricmp(sc_parser.token, "MUSIC")) {
+					if (!dstricmp(sc_parser.token, "MUSIC")) {
 						int ds_start;
 						int ds_end;
 						int lump;
@@ -1274,14 +1274,14 @@ static void P_InitMapInfo(void) {
 					//
 					// check for text
 					//
-					else if (!stricmp(sc_parser.token, "ENTERTEXT")) {
+					else if (!dstricmp(sc_parser.token, "ENTERTEXT")) {
 						cluster.enteronly = true;
 						text = sc_parser.getstring();
-						strncpy(cluster.text, text, strlen(text));
+						dstrncpy(cluster.text, text, dstrlen(text));
 					}
-					else if (!stricmp(sc_parser.token, "EXITTEXT")) {
+					else if (!dstricmp(sc_parser.token, "EXITTEXT")) {
 						text = sc_parser.getstring();
-						strncpy(cluster.text, text, strlen(text));
+						dstrncpy(cluster.text, text, dstrlen(text));
 					}
 					else {
 						sc_parser.error("P_InitMapInfo");
@@ -1372,11 +1372,11 @@ static void P_InitSkyDef(void) {
 		//
 		// find sky block
 		//
-		if (!stricmp(sc_parser.token, "SKY")) {
+		if (!dstricmp(sc_parser.token, "SKY")) {
 			memset(&sky, 0, sizeof(skydef_t));
 
 			sc_parser.find(false);
-			strncpy(sky.flat, sc_parser.token, strlen(sc_parser.token));
+			dstrncpy(sky.flat, sc_parser.token, dstrlen(sc_parser.token));
 
 			sc_parser.compare("{");  // must expect open bracket
 
@@ -1394,19 +1394,19 @@ static void P_InitSkyDef(void) {
 					//
 					// check for sky flags
 					//
-					if (!stricmp(sc_parser.token, "CLOUD")) {
+					if (!dstricmp(sc_parser.token, "CLOUD")) {
 						sky.flags |= SKF_CLOUD;
 					}
-					else if (!stricmp(sc_parser.token, "THUNDER")) {
+					else if (!dstricmp(sc_parser.token, "THUNDER")) {
 						sky.flags |= SKF_THUNDER;
 					}
-					else if (!stricmp(sc_parser.token, "FIRE")) {
+					else if (!dstricmp(sc_parser.token, "FIRE")) {
 						sky.flags |= SKF_FIRE;
 					}
-					else if (!stricmp(sc_parser.token, "FADEINBACKGROUND")) {
+					else if (!dstricmp(sc_parser.token, "FADEINBACKGROUND")) {
 						sky.flags |= SKF_FADEBACK;
 					}
-					else if (!stricmp(sc_parser.token, "VOID")) {
+					else if (!dstricmp(sc_parser.token, "VOID")) {
 						sky.flags |= SKF_VOID;
 					}
 					else {

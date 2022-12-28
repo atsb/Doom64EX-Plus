@@ -349,10 +349,10 @@ static CMD(Cheat) {
 			return;
 		}
 
-		if (!stricmp(param[0], "all")) {
+		if (!dstricmp(param[0], "all")) {
 			M_CheatKfa(player, NULL);
 		}
-		else if (!stricmp(param[0], "weapon")) {
+		else if (!dstricmp(param[0], "weapon")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Weapons:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -367,11 +367,11 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (strlen(param[1]) == 1) {
+			if (dstrlen(param[1]) == 1) {
 				M_CheatGiveWeapon(player, param[1]);
 			}
 		}
-		else if (!stricmp(param[0], "artifact")) {
+		else if (!dstricmp(param[0], "artifact")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Artifacts:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -381,11 +381,11 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (strlen(param[1]) == 1) {
+			if (dstrlen(param[1]) == 1) {
 				M_CheatArtifacts(player, param[1]);
 			}
 		}
-		else if (!stricmp(param[0], "key")) {
+		else if (!dstricmp(param[0], "key")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Keys:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -398,7 +398,7 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (strlen(param[1]) == 1) {
+			if (dstrlen(param[1]) == 1) {
 				M_CheatGiveKey(player, param[1]);
 			}
 		}
@@ -453,8 +453,8 @@ static CMD(SpawnThing) {
 	}
 
 	player = &players[consoleplayer];
-	x = player->mo->x + FixedMul(INT2F(64) + mobjinfo[id].radius, cos(player->mo->angle));
-	y = player->mo->y + FixedMul(INT2F(64) + mobjinfo[id].radius, sin(player->mo->angle));
+	x = player->mo->x + FixedMul(INT2F(64) + mobjinfo[id].radius, dcos(player->mo->angle));
+	y = player->mo->y + FixedMul(INT2F(64) + mobjinfo[id].radius, dsin(player->mo->angle));
 	z = player->mo->z;
 
 	thing = P_SpawnMobj(x, y, z, id);
@@ -1127,7 +1127,7 @@ void G_Ticker(void) {
 
 				if ((players[i].cmd.buttons & BT_SPECIALMASK) == BTS_SAVEGAME) {
 					if (!savedescription[0]) {
-						strcpy(savedescription, "NET GAME");
+						dstrcpy(savedescription, "NET GAME");
 					}
 					savegameslot =
 						(players[i].cmd.buttons & BTS_SAVEMASK) >> BTS_SAVESHIFT;
@@ -1272,8 +1272,8 @@ boolean G_CheckSpot(int playernum, mapthing_t* mthing) {
 	an = ANG45 * (angle_t)(mthing->angle / 45);
 
 	mo = P_SpawnMobj(
-		x + 20 * cos(an),
-		y + 20 * sin(an),
+		x + 20 * dcos(an),
+		y + 20 * dsin(an),
 		ss->sector->floorheight,
 		MT_TELEPORTFOG
 	);
@@ -1511,7 +1511,7 @@ int8_t savename[256];
 //
 
 void G_LoadGame(const int8_t* name) {
-	strcpy(savename, name);
+	dstrcpy(savename, name);
 	gameaction = ga_loadgame;
 }
 
@@ -1539,7 +1539,7 @@ void G_DoLoadGame(void) {
 
 void G_SaveGame(int slot, const int8_t* description) {
 	savegameslot = slot;
-	strcpy(savedescription, description);
+	dstrcpy(savedescription, description);
 	sendsave = true;
 }
 

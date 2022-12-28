@@ -65,7 +65,7 @@ cvar_t* CON_CvarGet(int8_t* name) {
 	cvar_t* var;
 
 	for (var = cvarcap; var; var = var->next) {
-		if (!strcmp(name, var->name)) {
+		if (!dstrcmp(name, var->name)) {
 			return var;
 		}
 	}
@@ -118,12 +118,12 @@ void CON_CvarSet(int8_t* var_name, int8_t* value) {
 		return;
 	}
 
-	changed = strcmp(var->string, value);
+	changed = dstrcmp(var->string, value);
 
 	Z_Free(var->string);    // free the old value string
 
-	var->string = Z_Malloc(strlen(value) + 1, PU_STATIC, 0);
-	strcpy(var->string, value);
+	var->string = Z_Malloc(dstrlen(value) + 1, PU_STATIC, 0);
+	dstrcpy(var->string, value);
 	var->value = atof(var->string);
 
 	if (var->callback) {
@@ -157,11 +157,11 @@ void CON_CvarRegister(cvar_t* variable) {
 
 	// copy the value off, because future sets will Z_Free it
 	oldstr = variable->string;
-	variable->string = Z_Malloc(strlen(variable->string) + 1, PU_STATIC, 0);
-	strcpy(variable->string, oldstr);
+	variable->string = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
+	dstrcpy(variable->string, oldstr);
 	variable->value = atof(variable->string);
-	variable->defvalue = Z_Malloc(strlen(variable->string) + 1, PU_STATIC, 0);
-	strcpy(variable->defvalue, variable->string);
+	variable->defvalue = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
+	dstrcpy(variable->defvalue, variable->string);
 
 	// link the variable in
 	variable->next = cvarcap;

@@ -36,7 +36,7 @@
 extern deh_section_t *deh_section_types[];
 extern char* deh_signatures[];
 
-static bool deh_initialized = false;
+static boolean deh_initialized = false;
 
 void DEH_Checksum(sha1_digest_t digest)
 {
@@ -105,7 +105,7 @@ static deh_section_t *GetSectionByName(char *name)
 
 // Is the string passed just whitespace?
 
-static bool IsWhitespace(char *s)
+static boolean IsWhitespace(char *s)
 {
     for (; *s; ++s)
     {
@@ -150,7 +150,7 @@ static char *CleanString(char *s)
 //
 // Returns true if read correctly
 
-bool DEH_ParseAssignment(char *line, char **variable_name, char **value)
+boolean DEH_ParseAssignment(char *line, char **variable_name, char **value)
 {
     char *p;
 
@@ -176,7 +176,7 @@ bool DEH_ParseAssignment(char *line, char **variable_name, char **value)
     return true;
 }
 
-static bool CheckSignatures(deh_context_t *context)
+static boolean CheckSignatures(deh_context_t *context)
 {
     size_t i;
     char *line;
@@ -210,7 +210,7 @@ static void DEH_ParseContext(deh_context_t *context)
     deh_section_t *current_section = NULL;
     char section_name[20];
     void *tag = NULL;
-    bool extended;
+    boolean extended;
     char *line;
 
     // Read the header and check it matches the signature
@@ -321,7 +321,7 @@ int DEH_LoadFile(char *filename)
 // Load dehacked file from WAD lump.
 // If allow_long is set, allow long strings and cheats just for this lump.
 
-int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error)
+int DEH_LoadLump(int lumpnum, boolean allow_long, boolean allow_error)
 {
     deh_context_t *context;
 
@@ -352,7 +352,7 @@ int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error)
     return 1;
 }
 
-int DEH_LoadLumpByName(char *name, bool allow_long, bool allow_error)
+int DEH_LoadLumpByName(char *name, boolean allow_long, boolean allow_error)
 {
     int lumpnum;
 

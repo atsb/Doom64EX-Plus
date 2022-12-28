@@ -83,7 +83,7 @@ static CMD(DumpGLExtensions) {
 	int len = 0;
 
 	string = (int8_t*)glGetString(GL_EXTENSIONS);
-	len = strlen(string);
+	len = dstrlen(string);
 
 	for (i = 0; i < len; i++) {
 		if (string[i] == 0x20) {
@@ -121,7 +121,7 @@ static boolean FindExtension(const int8_t* ext) {
 		if (!where) {
 			break;
 		}
-		terminator = where + strlen(ext);
+		terminator = where + dstrlen(ext);
 		if (where == start || *(where - 1) == ' ') {
 			if (*terminator == ' ' || *terminator == '\0') {
 				return true;

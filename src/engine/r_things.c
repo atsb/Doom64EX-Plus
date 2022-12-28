@@ -459,8 +459,8 @@ static boolean R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) {
 	vertex[2].tv = vertex[3].tv = 0;
 
 	// get angles
-	s = F2D3D(sin(laser->angle + ANG90));
-	c = F2D3D(cos(laser->angle + ANG90));
+	s = F2D3D(dsin(laser->angle + ANG90));
+	c = F2D3D(dcos(laser->angle + ANG90));
 
 	// setup vertex coordinates
 
@@ -553,8 +553,8 @@ void R_SetupSprites(void) {
 			}
 
 			// move a bit further towards view
-			vis->x = F2D3D(vis->spr->x - FixedMul(FLOATTOFIXED(1.5), cos(ang)));
-			vis->y = F2D3D(vis->spr->y - FixedMul(FLOATTOFIXED(1.5), sin(ang)));
+			vis->x = F2D3D(vis->spr->x - FixedMul(FLOATTOFIXED(1.5), dcos(ang)));
+			vis->y = F2D3D(vis->spr->y - FixedMul(FLOATTOFIXED(1.5), dsin(ang)));
 			vis->z = F2D3D(R_Interpolate(vis->spr->z, vis->spr->frame_z, interpolate));
 		}
 		else {  // normal vis sprite process

@@ -32,7 +32,7 @@
 #endif
 
 #include "d_event.h"
-extern const int8_t version_date[];
+
 ////////////Video///////////////
 
 extern SDL_Surface* screen;

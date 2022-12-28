@@ -197,11 +197,11 @@ boolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v) {
 	cenx = (line->linedef->v1->x + line->linedef->v2->x) >> 1;
 	ceny = (line->linedef->v1->y + line->linedef->v2->y) >> 1;
 
-	f1 = FixedMul(2 * FRACUNIT, cos(line->angle + ANG90));
-	f2 = FixedMul(2 * FRACUNIT, sin(line->angle + ANG90));
+	f1 = FixedMul(2 * FRACUNIT, dcos(line->angle + ANG90));
+	f2 = FixedMul(2 * FRACUNIT, dsin(line->angle + ANG90));
 
-	s1 = FixedMul(16 * FRACUNIT, cos(line->angle));
-	s2 = FixedMul(16 * FRACUNIT, sin(line->angle));
+	s1 = FixedMul(16 * FRACUNIT, dcos(line->angle));
+	s2 = FixedMul(16 * FRACUNIT, dsin(line->angle));
 
 	x1 = cenx - s1;
 	x2 = cenx + s1;
