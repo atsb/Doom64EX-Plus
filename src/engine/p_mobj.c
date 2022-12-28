@@ -1268,14 +1268,14 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 
 	// [kex] adjust velocity based on viewpitch
 	if (!linetarget) {
-		frac = FixedMul(th->info->speed, cos(source->pitch));
+		frac = FixedMul(th->info->speed, dcos(source->pitch));
 	}
 	else {
 		frac = th->info->speed;
 	}
 
-	th->momx = FixedMul(frac, cos(an));
-	th->momy = FixedMul(frac, sin(an));
+	th->momx = FixedMul(frac, dcos(an));
+	th->momy = FixedMul(frac, dsin(an));
 	th->momz = FixedMul(th->info->speed, slope);
 
 	x = source->x + (offset * finecosine[an >> ANGLETOFINESHIFT]);
@@ -1337,8 +1337,8 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
     }
 
 	th->angle = an;
-	th->momx = FixedMul(speed, cos(th->angle));
-	th->momy = FixedMul(speed, sin(th->angle));
+	th->momx = FixedMul(speed, dcos(th->angle));
+	th->momy = FixedMul(speed, dsin(th->angle));
 
 	if (dest) {
 		dist = P_AproxDistance(dest->x - x, dest->y - y);
@@ -1381,8 +1381,8 @@ void P_SpawnDartMissile(int tid, int type, mobj_t* target) {
 
 		if (type == MT_PROJ_TRACER) {
 			th = P_SpawnMissile(mo, target, type,
-				FixedMul(mo->radius, cos(mo->angle)),
-				FixedMul(mo->radius, sin(mo->angle)),
+				FixedMul(mo->radius, dcos(mo->angle)),
+				FixedMul(mo->radius, dsin(mo->angle)),
 				(mo->height << 1) / FRACUNIT, true);
 
 			th->x = (th->x + th->momx);
@@ -1391,8 +1391,8 @@ void P_SpawnDartMissile(int tid, int type, mobj_t* target) {
 		}
 		else {
 			th = P_SpawnMissile(mo, NULL, type,
-				FixedMul(mo->radius, cos(mo->angle)),
-				FixedMul(mo->radius, sin(mo->angle)),
+				FixedMul(mo->radius, dcos(mo->angle)),
+				FixedMul(mo->radius, dsin(mo->angle)),
 				0, false);
 		}
 

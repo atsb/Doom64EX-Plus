@@ -103,11 +103,11 @@ static void P_InitAnimdef(void) {
 		//
 		// find animpic block
 		//
-		if (!stricmp(sc_parser.token, "ANIMPIC")) {
+		if (!dstricmp(sc_parser.token, "ANIMPIC")) {
 			memset(&anim, 0, sizeof(animdef_t));
 
 			sc_parser.find(false);
-			strncpy(anim.name, sc_parser.token, strlen(sc_parser.token));
+			dstrncpy(anim.name, sc_parser.token, dstrlen(sc_parser.token));
 
 			sc_parser.compare("{");  // must expect open bracket
 

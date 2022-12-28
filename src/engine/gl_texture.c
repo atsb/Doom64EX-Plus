@@ -142,7 +142,7 @@ static void InitWorldTextures(void) {
 		textureptr[i] = (dtexture*)Z_Malloc(1 * sizeof(dtexture), PU_STATIC, 0);
 
 		// get starting index for switch textures
-		if (!strnicmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
+		if (!dstrnicmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
 			swx_start = i;
 		}
 
@@ -380,7 +380,7 @@ static void InitSpriteTextures(void) {
 
 		for (j = 0; j < NUMSPRITES; j++) {
 			// start looking for external palette lumps
-			if (!strncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
+			if (!dstrncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
 				int8_t palname[9];
 
 				// increase the count if a palette lump is found

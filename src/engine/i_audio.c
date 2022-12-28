@@ -990,7 +990,7 @@ static boolean Song_RegisterTracks(song_t* song) {
         track_t* track = &song->tracks[i];
 
         memcpy(track, data, 8);
-        if(strncmp(track->header, "MTrk", 4)) {
+        if(dstrncmp(track->header, "MTrk", 4)) {
             return false;
         }
 
@@ -1047,7 +1047,7 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
         }
 
         memcpy(song, song->data, 0x0e);
-        if(strncmp(song->header, "MThd", 4)) {
+        if(dstrncmp(song->header, "MThd", 4)) {
             fail++;
             continue;
         }

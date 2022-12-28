@@ -150,7 +150,7 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 
 	glSetVertex(vtxstring);
 
-	for (i = 0, vi = 0; i < strlen(msg); i++, vi += 4) {
+	for (i = 0, vi = 0; i < dstrlen(msg); i++, vi += 4) {
 		c = toupper(msg[i]);
 		if (c == '\t') {
 			while (x % 64) {
@@ -333,7 +333,7 @@ int Center_Text(const int8_t* string) {
 	int i = 0;
 	float scale;
 
-	len = strlen(string);
+	len = dstrlen(string);
 
 	for (i = 0; i < len; i++) {
 		t = string[i];
@@ -426,7 +426,7 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
 
-	for (i = 0, vi = 0; i < strlen(string); i++, vi += 4) {
+	for (i = 0, vi = 0; i < dstrlen(string); i++, vi += 4) {
 		vx1 = (float)x;
 		vy1 = (float)y;
 
@@ -916,7 +916,7 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
 
-	for (i = 0, vi = 0; i < strlen(msg); i++, vi += 4) {
+	for (i = 0, vi = 0; i < dstrlen(msg); i++, vi += 4) {
 		vx1 = x;
 		vy1 = y;
 

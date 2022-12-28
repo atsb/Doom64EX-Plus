@@ -40,7 +40,6 @@
 #include <ctype.h>
 #include <stdio.h>
 #endif
-#include <string.h>
 
 #include "doomdef.h"
 #include "doomtype.h"
@@ -107,7 +106,7 @@ static void SC_Close(void) {
 
 static void SC_Compare(const int8_t* token) {
 	sc_parser.find(false);
-	if (stricmp(sc_parser.token, token)) {
+	if (dstricmp(sc_parser.token, token)) {
 		I_Error("SC_Compare: Expected '%s', found '%s' (line = %i, pos = %i)",
 			token, sc_parser.token, sc_parser.linepos, sc_parser.rowpos);
 	}
@@ -152,7 +151,7 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 	boolean ok = false;
 
 	for (i = 0; table[i].token; i++) {
-		if (!stricmp(table[i].token, sc_parser.token)) {
+		if (!dstricmp(table[i].token, sc_parser.token)) {
 			byte* pointer = ((byte*)data + table[i].ptroffset);
 			int8_t* name;
 			byte rgb[3];
@@ -162,12 +161,12 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 			switch (table[i].type) {
 			case 's':
 				name = sc_parser.getstring();
-				strncpy((int8_t*)pointer, name, strlen(name));
+				dstrncpy((int8_t*)pointer, name, dstrlen(name));
 				break;
 			case 'S':
 				name = sc_parser.getstring();
-				strupr(name);
-				strncpy((int8_t*)pointer, name, strlen(name));
+				dstrupr(name);
+				dstrncpy((int8_t*)pointer, name, dstrlen(name));
 				break;
 			case 'i':
 				*(int*)pointer = sc_parser.getint();
@@ -178,11 +177,11 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 			case 'c':
 				sc_parser.compare("="); // expect a '='
 				sc_parser.find(false);
-				rgb[0] = htoi(sc_parser.token);
+				rgb[0] = dhtoi(sc_parser.token);
 				sc_parser.find(false);
-				rgb[1] = htoi(sc_parser.token);
+				rgb[1] = dhtoi(sc_parser.token);
 				sc_parser.find(false);
-				rgb[2] = htoi(sc_parser.token);
+				rgb[2] = dhtoi(sc_parser.token);
 				*(rcolor*)pointer = D_RGBA(rgb[0], rgb[1], rgb[2], 0xFF);
 				break;
 			}

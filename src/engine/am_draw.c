@@ -323,14 +323,14 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, int solid, byte r, byte g, byte 
 	tri[0].tu = tri[1].tu = tri[2].tu = 0.0f;
 	tri[0].tv = tri[1].tv = tri[2].tv = 0.0f;
 
-	tri[0].x = F2D3D(cos(angle << 5) + x);
-	tri[0].y = F2D3D(sin(angle << 5) + y);
+	tri[0].x = F2D3D((dcos(angle) << 5) + x);
+	tri[0].y = F2D3D((dsin(angle) << 5) + y);
 
-	tri[1].x = F2D3D(cos(angle + 0xA0000000 << 5) + x);
-	tri[1].y = F2D3D(sin(angle + 0xA0000000 << 5) + y);
+	tri[1].x = F2D3D((dcos(angle + 0xA0000000) << 5) + x);
+	tri[1].y = F2D3D((dsin(angle + 0xA0000000) << 5) + y);
 
-	tri[2].x = F2D3D(cos(angle + 0x60000000 << 5 + x));
-	tri[2].y = F2D3D(sin(angle + 0x60000000 << 5 + y));
+	tri[2].x = F2D3D((dcos(angle + 0x60000000) << 5) + x);
+	tri[2].y = F2D3D((dsin(angle + 0x60000000) << 5) + y);
 
 	tri[0].r = tri[1].r = tri[2].r = r;
 	tri[0].g = tri[1].g = tri[2].g = g;
@@ -379,8 +379,8 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	float dx2;
 	float dy1;
 	float dy2;
-	float mcos;
-	float msin;
+	float cos;
+	float sin;
 	vtx_t vtx[4];
 
 	if (thing->flags & (MF_NOSECTOR | MF_RENDERLASER)) {
@@ -442,28 +442,28 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	dx2 = dx1 + width;
 	dy1 = -(height / 2.0f);
 	dy2 = dy1 + height;
-	mcos = F2D3D(cos(am_viewangle + ANG90));
-	msin = F2D3D(sin(am_viewangle + ANG90));
+	cos = F2D3D(dcos(am_viewangle + ANG90));
+	sin = F2D3D(dsin(am_viewangle + ANG90));
 
 	glSetVertex(vtx);
 
-	vtx[0].x = tx - ((dx2 * msin) + (dy1 * mcos));
-	vtx[0].y = ty + ((dx2 * mcos) - (dy1 * msin));
+	vtx[0].x = tx - ((dx2 * sin) + (dy1 * cos));
+	vtx[0].y = ty + ((dx2 * cos) - (dy1 * sin));
 	vtx[0].z = fz;
 	vtx[0].tu = flip;
 	vtx[0].tv = 0.0f;
-	vtx[1].x = tx - ((dx2 * msin) + (dy2 * mcos));
-	vtx[1].y = ty + ((dx2 * mcos) - (dy2 * msin));
+	vtx[1].x = tx - ((dx2 * sin) + (dy2 * cos));
+	vtx[1].y = ty + ((dx2 * cos) - (dy2 * sin));
 	vtx[1].z = fz;
 	vtx[1].tu = flip;
 	vtx[1].tv = 1.0f;
-	vtx[2].x = tx - ((dx1 * msin) + (dy2 * mcos));
-	vtx[2].y = ty + ((dx1 * mcos) - (dy2 * msin));
+	vtx[2].x = tx - ((dx1 * sin) + (dy2 * cos));
+	vtx[2].y = ty + ((dx1 * cos) - (dy2 * sin));
 	vtx[2].z = fz;
 	vtx[2].tu = 1 - flip;
 	vtx[2].tv = 1.0f;
-	vtx[3].x = tx - ((dx1 * msin) + (dy1 * mcos));
-	vtx[3].y = ty + ((dx1 * mcos) - (dy1 * msin));
+	vtx[3].x = tx - ((dx1 * sin) + (dy1 * cos));
+	vtx[3].y = ty + ((dx1 * cos) - (dy1 * sin));
 	vtx[3].z = fz;
 	vtx[3].tu = 1 - flip;
 	vtx[3].tv = 0.0f;
