@@ -453,7 +453,7 @@ int dhtoi(int8_t* str) {
 // dfcmp
 //
 
-boolean dfcmp(float f1, float f2) {
+bool dfcmp(float f1, float f2) {
 	float precision = 0.00001f;
 	if (((f1 - precision) < f2) &&
 		((f1 + precision) > f2)) {

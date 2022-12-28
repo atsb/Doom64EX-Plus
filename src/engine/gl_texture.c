@@ -304,7 +304,7 @@ static void InitGfxTextures(void) {
 // GL_BindGfxTexture
 //
 
-int GL_BindGfxTexture(const int8_t* name, boolean alpha) {
+int GL_BindGfxTexture(const int8_t* name, bool alpha) {
 	byte* png;
 	int lump;
 	int width;
@@ -641,7 +641,7 @@ void GL_UnloadTexture(dtexture* texture) {
 // GL_SetTextureUnit
 //
 
-void GL_SetTextureUnit(int unit, boolean enable) {
+void GL_SetTextureUnit(int unit, bool enable) {
 
 	if (unit > 3) {
 		return;

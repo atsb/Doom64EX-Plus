@@ -51,7 +51,7 @@ int         skyflatnum = -1;
 int         thunderCounter = 0;
 int         lightningCounter = 0;
 int         thundertic = 1;
-boolean    skyfadeback = false;
+bool    skyfadeback = false;
 byte* fireBuffer;
 dPalette_t  firePal16[256];
 int         fireLump = -1;

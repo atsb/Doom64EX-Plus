@@ -36,7 +36,7 @@
 //
 
 // Called by main loop.
-boolean ST_Responder(event_t* ev);
+bool ST_Responder(event_t* ev);
 
 // Called by main loop.
 void ST_Ticker(void);
@@ -60,7 +60,7 @@ void ST_RegisterCvars(void);
 void ST_DisplayPendingWeapon(void);
 
 extern int8_t player_names[MAXPLAYERS][MAXPLAYERNAME];
-extern boolean st_chatOn;
+extern bool st_chatOn;
 extern int st_crosshairs;
 
 #endif

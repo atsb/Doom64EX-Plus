@@ -40,12 +40,12 @@
 // ------------------------
 // Command line parameters.
 //
-extern  boolean    nomonsters;     // checkparm of -nomonsters
-extern  boolean    respawnparm;    // checkparm of -respawn
-extern  boolean    respawnitem;
-extern  boolean    fastparm;       // checkparm of -fast
-extern  boolean    nolights;
-extern  boolean    devparm;        // DEBUG: launched with -devparm
+extern  bool    nomonsters;     // checkparm of -nomonsters
+extern  bool    respawnparm;    // checkparm of -respawn
+extern  bool    respawnitem;
+extern  bool    fastparm;       // checkparm of -fast
+extern  bool    nolights;
+extern  bool    devparm;        // DEBUG: launched with -devparm
 
 // -------------------------------------------
 // Selected skill type, map etc.
@@ -55,7 +55,7 @@ extern  boolean    devparm;        // DEBUG: launched with -devparm
 extern  skill_t     startskill;
 extern  int         startmap;
 
-extern  boolean    autostart;
+extern  bool    autostart;
 
 // Selected by user.
 extern  skill_t     gameskill;
@@ -64,13 +64,13 @@ extern  int         gamemap;
 extern  int         nextmap;
 
 // Nightmare mode flag, single player.
-extern  boolean    respawnmonsters;
-extern  boolean    respawnspecials;
+extern  bool    respawnmonsters;
+extern  bool    respawnspecials;
 
 // Netgame? Only true if >1 player.
-extern  boolean    netgame;
-extern  boolean    netcheat;
-extern  boolean    netkill;
+extern  bool    netgame;
+extern  bool    netcheat;
+extern  bool    netkill;
 
 extern  int         gameflags;
 extern  int         compatflags;
@@ -82,7 +82,7 @@ extern int          deathmatch;
 extern int          video_width;
 extern int          video_height;
 extern float        video_ratio;
-extern boolean     window_focused;
+extern bool     window_focused;
 
 // -------------------------
 // Status flags for refresh.
@@ -91,17 +91,17 @@ extern boolean     window_focused;
 // Depending on view size - no status bar?
 // Note that there is no way to disable the
 //  status bar explicitely.
-extern  boolean    statusbaractive;
+extern  bool    statusbaractive;
 
 extern  bool    automapactive;      // In AutoMap mode?
-extern  boolean    menuactive;         // Menu overlayed?
-extern  boolean    allowmenu;          // Allow menu interaction?
-extern  boolean    mainmenuactive;
-extern  boolean    allowclearmenu;
-extern  boolean    paused;             // Game Pause?
+extern  bool    menuactive;         // Menu overlayed?
+extern  bool    allowmenu;          // Allow menu interaction?
+extern  bool    mainmenuactive;
+extern  bool    allowclearmenu;
+extern  bool    paused;             // Game Pause?
 
-extern  boolean    InWindow;
-extern  boolean    setWindow;
+extern  bool    InWindow;
+extern  bool    setWindow;
 extern  int         ViewHeight;
 extern  int         ViewWidth;
 
@@ -152,15 +152,15 @@ extern  int         leveltime;      // tics in game play for par
 // DEMO playback/recording related stuff.
 // No demo, there is a human player in charge?
 // Disable save/end game?
-extern  boolean    usergame;
-extern  boolean    rundemo4;
+extern  bool    usergame;
+extern  bool    rundemo4;
 
 //?
-extern  boolean    demoplayback;
-extern  boolean    demorecording;
+extern  bool    demoplayback;
+extern  bool    demorecording;
 
 // Quit after playing a demo from cmdline.
-extern  boolean    singledemo;
+extern  bool    singledemo;
 
 extern  gamestate_t gamestate;
 
@@ -175,22 +175,22 @@ typedef struct {
 	int         type;
 	int         cluster;
 	int         exitdelay;
-	boolean    nointermission;
-	boolean    clearchts;
-	boolean    forcegodmode;
-	boolean    contmusexit;
+	bool    nointermission;
+	bool    clearchts;
+	bool    forcegodmode;
+	bool    contmusexit;
 	int         allowjump;
 	int         allowfreelook;
 } mapdef_t;
 
 typedef struct {
-	int         id;
-	int         music;
-	boolean    enteronly;
+	int           id;
+	int           music;
+	bool          enteronly;
 	int16_t       pic_x;
 	int16_t       pic_y;
-	boolean    nointermission;
-	boolean    scrolltextend;
+	bool          nointermission;
+	bool          scrolltextend;
 	int8_t        text[512];
 	int8_t        pic[9];
 } clusterdef_t;
@@ -207,7 +207,7 @@ extern  int         gametic;
 extern  player_t    players[MAXPLAYERS];
 
 // Alive? Disconnected?
-extern  boolean    playeringame[MAXPLAYERS];
+extern  bool    playeringame[MAXPLAYERS];
 
 // Player spawn spots for deathmatch.
 #define MAX_DM_STARTS   10
@@ -231,7 +231,7 @@ extern  int8_t        basedefault[1024];
 extern  FILE* debugfile;
 
 // if true, load all graphics at level load
-extern  boolean    precache;
+extern  bool    precache;
 
 #define MAXSENSITIVITY    32
 

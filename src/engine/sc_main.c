@@ -148,7 +148,7 @@ static int SC_GetInteger(void) {
 
 static int SC_SetData(byte* data, const scdatatable_t* table) {
 	int i;
-	boolean ok = false;
+	bool ok = false;
 
 	for (i = 0; table[i].token; i++) {
 		if (!dstricmp(table[i].token, sc_parser.token)) {
@@ -197,12 +197,12 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 // SC_Find
 //
 
-static int SC_Find(boolean forceupper) {
+static int SC_Find(bool forceupper) {
 	int8_t c = 0;
 	int i = 0;
-	boolean comment = false;
-	boolean havetoken = false;
-	boolean string = false;
+	bool comment = false;
+	bool havetoken = false;
+	bool string = false;
 
 	dmemset(sc_parser.token, 0, 256);
 

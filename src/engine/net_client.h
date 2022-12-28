@@ -33,7 +33,7 @@
 
 #define MAXPLAYERNAME 30
 
-boolean NET_CL_Connect(net_addr_t* addr);
+bool NET_CL_Connect(net_addr_t* addr);
 void NET_CL_Disconnect(void);
 void NET_CL_Run(void);
 void NET_CL_Init(void);
@@ -42,12 +42,12 @@ void NET_CL_SendTiccmd(ticcmd_t* ticcmd, int maketic);
 void NET_Init(void);
 void NET_CL_SendCheat(int player, int type, char* buff);
 
-extern boolean net_client_connected;
-extern boolean net_client_received_wait_data;
-extern boolean net_client_controller;
+extern bool net_client_connected;
+extern bool net_client_received_wait_data;
+extern bool net_client_controller;
 extern uint32_t net_clients_in_game;
 extern uint32_t net_drones_in_game;
-extern boolean net_waiting_for_start;
+extern bool net_waiting_for_start;
 extern char net_player_names[MAXPLAYERS][MAXPLAYERNAME];
 extern char net_player_addresses[MAXPLAYERS][MAXPLAYERNAME];
 extern int net_player_number;

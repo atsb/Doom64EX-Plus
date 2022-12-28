@@ -28,7 +28,7 @@
 #pragma interface
 #endif
 
-boolean P_GivePower(player_t*, int);
-boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, boolean dropped);
+bool P_GivePower(player_t*, int);
+bool P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, bool dropped);
 
 #endif

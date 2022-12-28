@@ -48,9 +48,9 @@ void NetUpdate(void);
 //  to notify of game exit
 void D_QuitNetGame(void);
 
-extern boolean ShowGun;
-extern boolean drone;
-extern boolean    net_cl_new_sync;
+extern bool ShowGun;
+extern bool drone;
+extern bool    net_cl_new_sync;
 
 #endif
 

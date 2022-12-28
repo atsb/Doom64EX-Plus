@@ -78,7 +78,7 @@ uint32_t    renderTic = 0;
 uint32_t    spriteRenderTic = 0;
 uint32_t    glBindCalls = 0;
 
-boolean        bRenderSky = false;
+bool        bRenderSky = false;
 
 CVAR(r_fov, 74.0);
 CVAR(r_fog, 1);
@@ -499,7 +499,7 @@ static void R_SetViewClipping(angle_t angle) {
 // R_Interpolate
 //
 
-fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, boolean enable) {
+fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, bool enable) {
 	return !enable ? ticframe : updateframe + FixedMul(rendertic_frac, ticframe - updateframe);
 }
 
@@ -538,7 +538,7 @@ static void R_DrawReadDisk(void) {
 //
 
 extern line_t* contextline; // from p_map.c
-boolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v); // from r_bsp.c
+bool R_GenerateSwitchPlane(seg_t* line, vtx_t* v); // from r_bsp.c
 
 static vertex_t* TraverseVertex(vertex_t* vertex, line_t* line) {
 	int i;

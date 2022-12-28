@@ -90,14 +90,14 @@ static net_packet_t* QueuePop(packet_queue_t* queue)
 //
 //-----------------------------------------------------------------------------
 
-static boolean NET_CL_InitClient(void)
+static bool NET_CL_InitClient(void)
 {
 	QueueInit(&client_queue);
 
 	return true;
 }
 
-static boolean NET_CL_InitServer(void)
+static bool NET_CL_InitServer(void)
 {
 	I_Error("NET_CL_InitServer: attempted to initialise client pipe end as a server!");
 	return false;
@@ -108,7 +108,7 @@ static void NET_CL_SendPacket(net_addr_t* addr, net_packet_t* packet)
 	QueuePush(&server_queue, NET_PacketDup(packet));
 }
 
-static boolean NET_CL_RecvPacket(net_addr_t** addr, net_packet_t** packet)
+static bool NET_CL_RecvPacket(net_addr_t** addr, net_packet_t** packet)
 {
 	net_packet_t* popped;
 
@@ -159,13 +159,13 @@ net_module_t net_loop_client_module =
 //
 //-----------------------------------------------------------------------------
 
-static boolean NET_SV_InitClient(void)
+static bool NET_SV_InitClient(void)
 {
 	I_Error("NET_SV_InitClient: attempted to initialise server pipe end as a client!");
 	return false;
 }
 
-static boolean NET_SV_InitServer(void)
+static bool NET_SV_InitServer(void)
 {
 	QueueInit(&server_queue);
 
@@ -177,7 +177,7 @@ static void NET_SV_SendPacket(net_addr_t* addr, net_packet_t* packet)
 	QueuePush(&client_queue, NET_PacketDup(packet));
 }
 
-static boolean NET_SV_RecvPacket(net_addr_t** addr, net_packet_t** packet)
+static bool NET_SV_RecvPacket(net_addr_t** addr, net_packet_t** packet)
 {
 	net_packet_t* popped;
 

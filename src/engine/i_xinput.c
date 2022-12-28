@@ -44,7 +44,7 @@ xinputgamepad_t xgamepad;
 // Library functions
 //
 
-typedef void (WINAPI* LPXINPUTENABLE)(boolean enable);
+typedef void (WINAPI* LPXINPUTENABLE)(bool enable);
 static LPXINPUTENABLE   I_XInputEnable = NULL;
 
 typedef dword(WINAPI* LPXINPUTGETSTATE)(dword userID, xinputstate_t* state);
@@ -94,8 +94,8 @@ static void I_XInputClampDeadZone(void) {
 void I_XInputPollEvent(void) {
 	xinputbuttons_t* buttons;
 	event_t event;
-	boolean ltrigger;
-	boolean rtrigger;
+	bool ltrigger;
+	bool rtrigger;
 	int i;
 	int j;
 	int bits;
@@ -266,7 +266,7 @@ void I_XInputPollEvent(void) {
 // I_XInputVibrate
 //
 
-void I_XInputVibrate(boolean leftside, byte amount, int windDown) {
+void I_XInputVibrate(bool leftside, byte amount, int windDown) {
 	if (!xgamepad.connected) {
 		return;
 	}

@@ -26,7 +26,7 @@
 #include "gl_main.h"
 
 void Draw_GfxImage(int x, int y, const int8_t* name,
-	rcolor color, boolean alpha);
+	rcolor color, bool alpha);
 void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 	float scale, int pal, rcolor c);
 
@@ -54,7 +54,7 @@ extern const symboldata_t symboldata[];
 #define ST_FONTSIZE        (ST_FONTEND - ST_FONTSTART + 1) // Calculate # of glyphs in font.
 
 int Draw_Text(int x, int y, rcolor color, float scale,
-	boolean wrap, const int8_t* string, ...);
+	bool wrap, const int8_t* string, ...);
 int Center_Text(const int8_t* string);
 int Draw_BigText(int x, int y, rcolor color, const int8_t* string);
 void Draw_Number(int x, int y, int num, int type, rcolor c);

@@ -1049,7 +1049,7 @@ static void saveg_read_laserthinker_t(void* data) {
     laserthinker_t* laserthinker = (laserthinker_t*)data;
     laser_t* l = NULL;
     int next;
-    boolean head = true;
+    bool head = true;
 
     laserthinker->dest = saveg_read_mobjindex();
 
@@ -1229,7 +1229,7 @@ static void saveg_read_header(void) {
 //
 //------------------------------------------------------------------------
 
-static boolean saveg_read_marker(int marker) {
+static bool saveg_read_marker(int marker) {
     int value;
 
     saveg_read_pad();
@@ -1247,7 +1247,7 @@ static void saveg_write_marker(int marker) {
 // P_WriteSaveGame
 //
 
-boolean P_WriteSaveGame(int8_t* description, int slot) {
+bool P_WriteSaveGame(int8_t* description, int slot) {
 
     // setup game save file
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
@@ -1279,7 +1279,7 @@ boolean P_WriteSaveGame(int8_t* description, int slot) {
 // P_ReadSaveGame
 //
 
-boolean P_ReadSaveGame(int8_t* name) {
+bool P_ReadSaveGame(int8_t* name) {
     M_ReadFile(name, &savebuffer);
     save_offset = 0;
 
@@ -1308,7 +1308,7 @@ boolean P_ReadSaveGame(int8_t* name) {
 // P_QuickReadSaveHeader
 //
 
-boolean P_QuickReadSaveHeader(int8_t* name, int8_t* date,
+bool P_QuickReadSaveHeader(int8_t* name, int8_t* date,
     int* thumbnail, int* skill, int* map) {
     int i;
     int size;
@@ -1824,7 +1824,7 @@ void P_ArchiveSpecials(void) {
 
 void P_UnArchiveSpecials(void) {
     int         i;
-    boolean    specialthinker;
+    bool    specialthinker;
     byte        tclass;
     void* thinker;
     thinker_t* currentthinker;

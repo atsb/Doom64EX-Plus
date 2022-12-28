@@ -66,7 +66,7 @@ static queryresponse_t* AddResponder(net_addr_t* addr,
 // Returns true if the reply is from a host that has not previously
 // responded.
 
-static boolean CheckResponder(net_addr_t* addr)
+static bool CheckResponder(net_addr_t* addr)
 {
 	int i;
 
@@ -198,7 +198,7 @@ static void NET_Query_GetResponse(void)
 }
 
 static net_addr_t* NET_Query_QueryLoop(net_addr_t* addr,
-	boolean find_one)
+	bool find_one)
 {
 	int start_time;
 	int last_send_time;
