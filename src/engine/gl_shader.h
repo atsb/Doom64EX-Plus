@@ -32,7 +32,7 @@
 */
 void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
-dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type);
+boolean GL_CheckShaderErrors(uint32_t shader, uint32_t type);
 void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment);
 
 #endif //__GL_SHADER__H

@@ -159,9 +159,9 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-dboolean M_WriteFile(int8_t const* name, void* source, int length) {
+boolean M_WriteFile(int8_t const* name, void* source, int length) {
 	FILE* fp;
-	dboolean result;
+	boolean result;
 
 	errno = 0;
 
@@ -183,7 +183,7 @@ dboolean M_WriteFile(int8_t const* name, void* source, int length) {
 //
 // M_WriteTextFile
 //
-dboolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
+boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
 	int handle;
 	int count;
 	handle = w3sopen(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);

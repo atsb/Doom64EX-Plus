@@ -46,7 +46,7 @@
 // Draw_GfxImage
 //
 
-void Draw_GfxImage(int x, int y, const int8_t* name, rcolor color, dboolean alpha) {
+void Draw_GfxImage(int x, int y, const int8_t* name, rcolor color, boolean alpha) {
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -122,7 +122,7 @@ static vtx_t vtxstring[MAX_MESSAGE_SIZE];
 //
 
 int Draw_Text(int x, int y, rcolor color, float scale,
-	dboolean wrap, const int8_t* string, ...) {
+	boolean wrap, const int8_t* string, ...) {
 	int c;
 	int i;
 	int vi = 0;

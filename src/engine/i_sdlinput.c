@@ -54,11 +54,11 @@ CVAR_EXTERNAL(m_menumouse);
 float mouse_accelfactor;
 
 int         UseJoystick;
-dboolean    DigiJoy;
+boolean    DigiJoy;
 int         DualMouse;
 
-dboolean    MouseMode;//false=microsoft, true=mouse systems
-dboolean window_mouse;
+boolean    MouseMode;//false=microsoft, true=mouse systems
+boolean window_mouse;
 
 #ifdef VITA
 Sint32 s_deadzone = 8000;
@@ -360,9 +360,9 @@ int I_MouseAccel(int val) {
 // I_UpdateGrab
 //
 
-dboolean I_UpdateGrab(void) {
-	static dboolean currently_grabbed = false;
-	dboolean grab;
+boolean I_UpdateGrab(void) {
+	static boolean currently_grabbed = false;
+	boolean grab;
 
 	grab = /*window_mouse &&*/ !menuactive
 		&& (gamestate == GS_LEVEL)
@@ -524,8 +524,8 @@ void I_GetEvent(SDL_Event* Event) {
             ev.data3 = GAMEPAD_RIGHT_STICK;
             D_PostEvent(&ev);
 
-            static dboolean old_ltrigger = false;
-            static dboolean old_rtrigger = false;
+            static boolean old_ltrigger = false;
+            static boolean old_rtrigger = false;
 
             int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
             if (z >= 0x4000 && !old_ltrigger) {

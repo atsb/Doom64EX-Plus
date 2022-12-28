@@ -432,11 +432,11 @@ P_SetThingPosition(mobj_t* thing) {
 // to P_BlockLinesIterator, then make one or more calls
 // to it.
 //
-dboolean
+boolean
 P_BlockLinesIterator
 (int            x,
 	int            y,
-	dboolean(*func)(line_t*)) {
+	boolean(*func)(line_t*)) {
 	int            offset;
 	int16_t* list;
 	line_t* ld;
@@ -475,11 +475,11 @@ P_BlockLinesIterator
 //
 // P_BlockThingsIterator
 //
-dboolean
+boolean
 P_BlockThingsIterator
 (int            x,
 	int            y,
-	dboolean(*func)(mobj_t*)) {
+	boolean(*func)(mobj_t*)) {
 	mobj_t* mobj;
 
 	if (x < 0
@@ -506,7 +506,7 @@ intercept_t    intercepts[MAXINTERCEPTS];
 intercept_t* intercept_p;
 
 divline_t     trace;
-dboolean     earlyout;
+boolean     earlyout;
 int        ptflags;
 
 //
@@ -519,7 +519,7 @@ int        ptflags;
 // are on opposite sides of the trace.
 // Returns true if earlyout and a solid line hit.
 //
-dboolean
+boolean
 PIT_AddLineIntercepts(line_t* ld) {
 	int            s1;
 	int            s2;
@@ -574,7 +574,7 @@ PIT_AddLineIntercepts(line_t* ld) {
 //
 // PIT_AddThingIntercepts
 //
-dboolean PIT_AddThingIntercepts(mobj_t* thing) {
+boolean PIT_AddThingIntercepts(mobj_t* thing) {
 	fixed_t        x1;
 	fixed_t        y1;
 	fixed_t        x2;
@@ -583,7 +583,7 @@ dboolean PIT_AddThingIntercepts(mobj_t* thing) {
 	int            s1;
 	int            s2;
 
-	dboolean        tracepositive;
+	boolean        tracepositive;
 
 	divline_t        dl;
 
@@ -643,7 +643,7 @@ dboolean PIT_AddThingIntercepts(mobj_t* thing) {
 // Returns true if the traverser function returns true
 // for all lines.
 //
-dboolean
+boolean
 P_TraverseIntercepts
 (traverser_t    func,
 	fixed_t    maxfrac) {
@@ -709,14 +709,14 @@ void T_TraceDrawer(tracedrawer_t* tdrawer) {
 // Returns true if the traverser function returns true
 // for all lines.
 //
-dboolean
+boolean
 P_PathTraverse
 (fixed_t        x1,
 	fixed_t        y1,
 	fixed_t        x2,
 	fixed_t        y2,
 	int            flags,
-	dboolean(*trav)(intercept_t*)) {
+	boolean(*trav)(intercept_t*)) {
 	fixed_t    xt1;
 	fixed_t    yt1;
 	fixed_t    xt2;

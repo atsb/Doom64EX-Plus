@@ -82,9 +82,9 @@ void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
 	glDeleteShader(fragmentShader);
 }
 
-dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
+boolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
 {
-	dboolean success;
+	boolean success;
 	char log[1024];
 
 	switch(type)
