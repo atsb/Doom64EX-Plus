@@ -34,34 +34,7 @@
 #include "doomtype.h"
 #include "d_keywds.h"
 #include "tables.h"
-
-// build version
-extern const int8_t version_date[];
-
-void        _dprintf(const int8_t* s, ...);
-int8_t* dstrcpy(int8_t* dest, const int8_t* src);
-void        dstrncpy(int8_t* dest, const int8_t* src, int maxcount);
-int         dstrcmp(const int8_t* s1, const int8_t* s2);
-int         dstrncmp(const int8_t* s1, const int8_t* s2, int len);
-int         dstricmp(const int8_t* s1, const int8_t* s2);
-int         dstrnicmp(const int8_t* s1, const int8_t* s2, int len);
-void        dstrupr(int8_t* s);
-void        dstrlwr(int8_t* s);
-int         dstrlen(const int8_t* string);
-int8_t* dstrrchr(int8_t* s, int8_t c);
-void        dstrcat(int8_t* dest, const int8_t* src);
-int8_t* dstrstr(int8_t* s1, int8_t* s2);
-int         dhtoi(int8_t* str);
-boolean    dfcmp(float f1, float f2);
-int         dsprintf(int8_t* buf, const int8_t* format, ...);
-int         dsnprintf(int8_t* src, size_t n, const int8_t* str, ...);
-
-extern int D_abs(int x);
-extern float D_fabs(float x);
-
-#define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
-#define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
-
+#include "gl_utils.h"
 
 // #define macros to provide functions missing in Windows.
 // Outside Windows, we use strings.h for str[n]casecmp.
@@ -137,21 +110,24 @@ typedef enum {
 //
 // Difficulty/skill settings/filters.
 //
-
 // Skill flags.
-#define MTF_EASY            1
-#define MTF_NORMAL          2
-#define MTF_HARD            4
-#define MTF_AMBUSH          8      // Deaf monsters/do not react to sound.
-#define MTF_MULTI           16     // Multiplayer specific
-#define MTF_SPAWN           32     // Don't spawn until triggered in level
-#define MTF_ONTOUCH         64     // Trigger something when picked up
-#define MTF_ONDEATH         128    // Trigger something when killed
-#define MTF_SECRET          256    // Count as secret for intermission when picked up
-#define MTF_NOINFIGHTING    512    // Ignore other attackers
-#define MTF_NODEATHMATCH    1024   // Don't spawn in deathmatch games
-#define MTF_NONETGAME       2048   // Don't spawn in standard netgame mode
-#define MTF_NIGHTMARE       4096   // [kex] Nightmare thing
+
+enum
+{
+	MTF_EASY = 1,
+	MTF_NORMAL = 2,
+	MTF_HARD = 4,
+	MTF_AMBUSH = 8,      // Deaf monsters/do not react to sound.
+	MTF_MULTI = 16,     // Multiplayer specific
+	MTF_SPAWN = 32,     // Don't spawn until triggered in level
+	MTF_ONTOUCH = 64,     // Trigger something when picked up
+	MTF_ONDEATH = 128,    // Trigger something when killed
+	MTF_SECRET = 256,   // Count as secret for intermission when picked up
+	MTF_NOINFIGHTING = 512,    // Ignore other attackers
+	MTF_NODEATHMATCH = 1024,   // Don't spawn in deathmatch games
+	MTF_NONETGAME = 2048,   // Don't spawn in standard netgame mode
+	MTF_NIGHTMARE = 4096,   // [kex] Nightmare thing
+};
 
 typedef enum {
 	sk_baby,
@@ -255,72 +231,69 @@ extern boolean windowpause;
 // This is the stuff configured by Setup.Exe.
 // Most key data are simple ascii (uppercased).
 //
-#define KEY_RIGHTARROW          0xae
-#define KEY_LEFTARROW           0xac
-#define KEY_UPARROW             0xad
-#define KEY_DOWNARROW           0xaf
-#define KEY_ESCAPE              27
-#define KEY_ENTER               13
-#define KEY_TAB                 9
-#define KEY_F1                  (0x80+0x3b)
-#define KEY_F2                  (0x80+0x3c)
-#define KEY_F3                  (0x80+0x3d)
-#define KEY_F4                  (0x80+0x3e)
-#define KEY_F5                  (0x80+0x3f)
-#define KEY_F6                  (0x80+0x40)
-#define KEY_F7                  (0x80+0x41)
-#define KEY_F8                  (0x80+0x42)
-#define KEY_F9                  (0x80+0x43)
-#define KEY_F10                 (0x80+0x44)
-#define KEY_F11                 (0x80+0x57)
-#define KEY_F12                 (0x80+0x58)
 
-#define KEY_BACKSPACE           127
-#define KEY_PAUSE               0xff
+enum
+{
+	KEY_RIGHTARROW = 0xae,
+	KEY_LEFTARROW = 0xac,
+	KEY_UPARROW = 0xad,
+	KEY_DOWNARROW = 0xaf,
+	KEY_ESCAPE = 27,
+	KEY_ENTER = 13,
+	KEY_TAB = 9,
+	KEY_F1 = (0x80+0x3b),
+	KEY_F2 = (0x80+0x3c),
+	KEY_F3 = (0x80+0x3d),
+	KEY_F4 = (0x80+0x3e),
+	KEY_F5 = (0x80+0x3f),
+	KEY_F6 = (0x80+0x40),
+	KEY_F7 = (0x80+0x41),
+	KEY_F8 = (0x80+0x42),
+	KEY_F9 = (0x80+0x43),
+	KEY_F10 = (0x80+0x44),
+	KEY_F11 = (0x80+0x57),
+	KEY_F12 = (0x80+0x58),
+	KEY_BACKSPACE = 127,
+	KEY_PAUSE = 0xff,
+	KEY_KPSTAR = 298,
+	KEY_KPPLUS = 299,
+	KEY_EQUALS = 0x3d,
+	KEY_MINUS = 0x2d,
+	KEY_SHIFT = (0x80+0x36),
+	KEY_CTRL = (0x80+0x1d),
+	KEY_ALT = (0x80+0x38),
+	KEY_RSHIFT = (0x80+0x36),
+	KEY_RCTRL = (0x80+0x1d),
+	KEY_RALT = (0x80+0x38),
+	KEY_INSERT = 0xd2,
+	KEY_HOME = 0xc7,
+	KEY_PAGEUP = 0xc9,
+	KEY_PAGEDOWN = 0xd1,
+	KEY_DEL = 0xc8,
+	KEY_END = 0xcf,
+	KEY_SCROLLLOCK = 0xc6,
+	KEY_SPACEBAR = 0x20,
 
-#define KEY_KPSTAR              298
-#define KEY_KPPLUS              299
-
-#define KEY_EQUALS              0x3d
-#define KEY_MINUS               0x2d
-
-#define KEY_SHIFT               (0x80+0x36)
-#define KEY_CTRL                (0x80+0x1d)
-#define KEY_ALT                 (0x80+0x38)
-
-#define KEY_RSHIFT              (0x80+0x36)
-#define KEY_RCTRL               (0x80+0x1d)
-#define KEY_RALT                (0x80+0x38)
-
-#define KEY_INSERT              0xd2
-#define KEY_HOME                0xc7
-#define KEY_PAGEUP              0xc9
-#define KEY_PAGEDOWN            0xd1
-#define KEY_DEL                 0xc8
-#define KEY_END                 0xcf
-#define KEY_SCROLLLOCK          0xc6
-#define KEY_SPACEBAR            0x20
-
-#define KEY_KEYPADENTER         269
-#define KEY_KEYPADMULTIPLY      298
-#define KEY_KEYPADPLUS          299
-#define KEY_NUMLOCK             300
-#define KEY_KEYPADMINUS         301
-#define KEY_KEYPADPERIOD        302
-#define KEY_KEYPADDIVIDE        303
-#define KEY_KEYPAD0             304
-#define KEY_KEYPAD1             305
-#define KEY_KEYPAD2             306
-#define KEY_KEYPAD3             307
-#define KEY_KEYPAD4             308
-#define KEY_KEYPAD5             309
-#define KEY_KEYPAD6             310
-#define KEY_KEYPAD7             311
-#define KEY_KEYPAD8             312
-#define KEY_KEYPAD9             313
-
-#define KEY_MWHEELUP            (0x80 + 0x6b)
-#define KEY_MWHEELDOWN          (0x80 + 0x6c)
+	KEY_KEYPADENTER = 269,
+	KEY_KEYPADMULTIPLY = 298,
+	KEY_KEYPADPLUS = 299,
+	KEY_NUMLOCK = 300,
+	KEY_KEYPADMINUS = 301,
+	KEY_KEYPADPERIOD = 302,
+	KEY_KEYPADDIVIDE = 303,
+	KEY_KEYPAD0 = 304,
+	KEY_KEYPAD1 = 305,
+	KEY_KEYPAD2 = 306,
+	KEY_KEYPAD3 = 307,
+	KEY_KEYPAD4 = 308,
+	KEY_KEYPAD5 = 309,
+	KEY_KEYPAD6 = 310,
+	KEY_KEYPAD7 = 311,
+	KEY_KEYPAD8 = 312,
+	KEY_KEYPAD9 = 313,
+	KEY_MWHEELUP = (0x80 + 0x6b),
+	KEY_MWHEELDOWN = (0x80 + 0x6c)
+};
 
 #ifdef VITA
 typedef enum {
@@ -348,8 +321,7 @@ typedef enum {
 };
 #endif
 
-#include "doomtype.h"
-#include "gl_utils.h"
+
 //code assumes MOUSE_BUTTONS<10
 #define MOUSE_BUTTONS        6
 

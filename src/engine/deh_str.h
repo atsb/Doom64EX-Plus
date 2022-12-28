@@ -22,23 +22,22 @@
 
 #include "doomtype.h"
 
-// Used to do dehacked text substitutions throughout the program
-
-const char *DEH_String(const char *s);
-void DEH_printf(const char *fmt, ...);
-void DEH_fprintf(FILE *fstream, const char *fmt, ...);
-void DEH_snprintf(char *buffer, size_t len, const char *fmt, ...);
-void DEH_AddStringReplacement(const char *from_text, const char *to_text);
 
 
-#if 0
+
+#ifdef USE_DEHACKED_DEFINES //The reason of why i did this: https://github.com/Arawn-Davies/doomgeneric-ps2/blob/main/includes/deh_str.h
 // Static macro versions of the functions above
-
 #define DEH_String(x) (x)
 #define DEH_printf printf
 #define DEH_fprintf fprintf
 #define DEH_snprintf snprintf
-
+#else
+// Used to do dehacked text substitutions throughout the program
+const char* DEH_String(const char* s);
+void DEH_printf(const char* fmt, ...);
+void DEH_fprintf(FILE* fstream, const char* fmt, ...);
+void DEH_snprintf(char* buffer, size_t len, const char* fmt, ...);
+void DEH_AddStringReplacement(const char* from_text, const char* to_text);
 #endif
 
 #endif /* #ifndef DEH_STR_H */
