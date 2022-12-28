@@ -433,7 +433,7 @@ void P_NightmareRespawn(mobj_t* mobj) {
 		z = ONFLOORZ;
 	}
 
-	dmemset(&junk, 0, sizeof(line_t));
+	memset(&junk, 0, sizeof(line_t));
 
 	// inherit attributes from deceased one
 	mo = P_SpawnMobj(x, y, z, mobj->type);
@@ -593,7 +593,7 @@ mobj_t* P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type) {
 	mobjinfo_t* info;
 
 	mobj = Z_Malloc(sizeof(*mobj), PU_LEVEL, NULL);
-	dmemset(mobj, 0, sizeof(*mobj));
+	memset(mobj, 0, sizeof(*mobj));
 	info = &mobjinfo[type];
 
 	mobj->type = type;
@@ -993,7 +993,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	if (mthing->type == 11) {
 		if (deathmatch_p < &deathmatchstarts[10]) {
-			dmemcpy(deathmatch_p, mthing, sizeof(*mthing));
+			memcpy(deathmatch_p, mthing, sizeof(*mthing));
 			deathmatch_p++;
 		}
 		return NULL;
@@ -1055,7 +1055,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	if (mthing->options & MTF_SPAWN) {
 		mthing->options &= ~MTF_SPAWN;
-		dmemcpy(&spawnlist[numspawnlist++], mthing, sizeof(mapthing_t));
+		memcpy(&spawnlist[numspawnlist++], mthing, sizeof(mapthing_t));
 
 		return NULL;
 	}

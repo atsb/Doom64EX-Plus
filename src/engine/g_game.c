@@ -246,7 +246,7 @@ static CMD(Weapon) {
 		return;
 	}
 
-	id = datoi(param[0]);
+	id = atoi(param[0]);
 
 	if ((id > NUMWEAPONS) || (id < 1)) {
 		return;
@@ -447,7 +447,7 @@ static CMD(SpawnThing) {
 		return;
 	}
 
-	id = datoi(param[0]);
+	id = atoi(param[0]);
 	if (id >= NUMMOBJTYPES || id < 0) {
 		return;
 	}
@@ -484,7 +484,7 @@ static CMD(ExitLevel) {
 		G_ExitLevel();
 	}
 	else {
-		G_SecretExitLevel(datoi(param[0]));
+		G_SecretExitLevel(atoi(param[0]));
 	}
 }
 
@@ -503,9 +503,9 @@ static CMD(TriggerSpecial) {
 		return;
 	}
 
-	dmemset(&junk, 0, sizeof(line_t));
-	junk.special = datoi(param[0]);
-	junk.tag = datoi(param[1]);
+	memset(&junk, 0, sizeof(line_t));
+	junk.special = atoi(param[0]);
+	junk.tag = atoi(param[1]);
 
 	P_DoSpecialLine(players[consoleplayer].mo, &junk, 0);
 }
@@ -577,7 +577,7 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	playercontrols_t* pc;
 
 	pc = &Controls;
-	dmemset(cmd, 0, sizeof(ticcmd_t));
+	memset(cmd, 0, sizeof(ticcmd_t));
 
 	cmd->consistency = consistency[consoleplayer][maketic % BACKUPTICS];
 
@@ -908,7 +908,7 @@ void G_DoLoadLevel(void) {
 			players[i].playerstate = PST_REBORN;
 		}
 
-		dmemset(players[i].frags, 0, sizeof(players[i].frags));
+		memset(players[i].frags, 0, sizeof(players[i].frags));
 	}
 
 	basetic = gametic;
@@ -1074,7 +1074,7 @@ void G_Ticker(void) {
 			if (playeringame[i]) {
 				cmd = &players[i].cmd;
 
-				dmemcpy(cmd, &netcmds[i][buf], sizeof(ticcmd_t));
+				memcpy(cmd, &netcmds[i][buf], sizeof(ticcmd_t));
 
 				//
 				// 20120404 villsa - make sure gameaction isn't set to anything before
@@ -1153,8 +1153,8 @@ void G_PlayerFinishLevel(int player) {
 
 	p = &players[player];
 
-	dmemset(p->powers, 0, sizeof(p->powers));
-	dmemset(p->cards, 0, sizeof(p->cards));
+	memset(p->powers, 0, sizeof(p->powers));
+	memset(p->cards, 0, sizeof(p->cards));
 	p->mo->flags &= ~MF_SHADOW;     // cancel invisibility
 	p->damagecount = 0;         // no palette changes
 	p->bonuscount = 0;
@@ -1181,11 +1181,11 @@ void G_PlayerReborn(int player) {
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
 
-	dmemcpy(frags, players[player].frags, sizeof(frags));
-	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
-	dmemcpy(wpns, players[player].weaponowned, sizeof(boolean) * NUMWEAPONS);
-	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
-	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
+	memcpy(frags, players[player].frags, sizeof(frags));
+	memcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
+	memcpy(wpns, players[player].weaponowned, sizeof(boolean) * NUMWEAPONS);
+	memcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
+	memcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
@@ -1197,9 +1197,9 @@ void G_PlayerReborn(int player) {
 	R_RefreshBrightness();
 
 	p = &players[player];
-	dmemset(p, 0, sizeof(*p));
+	memset(p, 0, sizeof(*p));
 
-	dmemcpy(players[player].frags, frags, sizeof(players[player].frags));
+	memcpy(players[player].frags, frags, sizeof(players[player].frags));
 	players[player].killcount = killcount;
 	players[player].itemcount = itemcount;
 	players[player].secretcount = secretcount;
@@ -1398,7 +1398,7 @@ void G_ExitLevel(void) {
 
 	map = P_GetMapInfo(gamemap);
 
-	dmemset(&junk, 0, sizeof(line_t));
+	memset(&junk, 0, sizeof(line_t));
 	junk.tag = map->exitdelay;
 
 	P_SpawnDelayTimer(&junk, G_CompleteLevel);
@@ -1416,7 +1416,7 @@ void G_SecretExitLevel(int map) {
 
 	mapdef = P_GetMapInfo(gamemap);
 
-	dmemset(&junk, 0, sizeof(line_t));
+	memset(&junk, 0, sizeof(line_t));
 	junk.tag = mapdef->exitdelay;
 
 	P_SpawnDelayTimer(&junk, G_CompleteLevel);
@@ -1580,7 +1580,7 @@ void G_Init(void) {
 	G_ReloadDefaults();
 	G_InitActions();
 
-	dmemset(playeringame, 0, sizeof(playeringame));
+	memset(playeringame, 0, sizeof(playeringame));
 	G_ClearInput();
 
 	G_AddCommand("+fire", CMD_Button, PCKEY_ATTACK);

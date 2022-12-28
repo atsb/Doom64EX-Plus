@@ -85,7 +85,7 @@ float CON_CvarValue(int8_t* name) {
 		return 0;
 	}
 
-	return datof(var->string);
+	return atof(var->string);
 }
 
 //
@@ -124,7 +124,7 @@ void CON_CvarSet(int8_t* var_name, int8_t* value) {
 
 	var->string = Z_Malloc(dstrlen(value) + 1, PU_STATIC, 0);
 	dstrcpy(var->string, value);
-	var->value = datof(var->string);
+	var->value = atof(var->string);
 
 	if (var->callback) {
 		var->callback(var);
@@ -159,7 +159,7 @@ void CON_CvarRegister(cvar_t* variable) {
 	oldstr = variable->string;
 	variable->string = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
 	dstrcpy(variable->string, oldstr);
-	variable->value = datof(variable->string);
+	variable->value = atof(variable->string);
 	variable->defvalue = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
 	dstrcpy(variable->defvalue, variable->string);
 

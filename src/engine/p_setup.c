@@ -217,7 +217,7 @@ void P_LoadSegs(void)
 
 	numsegs = W_MapLumpLength(ML_SEGS) / sizeof(mapseg_t);
 	segs = Z_Malloc(numsegs * sizeof(seg_t), PU_LEVEL, 0);
-	dmemset(segs, 0, numsegs * sizeof(seg_t));
+	memset(segs, 0, numsegs * sizeof(seg_t));
 
 	CON_DPrintf("%i segs\n", numsegs);
 
@@ -273,7 +273,7 @@ void P_LoadSubsectors(int lump) {
 	CON_DPrintf("%i subsectors\n", numsubsectors);
 
 	ms = (mapsubsector_t*)W_GetMapLump(lump);
-	dmemset(subsectors, 0, numsubsectors * sizeof(subsector_t));
+	memset(subsectors, 0, numsubsectors * sizeof(subsector_t));
 	ss = subsectors;
 
 	for (i = 0; i < numsubsectors; i++, ss++, ms++) {
@@ -295,7 +295,7 @@ void P_LoadSectors(int lump) {
 
 	numsectors = W_MapLumpLength(lump) / sizeof(mapsector_t);
 	sectors = Z_Malloc(numsectors * sizeof(sector_t), PU_LEVEL, 0);
-	dmemset(sectors, 0, numsectors * sizeof(sector_t));
+	memset(sectors, 0, numsectors * sizeof(sector_t));
 
 	CON_DPrintf("%i sectors\n", numsectors);
 
@@ -340,7 +340,7 @@ void P_LoadLights(int lump) {
 
 	numlights = (W_MapLumpLength(lump) / sizeof(maplights_t)) + 256;
 	lights = Z_Malloc(numlights * sizeof(light_t), PU_LEVEL, NULL);
-	dmemset(lights, 0, numlights * sizeof(light_t));
+	memset(lights, 0, numlights * sizeof(light_t));
 
 	CON_DPrintf("%i lights\n", numlights);
 
@@ -548,7 +548,7 @@ void P_LoadThings(int lump) {
 	boolean        p4start = false;
 
 	bodyqueslot = 0;
-	dmemset(playerstarts, 0, sizeof(playerstarts));
+	memset(playerstarts, 0, sizeof(playerstarts));
 	deathmatch_p = deathmatchstarts;
 
 	numthings = W_MapLumpLength(lump) / sizeof(mapthing_t);
@@ -636,7 +636,7 @@ void P_LoadLineDefs(int lump) {
 
 	numlines = W_MapLumpLength(lump) / sizeof(maplinedef_t);
 	lines = Z_Malloc(numlines * sizeof(line_t), PU_LEVEL, 0);
-	dmemset(lines, 0, numlines * sizeof(line_t));
+	memset(lines, 0, numlines * sizeof(line_t));
 
 	CON_DPrintf("%i linedefs\n", numlines);
 
@@ -720,7 +720,7 @@ void P_LoadSideDefs(int lump) {
 
 	numsides = W_MapLumpLength(lump) / sizeof(mapsidedef_t);
 	sides = Z_Malloc(numsides * sizeof(side_t), PU_LEVEL, 0);
-	dmemset(sides, 0, numsides * sizeof(side_t));
+	memset(sides, 0, numsides * sizeof(side_t));
 
 	CON_DPrintf("%i sidedefs\n", numsides);
 
@@ -745,8 +745,8 @@ void P_LoadReject(int lump) {
 
 	size = W_MapLumpLength(lump);
 	rejectmatrix = (byte*)Z_Malloc(size, PU_LEVEL, 0);
-	dmemset(rejectmatrix, 0, size);
-	dmemcpy(rejectmatrix, (byte*)W_GetMapLump(lump), size);
+	memset(rejectmatrix, 0, size);
+	memcpy(rejectmatrix, (byte*)W_GetMapLump(lump), size);
 }
 
 static const int8_t* bmaperrormsg;
@@ -852,7 +852,7 @@ static void P_LoadBlockMap(void) {
 	// clear out mobj chains
 	count = sizeof(*blocklinks) * bmapwidth * bmapheight;
 	blocklinks = Z_Malloc(count, PU_LEVEL, 0);
-	dmemset(blocklinks, 0, count);
+	memset(blocklinks, 0, count);
 }
 
 //
@@ -1060,7 +1060,7 @@ void P_SetupLevel(int map, int playermask, skill_t skill) {
 	P_LoadThings(ML_THINGS);
 	W_FreeMapLump();
 
-	dmemset(taglist, 0, sizeof(int) * MAXQUEUELIST);
+	memset(taglist, 0, sizeof(int) * MAXQUEUELIST);
 	taglistidx = 0;
 
 	// set up world state
@@ -1138,7 +1138,7 @@ static void P_InitMapInfo(void) {
 		// find map block
 		//
 		if (!dstricmp(sc_parser.token, "MAP")) {
-			dmemset(&mapdef, 0, sizeof(mapdef_t));
+			memset(&mapdef, 0, sizeof(mapdef_t));
 
 			//
 			// set default values
@@ -1194,20 +1194,20 @@ static void P_InitMapInfo(void) {
 						}
 					}
 					else if (!dstricmp(sc_parser.token, "ALLOWJUMP")) {
-						if (datoi(sc_parser.getstring()) == 1) {
+						if (atoi(sc_parser.getstring()) == 1) {
 							mapdef.allowjump = 1;
 						}
-						else if (datoi(sc_parser.getstring()) == 0) {
+						else if (atoi(sc_parser.getstring()) == 0) {
 							mapdef.allowjump = 2;
 						}
 
 						ok = true;
 					}
 					else if (!dstricmp(sc_parser.token, "ALLOWFREELOOK")) {
-						if (datoi(sc_parser.getstring()) == 1) {
+						if (atoi(sc_parser.getstring()) == 1) {
 							mapdef.allowfreelook = 1;
 						}
-						else if (datoi(sc_parser.getstring()) == 0) {
+						else if (atoi(sc_parser.getstring()) == 0) {
 							mapdef.allowfreelook = 2;
 						}
 
@@ -1222,17 +1222,17 @@ static void P_InitMapInfo(void) {
 
 			mapdefs = Z_Realloc(mapdefs,
 				sizeof(mapdef_t) * ++nummapdef, PU_STATIC, 0);
-			dmemcpy(&mapdefs[nummapdef - 1], &mapdef, sizeof(mapdef_t));
+			memcpy(&mapdefs[nummapdef - 1], &mapdef, sizeof(mapdef_t));
 		}
 
 		//
 		// find cluster block
 		//
 		else if (!dstricmp(sc_parser.token, "CLUSTER")) {
-			dmemset(&cluster, 0, sizeof(clusterdef_t));
+			memset(&cluster, 0, sizeof(clusterdef_t));
 
 			sc_parser.find(false);
-			cluster.id = datoi(sc_parser.token);
+			cluster.id = atoi(sc_parser.token);
 
 			sc_parser.compare("{");  // must expect open bracket
 
@@ -1291,7 +1291,7 @@ static void P_InitMapInfo(void) {
 
 			clusterdefs = Z_Realloc(clusterdefs,
 				sizeof(clusterdef_t) * ++numclusterdef, PU_STATIC, 0);
-			dmemcpy(&clusterdefs[numclusterdef - 1], &cluster, sizeof(clusterdef_t));
+			memcpy(&clusterdefs[numclusterdef - 1], &cluster, sizeof(clusterdef_t));
 		}
 		else {
 			sc_parser.error("P_InitMapInfo");
@@ -1373,7 +1373,7 @@ static void P_InitSkyDef(void) {
 		// find sky block
 		//
 		if (!dstricmp(sc_parser.token, "SKY")) {
-			dmemset(&sky, 0, sizeof(skydef_t));
+			memset(&sky, 0, sizeof(skydef_t));
 
 			sc_parser.find(false);
 			dstrncpy(sky.flat, sc_parser.token, dstrlen(sc_parser.token));
@@ -1421,7 +1421,7 @@ static void P_InitSkyDef(void) {
 
 			skydefs = Z_Realloc(skydefs,
 				sizeof(skydef_t) * ++numskydef, PU_STATIC, 0);
-			dmemcpy(&skydefs[numskydef - 1], &sky, sizeof(skydef_t));
+			memcpy(&skydefs[numskydef - 1], &sky, sizeof(skydef_t));
 		}
 		else {
 			sc_parser.error("P_InitSkyDef");

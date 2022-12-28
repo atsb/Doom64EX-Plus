@@ -148,7 +148,7 @@ void CON_AddLine(int8_t* line, int len) {
 	cline->len = len;
 
 	if (len) {
-		dmemcpy(cline->line, line, len);
+		memcpy(cline->line, line, len);
 	}
 
 	cline->line[len] = 0;
@@ -379,7 +379,7 @@ bool CON_Responder(event_t* ev) {
 				c = console_prevcmds[console_nextcmd];
 				if (console_buffer[c]) {
 					console_inputlength = console_buffer[c]->len;
-					dmemcpy(console_inputbuffer, console_buffer[console_prevcmds[console_nextcmd]]->line, console_inputlength);
+					memcpy(console_inputbuffer, console_buffer[console_prevcmds[console_nextcmd]]->line, console_inputlength);
 				}
 				break;
 
@@ -399,7 +399,7 @@ bool CON_Responder(event_t* ev) {
 
 				console_nextcmd = c;
 				console_inputlength = console_buffer[console_prevcmds[console_nextcmd]]->len;
-				dmemcpy(console_inputbuffer, console_buffer[console_prevcmds[console_nextcmd]]->line, console_inputlength);
+				memcpy(console_inputbuffer, console_buffer[console_prevcmds[console_nextcmd]]->line, console_inputlength);
 				break;
 
 			case KEY_MWHEELUP:

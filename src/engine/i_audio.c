@@ -428,7 +428,7 @@ static void Song_ClearPlaylist(void) {
     int i;
 
     for(i = 0; i < MIDI_CHANNELS; i++) {
-        dmemset(&playlist[i], 0, sizeof(song_t));
+        memset(&playlist[i], 0, sizeof(song_t));
 
         playlist[i].id      = i;
         playlist[i].state   = CHAN_STATE_READY;
@@ -624,7 +624,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
     // mostly for debugging/logging
     case MIDI_MESSAGE:
         b = Chan_GetNextMidiByte(chan);
-        dmemset(string, 0, 256);
+        memset(string, 0, 256);
 
         for(i = 0; i < b; i++) {
             string[i] = Chan_GetNextMidiByte(chan);
@@ -989,7 +989,7 @@ static boolean Song_RegisterTracks(song_t* song) {
     for(i = 0; i < song->ntracks; i++) {
         track_t* track = &song->tracks[i];
 
-        dmemcpy(track, data, 8);
+        memcpy(track, data, 8);
         if(dstrncmp(track->header, "MTrk", 4)) {
             return false;
         }
@@ -1046,7 +1046,7 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
             continue;
         }
 
-        dmemcpy(song, song->data, 0x0e);
+        memcpy(song, song->data, 0x0e);
         if(dstrncmp(song->header, "MThd", 4)) {
             fail++;
             continue;
@@ -1182,7 +1182,7 @@ void I_InitSequencer(void) {
         return;
     }
 
-    dmemset(&doomseq, 0, sizeof(doomseq_t));
+    memset(&doomseq, 0, sizeof(doomseq_t));
 
     //
     // init sequencer thread

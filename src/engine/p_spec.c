@@ -104,7 +104,7 @@ static void P_InitAnimdef(void) {
 		// find animpic block
 		//
 		if (!dstricmp(sc_parser.token, "ANIMPIC")) {
-			dmemset(&anim, 0, sizeof(animdef_t));
+			memset(&anim, 0, sizeof(animdef_t));
 
 			sc_parser.find(false);
 			dstrncpy(anim.name, sc_parser.token, dstrlen(sc_parser.token));
@@ -128,7 +128,7 @@ static void P_InitAnimdef(void) {
 
 			animdefs = Z_Realloc(animdefs,
 				sizeof(animdef_t) * ++numanimdef, PU_STATIC, 0);
-			dmemcpy(&animdefs[numanimdef - 1], &anim, sizeof(animdef_t));
+			memcpy(&animdefs[numanimdef - 1], &anim, sizeof(animdef_t));
 		}
 		else {
 			sc_parser.error("P_InitAnimdef");
@@ -1890,7 +1890,7 @@ void P_UpdateSpecials(void) {
 				}
 
 				S_StartSound((mobj_t*)buttonlist[i].soundorg, sfx_switch1);
-				dmemset(&buttonlist[i], 0, sizeof(button_t));
+				memset(&buttonlist[i], 0, sizeof(button_t));
 			}
 		}
 	}
@@ -2011,7 +2011,7 @@ void P_SpawnSpecials(void) {
 	i = M_CheckParm("-timer");
 	if (i && deathmatch) {
 		int    time;
-		time = datoi(myargv[i + 1]) * 60 * TICRATE;
+		time = atoi(myargv[i + 1]) * 60 * TICRATE;
 		levelTimer = true;
 		levelTimeCount = time;
 	}
@@ -2097,6 +2097,6 @@ void P_SpawnSpecials(void) {
 	}
 
 	for (i = 0; i < MAXBUTTONS; i++) {
-		dmemset(&buttonlist[i], 0, sizeof(button_t));
+		memset(&buttonlist[i], 0, sizeof(button_t));
 	}
 }

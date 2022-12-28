@@ -100,8 +100,8 @@ void M_EncodePassword(void) {
 	int xbit3 = 0;
 	player_t* player;
 
-	dmemset(encode, 0, 10);
-	dmemset(passwordData, 0, 16);
+	memset(encode, 0, 10);
+	memset(passwordData, 0, 16);
 	player = &players[consoleplayer];
 
 	// map and skill
@@ -237,8 +237,8 @@ boolean M_DecodePassword(boolean checkOnly) {
 	int16_t x, y;
 	player_t* player;
 
-	dmemcpy(data, passwordData, 16);
-	dmemset(decode, 0, 10);
+	memcpy(data, passwordData, 16);
+	memset(decode, 0, 10);
 	player = &players[consoleplayer];
 
 	//
