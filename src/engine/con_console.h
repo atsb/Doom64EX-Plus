@@ -31,7 +31,7 @@
 #define MAX_CONSOLE_INPUT_LEN    80
 extern int8_t     console_inputbuffer[];
 extern int      console_inputlength;
-extern dboolean console_initialized;
+extern bool console_initialized;
 
 #define CONCLEARINPUT() (dmemset(console_inputbuffer+1, 0, MAX_CONSOLE_INPUT_LEN-1))
 
@@ -44,6 +44,6 @@ void CON_Draw(void);
 void CON_AddLine(int8_t *line, int len);
 void CON_Ticker(void);
 
-dboolean CON_Responder(event_t* ev);
+bool CON_Responder(event_t* ev);
 
 #endif

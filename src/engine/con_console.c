@@ -78,7 +78,7 @@ static int          console_nextcmd;
 
 int8_t        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
 int         console_inputlength;
-dboolean    console_initialized = false;
+bool    console_initialized = false;
 
 //
 // CON_Init
@@ -122,7 +122,7 @@ void CON_Init(void) {
 void CON_AddLine(int8_t* line, int len) {
 	conline_t* cline;
 	int         i;
-	dboolean    recursed = false;
+	bool    recursed = false;
 
 	if (!console_linebuffer) {
 		//not initialised yet
@@ -248,7 +248,7 @@ void CON_DPrintf(const int8_t* s, ...) {
 // CON_ParseKey
 //
 
-static dboolean shiftdown = false;
+static bool shiftdown = false;
 
 void CON_ParseKey(int8_t c) {
 	if (c < ' ') {
@@ -278,8 +278,8 @@ void CON_ParseKey(int8_t c) {
 // CON_Ticker
 //
 
-static dboolean keyheld = false;
-static dboolean lastevent = 0;
+static bool keyheld = false;
+static int lastevent = 0;
 static int lastkey = 0;
 static int ticpressed = 0;
 
@@ -299,9 +299,9 @@ void CON_Ticker(void) {
 
 void G_ClearInput(void);
 
-dboolean CON_Responder(event_t* ev) {
+bool CON_Responder(event_t* ev) {
 	int c;
-	dboolean clearheld = true;
+	bool clearheld = true;
 
 	if ((ev->type != ev_keyup) && (ev->type != ev_keydown)) {
 		return false;

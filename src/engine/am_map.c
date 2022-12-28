@@ -69,7 +69,7 @@ enum {
 // automap vars
 
 int             amCheating = 0;        //villsa: no longer static..
-dboolean        automapactive = false;
+bool        automapactive = false;
 fixed_t         automapx = 0;
 fixed_t         automapy = 0;
 fixed_t         automappanx = 0;
@@ -78,7 +78,7 @@ byte            amModeCycle = 0;        // textured or line mode?
 int             followplayer = 1;        // specifies whether to follow the player around
 
 static player_t* plr;                       // the player represented by an arrow
-static dboolean stopped = true;
+static bool stopped = true;
 static word     am_blink = 0;        // player arrow blink tics
 static angle_t  automapangle = 0;
 static float    scale = 640.0f;   // todo: reset scale after changing levels
@@ -317,7 +317,7 @@ static void AM_GetBounds(void) {
 // Handle events (user inputs) in automap mode
 //
 
-dboolean AM_Responder(event_t* ev) {
+int AM_Responder(event_t* ev) {
 	int rc = false;
 
 	if (am_flags & AF_PANMODE) {
@@ -1085,7 +1085,7 @@ void AM_Drawer(void) {
 	fixed_t x;
 	fixed_t y;
 	angle_t view;
-	dboolean follow = false;
+	bool follow = false;
 
 	if (!automapactive) {
 		return;
