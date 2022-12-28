@@ -67,8 +67,8 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, dboolean flipped) {
-	int    r;
+static void R_InstallSpriteLump(uint32_t lump, uint32_t frame, uint32_t rotation, bool flipped) {
+	uint32_t    r;
 
 	if (frame >= 29 || rotation > 8) {
 		I_Error("R_InstallSpriteLump: Bad frame characters in lump %i", lump);

@@ -289,12 +289,13 @@ int8_t* I_FindDataFile(int8_t* file) {
 			return path;
 	}
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__)
 	{
 		int i;
 		const int8_t* paths[] = {
 			//André: Removed all useless directories, Only The dir usr/local is fine to use.
 				"/usr/local/share/doom64ex-plus/",
+		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
 			snprintf(path, 511, "%s%s", paths[i], file);
