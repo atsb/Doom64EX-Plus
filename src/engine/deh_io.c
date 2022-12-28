@@ -58,12 +58,12 @@ struct deh_context_s
     int linenum;
 
     // Used by DEH_ReadLine:
-    bool last_was_newline;
+    boolean last_was_newline;
     char *readbuffer;
     int readbuffer_size;
 
     // Error handling.
-    bool had_error;
+    boolean had_error;
 };
 
 static deh_context_t *DEH_NewContext(void)
@@ -225,11 +225,11 @@ static void IncreaseReadBuffer(deh_context_t *context)
 
 // Read a whole line
 
-char *DEH_ReadLine(deh_context_t *context, bool extended)
+char *DEH_ReadLine(deh_context_t *context, boolean extended)
 {
     int c;
     int pos;
-    bool escaped = false;
+    boolean escaped = false;
 
     for (pos = 0;;)
     {
@@ -330,7 +330,7 @@ void DEH_Error(deh_context_t *context, char *msg, ...)
     context->had_error = true;
 }
 
-bool DEH_HadError(deh_context_t *context)
+boolean DEH_HadError(deh_context_t *context)
 {
     return context->had_error;
 }

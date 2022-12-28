@@ -75,7 +75,7 @@ static SDL_sem *semaphore = NULL;
 #define SEMAPHORE_LOCK()    if(SDL_SemWait(semaphore) == 0) {
 #define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
 
-// 20120205 villsa - bool to determine if sequencer is ready or not
+// 20120205 villsa - boolean to determine if sequencer is ready or not
 static boolean seqready = false;
 
 //

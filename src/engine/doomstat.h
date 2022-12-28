@@ -93,7 +93,7 @@ extern boolean     window_focused;
 //  status bar explicitely.
 extern  boolean    statusbaractive;
 
-extern  bool    automapactive;      // In AutoMap mode?
+extern  boolean    automapactive;      // In AutoMap mode?
 extern  boolean    menuactive;         // Menu overlayed?
 extern  boolean    allowmenu;          // Allow menu interaction?
 extern  boolean    mainmenuactive;
