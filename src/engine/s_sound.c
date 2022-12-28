@@ -376,7 +376,7 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep) {
         angle -= listener->angle;
 
         // stereo separation
-        *sep = (NORM_VOLUME + 1) - (FixedMul(S_STEREO_SWING, dsin(angle)) >> FRACBITS);
+        *sep = (NORM_VOLUME + 1) - (FixedMul(S_STEREO_SWING, sin(angle)) >> FRACBITS);
     }
     else {
         *sep = NORM_SEP;

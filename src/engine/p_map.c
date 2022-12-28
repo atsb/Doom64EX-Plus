@@ -88,8 +88,8 @@ static boolean P_CheckThingCollision(mobj_t* thing) {
 	fixed_t x, y;
 	fixed_t rx, ry;
 
-	x = D_abs(thing->x - tmx);
-	y = D_abs(thing->y - tmy);
+	x = abs(thing->x - tmx);
+	y = abs(thing->y - tmy);
 
 	rx = blockdist - x;
 	ry = blockdist - x;
@@ -1121,7 +1121,7 @@ boolean PTR_ShootTraverse(intercept_t* in) {
 
 		sidesector = lineside ? li->backsector : li->frontsector;
 		dist = FixedMul(attackrange, in->frac);
-		hitz = shootz + FixedMul(dcos(shootthing->pitch - ANG90), dist);
+		hitz = shootz + FixedMul(cos(shootthing->pitch - ANG90), dist);
 
 		if (li->flags & ML_TWOSIDED && li->backsector) {
 			// crosses a two sided line
@@ -1316,7 +1316,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	P_PathTraverse(t1->x, t1->y, x2, y2, flags, PTR_AimTraverse);
 
 	if (t1->player) {
-		pitch = dcos(D_abs(t1->pitch - ANG90));
+		pitch = cos(abs(t1->pitch - ANG90));
 
 		if (distance != (ATTACKRANGE + 1)) {
 				flags &= ~PT_ADDTHINGS;
@@ -1332,7 +1332,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	else if (t1->player) {
 		aimslope = pitch;
 
-		if (D_abs(aimslope) > 0x40) {
+		if (abs(aimslope) > 0x40) {
 			return aimslope;
 		}
 	}
@@ -1359,15 +1359,15 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, in
 	shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT; // [d64] changed from 8 to 12
 	attackrange = distance;
 	aimslope = slope;
-	aimpitch = dcos(shootthing->pitch);
+	aimpitch = cos(shootthing->pitch);
 	shotline = NULL;
 
 	//
 	// [kex] - stuff for plane hit detection
 	//
-	shootdirx = FixedMul(aimpitch, dcos(shootthing->angle));
-	shootdiry = FixedMul(aimpitch, dsin(shootthing->angle));
-	shootdirz = dsin(shootthing->pitch);
+	shootdirx = FixedMul(aimpitch, cos(shootthing->angle));
+	shootdiry = FixedMul(aimpitch, sin(shootthing->angle));
+	shootdirz = sin(shootthing->pitch);
 	laserhit_x = t1->x;
 	laserhit_y = t1->y;
 	laserhit_z = t1->z;
@@ -1537,8 +1537,8 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
 		}
 	}
 
-	dx = D_abs(thing->x - bombspot->x);
-	dy = D_abs(thing->y - bombspot->y);
+	dx = abs(thing->x - bombspot->x);
+	dy = abs(thing->y - bombspot->y);
 
 	dist = dx > dy ? dx : dy;
 	dist = F2INT(dist - thing->radius);

@@ -476,11 +476,11 @@ void R_SetupFrame(player_t* player) {
 	fviewy = F2D3D(viewy);
 	fviewz = F2D3D(viewz);
 
-	viewsin[0] = F2D3D(dsin(viewangle));
-	viewsin[1] = F2D3D(dsin(viewpitch - ANG90));
+	viewsin[0] = F2D3D(sin(viewangle));
+	viewsin[1] = F2D3D(sin(viewpitch - ANG90));
 
-	viewcos[0] = F2D3D(dcos(viewangle));
-	viewcos[1] = F2D3D(dcos(viewpitch - ANG90));
+	viewcos[0] = F2D3D(cos(viewangle));
+	viewcos[1] = F2D3D(cos(viewpitch - ANG90));
 
 	D_IncValidCount();
 }

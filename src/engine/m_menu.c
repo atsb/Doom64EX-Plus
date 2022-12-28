@@ -855,7 +855,7 @@ menu_t NetworkDef = {
 
 void M_Network(int choice) {
 	M_SetupNextMenu(&NetworkDef);
-	dstrcpy(inputString, m_playername.string);
+	strcpy(inputString, m_playername.string);
 }
 
 void M_PlayerSetName(int choice) {
@@ -1888,13 +1888,13 @@ void M_Video(int choice) {
 
 	checkratio = v_width.value / v_height.value;
 
-	if (dfcmp(checkratio, ratioVal[2])) {
+	if (fcmp(checkratio, ratioVal[2])) {
 		m_aspectRatio = 2;
 	}
-	else if (dfcmp(checkratio, ratioVal[1])) {
+	else if (fcmp(checkratio, ratioVal[1])) {
 		m_aspectRatio = 1;
 	}
-	else if (dfcmp(checkratio, ratioVal[3])) {
+	else if (fcmp(checkratio, ratioVal[3])) {
 		m_aspectRatio = 3;
 	}
 	else {
@@ -2963,9 +2963,9 @@ void M_BuildControlMenu(void) {
 	menu->lastOn = itemOn;
 
 	for (item = 0; item < actions; item++) {
-		dstrcpy(menu->menuitems[item].name, PlayerActions[item].name);
+		strcpy(menu->menuitems[item].name, PlayerActions[item].name);
 		if (PlayerActions[item].action) {
-			for (i = dstrlen(PlayerActions[item].name); i < 17; i++) {
+			for (i = strlen(PlayerActions[item].name); i < 17; i++) {
 				menu->menuitems[item].name[i] = ' ';
 			}
 
@@ -2983,7 +2983,7 @@ void M_BuildControlMenu(void) {
 	}
 
 #define ADD_NONBINDABLE_ITEM(i, str, s)                 \
-    dstrcpy(menu->menuitems[actions + i].name, str);    \
+    strcpy(menu->menuitems[actions + i].name, str);    \
     menu->menuitems[actions + i].status = s;            \
     menu->menuitems[actions + i].routine = NULL
 
@@ -3001,7 +3001,7 @@ void M_BuildControlMenu(void) {
 void M_ChangeKeyBinding(int choice) {
 	int8_t action[128];
 	sprintf(action, "%s %d", PlayerActions[choice].action, 1);
-	dstrcpy(MenuBindBuff, action);
+	strcpy(MenuBindBuff, action);
 	messageBindCommand = MenuBindBuff;
 	sprintf(MenuBindMessage, "%s", PlayerActions[choice].name);
 	MenuBindActive = true;
@@ -3311,7 +3311,7 @@ void M_DoSave(int slot) {
 //
 void M_SaveSelect(int choice) {
 	saveSlot = choice;
-	dstrcpy(inputString, savegamestrings[choice]);
+	strcpy(inputString, savegamestrings[choice]);
 	M_SetInputString(savegamestrings[choice], (SAVESTRINGSIZE - 1));
 }
 
@@ -3450,7 +3450,7 @@ void M_ReadSaveStrings(void) {
 		// handle = open(name, O_RDONLY | 0, 0666);
 		handle = w3sopen(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
 		if (handle == -1) {
-			dstrcpy(&savegamestrings[i][0], EMPTYSTRING);
+			strcpy(&savegamestrings[i][0], EMPTYSTRING);
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
@@ -3675,10 +3675,10 @@ static void M_ReturnInstant(void) {
 
 static void M_SetInputString(int8_t* string, int len) {
 	inputEnter = true;
-	dstrcpy(oldInputString, string);
+	strcpy(oldInputString, string);
 
 	// hack
-	if (!dstrcmp(string, EMPTYSTRING)) {
+	if (!strcmp(string, EMPTYSTRING)) {
 #ifdef VITA
         // autoname the save
         snprintf(inputString, SAVESTRINGSIZE-1, "SAVEGAME%d", saveSlot);
@@ -3687,7 +3687,7 @@ static void M_SetInputString(int8_t* string, int len) {
 #endif
 	}
 
-	inputCharIndex = dstrlen(inputString);
+	inputCharIndex = strlen(inputString);
 	inputMax = len;
 }
 
@@ -3714,7 +3714,7 @@ static int M_StringWidth(const int8_t* string) {
 	int w = 0;
 	int c;
 
-	for (i = 0; i < dstrlen(string); i++) {
+	for (i = 0; i < strlen(string); i++) {
 		c = toupper(string[i]) - ST_FONTSTART;
 		if (c < 0 || c >= ST_FONTSIZE) {
 			w += 4;
@@ -3739,7 +3739,7 @@ static int M_BigStringWidth(const int8_t* string) {
 	int len = 0;
 	int i = 0;
 
-	len = dstrlen(string);
+	len = strlen(string);
 
 	for (i = 0; i < len; i++) {
 		t = string[i];
@@ -4455,7 +4455,7 @@ boolean M_Responder(event_t* ev) {
 
 		case KEY_ESCAPE:
 			inputEnter = false;
-			dstrcpy(inputString, oldInputString);
+			strcpy(inputString, oldInputString);
 			break;
 
 		case KEY_ENTER:
@@ -4467,7 +4467,7 @@ boolean M_Responder(event_t* ev) {
 				}
 			}
 			else {
-				dstrcpy(savegamestrings[saveSlot], inputString);
+				strcpy(savegamestrings[saveSlot], inputString);
 				if (savegamestrings[saveSlot][0]) {
 					M_DoSave(saveSlot);
 				}

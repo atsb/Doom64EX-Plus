@@ -1118,7 +1118,7 @@ static void saveg_write_header(int8_t* description) {
     }
 
     sprintf(date, "%s", saveg_gettime());
-    size = dstrlen(date);
+    size = strlen(date);
 
     for (i = 0; i < size; i++) {
         saveg_write8(date[i]);
