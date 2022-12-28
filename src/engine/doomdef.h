@@ -39,8 +39,6 @@
 extern const int8_t version_date[];
 
 void        _dprintf(const int8_t* s, ...);
-void* dmemcpy(void* s1, const void* s2, size_t n);
-void* dmemset(void* s, dword c, size_t n);
 int8_t* dstrcpy(int8_t* dest, const int8_t* src);
 void        dstrncpy(int8_t* dest, const int8_t* src, int maxcount);
 int         dstrcmp(const int8_t* s1, const int8_t* s2);
@@ -53,8 +51,6 @@ int         dstrlen(const int8_t* string);
 int8_t* dstrrchr(int8_t* s, int8_t c);
 void        dstrcat(int8_t* dest, const int8_t* src);
 int8_t* dstrstr(int8_t* s1, int8_t* s2);
-int         datoi(const int8_t* str);
-float       datof(int8_t* str);
 int         dhtoi(int8_t* str);
 boolean    dfcmp(float f1, float f2);
 int         dsprintf(int8_t* buf, const int8_t* format, ...);

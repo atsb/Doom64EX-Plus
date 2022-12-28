@@ -93,12 +93,12 @@ void I_InitScreen(void) {
 
 	p = M_CheckParm("-width");
 	if (p && p < myargc - 1) {
-		newwidth = datoi(myargv[p + 1]);
+		newwidth = atoi(myargv[p + 1]);
 	}
 
 	p = M_CheckParm("-height");
 	if (p && p < myargc - 1) {
-		newheight = datoi(myargv[p + 1]);
+		newheight = atoi(myargv[p + 1]);
 	}
 
 	if (newwidth && newheight) {

@@ -107,7 +107,7 @@ void I_XInputPollEvent(void) {
 		return;
 	}
 
-	dmemset(&event, 0, sizeof(event_t));
+	memset(&event, 0, sizeof(event_t));
 
 	//
 	// clamp cvar values
@@ -380,7 +380,7 @@ void I_XInputReadActions(event_t* ev) {
 void I_XInputInit(void) {
 	HINSTANCE hInst;
 
-	dmemset(&xgamepad, 0, sizeof(xinputgamepad_t));
+	memset(&xgamepad, 0, sizeof(xinputgamepad_t));
 
 	//
 	// check for disabling parameter

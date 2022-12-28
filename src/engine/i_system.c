@@ -444,7 +444,7 @@ void I_Printf(const int8_t* string, ...) {
 	int8_t buff[1024];
 	va_list    va;
 
-	dmemset(buff, 0, 1024);
+	memset(buff, 0, 1024);
 
 	va_start(va, string);
 	vsprintf(buff, string, va);

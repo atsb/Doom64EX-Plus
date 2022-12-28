@@ -118,7 +118,7 @@ static void Z_RemoveBlock(memblock_t* block) {
 //
 
 void Z_Init(void) {
-	dmemset(allocated_blocks, 0, sizeof(allocated_blocks));
+	memset(allocated_blocks, 0, sizeof(allocated_blocks));
 
 #ifdef ZONEFILE
 	atexit(Z_CloseLogFile); // exit handler
@@ -399,7 +399,7 @@ void* (Z_Calloc)(int n1, int tag, void* user, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Calloc(file=%s:%d)\n", file, line);
 #endif
-	return dmemset((Z_Malloc)(n1, tag, user, file, line), 0, n1);
+	return memset((Z_Malloc)(n1, tag, user, file, line), 0, n1);
 }
 
 //

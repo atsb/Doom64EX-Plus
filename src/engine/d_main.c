@@ -803,7 +803,7 @@ static void FindResponseFile(void) {
 
 			firstargv = myargv[0];
 			myargv = (int8_t**)malloc(sizeof(int8_t*) * MAXARGVS);
-			dmemset(myargv, 0, sizeof(int8_t*) * MAXARGVS);
+			memset(myargv, 0, sizeof(int8_t*) * MAXARGVS);
 			myargv[0] = firstargv;
 
 			infile = file;
@@ -884,7 +884,7 @@ static void D_Init(void) {
 	p = M_CheckParm("-timer");
 	if (p && p < myargc - 1 && deathmatch) {
 		int     time;
-		time = datoi(myargv[p + 1]);
+		time = atoi(myargv[p + 1]);
 		I_Printf("Levels will end after %d minute\n", time);
 
 		if (time > 1) {
@@ -897,7 +897,7 @@ static void D_Init(void) {
 	p = M_CheckParm("-warp");
 	if (p && p < myargc - 1) {
 		autostart = true;
-		startmap = datoi(myargv[p + 1]);
+		startmap = atoi(myargv[p + 1]);
 		gameaction = ga_newgame;
 	}
 

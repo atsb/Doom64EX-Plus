@@ -74,7 +74,7 @@ void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
-bool M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size);
+boolean M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size);
 int8_t* M_StringDuplicate(const int8_t* orig);
 
 //

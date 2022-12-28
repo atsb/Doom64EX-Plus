@@ -139,7 +139,7 @@ static int SC_GetInteger(void) {
 	sc_parser.compare("="); // expect a '='
 	sc_parser.find(false);  // get next token which should be an integer
 
-	return datoi(sc_parser.token);
+	return atoi(sc_parser.token);
 }
 
 //
@@ -204,7 +204,7 @@ static int SC_Find(boolean forceupper) {
 	boolean havetoken = false;
 	boolean string = false;
 
-	dmemset(sc_parser.token, 0, 256);
+	memset(sc_parser.token, 0, 256);
 
 	while (sc_parser.readtokens()) {
 		c = sc_parser.fgetchar();
@@ -318,7 +318,7 @@ void SC_Init(void) {
 	// clear variables
 	//
 
-	dmemset(&sc_parser, 0, sizeof(scparser_t));
+	memset(&sc_parser, 0, sizeof(scparser_t));
 
 	//
 	// setup lexer routines
