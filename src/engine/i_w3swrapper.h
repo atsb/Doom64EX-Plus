@@ -43,16 +43,9 @@
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
 
-#ifdef C89
-typedef enum
-{
-	false,
-	true
-} dboolean;
-#else
 #include <stdbool.h>
-typedef bool dboolean;
-#endif
+typedef int dboolean;
+typedef unsigned char boolean;
 
 #ifdef _WIN32
 #include <Windows.h>
