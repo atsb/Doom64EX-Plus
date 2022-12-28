@@ -75,7 +75,7 @@ static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
 static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 	int* dat;
 
-	if (!dstrncmp((int8_t*)chunk->name, "grAb", 4) && chunk->size >= 8) {
+	if (!strncmp((int8_t*)chunk->name, "grAb", 4) && chunk->size >= 8) {
 		dat = (int*)png_get_user_chunk_ptr(png_ptr);
 		dat[0] = I_SwapBE32(*(int*)(chunk->data));
 		dat[1] = I_SwapBE32(*(int*)(chunk->data + 4));
@@ -223,7 +223,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 					int8_t palname[9];
 
 					sprintf(palname, "PAL");
-					dstrncpy(palname + 3, lumpinfo[lump].name, 4);
+					strncpy(palname + 3, lumpinfo[lump].name, 4);
 					sprintf(palname + 7, "%i", palindex);
 
 					// villsa 12/04/13: don't abort if external palette is not found

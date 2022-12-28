@@ -73,7 +73,7 @@ int M_CheckParm(const int8_t* check) {
 	int        i;
 
 	for (i = 1; i < myargc; i++) {
-		if (!dstricmp(check, myargv[i])) { //strcasecmp
+		if (!stricmp(check, myargv[i])) { //strcasecmp
 			return i;
 		}
 	}
