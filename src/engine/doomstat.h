@@ -93,7 +93,7 @@ extern dboolean     window_focused;
 //  status bar explicitely.
 extern  dboolean    statusbaractive;
 
-extern  dboolean    automapactive;      // In AutoMap mode?
+extern  bool    automapactive;      // In AutoMap mode?
 extern  dboolean    menuactive;         // Menu overlayed?
 extern  dboolean    allowmenu;          // Allow menu interaction?
 extern  dboolean    mainmenuactive;

@@ -360,8 +360,6 @@ typedef enum {
 };
 #endif
 
-// DOOM basic types (dboolean),
-//  and max/min values.
 #include "doomtype.h"
 #include "gl_utils.h"
 //code assumes MOUSE_BUTTONS<10

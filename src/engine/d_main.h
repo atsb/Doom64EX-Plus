@@ -41,7 +41,7 @@
 void D_DoomMain(void);
 
 int D_MiniLoop(void (*start)(void), void (*stop)(void),
-               void (*draw)(void), dboolean(*tick)(void));
+               void (*draw)(void), int(*tick)(void));
 
 // Called by IO functions when input is detected.
 void D_PostEvent(event_t* ev);

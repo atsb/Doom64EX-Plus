@@ -42,15 +42,13 @@
 #define W32GetVersionEX(lpVersionInformation, wTypeMask, dwlConditionMask) VerifyVersionInfo(lpVersionInformation, wTypeMask, dwlConditionMask)
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
-
-#ifdef C89
-#define false 0
-#define true 1
-typedef int dboolean;
-typedef int bool;
-#else
+//Read back the c89 bool
 #include <stdbool.h>
-typedef bool dboolean;
+typedef int dboolean;
+
+// Windows has this already in rpcndr.h
+#ifndef _WIN32
+typedef unsigned char boolean;
 #endif
 
 #ifdef _WIN32
@@ -119,7 +117,7 @@ typedef unsigned long long w3suint64_t;
 #define GetBasePath()   SDL_AndroidGetInternalStoragePath()
 #endif
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__)
 #define Free(userdir)	free(userdir)
 #else
 #define Free(userdir)	SDL_free(userdir)

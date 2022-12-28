@@ -27,7 +27,7 @@
 CVAR_EXTERNAL(am_overlay);
 
 // Called by main loop.
-dboolean AM_Responder(event_t* ev);
+int AM_Responder(event_t* ev);
 
 // Called by main loop.
 void AM_Ticker(void);
