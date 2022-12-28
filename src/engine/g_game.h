@@ -27,7 +27,7 @@
 #include "doomdef.h"
 #include "d_event.h"
 
-extern boolean sendpause;
+extern bool sendpause;
 
 //
 // GAME
@@ -52,6 +52,6 @@ void G_RunTitleMap(void);
 void G_RunGame(void);
 void G_RegisterCvars(void);
 
-boolean G_Responder(event_t* ev);
+bool G_Responder(event_t* ev);
 
 #endif

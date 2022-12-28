@@ -209,12 +209,12 @@ static void NET_Conn_ParseReliableACK(net_connection_t* conn, net_packet_t* pack
 //
 // Returns true if the packet should be discarded (incorrect sequence)
 
-static boolean NET_Conn_ReliablePacket(net_connection_t* conn,
+static bool NET_Conn_ReliablePacket(net_connection_t* conn,
 	net_packet_t* packet)
 {
 	int seq;
 	net_packet_t* reply;
-	boolean result;
+	bool result;
 
 	// Read the sequence number
 
@@ -263,7 +263,7 @@ static boolean NET_Conn_ReliablePacket(net_connection_t* conn,
 //
 // Returns true if eaten by common code
 
-boolean NET_Conn_Packet(net_connection_t* conn, net_packet_t* packet,
+bool NET_Conn_Packet(net_connection_t* conn, net_packet_t* packet,
 	uint32_t* packet_type)
 {
 	conn->keepalive_recv_time = I_GetTimeMS();
@@ -532,25 +532,9 @@ void NET_SafePuts(char* s)
 
 // Check that a gamemode+gamemission received over the network is valid.
 
-/*boolean NET_ValidGameMode(GameMode_t mode, GameMission_t mission)
-{
-	if (mode == shareware || mode == registered || mode == retail)
-	{
-		return true;
-	}
-	else if (mode == commercial)
-	{
-		return mission == doom2 || mission == pack_tnt || mission == pack_plut;
-	}
-	else
-	{
-		return false;
-	}
-}*/
-
 // Check that game settings are valid
 
-boolean NET_ValidGameSettings(net_gamesettings_t* settings)
+bool NET_ValidGameSettings(net_gamesettings_t* settings)
 {
 	if (settings->ticdup <= 0)
 		return false;

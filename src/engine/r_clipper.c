@@ -53,7 +53,7 @@ clipnode_t* clipnodes = NULL;
 clipnode_t* cliphead = NULL;
 
 static clipnode_t* R_Clipnode_NewRange(angle_t start, angle_t end);
-static boolean R_Clipper_IsRangeVisible(angle_t startAngle, angle_t endAngle);
+static bool R_Clipper_IsRangeVisible(angle_t startAngle, angle_t endAngle);
 static void R_Clipper_AddClipRange(angle_t start, angle_t end);
 static void R_Clipper_RemoveRange(clipnode_t* range);
 static void R_Clipnode_Free(clipnode_t* node);
@@ -80,7 +80,7 @@ static clipnode_t* R_Clipnode_NewRange(angle_t start, angle_t end) {
 // R_Clipper_SafeCheckRange
 //
 
-boolean R_Clipper_SafeCheckRange(angle_t startAngle, angle_t endAngle) {
+bool R_Clipper_SafeCheckRange(angle_t startAngle, angle_t endAngle) {
 	if (startAngle > endAngle)
 		return (R_Clipper_IsRangeVisible(startAngle, ANGLE_MAX) ||
 			R_Clipper_IsRangeVisible(0, endAngle));
@@ -88,7 +88,7 @@ boolean R_Clipper_SafeCheckRange(angle_t startAngle, angle_t endAngle) {
 	return R_Clipper_IsRangeVisible(startAngle, endAngle);
 }
 
-static boolean R_Clipper_IsRangeVisible(angle_t startAngle, angle_t endAngle) {
+static bool R_Clipper_IsRangeVisible(angle_t startAngle, angle_t endAngle) {
 	clipnode_t* ci;
 	ci = cliphead;
 
@@ -252,7 +252,7 @@ void R_Clipper_Clear(void) {
 // R_FrustumAngle
 //
 
-extern boolean widescreen;
+extern bool widescreen;
 
 angle_t R_FrustumAngle(void) {
 	angle_t tilt;
@@ -354,7 +354,7 @@ void R_FrustrumSetup(void) {
 // Returns false if polygon is not within the view frustrum
 //
 
-boolean R_FrustrumTestVertex(vtx_t* vertex, int count) {
+bool R_FrustrumTestVertex(vtx_t* vertex, int count) {
 	int p;
 	int i;
 

@@ -43,9 +43,19 @@
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
 
+#ifdef C89 //Adding again becuse some platforms don´t support stdbool.h
+#ifdef _WIN32
+#define bool  _Bool
+#define false 0
+#define true  1
+#else
+#define false 0
+#define true 1
+typedef unsigned char bool;
+#endif
+#else
 #include <stdbool.h>
-
-typedef unsigned char boolean;
+#endif
 
 #ifdef _WIN32
 #include <Windows.h>

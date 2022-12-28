@@ -76,7 +76,8 @@ static SDL_sem *semaphore = NULL;
 #define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
-static boolean seqready = false;
+// 20221228 André - Changed to normal bool 
+static bool seqready = false;
 
 //
 // DEFINES
@@ -175,11 +176,11 @@ typedef struct {
     uint64_t      starttime;
     uint64_t      curtime;
     chanstate_e state;
-    boolean    paused;
+    bool    paused;
 
     // read by audio thread but only
     // modified by game code
-    boolean    stop;
+    bool    stop;
     float       basevol;
 } channel_t;
 
@@ -363,7 +364,7 @@ static byte Chan_GetNextMidiByte(channel_t* chan) {
 // Checks if the midi reader has reached the end
 //
 
-static boolean Chan_CheckTrackEnd(channel_t* chan) {
+static bool Chan_CheckTrackEnd(channel_t* chan) {
     return ((dword)(chan->pos - chan->song->data) >= chan->song->length);
 }
 
@@ -439,7 +440,7 @@ static void Song_ClearPlaylist(void) {
 // Chan_RemoveTrackFromPlaylist
 //
 
-static boolean Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
+static bool Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
     if(!chan->song || !chan->track) {
         return false;
     }
@@ -824,7 +825,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 // Chan_CheckState
 //
 
-static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
+static bool Chan_CheckState(doomseq_t* seq, channel_t* chan) {
     if(chan->state == CHAN_STATE_ENDED) {
         return true;
     }
@@ -979,7 +980,7 @@ static void Seq_RunSong(doomseq_t* seq, dword msecs) {
 // Allocate data for all tracks for a midi song
 //
 
-static boolean Song_RegisterTracks(song_t* song) {
+static bool Song_RegisterTracks(song_t* song) {
     int i;
     byte* data;
 
@@ -1011,7 +1012,7 @@ static boolean Song_RegisterTracks(song_t* song) {
 // Allocate data for all midi songs
 //
 
-static boolean Seq_RegisterSongs(doomseq_t* seq) {
+static bool Seq_RegisterSongs(doomseq_t* seq) {
     int i;
     int start;
     int end;
@@ -1159,7 +1160,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 //
 
 void I_InitSequencer(void) {
-    boolean sffound;
+    bool sffound;
     int8_t *sfpath;
 
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");

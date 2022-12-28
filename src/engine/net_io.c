@@ -95,7 +95,7 @@ void NET_SendBroadcast(net_context_t* context, net_packet_t* packet)
 	}
 }
 
-boolean NET_RecvPacket(net_context_t* context,
+bool NET_RecvPacket(net_context_t* context,
 	net_addr_t** addr,
 	net_packet_t** packet)
 {

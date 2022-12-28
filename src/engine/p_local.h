@@ -146,9 +146,9 @@ void        P_SafeRemoveMobj(mobj_t* mobj);
 void        P_RemoveMobj(mobj_t* th);
 void        P_SpawnPlayer(mapthing_t* mthing);
 void        P_SetTarget(mobj_t** mop, mobj_t* targ);
-boolean    P_SetMobjState(mobj_t* mobj, statenum_t state);
+bool    P_SetMobjState(mobj_t* mobj, statenum_t state);
 void        P_MobjThinker(mobj_t* mobj);
-boolean    P_OnMobjZ(mobj_t* mobj);
+bool    P_OnMobjZ(mobj_t* mobj);
 void        P_NightmareRespawn(mobj_t* mobj);
 void        P_RespawnSpecials(mobj_t* special);
 void        P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z);
@@ -159,7 +159,7 @@ int         EV_SpawnMobjTemplate(line_t* line);
 int         EV_FadeOutMobj(line_t* line);
 void        P_SpawnDartMissile(int tid, int type, mobj_t* target);
 mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
-	fixed_t xoffs, fixed_t yoffs, fixed_t heightoffs, boolean aim);
+	fixed_t xoffs, fixed_t yoffs, fixed_t heightoffs, bool aim);
 
 //
 // P_ENEMY
@@ -178,7 +178,7 @@ typedef struct {
 
 typedef struct {
 	fixed_t    frac;        // along trace line
-	boolean    isaline;
+	bool    isaline;
 	union {
 		mobj_t* thing;
 		line_t* line;
@@ -190,7 +190,7 @@ typedef struct {
 extern intercept_t    intercepts[MAXINTERCEPTS];
 extern intercept_t* intercept_p;
 
-typedef boolean(*traverser_t)(intercept_t* in);
+typedef bool(*traverser_t)(intercept_t* in);
 
 fixed_t P_AproxDistance(fixed_t dx, fixed_t dy);
 int     P_PointOnLineSide(fixed_t x, fixed_t y, line_t* line);
@@ -206,8 +206,8 @@ extern fixed_t        openrange;
 extern fixed_t        lowfloor;
 
 void         P_LineOpening(line_t* linedef);
-boolean    P_BlockLinesIterator(int x, int y, boolean(*func)(line_t*));
-boolean    P_BlockThingsIterator(int x, int y, boolean(*func)(mobj_t*));
+bool    P_BlockLinesIterator(int x, int y, bool(*func)(line_t*));
+bool    P_BlockThingsIterator(int x, int y, bool(*func)(mobj_t*));
 
 #define PT_ADDLINES        1
 #define PT_ADDTHINGS    2
@@ -215,7 +215,7 @@ boolean    P_BlockThingsIterator(int x, int y, boolean(*func)(mobj_t*));
 
 extern divline_t    trace;
 
-boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int    flags, boolean(*trav)(intercept_t*));
+bool P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int    flags, bool(*trav)(intercept_t*));
 void    P_UnsetThingPosition(mobj_t* thing);
 void    P_SetThingPosition(mobj_t* thing);
 
@@ -225,20 +225,20 @@ void    P_SetThingPosition(mobj_t* thing);
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
-extern boolean     floatok;
+extern bool     floatok;
 extern fixed_t      tmfloorz;
 extern fixed_t      tmceilingz;
 extern line_t* tmhitline;
 
-boolean    P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y);
-boolean    P_TryMove(mobj_t* thing, fixed_t x, fixed_t y);
-boolean    P_PlayerMove(mobj_t* thing, fixed_t x, fixed_t y);
-boolean    P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y);
+bool    P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y);
+bool    P_TryMove(mobj_t* thing, fixed_t x, fixed_t y);
+bool    P_PlayerMove(mobj_t* thing, fixed_t x, fixed_t y);
+bool    P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y);
 void        P_SlideMove(mobj_t* mo);
-boolean    P_CheckSight(mobj_t* t1, mobj_t* t2);
+bool    P_CheckSight(mobj_t* t1, mobj_t* t2);
 void        P_ScanSights(void);
-boolean    P_UseLines(player_t* player, boolean showcontext);
-boolean    P_ChangeSector(sector_t* sector, boolean crunch);
+bool    P_UseLines(player_t* player, bool showcontext);
+bool    P_ChangeSector(sector_t* sector, bool crunch);
 mobj_t* P_CheckOnMobj(mobj_t* thing);
 void        P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t y);
 
