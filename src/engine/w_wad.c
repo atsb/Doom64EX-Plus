@@ -92,7 +92,7 @@ typedef struct {
 extern lumpinfo_t* lumpinfo;
 int            numlumps;
 
-#define CopyLumps(dest, src, count) dmemcpy(dest, src, (count)*sizeof(lumpinfo_t))
+#define CopyLumps(dest, src, count) memcpy(dest, src, (count)*sizeof(lumpinfo_t))
 #define CopyLump(dest, src) CopyLumps(dest, src, 1)
 
 void ExtractFileBase(int8_t* path, int8_t* dest) {
@@ -109,7 +109,7 @@ void ExtractFileBase(int8_t* path, int8_t* dest) {
 	}
 
 	// copy up to eight characters
-	dmemset(dest, 0, 8);
+	memset(dest, 0, 8);
 	length = 0;
 
 	while (*src && *src != '.') {
@@ -240,7 +240,7 @@ wad_file_t* W_AddFile(int8_t* filename) {
 		lump_p->position = LONG(filerover->filepos);
 		lump_p->size = LONG(filerover->size);
 		lump_p->cache = NULL;
-		dmemcpy(lump_p->name, filerover->name, 8);
+		memcpy(lump_p->name, filerover->name, 8);
 
 		++lump_p;
 		++filerover;
@@ -304,7 +304,7 @@ void W_Init(void) {
 
 	// Fill in lumpinfo
 	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
-	dmemset(lumpinfo, 0, numlumps * sizeof(lumpinfo_t));
+	memset(lumpinfo, 0, numlumps * sizeof(lumpinfo_t));
 
 	if (!lumpinfo) {
 		I_Error("W_Init: Couldn't realloc lumpinfo");
@@ -318,7 +318,7 @@ void W_Init(void) {
 		lump_p->position = LONG(filerover->filepos);
 		lump_p->size = LONG(filerover->size);
 		lump_p->cache = NULL;
-		dmemcpy(lump_p->name, filerover->name, 8);
+		memcpy(lump_p->name, filerover->name, 8);
 	}
 
 	if (!numlumps) {

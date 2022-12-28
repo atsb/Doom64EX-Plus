@@ -354,7 +354,7 @@ void M_ScreenShot(void) {
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-bool M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size)
+boolean M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size)
 {
 	size_t len;
 

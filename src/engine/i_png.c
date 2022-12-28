@@ -64,7 +64,7 @@ d_inline static size_t I_PNGRowSize(int width, byte bits) {
 //
 
 static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
-	dmemcpy(area, pngReadData, size);
+	memcpy(area, pngReadData, size);
 	pngReadData += size;
 }
 
@@ -215,7 +215,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 					}
 
 					for (i = 0; i < 16; i++) {
-						dmemcpy(&pal[i], &pal[pindex + i], sizeof(png_color));
+						memcpy(&pal[i], &pal[pindex + i], sizeof(png_color));
 					}
 				}
 				else if (bit_depth >= 8) {  // 8 bit and up requires an external palette lump
@@ -244,7 +244,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 					// palette in case world textures have a 8-32 bit depth color table
 					else {
 						for (i = 0; i < 16; i++) {
-							dmemcpy(&pal[i], &pal[(16 * palindex) + i], sizeof(png_color));
+							memcpy(&pal[i], &pal[(16 * palindex) + i], sizeof(png_color));
 						}
 					}
 				}
@@ -339,7 +339,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 
 static void I_PNGWriteFunc(png_structp png_ptr, byte* data, int length) {
 	pngWriteData = (byte*)Z_Realloc(pngWriteData, sizeof(pngWritePos) + length, PU_STATIC, 0);
-	dmemcpy(pngWriteData + pngWritePos, data, sizeof(length));
+	memcpy(pngWriteData + pngWritePos, data, sizeof(length));
 	pngWritePos += length;
 }
 
@@ -429,7 +429,7 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 
 	// allocate output
 	out = (byte*)Z_Malloc(sizeof(pngWritePos), PU_STATIC, 0);
-	dmemcpy(out, pngWriteData, sizeof(pngWritePos));
+	memcpy(out, pngWriteData, sizeof(pngWritePos));
 	*size = pngWritePos;
 
 	Z_Free(pngWriteData);

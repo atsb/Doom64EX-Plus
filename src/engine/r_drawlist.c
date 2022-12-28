@@ -61,7 +61,7 @@ vtxlist_t* DL_AddVertexList(drawlist_t* dl) {
 			(vtxlist_t*)Z_Realloc(dl->list,
 				dl->max * sizeof(vtxlist_t), PU_LEVEL, NULL);
 
-		dmemset(&dl->list[dl->max - 1], 0, sizeof(vtxlist_t));
+		memset(&dl->list[dl->max - 1], 0, sizeof(vtxlist_t));
 
 		list = &dl->list[dl->index];
 	}

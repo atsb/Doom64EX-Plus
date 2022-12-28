@@ -99,12 +99,12 @@ static CMD(UnbindAll);
 //
 
 void G_InitActions(void) {
-	dmemset(AllActions, 0, NUM_ACTIONS);
+	memset(AllActions, 0, NUM_ACTIONS);
 	KeyActions = AllActions + KEY_ACTIONPOS;
 	MouseActions = AllActions + MOUSE_ACTIONPOS;
 	Mouse2Actions = AllActions + MOUSE2_ACTIONPOS;
 
-	dmemset(CurrentActions, 0, MAX_CURRENTACTIONS * sizeof(alist_t*));
+	memset(CurrentActions, 0, MAX_CURRENTACTIONS * sizeof(alist_t*));
 
 	G_AddCommand("alias", CMD_Alias, 0);
 	G_AddCommand("unbind", CMD_Unbind, 0);
@@ -549,7 +549,7 @@ alist_t** FindActionControler(int8_t* name, alist_t** actions, int numbuttons) {
 	int i;
 
 	if ((name[0] >= '1') && (name[0] <= '9')) {
-		i = datoi(name) - 1;
+		i = atoi(name) - 1;
 		if (i > numbuttons) {
 			return NULL;
 		}

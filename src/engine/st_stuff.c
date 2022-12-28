@@ -519,7 +519,7 @@ static void ST_DrawKey(int key, const float uv[4][2], const float xy[4][2]) {
 
 	if (plyr->cards[key] ||
 		(flashCards[key].doDraw && flashCards[key].active)) {
-		dmemcpy(keydrawxy, xy, (sizeof(float) * 4) * 2);
+		memcpy(keydrawxy, xy, (sizeof(float) * 4) * 2);
 
 		if (st_drawhud.value >= 2) {
 			keydrawxy[0][0] += 20;
@@ -885,7 +885,7 @@ void ST_Drawer(void) {
 		mapdef_t* map = P_GetMapInfo(gamemap);
 
 		if (map) {
-			dmemset(&str, 0, 128);
+			memset(&str, 0, 128);
 
 			if (map->type == 2) {
 				sprintf(str, "%s", map->mapname);
@@ -1123,8 +1123,8 @@ void ST_Init(void) {
 		stchat[i].color = 0;
 	}
 
-	dmemset(st_chatstring, 0, MAXPLAYERS * MAXCHATSIZE);
-	dmemset(st_chatqueue, 0, STQUEUESIZE);
+	memset(st_chatstring, 0, MAXPLAYERS * MAXCHATSIZE);
+	memset(st_chatqueue, 0, STQUEUESIZE);
 
 	// setup crosshairs
 
@@ -1152,7 +1152,7 @@ void ST_AddChatMsg(int8_t* msg, int player) {
 	int8_t str[MAXCHATSIZE];
 
 	sprintf(str, "%s: %s", player_names[player], msg);
-	dmemset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
+	memset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
 	memcpy(stchat[st_chatcount].msg, str, dstrlen(str));
 	stchat[st_chatcount].tics = MAXCHATTIME;
 	stchat[st_chatcount].color = st_chatcolors[player];
@@ -1280,7 +1280,7 @@ static void ST_FeedChatMsg(event_t* ev) {
 	case KEY_ESCAPE:
 		len = dstrlen(st_chatstring[consoleplayer]);
 		st_chatOn = false;
-		dmemset(st_chatstring[consoleplayer], 0, len);
+		memset(st_chatstring[consoleplayer], 0, len);
 		break;
 	case KEY_SHIFT:
 		if (ev->type == ev_keydown) {
@@ -1356,7 +1356,7 @@ static void ST_EatChatMsg(void) {
 		case KEY_ENTER:
 		case KEY_KEYPADENTER:
 			ST_AddChatMsg(st_chatstring[i], i);
-			dmemset(st_chatstring[i], 0, len);
+			memset(st_chatstring[i], 0, len);
 			break;
 		case KEY_BACKSPACE:
 			st_chatstring[i][MAX(len--, 0)] = 0;

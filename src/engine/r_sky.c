@@ -654,7 +654,7 @@ void R_InitFire(void) {
 	int i;
 
 	fireLump = W_GetNumForName("FIRE") - g_start;
-	dmemset(&firePal16, 0, sizeof(dPalette_t) * 256);
+	memset(&firePal16, 0, sizeof(dPalette_t) * 256);
 	for (i = 0; i < 16; i++) {
 		firePal16[i].r = 16 * i;
 		firePal16[i].g = 16 * i;
@@ -693,7 +693,7 @@ static void R_DrawFire(void) {
 	//
 	// copy fire pixel data to texture data array
 	//
-	dmemset(firetexture, 0, sizeof(int) * FIRESKY_WIDTH * FIRESKY_HEIGHT);
+	memset(firetexture, 0, sizeof(int) * FIRESKY_WIDTH * FIRESKY_HEIGHT);
 	for (i = 0; i < FIRESKY_WIDTH * FIRESKY_HEIGHT; i++) {
 		byte rgb[3];
 

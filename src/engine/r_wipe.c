@@ -180,7 +180,7 @@ void WIPE_MeltScreen(void) {
 	v[0].tv = v[1].tv = (float)video_height / (float)padh;
 	v[2].tv = v[3].tv = 0.0f;
 
-	dmemcpy(v2, v, sizeof(vtx_t) * 4);
+	memcpy(v2, v, sizeof(vtx_t) * 4);
 
 	glBindTexture(GL_TEXTURE_2D, wipeMeltTexture);
 	GL_SetTextureMode(GL_ADD);

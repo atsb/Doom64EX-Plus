@@ -541,7 +541,7 @@ void GL_BindDummyTexture(void) {
 
 		byte rgb[48];   // 4x4 RGB texture
 
-		dmemset(rgb, 0xff, 48);
+		memset(rgb, 0xff, 48);
 
 		glGenTextures(1, &dummytexture);
 		glBindTexture(GL_TEXTURE_2D, dummytexture);
@@ -566,7 +566,7 @@ static dtexture envtexture = 0;
 void GL_BindEnvTexture(void) {
 	rcolor rgb[16];
 
-	dmemset(rgb, 0xff, sizeof(rcolor) * 16);
+	memset(rgb, 0xff, sizeof(rcolor) * 16);
 
 	if (envtexture == 0) {
 		glGenTextures(1, &envtexture);
@@ -603,7 +603,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 	lastenvcolor = color;
 	c = (byte*)rgb;
 
-	dmemset(rgb, 0, sizeof(rcolor) * 16);
+	memset(rgb, 0, sizeof(rcolor) * 16);
 
 	for (i = 0; i < 16; i++) {
 		*c++ = (byte)((env >> 0) & 0xff);

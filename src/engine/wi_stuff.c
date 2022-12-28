@@ -434,7 +434,7 @@ void WI_Drawer(void) {
 
 		Draw_BigText(-1, 187, WHITE, "Password");
 
-		dmemset(password, 0, 20);
+		memset(password, 0, 20);
 		passData = passwordData;
 
 		// draw actual password

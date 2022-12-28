@@ -145,7 +145,7 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	char	lumpname[9];
 	int		lumpnum;
 	int map;
-	map = datoi(dat);
+	map = atoi(dat);
 	gameskill = (int)sv_skill.value;
 	gamemap = nextmap = map;
 
@@ -166,7 +166,7 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	{
 		// So be it.
 		G_DeferedInitNew(gameskill, map);
-		dmemset(passwordData, 0xff, 16);
+		memset(passwordData, 0xff, 16);
 	}
 }
 
@@ -183,7 +183,7 @@ static void M_CheatAllMap(player_t* player, int8_t dat[4]) {
 
 void M_CheatGiveWeapon(player_t* player, int8_t dat[4]) {
 	int8_t c = dat[0];
-	int w = datoi(&c);
+	int w = atoi(&c);
 
 	static int8_t* WeapGotNames[8] = {
 		GOTCHAINSAW,
@@ -220,7 +220,7 @@ void M_CheatGiveWeapon(player_t* player, int8_t dat[4]) {
 
 void M_CheatGiveKey(player_t* player, int8_t dat[4]) {
 	int8_t c = dat[0];
-	int k = datoi(&c);
+	int k = atoi(&c);
 
 	if (!k || k > NUMCARDS) {
 		return;
@@ -237,7 +237,7 @@ void M_CheatBoyISuck(player_t* player, int8_t dat[4]) {
 
 void M_CheatArtifacts(player_t* player, int8_t dat[4]) {
 	int8_t c = dat[0];
-	int a = datoi(&c);
+	int a = atoi(&c);
 
 	static int8_t* ArtiGotNames[3] = {
 		GOTARTIFACT1,

@@ -667,7 +667,7 @@ void M_NewGame(int choice) {
 void M_ChooseSkill(int choice) {
 	G_DeferedInitNew(choice, 1);
 	M_ClearMenus();
-	dmemset(passwordData, 0xff, 16);
+	memset(passwordData, 0xff, 16);
 	allowmenu = false;
 }
 
@@ -2268,7 +2268,7 @@ void M_DrawPassword(void) {
 		}
 	}
 
-	dmemset(password, 0, 2);
+	memset(password, 0, 2);
 	passData = passwordData;
 
 	for (i = 0; i < 19; i++) {
@@ -5339,7 +5339,7 @@ void M_Init(void) {
 
 	for (i = 0; i < NUM_CONTROL_ITEMS; i++) {
 		ControlsItem[i].alphaKey = 0;
-		dmemset(ControlsItem[i].name, 0, 64);
+		memset(ControlsItem[i].name, 0, 64);
 		ControlsItem[i].routine = NULL;
 		ControlsItem[i].status = 1;
 	}
@@ -5353,7 +5353,7 @@ void M_Init(void) {
 		PasswordMenu[i].alphaKey = (int8_t)passwordChar[i];
 	}
 
-	dmemset(passwordData, 0xff, 16);
+	memset(passwordData, 0xff, 16);
 
 	MainDef.y += 8;
 	NewDef.prevMenu = &MainDef;

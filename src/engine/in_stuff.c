@@ -67,7 +67,7 @@ void IN_Start(void) {
 	f_alpha = 0;
 	fcluster = NULL;
 
-	dmemset(fInterString, 0, 16 * 32);
+	memset(fInterString, 0, 16 * 32);
 
 	fcluster = P_GetCluster(nextmap);
 
