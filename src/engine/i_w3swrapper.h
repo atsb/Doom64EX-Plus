@@ -48,13 +48,7 @@
 #define true 1
 typedef unsigned char bool;
 #else
-#ifdef _WIN32
-#define bool  _Bool
-#define false 0
-#define true  1
-#else
 #include <stdbool.h>
-#endif
 #endif
 
 #ifdef _WIN32
