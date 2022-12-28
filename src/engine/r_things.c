@@ -67,29 +67,31 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-static void R_InstallSpriteLump(int32_t lump, int32_t frame, int32_t rotation, bool flipped) {
-	int32_t    r;
+void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
+	boolean flipped)
+{
+	int r;
 
-	if (frame >= 29 || rotation > 8) {
+	if (frame >= 26 || rotation > 8)
 		I_Error("R_InstallSpriteLump: Bad frame characters in lump %i", lump);
-	}
 
-	if (frame > maxframe) {
+	if ((int)frame > maxframe)
 		maxframe = frame;
-	}
 
-	if (rotation == 0) {
+	if (rotation == 0)
+	{
 		// the lump should be used for all rotations
-		if (sprtemp[frame].rotate == false) {
-			I_Error("R_InitSprites: Sprite %s frame %c has multiple rot=0 lump", spritename, 'A' + frame);
-		}
-
-		if (sprtemp[frame].rotate == true) {
-			I_Error("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump", spritename, 'A' + frame);
-		}
+		if (sprtemp[frame].rotate == false)
+			I_Error("R_InitSprites: Sprite %s frame %c has multip rot=0 lump",
+				spritename, 'A' + frame);
+		if (sprtemp[frame].rotate == true)
+			I_Error
+			("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump",
+				spritename, 'A' + frame);
 
 		sprtemp[frame].rotate = false;
-		for (r = 0; r < 8; r++) {
+		for (r = 0; r < 8; r++)
+		{
 			sprtemp[frame].lump[r] = lump - s_start;
 			sprtemp[frame].flip[r] = (byte)flipped;
 		}
@@ -97,16 +99,17 @@ static void R_InstallSpriteLump(int32_t lump, int32_t frame, int32_t rotation, b
 	}
 
 	// the lump is only used for one rotation
-	if (sprtemp[frame].rotate == false) {
-		I_Error("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump", spritename, 'A' + frame);
-	}
+	if (sprtemp[frame].rotate == false)
+		I_Error
+		("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump",
+			spritename, 'A' + frame);
 
 	sprtemp[frame].rotate = true;
 
-	// make 0 based
-	rotation--;
-	if ((sprtemp[frame].lump[rotation] != -1))
-		I_Error("R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it",
+	rotation--;                 // make 0 based
+	if (sprtemp[frame].lump[rotation] != -1)
+		I_Error
+		("R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it",
 			spritename, 'A' + frame, '1' + rotation);
 
 	sprtemp[frame].lump[rotation] = lump - s_start;
@@ -133,12 +136,10 @@ void R_InitSprites(int8_t** namelist) {
 	int8_t** check;
 	int     i;
 	int     l;
-	int     intname;
 	int     frame;
 	int     rotation;
 	int     start;
 	int     end;
-	int     patched;
 
 	// count the number of sprite names
 	check = namelist;
@@ -163,30 +164,30 @@ void R_InitSprites(int8_t** namelist) {
 
 	for (i = 0; i < numsprites; i++) {
 		spritename = namelist[i];
-		dmemset(sprtemp, -1, sizeof(sprtemp));
+		memset(sprtemp, -1, sizeof(sprtemp));
 
 		maxframe = -1;
-		intname = *(int*)namelist[i];
 
 		// scan the lumps,
 		//  filling in the frames for whatever is found
 
-		for (l = start + 1; l < end; l++) {
-			if (*(int*)lumpinfo[l].name == intname) {
+		for (l = start + 1; l < end; l++)
+#ifdef _WIN32
+			if (!_strnicmp(lumpinfo[l].name, spritename, 4))
+#else
+			if (!strncasecmp(lumpinfo[l].name, spritename, 4))
+#endif
+			{
 				frame = lumpinfo[l].name[4] - 'A';
 				rotation = lumpinfo[l].name[5] - '0';
-
-				patched = l;
-
-				R_InstallSpriteLump(patched, frame, rotation, false);
-
-				if (lumpinfo[l].name[6]) {
+				R_InstallSpriteLump(l, frame, rotation, false);
+				if (lumpinfo[l].name[6])
+				{
 					frame = lumpinfo[l].name[6] - 'A';
 					rotation = lumpinfo[l].name[7] - '0';
 					R_InstallSpriteLump(l, frame, rotation, true);
 				}
 			}
-		}
 
 		// check the frames that were found for completeness
 		if (maxframe == -1) {
@@ -221,7 +222,8 @@ void R_InitSprites(int8_t** namelist) {
 		spriteinfo[i].numframes = maxframe;
 		spriteinfo[i].spriteframes =
 			Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-		dmemcpy(spriteinfo[i].spriteframes, sprtemp, maxframe * sizeof(spriteframe_t));
+		memcpy(spriteinfo[i].spriteframes, sprtemp,
+			maxframe * sizeof(spriteframe_t));
 	}
 }
 
