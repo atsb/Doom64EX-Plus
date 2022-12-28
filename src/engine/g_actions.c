@@ -105,7 +105,7 @@ void G_InitActions(void) {
 	Mouse2Actions = AllActions + MOUSE2_ACTIONPOS;
 
 	memset(CurrentActions, 0, MAX_CURRENTACTIONS * sizeof(alist_t*));
-	//Dummy
+
 	G_AddCommand("alias", CMD_Alias, 0);
 	G_AddCommand("unbind", CMD_Unbind, 0);
 	G_AddCommand("unbindall", CMD_UnbindAll, 0);

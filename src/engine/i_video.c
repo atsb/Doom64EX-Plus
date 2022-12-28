@@ -46,8 +46,6 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "gl_main.h"
-
-const int8_t version_date[];
 SDL_Window* window;
 SDL_GLContext   glContext;
 
