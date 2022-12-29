@@ -55,9 +55,9 @@ typedef unsigned char boolean;
 #endif
 
 #ifdef OLD_TYPE
-typedef BYTE byte;
-typedef WORD word;
-typedef DWORD dword;
+typedef BYTE w3suint8_t;
+typedef WORD w3suint16_t;
+typedef DWORD w3suint64_t;
 #else
 typedef UINT8  w3suint8_t;
 typedef UINT16 w3suint16_t;
@@ -72,6 +72,10 @@ typedef unsigned char w3suint8_t;
 typedef unsigned short w3suint16_t;
 typedef unsigned long long w3suint64_t;
 #endif 
+
+typedef w3suint8_t  byte;
+typedef w3suint16_t word;
+typedef w3suint64_t dword;
 
 #ifdef _WIN32
 #ifndef _XBOX
