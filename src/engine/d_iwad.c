@@ -22,7 +22,11 @@
 #include <string.h>
 
 #include "deh_str.h"
+#include "doomkeys.h"
+#include "d_iwad.h"
 #include "i_system.h"
+#include "m_argv.h"
+#include "m_config.h"
 #include "m_misc.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -49,7 +53,7 @@ int8_t *D_FindWADByName(int8_t *name)
     
     // Absolute path?
 
-    probe = M_FileExists(name);
+    probe = M_FileCaseExists(name);
     if (probe != NULL)
     {
         return probe;
@@ -63,17 +67,17 @@ int8_t *D_FindWADByName(int8_t *name)
         // the "directory" may actually refer directly to an IWAD
         // file.
 
-        probe = M_FileExists(iwad_dirs[i]);
-        //if (DirIsFile(iwad_dirs[i], name) && probe != NULL)
+        probe = M_FileCaseExists(iwad_dirs[i]);
+        if (DirIsFile(iwad_dirs[i], name) && probe != NULL)
         {
             return probe;
         }
 
         // Construct a string for the full path
 
-        //path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR, name, NULL);
+        path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR, name, NULL);
 
-        probe = M_FileExists(path);
+        probe = M_FileCaseExists(path);
         if (probe != NULL)
         {
             return probe;

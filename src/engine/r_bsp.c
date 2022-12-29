@@ -124,7 +124,7 @@ int checkcoord[12][4] = {
 // R_CheckBBox
 //
 
-dboolean R_CheckBBox(fixed_t* bspcoord) {
+boolean R_CheckBBox(fixed_t* bspcoord) {
 	angle_t     angle1;
 	angle_t     angle2;
 	int         boxpos;
@@ -179,7 +179,7 @@ static void AddSwitchQuad(seg_t* line) {
 // R_GenerateSwitchPlane
 //
 
-dboolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v) {
+boolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v) {
 	fixed_t     bottom = 0;
 	fixed_t     top = 0;
 	int         offset = 0;
@@ -297,7 +297,7 @@ d_inline static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bot
 // R_GenerateLowerSegPlane
 //
 
-static dboolean R_GenerateLowerSegPlane(seg_t* line, vtx_t* v) {
+static boolean R_GenerateLowerSegPlane(seg_t* line, vtx_t* v) {
 	line_t* linedef;
 	side_t* sidedef;
 	rfloat      top;
@@ -367,7 +367,7 @@ static dboolean R_GenerateLowerSegPlane(seg_t* line, vtx_t* v) {
 // R_GenerateUpperSegPlane
 //
 
-static dboolean R_GenerateUpperSegPlane(seg_t* line, vtx_t* v) {
+static boolean R_GenerateUpperSegPlane(seg_t* line, vtx_t* v) {
 	line_t* linedef;
 	side_t* sidedef;
 	rfloat      top;
@@ -441,7 +441,7 @@ static dboolean R_GenerateUpperSegPlane(seg_t* line, vtx_t* v) {
 // R_GenerateMiddleSegPlane
 //
 
-static dboolean R_GenerateMiddleSegPlane(seg_t* line, vtx_t* v) {
+static boolean R_GenerateMiddleSegPlane(seg_t* line, vtx_t* v) {
 	line_t* linedef;
 	side_t* sidedef;
 	rfloat      top;

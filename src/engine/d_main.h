@@ -41,7 +41,7 @@
 void D_DoomMain(void);
 
 int D_MiniLoop(void (*start)(void), void (*stop)(void),
-               void (*draw)(void), int(*tick)(void));
+               void (*draw)(void), boolean(*tick)(void));
 
 // Called by IO functions when input is detected.
 void D_PostEvent(event_t* ev);
@@ -53,6 +53,6 @@ void D_PostEvent(event_t* ev);
 
 void D_IncValidCount(void);
 
-extern dboolean BusyDisk;
+extern boolean BusyDisk;
 
 #endif

@@ -99,13 +99,13 @@ static int SortSprites(const vtxlist_t* a, const vtxlist_t* b) {
 // DL_ProcessDrawList
 //
 
-void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
+void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 	drawlist_t* dl;
 	int i;
 	int drawcount = 0;
 	vtxlist_t* head;
 	vtxlist_t* tail;
-	dboolean checkNightmare = false;
+	boolean checkNightmare = false;
 
 	if (tag < 0 && tag >= NUMDRAWLISTS) {
 		return;
@@ -157,7 +157,7 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 
 			// setup texture ID
 			if (tag == DLT_SPRITE) {
-				uint64_t flags = ((visspritelist_t*)head->data)->spr->flags;
+				intptr_t flags = ((visspritelist_t*)head->data)->spr->flags;
 
 				// textid in sprites contains hack that stores palette index data
 				palette = head->texid >> 24;
@@ -167,11 +167,11 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 				// villsa 12152013 - change blend states for nightmare things
 				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
 					if (!checkNightmare && (flags & MF_NIGHTMARE)) {
-						glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+						dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
 						checkNightmare ^= 1;
 					}
 					else if (checkNightmare && !(flags & MF_NIGHTMARE)) {
-						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+						dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						checkNightmare ^= 1;
 					}
 				}
@@ -183,9 +183,9 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 
 			// non sprite textures must repeat or mirrored-repeat
 			if (tag == DLT_WALL) {
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
 					head->flags & DLF_MIRRORS ? GL_MIRRORED_REPEAT : GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
 
@@ -199,7 +199,7 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 				GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
 			}
 
-			glDrawGeometry(drawcount, drawVertex);
+			dglDrawGeometry(drawcount, drawVertex);
 
 			// count vertex size
 			if (devparm) {
@@ -237,8 +237,8 @@ int DL_GetDrawListSize(int tag) {
 // DL_BeginDrawList
 //
 
-void DL_BeginDrawList(dboolean t) {
-	glSetVertex(drawVertex);
+void DL_BeginDrawList(boolean t) {
+	dglSetVertex(drawVertex);
 	GL_SetTextureUnit(0, t);
 }
 

@@ -26,10 +26,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef C89
 #include <stdbool.h>
-#endif
-#include "i_w3swrapper.h"
 
 #ifdef _MSC_VER
 #include "i_opndir.h"
@@ -41,38 +38,16 @@
 #include "doomstat.h"
 #include "d_main.h"
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#else
+#ifdef __OpenBSD__
 #include <SDL.h>
+#else
+#include <SDL2/SDL.h>
 #endif
 
 #include "i_video.h"
 #include "m_misc.h"
 #include "i_system.h"
 #include "con_console.h"
-
-#ifdef VITA
-#include <vitasdk.h>
-int _newlib_heap_size_user = 200 * 1024 * 1024;
-
-void early_fatal_error(const char *msg) {
-	vglInit(0);
-	SceMsgDialogUserMessageParam msg_param;
-	sceClibMemset(&msg_param, 0, sizeof(SceMsgDialogUserMessageParam));
-	msg_param.buttonType = SCE_MSG_DIALOG_BUTTON_TYPE_OK;
-	msg_param.msg = (const SceChar8*)msg;
-	SceMsgDialogParam param;
-	sceMsgDialogParamInit(&param);
-	param.mode = SCE_MSG_DIALOG_MODE_USER_MSG;
-	param.userMsgParam = &msg_param;
-	sceMsgDialogInit(&param);
-	while (sceMsgDialogGetStatus() != SCE_COMMON_DIALOG_STATUS_FINISHED) {
-		vglSwapBuffers(GL_TRUE);
-	}
-	sceKernelExitProcess(0);
-}
-#endif
 
 const int8_t version_date[] = __DATE__;
 
@@ -453,7 +428,7 @@ int dhtoi(int8_t* str) {
 // dfcmp
 //
 
-dboolean dfcmp(float f1, float f2) {
+boolean dfcmp(float f1, float f2) {
 	float precision = 0.00001f;
 	if (((f1 - precision) < f2) &&
 		((f1 + precision) > f2)) {
@@ -492,9 +467,9 @@ int dsprintf(int8_t* buf, const int8_t* format, ...) {
 
 	va_start(arg, format);
 #ifdef HAVE_VSNPRINTF
-	x = w3svsnprintf(buf, dstrlen(buf), format, arg);
+	x = vsnprintf(buf, dstrlen(buf), format, arg);
 #else
-	x = w3svsnprintf(buf, format, arg);
+	x = vsprintf(buf, format, arg);
 #endif
 	va_end(arg);
 
@@ -511,9 +486,9 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 	va_start(argptr, str);
 
 #ifdef HAVE_VSNPRINTF
-	x = w3svsnprintf(src, n, str, argptr);
+	x = vsnprintf(src, n, str, argptr);
 #else
-	x = w3svsnprintf(src, str, argptr);
+	x = vsprintf(src, str, argptr);
 #endif
 
 	va_end(argptr);
@@ -528,29 +503,7 @@ int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
 int main(int argc, char *argv[]) {
 	myargc = argc;
 	myargv = argv;
-#ifdef VITA
-	// Checking for libshacccg.suprx existence
-	SceIoStat st1, st2;
-	if (!(sceIoGetstat("ur0:/data/libshacccg.suprx", &st1) >= 0 || sceIoGetstat("ur0:/data/external/libshacccg.suprx", &st2) >= 0))
-		early_fatal_error("Error: Runtime shader compiler (libshacccg.suprx) is not installed.");
-	scePowerSetArmClockFrequency(444);
-	scePowerSetBusClockFrequency(222);
-	scePowerSetGpuClockFrequency(222);
-	scePowerSetGpuXbarClockFrequency(166);
-	printf("Starting up vitaGL\n");
-	vglInitExtended(0x200000, 960, 544, 0x1000000, SCE_GXM_MULTISAMPLE_4X);
-	vglUseCachedMem(GL_TRUE);
-	//Init net.
-	sceSysmoduleLoadModule(SCE_SYSMODULE_NET);
-	int ret = sceNetShowNetstat();
-	SceNetInitParam initparam;
-	if (ret == SCE_NET_ERROR_ENOTINIT) {
-		initparam.memory = malloc(141 * 1024);
-		initparam.size = 141 * 1024;
-		initparam.flags = 0;
-		sceNetInit(&initparam);
-	}
-#endif
+
 	D_DoomMain();
 
 	return 0;

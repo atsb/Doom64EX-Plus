@@ -57,8 +57,8 @@ net_packet_t* NET_PacketDup(net_packet_t* packet)
 {
 	net_packet_t* newpacket;
 
-	newpacket = NET_NewPacket(sizeof(packet->len));
-	memcpy(newpacket->data, packet->data, sizeof(packet->len));
+	newpacket = NET_NewPacket(packet->len);
+	memcpy(newpacket->data, packet->data, packet->len);
 	newpacket->len = packet->len;
 
 	return newpacket;
@@ -76,7 +76,7 @@ void NET_FreePacket(net_packet_t* packet)
 // Read a byte from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt8(net_packet_t* packet, int* data)
+boolean NET_ReadInt8(net_packet_t* packet, int* data)
 {
 	if (packet->pos + 1 > packet->len)
 		return false;
@@ -91,7 +91,7 @@ dboolean NET_ReadInt8(net_packet_t* packet, int* data)
 // Read a 16-bit integer from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt16(net_packet_t* packet, uint32_t* data)
+boolean NET_ReadInt16(net_packet_t* packet, uint32_t* data)
 {
 	byte* p;
 
@@ -109,7 +109,7 @@ dboolean NET_ReadInt16(net_packet_t* packet, uint32_t* data)
 // Read a 32-bit integer from the packet, returning true if read
 // successfully
 
-dboolean NET_ReadInt32(net_packet_t* packet, uint32_t* data)
+boolean NET_ReadInt32(net_packet_t* packet, uint32_t* data)
 {
 	byte* p;
 
@@ -126,7 +126,7 @@ dboolean NET_ReadInt32(net_packet_t* packet, uint32_t* data)
 
 // Signed read functions
 
-dboolean NET_ReadSInt8(net_packet_t* packet, int* data)
+boolean NET_ReadSInt8(net_packet_t* packet, int* data)
 {
 	if (NET_ReadInt8(packet, data))
 	{
@@ -143,7 +143,7 @@ dboolean NET_ReadSInt8(net_packet_t* packet, int* data)
 	}
 }
 
-dboolean NET_ReadSInt16(net_packet_t* packet, int32_t* data)
+boolean NET_ReadSInt16(net_packet_t* packet, int32_t* data)
 {
 	if (NET_ReadInt16(packet, (uint32_t*)data))
 	{
@@ -160,7 +160,7 @@ dboolean NET_ReadSInt16(net_packet_t* packet, int32_t* data)
 	}
 }
 
-dboolean NET_ReadSInt32(net_packet_t* packet, int32_t* data)
+boolean NET_ReadSInt32(net_packet_t* packet, int32_t* data)
 {
 	if (NET_ReadInt32(packet, (uint32_t*)data))
 	{
@@ -219,9 +219,9 @@ static void NET_IncreasePacket(net_packet_t* packet)
 
 	packet->alloced *= 2;
 
-	newdata = Z_Malloc(sizeof(packet->alloced), PU_STATIC, 0);
+	newdata = Z_Malloc(packet->alloced, PU_STATIC, 0);
 
-	memcpy(newdata, packet->data, sizeof(packet->len));
+	memcpy(newdata, packet->data, packet->len);
 
 	Z_Free(packet->data);
 	packet->data = newdata;

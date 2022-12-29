@@ -28,7 +28,7 @@
 #include "m_fixed.h"
 #include "d_think.h"
 #include "p_mobj.h"
-#include "i_w3swrapper.h"
+
 //
 // INTERNAL MAP TYPES
 //  used by play and refresh
@@ -230,7 +230,7 @@ typedef struct {
 	// If false use 0 for any position.
 	// Note: as eight entries are available,
 	//  we might as well insert the same name eight times.
-	boolean	    rotate;
+	boolean    rotate;
 
 	// Lump to use for view angles 0-7.
 	int16_t    lump[8];

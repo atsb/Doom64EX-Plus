@@ -93,7 +93,7 @@ static int FindInList(searchlist_t* list, const int8_t* name) {
 	return -1;
 }
 
-static dboolean SetupList(searchlist_t* list, searchlist_t* src_list,
+static boolean SetupList(searchlist_t* list, searchlist_t* src_list,
 	const int8_t* startname, const int8_t* endname,
 	const int8_t* startname2, const int8_t* endname2) {
 	int startlump, endlump;
@@ -212,7 +212,7 @@ static sprite_frame_t* FindSpriteFrame(int8_t* name, int frame) {
 
 // Check if sprite lump is needed in the new wad
 
-static dboolean SpriteLumpNeeded(lumpinfo_t* lump) {
+static boolean SpriteLumpNeeded(lumpinfo_t* lump) {
 	sprite_frame_t* sprite;
 	int angle_num;
 	int i;

@@ -40,7 +40,7 @@
 
 static byte* pngWriteData;
 static byte* pngReadData;
-static int   pngWritePos = 0;
+static size_t   pngWritePos = 0;
 
 CVAR_CMD(i_gamma, 0) {
 	GL_DumpTextures();
@@ -112,7 +112,7 @@ static void I_TranslatePalette(png_colorp dest) {
 // I_PNGReadData
 //
 
-byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
+byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 	int* w, int* h, int* offset, int palindex) {
 	png_structp png_ptr;
 	png_infop   info_ptr;
@@ -337,9 +337,9 @@ byte* I_PNGReadData(int lump, dboolean palette, dboolean nopack, dboolean alpha,
 // I_PNGWriteFunc
 //
 
-static void I_PNGWriteFunc(png_structp png_ptr, byte* data, int length) {
-	pngWriteData = (byte*)Z_Realloc(pngWriteData, sizeof(pngWritePos) + length, PU_STATIC, 0);
-	dmemcpy(pngWriteData + pngWritePos, data, sizeof(length));
+static void I_PNGWriteFunc(png_structp png_ptr, byte* data, size_t length) {
+	pngWriteData = (byte*)Z_Realloc(pngWriteData, pngWritePos + length, PU_STATIC, 0);
+	dmemcpy(pngWriteData + pngWritePos, data, length);
 	pngWritePos += length;
 }
 
@@ -355,7 +355,7 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 	byte* pic;
 	byte** row_pointers;
 	size_t      j = 0;
-	int      row;
+	size_t      row;
 
 	// setup png pointer
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
@@ -428,8 +428,8 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 
 	// allocate output
-	out = (byte*)Z_Malloc(sizeof(pngWritePos), PU_STATIC, 0);
-	dmemcpy(out, pngWriteData, sizeof(pngWritePos));
+	out = (byte*)Z_Malloc(pngWritePos, PU_STATIC, 0);
+	dmemcpy(out, pngWriteData, pngWritePos);
 	*size = pngWritePos;
 
 	Z_Free(pngWriteData);

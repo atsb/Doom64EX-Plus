@@ -30,14 +30,14 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#else
+#ifdef __OpenBSD__
 #include <SDL.h>
 #include <SDL_opengl.h>
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #endif
-#include "i_w3swrapper.h"
+
 #include "m_misc.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -46,6 +46,7 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "gl_main.h"
+
 SDL_Window* window;
 SDL_GLContext   glContext;
 
@@ -61,7 +62,7 @@ SDL_Surface* screen;
 int video_width;
 int video_height;
 float video_ratio;
-dboolean window_focused;
+boolean window_focused;
 
 int mouse_x = 0;
 int mouse_y = 0;

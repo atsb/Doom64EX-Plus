@@ -27,10 +27,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef C89
-#include <stdbool.h>
-#endif
-
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -42,8 +38,8 @@
 #else
 #include <dirent.h>
 #endif
+
 #include <fcntl.h>
-#include "i_w3swrapper.h"
 #include "doomdef.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
@@ -93,22 +89,22 @@
 // defaulted values
 //
 
-dboolean            allowmenu = true;                   // can menu be accessed?
-dboolean            menuactive = false;
-dboolean            mainmenuactive = false;
-dboolean            allowclearmenu = true;              // can user hit escape to clear menu?
+boolean            allowmenu = true;                   // can menu be accessed?
+boolean            menuactive = false;
+boolean            mainmenuactive = false;
+boolean            allowclearmenu = true;              // can user hit escape to clear menu?
 
-static dboolean     newmenu = false;    // 20120323 villsa
+static boolean     newmenu = false;    // 20120323 villsa
 static int8_t* messageBindCommand;
 static int          quickSaveSlot;                      // -1 = no quicksave slot picked!
 static int          saveSlot;                           // which slot to save in
 static int8_t         savegamestrings[10][MENUSTRINGSIZE];
-static dboolean     alphaprevmenu = false;
+static boolean     alphaprevmenu = false;
 static int          menualphacolor = 0xff;
 
 static int8_t         inputString[MENUSTRINGSIZE];
 static int8_t         oldInputString[MENUSTRINGSIZE];
-static dboolean     inputEnter = false;
+static boolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
 
@@ -126,8 +122,8 @@ void(*menufadefunc)(void) = NULL;
 
 static int8_t     MenuBindBuff[256];
 static int8_t     MenuBindMessage[256];
-static dboolean MenuBindActive = false;
-static dboolean showfullitemvalue[3] = { false, false, false };
+static boolean MenuBindActive = false;
+static boolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
@@ -166,7 +162,7 @@ typedef struct {
 
 typedef struct menu_s {
 	int16_t               numitems;           // # of menu items
-	dboolean            textonly;
+	boolean            textonly;
 	struct menu_s* prevMenu;          // previous menu
 	menuitem_t* menuitems;         // menu items
 	void (*routine)(void);                  // draw routine
@@ -174,7 +170,7 @@ typedef struct menu_s {
 	int16_t               x;
 	int16_t               y;                  // x,y of menu
 	int16_t               lastOn;             // last item user was on in menu
-	dboolean            smallfont;          // draw text using small fonts
+	boolean            smallfont;          // draw text using small fonts
 	menudefault_t* defaultitems;      // pointer to default values for cvars
 	int16_t               numpageitems;       // number of items to display per page
 	int16_t               menupageoffset;
@@ -225,10 +221,10 @@ static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t
 static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
 static void M_SetInputString(int8_t* string, int len);
-static void M_Scroll(menu_t* menu, dboolean up);
+static void M_Scroll(menu_t* menu, boolean up);
 static void M_DoVideoReset(int choice);
 
-static dboolean M_SetThumbnail(int which);
+static boolean M_SetThumbnail(int which);
 
 CVAR_CMD(m_menufadetime, 0) {
 	if (cvar->value < 0) {
@@ -1721,16 +1717,12 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
-#ifndef VITA	
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
 	{2,"Windowed:",M_ChangeWindowed, 'w'},
-#endif	
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
 	{2,"Resolution:",M_ChangeResolution, 'r'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
-#ifndef VITA	
 	{2,"Vsync:",M_ChangeVerticalSynchronisation, 'v'},
-#endif
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
 	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
@@ -1757,14 +1749,10 @@ menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
-#ifndef VITA	
 	{ &r_anisotropic, 1 },
 	{ &v_windowed, 0 },
-#endif
 	{ &i_interpolateframes, 1 },
-#ifndef VITA
 	{ &v_vsync, 1 },
-#endif
 	{ &v_accessibility, 0 },
 	{ NULL, -1 }
 };
@@ -1785,11 +1773,7 @@ menu_t VideoDef = {
 	0,
 	false,
 	VideoDefault,
-#ifdef VITA
-    10,
-#else
-    12,
-#endif
+	12,
 	0,
 	0.65f,
 	VideoHints,
@@ -1943,11 +1927,6 @@ void M_DrawVideo(void) {
 	static const int8_t* filterType[2] = { "Linear", "Nearest" };
 	static const int8_t* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
 	static const int8_t* frametype[2] = { "Off", "On" };
-#ifdef VITA	 
-    static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" };
-	static char bitValue[8];
-#endif
-
 	int8_t res[16];
 	int y;
 
@@ -1974,20 +1953,14 @@ void M_DrawVideo(void) {
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
-#ifndef VITA	
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
-#endif
 	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
 
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
-#ifdef VITA
-	DRAWVIDEOITEM2(vsync, v_vsync.value, vsyncType);
-#else	
 	DRAWVIDEOITEM2(vsync, v_vsync.value, frametype);
-#endif
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, frametype);
 
 #undef DRAWVIDEOITEM
@@ -2066,11 +2039,10 @@ void M_ChangeGammaLevel(int choice)
 	}
 }
 
-
 void M_ChangeFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_filter);
 }
-#ifndef VITA
+
 void M_ChangeAnisotropic(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_anisotropic);
 }
@@ -2078,7 +2050,7 @@ void M_ChangeAnisotropic(int choice) {
 void M_ChangeWindowed(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_windowed);
 }
-#endif
+
 static void M_SetResolution(void) {
 	int width = SCREENWIDTH;
 	int height = SCREENHEIGHT;
@@ -2185,11 +2157,7 @@ void M_ChangeInterpolateFrames(int choice)
 
 void M_ChangeVerticalSynchronisation(int choice)
 {
-#ifdef VITA
-	M_SetOptionValue(choice, 0, 2, 1, &v_vsync);
-#else	
 	M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
-#endif
 }
 
 void M_ChangeAccessibility(int choice)
@@ -2225,7 +2193,7 @@ menu_t PasswordDef = {
 	NULL
 };
 
-static dboolean passInvalid = false;
+static boolean passInvalid = false;
 static int        curPasswordSlot = 0;
 static int        passInvalidTic = 0;
 
@@ -2248,8 +2216,6 @@ void M_DrawPassword(void) {
 
 #if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (!xgamepad.connected)
-#elif defined(VITA)
-	
 #endif
 	{
 		Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
@@ -2740,132 +2706,8 @@ void M_DrawXGamePad(void) {
 		msgNames[(int)v_mlookinvert.value]);
 }
 
-#elif defined(VITA)
-#include "g_controls.h"
+#endif  // XINPUT
 
-//------------------------------------------------------------------------
-//
-// GAMEPAD CONTROLLER MENU
-//
-//------------------------------------------------------------------------
-
-void M_XGamePadChoice(int choice);
-void M_DrawXGamePad(void);
-
-cvar_t i_rsticksensitivityy;
-cvar_t i_rsticksensitivityx;
-CVAR_EXTERNAL(i_xinputscheme);
-
-enum {
-	xgp_sensitivityx,
-	xgp_empty1,
-	xgp_sensitivityy,
-	xgp_empty2,
-	xgp_look,
-	xgp_invert,
-	xgp_default,
-	xgp_return,
-	xgp_end
-} xgp_e;
-
-menuitem_t XGamePadMenu[] = {
-	{3,"Look Sensitivity x",M_XGamePadChoice,'s'},
-	{-1,"",0},
-	{3,"Look Sensitivity y",M_XGamePadChoice,'t'},
-	{-1,"",0},
-	{2,"Y Axis Look:",M_ChangeMouseLook,'l'},
-	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
-	{-2,"Default",M_DoDefaults,'d'},
-	{1,"/r Return",M_Return, 0x20}
-};
-
-menudefault_t XGamePadDefault[] = {
-	{ &i_rsticksensitivityx, 2.0f },
-	{ &i_rsticksensitivityy, 1.5f},
-	{ &v_mlook, 0 },
-	{ &v_mlookinvert, 0 },
-	{ NULL, -1 }
-};
-
-menu_t XGamePadDef = {
-	xgp_end,
-	false,
-	&ControlMenuDef,
-	XGamePadMenu,
-	M_DrawXGamePad,
-	"Gamepad Menu",
-	88,48,
-	0,
-	false,
-	XGamePadDefault,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_XGamePadChoice(int choice) {
-	float slope1 = 10.0f / 100.0f;
-	float slope2 = 10.0f / 100.0f;
-
-	switch (itemOn) {
-	case xgp_sensitivityx:
-		if (choice) {
-			if (i_rsticksensitivityx.value < 0.0125f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityx.value + slope1);
-			}
-			else {
-				CON_CvarSetValue(i_rsticksensitivityx.name, 0.0125f);
-			}
-		}
-		else {
-			if (i_rsticksensitivityy.value > 0.001f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityy.value - slope1);
-			}
-			else {
-				CON_CvarSetValue(i_rsticksensitivityx.name, 0.001f);
-			}
-		}
-		break;
-
-	case xgp_sensitivityy:
-		if (choice) {
-			if (i_rsticksensitivityy.value < 10.0f) {
-				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value + slope2);
-			}
-			else {
-				CON_CvarSetValue(i_rsticksensitivityy.name, 100);
-			}
-		}
-		else {
-			if (i_rsticksensitivityy.value > 1) {
-				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value - slope2);
-			}
-			else {
-				CON_CvarSetValue(i_rsticksensitivityy.name, 1);
-			}
-		}
-		break;
-	}
-}
-
-void M_DrawXGamePad(void) {
-	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivityx + 1),
-		100, i_rsticksensitivityx.value * 10.0f);
-
-	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivityy + 1),
-		50, i_rsticksensitivityy.value * 0.5f);
-
-	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_look, MENUCOLORRED,
-		msgNames[(int)v_mlook.value]);
-
-	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_invert, MENUCOLORRED,
-		msgNames[(int)v_mlookinvert.value]);
-}
-
-
-#endif
 //------------------------------------------------------------------------
 //
 // CONTROLS MENU
@@ -2995,7 +2837,7 @@ void M_BuildControlMenu(void) {
 	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
 	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
 	ADD_NONBINDABLE_ITEM(7, "Chat             t", 1);
-	ADD_NONBINDABLE_ITEM(8, "Console          Backslash", 1);
+	ADD_NONBINDABLE_ITEM(8, "Console          BACKSLASH", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {
@@ -3024,7 +2866,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	controls_gamepad,
 #endif
 	controls_return,
@@ -3034,7 +2876,7 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{1,"Gamepad",M_ControlChoice, 'g'},
 #endif
 	{1,"/r Return",M_Return, 0x20}
@@ -3043,7 +2885,7 @@ menuitem_t ControlsMenu[] = {
 int8_t* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	"configure gamepad functionality",
 #endif
 	NULL
@@ -3076,7 +2918,7 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA) // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
@@ -3448,14 +3290,23 @@ void M_ReadSaveStrings(void) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
 
 		// handle = open(name, O_RDONLY | 0, 0666);
-		handle = w3sopen(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+#ifdef _WIN32
+		handle = _open(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+#else
+		handle = open(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+#endif
 		if (handle == -1) {
 			dstrcpy(&savegamestrings[i][0], EMPTYSTRING);
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
-		w3sread(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		w3sclose(handle);
+#ifdef _WIN32
+		_read(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		_close(handle);
+#else
+		read(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		close(handle);
+#endif
 		DoomLoadMenu[i].status = 1;
 	}
 }
@@ -3679,12 +3530,7 @@ static void M_SetInputString(int8_t* string, int len) {
 
 	// hack
 	if (!dstrcmp(string, EMPTYSTRING)) {
-#ifdef VITA
-        // autoname the save
-        snprintf(inputString, SAVESTRINGSIZE-1, "SAVEGAME%d", saveSlot);
-#else
-        inputString[0] = 0;
-#endif
+		inputString[0] = 0;
 	}
 
 	inputCharIndex = dstrlen(inputString);
@@ -3792,7 +3638,7 @@ static int M_BigStringWidth(const int8_t* string) {
 // Allow scrolling through multi-page menus via mouse wheel
 //
 
-static void M_Scroll(menu_t* menu, dboolean up) {
+static void M_Scroll(menu_t* menu, boolean up) {
 	if (menu->numpageitems != -1) {
 		if (!up) {
 			menu->menupageoffset++;
@@ -3908,7 +3754,7 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 // Really need a better and more efficient menu system
 //
 
-static dboolean M_CursorHighlightItem(menu_t* menu) {
+static boolean M_CursorHighlightItem(menu_t* menu) {
 	float scrnx;
 	float scrny;
 	float mx;
@@ -4067,7 +3913,7 @@ static int8_t thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
-static dboolean M_SetThumbnail(int which) {
+static boolean M_SetThumbnail(int which) {
 	byte* data;
 
 	data = Z_Malloc(SAVEGAMETBSIZE, PU_STATIC, 0);
@@ -4095,16 +3941,16 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
 
-	glDisable(GL_TEXTURE_2D);
+	dglDisable(GL_TEXTURE_2D);
 
 	//
 	// draw back panels
 	//
-	glColor4ub(4, 4, 4, menualphacolor);
+	dglColor4ub(4, 4, 4, menualphacolor);
 	//
 	// save game panel
 	//
-	glRecti(
+	dglRecti(
 		def->x - 48,
 		def->y - 12,
 		def->x + 256,
@@ -4113,7 +3959,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// stats panel
 	//
-	glRecti(
+	dglRecti(
 		def->x + 272,
 		def->y - 12,
 		def->x + 464,
@@ -4123,12 +3969,12 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// draw outline for panels
 	//
-	glColor4ub(240, 86, 84, menualphacolor);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	dglColor4ub(240, 86, 84, menualphacolor);
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//
 	// save game panel
 	//
-	glRecti(
+	dglRecti(
 		def->x - 48,
 		def->y - 12,
 		def->x + 256,
@@ -4137,14 +3983,14 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// stats panel
 	//
-	glRecti(
+	dglRecti(
 		def->x + 272,
 		def->y - 12,
 		def->x + 464,
 		def->y + 116
 	);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_TEXTURE_2D);
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	dglEnable(GL_TEXTURE_2D);
 
 	//
 	// draw thumbnail texture and stats
@@ -4176,7 +4022,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 const symboldata_t xinputbutons[12] = {
 	{ 0, 0, 15, 16 },   // B
@@ -4212,50 +4058,6 @@ void M_DrawXInputButton(int x, int y, int button) {
 	const rcolor color = MENUCOLORWHITE;
 
 	switch (button) {
-#ifdef VITA
-	case GAMEPAD_B:
-		index = 0;
-		break;
-	case GAMEPAD_A:
-		index = 1;
-		break;
-	case GAMEPAD_Y:
-		index = 2;
-		break;
-	case GAMEPAD_X:
-		index = 3;
-		break;
-	case GAMEPAD_LSHOULDER:
-		index = 4;
-		break;
-	case GAMEPAD_RSHOULDER:
-		index = 5;
-		break;
-	case GAMEPAD_DPAD_LEFT:
-		index = 6;
-		break;
-	case GAMEPAD_DPAD_RIGHT:
-		index = 7;
-		break;
-	case GAMEPAD_DPAD_UP:
-		index = 8;
-		break;
-	case GAMEPAD_DPAD_DOWN:
-		index = 9;
-		break;
-	case GAMEPAD_START:
-		index = 10;
-		break;
-	case GAMEPAD_BACK:
-		index = 11;
-		break;
-	case GAMEPAD_LTRIGGER:
-		index = 4;
-		break;
-	case GAMEPAD_RTRIGGER:
-		index = 5;
-		break;
-#else		
 	case XINPUT_GAMEPAD_B:
 		index = 0;
 		break;
@@ -4298,7 +4100,6 @@ void M_DrawXInputButton(int x, int y, int button) {
 	case XINPUT_GAMEPAD_RIGHT_TRIGGER:
 		index = 5;
 		break;
-#endif		
 		//
 		// [kex] TODO: finish adding remaining buttons?
 		//
@@ -4311,11 +4112,11 @@ void M_DrawXInputButton(int x, int y, int button) {
 	width = (float)gfxwidth[pic];
 	height = (float)gfxheight[pic];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
-	glEnable(GL_BLEND);
-	glSetVertex(vtx);
+	dglEnable(GL_BLEND);
+	dglSetVertex(vtx);
 
 	GL_SetOrtho(0);
 
@@ -4340,12 +4141,12 @@ void M_DrawXInputButton(int x, int y, int button) {
 		color
 	);
 
-	glTriangle(0, 1, 2);
-	glTriangle(3, 2, 1);
-	glDrawGeometry(4, vtx);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
+	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
-	glDisable(GL_BLEND);
+	dglDisable(GL_BLEND);
 }
 
 #endif
@@ -4354,9 +4155,9 @@ void M_DrawXInputButton(int x, int y, int button) {
 // M_Responder
 //
 
-static dboolean shiftdown = false;
+static boolean shiftdown = false;
 
-dboolean M_Responder(event_t* ev) {
+boolean M_Responder(event_t* ev) {
 	int ch;
 	int i;
 
@@ -4735,7 +4536,7 @@ dboolean M_Responder(event_t* ev) {
 // M_StartControlPanel
 //
 
-void M_StartControlPanel(dboolean forcenext) {
+void M_StartControlPanel(boolean forcenext) {
 	if (!allowmenu) {
 		return;
 	}
@@ -4795,11 +4596,11 @@ static void M_DrawMenuSkull(int x, int y) {
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
-	glEnable(GL_BLEND);
-	glSetVertex(vtx);
+	dglEnable(GL_BLEND);
+	dglSetVertex(vtx);
 
 	GL_SetOrtho(0);
 
@@ -4829,12 +4630,12 @@ static void M_DrawMenuSkull(int x, int y) {
 		color
 	);
 
-	glTriangle(0, 1, 2);
-	glTriangle(3, 2, 1);
-	glDrawGeometry(4, vtx);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
+	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
-	glDisable(GL_BLEND);
+	dglDisable(GL_BLEND);
 }
 
 //
@@ -4851,8 +4652,8 @@ static void M_DrawCursor(int x, int y) {
 		gfxIdx = GL_BindGfxTexture("CURSOR", true);
 		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 		GL_SetOrthoScale(scale);
 		GL_SetState(GLSTATE_BLEND, 1);
@@ -5092,28 +4893,7 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT)  || defined(VITA) // XINPUT
-#ifdef VITA
-	if(currentMenu != &MainDef) {
-		GL_SetOrthoScale(0.75f);
-		if (currentMenu == &PasswordDef) {
-			M_DrawXInputButton(4, 271, GAMEPAD_B);
-			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
-		}
-
-		GL_SetOrthoScale(0.75f);
-		M_DrawXInputButton(4, 287, GAMEPAD_A);
-		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
-
-		if (currentMenu != &PauseDef) {
-			GL_SetOrthoScale(0.75f);
-			M_DrawXInputButton(5, 303, GAMEPAD_START);
-			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
-		}
-
-		GL_SetOrthoScale(1);
-	}
-#else
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	if (xgamepad.connected && currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
@@ -5133,7 +4913,6 @@ void M_Drawer(void) {
 
 		GL_SetOrthoScale(1);
 	}
-#endif
 #endif
 
 	M_DrawCursor(mouse_x, mouse_y);
@@ -5262,14 +5041,12 @@ void M_Ticker(void) {
 	}
 
 #if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-#ifndef VITA
 	//
 	// hide mouse menu if gamepad controller is plugged in
 	//
 	if (currentMenu == &ControlMenuDef) {
 		currentMenu->menuitems[controls_gamepad].status = xgamepad.connected ? 1 : -3;
 	}
-#endif
 #endif
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header

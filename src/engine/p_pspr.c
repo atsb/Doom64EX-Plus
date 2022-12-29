@@ -156,7 +156,7 @@ void P_DropWeapon(player_t* player) {
 // If not, selects the next weapon to use.
 //
 
-dboolean P_CheckAmmo(player_t* player) {
+boolean P_CheckAmmo(player_t* player) {
 	ammotype_t ammo;
 	int count;
 
@@ -572,7 +572,7 @@ void P_BulletSlope(mobj_t* mo) {
 //
 // P_GunShot
 //
-void P_GunShot(mobj_t* mo, dboolean accurate) {
+void P_GunShot(mobj_t* mo, boolean accurate) {
 	angle_t     angle;
 	int         damage;
 	int         rnd1, rnd2;
@@ -724,6 +724,10 @@ void A_BFGSpray(mobj_t* mo) {
 
 		// mo->target is the originator (player) of the missile
 
+		//
+		// [kex] add 1 to distance so autoaim can be forced
+		//
+		P_AimLineAttack(mo->target, an, 0, ATTACKRANGE + 1);
 
 		if (!linetarget) {
 			continue;

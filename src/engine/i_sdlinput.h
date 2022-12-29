@@ -27,10 +27,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#else
+#ifdef __OpenBSD__
 #include <SDL.h>
+#else
+#include <SDL2/SDL.h>
 #endif
 #include "doomtype.h"
 ////////////Input//////////////
@@ -53,4 +53,4 @@ void I_StartTic(void);
 void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
-dboolean I_UpdateGrab(void);
+boolean I_UpdateGrab(void);

@@ -37,12 +37,13 @@
 #include <unistd.h>
 #endif
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#else
+#ifdef __OpenBSD__
 #include <SDL.h>
+#else
+#include <SDL2/SDL.h>
 #endif
-#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
+
+#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
 #include <fluidsynth.h>
 #else
 #include <fluidlite.h> //ATSB: Fluidlite on WIN32/macOS and some other devices so we can distribute binaries without all the stupid dependencies
@@ -172,8 +173,8 @@ typedef struct {
     dword       nexttic;
     dword       lasttic;
     dword       starttic;
-    uint64_t      starttime;
-    uint64_t      curtime;
+    uint32_t      starttime;
+    uint32_t      curtime;
     chanstate_e state;
     dboolean    paused;
 
@@ -1076,30 +1077,10 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 // Seq_Shutdown
 //
 
-static void Seq_Shutdown(doomseq_t* seq) {
-
-    //
-    // signal the sequencer to shut down
-    //
-    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
-
-    //
-    // wait until the audio thread is finished
-    //
-    SDL_WaitThread(seq->thread, NULL);
-
+static void Seq_Shutdown(doomseq_t* seq)
+{
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
-
-    //
-    // fluidsynth cleanup stuff
-    //
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
 }
 
 //
@@ -1113,7 +1094,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
     long start = SDL_GetTicks();
     long delay = 0;
     int status;
-    int count = 0;
+    dword count = 0;
     signalhandler signal;
 
     while(1) {
@@ -1274,7 +1255,7 @@ void I_InitSequencer(void) {
 
     Song_ClearPlaylist();
 
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
 

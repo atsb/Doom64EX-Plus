@@ -42,8 +42,6 @@
 static int8_t* ConfigFileName =
 #ifdef _WIN32
 "config.cfg"
-#elif defined(VITA)
-"ux0:data/Doom64EX+/config.cfg"
 #else
 NULL
 #endif

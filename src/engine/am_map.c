@@ -49,6 +49,7 @@
 #include "gl_draw.h"
 #include "g_actions.h"
 #include "g_controls.h"
+
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
@@ -69,7 +70,7 @@ enum {
 // automap vars
 
 int             amCheating = 0;        //villsa: no longer static..
-bool        automapactive = false;
+boolean        automapactive = false;
 fixed_t         automapx = 0;
 fixed_t         automapy = 0;
 fixed_t         automappanx = 0;
@@ -78,7 +79,7 @@ byte            amModeCycle = 0;        // textured or line mode?
 int             followplayer = 1;        // specifies whether to follow the player around
 
 static player_t* plr;                       // the player represented by an arrow
-static bool stopped = true;
+static boolean stopped = true;
 static word     am_blink = 0;        // player arrow blink tics
 static angle_t  automapangle = 0;
 static float    scale = 640.0f;   // todo: reset scale after changing levels
@@ -106,13 +107,11 @@ CVAR(am_overlay, 0);
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
 
-#if defined(_WIN32) && defined(USE_XINPUT) // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_xinputscheme);
-#elif defined(VITA)
-float i_rsticksensitivity;
-CVAR_EXTERNAL(i_xinputscheme);
 #endif
+
 //
 // CMD_Automap
 //
@@ -317,7 +316,7 @@ static void AM_GetBounds(void) {
 // Handle events (user inputs) in automap mode
 //
 
-int AM_Responder(event_t* ev) {
+boolean AM_Responder(event_t* ev) {
 	int rc = false;
 
 	if (am_flags & AF_PANMODE) {
@@ -452,113 +451,8 @@ int AM_Responder(event_t* ev) {
 			}
 		}
 	}
-#elif defined(VITA)
-	else if (ev->type == ev_gamepad) {
-		//
-		// user has pan button held down and is
-		// moving around with the stick
-		//
-		if (am_flags & AF_PANGAMEPAD) {
-			if (ev->data3 == GAMEPAD_LEFT_STICK) {
-				float x;
-				float y;
-
-				x = (float)ev->data1 * i_rsticksensitivity / (1500.0f / scale);
-				y = (float)ev->data2 * i_rsticksensitivity / (1500.0f / scale);
-
-				mpanx = (int)x << 16;
-				mpany = (int)y << 16;
-
-				rc = true;
-			}
-		}
-	}
-	else if (automapactive) {
-		if (ev->type == ev_keydown) {
-			switch (ev->data1) {
-				//
-				// pan button
-				//
-			case GAMEPAD_A:
-				CMD_AutomapSetFlag(AF_PANGAMEPAD, NULL);
-				break;
-
-			case GAMEPAD_LSHOULDER:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_ZOOMIN, NULL);
-					rc = true;
-				}
-				break;
-
-			case GAMEPAD_RSHOULDER:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_ZOOMOUT, NULL);
-					rc = true;
-				}
-				break;
-
-			case GAMEPAD_DPAD_UP:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANTOP, NULL);
-					rc = true;
-				}
-				break;
-
-			case GAMEPAD_DPAD_DOWN:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANBOTTOM, NULL);
-					rc = true;
-				}
-				break;
-
-			case GAMEPAD_DPAD_LEFT:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANLEFT, NULL);
-					rc = true;
-				}
-				break;
-
-			case GAMEPAD_DPAD_RIGHT:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANRIGHT, NULL);
-					rc = true;
-				}
-				break;
-			}
-		}
-		else if (ev->type == ev_keyup) {
-			switch (ev->data1) {
-			case GAMEPAD_A:
-				CMD_AutomapSetFlag(AF_PANGAMEPAD | PCKF_UP, NULL);
-				break;
-
-			case GAMEPAD_LSHOULDER:
-				CMD_AutomapSetFlag(AF_ZOOMIN | PCKF_UP, NULL);
-				break;
-
-			case GAMEPAD_RSHOULDER:
-				CMD_AutomapSetFlag(AF_ZOOMOUT | PCKF_UP, NULL);
-				break;
-
-			case GAMEPAD_DPAD_UP:
-				CMD_AutomapSetFlag(AF_PANTOP | PCKF_UP, NULL);
-				break;
-
-			case GAMEPAD_DPAD_DOWN:
-				CMD_AutomapSetFlag(AF_PANBOTTOM | PCKF_UP, NULL);
-				break;
-
-			case GAMEPAD_DPAD_LEFT:
-				CMD_AutomapSetFlag(AF_PANLEFT | PCKF_UP, NULL);
-				break;
-
-			case GAMEPAD_DPAD_RIGHT:
-				CMD_AutomapSetFlag(AF_PANRIGHT | PCKF_UP, NULL);
-				break;
-			}
-		}
-	}
 #endif
+
 	return rc;
 }
 
@@ -611,7 +505,7 @@ void AM_Ticker(void) {
 		}
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA)  // XINPUT
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
 	if (am_flags & AF_PANGAMEPAD) {
 		automappanx += mpanx;
@@ -1085,7 +979,7 @@ void AM_Drawer(void) {
 	fixed_t x;
 	fixed_t y;
 	angle_t view;
-	bool follow = false;
+	boolean follow = false;
 
 	if (!automapactive) {
 		return;

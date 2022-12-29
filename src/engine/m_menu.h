@@ -34,7 +34,7 @@
 // Even when the menu is not displayed,
 // this can resize the view and change game parameters.
 // Does all the real work of the menu interaction.
-dboolean M_Responder(event_t* ev);
+boolean M_Responder(event_t* ev);
 
 // Called by main loop,
 // only used for menu (skull cursor) animation.
@@ -50,7 +50,7 @@ void M_Init(void);
 
 // Called by intro code to force menu up upon a keypress,
 // does nothing if menu is already up.
-void M_StartControlPanel(dboolean forcenext);
+void M_StartControlPanel(boolean forcenext);
 
 void M_StartMainMenu(void);
 

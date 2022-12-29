@@ -75,35 +75,35 @@ void        G_SetFastParms(int fast_pending);
 gameaction_t    gameaction = 0;
 gamestate_t     gamestate = 0;
 skill_t         gameskill = 0;
-dboolean        respawnmonsters = false;
-dboolean        respawnspecials = false;
+boolean        respawnmonsters = false;
+boolean        respawnspecials = false;
 int             gamemap = 0;
 int             nextmap = 0;
-dboolean        paused = false;
-dboolean        sendpause = false;    // send a pause event next tic
-dboolean        sendsave = false;    // send a save event next tic
-dboolean        usergame = false;    // ok to save / end game
+boolean        paused = false;
+boolean        sendpause = false;    // send a pause event next tic
+boolean        sendsave = false;    // send a save event next tic
+boolean        usergame = false;    // ok to save / end game
 int             starttime = 0;        // for comparative timing purposes
 int             deathmatch = false;    // only if started as net death
-dboolean        netcheat = false;
-dboolean        netkill = false;
-dboolean        netgame = false;    // only true if packets are broadcast
+boolean        netcheat = false;
+boolean        netkill = false;
+boolean        netgame = false;    // only true if packets are broadcast
 int             basetic = 0;
 int             gametic = 0;
 
-dboolean        playeringame[MAXPLAYERS];
+boolean        playeringame[MAXPLAYERS];
 player_t        players[MAXPLAYERS];
 
 int             consoleplayer;              // player taking events and displaying
 int             displayplayer;              // view being displayed
 
-static dboolean savenow = false;
+static boolean savenow = false;
 static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
 // for intermission
 int             totalkills, totalitems, totalsecret;
-dboolean        precache = true;     // if true, load all graphics at start
+boolean        precache = true;     // if true, load all graphics at start
 
 byte            consistency[MAXPLAYERS][BACKUPTICS];
 
@@ -145,6 +145,7 @@ NETCVAR_PARAM(sv_allowcheats, 0, gameflags, GF_ALLOWCHEATS);
 NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE);
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
+NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
 
 CVAR_EXTERNAL(v_mlook);
@@ -166,6 +167,7 @@ CVAR_EXTERNAL(st_hud_color);
 
 void G_RegisterCvars(void) {
 	CON_CvarRegister(&p_allowjump);
+	CON_CvarRegister(&p_autoaim);
 	CON_CvarRegister(&sv_nomonsters);
 	CON_CvarRegister(&sv_fastmonsters);
 	CON_CvarRegister(&sv_respawnitems);
@@ -844,41 +846,6 @@ void G_ClearInput(void) {
 	}
 }
 
-#ifdef VITA
-//
-// G_DoCmdGamepadMove
-//
-
-extern float i_rsticksensitivity;
-CVAR_EXTERNAL(i_xinputscheme);
-
-void G_DoCmdGamepadMove(event_t *ev)
-{
-    // Most of this is taken from kaiser's xinput.c
-    playercontrols_t *pc = &Controls;
-
-    if (ev->type == ev_gamepad) {
-        pc->flags |= PCF_GAMEPAD;
-
-        //
-        // left analog stick
-        //
-        if (ev->data3 == GAMEPAD_LEFT_STICK) {
-            pc->joyx += (ev->data1) * 0.0015f;
-            pc->joyy += (ev->data2) * 0.0015f;
-        }
-        //
-        // right analog stick
-        //
-        else if (ev->data3 == GAMEPAD_RIGHT_STICK) {
-            int x = (ev->data1) * i_rsticksensitivity * 0.0015f;
-            int y = (ev->data2) * i_rsticksensitivity * 0.0015f;
-            pc->mousex += x;
-            pc->mousey += y;
-        }
-    }
-}
-#endif
 //
 // G_SetGameFlags
 //
@@ -892,6 +859,8 @@ static void G_SetGameFlags(void) {
 	if (sv_friendlyfire.value > 0)  gameflags |= GF_FRIENDLYFIRE;
 	if (sv_keepitems.value > 0)     gameflags |= GF_KEEPITEMS;
 	if (p_allowjump.value > 0)      gameflags |= GF_ALLOWJUMP;
+	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
+
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
 }
 
@@ -968,7 +937,7 @@ void G_DoLoadLevel(void) {
 // Get info needed to make ticcmd_ts for the players.
 //
 
-dboolean G_Responder(event_t* ev) {
+boolean G_Responder(event_t* ev) {
 	// Handle level specific ticcmds
 	if (gamestate == GS_LEVEL) {
 		// allow spy mode changes even during the demo
@@ -986,10 +955,7 @@ dboolean G_Responder(event_t* ev) {
 		}
 
 		if (demoplayback && gameaction == ga_nothing) {
-			if (
-#ifndef VITA			
-			ev->type == ev_keydown ||
-#endif
+			if (ev->type == ev_keydown ||
 				ev->type == ev_gamepad) {
 				G_CheckDemoStatus();
 				gameaction = ga_warpquick;
@@ -1012,14 +978,9 @@ dboolean G_Responder(event_t* ev) {
 	// Handle screen specific ticcmds
 	if (gamestate == GS_SKIPPABLE) {
 		if (gameaction == ga_nothing) {
-#ifdef VITA
-			if(ev->type == ev_keydown || 
-			(ev->type == ev_mouse && ev->data1)) {
-#else			
 			if (ev->type == ev_keydown ||
 				(ev->type == ev_mouse && ev->data1) ||
 				ev->type == ev_gamepad) {
-#endif				
 				gameaction = ga_title;
 				return true;
 			}
@@ -1176,14 +1137,14 @@ void G_PlayerReborn(int player) {
 	int         killcount;
 	int         itemcount;
 	int         secretcount;
-	dboolean    cards[NUMCARDS];
-	dboolean    wpns[NUMWEAPONS];
+	boolean    cards[NUMCARDS];
+	boolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
-	dmemcpy(cards, players[player].cards, sizeof(dboolean) * NUMCARDS);
-	dmemcpy(wpns, players[player].weaponowned, sizeof(dboolean) * NUMWEAPONS);
+	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
+	dmemcpy(wpns, players[player].weaponowned, sizeof(boolean) * NUMWEAPONS);
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
@@ -1232,7 +1193,7 @@ void G_PlayerReborn(int player) {
 // because something is occupying it
 //
 
-dboolean G_CheckSpot(int playernum, mapthing_t* mthing) {
+boolean G_CheckSpot(int playernum, mapthing_t* mthing) {
 	fixed_t         x;
 	fixed_t         y;
 	subsector_t* ss;

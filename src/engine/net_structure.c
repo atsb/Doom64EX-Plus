@@ -50,7 +50,7 @@ void NET_WriteSettings(net_packet_t* packet, net_gamesettings_t* settings)
 	NET_WriteInt32(packet, settings->gameflags);
 }
 
-dboolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings)
+boolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings)
 {
 	return NET_ReadInt8(packet, (int*)&settings->ticdup)
 		&& NET_ReadInt8(packet, (int*)&settings->extratics)
@@ -70,9 +70,9 @@ dboolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings)
 		&& NET_ReadInt32(packet, (uint32_t*)&settings->gameflags);
 }
 
-dboolean NET_ReadQueryData(net_packet_t* packet, net_querydata_t* query)
+boolean NET_ReadQueryData(net_packet_t* packet, net_querydata_t* query)
 {
-	dboolean result;
+	boolean result;
 
 	query->version = NET_ReadString(packet);
 
@@ -107,7 +107,7 @@ void NET_WriteQueryData(net_packet_t* packet, net_querydata_t* query)
 }
 
 void NET_WriteTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
-	dboolean lowres_turn)
+	boolean lowres_turn)
 {
 	// Header
 
@@ -142,8 +142,8 @@ void NET_WriteTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
 		NET_WriteInt16(packet, diff->cmd.pitch);
 }
 
-dboolean NET_ReadTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
-	dboolean lowres_turn)
+boolean NET_ReadTiccmdDiff(net_packet_t* packet, net_ticdiff_t* diff,
+	boolean lowres_turn)
 {
 	int val;
 	int sval;
@@ -277,7 +277,7 @@ void NET_TiccmdPatch(ticcmd_t* src, net_ticdiff_t* diff, ticcmd_t* dest)
 // net_full_ticcmd_t
 //
 
-dboolean NET_ReadFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean lowres_turn)
+boolean NET_ReadFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, boolean lowres_turn)
 {
 	int bitfield;
 	int i;
@@ -317,7 +317,7 @@ dboolean NET_ReadFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboole
 	return true;
 }
 
-void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean lowres_turn)
+void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, boolean lowres_turn)
 {
 	uint32_t bitfield;
 	int i;
@@ -352,7 +352,7 @@ void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, dboolean 
 	}
 }
 
-dboolean NET_ReadMD5Sum(net_packet_t* packet, md5_digest_t digest)
+boolean NET_ReadMD5Sum(net_packet_t* packet, md5_digest_t digest)
 {
 	int b;
 	int i;

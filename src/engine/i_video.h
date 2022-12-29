@@ -25,10 +25,10 @@
 #ifndef __I_VIDEO_H__
 #define __I_VIDEO_H__
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#else
+#ifdef __OpenBSD__
 #include <SDL.h>
+#else
+#include <SDL2/SDL.h>
 #endif
 
 #include "d_event.h"

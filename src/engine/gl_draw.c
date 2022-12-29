@@ -36,7 +36,7 @@
 #include <stdarg.h>
 #include "doomtype.h"
 #include "doomstat.h"
-#include "gl_main.h"
+#include "dgl.h"
 #include "r_things.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
@@ -46,11 +46,11 @@
 // Draw_GfxImage
 //
 
-void Draw_GfxImage(int x, int y, const int8_t* name, rcolor color, dboolean alpha) {
+void Draw_GfxImage(int x, int y, const int8_t* name, rcolor color, boolean alpha) {
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetupAndDraw2DQuad((float)x, (float)y,
@@ -122,7 +122,7 @@ static vtx_t vtxstring[MAX_MESSAGE_SIZE];
 //
 
 int Draw_Text(int x, int y, rcolor color, float scale,
-	dboolean wrap, const int8_t* string, ...) {
+	boolean wrap, const int8_t* string, ...) {
 	int c;
 	int i;
 	int vi = 0;
@@ -142,13 +142,13 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 
 	GL_BindGfxTexture("SFONT", true);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 	GL_SetOrthoScale(scale);
 	GL_SetOrtho(0);
 
-	glSetVertex(vtxstring);
+	dglSetVertex(vtxstring);
 
 	for (i = 0, vi = 0; i < dstrlen(msg); i++, vi += 4) {
 		c = toupper(msg[i]);
@@ -196,10 +196,10 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 			vtxstring[vi + 3].tu = fcol + 0.0015f;
 			vtxstring[vi + 3].tv = frow + 0.5f;
 
-			glSetVertexColor(vtxstring + vi, color, 4);
+			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			glTriangle(vi + 0, vi + 1, vi + 2);
-			glTriangle(vi + 0, vi + 2, vi + 3);
+			dglTriangle(vi + 0, vi + 1, vi + 2);
+			dglTriangle(vi + 0, vi + 2, vi + 3);
 
 			if (devparm) {
 				vertCount += 4;
@@ -209,7 +209,7 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	}
 
 	if (vi) {
-		glDrawGeometry(vi, vtxstring);
+		dglDrawGeometry(vi, vtxstring);
 	}
 
 	GL_ResetViewport();
@@ -418,10 +418,10 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 	smbwidth = (float)gfxwidth[pic];
 	smbheight = (float)gfxheight[pic];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
-	glSetVertex(vtxstring);
+	dglSetVertex(vtxstring);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
@@ -531,10 +531,10 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 			vtxstring[vi + 3].tu = tx1;
 			vtxstring[vi + 3].tv = ty1;
 
-			glSetVertexColor(vtxstring + vi, color, 4);
+			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			glTriangle(vi + 2, vi + 1, vi + 0);
-			glTriangle(vi + 3, vi + 2, vi + 0);
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
 
 			if (devparm) {
 				vertCount += 4;
@@ -545,7 +545,7 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 	}
 
 	if (vi) {
-		glDrawGeometry(vi, vtxstring);
+		dglDrawGeometry(vi, vtxstring);
 	}
 
 	GL_ResetViewport();
@@ -906,12 +906,12 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	width = (float)gfxwidth[pic];
 	height = (float)gfxheight[pic];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	glSetVertex(vtxstring);
+	dglSetVertex(vtxstring);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
@@ -951,10 +951,10 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 			vtxstring[vi + 3].tu = tx1;
 			vtxstring[vi + 3].tv = ty1;
 
-			glSetVertexColor(vtxstring + vi, color, 4);
+			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			glTriangle(vi + 2, vi + 1, vi + 0);
-			glTriangle(vi + 3, vi + 2, vi + 0);
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
 
 			if (devparm) {
 				vertCount += 4;
@@ -965,7 +965,7 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	}
 
 	if (vi) {
-		glDrawGeometry(vi, vtxstring);
+		dglDrawGeometry(vi, vtxstring);
 	}
 
 	GL_ResetViewport();

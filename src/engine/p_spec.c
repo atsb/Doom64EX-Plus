@@ -62,7 +62,7 @@ static byte tryopentype[3];
 //
 
 typedef struct {
-	dboolean isreverse;
+	boolean isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -305,7 +305,7 @@ sector_t* getNextSector(line_t* line, sector_t* sec) {
 // P_FindLowestFloorSurrounding()
 // FIND LOWEST FLOOR HEIGHT IN SURROUNDING SECTORS
 //
-fixed_t P_FindLowestFloorSurrounding(sector_t* sec) {
+fixed_t    P_FindLowestFloorSurrounding(sector_t* sec) {
 	int            i;
 	line_t* check;
 	sector_t* other;
@@ -330,7 +330,7 @@ fixed_t P_FindLowestFloorSurrounding(sector_t* sec) {
 // P_FindHighestFloorSurrounding()
 // FIND HIGHEST FLOOR HEIGHT IN SURROUNDING SECTORS
 //
-fixed_t P_FindHighestFloorSurrounding(sector_t* sec) {
+fixed_t    P_FindHighestFloorSurrounding(sector_t* sec) {
 	int            i;
 	line_t* check;
 	sector_t* other;
@@ -504,7 +504,7 @@ int P_FindSectorFromTag(int tag) {
 // P_ActivateLineByTag
 //
 
-dboolean P_ActivateLineByTag(int tag, mobj_t* activator) {
+boolean P_ActivateLineByTag(int tag, mobj_t* activator) {
 	int i;
 
 	for (i = 0; i < numlines; i++) {
@@ -864,7 +864,7 @@ void T_LookAtCamera(aimcamera_t* camera) {
 // P_SetAimCamera
 //
 
-int P_SetAimCamera(player_t* player, line_t* line, dboolean aim) {
+int P_SetAimCamera(player_t* player, line_t* line, boolean aim) {
 	mobj_t* mo;
 	aimcamera_t* camera;
 
@@ -1046,7 +1046,7 @@ void P_SetMovingCamera(player_t* player, line_t* line) {
 // This doesn't appear to be used at all
 //
 
-static dboolean P_ModifyMobjFlags(int tid, int flags) {
+static boolean P_ModifyMobjFlags(int tid, int flags) {
 	mobj_t* mo;
 	bool ok = false;
 
@@ -1600,7 +1600,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 // P_InitSpecialLine
 //
 
-dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
+boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 	int ok = 0;
 	int use = line->special & MLU_REPEAT;
 
@@ -1632,7 +1632,7 @@ dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 // Only the front sides of lines are usable.
 //
 
-dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
+boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
 	bool     ok;
 	int         actionType;
@@ -1640,28 +1640,28 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	actionType = SPECIALMASK(line->special);
 
 	if (actionType == 0)
-		return ok = false;
+		return false;
 
 	player = thing->player;
 
 	/* */
 	/*	Switches that other things can activate */
 	/* */
-	if (!player && thing->type != MT_FAKEITEM)
+	if (!player)
 	{
 		/* Missiles should NOT trigger specials... */
 		if (thing->flags & MF_MISSILE)
-			return ok = false;
+			return false;
 
 		if (!(line->flags & ML_THINGTRIGGER))
 		{
 			/* never open secret doors */
 			if (line->flags & ML_SECRET)
-				return ok = false;
+				return false;
 
 			/* never allow a non-player mobj to use lines with these useflags */
 			if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED))
-				return ok = false;
+				return false;
 
 			/*
 				actionType == 1 // MANUAL DOOR RAISE
@@ -1675,7 +1675,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			if (!((line->special & MLU_USE && actionType == 1) ||
 				(line->special & MLU_CROSS && (actionType == 4 || actionType == 10 || actionType == 39 || actionType == 125)) ||
 				(line->special & MLU_SHOOT && actionType == 2)))
-				return ok = false;
+				return false;
 		}
 	}
 	else {
@@ -1686,7 +1686,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 0;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[0]] = true;
-				return ok = false;
+				return false;
 			}
 		}
 		else if (line->special & MLU_YELLOW) {
@@ -1695,7 +1695,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 1;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[1]] = true;
-				return ok = false;
+				return false;
 			}
 		}
 		else if (line->special & MLU_RED) {
@@ -1704,7 +1704,7 @@ dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 2;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[2]] = true;
-				return ok = false;
+				return false;
 			}
 		}
 	}
@@ -1787,7 +1787,7 @@ void P_PlayerInSpecialSector(player_t* player) {
 // Animate planes, scroll walls, etc.
 //
 
-dboolean        levelTimer;
+boolean        levelTimer;
 int             levelTimeCount;
 extern line_t** linespeciallist;
 extern int16_t    numlinespecials;

@@ -56,7 +56,7 @@ extern uint32_t renderTic;
 extern uint32_t spriteRenderTic;
 extern uint32_t glBindCalls;
 
-extern dboolean     bRenderSky;
+extern boolean     bRenderSky;
 
 CVAR_EXTERNAL(r_fov);
 
@@ -68,7 +68,7 @@ angle_t R_PointToAngle(fixed_t x, fixed_t y);//note difference from sw version
 angle_t R_PointToPitch(fixed_t z1, fixed_t z2, fixed_t dist);
 void R_PrecacheLevel(void);
 int R_PointOnSide(fixed_t x, fixed_t y, node_t* node);
-fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, dboolean enable);
+fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, boolean enable);
 void R_SetupLevel(void);
 void R_SetViewAngleOffset(angle_t angle);
 void R_SetViewOffset(int offset);

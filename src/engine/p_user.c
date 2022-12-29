@@ -592,7 +592,7 @@ void P_PlayerThink(player_t* player) {
     cmd = &player->cmd;
     if (player->mo->flags & MF_JUSTATTACKED) {
         cmd->angleturn = 0;
-        cmd->forwardmove = (int8_t)0xc800;
+        cmd->forwardmove = 0xc800;
         cmd->sidemove = 0;
         player->mo->flags &= ~MF_JUSTATTACKED;
     }
@@ -656,7 +656,7 @@ void P_PlayerThink(player_t* player) {
             }
         }
         else {  // 20120211 villsa - new weapon cycle logic
-            dboolean direction;
+            boolean direction;
             int weapon;
 
             newweapon = player->pendingweapon;
@@ -763,4 +763,6 @@ void P_PlayerThink(player_t* player) {
     if (player->recoilpitch)
     	player->recoilpitch = (((player->recoilpitch << 2) - player->recoilpitch) >> 2);
 
+    // [kex] check cvar for autoaim
+    player->autoaim = (gameflags & GF_ALLOWAUTOAIM);
 }

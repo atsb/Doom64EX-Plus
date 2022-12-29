@@ -25,6 +25,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __OpenBSD__
+#include <SDL_timer.h>
+#else
+#include <SDL2/SDL_timer.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -54,10 +60,10 @@
 #include "i_system.h"
 #include "i_audio.h"
 #include "gl_draw.h"
+
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
 #endif
-#include "i_w3swrapper.h"
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
@@ -68,6 +74,20 @@ CVAR(v_accessibility, 0);
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
+#ifdef DOOM_UNIX_INSTALL
+#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
+#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
+#define GetBasePath()	SDL_GetBasePath();
+#elif defined __ANDROID__
+#define GetBasePath()   SDL_AndroidGetInternalStoragePath();
+#endif
+
+#if defined(__LINUX__) || defined(__OpenBSD__)
+#define Free(userdir)	free(userdir);
+#else
+#define Free(userdir)	SDL_free(userdir);
+#endif
+
 
 ticcmd_t        emptycmd;
 
@@ -76,7 +96,14 @@ ticcmd_t        emptycmd;
 //
 
 void I_Sleep(unsigned long usecs) {
-	w3ssleep((dword)usecs);
+#ifdef _WIN32
+	Sleep((DWORD)usecs);
+#else
+	struct timespec tc;
+	tc.tv_sec = usecs / 1000;
+	tc.tv_nsec = (usecs % 1000) * 1000000;
+	nanosleep(&tc, NULL);
+#endif
 }
 
 static Uint32 basetime = 0;
@@ -123,9 +150,9 @@ void I_InitClockRate(void) {
 
 static uint32_t start_displaytime;
 static uint32_t displaytime;
-static dboolean InDisplay = false;
+static boolean InDisplay = false;
 
-dboolean realframe = false;
+boolean realframe = false;
 
 fixed_t         rendertic_frac = 0;
 uint32_t    rendertic_start;
@@ -137,7 +164,7 @@ const float     rendertic_msec = 100 * TICRATE / 100000.0f;
 // I_StartDisplay
 //
 
-dboolean I_StartDisplay(void) {
+boolean I_StartDisplay(void) {
 	rendertic_frac = I_GetTimeFrac();
 
 	if (InDisplay) {
@@ -232,7 +259,6 @@ int8_t* I_GetUserDir(void)
  *  whatever...  eventually we will clean up this mess and have
  *  portable fixed width types everywhere...  one day.
  *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
- *  WOLF3S 21-12-2022: Moved everything to a header file called i_w3swrapper.h.
  */
 int8_t* I_GetUserFile(int8_t* file) {
 	int8_t* path, * userdir;
@@ -263,7 +289,7 @@ int8_t* I_FindDataFile(int8_t* file) {
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
 
-        Free(dir);
+         Free(dir);
 
 		if (I_FileExists(path))
 			return path;
@@ -289,12 +315,18 @@ int8_t* I_FindDataFile(int8_t* file) {
 			return path;
 	}
 
-#if defined(__linux__) || defined(__OpenBSD__)
+#if defined(__LINUX__) || defined(__OpenBSD__)
 	{
 		int i;
 		const int8_t* paths[] = {
 			//André: Removed all useless directories, Only The dir usr/local is fine to use.
+				//"/usr/local/share/games/doom64ex-plus/",
 				"/usr/local/share/doom64ex-plus/",
+				//"/usr/local/share/doom/",
+				//"/usr/share/games/doom64ex-plus/",
+				//"/usr/share/doom64ex-plus/",
+				//"/usr/share/doom/",
+				//"/opt/doom64ex-plus/",
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
@@ -303,21 +335,6 @@ int8_t* I_FindDataFile(int8_t* file) {
 				return path;
 		}
 	}
-#elif defined(VITA)
-	{
-		int i;
-		const int8_t* paths[] = {
-				"ux0:/data/Doom64EX+/",
-		};
-
-		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-			snprintf(path, 511, "%s%s", paths[i], file);
-			if (I_FileExists(path))
-				return path;
-		}
-	}
-
-
 #endif
 
 	Free(path);
@@ -330,7 +347,7 @@ int8_t* I_FindDataFile(int8_t* file) {
  * @param path Absolute path to check.
  */
 
-dboolean I_FileExists(const int8_t* path)
+boolean I_FileExists(const int8_t* path)
 {
 	struct stat st;
 	return !stat(path, &st) && S_ISREG(st.st_mode);
@@ -459,7 +476,7 @@ void I_Printf(const int8_t* string, ...) {
 // I_BeginRead
 //
 
-dboolean    inshowbusy = false;
+boolean    inshowbusy = false;
 
 void I_BeginRead(void) {
 	if (!devparm) {
@@ -482,10 +499,6 @@ void I_BeginRead(void) {
 CVAR_EXTERNAL(i_rsticksensitivity);
 CVAR_EXTERNAL(i_rstickthreshold);
 CVAR_EXTERNAL(i_xinputscheme);
-#elif defined(VITA)
-extern cvar_t i_rsticksensitivityy;
-extern cvar_t i_rsticksensitivityx;
-cvar_t i_xinputscheme;
 #endif
 
 CVAR_EXTERNAL(i_gamma);
@@ -494,13 +507,9 @@ CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
-#if defined(_WIN32) && defined(USE_XINPUT) 
+#if defined(_WIN32) && defined(USE_XINPUT)
 	CON_CvarRegister(&i_rsticksensitivity);
 	CON_CvarRegister(&i_rstickthreshold);
-	CON_CvarRegister(&i_xinputscheme);
-#elif defined(VITA)
-	CON_CvarRegister(& i_rsticksensitivityy);
-	CON_CvarRegister(& i_rsticksensitivityx);
 	CON_CvarRegister(&i_xinputscheme);
 #endif
 	CON_CvarRegister(&i_gamma);

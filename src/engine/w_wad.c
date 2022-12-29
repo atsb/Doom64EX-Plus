@@ -363,7 +363,7 @@ void W_Init(void) {
 	W_HashLumps();
 }
 
-static dboolean nonmaplump = false;
+static boolean nonmaplump = false;
 
 filelump_t* mapLump;
 int numMapLumps;
@@ -519,7 +519,7 @@ int W_LumpLength(int lump) {
 //
 
 void W_ReadLump(int lump, void* dest) {
-	uint64_t c;
+	intptr_t c;
 	lumpinfo_t* l;
 
 	if (lump >= numlumps) {

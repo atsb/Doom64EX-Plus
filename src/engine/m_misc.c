@@ -30,10 +30,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef C89
 #include <stdbool.h>
-#endif
-#include "i_w3swrapper.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -46,7 +43,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
-#include "i_w3swrapper.h"
 
 #include "doomstat.h"
 #include "m_misc.h"
@@ -56,8 +52,6 @@
 #include "i_png.h"
 #include "gl_texture.h"
 #include "p_saveg.h"
-#include "i_system.h"
-
 
 int      myargc;
 char**   myargv;
@@ -159,9 +153,9 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-dboolean M_WriteFile(int8_t const* name, void* source, int length) {
+boolean M_WriteFile(int8_t const* name, void* source, int length) {
 	FILE* fp;
-	dboolean result;
+	boolean result;
 
 	errno = 0;
 
@@ -183,17 +177,26 @@ dboolean M_WriteFile(int8_t const* name, void* source, int length) {
 //
 // M_WriteTextFile
 //
-dboolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
+
+boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
 	int handle;
 	int count;
-	handle = w3sopen(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+#ifdef _WIN32
+	handle = _open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+#else
+	handle = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+#endif
 
 	if (handle == -1) {
 		return false;
 	}
-	count = w3swrite(handle, source, length);
-	w3sclose(handle);
-
+#ifdef _WIN32
+	count = _write(handle, source, length);
+	_close(handle);
+#else
+	count = write(handle, source, length);
+	close(handle);
+#endif
 
 	if (count < length) {
 		return false;
@@ -212,7 +215,7 @@ int M_ReadFile(int8_t const* name, byte** buffer) {
 	errno = 0;
 
 	if ((fp = fopen(name, "rb"))) {
-		int length;
+		size_t length;
 
 		I_BeginRead();
 
@@ -229,6 +232,9 @@ int M_ReadFile(int8_t const* name, byte** buffer) {
 
 		fclose(fp);
 	}
+
+	//I_Error("M_ReadFile: Couldn't read file %s: %s", name,
+	//errno ? strerror(errno) : "(Unknown Error)");
 
 	return -1;
 }
@@ -343,7 +349,11 @@ void M_ScreenShot(void) {
 
 	while (shotnum < 1000) {
 		sprintf(name, "sshot%03d.png", shotnum);
-		if (w3saccess(name, 0) != 0)
+#ifdef _WIN32
+		if (_access(name, 0) != 0)
+#else
+		if (access(name, 0) != 0)
+#endif
 		{
 			break;
 		}

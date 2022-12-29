@@ -298,14 +298,14 @@ static void saveg_write_mapthing_t(mapthing_t* mt) {
 //
 
 static void saveg_read_ticcmd_t(ticcmd_t* cmd) {
-    cmd->forwardmove = saveg_read8();
-    cmd->sidemove = saveg_read8();
-    cmd->angleturn = saveg_read16();
-    cmd->pitch = saveg_read16();
-    cmd->consistency = saveg_read8();
-    cmd->chatchar = saveg_read8();
-    cmd->buttons = saveg_read8();
-    cmd->buttons2 = saveg_read8();
+    cmd->forwardmove    = saveg_read8();
+    cmd->sidemove       = saveg_read8();
+    cmd->angleturn      = saveg_read16();
+    cmd->pitch          = saveg_read16();
+    cmd->consistency    = saveg_read8();
+    cmd->chatchar       = saveg_read8();
+    cmd->buttons        = saveg_read8();
+    cmd->buttons2       = saveg_read8();
 }
 
 static void saveg_write_ticcmd_t(ticcmd_t* cmd) {
@@ -511,6 +511,7 @@ static void saveg_write_player_t(player_t* p) {
 
     saveg_write32(p->palette);
     saveg_write32(p->onground);
+    saveg_write32(p->autoaim);
 }
 
 static void saveg_read_player_t(player_t* p) {
@@ -580,6 +581,7 @@ static void saveg_read_player_t(player_t* p) {
 
     p->palette = saveg_read32();
     p->onground = saveg_read32();
+    p->autoaim = saveg_read32();
 }
 
 //
@@ -1049,7 +1051,7 @@ static void saveg_read_laserthinker_t(void* data) {
     laserthinker_t* laserthinker = (laserthinker_t*)data;
     laser_t* l = NULL;
     int next;
-    dboolean head = true;
+    boolean head = true;
 
     laserthinker->dest = saveg_read_mobjindex();
 
@@ -1229,7 +1231,7 @@ static void saveg_read_header(void) {
 //
 //------------------------------------------------------------------------
 
-static dboolean saveg_read_marker(int marker) {
+static boolean saveg_read_marker(int marker) {
     int value;
 
     saveg_read_pad();
@@ -1247,7 +1249,7 @@ static void saveg_write_marker(int marker) {
 // P_WriteSaveGame
 //
 
-dboolean P_WriteSaveGame(int8_t* description, int slot) {
+boolean P_WriteSaveGame(int8_t* description, int slot) {
 
     // setup game save file
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
@@ -1279,7 +1281,7 @@ dboolean P_WriteSaveGame(int8_t* description, int slot) {
 // P_ReadSaveGame
 //
 
-dboolean P_ReadSaveGame(int8_t* name) {
+boolean P_ReadSaveGame(int8_t* name) {
     M_ReadFile(name, &savebuffer);
     save_offset = 0;
 
@@ -1308,7 +1310,7 @@ dboolean P_ReadSaveGame(int8_t* name) {
 // P_QuickReadSaveHeader
 //
 
-dboolean P_QuickReadSaveHeader(int8_t* name, int8_t* date,
+boolean P_QuickReadSaveHeader(int8_t* name, int8_t* date,
     int* thumbnail, int* skill, int* map) {
     int i;
     int size;
@@ -1824,7 +1826,7 @@ void P_ArchiveSpecials(void) {
 
 void P_UnArchiveSpecials(void) {
     int         i;
-    dboolean    specialthinker;
+    boolean    specialthinker;
     byte        tclass;
     void* thinker;
     thinker_t* currentthinker;
