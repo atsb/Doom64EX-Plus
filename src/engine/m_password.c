@@ -38,7 +38,7 @@
 //
 
 byte passwordData[16];
-dboolean doPassword = false;
+boolean doPassword = false;
 const int8_t* passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
 static const int passwordTable[10] = { 1, 8, 9, 5, 6, 2, 7, 0, 4, 3 };
 
@@ -59,7 +59,7 @@ static void M_EncodePassItem(int* bit, int value, int maxvalue) {
 // M_CheckPassCode
 //
 
-static dboolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
+static boolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
 	byte checkByte = 0;
 	if (*bit1 < 0) {
 		*bit2 = (*bit1 + 7) >> 3;
@@ -100,8 +100,8 @@ void M_EncodePassword(void) {
 	int xbit3 = 0;
 	player_t* player;
 
-	dmemset(encode, 0, 10);
-	dmemset(passwordData, 0, 16);
+	memset(encode, 0, 10);
+	memset(passwordData, 0, 16);
 	player = &players[consoleplayer];
 
 	// map and skill
@@ -226,7 +226,7 @@ static int M_DecodePassItem(int bytecode, int maxvalue) {
 // M_DecodePassword
 //
 
-dboolean M_DecodePassword(dboolean checkOnly) {
+boolean M_DecodePassword(boolean checkOnly) {
 	byte data[16];
 	byte decode[10];
 	int bit = 0;
@@ -237,8 +237,8 @@ dboolean M_DecodePassword(dboolean checkOnly) {
 	int16_t x, y;
 	player_t* player;
 
-	dmemcpy(data, passwordData, 16);
-	dmemset(decode, 0, 10);
+	memcpy(data, passwordData, 16);
+	memset(decode, 0, 10);
 	player = &players[consoleplayer];
 
 	//

@@ -33,6 +33,7 @@
 
 #include <stdlib.h>
 
+#include "i_w3swrapper.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_system.h"
@@ -62,7 +63,7 @@ static byte tryopentype[3];
 //
 
 typedef struct {
-	dboolean isreverse;
+	boolean isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -103,11 +104,11 @@ static void P_InitAnimdef(void) {
 		//
 		// find animpic block
 		//
-		if (!dstricmp(sc_parser.token, "ANIMPIC")) {
-			dmemset(&anim, 0, sizeof(animdef_t));
+		if (!w3sstricmp(sc_parser.token, "ANIMPIC")) {
+			memset(&anim, 0, sizeof(animdef_t));
 
 			sc_parser.find(false);
-			dstrncpy(anim.name, sc_parser.token, dstrlen(sc_parser.token));
+			strncpy(anim.name, sc_parser.token, strlen(sc_parser.token));
 
 			sc_parser.compare("{");  // must expect open bracket
 
@@ -128,7 +129,7 @@ static void P_InitAnimdef(void) {
 
 			animdefs = Z_Realloc(animdefs,
 				sizeof(animdef_t) * ++numanimdef, PU_STATIC, 0);
-			dmemcpy(&animdefs[numanimdef - 1], &anim, sizeof(animdef_t));
+			memcpy(&animdefs[numanimdef - 1], &anim, sizeof(animdef_t));
 		}
 		else {
 			sc_parser.error("P_InitAnimdef");
@@ -504,7 +505,7 @@ int P_FindSectorFromTag(int tag) {
 // P_ActivateLineByTag
 //
 
-dboolean P_ActivateLineByTag(int tag, mobj_t* activator) {
+boolean P_ActivateLineByTag(int tag, mobj_t* activator) {
 	int i;
 
 	for (i = 0; i < numlines; i++) {
@@ -864,7 +865,7 @@ void T_LookAtCamera(aimcamera_t* camera) {
 // P_SetAimCamera
 //
 
-int P_SetAimCamera(player_t* player, line_t* line, dboolean aim) {
+int P_SetAimCamera(player_t* player, line_t* line, boolean aim) {
 	mobj_t* mo;
 	aimcamera_t* camera;
 
@@ -1046,9 +1047,9 @@ void P_SetMovingCamera(player_t* player, line_t* line) {
 // This doesn't appear to be used at all
 //
 
-static dboolean P_ModifyMobjFlags(int tid, int flags) {
+static boolean P_ModifyMobjFlags(int tid, int flags) {
 	mobj_t* mo;
-	bool ok = false;
+	boolean ok = false;
 
 	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
 		// not matching the tid
@@ -1600,7 +1601,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 // P_InitSpecialLine
 //
 
-dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
+boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 	int ok = 0;
 	int use = line->special & MLU_REPEAT;
 
@@ -1632,9 +1633,9 @@ dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 // Only the front sides of lines are usable.
 //
 
-dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
+boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
-	bool     ok;
+	boolean     ok;
 	int         actionType;
 
 	actionType = SPECIALMASK(line->special);
@@ -1787,7 +1788,7 @@ void P_PlayerInSpecialSector(player_t* player) {
 // Animate planes, scroll walls, etc.
 //
 
-dboolean        levelTimer;
+boolean        levelTimer;
 int             levelTimeCount;
 extern line_t** linespeciallist;
 extern int16_t    numlinespecials;
@@ -1890,7 +1891,7 @@ void P_UpdateSpecials(void) {
 				}
 
 				S_StartSound((mobj_t*)buttonlist[i].soundorg, sfx_switch1);
-				dmemset(&buttonlist[i], 0, sizeof(button_t));
+				memset(&buttonlist[i], 0, sizeof(button_t));
 			}
 		}
 	}
@@ -2011,7 +2012,7 @@ void P_SpawnSpecials(void) {
 	i = M_CheckParm("-timer");
 	if (i && deathmatch) {
 		int    time;
-		time = datoi(myargv[i + 1]) * 60 * TICRATE;
+		time = atoi(myargv[i + 1]) * 60 * TICRATE;
 		levelTimer = true;
 		levelTimeCount = time;
 	}
@@ -2097,6 +2098,6 @@ void P_SpawnSpecials(void) {
 	}
 
 	for (i = 0; i < MAXBUTTONS; i++) {
-		dmemset(&buttonlist[i], 0, sizeof(button_t));
+		memset(&buttonlist[i], 0, sizeof(button_t));
 	}
 }

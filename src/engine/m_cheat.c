@@ -52,23 +52,25 @@ typedef struct {
 static void M_CheatFa(player_t* player, int8_t dat[4]);
 static void M_CheatBerserk(player_t* player, int8_t dat[4]);
 static void M_CheatWarp(player_t* player, int8_t dat[4]);
+static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]);
 static void M_CheatMyPos(player_t* player, int8_t dat[4]);
 static void M_CheatAllMap(player_t* player, int8_t dat[4]);
 
 cheatinfo_t cheat[] = {
-	{   "iddqd",    M_CheatGod,         0   },
-	{   "idfa",     M_CheatFa,          0   },
-	{   "idkfa",    M_CheatKfa,         0   },
-	{   "idclip",   M_CheatClip,        0   },
-	{   "idclev",   M_CheatWarp,        -2  },
-	{   "idpos",    M_CheatMyPos,       0   },
-	{   "exm",		M_CheatAllMap,      0   },
-	{   "exr",		M_CheatBerserk,     0   },
-	{   "exw",		M_CheatGiveWeapon,  -1  },
-	{   "exg",		M_CheatGiveKey,     -1  },
-	{   "exk",		M_CheatBoyISuck,    0   },
-	{   "exa",		M_CheatArtifacts,   -1  },
-	{   NULL,       NULL,               0   }
+	{   "iddqd",    M_CheatGod,           0 },
+	{   "idfa",     M_CheatFa,            0 },
+	{   "idkfa",    M_CheatKfa,           0 },
+	{   "idclip",   M_CheatClip,          0 },
+	{   "idclev",   M_CheatWarp,        - 2 },
+	{   "exclev",   M_CheatWarpCarryOver, 2 },
+	{   "idpos",    M_CheatMyPos,         0 },
+	{   "exm",		M_CheatAllMap,        0 },
+	{   "exr",		M_CheatBerserk,       0 },
+	{   "exw",		M_CheatGiveWeapon,   -1 },
+	{   "exg",		M_CheatGiveKey,      -1 },
+	{   "exk",		M_CheatBoyISuck,      0 },
+	{   "exa",		M_CheatArtifacts,    -1 },
+	{   NULL,       NULL,                 0 }
 };
 
 void M_CheatGod(player_t* player, int8_t dat[4]) {
@@ -145,7 +147,7 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	char	lumpname[9];
 	int		lumpnum;
 	int map;
-	map = datoi(dat);
+	map = atoi(dat);
 	gameskill = (int)sv_skill.value;
 	gamemap = nextmap = map;
 
@@ -165,13 +167,35 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	if (lumpnum)
 	{
 		// So be it.
-		G_DeferedInitNew(gameskill, map);
-		dmemset(passwordData, 0xff, 16);
+		G_InitNew(gameskill, map);
+		memset(passwordData, 0xff, 16);
 	}
 }
 
+static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]) {
+	char	lumpname[9];
+	int		lumpnum;
+	int map;
+	map = atoi(dat);
+	gameskill = (int)sv_skill.value;
+	gamemap = nextmap = map;
+
+	if (map < 1)
+	{
+		return;
+	}
+	if (map < 10)
+	{
+		DEH_snprintf(lumpname, 9, "MAP0%i", map);
+	}
+	else {
+		DEH_snprintf(lumpname, 9, "MAP%i", map);
+	}
+	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
+}
+
 static void M_CheatMyPos(player_t* player, int8_t dat[4]) {
-	_dprintf("ang = %d; x,y = (%d, %d)",
+	printf("ang = %d; x,y = (%d, %d)",
 		(int)(players[consoleplayer].mo->angle * (float)180 / ANG180),
 		F2INT(players[consoleplayer].mo->x),
 		F2INT(players[consoleplayer].mo->y));
@@ -183,7 +207,7 @@ static void M_CheatAllMap(player_t* player, int8_t dat[4]) {
 
 void M_CheatGiveWeapon(player_t* player, int8_t dat[4]) {
 	int8_t c = dat[0];
-	int w = datoi(&c);
+	int w = atoi(&c);
 
 	static int8_t* WeapGotNames[8] = {
 		GOTCHAINSAW,
@@ -220,7 +244,7 @@ void M_CheatGiveWeapon(player_t* player, int8_t dat[4]) {
 
 void M_CheatGiveKey(player_t* player, int8_t dat[4]) {
 	int8_t c = dat[0];
-	int k = datoi(&c);
+	int k = atoi(&c);
 
 	if (!k || k > NUMCARDS) {
 		return;
@@ -237,7 +261,7 @@ void M_CheatBoyISuck(player_t* player, int8_t dat[4]) {
 
 void M_CheatArtifacts(player_t* player, int8_t dat[4]) {
 	int8_t c = dat[0];
-	int a = datoi(&c);
+	int a = atoi(&c);
 
 	static int8_t* ArtiGotNames[3] = {
 		GOTARTIFACT1,
@@ -257,7 +281,7 @@ void M_CheatArtifacts(player_t* player, int8_t dat[4]) {
 
 #define CHEAT_ARGS_MAX 8  /* Maximum number of args at end of cheats */
 
-static dboolean M_FindCheats(player_t* plyr, int key) {
+static boolean M_FindCheats(player_t* plyr, int key) {
 	static unsigned long sr;
 	static int8_t argbuf[CHEAT_ARGS_MAX + 1], * arg;
 	static int init, argsleft, cht;

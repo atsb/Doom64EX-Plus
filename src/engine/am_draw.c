@@ -105,7 +105,7 @@ void AM_EndDraw(void) {
 //
 
 static float am_drawscale = 0.0f;
-static bool DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
+static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	leaf_t* leaf;
 	rcolor color;
 	fixed_t tx;

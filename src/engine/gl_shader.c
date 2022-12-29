@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 Andr� Guilherme
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -84,9 +84,9 @@ void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
 	glDeleteShader(fragmentShader);
 }
 
-dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
+boolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
 {
-	dboolean success = true;
+	boolean success;
 	char log[1024];
 
 	switch(type)

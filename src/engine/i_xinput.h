@@ -19,13 +19,11 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-
 #if defined(_WIN32) && defined(USE_XINPUT)
 #ifndef __I_XINPUT__
 #define __I_XINPUT__
 
 #include <windows.h>
-
 //
 // use Microsoft's bullcrap annotation macros if not already defined
 //
@@ -107,8 +105,8 @@ typedef struct {
 typedef struct {
 	xinputstate_t   state;                      // gamepad state
 	xinputrumble_t  vibration;                  // rumble data
-	dboolean        connected;                  // is controller connected?
-	dboolean        available;                  // is api available? can be disabled with -noxinput
+	boolean        connected;                  // is controller connected?
+	boolean        available;                  // is api available? can be disabled with -noxinput
 	int             oldbuttons;                 // button inputs from previous tic
 	int             refiretic[XINPUT_BUTTONS];  // how long to refire held down buttons?
 	float           rxthreshold;                // right stick x-axis threshold
@@ -123,9 +121,9 @@ extern int xbtnkeys[XINPUT_BUTTONS + 2][2];
 void        I_XInputBindButton(int index, int key);
 void        I_XInputPollEvent(void);
 void        I_XInputReadActions(event_t* ev);
-void        I_XInputVibrate(dboolean leftside, byte amount, int windDown);
+void        I_XInputVibrate(boolean leftside, byte amount, int windDown);
 void        I_XInputInit(void);
 void        I_InitXInputCommands(void);
 
-#endif // __I_XINPUT__
 #endif
+#endif // __I_XINPUT__

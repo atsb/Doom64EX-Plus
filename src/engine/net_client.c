@@ -66,7 +66,7 @@ typedef struct
 {
 	// Whether this tic has been received yet
 
-	dboolean active;
+	boolean active;
 
 	// Last time we sent a resend request for this tic
 
@@ -83,7 +83,7 @@ typedef struct
 {
 	// Whether this slot is active yet
 
-	dboolean active;
+	boolean active;
 
 	// The tic number
 
@@ -107,15 +107,15 @@ static net_context_t* client_context;
 
 // true if the client code is in use
 
-dboolean net_client_connected;
+boolean net_client_connected;
 
 // true if we have received waiting data from the server
 
-dboolean net_client_received_wait_data;
+boolean net_client_received_wait_data;
 
 // if true, this client is the controller of the game
 
-dboolean net_client_controller = false;
+boolean net_client_controller = false;
 
 // Number of clients currently connected to the server
 
@@ -141,7 +141,7 @@ int net_player_number;
 
 // Waiting for the game to start?
 
-dboolean net_waiting_for_start = false;
+boolean net_waiting_for_start = false;
 
 // Name that we send to the server
 
@@ -164,7 +164,7 @@ static net_server_recv_t recvwindow[BACKUPTICS];
 // Whether we need to send an acknowledgement and
 // when gamedata was last received.
 
-static dboolean need_to_acknowledge;
+static boolean need_to_acknowledge;
 static uint32_t gamedata_recv_time;
 
 // Hash checksums of our wad directory and dehacked data.
@@ -754,7 +754,7 @@ static void NET_CL_CheckResends(void)
 	for (i = 0; i < BACKUPTICS; ++i)
 	{
 		net_server_recv_t* recvobj;
-		dboolean need_resend;
+		boolean need_resend;
 
 		recvobj = &recvwindow[i];
 
@@ -1159,7 +1159,7 @@ void NET_CL_SendCheat(int player, int type, char* buff)
 
 // connect to a server
 
-dboolean NET_CL_Connect(net_addr_t* addr)
+boolean NET_CL_Connect(net_addr_t* addr)
 {
 	int start_time;
 	int last_send_time;

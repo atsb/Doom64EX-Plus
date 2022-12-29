@@ -87,8 +87,8 @@ alist_t** Mouse2Actions;
 
 static int  MouseButtons = 0;
 
-static dboolean OptimizeTree = false;
-dboolean        ButtonAction = false;
+static boolean OptimizeTree = false;
+boolean        ButtonAction = false;
 
 static CMD(Alias);
 static CMD(Unbind);
@@ -99,12 +99,12 @@ static CMD(UnbindAll);
 //
 
 void G_InitActions(void) {
-	dmemset(AllActions, 0, NUM_ACTIONS);
+	memset(AllActions, 0, NUM_ACTIONS);
 	KeyActions = AllActions + KEY_ACTIONPOS;
 	MouseActions = AllActions + MOUSE_ACTIONPOS;
 	Mouse2Actions = AllActions + MOUSE2_ACTIONPOS;
 
-	dmemset(CurrentActions, 0, MAX_CURRENTACTIONS * sizeof(alist_t*));
+	memset(CurrentActions, 0, MAX_CURRENTACTIONS * sizeof(alist_t*));
 
 	G_AddCommand("alias", CMD_Alias, 0);
 	G_AddCommand("unbind", CMD_Unbind, 0);
@@ -125,7 +125,7 @@ static action_t* FindAction(int8_t* name) {
 
 	tree = Actions;
 	while (tree) {
-		cmp = dstrcmp(name, tree->name);
+		cmp = strcmp(name, tree->name);
 		if (cmp == 0) {
 			break;
 		}
@@ -228,14 +228,14 @@ void DerefSingleAction(alist_t* al) {
 // Matches user input to see if its valid
 //
 
-alist_t* DoRunActions(alist_t* al, dboolean free) {
+alist_t* DoRunActions(alist_t* al, boolean free) {
 	alist_t* next = NULL;
 	action_t* action;
 	cvar_t* cvar;
 
 	while (al) {
 		next = al->next;
-		if (dstrcmp(al->cmd, "wait") == 0) {
+		if (strcmp(al->cmd, "wait") == 0) {
 			break;
 		}
 
@@ -258,7 +258,7 @@ alist_t* DoRunActions(alist_t* al, dboolean free) {
 			if (!al->param[0]) {
 				int8_t str[256];
 				sprintf(str, "%s: %s (%s)", cvar->name, cvar->string, cvar->defvalue);
-				CON_AddLine(str, dstrlen(str));
+				CON_AddLine(str, strlen(str));
 			}
 			else {
 				CON_CvarSet(cvar->name, al->param[0]);
@@ -298,7 +298,7 @@ alist_t* DoRunActions(alist_t* al, dboolean free) {
 // TryActions
 //
 
-void TryActions(alist_t* al, dboolean up) {
+void TryActions(alist_t* al, boolean up) {
 	if (!al) {
 		return;
 	}
@@ -311,7 +311,7 @@ void TryActions(alist_t* al, dboolean up) {
 			return;
 		}
 
-		dstrcpy(buff, al->cmd);
+		strcpy(buff, al->cmd);
 		buff[0] = '-';
 		action = FindAction(buff);
 		if (action) {
@@ -389,7 +389,7 @@ static void ProcessButtonActions(alist_t** actions, int b, int ob) {
 // G_ActionResponder
 //
 
-dboolean G_ActionResponder(event_t* ev) {
+boolean G_ActionResponder(event_t* ev) {
 	switch (ev->type) {
 	case ev_keyup:
 	case ev_keydown:
@@ -433,7 +433,7 @@ dboolean G_ActionResponder(event_t* ev) {
 // NextToken
 //
 
-int8_t* NextToken(int8_t* s, dboolean* pquoted) { //null terminates current token
+int8_t* NextToken(int8_t* s, boolean* pquoted) { //null terminates current token
 	int8_t* p;
 
 	p = s;
@@ -474,7 +474,7 @@ alist_t* ParseActions(int8_t* actions) {
 	int         param;
 	alist_t* al;
 	alist_t* alist;
-	dboolean    quoted;
+	boolean    quoted;
 
 	if (!actions) {
 		return NULL;
@@ -514,7 +514,7 @@ alist_t* ParseActions(int8_t* actions) {
 			p = SkipWhitespace(p);
 		}
 
-		dstrlwr(al->cmd);
+		w3sstrlwr(al->cmd);
 
 		if (!*p) {
 			al->next = NULL;
@@ -549,7 +549,7 @@ alist_t** FindActionControler(int8_t* name, alist_t** actions, int numbuttons) {
 	int i;
 
 	if ((name[0] >= '1') && (name[0] <= '9')) {
-		i = datoi(name) - 1;
+		i = atoi(name) - 1;
 		if (i > numbuttons) {
 			return NULL;
 		}
@@ -569,7 +569,7 @@ alist_t** G_FindKeyByName(int8_t* key) {
 	int     i;
 	int8_t    buff[MAX_KEY_NAME_LENGTH];
 
-	if (dstrncmp(key, "mouse", 5) == 0) {
+	if (strncmp(key, "mouse", 5) == 0) {
 		//gets confused if have >20 mouse buttons:)
 		if ((key[5] == '2') && key[6]) {
 			return(FindActionControler(&key[6], Mouse2Actions, MOUSE_BUTTONS));
@@ -579,7 +579,7 @@ alist_t** G_FindKeyByName(int8_t* key) {
 
 	for (i = 0; i < NUMKEYS; i++) {
 		M_GetKeyName(buff, i);
-		if (dstricmp(key, buff) == 0) {
+		if (w3sstricmp(key, buff) == 0) {
 			return(&KeyActions[i]);
 		}
 	}
@@ -624,7 +624,7 @@ static int GetBitNum(int bits) {
 	return -1;
 }
 
-dboolean G_BindActionByEvent(event_t* ev, int8_t* action) {
+boolean G_BindActionByEvent(event_t* ev, int8_t* action) {
 	int     button;
 	alist_t** plist;
 
@@ -695,7 +695,7 @@ void G_OutputBindings(FILE* fh) {
 		OutputActions(fh, al, name);
 	}
 
-	dstrcpy(name, "mouse");
+	strcpy(name, "mouse");
 
 	for (i = 0; i < MOUSE_BUTTONS; i++) {
 		al = MouseActions[i];
@@ -915,7 +915,7 @@ static void AddAction(action_t* action) {
 	if (Actions) {
 		tree = Actions;
 		while (tree) {
-			cmp = dstrcmp(action->name, tree->name);
+			cmp = strcmp(action->name, tree->name);
 			if (cmp == 0) {
 				ReplaceActionWith(tree, action);
 
@@ -964,7 +964,7 @@ void G_AddCommand(int8_t* name, actionproc_t proc, int64_t data) {
 
 	action = (action_t*)Z_Malloc(sizeof(action_t), PU_STATIC, NULL);
 	action->name = strdup(name);
-	dstrlwr(action->name);
+	w3sstrlwr(action->name);
 	action->proc = proc;
 	action->data = data;
 	AddAction(action);
@@ -1011,8 +1011,8 @@ void G_UnregisterAction(int8_t* name) {
 	action_t* tree;
 	int8_t        buff[256];
 
-	dstrcpy(buff, name);
-	dstrlwr(buff);
+	strcpy(buff, name);
+	w3sstrlwr(buff);
 
 	action = FindAction(buff);
 
@@ -1159,16 +1159,16 @@ static CMD(UnbindAll) {
 // IsSameAction
 //
 
-static dboolean IsSameAction(int8_t* cmd, alist_t* al) {
+static boolean IsSameAction(int8_t* cmd, alist_t* al) {
 	if (!al) {
 		return false;
 	}
 
-	if (!dstrcmp(al->cmd, "weapon")) {
+	if (!strcmp(al->cmd, "weapon")) {
 		{
 			int8_t buff[256];
 			sprintf(buff, "%s %s", al->cmd, al->param[0]);
-			if (!dstrcmp(cmd, buff)) {
+			if (!strcmp(cmd, buff)) {
 				return true;
 			}
 			else {
@@ -1177,7 +1177,7 @@ static dboolean IsSameAction(int8_t* cmd, alist_t* al) {
 		}
 	}
 	else {
-		if (dstricmp(cmd, al->cmd) != 0) {
+		if (w3sstricmp(cmd, al->cmd) != 0) {
 			return false;
 		}
 	}
@@ -1226,7 +1226,7 @@ void G_GetActionBindings(int8_t* buff, int8_t* action) {
 
 			M_GetKeyName(p, i);
 
-			p += dstrlen(p);
+			p += strlen(p);
 
 			if (p - buff >= MAX_MENUACTION_LENGTH) {
 				return;
@@ -1240,7 +1240,7 @@ void G_GetActionBindings(int8_t* buff, int8_t* action) {
 			}
 
 			if (i < MOUSE_BUTTONS - 2) {
-				dstrcpy(p, "mouse?");
+				strcpy(p, "mouse?");
 				p[5] = i + '1';
 				p += 6;
 			}
@@ -1253,7 +1253,7 @@ void G_GetActionBindings(int8_t* buff, int8_t* action) {
 			if (p != buff) {
 				*(p++) = ',';
 			}
-			dstrcpy(p, "mouse2?");
+			strcpy(p, "mouse2?");
 			p[6] = i + '1';
 			p += 7;
 			if (p - buff >= MAX_MENUACTION_LENGTH) {
@@ -1284,7 +1284,7 @@ void G_UnbindAction(int8_t* action) {
 			int8_t p[16];
 
 			if (i < MOUSE_BUTTONS - 2) {
-				dstrcpy(p, "mouse?");
+				strcpy(p, "mouse?");
 				p[5] = i + '1';
 			}
 
@@ -1294,7 +1294,7 @@ void G_UnbindAction(int8_t* action) {
 		if (IsSameAction(action, Mouse2Actions[i])) {
 			int8_t p[16];
 
-			dstrcpy(p, "mouse2?");
+			strcpy(p, "mouse2?");
 			p[6] = i + '1';
 
 			Unbind(p);

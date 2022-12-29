@@ -93,22 +93,22 @@
 // defaulted values
 //
 
-dboolean            allowmenu = true;                   // can menu be accessed?
-dboolean            menuactive = false;
-dboolean            mainmenuactive = false;
-dboolean            allowclearmenu = true;              // can user hit escape to clear menu?
+boolean            allowmenu = true;                   // can menu be accessed?
+boolean            menuactive = false;
+boolean            mainmenuactive = false;
+boolean            allowclearmenu = true;              // can user hit escape to clear menu?
 
-static dboolean     newmenu = false;    // 20120323 villsa
+static boolean     newmenu = false;    // 20120323 villsa
 static int8_t* messageBindCommand;
 static int          quickSaveSlot;                      // -1 = no quicksave slot picked!
 static int          saveSlot;                           // which slot to save in
 static int8_t         savegamestrings[10][MENUSTRINGSIZE];
-static dboolean     alphaprevmenu = false;
+static boolean     alphaprevmenu = false;
 static int          menualphacolor = 0xff;
 
 static int8_t         inputString[MENUSTRINGSIZE];
 static int8_t         oldInputString[MENUSTRINGSIZE];
-static dboolean     inputEnter = false;
+static boolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
 
@@ -126,8 +126,8 @@ void(*menufadefunc)(void) = NULL;
 
 static int8_t     MenuBindBuff[256];
 static int8_t     MenuBindMessage[256];
-static dboolean MenuBindActive = false;
-static dboolean showfullitemvalue[3] = { false, false, false };
+static boolean MenuBindActive = false;
+static boolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
 static int      thermowait = 0;
 static int      m_aspectRatio = 0;
@@ -166,7 +166,7 @@ typedef struct {
 
 typedef struct menu_s {
 	int16_t               numitems;           // # of menu items
-	dboolean            textonly;
+	boolean            textonly;
 	struct menu_s* prevMenu;          // previous menu
 	menuitem_t* menuitems;         // menu items
 	void (*routine)(void);                  // draw routine
@@ -174,7 +174,7 @@ typedef struct menu_s {
 	int16_t               x;
 	int16_t               y;                  // x,y of menu
 	int16_t               lastOn;             // last item user was on in menu
-	dboolean            smallfont;          // draw text using small fonts
+	boolean            smallfont;          // draw text using small fonts
 	menudefault_t* defaultitems;      // pointer to default values for cvars
 	int16_t               numpageitems;       // number of items to display per page
 	int16_t               menupageoffset;
@@ -225,10 +225,10 @@ static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t
 static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
 static void M_SetInputString(int8_t* string, int len);
-static void M_Scroll(menu_t* menu, dboolean up);
+static void M_Scroll(menu_t* menu, boolean up);
 static void M_DoVideoReset(int choice);
 
-static dboolean M_SetThumbnail(int which);
+static boolean M_SetThumbnail(int which);
 
 CVAR_CMD(m_menufadetime, 0) {
 	if (cvar->value < 0) {
@@ -667,7 +667,7 @@ void M_NewGame(int choice) {
 void M_ChooseSkill(int choice) {
 	G_DeferedInitNew(choice, 1);
 	M_ClearMenus();
-	dmemset(passwordData, 0xff, 16);
+	memset(passwordData, 0xff, 16);
 	allowmenu = false;
 }
 
@@ -762,7 +762,7 @@ void M_DrawNetwork(void);
 
 CVAR_EXTERNAL(m_playername);
 CVAR_EXTERNAL(p_allowjump);
-//Andr�: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
+//André: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
 CVAR_EXTERNAL(sv_nomonsters);
 CVAR_EXTERNAL(sv_fastmonsters);
 CVAR_EXTERNAL(sv_respawnitems);
@@ -855,7 +855,7 @@ menu_t NetworkDef = {
 
 void M_Network(int choice) {
 	M_SetupNextMenu(&NetworkDef);
-	dstrcpy(inputString, m_playername.string);
+	strcpy(inputString, m_playername.string);
 }
 
 void M_PlayerSetName(int choice) {
@@ -1849,11 +1849,18 @@ static const int Resolution16_10[MAX_RES16_10][2] = {
 	{   7680,   4800    }
 };
 
-static const float ratioVal[4] = {
+#define MAX_RES21_09  2
+static const int Resolution21_09[MAX_RES21_09][2] = {
+	{   2560,    1080     },
+	{   3840,    2160     }
+}; //For the samsung ultrawide monitors lol.
+
+static const float ratioVal[5] = {
 	4.0f / 3.0f,
 	16.0f / 9.0f,
 	16.0f / 10.0f,
 	5.0f / 4.0f,
+	21.0f / 9.0f
 };
 
 static int8_t gammamsg[21][28] = {
@@ -1888,14 +1895,20 @@ void M_Video(int choice) {
 
 	checkratio = v_width.value / v_height.value;
 
-	if (dfcmp(checkratio, ratioVal[2])) {
+	if (fcmp(checkratio, ratioVal[2])) {
 		m_aspectRatio = 2;
 	}
-	else if (dfcmp(checkratio, ratioVal[1])) {
+	else if (fcmp(checkratio, ratioVal[1])) {
 		m_aspectRatio = 1;
 	}
-	else if (dfcmp(checkratio, ratioVal[3])) {
+	else if (fcmp(checkratio, ratioVal[3])) {
 		m_aspectRatio = 3;
+	}
+	else if (fcmp(checkratio, ratioVal[4])) {
+		m_aspectRatio = 4;
+	}
+	else if (fcmp(checkratio, ratioVal[5])) {
+		m_aspectRatio = 5;
 	}
 	else {
 		m_aspectRatio = 0;
@@ -1934,6 +1947,14 @@ void M_Video(int choice) {
 			}
 		}
 		break;
+	case 4:
+		for (i = 0; i < MAX_RES21_09; i++) {
+			if ((int)v_width.value == Resolution21_09[i][0]) {
+				m_ScreenSize = i;
+				return;
+			}
+		}
+		break;
 	}
 
 	m_ScreenSize = 1;
@@ -1941,10 +1962,10 @@ void M_Video(int choice) {
 
 void M_DrawVideo(void) {
 	static const int8_t* filterType[2] = { "Linear", "Nearest" };
-	static const int8_t* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
+	static const int8_t* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09" };
 	static const int8_t* frametype[2] = { "Off", "On" };
 #ifdef VITA	 
-    static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" };
+    static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" }; //Add this later for debug
 	static char bitValue[8];
 #endif
 
@@ -2100,6 +2121,10 @@ static void M_SetResolution(void) {
 		width = Resolution5_4[m_ScreenSize][0];
 		height = Resolution5_4[m_ScreenSize][1];
 		break;
+	case 4:
+		width = Resolution21_09[m_ScreenSize][0];
+		height = Resolution21_09[m_ScreenSize][1];
+		break;
 	}
 
 	M_SetCvar(&v_width, (float)width);
@@ -2110,12 +2135,12 @@ void M_ChangeRatio(int choice) {
 	int max = 0;
 
 	if (choice) {
-		if (++m_aspectRatio > 3) {
+		if (++m_aspectRatio > 4) {
 			if (choice == 3) {
 				m_aspectRatio = 0;
 			}
 			else {
-				m_aspectRatio = 3;
+				m_aspectRatio = 4;
 			}
 		}
 	}
@@ -2135,6 +2160,9 @@ void M_ChangeRatio(int choice) {
 		break;
 	case 3:
 		max = MAX_RES5_4;
+		break;
+	case 4:
+		max = MAX_RES21_09;
 		break;
 	}
 
@@ -2158,6 +2186,9 @@ void M_ChangeResolution(int choice) {
 		break;
 	case 3:
 		max = MAX_RES5_4;
+		break;
+	case 4:
+		max = MAX_RES21_09;
 		break;
 	}
 
@@ -2225,7 +2256,7 @@ menu_t PasswordDef = {
 	NULL
 };
 
-static dboolean passInvalid = false;
+static boolean passInvalid = false;
 static int        curPasswordSlot = 0;
 static int        passInvalidTic = 0;
 
@@ -2268,7 +2299,7 @@ void M_DrawPassword(void) {
 		}
 	}
 
-	dmemset(password, 0, 2);
+	memset(password, 0, 2);
 	passData = passwordData;
 
 	for (i = 0; i < 19; i++) {
@@ -2963,9 +2994,9 @@ void M_BuildControlMenu(void) {
 	menu->lastOn = itemOn;
 
 	for (item = 0; item < actions; item++) {
-		dstrcpy(menu->menuitems[item].name, PlayerActions[item].name);
+		strcpy(menu->menuitems[item].name, PlayerActions[item].name);
 		if (PlayerActions[item].action) {
-			for (i = dstrlen(PlayerActions[item].name); i < 17; i++) {
+			for (i = strlen(PlayerActions[item].name); i < 17; i++) {
 				menu->menuitems[item].name[i] = ' ';
 			}
 
@@ -2983,7 +3014,7 @@ void M_BuildControlMenu(void) {
 	}
 
 #define ADD_NONBINDABLE_ITEM(i, str, s)                 \
-    dstrcpy(menu->menuitems[actions + i].name, str);    \
+    strcpy(menu->menuitems[actions + i].name, str);    \
     menu->menuitems[actions + i].status = s;            \
     menu->menuitems[actions + i].routine = NULL
 
@@ -3001,7 +3032,7 @@ void M_BuildControlMenu(void) {
 void M_ChangeKeyBinding(int choice) {
 	int8_t action[128];
 	sprintf(action, "%s %d", PlayerActions[choice].action, 1);
-	dstrcpy(MenuBindBuff, action);
+	strcpy(MenuBindBuff, action);
 	messageBindCommand = MenuBindBuff;
 	sprintf(MenuBindMessage, "%s", PlayerActions[choice].name);
 	MenuBindActive = true;
@@ -3311,7 +3342,7 @@ void M_DoSave(int slot) {
 //
 void M_SaveSelect(int choice) {
 	saveSlot = choice;
-	dstrcpy(inputString, savegamestrings[choice]);
+	strcpy(inputString, savegamestrings[choice]);
 	M_SetInputString(savegamestrings[choice], (SAVESTRINGSIZE - 1));
 }
 
@@ -3450,7 +3481,7 @@ void M_ReadSaveStrings(void) {
 		// handle = open(name, O_RDONLY | 0, 0666);
 		handle = w3sopen(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
 		if (handle == -1) {
-			dstrcpy(&savegamestrings[i][0], EMPTYSTRING);
+			strcpy(&savegamestrings[i][0], EMPTYSTRING);
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
@@ -3675,10 +3706,10 @@ static void M_ReturnInstant(void) {
 
 static void M_SetInputString(int8_t* string, int len) {
 	inputEnter = true;
-	dstrcpy(oldInputString, string);
+	strcpy(oldInputString, string);
 
 	// hack
-	if (!dstrcmp(string, EMPTYSTRING)) {
+	if (!strcmp(string, EMPTYSTRING)) {
 #ifdef VITA
         // autoname the save
         snprintf(inputString, SAVESTRINGSIZE-1, "SAVEGAME%d", saveSlot);
@@ -3687,7 +3718,7 @@ static void M_SetInputString(int8_t* string, int len) {
 #endif
 	}
 
-	inputCharIndex = dstrlen(inputString);
+	inputCharIndex = strlen(inputString);
 	inputMax = len;
 }
 
@@ -3714,7 +3745,7 @@ static int M_StringWidth(const int8_t* string) {
 	int w = 0;
 	int c;
 
-	for (i = 0; i < dstrlen(string); i++) {
+	for (i = 0; i < strlen(string); i++) {
 		c = toupper(string[i]) - ST_FONTSTART;
 		if (c < 0 || c >= ST_FONTSIZE) {
 			w += 4;
@@ -3739,7 +3770,7 @@ static int M_BigStringWidth(const int8_t* string) {
 	int len = 0;
 	int i = 0;
 
-	len = dstrlen(string);
+	len = strlen(string);
 
 	for (i = 0; i < len; i++) {
 		t = string[i];
@@ -3792,7 +3823,7 @@ static int M_BigStringWidth(const int8_t* string) {
 // Allow scrolling through multi-page menus via mouse wheel
 //
 
-static void M_Scroll(menu_t* menu, dboolean up) {
+static void M_Scroll(menu_t* menu, boolean up) {
 	if (menu->numpageitems != -1) {
 		if (!up) {
 			menu->menupageoffset++;
@@ -3908,7 +3939,7 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 // Really need a better and more efficient menu system
 //
 
-static dboolean M_CursorHighlightItem(menu_t* menu) {
+static boolean M_CursorHighlightItem(menu_t* menu) {
 	float scrnx;
 	float scrny;
 	float mx;
@@ -4067,7 +4098,7 @@ static int8_t thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
-static dboolean M_SetThumbnail(int which) {
+static boolean M_SetThumbnail(int which) {
 	byte* data;
 
 	data = Z_Malloc(SAVEGAMETBSIZE, PU_STATIC, 0);
@@ -4354,9 +4385,9 @@ void M_DrawXInputButton(int x, int y, int button) {
 // M_Responder
 //
 
-static dboolean shiftdown = false;
+static boolean shiftdown = false;
 
-dboolean M_Responder(event_t* ev) {
+boolean M_Responder(event_t* ev) {
 	int ch;
 	int i;
 
@@ -4455,7 +4486,7 @@ dboolean M_Responder(event_t* ev) {
 
 		case KEY_ESCAPE:
 			inputEnter = false;
-			dstrcpy(inputString, oldInputString);
+			strcpy(inputString, oldInputString);
 			break;
 
 		case KEY_ENTER:
@@ -4467,7 +4498,7 @@ dboolean M_Responder(event_t* ev) {
 				}
 			}
 			else {
-				dstrcpy(savegamestrings[saveSlot], inputString);
+				strcpy(savegamestrings[saveSlot], inputString);
 				if (savegamestrings[saveSlot][0]) {
 					M_DoSave(saveSlot);
 				}
@@ -4735,7 +4766,7 @@ dboolean M_Responder(event_t* ev) {
 // M_StartControlPanel
 //
 
-void M_StartControlPanel(dboolean forcenext) {
+void M_StartControlPanel(boolean forcenext) {
 	if (!allowmenu) {
 		return;
 	}
@@ -5339,7 +5370,7 @@ void M_Init(void) {
 
 	for (i = 0; i < NUM_CONTROL_ITEMS; i++) {
 		ControlsItem[i].alphaKey = 0;
-		dmemset(ControlsItem[i].name, 0, 64);
+		memset(ControlsItem[i].name, 0, 64);
 		ControlsItem[i].routine = NULL;
 		ControlsItem[i].status = 1;
 	}
@@ -5353,7 +5384,7 @@ void M_Init(void) {
 		PasswordMenu[i].alphaKey = (int8_t)passwordChar[i];
 	}
 
-	dmemset(passwordData, 0xff, 16);
+	memset(passwordData, 0xff, 16);
 
 	MainDef.y += 8;
 	NewDef.prevMenu = &MainDef;

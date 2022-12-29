@@ -38,7 +38,7 @@ static deh_mapping_entry_t *GetMappingEntryByName(deh_context_t *context,
     {
         deh_mapping_entry_t *entry = &mapping->entries[i];
 
-        if (!strcasecmp(entry->name, name))
+        if (!w3sstrcasecmp(entry->name, name))
         {
             if (entry->location == NULL)
             {
@@ -76,7 +76,7 @@ static void *GetStructField(void *structptr,
 // Set the value of a particular field in a structure by name
 //
 
-bool DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
+boolean DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
                        void *structptr, char *name, int value)
 {
     deh_mapping_entry_t *entry;
@@ -124,7 +124,7 @@ bool DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
 // Set the value of a string field in a structure by name
 //
 
-bool DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
+boolean DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
                              void *structptr, char *name, char *value)
 {
     deh_mapping_entry_t *entry;

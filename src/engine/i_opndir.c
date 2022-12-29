@@ -45,8 +45,11 @@
 #include <errno.h>
 #include <string.h>
 
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <windows.h> /* for GetFileAttributes */
-
+#endif
 #include <tchar.h>
 #define SUFFIX    _T("*")
 #define    SLASH    _T("\\")

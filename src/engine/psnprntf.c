@@ -11,10 +11,10 @@
 #include <stdarg.h> /* for va_list */
 #include <stdlib.h> /* for fcvt */
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
+#ifdef __APPLE__
 #include <SDL2/SDL.h> // villsa
+#else
+#include <SDL.h>
 #endif
 #include "psnprntf.h"
 

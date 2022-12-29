@@ -24,8 +24,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifndef C89
 #include <stdbool.h>
-
+#endif
 #ifdef _MSC_VER
 #include "i_opndir.h"
 #else
@@ -41,6 +42,7 @@
 #include <stdio.h>
 #endif
 
+#include "i_w3swrapper.h"
 #include "doomdef.h"
 #include "doomtype.h"
 #include "z_zone.h"
@@ -106,7 +108,7 @@ static void SC_Close(void) {
 
 static void SC_Compare(const int8_t* token) {
 	sc_parser.find(false);
-	if (dstricmp(sc_parser.token, token)) {
+	if (w3sstricmp(sc_parser.token, token)) {
 		I_Error("SC_Compare: Expected '%s', found '%s' (line = %i, pos = %i)",
 			token, sc_parser.token, sc_parser.linepos, sc_parser.rowpos);
 	}
@@ -139,7 +141,7 @@ static int SC_GetInteger(void) {
 	sc_parser.compare("="); // expect a '='
 	sc_parser.find(false);  // get next token which should be an integer
 
-	return datoi(sc_parser.token);
+	return atoi(sc_parser.token);
 }
 
 //
@@ -148,10 +150,10 @@ static int SC_GetInteger(void) {
 
 static int SC_SetData(byte* data, const scdatatable_t* table) {
 	int i;
-	dboolean ok = false;
+	boolean ok = false;
 
 	for (i = 0; table[i].token; i++) {
-		if (!dstricmp(table[i].token, sc_parser.token)) {
+		if (!w3sstricmp(table[i].token, sc_parser.token)) {
 			byte* pointer = ((byte*)data + table[i].ptroffset);
 			int8_t* name;
 			byte rgb[3];
@@ -161,12 +163,12 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 			switch (table[i].type) {
 			case 's':
 				name = sc_parser.getstring();
-				dstrncpy((int8_t*)pointer, name, dstrlen(name));
+				strncpy((int8_t*)pointer, name, strlen(name));
 				break;
 			case 'S':
 				name = sc_parser.getstring();
-				dstrupr(name);
-				dstrncpy((int8_t*)pointer, name, dstrlen(name));
+				w3sstrupr(name);
+				strncpy((int8_t*)pointer, name, strlen(name));
 				break;
 			case 'i':
 				*(int*)pointer = sc_parser.getint();
@@ -177,11 +179,11 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 			case 'c':
 				sc_parser.compare("="); // expect a '='
 				sc_parser.find(false);
-				rgb[0] = dhtoi(sc_parser.token);
+				rgb[0] = htoi(sc_parser.token);
 				sc_parser.find(false);
-				rgb[1] = dhtoi(sc_parser.token);
+				rgb[1] = htoi(sc_parser.token);
 				sc_parser.find(false);
-				rgb[2] = dhtoi(sc_parser.token);
+				rgb[2] = htoi(sc_parser.token);
 				*(rcolor*)pointer = D_RGBA(rgb[0], rgb[1], rgb[2], 0xFF);
 				break;
 			}
@@ -197,14 +199,14 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 // SC_Find
 //
 
-static int SC_Find(dboolean forceupper) {
+static int SC_Find(boolean forceupper) {
 	int8_t c = 0;
 	int i = 0;
-	dboolean comment = false;
-	dboolean havetoken = false;
-	dboolean string = false;
+	boolean comment = false;
+	boolean havetoken = false;
+	boolean string = false;
 
-	dmemset(sc_parser.token, 0, 256);
+	memset(sc_parser.token, 0, 256);
 
 	while (sc_parser.readtokens()) {
 		c = sc_parser.fgetchar();
@@ -318,7 +320,7 @@ void SC_Init(void) {
 	// clear variables
 	//
 
-	dmemset(&sc_parser, 0, sizeof(scparser_t));
+	memset(&sc_parser, 0, sizeof(scparser_t));
 
 	//
 	// setup lexer routines

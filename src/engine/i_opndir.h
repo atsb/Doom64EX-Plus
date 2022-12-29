@@ -34,29 +34,23 @@
 #ifndef I_OPNDIR_H__
 #define I_OPNDIR_H__
 
+#ifdef _XBOX
+#include <SDL_stdinc.h>
+#else
 #include <stdint.h>
+#endif
 
 #ifdef _MSC_VER
 #include <direct.h>
 #include <io.h>
+#include "i_w3swrapper.h"
+#endif
 #define F_OK 0
 #define W_OK 2
 #define R_OK 4
 #define S_ISDIR(x) (((sbuf.st_mode & S_IFDIR)==S_IFDIR)?1:0)
-#ifndef TRUE
-#define TRUE true
-#endif
-#ifndef FALSE
-#define FALSE false
-#endif
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
 #ifndef PATH_MAX
 #define PATH_MAX _MAX_PATH
-#endif
-
-#else
-#include <unistd.h>
 #endif
 
 #ifndef FILENAME_MAX

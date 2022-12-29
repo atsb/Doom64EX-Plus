@@ -153,7 +153,7 @@ void P_NoiseAlert(mobj_t* target, mobj_t* emmiter) {
 // P_CheckMeleeRange
 //
 
-dboolean P_CheckMeleeRange(mobj_t* actor) {
+boolean P_CheckMeleeRange(mobj_t* actor) {
 	mobj_t* pl;
 	fixed_t    dist;
 
@@ -179,7 +179,7 @@ dboolean P_CheckMeleeRange(mobj_t* actor) {
 // P_CheckMissileRange
 //
 
-dboolean P_CheckMissileRange(mobj_t* actor) {
+boolean P_CheckMissileRange(mobj_t* actor) {
 	fixed_t    dist;
 
 	if (!(actor->flags & MF_SEETARGET)) {
@@ -238,7 +238,7 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 	fixed_t deltaz = 0;
 	fixed_t offs = 0;
 	int type = 0;
-	dboolean aim = false;
+	boolean aim = false;
 	mobj_t* mo;
 
 	if (direction == DP_LEFT) {
@@ -357,11 +357,11 @@ void T_MobjExplode(mobjexp_t* mexp) {
 fixed_t	xspeed[8] = { FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000 };
 fixed_t yspeed[8] = { 0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000 };
 
-dboolean P_Move(mobj_t* actor) {
+boolean P_Move(mobj_t* actor) {
 	fixed_t    tryx;
 	fixed_t    tryy;
 	line_t*		ld;
-	dboolean   good;
+	boolean   good;
 
 	if (actor->movedir == DI_NODIR) {
 		return false;
@@ -427,7 +427,7 @@ dboolean P_Move(mobj_t* actor) {
 // an OpenDoor call is made to start it opening.
 //
 
-dboolean P_TryWalk(mobj_t* actor) {
+boolean P_TryWalk(mobj_t* actor) {
 	if (!P_Move(actor))
 		return false;
 
@@ -486,7 +486,7 @@ void P_NewChaseDir(mobj_t* actor) {
 	}
 
 	// try other directions
-	if (P_Random() > 200 || D_abs(deltay) > D_abs(deltax)) {
+	if (P_Random() > 200 || abs(deltay) > abs(deltax)) {
 		tdir = d[1];
 		d[1] = d[2];
 		d[2] = tdir;
@@ -560,7 +560,7 @@ void P_NewChaseDir(mobj_t* actor) {
 // Returns true if a player is targeted.
 //
 
-dboolean P_LookForPlayers(mobj_t* actor, dboolean allaround) {
+boolean P_LookForPlayers(mobj_t* actor, boolean allaround) {
 	angle_t     an;
 	fixed_t     dist;
 
@@ -1539,7 +1539,7 @@ void A_SkullSetAlpha(mobj_t* actor) {
 // PIT_PainCheckLine
 //
 
-static dboolean PIT_PainCheckLine(intercept_t* in) {
+static boolean PIT_PainCheckLine(intercept_t* in) {
 	if (!in->d.line->backsector) {
 		return false;
 	}

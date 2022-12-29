@@ -73,38 +73,12 @@ int M_CheckParm(const int8_t* check) {
 	int        i;
 
 	for (i = 1; i < myargc; i++) {
-		if (!dstricmp(check, myargv[i])) { //strcasecmp
+		if (!w3sstricmp(check, myargv[i])) { //strcasecmp
 			return i;
 		}
 	}
 
 	return 0;
-}
-
-// Safe, portable vsnprintf().
-int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args)
-{
-	int result;
-
-	if (buf_len < 1)
-	{
-		return 0;
-	}
-
-	// Windows (and other OSes?) has a vsnprintf() that doesn't always
-	// append a trailing \0. So we must do it, and write into a buffer
-	// that is one byte shorter; otherwise this function is unsafe.
-	result = vsnprintf(buf, buf_len, s, args);
-
-	// If truncated, change the final int8_t in the buffer to a \0.
-	// A negative result indicates a truncated buffer on Windows.
-	if (result < 0 || result >= buf_len)
-	{
-		buf[buf_len - 1] = '\0';
-		result = buf_len - 1;
-	}
-
-	return result;
 }
 
 //
@@ -159,9 +133,9 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-dboolean M_WriteFile(int8_t const* name, void* source, int length) {
+boolean M_WriteFile(int8_t const* name, void* source, int length) {
 	FILE* fp;
-	dboolean result;
+	boolean result;
 
 	errno = 0;
 
@@ -183,7 +157,7 @@ dboolean M_WriteFile(int8_t const* name, void* source, int length) {
 //
 // M_WriteTextFile
 //
-dboolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
+boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
 	int handle;
 	int count;
 	handle = w3sopen(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
@@ -380,7 +354,7 @@ void M_ScreenShot(void) {
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-bool M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size)
+boolean M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size)
 {
 	size_t len;
 

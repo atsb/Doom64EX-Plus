@@ -118,7 +118,7 @@ static void Z_RemoveBlock(memblock_t* block) {
 //
 
 void Z_Init(void) {
-	dmemset(allocated_blocks, 0, sizeof(allocated_blocks));
+	memset(allocated_blocks, 0, sizeof(allocated_blocks));
 
 #ifdef ZONEFILE
 	atexit(Z_CloseLogFile); // exit handler
@@ -165,7 +165,7 @@ void (Z_Free)(void* ptr, const int8_t* file, int line) {
 // Returns true if any blocks were freed.
 //
 
-static dboolean Z_ClearCache(int size) {
+static boolean Z_ClearCache(int size) {
 	memblock_t* block;
 	memblock_t* next_block;
 	int remaining;
@@ -399,7 +399,7 @@ void* (Z_Calloc)(int n1, int tag, void* user, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Calloc(file=%s:%d)\n", file, line);
 #endif
-	return dmemset((Z_Malloc)(n1, tag, user, file, line), 0, n1);
+	return memset((Z_Malloc)(n1, tag, user, file, line), 0, n1);
 }
 
 //
@@ -410,7 +410,7 @@ int8_t* (Z_Strdup)(const int8_t* s, int tag, void* user, const int8_t* file, int
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Strdup(file=%s:%d)\n", file, line);
 #endif
-	return dstrcpy((Z_Malloc)(dstrlen(s) + 1, tag, user, file, line), s);
+	return strcpy((Z_Malloc)(strlen(s) + 1, tag, user, file, line), s);
 }
 
 //
@@ -423,7 +423,7 @@ int8_t* (Z_Strdupa)(const int8_t* s, const int8_t* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Strdupa(file=%s:%d)\n", file, line);
 #endif
-	return dstrcpy((Z_Alloca)(strlen(s) + 1, file, line), s);
+	return strcpy((Z_Alloca)(strlen(s) + 1, file, line), s);
 }
 
 //

@@ -40,12 +40,12 @@
 static int              f_alpha = 0;
 static int              fInterFadeOut = false;
 static int8_t             fInterString[16][32];
-static dboolean         fInterDone = false;
+static boolean         fInterDone = false;
 static int              fInterAlpha = 0;
 static int              fInterSlot = 0;
 static int              fTextOffset = 0;
 static clusterdef_t* fcluster = NULL;
-static dboolean         fstopmusic = false;
+static boolean         fstopmusic = false;
 
 //
 // IN_Start
@@ -67,7 +67,7 @@ void IN_Start(void) {
 	f_alpha = 0;
 	fcluster = NULL;
 
-	dmemset(fInterString, 0, 16 * 32);
+	memset(fInterString, 0, 16 * 32);
 
 	fcluster = P_GetCluster(nextmap);
 
@@ -84,7 +84,7 @@ void IN_Start(void) {
 	i = 0;
 
 	// setup intermission text
-	while (k < dstrlen(fcluster->text)) {
+	while (k < strlen(fcluster->text)) {
 		int8_t c = fcluster->text[k++];
 
 		if (c == '\n') {

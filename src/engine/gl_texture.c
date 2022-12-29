@@ -142,7 +142,7 @@ static void InitWorldTextures(void) {
 		textureptr[i] = (dtexture*)Z_Malloc(1 * sizeof(dtexture), PU_STATIC, 0);
 
 		// get starting index for switch textures
-		if (!dstrnicmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
+		if (!w3sstrnicmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
 			swx_start = i;
 		}
 
@@ -304,7 +304,7 @@ static void InitGfxTextures(void) {
 // GL_BindGfxTexture
 //
 
-int GL_BindGfxTexture(const int8_t* name, dboolean alpha) {
+int GL_BindGfxTexture(const int8_t* name, boolean alpha) {
 	byte* png;
 	int lump;
 	int width;
@@ -380,7 +380,7 @@ static void InitSpriteTextures(void) {
 
 		for (j = 0; j < NUMSPRITES; j++) {
 			// start looking for external palette lumps
-			if (!dstrncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
+			if (!strncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
 				int8_t palname[9];
 
 				// increase the count if a palette lump is found
@@ -541,7 +541,7 @@ void GL_BindDummyTexture(void) {
 
 		byte rgb[48];   // 4x4 RGB texture
 
-		dmemset(rgb, 0xff, 48);
+		memset(rgb, 0xff, 48);
 
 		glGenTextures(1, &dummytexture);
 		glBindTexture(GL_TEXTURE_2D, dummytexture);
@@ -566,7 +566,7 @@ static dtexture envtexture = 0;
 void GL_BindEnvTexture(void) {
 	rcolor rgb[16];
 
-	dmemset(rgb, 0xff, sizeof(rcolor) * 16);
+	memset(rgb, 0xff, sizeof(rcolor) * 16);
 
 	if (envtexture == 0) {
 		glGenTextures(1, &envtexture);
@@ -603,7 +603,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 	lastenvcolor = color;
 	c = (byte*)rgb;
 
-	dmemset(rgb, 0, sizeof(rcolor) * 16);
+	memset(rgb, 0, sizeof(rcolor) * 16);
 
 	for (i = 0; i < 16; i++) {
 		*c++ = (byte)((env >> 0) & 0xff);
@@ -641,7 +641,7 @@ void GL_UnloadTexture(dtexture* texture) {
 // GL_SetTextureUnit
 //
 
-void GL_SetTextureUnit(int unit, dboolean enable) {
+void GL_SetTextureUnit(int unit, boolean enable) {
 
 	if (unit > 3) {
 		return;

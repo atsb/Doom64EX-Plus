@@ -75,35 +75,35 @@ void        G_SetFastParms(int fast_pending);
 gameaction_t    gameaction = 0;
 gamestate_t     gamestate = 0;
 skill_t         gameskill = 0;
-dboolean        respawnmonsters = false;
-dboolean        respawnspecials = false;
+boolean        respawnmonsters = false;
+boolean        respawnspecials = false;
 int             gamemap = 0;
 int             nextmap = 0;
-dboolean        paused = false;
-dboolean        sendpause = false;    // send a pause event next tic
-dboolean        sendsave = false;    // send a save event next tic
-dboolean        usergame = false;    // ok to save / end game
+boolean        paused = false;
+boolean        sendpause = false;    // send a pause event next tic
+boolean        sendsave = false;    // send a save event next tic
+boolean        usergame = false;    // ok to save / end game
 int             starttime = 0;        // for comparative timing purposes
 int             deathmatch = false;    // only if started as net death
-dboolean        netcheat = false;
-dboolean        netkill = false;
-dboolean        netgame = false;    // only true if packets are broadcast
+boolean        netcheat = false;
+boolean        netkill = false;
+boolean        netgame = false;    // only true if packets are broadcast
 int             basetic = 0;
 int             gametic = 0;
 
-dboolean        playeringame[MAXPLAYERS];
+boolean        playeringame[MAXPLAYERS];
 player_t        players[MAXPLAYERS];
 
 int             consoleplayer;              // player taking events and displaying
 int             displayplayer;              // view being displayed
 
-static dboolean savenow = false;
+static boolean savenow = false;
 static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
 // for intermission
 int             totalkills, totalitems, totalsecret;
-dboolean        precache = true;     // if true, load all graphics at start
+boolean        precache = true;     // if true, load all graphics at start
 
 byte            consistency[MAXPLAYERS][BACKUPTICS];
 
@@ -246,7 +246,7 @@ static CMD(Weapon) {
 		return;
 	}
 
-	id = datoi(param[0]);
+	id = atoi(param[0]);
 
 	if ((id > NUMWEAPONS) || (id < 1)) {
 		return;
@@ -349,10 +349,10 @@ static CMD(Cheat) {
 			return;
 		}
 
-		if (!dstricmp(param[0], "all")) {
+		if (!w3sstricmp(param[0], "all")) {
 			M_CheatKfa(player, NULL);
 		}
-		else if (!dstricmp(param[0], "weapon")) {
+		else if (!w3sstricmp(param[0], "weapon")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Weapons:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -367,11 +367,11 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (dstrlen(param[1]) == 1) {
+			if (strlen(param[1]) == 1) {
 				M_CheatGiveWeapon(player, param[1]);
 			}
 		}
-		else if (!dstricmp(param[0], "artifact")) {
+		else if (!w3sstricmp(param[0], "artifact")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Artifacts:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -381,11 +381,11 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (dstrlen(param[1]) == 1) {
+			if (strlen(param[1]) == 1) {
 				M_CheatArtifacts(player, param[1]);
 			}
 		}
-		else if (!dstricmp(param[0], "key")) {
+		else if (!w3sstricmp(param[0], "key")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Keys:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -398,7 +398,7 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (dstrlen(param[1]) == 1) {
+			if (strlen(param[1]) == 1) {
 				M_CheatGiveKey(player, param[1]);
 			}
 		}
@@ -447,7 +447,7 @@ static CMD(SpawnThing) {
 		return;
 	}
 
-	id = datoi(param[0]);
+	id = atoi(param[0]);
 	if (id >= NUMMOBJTYPES || id < 0) {
 		return;
 	}
@@ -484,7 +484,7 @@ static CMD(ExitLevel) {
 		G_ExitLevel();
 	}
 	else {
-		G_SecretExitLevel(datoi(param[0]));
+		G_SecretExitLevel(atoi(param[0]));
 	}
 }
 
@@ -503,9 +503,9 @@ static CMD(TriggerSpecial) {
 		return;
 	}
 
-	dmemset(&junk, 0, sizeof(line_t));
-	junk.special = datoi(param[0]);
-	junk.tag = datoi(param[1]);
+	memset(&junk, 0, sizeof(line_t));
+	junk.special = atoi(param[0]);
+	junk.tag = atoi(param[1]);
 
 	P_DoSpecialLine(players[consoleplayer].mo, &junk, 0);
 }
@@ -577,7 +577,7 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	playercontrols_t* pc;
 
 	pc = &Controls;
-	dmemset(cmd, 0, sizeof(ticcmd_t));
+	memset(cmd, 0, sizeof(ticcmd_t));
 
 	cmd->consistency = consistency[consoleplayer][maketic % BACKUPTICS];
 
@@ -908,7 +908,7 @@ void G_DoLoadLevel(void) {
 			players[i].playerstate = PST_REBORN;
 		}
 
-		dmemset(players[i].frags, 0, sizeof(players[i].frags));
+		memset(players[i].frags, 0, sizeof(players[i].frags));
 	}
 
 	basetic = gametic;
@@ -968,7 +968,7 @@ void G_DoLoadLevel(void) {
 // Get info needed to make ticcmd_ts for the players.
 //
 
-dboolean G_Responder(event_t* ev) {
+boolean G_Responder(event_t* ev) {
 	// Handle level specific ticcmds
 	if (gamestate == GS_LEVEL) {
 		// allow spy mode changes even during the demo
@@ -1074,7 +1074,7 @@ void G_Ticker(void) {
 			if (playeringame[i]) {
 				cmd = &players[i].cmd;
 
-				dmemcpy(cmd, &netcmds[i][buf], sizeof(ticcmd_t));
+				memcpy(cmd, &netcmds[i][buf], sizeof(ticcmd_t));
 
 				//
 				// 20120404 villsa - make sure gameaction isn't set to anything before
@@ -1127,7 +1127,7 @@ void G_Ticker(void) {
 
 				if ((players[i].cmd.buttons & BT_SPECIALMASK) == BTS_SAVEGAME) {
 					if (!savedescription[0]) {
-						dstrcpy(savedescription, "NET GAME");
+						strcpy(savedescription, "NET GAME");
 					}
 					savegameslot =
 						(players[i].cmd.buttons & BTS_SAVEMASK) >> BTS_SAVESHIFT;
@@ -1153,8 +1153,8 @@ void G_PlayerFinishLevel(int player) {
 
 	p = &players[player];
 
-	dmemset(p->powers, 0, sizeof(p->powers));
-	dmemset(p->cards, 0, sizeof(p->cards));
+	memset(p->powers, 0, sizeof(p->powers));
+	memset(p->cards, 0, sizeof(p->cards));
 	p->mo->flags &= ~MF_SHADOW;     // cancel invisibility
 	p->damagecount = 0;         // no palette changes
 	p->bonuscount = 0;
@@ -1176,16 +1176,16 @@ void G_PlayerReborn(int player) {
 	int         killcount;
 	int         itemcount;
 	int         secretcount;
-	dboolean    cards[NUMCARDS];
-	dboolean    wpns[NUMWEAPONS];
+	boolean    cards[NUMCARDS];
+	boolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
 
-	dmemcpy(frags, players[player].frags, sizeof(frags));
-	dmemcpy(cards, players[player].cards, sizeof(dboolean) * NUMCARDS);
-	dmemcpy(wpns, players[player].weaponowned, sizeof(dboolean) * NUMWEAPONS);
-	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
-	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
+	memcpy(frags, players[player].frags, sizeof(frags));
+	memcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
+	memcpy(wpns, players[player].weaponowned, sizeof(boolean) * NUMWEAPONS);
+	memcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
+	memcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
@@ -1197,9 +1197,9 @@ void G_PlayerReborn(int player) {
 	R_RefreshBrightness();
 
 	p = &players[player];
-	dmemset(p, 0, sizeof(*p));
+	memset(p, 0, sizeof(*p));
 
-	dmemcpy(players[player].frags, frags, sizeof(players[player].frags));
+	memcpy(players[player].frags, frags, sizeof(players[player].frags));
 	players[player].killcount = killcount;
 	players[player].itemcount = itemcount;
 	players[player].secretcount = secretcount;
@@ -1232,7 +1232,7 @@ void G_PlayerReborn(int player) {
 // because something is occupying it
 //
 
-dboolean G_CheckSpot(int playernum, mapthing_t* mthing) {
+boolean G_CheckSpot(int playernum, mapthing_t* mthing) {
 	fixed_t         x;
 	fixed_t         y;
 	subsector_t* ss;
@@ -1398,7 +1398,7 @@ void G_ExitLevel(void) {
 
 	map = P_GetMapInfo(gamemap);
 
-	dmemset(&junk, 0, sizeof(line_t));
+	memset(&junk, 0, sizeof(line_t));
 	junk.tag = map->exitdelay;
 
 	P_SpawnDelayTimer(&junk, G_CompleteLevel);
@@ -1416,7 +1416,7 @@ void G_SecretExitLevel(int map) {
 
 	mapdef = P_GetMapInfo(gamemap);
 
-	dmemset(&junk, 0, sizeof(line_t));
+	memset(&junk, 0, sizeof(line_t));
 	junk.tag = mapdef->exitdelay;
 
 	P_SpawnDelayTimer(&junk, G_CompleteLevel);
@@ -1511,7 +1511,7 @@ int8_t savename[256];
 //
 
 void G_LoadGame(const int8_t* name) {
-	dstrcpy(savename, name);
+	strcpy(savename, name);
 	gameaction = ga_loadgame;
 }
 
@@ -1539,7 +1539,7 @@ void G_DoLoadGame(void) {
 
 void G_SaveGame(int slot, const int8_t* description) {
 	savegameslot = slot;
-	dstrcpy(savedescription, description);
+	strcpy(savedescription, description);
 	sendsave = true;
 }
 
@@ -1580,7 +1580,7 @@ void G_Init(void) {
 	G_ReloadDefaults();
 	G_InitActions();
 
-	dmemset(playeringame, 0, sizeof(playeringame));
+	memset(playeringame, 0, sizeof(playeringame));
 	G_ClearInput();
 
 	G_AddCommand("+fire", CMD_Button, PCKEY_ATTACK);
