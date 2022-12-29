@@ -40,6 +40,21 @@ word statindice = 0;
 static word indicecnt = 0;
 static word drawIndices[MAXINDICES];
 
+void glGetVersion(int major, int minor)
+{
+	OGL_WINDOW_HINT(OGL_MAJOR_VERSION, major);
+	OGL_WINDOW_HINT(OGL_MINOR_VERSION, minor);
+}
+
+void glDestroyWindow(OGL_DEFS)
+{
+	if (Window)
+	{
+		OGL_DESTROY_WINDOW(Window);
+		Window = NULL;
+	}
+}
+
 //
 // glLogError
 //
@@ -337,4 +352,3 @@ void glTexCombReplaceAlpha(int t) {
 	GL_SetCombineSourceAlpha(1, GL_PRIMARY_COLOR);
 	GL_SetCombineOperandAlpha(1, GL_SRC_ALPHA);
 }
->>>>>>> main
