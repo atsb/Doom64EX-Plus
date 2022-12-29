@@ -79,33 +79,22 @@ typedef w3suint16_t word;
 typedef w3suint64_t dword;
 
 #ifdef _WIN32
-#ifndef _XBOX
 #define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
 #define w3swrite(handle, buf, maxcharcount) _write(handle, buf, maxcharcount)
 #define w3saccess(filename, accessmode) _access(filename, accessmode)
 #define w3sread(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
 #define w3sclose(filehandle) _close(filehandle)
 #define w3sstrdup(source) _strdup(source)
-#define w3sstricmp(str1, str2, size) _stricmp(str1, str2)
+#define w3sstricmp(str1, str2) _stricmp(str1, str2)
 #define w3sstrupr(str) _strupr(str)
 #define w3sstrnicmp(str1, str2, size) _strnicmp(str1, str2, size)
-#define w3sstrcasecmp(str1, str2, size) w3sstricmp(str1, str2, size)
+#define w3sstrcasecmp(str1, str2) w3sstricmp(str1, str2)
 #define w3sstrncasecmp(str1, str2, size) w3sstrnicmp(str1, str2, size)
 #define w3ssnprintf(buf, buffcount, format, ...) _snprintf(buf, buffcount, format, __VA_ARGS__)
 #define w3svsnprintf(buf, buffcount, format, arglist) _vsnprintf(buf, buffcount, format, arglist)
 #define w3sstrlwr(str) _strlwr(str)
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
-#else
-#define w3sopen(FileName, OpenFlag, __VA_ARGS__) open(FileName, OpenFlag, __VA_ARGS__)
-#define w3swrite(handle, buf, maxcharcount) write(handle, buf, maxcharcount)
-#define w3saccess(filename, accessmode) access(filename, accessmode)
-#define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
-#define w3sclose(filehandle) close(filehandle)
-#define w3sstrdup(source) strdup(source)
-#define DIR_SEPARATOR '\\'
-#define PATH_SEPARATOR ';'
-#endif
 #else
 #define w3sopen(FileName, OpenFlag, ...) open(FileName, OpenFlag, __VA_ARGS__)
 #define w3swrite(handle, buf, maxcharcount) write(handle, buf, maxcharcount)
@@ -115,11 +104,11 @@ typedef w3suint64_t dword;
 #define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define w3sstrdup(source) strdup(source)
 #define w3sstrupr(str) strupr(str)
-#define w3sstricmp(str1, str2) stricmp(str1, str2)
-#define w3sstrnicmp(str1, str2, size) strnicmp(str1, str2, size)
 #define w3ssnprintf(buf, buffcount, format, ...) snprintf(buf, buffcount, format, __VA_ARGS__)
 #define w3svsnprintf(buf, buffcount, format, arglist) vsnprintf(buf, buffcount, format, arglist)
 #define w3sstrlwr(str) strlwr(str)
+#define w3sstricmp(str1, str2) stricmp(str1, str2)
+#define w3sstrnicmp(str1, str2, size) strnicmp(str1, str2, size)
 #define w3sstrcasecmp(str1, str2) w3sstricmp(str1, str2)
 #define w3sstrncasecmp(str1, str2, size) w3sstrnicmp(str1, str2, size)
 #define DIR_SEPARATOR '/'
