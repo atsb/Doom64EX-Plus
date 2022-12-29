@@ -56,7 +56,12 @@ int8_t* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"A001", "A012", "A010", "A018", "A017", "A026", "A022", "A028",
 	"A029", "A035", "A036", "TRE3", "TRE2", "TRE1", "A013", "A019",
 	"A004", "A005", "A023", "SAWG", "PUNG", "PISG", "SHT1", "SHT2",
-	"CHGG", "ROCK", "PLAS", "BFGG", "LASR", NULL
+	"CHGG", "ROCK", "PLAS", "BFGG", "LASR", "S015", "S016", "S003",
+	"S039", "S025", "S033", "S034", "S035", "S005", "S006", "S007",
+	"S008", "S009", "S010", "S011", "S012", "S013", "S014", "S017",
+	"S018", "S019", "S020", "S021", "S022", "S023", "S024", "S028",
+	"S029", "S031", "S032", "S027", "S036", "S037", "S038", "S040",
+	"S041", "S026", "S002", "S030", NULL
 };
 
 // Doesn't work with g++, needs actionf_p1
@@ -1000,6 +1005,73 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_LASERG1*/           { SPR_LASR, 0, 8, {A_FireLaser}, S_LASERG2 },
 	/*S_LASERG2*/           { SPR_LASR, 0, 3, {A_ReFire}, S_LASERG },
 	/*S_LASERGLIGHT*/       { SPR_LASR, 32769, 3, {NULL}, S_NULL },
+
+	{ SPR_S003,0,4,NULL,S_BWTORCH2 },// S_BWTORCH1
+	{ SPR_S003,1,4,NULL,S_BWTORCH3 },// S_BWTORCH2
+	{ SPR_S003,2,4,NULL,S_BWTORCH4 },// S_BWTORCH3
+	{ SPR_S003,3,4,NULL,S_BWTORCH1 },// S_BWTORCH4
+	{ SPR_S039,0,4,NULL,S_YWTORCH2 },// S_YWTORCH1
+	{ SPR_S039,1,4,NULL,S_YWTORCH3 },// S_YWTORCH2
+	{ SPR_S039,2,4,NULL,S_YWTORCH4 },// S_YWTORCH3
+	{ SPR_S039,3,4,NULL,S_YWTORCH1 },// S_YWTORCH4
+	{ SPR_S025,0,4,NULL,S_RWTORCH2 },// S_RWTORCH1
+	{ SPR_S025,1,4,NULL,S_RWTORCH3 },// S_RWTORCH2
+	{ SPR_S025,2,4,NULL,S_RWTORCH4 },// S_RWTORCH3
+	{ SPR_S025,3,4,NULL,S_RWTORCH1 },// S_RWTORCH4
+	{ SPR_S033,32768,4,NULL,S_BFLM2 },// S_BFLM1
+	{ SPR_S033,32769,4,NULL,S_BFLM3 },// S_BFLM2
+	{ SPR_S033,32770,4,NULL,S_BFLM4 },// S_BFLM3
+	{ SPR_S033,32771,4,NULL,S_BFLM1 },// S_BFLM4
+	{ SPR_S034,32768,4,NULL,S_RFLM2 },// S_RFLM1
+	{ SPR_S034,32769,4,NULL,S_RFLM3 },// S_RFLM2
+	{ SPR_S034,32770,4,NULL,S_RFLM4 },// S_RFLM3
+	{ SPR_S034,32771,4,NULL,S_RFLM1 },// S_RFLM4
+	{ SPR_S035,32768,4,NULL,S_YFLM2 },// S_YFLM1
+	{ SPR_S035,32769,4,NULL,S_YFLM3 },// S_YFLM2
+	{ SPR_S035,32770,4,NULL,S_YFLM4 },// S_YFLM3
+	{ SPR_S035,32771,4,NULL,S_YFLM1 },// S_YFLM4
+	{ SPR_S005,0,-1,NULL,S_NULL },// S_MISC5
+	{ SPR_S006,0,-1,NULL,S_NULL },// S_MISC6
+	{ SPR_S007,0,-1,NULL,S_NULL },// S_MISC7
+	{ SPR_S008,0,-1,NULL,S_NULL },// S_MISC8_1
+	{ SPR_S009,0,-1,NULL,S_NULL },// S_MISC9_1
+	{ SPR_S010,0,-1,NULL,S_NULL },// S_MISC10
+	{ SPR_S011,0,6,NULL,S_MISC11_2 },// S_MISC11_1
+	{ SPR_S011,1,6,NULL,S_MISC11_1 },// S_MISC11_2
+	{ SPR_S012,0,6,NULL,S_MISC12_2 },// S_MISC12_1
+	{ SPR_S012,1,6,NULL,S_MISC12_1 },// S_MISC12_2
+	{ SPR_S013,0,6,NULL,S_MISC13_2 },// S_MISC13_1
+	{ SPR_S013,1,6,NULL,S_MISC13_1 },// S_MISC13_2
+	{ SPR_S014,0,-1,NULL,S_NULL },// S_MISC14
+	{ SPR_S017,0,-1,NULL,S_NULL },// S_MISC17
+	{ SPR_S018,0,-1,NULL,S_NULL },// S_MISC18
+	{ SPR_S019,0,-1,NULL,S_NULL },// S_MISC19
+	{ SPR_S020,0,-1,NULL,S_NULL },// S_MISC20
+	{ SPR_S021,0,4,NULL,S_MISC21_2 },// S_MISC21_1
+	{ SPR_S021,1,4,NULL,S_MISC21_1 },// S_MISC21_2
+	{ SPR_S022,0,-1,NULL,S_NULL },// S_MISC22
+	{ SPR_S023,0,-1,NULL,S_NULL },// S_MISC23
+	{ SPR_S024,0,-1,NULL,S_NULL },// S_MISC24
+	{ SPR_S028,0,-1,NULL,S_NULL },// S_MISC28
+	{ SPR_S029,0,-1,NULL,S_NULL },// S_MISC29
+	{ SPR_S031,0,-1,NULL,S_NULL },// S_MISC31
+	{ SPR_S032,0,-1,NULL,S_NULL },// S_MISC32
+	{ SPR_S027,0,-1,NULL,S_NULL },// S_MISC27
+	{ SPR_S036,0,-1,NULL,S_NULL },// S_MISC36
+	{ SPR_S037,0,-1,NULL,S_NULL },// S_MISC37
+	{ SPR_S038,0,-1,NULL,S_NULL },// S_MISC38
+	{ SPR_S040,0,-1,NULL,S_NULL },// S_MISC45
+	{ SPR_S041,0,-1,NULL,S_NULL },// S_MISC41
+	{ SPR_S026,0,-1,NULL,S_NULL },// S_MISC26
+	{ SPR_S027,0,-1,NULL,S_NULL },// S_MISC46
+	{ SPR_S002,32768,4,NULL,S_MISC47_2 },// S_MISC47_1
+	{ SPR_S002,32769,4,NULL,S_MISC47_3 },// S_MISC47_2
+	{ SPR_S002,32770,4,NULL,S_MISC47_4 },// S_MISC47_3
+	{ SPR_S002,32771,4,NULL,S_MISC47_1 },// S_MISC47_4
+	{ SPR_S030,32768,4,NULL,S_MISC30_2 },// S_MISC30_1
+	{ SPR_S030,32769,4,NULL,S_MISC30_3 },// S_MISC30_2
+	{ SPR_S030,32770,4,NULL,S_MISC30_4 },// S_MISC30_3
+	{ SPR_S030,32771,4,NULL,S_MISC30_1 },// S_MISC30_4
 };
 
 #pragma warning(pop)
@@ -4672,4 +4744,1083 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		0,        //palette
 		255        //alpha
 	},
+{// MT_MISC2
+1015,// doomednum
+S_LAMP1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+47 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC3
+1016,// doomednum
+S_LAMP2,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+12 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC4
+1003,// doomednum
+S_BWTORCH1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC5
+1039,// doomednum
+S_YWTORCH1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC6
+1025,// doomednum
+S_RWTORCH1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC7
+1033,// doomednum
+S_BFLM1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+192// alpha
+},
+
+{// MT_MISC8
+1034,// doomednum
+S_RFLM1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+192// alpha
+},
+
+{// MT_MISC9
+1035,// doomednum
+S_YFLM1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+192// alpha
+},
+
+{// MT_MISC10
+1005,// doomednum
+S_MISC5,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC11
+1006,// doomednum
+S_MISC6,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+65 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC12
+1007,// doomednum
+S_MISC7,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+132 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC13
+1008,// doomednum
+S_MISC8_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC14
+1009,// doomednum
+S_MISC9_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC15
+1010,// doomednum
+S_MISC10,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC16
+1011,// doomednum
+S_MISC11_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC17
+1012,// doomednum
+S_MISC12_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC18
+1013,// doomednum
+S_MISC13_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC19
+1014,// doomednum
+S_MISC14,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+85 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC20
+1017,// doomednum
+S_MISC17,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+132 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC21
+1018,// doomednum
+S_MISC18,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+62 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC22
+1019,// doomednum
+S_MISC19,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+72 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC23
+1020,// doomednum
+S_MISC20,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+62 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC24
+1021,// doomednum
+S_MISC21_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+97 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC25
+1022,// doomednum
+S_MISC22,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+8 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC26
+1023,// doomednum
+S_MISC23,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+8 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC27
+1024,// doomednum
+S_MISC24,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+8 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC28
+1028,// doomednum
+S_MISC28,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC29
+1029,// doomednum
+S_MISC29,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC30
+1031,// doomednum
+S_MISC31,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+8 * FRACUNIT,// radius
+80 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC31
+1032,// doomednum
+S_MISC32,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+8 * FRACUNIT,// radius
+62 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC32
+1027,// doomednum
+S_MISC27,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+14 * FRACUNIT,// radius
+80 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC33
+1036,// doomednum
+S_MISC36,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+16 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC34
+1037,// doomednum
+S_MISC37,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+16 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC35
+1038,// doomednum
+S_MISC38,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+16 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC36
+1040,// doomednum
+S_MISC45,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+32 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC37
+1041,// doomednum
+S_MISC41,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC38
+1026,// doomednum
+S_MISC26,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+20 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+0,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC39
+45,// doomednum
+S_MISC46,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+32 * FRACUNIT,// radius
+81 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC40
+70,// doomednum
+S_MISC47_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+16 * FRACUNIT,// radius
+16 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
+
+{// MT_MISC41
+1030,// doomednum
+S_MISC30_1,// spawnstate
+1000,// spawnhealth
+S_NULL,// seestate
+sfx_None,// seesound
+8,// reactiontime
+sfx_None,// attacksound
+S_NULL,// painstate
+0,// painchance
+sfx_None,// painsound
+S_NULL,// meleestate
+S_NULL,// missilestate
+S_NULL,// deathstate
+S_NULL,// xdeathstate
+sfx_None,// deathsound
+0,// speed
+8 * FRACUNIT,// radius
+62 * FRACUNIT,// height
+100,// mass
+0,// damage
+sfx_None,// activesound
+MF_SOLID,// flags
+0,// palette
+255// alpha
+},
 };
