@@ -1860,10 +1860,10 @@ void P_UpdateSpecials(void) {
 				sector->xoffset -= speed;
 			}
 			if (sector->flags & MS_SCROLLUP) {
-				sector->yoffset -= speed;
+				sector->yoffset += speed;
 			}
 			if (sector->flags & MS_SCROLLDOWN) {
-				sector->yoffset += speed;
+				sector->yoffset -= speed;
 			}
 		}
 	}
