@@ -81,6 +81,8 @@ POINT Resolutions[] =
 	{   1280,   1024    },
 	{   2560,   2048    },
 	{   5120,   4096    },
+	{   2560,    1080   },
+	{   3840,    2160   },
 	{   0,      0       }
 };
 
@@ -238,8 +240,13 @@ void L_InitResolution(HWND hWnd)
 			sprintf(buff, "%dx%d (16:9)", p->x, p->y);
 		else if (i <= 33)
 			sprintf(buff, "%dx%d (16:10)", p->x, p->y);
-		else
+		else if (i <= 36)
 			sprintf(buff, "%dx%d (5:4)", p->x, p->y);
+		else if (i <= 39)
+			sprintf(buff, "%dx%d (21:09)", p->x, p->y);
+		else
+			printf("Unsupported resolution: %dx%d", p->x, p->y); //André: Detect if there´s some unregular resolution like 8480X10000
+
 		//Hack for now - GIB
 		SendMessageA(hwndRes, CB_ADDSTRING, 0, (LPARAM)buff);
 		SendMessageA(hwndRes, CB_SETITEMDATA, i, (LPARAM)i);
