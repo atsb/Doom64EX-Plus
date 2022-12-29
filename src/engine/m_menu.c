@@ -762,7 +762,7 @@ void M_DrawNetwork(void);
 
 CVAR_EXTERNAL(m_playername);
 CVAR_EXTERNAL(p_allowjump);
-//Andr�: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
+//André: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
 CVAR_EXTERNAL(sv_nomonsters);
 CVAR_EXTERNAL(sv_fastmonsters);
 CVAR_EXTERNAL(sv_respawnitems);
