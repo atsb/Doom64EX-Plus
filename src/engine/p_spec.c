@@ -1647,7 +1647,7 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	/* */
 	/*	Switches that other things can activate */
 	/* */
-	if (!player)
+	if (!player && thing->type != MT_FAKEITEM)
 	{
 		/* Missiles should NOT trigger specials... */
 		if (thing->flags & MF_MISSILE)
