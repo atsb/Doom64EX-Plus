@@ -88,8 +88,8 @@ static boolean P_CheckThingCollision(mobj_t* thing) {
 	fixed_t x, y;
 	fixed_t rx, ry;
 
-	x = D_abs(thing->x - tmx);
-	y = D_abs(thing->y - tmy);
+	x = abs(thing->x - tmx);
+	y = abs(thing->y - tmy);
 
 	rx = blockdist - x;
 	ry = blockdist - x;
@@ -1316,7 +1316,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	P_PathTraverse(t1->x, t1->y, x2, y2, flags, PTR_AimTraverse);
 
 	if (t1->player) {
-		pitch = dcos(D_abs(t1->pitch - ANG90));
+		pitch = dcos(abs(t1->pitch - ANG90));
 
 		if (distance != (ATTACKRANGE + 1)) {
 				flags &= ~PT_ADDTHINGS;
@@ -1332,7 +1332,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	else if (t1->player) {
 		aimslope = pitch;
 
-		if (D_abs(aimslope) > 0x40) {
+		if (abs(aimslope) > 0x40) {
 			return aimslope;
 		}
 	}
@@ -1537,8 +1537,8 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
 		}
 	}
 
-	dx = D_abs(thing->x - bombspot->x);
-	dy = D_abs(thing->y - bombspot->y);
+	dx = abs(thing->x - bombspot->x);
+	dy = abs(thing->y - bombspot->y);
 
 	dist = dx > dy ? dx : dy;
 	dist = F2INT(dist - thing->radius);

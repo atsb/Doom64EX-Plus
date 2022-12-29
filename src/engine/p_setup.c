@@ -51,6 +51,7 @@
 #include "m_random.h"
 #include "z_zone.h"
 #include "sc_main.h"
+#include "i_w3swrapper.h"
 
 void P_SpawnMapThing(mapthing_t* mthing);
 
@@ -1137,7 +1138,7 @@ static void P_InitMapInfo(void) {
 		//
 		// find map block
 		//
-		if (!dstricmp(sc_parser.token, "MAP")) {
+		if (!w3sstricmp(sc_parser.token, "MAP")) {
 			memset(&mapdef, 0, sizeof(mapdef_t));
 
 			//
@@ -1151,7 +1152,7 @@ static void P_InitMapInfo(void) {
 
 			// read level name
 			sc_parser.find(false);
-			dstrncpy(mapdef.mapname, sc_parser.token, dstrlen(sc_parser.token));
+			strncpy(mapdef.mapname, sc_parser.token, strlen(sc_parser.token));
 
 			sc_parser.compare("{");  // must expect open bracket
 
@@ -1171,7 +1172,7 @@ static void P_InitMapInfo(void) {
 					//
 					// get music track ID
 					//
-					if (!dstricmp(sc_parser.token, "MUSIC")) {
+					if (!w3sstricmp(sc_parser.token, "MUSIC")) {
 						int8_t* text;
 						int ds_start;
 						int ds_end;
@@ -1193,7 +1194,7 @@ static void P_InitMapInfo(void) {
 							mapdef.music = (lump - ds_start);
 						}
 					}
-					else if (!dstricmp(sc_parser.token, "ALLOWJUMP")) {
+					else if (!w3sstricmp(sc_parser.token, "ALLOWJUMP")) {
 						if (atoi(sc_parser.getstring()) == 1) {
 							mapdef.allowjump = 1;
 						}
@@ -1203,7 +1204,7 @@ static void P_InitMapInfo(void) {
 
 						ok = true;
 					}
-					else if (!dstricmp(sc_parser.token, "ALLOWFREELOOK")) {
+					else if (!w3sstricmp(sc_parser.token, "ALLOWFREELOOK")) {
 						if (atoi(sc_parser.getstring()) == 1) {
 							mapdef.allowfreelook = 1;
 						}
@@ -1228,7 +1229,7 @@ static void P_InitMapInfo(void) {
 		//
 		// find cluster block
 		//
-		else if (!dstricmp(sc_parser.token, "CLUSTER")) {
+		else if (!w3sstricmp(sc_parser.token, "CLUSTER")) {
 			memset(&cluster, 0, sizeof(clusterdef_t));
 
 			sc_parser.find(false);
@@ -1252,7 +1253,7 @@ static void P_InitMapInfo(void) {
 					//
 					// get music track ID
 					//
-					if (!dstricmp(sc_parser.token, "MUSIC")) {
+					if (!w3sstricmp(sc_parser.token, "MUSIC")) {
 						int ds_start;
 						int ds_end;
 						int lump;
@@ -1274,14 +1275,14 @@ static void P_InitMapInfo(void) {
 					//
 					// check for text
 					//
-					else if (!dstricmp(sc_parser.token, "ENTERTEXT")) {
+					else if (!w3sstricmp(sc_parser.token, "ENTERTEXT")) {
 						cluster.enteronly = true;
 						text = sc_parser.getstring();
-						dstrncpy(cluster.text, text, dstrlen(text));
+						strncpy(cluster.text, text, strlen(text));
 					}
-					else if (!dstricmp(sc_parser.token, "EXITTEXT")) {
+					else if (!w3sstricmp(sc_parser.token, "EXITTEXT")) {
 						text = sc_parser.getstring();
-						dstrncpy(cluster.text, text, dstrlen(text));
+						strncpy(cluster.text, text, strlen(text));
 					}
 					else {
 						sc_parser.error("P_InitMapInfo");
@@ -1372,11 +1373,11 @@ static void P_InitSkyDef(void) {
 		//
 		// find sky block
 		//
-		if (!dstricmp(sc_parser.token, "SKY")) {
+		if (!w3sstricmp(sc_parser.token, "SKY")) {
 			memset(&sky, 0, sizeof(skydef_t));
 
 			sc_parser.find(false);
-			dstrncpy(sky.flat, sc_parser.token, dstrlen(sc_parser.token));
+			strncpy(sky.flat, sc_parser.token, strlen(sc_parser.token));
 
 			sc_parser.compare("{");  // must expect open bracket
 
@@ -1394,19 +1395,19 @@ static void P_InitSkyDef(void) {
 					//
 					// check for sky flags
 					//
-					if (!dstricmp(sc_parser.token, "CLOUD")) {
+					if (!w3sstricmp(sc_parser.token, "CLOUD")) {
 						sky.flags |= SKF_CLOUD;
 					}
-					else if (!dstricmp(sc_parser.token, "THUNDER")) {
+					else if (!w3sstricmp(sc_parser.token, "THUNDER")) {
 						sky.flags |= SKF_THUNDER;
 					}
-					else if (!dstricmp(sc_parser.token, "FIRE")) {
+					else if (!w3sstricmp(sc_parser.token, "FIRE")) {
 						sky.flags |= SKF_FIRE;
 					}
-					else if (!dstricmp(sc_parser.token, "FADEINBACKGROUND")) {
+					else if (!w3sstricmp(sc_parser.token, "FADEINBACKGROUND")) {
 						sky.flags |= SKF_FADEBACK;
 					}
-					else if (!dstricmp(sc_parser.token, "VOID")) {
+					else if (!w3sstricmp(sc_parser.token, "VOID")) {
 						sky.flags |= SKF_VOID;
 					}
 					else {

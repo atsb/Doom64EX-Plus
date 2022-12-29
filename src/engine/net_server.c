@@ -154,7 +154,7 @@ static void NET_SV_SendConsoleMessage(net_client_t* client, char* s, ...)
 	net_packet_t* packet;
 
 	va_start(args, s);
-	vsnprintf(buf, sizeof(buf), s, args);
+	w3svsnprintf(buf, sizeof(buf), s, args);
 	va_end(args);
 
 	packet = NET_Conn_NewReliable(&client->connection,
@@ -172,7 +172,7 @@ static void NET_SV_BroadcastMessage(char* s, ...)
 	int i;
 
 	va_start(args, s);
-	vsnprintf(buf, sizeof(buf), s, args);
+	w3svsnprintf(buf, sizeof(buf), s, args);
 	va_end(args);
 
 	for (i = 0; i < MAXNETNODES; ++i)

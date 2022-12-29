@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <string.h>
 #include <time.h>
 
 #ifndef _WIN32
@@ -43,7 +44,6 @@ void w3ssleep(dword usecs)
 #define vsnprintf _vsnprintf
 #endif
 #endif
-
 // Safe, portable vsnprintf().
 int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
 {
@@ -70,3 +70,49 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
     return result;
 }
 #endif
+
+//
+// dhtoi
+//
+
+int htoi(int8_t* str) {
+	int8_t* s;
+	int num;
+
+	num = 0;
+	s = str;
+
+	while (*s) {
+		num <<= 4;
+		if (*s >= '0' && *s <= '9') {
+			num += *s - '0';
+		}
+		else if (*s >= 'a' && *s <= 'f') {
+			num += 10 + *s - 'a';
+		}
+		else if (*s >= 'A' && *s <= 'F') {
+			num += 10 + *s - 'A';
+		}
+		else {
+			return 0;
+		}
+		s++;
+	}
+
+	return num;
+}
+
+//
+// dfcmp
+//
+
+boolean fcmp(float f1, float f2) {
+	float precision = 0.00001f;
+	if (((f1 - precision) < f2) &&
+		((f1 + precision) > f2)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}

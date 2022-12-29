@@ -957,7 +957,7 @@ void ST_Drawer(void) {
 				G_GetActionBindings(usestring, "+use");
 				sprintf(contextstring, "(%s)Use", usestring);
 
-				x = (160 / 0.75f) - ((dstrlen(contextstring) * 8) / 2);
+				x = (160 / 0.75f) - ((strlen(contextstring) * 8) / 2);
 
 				Draw_Text((int)x, 214, WHITEALPHA(0xA0), 0.75f, false, contextstring);
 			}
@@ -1111,7 +1111,7 @@ void ST_Init(void) {
 
 	for (i = 0; i < MAXPLAYERS; i++) {
 		if (playeringame[i] && net_player_names[i][0]) {
-			snprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]);
+			w3ssnprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]);
 		}
 	}
 
@@ -1153,7 +1153,7 @@ void ST_AddChatMsg(int8_t* msg, int player) {
 
 	sprintf(str, "%s: %s", player_names[player], msg);
 	memset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
-	memcpy(stchat[st_chatcount].msg, str, dstrlen(str));
+	memcpy(stchat[st_chatcount].msg, str, strlen(str));
 	stchat[st_chatcount].tics = MAXCHATTIME;
 	stchat[st_chatcount].color = st_chatcolors[player];
 	st_chatcount = (st_chatcount + 1) % MAXCHATNODES;
@@ -1278,7 +1278,7 @@ static void ST_FeedChatMsg(event_t* ev) {
 		ST_QueueChatChar((int8_t)c);
 		break;
 	case KEY_ESCAPE:
-		len = dstrlen(st_chatstring[consoleplayer]);
+		len = strlen(st_chatstring[consoleplayer]);
 		st_chatOn = false;
 		memset(st_chatstring[consoleplayer], 0, len);
 		break;
@@ -1350,7 +1350,7 @@ static void ST_EatChatMsg(void) {
 
 		c = players[i].cmd.chatchar;
 
-		len = dstrlen(st_chatstring[i]);
+		len = strlen(st_chatstring[i]);
 
 		switch (c) {
 		case KEY_ENTER:
@@ -1498,7 +1498,7 @@ static void ST_DisplayName(int playernum) {
 	color |= ((255 - (int)((float)distance * 0.19921875f)) << 24);
 
 	// display player name
-	dsnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
+	w3ssnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
 	Draw_Text(screenx, screeny, color, 1.0f, 0, name);
 }
 

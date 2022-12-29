@@ -88,23 +88,23 @@ void R_LightGetHSV(int r, int g, int b, int* h, int* s, int* v) {
 
 	delta = ((float)max / 255.0f);
 
-	if (dfcmp(delta, 0.0f)) {
+	if (fcmp(delta, 0.0f)) {
 		delta = 0;
 	}
 	else {
 		j = ((delta - ((float)min / 255.0f)) / delta);
 	}
 
-	if (!dfcmp(j, 0.0f)) {
+	if (!fcmp(j, 0.0f)) {
 		xr = ((float)r / 255.0f);
 
-		if (!dfcmp(xr, delta)) {
+		if (!fcmp(xr, delta)) {
 			xg = ((float)g / 255.0f);
 
-			if (!dfcmp(xg, delta)) {
+			if (!fcmp(xg, delta)) {
 				xb = ((float)b / 255.0f);
 
-				if (dfcmp(xb, delta)) {
+				if (fcmp(xb, delta)) {
 					sum = ((((delta - xg) / (delta - (min / 255.0f))) + 4.0f) -
 						((delta - xr) / (delta - (min / 255.0f))));
 				}
@@ -157,7 +157,7 @@ void R_LightGetRGB(int h, int s, int v, int* r, int* g, int* b) {
 	x = (s / 255.0f);
 	i = (v / 255.0f);
 
-	if (!dfcmp(x, 0.0f)) {
+	if (!fcmp(x, 0.0f)) {
 		table = (int)(j / 60.0f);
 		if (table < 6) {
 			float t = (j / 60.0f);

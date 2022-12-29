@@ -99,7 +99,7 @@ void ExtractFileBase(int8_t* path, int8_t* dest) {
 	int8_t* src;
 	int        length;
 
-	src = path + dstrlen(path) - 1;
+	src = path + strlen(path) - 1;
 
 	// back up until a \ or the start
 	while (src != path
@@ -188,7 +188,7 @@ wad_file_t* W_AddFile(int8_t* filename) {
 
 	startlump = numlumps;
 
-	if (strcasecmp(filename + dstrlen(filename) - 3, "wad")) {
+	if (strcasecmp(filename + strlen(filename) - 3, "wad")) {
 		// single lump file
 
 		// fraggle: Swap the filepos and size here.  The WAD directory
@@ -210,8 +210,8 @@ wad_file_t* W_AddFile(int8_t* filename) {
 		// WAD file
 		W_Read(wadfile, 0, &header, sizeof(header));
 
-		if (dstrncmp(header.identification, "PWAD", 4) &&
-			dstrncmp(header.identification, "IWAD", 4)) {
+		if (strncmp(header.identification, "PWAD", 4) &&
+			strncmp(header.identification, "IWAD", 4)) {
 			I_Error("W_AddFile: Wad file %s doesn't have valid IWAD or PWAD id\n", filename);
 		}
 
@@ -285,7 +285,7 @@ void W_Init(void) {
 
 	W_Read(wadfile, 0, &header, sizeof(header));
 
-	if (dstrnicmp(header.identification, "IWAD", 4)) {
+	if (w3sstrnicmp(header.identification, "IWAD", 4)) {
 		I_Error("W_Init: Invalid main IWAD id");
 	}
 
@@ -383,7 +383,7 @@ void W_CacheMapLump(int map) {
 	lump = W_GetNumForName(name8);
 
 	// check if non-lump map, aka standard doom map storage
-	if (!((lump + 1) >= numlumps) && !dstrncmp(lumpinfo[lump + 1].name, "THINGS", 8)) {
+	if (!((lump + 1) >= numlumps) && !strncmp(lumpinfo[lump + 1].name, "THINGS", 8)) {
 		nonmaplump = true;
 		return;
 	}
@@ -475,7 +475,7 @@ int W_CheckNumForName(const int8_t* name) {
 		i = lumpinfo[W_HashLumpName(name) % numlumps].index;
 	}
 
-	while (i >= 0 && dstrncmp(lumpinfo[i].name, name, 8)) {
+	while (i >= 0 && strncmp(lumpinfo[i].name, name, 8)) {
 		i = lumpinfo[i].next;
 	}
 

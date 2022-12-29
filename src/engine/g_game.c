@@ -349,10 +349,10 @@ static CMD(Cheat) {
 			return;
 		}
 
-		if (!dstricmp(param[0], "all")) {
+		if (!w3sstricmp(param[0], "all")) {
 			M_CheatKfa(player, NULL);
 		}
-		else if (!dstricmp(param[0], "weapon")) {
+		else if (!w3sstricmp(param[0], "weapon")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Weapons:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -367,11 +367,11 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (dstrlen(param[1]) == 1) {
+			if (strlen(param[1]) == 1) {
 				M_CheatGiveWeapon(player, param[1]);
 			}
 		}
-		else if (!dstricmp(param[0], "artifact")) {
+		else if (!w3sstricmp(param[0], "artifact")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Artifacts:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -381,11 +381,11 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (dstrlen(param[1]) == 1) {
+			if (strlen(param[1]) == 1) {
 				M_CheatArtifacts(player, param[1]);
 			}
 		}
-		else if (!dstricmp(param[0], "key")) {
+		else if (!w3sstricmp(param[0], "key")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Keys:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -398,7 +398,7 @@ static CMD(Cheat) {
 				return;
 			}
 
-			if (dstrlen(param[1]) == 1) {
+			if (strlen(param[1]) == 1) {
 				M_CheatGiveKey(player, param[1]);
 			}
 		}
@@ -1127,7 +1127,7 @@ void G_Ticker(void) {
 
 				if ((players[i].cmd.buttons & BT_SPECIALMASK) == BTS_SAVEGAME) {
 					if (!savedescription[0]) {
-						dstrcpy(savedescription, "NET GAME");
+						strcpy(savedescription, "NET GAME");
 					}
 					savegameslot =
 						(players[i].cmd.buttons & BTS_SAVEMASK) >> BTS_SAVESHIFT;
@@ -1511,7 +1511,7 @@ int8_t savename[256];
 //
 
 void G_LoadGame(const int8_t* name) {
-	dstrcpy(savename, name);
+	strcpy(savename, name);
 	gameaction = ga_loadgame;
 }
 
@@ -1539,7 +1539,7 @@ void G_DoLoadGame(void) {
 
 void G_SaveGame(int slot, const int8_t* description) {
 	savegameslot = slot;
-	dstrcpy(savedescription, description);
+	strcpy(savedescription, description);
 	sendsave = true;
 }
 
