@@ -259,8 +259,8 @@ EV_DoPlat
 				plat->high = sec->floorheight;
 			}
 
-			plat->wait = 30 * PLATWAIT;
-			plat->status = ((P_Random()&1) << 1) + down;
+			plat->wait = TICRATE * PLATWAIT;
+			plat->status = P_Random()&1;
 
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
