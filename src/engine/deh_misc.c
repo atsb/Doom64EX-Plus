@@ -198,7 +198,7 @@ static void DEH_MiscParseLine(deh_context_t *context, char *line, void *tag)
 
     for (i=0; i<arrlen(misc_settings); ++i)
     {
-        if (!w3sstrcasecmp(variable_name, misc_settings[i].deh_name))
+        if (!w3sstricmp(variable_name, misc_settings[i].deh_name))
         {
             *misc_settings[i].value = ivalue;
             return;
