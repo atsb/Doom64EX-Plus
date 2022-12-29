@@ -422,7 +422,7 @@ void T_Sequence(sequenceGlow_t* seq) {
 // P_SpawnSequenceLight
 //
 
-void P_SpawnSequenceLight(sector_t* sector, dboolean first) {
+void P_SpawnSequenceLight(sector_t* sector, boolean first) {
 	sequenceGlow_t* seq;
 	sector_t* headsector = NULL;
 	int i = 0;
@@ -639,11 +639,11 @@ int P_DoSectorLightChange(line_t* line, int16_t tag) {
 // internal light tags are used..
 //
 
-dboolean P_ChangeLightByTag(int tag1, int tag2) {
+boolean P_ChangeLightByTag(int tag1, int tag2) {
 	light_t* l1 = NULL;
 	light_t* l2 = NULL;
 	int i = 0;
-	dboolean ok = false;
+	boolean ok = false;
 
 	for (i = 256; i < numlights + 1; i++) {
 		if (i >= numlights) {

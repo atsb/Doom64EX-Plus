@@ -100,7 +100,7 @@ void WI_Start(void) {
 		seconds = (leveltime / TICRATE) % 60;
 	}
 
-	dsnprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
+	snprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
 
 	// generate password
 	if (nextmap < 40) {
@@ -138,10 +138,10 @@ void WI_Stop(void) {
 //
 
 int WI_Ticker(void) {
-	dboolean    state = false;
+	boolean    state = false;
 	player_t* player;
 	int         i;
-	dboolean    next = false;
+	boolean    next = false;
 
 	if (wi_advance <= 3) {
 		// check for button presses to skip delays
@@ -434,7 +434,7 @@ void WI_Drawer(void) {
 
 		Draw_BigText(-1, 187, WHITE, "Password");
 
-		dmemset(password, 0, 20);
+		memset(password, 0, 20);
 		passData = passwordData;
 
 		// draw actual password

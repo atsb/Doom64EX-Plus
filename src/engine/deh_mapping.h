@@ -77,7 +77,7 @@ struct deh_mapping_entry_s
 
     // if true, this is a string value.
 
-    bool is_string;
+    boolean is_string;
 };
 
 struct deh_mapping_s
@@ -86,9 +86,9 @@ struct deh_mapping_s
     deh_mapping_entry_t entries[MAX_MAPPING_ENTRIES];
 };
 
-bool DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
+boolean DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
                        void *structptr, char *name, int value);
-bool DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
+boolean DEH_SetStringMapping(deh_context_t *context, deh_mapping_t *mapping,
                              void *structptr, char *name, char *value);
 void DEH_StructSHA1Sum(sha1_context_t *context, deh_mapping_t *mapping,
                        void *structptr);

@@ -20,13 +20,10 @@
 //
 //-----------------------------------------------------------------------------
 
-
-#if defined(__gl_h)
-#error "Ogl must be included before of i_w3swrapper.h"
-#endif
-
 #ifdef USE_STDINT 
 #include <stdint.h>
+#else
+#include "doomtype.h"
 #endif
 #ifdef _WIN32
 #include <fcntl.h>
@@ -42,12 +39,11 @@
 #define W32GetVersionEX(lpVersionInformation, wTypeMask, dwlConditionMask) VerifyVersionInfo(lpVersionInformation, wTypeMask, dwlConditionMask)
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
-//Read back the c89 bool
-#include <stdbool.h>
-typedef int dboolean;
-
-// Windows has this already in rpcndr.h
-#ifndef _WIN32
+#ifdef C89 //Adding again because some platforms don´t support stdbool.h
+#define false 0
+#define true 1
+typedef unsigned char boolean;
+#else
 typedef unsigned char boolean;
 #endif
 
@@ -85,6 +81,12 @@ typedef unsigned long long w3suint64_t;
 #define w3sread(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
 #define w3sclose(filehandle) _close(filehandle)
 #define w3sstrdup(source) _strdup(source)
+#define w3sstricmp(str1, str2, size) _stricmp(str1, str2)
+#define w3sstrupr(str) _strupr(str)
+#define w3sstrnicmp(str1, str2, size) _strnicmp(str1, str2, size)
+#define w3ssnprintf(buf, buffcount, format) _snprintf(buf, buffcount, format)
+#define w3svsnprintf(buf, buffcount, format, arglist) _vsnprintf(buf, buffcount, format, arglist)
+#define w3sstrlwr(str) _strlwr(str)
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
 #else
@@ -105,6 +107,13 @@ typedef unsigned long long w3suint64_t;
 #define w3sclose(filehandle) close(filehandle)
 #define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define w3sstrdup(source) strdup(source)
+#define w3sstrupr(str) strupr(str)
+#define w3sstricmp(str1, str2) stricmp(str1, str2)
+#define w3sstrnicmp(str1, str2, size) stricmp(str1, str2)
+#define w3sstrnicmp(str1, str2, size) strnicmp(str1, str2, size)
+#define w3ssnprintf(buf, buffcount, format) snprintf(buf, buffcount, format)
+#define w3svsnprintf vsnprintf(buf, buffcount, format, arglist)
+#define w3sstrlwr(str) strlwr(str)
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif
@@ -128,12 +137,16 @@ typedef unsigned long long w3suint64_t;
 #else
 void w3ssleep(dword usecs);
 #endif
-#ifdef HAVE_VSNPRINTF
-#ifdef WIN32
-#define w3svsnprintf(buffer, buffercount, format, arglist)  _vsnprintf(buffer, buffercount, format, arglist)
-#else
-#define w3svsnprintf(buffer, buffercount, format, arglist) vsnprintf(buffer, buffercount, format, arglist);
-#endif
-#else
+
+#ifdef NO_VSNPRINTF
 #define w3svsnprintf(buf, format, arg) vsprintf(buf, format, arg)
+#else
+int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
+
+int         htoi(int8_t* str);
+boolean    fcmp(float f1, float f2);
+
+
+#define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
+#define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]

@@ -61,7 +61,7 @@ vtxlist_t* DL_AddVertexList(drawlist_t* dl) {
 			(vtxlist_t*)Z_Realloc(dl->list,
 				dl->max * sizeof(vtxlist_t), PU_LEVEL, NULL);
 
-		dmemset(&dl->list[dl->max - 1], 0, sizeof(vtxlist_t));
+		memset(&dl->list[dl->max - 1], 0, sizeof(vtxlist_t));
 
 		list = &dl->list[dl->index];
 	}
@@ -99,13 +99,13 @@ static int SortSprites(const vtxlist_t* a, const vtxlist_t* b) {
 // DL_ProcessDrawList
 //
 
-void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
+void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 	drawlist_t* dl;
 	int i;
 	int drawcount = 0;
 	vtxlist_t* head;
 	vtxlist_t* tail;
-	dboolean checkNightmare = false;
+	boolean checkNightmare = false;
 
 	if (tag < 0 && tag >= NUMDRAWLISTS) {
 		return;
@@ -237,7 +237,7 @@ int DL_GetDrawListSize(int tag) {
 // DL_BeginDrawList
 //
 
-void DL_BeginDrawList(dboolean t) {
+void DL_BeginDrawList(boolean t) {
 	glSetVertex(drawVertex);
 	GL_SetTextureUnit(0, t);
 }

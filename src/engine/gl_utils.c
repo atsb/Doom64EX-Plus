@@ -2,7 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-// Copyright(C) 2022 Andr� Guilherme
+// Copyright(C) 2022 André Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -53,22 +53,22 @@ void glLogError(const int8_t* message, const int8_t* file, int line) {
 
 		switch (err) {
 		case GL_INVALID_ENUM:
-			dstrcpy(str, "INVALID_ENUM");
+			strcpy(str, "INVALID_ENUM");
 			break;
 		case GL_INVALID_VALUE:
-			dstrcpy(str, "INVALID_VALUE");
+			strcpy(str, "INVALID_VALUE");
 			break;
 		case GL_INVALID_OPERATION:
-			dstrcpy(str, "INVALID_OPERATION");
+			strcpy(str, "INVALID_OPERATION");
 			break;
 		case GL_STACK_OVERFLOW:
-			dstrcpy(str, "STACK_OVERFLOW");
+			strcpy(str, "STACK_OVERFLOW");
 			break;
 		case GL_STACK_UNDERFLOW:
-			dstrcpy(str, "STACK_UNDERFLOW");
+			strcpy(str, "STACK_UNDERFLOW");
 			break;
 		case GL_OUT_OF_MEMORY:
-			dstrcpy(str, "OUT_OF_MEMORY");
+			strcpy(str, "OUT_OF_MEMORY");
 			break;
 		default:
 			sprintf(str, "0x%x", err);

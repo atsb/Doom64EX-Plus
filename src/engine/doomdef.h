@@ -42,52 +42,10 @@
 #include "doomtype.h"
 #include "d_keywds.h"
 #include "tables.h"
-
-// build version
-extern const int8_t version_date[];
-
-void        _dprintf(const int8_t* s, ...);
-void* dmemcpy(void* s1, const void* s2, size_t n);
-void* dmemset(void* s, dword c, size_t n);
-int8_t* dstrcpy(int8_t* dest, const int8_t* src);
-void        dstrncpy(int8_t* dest, const int8_t* src, int maxcount);
-int         dstrcmp(const int8_t* s1, const int8_t* s2);
-int         dstrncmp(const int8_t* s1, const int8_t* s2, int len);
-int         dstricmp(const int8_t* s1, const int8_t* s2);
-int         dstrnicmp(const int8_t* s1, const int8_t* s2, int len);
-void        dstrupr(int8_t* s);
-void        dstrlwr(int8_t* s);
-int         dstrlen(const int8_t* string);
-int8_t* dstrrchr(int8_t* s, int8_t c);
-void        dstrcat(int8_t* dest, const int8_t* src);
-int8_t* dstrstr(int8_t* s1, int8_t* s2);
-int         datoi(const int8_t* str);
-float       datof(int8_t* str);
-int         dhtoi(int8_t* str);
-dboolean    dfcmp(float f1, float f2);
-int         dsprintf(int8_t* buf, const int8_t* format, ...);
-int         dsnprintf(int8_t* src, size_t n, const int8_t* str, ...);
-
-extern int D_abs(int x);
-extern float D_fabs(float x);
-
-#define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
-#define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
-
+#include "i_w3swrapper.h"
 
 // #define macros to provide functions missing in Windows.
 // Outside Windows, we use strings.h for str[n]casecmp.
-
-#ifdef _WIN32
-
-#define snprintf _snprintf
-#define vsnprintf _vsnprintf
-
-#else
-
-#include <strings.h>
-
-#endif
 
 //
 // The packed attribute forces structures to be packed into the minimum
@@ -260,7 +218,7 @@ enum {
 	COMPATF_MOBJPASS = (1 << 1)     // allow mobjs to stand on top one another
 };
 
-extern dboolean windowpause;
+extern boolean windowpause;
 
 //
 // DOOM keyboard definition.

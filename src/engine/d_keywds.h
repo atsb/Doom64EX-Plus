@@ -69,7 +69,6 @@
 #define ITOA_NAME itoa
 #endif
 #ifdef _MSC_VER
-//#define HAVE_ITOA
 #define ITOA_NAME _itoa
 #endif
 #endif

@@ -53,4 +53,4 @@ void I_StartTic(void);
 void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
-dboolean I_UpdateGrab(void);
+boolean I_UpdateGrab(void);

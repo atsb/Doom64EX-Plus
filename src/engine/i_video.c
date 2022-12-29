@@ -46,6 +46,8 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "gl_main.h"
+const int8_t version_date[] = __DATE__;
+
 SDL_Window* window;
 SDL_GLContext   glContext;
 
@@ -61,7 +63,7 @@ SDL_Surface* screen;
 int video_width;
 int video_height;
 float video_ratio;
-dboolean window_focused;
+boolean window_focused;
 
 int mouse_x = 0;
 int mouse_y = 0;
@@ -93,12 +95,12 @@ void I_InitScreen(void) {
 
 	p = M_CheckParm("-width");
 	if (p && p < myargc - 1) {
-		newwidth = datoi(myargv[p + 1]);
+		newwidth = atoi(myargv[p + 1]);
 	}
 
 	p = M_CheckParm("-height");
 	if (p && p < myargc - 1) {
-		newheight = datoi(myargv[p + 1]);
+		newheight = atoi(myargv[p + 1]);
 	}
 
 	if (newwidth && newheight) {

@@ -104,7 +104,7 @@ void P_SpectateMove(player_t* player, angle_t angle, angle_t pitch, fixed_t move
 
     player->mo->x += FixedMul(frac, dcos(angle));
     player->mo->y += FixedMul(frac, dsin(angle));
-    player->mo->z += FixedMul(move, dcos(D_abs(pitch - ANG90)));
+    player->mo->z += FixedMul(move, dcos(abs(pitch - ANG90)));
 
     P_SetThingPosition(player->mo);
 }
@@ -656,7 +656,7 @@ void P_PlayerThink(player_t* player) {
             }
         }
         else {  // 20120211 villsa - new weapon cycle logic
-            dboolean direction;
+            boolean direction;
             int weapon;
 
             newweapon = player->pendingweapon;

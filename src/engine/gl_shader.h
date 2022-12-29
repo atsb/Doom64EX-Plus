@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 Andr� Guilherme
+// Copyright(C) 2022 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@
 */
 void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
-dboolean GL_CheckShaderErrors(uint32_t shader, uint32_t type);
+boolean GL_CheckShaderErrors(uint32_t shader, uint32_t type);
 void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment);
 
 #endif //__GL_SHADER__H

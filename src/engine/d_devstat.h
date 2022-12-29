@@ -25,6 +25,6 @@
 #include "d_event.h"
 void D_DeveloperDisplay(void);
 void D_BoyISuck(void);
-dboolean D_DevKeyResponder(event_t* ev);
+boolean D_DevKeyResponder(event_t* ev);
 
 #endif

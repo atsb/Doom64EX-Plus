@@ -34,6 +34,7 @@
 #include "m_misc.h"
 #include "m_random.h"
 #include "con_console.h"
+#include "i_system.h"
 
 #ifdef _WIN32
 #include "i_opndir.h"
@@ -44,21 +45,21 @@
 #endif
 
 void        G_DoLoadLevel(void);
-dboolean    G_CheckDemoStatus(void);
+boolean    G_CheckDemoStatus(void);
 void        G_ReadDemoTiccmd(ticcmd_t* cmd);
 void        G_WriteDemoTiccmd(ticcmd_t* cmd);
 
 FILE* demofp;
 byte* demo_p;
 int8_t            demoname[256];
-dboolean        demorecording = false;
-dboolean        demoplayback = false;
-dboolean        netdemo = false;
+boolean        demorecording = false;
+boolean        demoplayback = false;
+boolean        netdemo = false;
 byte* demobuffer;
 byte* demoend;
-dboolean        singledemo = false;    // quit after playing a demo from cmdline
-dboolean        endDemo;
-dboolean        iwadDemo = false;
+boolean        singledemo = false;    // quit after playing a demo from cmdline
+boolean        endDemo;
+boolean        iwadDemo = false;
 
 extern int      starttime;
 
@@ -131,8 +132,8 @@ void G_RecordDemo(const int8_t* name) {
 	demofp = NULL;
 	endDemo = false;
 
-	dstrcpy(demoname, name);
-	dstrcat(demoname, ".lmp");
+	strcpy(demoname, name);
+	strcat(demoname, ".lmp");
 	if (w3saccess(demoname, F_OK))
 	{
 		demofp = fopen(demoname, "wb");
@@ -214,11 +215,11 @@ void G_PlayDemo(const int8_t* name) {
 	p = M_CheckParm("-playdemo");
 	if (p && p < myargc - 1) {
 		// 20120107 bkw: add .lmp extension if missing.
-		if (dstrrchr(myargv[p + 1], '.')) {
-			dstrcpy(filename, myargv[p + 1]);
+		if (strrchr(myargv[p + 1], '.')) {
+			strncpy(filename, myargv[p + 1], myargv[p + 1]);
 		}
 		else {
-			dsprintf(filename, "%s.lmp", myargv[p + 1]);
+			sprintf(filename, "%s.lmp", myargv[p + 1]);
 		}
 
 		CON_DPrintf("--------Reading demo %s--------\n", filename);
@@ -291,7 +292,7 @@ void G_PlayDemo(const int8_t* name) {
 // Returns true if a new demo loop action will take place
 //
 
-dboolean G_CheckDemoStatus(void) {
+boolean G_CheckDemoStatus(void) {
 	if (endDemo) {
 		demorecording = false;
 		fputc(DEMOMARKER, demofp);

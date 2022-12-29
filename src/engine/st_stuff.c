@@ -77,8 +77,8 @@ CVAR_EXTERNAL(v_accessibility);
 //
 
 typedef struct {
-	dboolean    active;
-	dboolean    doDraw;
+	boolean    active;
+	boolean    doDraw;
 	int         delay;
 	int         times;
 } keyflash_t;
@@ -115,8 +115,8 @@ static byte             st_flash_g;
 static byte             st_flash_b;
 static byte             st_flash_a;
 static int              st_jmessages[ST_JMESSAGES];   // japan-specific messages
-static dboolean         st_hasjmsg = false;
-static dboolean         st_wpndisplay_show;
+static boolean         st_hasjmsg = false;
+static boolean         st_wpndisplay_show;
 static byte             st_wpndisplay_alpha;
 static int              st_wpndisplay_ticks;
 
@@ -161,7 +161,7 @@ typedef struct {
 
 static stchat_t stchat[MAXCHATNODES];
 static int st_chatcount = 0;
-dboolean st_chatOn = false;
+boolean st_chatOn = false;
 static int8_t st_chatstring[MAXPLAYERS][MAXCHATSIZE];
 
 #define STQUEUESIZE        256
@@ -519,7 +519,7 @@ static void ST_DrawKey(int key, const float uv[4][2], const float xy[4][2]) {
 
 	if (plyr->cards[key] ||
 		(flashCards[key].doDraw && flashCards[key].active)) {
-		dmemcpy(keydrawxy, xy, (sizeof(float) * 4) * 2);
+		memcpy(keydrawxy, xy, (sizeof(float) * 4) * 2);
 
 		if (st_drawhud.value >= 2) {
 			keydrawxy[0][0] += 20;
@@ -737,7 +737,7 @@ static void ST_DrawJMessage(int pic) {
 //
 
 void ST_Drawer(void) {
-	dboolean checkautomap;
+	boolean checkautomap;
 
 	//
 	// flash overlay
@@ -884,7 +884,7 @@ void ST_Drawer(void) {
 		mapdef_t* map = P_GetMapInfo(gamemap);
 
 		if (map) {
-			dmemset(&str, 0, 128);
+			memset(&str, 0, 128);
 
 			if (map->type == 2) {
 				sprintf(str, "%s", map->mapname);
@@ -956,7 +956,7 @@ void ST_Drawer(void) {
 				G_GetActionBindings(usestring, "+use");
 				sprintf(contextstring, "(%s)Use", usestring);
 
-				x = (160 / 0.75f) - ((dstrlen(contextstring) * 8) / 2);
+				x = (160 / 0.75f) - ((strlen(contextstring) * 8) / 2);
 
 				Draw_Text((int)x, 214, WHITEALPHA(0xA0), 0.75f, false, contextstring);
 			}
@@ -1110,7 +1110,7 @@ void ST_Init(void) {
 
 	for (i = 0; i < MAXPLAYERS; i++) {
 		if (playeringame[i] && net_player_names[i][0]) {
-			snprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]);
+			w3ssnprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]);
 		}
 	}
 
@@ -1122,8 +1122,8 @@ void ST_Init(void) {
 		stchat[i].color = 0;
 	}
 
-	dmemset(st_chatstring, 0, MAXPLAYERS * MAXCHATSIZE);
-	dmemset(st_chatqueue, 0, STQUEUESIZE);
+	memset(st_chatstring, 0, MAXPLAYERS * MAXCHATSIZE);
+	memset(st_chatqueue, 0, STQUEUESIZE);
 
 	// setup crosshairs
 
@@ -1151,8 +1151,8 @@ void ST_AddChatMsg(int8_t* msg, int player) {
 	int8_t str[MAXCHATSIZE];
 
 	sprintf(str, "%s: %s", player_names[player], msg);
-	dmemset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
-	memcpy(stchat[st_chatcount].msg, str, dstrlen(str));
+	memset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
+	memcpy(stchat[st_chatcount].msg, str, strlen(str));
 	stchat[st_chatcount].tics = MAXCHATTIME;
 	stchat[st_chatcount].color = st_chatcolors[player];
 	st_chatcount = (st_chatcount + 1) % MAXCHATNODES;
@@ -1250,7 +1250,7 @@ int8_t ST_DequeueChatChar(void) {
 // ST_FeedChatMsg
 //
 
-static dboolean st_shiftOn = false;
+static boolean st_shiftOn = false;
 static void ST_FeedChatMsg(event_t* ev) {
 	int c;
 
@@ -1277,9 +1277,9 @@ static void ST_FeedChatMsg(event_t* ev) {
 		ST_QueueChatChar((int8_t)c);
 		break;
 	case KEY_ESCAPE:
-		len = dstrlen(st_chatstring[consoleplayer]);
+		len = strlen(st_chatstring[consoleplayer]);
 		st_chatOn = false;
-		dmemset(st_chatstring[consoleplayer], 0, len);
+		memset(st_chatstring[consoleplayer], 0, len);
 		break;
 	case KEY_SHIFT:
 		if (ev->type == ev_keydown) {
@@ -1349,13 +1349,13 @@ static void ST_EatChatMsg(void) {
 
 		c = players[i].cmd.chatchar;
 
-		len = dstrlen(st_chatstring[i]);
+		len = strlen(st_chatstring[i]);
 
 		switch (c) {
 		case KEY_ENTER:
 		case KEY_KEYPADENTER:
 			ST_AddChatMsg(st_chatstring[i], i);
-			dmemset(st_chatstring[i], 0, len);
+			memset(st_chatstring[i], 0, len);
 			break;
 		case KEY_BACKSPACE:
 			st_chatstring[i][MAX(len--, 0)] = 0;
@@ -1372,7 +1372,7 @@ static void ST_EatChatMsg(void) {
 // Respond to keyboard input events, intercept cheats.
 //
 
-dboolean ST_Responder(event_t* ev) {
+boolean ST_Responder(event_t* ev) {
 	M_CheatProcess(plyr, ev);
 
 	if (netgame) {
@@ -1497,7 +1497,7 @@ static void ST_DisplayName(int playernum) {
 	color |= ((255 - (int)((float)distance * 0.19921875f)) << 24);
 
 	// display player name
-	dsnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
+	w3ssnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
 	Draw_Text(screenx, screeny, color, 1.0f, 0, name);
 }
 

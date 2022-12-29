@@ -75,8 +75,8 @@ static SDL_sem *semaphore = NULL;
 #define SEMAPHORE_LOCK()    if(SDL_SemWait(semaphore) == 0) {
 #define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
 
-// 20120205 villsa - bool to determine if sequencer is ready or not
-static dboolean seqready = false;
+// 20120205 villsa - boolean to determine if sequencer is ready or not
+static boolean seqready = false;
 
 //
 // DEFINES
@@ -175,11 +175,11 @@ typedef struct {
     uint64_t      starttime;
     uint64_t      curtime;
     chanstate_e state;
-    dboolean    paused;
+    boolean    paused;
 
     // read by audio thread but only
     // modified by game code
-    dboolean    stop;
+    boolean    stop;
     float       basevol;
 } channel_t;
 
@@ -363,7 +363,7 @@ static byte Chan_GetNextMidiByte(channel_t* chan) {
 // Checks if the midi reader has reached the end
 //
 
-static dboolean Chan_CheckTrackEnd(channel_t* chan) {
+static boolean Chan_CheckTrackEnd(channel_t* chan) {
     return ((dword)(chan->pos - chan->song->data) >= chan->song->length);
 }
 
@@ -428,7 +428,7 @@ static void Song_ClearPlaylist(void) {
     int i;
 
     for(i = 0; i < MIDI_CHANNELS; i++) {
-        dmemset(&playlist[i], 0, sizeof(song_t));
+        memset(&playlist[i], 0, sizeof(song_t));
 
         playlist[i].id      = i;
         playlist[i].state   = CHAN_STATE_READY;
@@ -439,7 +439,7 @@ static void Song_ClearPlaylist(void) {
 // Chan_RemoveTrackFromPlaylist
 //
 
-static dboolean Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
+static boolean Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
     if(!chan->song || !chan->track) {
         return false;
     }
@@ -624,7 +624,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
     // mostly for debugging/logging
     case MIDI_MESSAGE:
         b = Chan_GetNextMidiByte(chan);
-        dmemset(string, 0, 256);
+        memset(string, 0, 256);
 
         for(i = 0; i < b; i++) {
             string[i] = Chan_GetNextMidiByte(chan);
@@ -824,7 +824,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 // Chan_CheckState
 //
 
-static dboolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
+static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
     if(chan->state == CHAN_STATE_ENDED) {
         return true;
     }
@@ -979,7 +979,7 @@ static void Seq_RunSong(doomseq_t* seq, dword msecs) {
 // Allocate data for all tracks for a midi song
 //
 
-static dboolean Song_RegisterTracks(song_t* song) {
+static boolean Song_RegisterTracks(song_t* song) {
     int i;
     byte* data;
 
@@ -989,8 +989,8 @@ static dboolean Song_RegisterTracks(song_t* song) {
     for(i = 0; i < song->ntracks; i++) {
         track_t* track = &song->tracks[i];
 
-        dmemcpy(track, data, 8);
-        if(dstrncmp(track->header, "MTrk", 4)) {
+        memcpy(track, data, 8);
+        if(strncmp(track->header, "MTrk", 4)) {
             return false;
         }
 
@@ -1011,7 +1011,7 @@ static dboolean Song_RegisterTracks(song_t* song) {
 // Allocate data for all midi songs
 //
 
-static dboolean Seq_RegisterSongs(doomseq_t* seq) {
+static boolean Seq_RegisterSongs(doomseq_t* seq) {
     int i;
     int start;
     int end;
@@ -1046,8 +1046,8 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
             continue;
         }
 
-        dmemcpy(song, song->data, 0x0e);
-        if(dstrncmp(song->header, "MThd", 4)) {
+        memcpy(song, song->data, 0x0e);
+        if(strncmp(song->header, "MThd", 4)) {
             fail++;
             continue;
         }
@@ -1159,7 +1159,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 //
 
 void I_InitSequencer(void) {
-    dboolean sffound;
+    boolean sffound;
     int8_t *sfpath;
 
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
@@ -1182,7 +1182,7 @@ void I_InitSequencer(void) {
         return;
     }
 
-    dmemset(&doomseq, 0, sizeof(doomseq_t));
+    memset(&doomseq, 0, sizeof(doomseq_t));
 
     //
     // init sequencer thread
