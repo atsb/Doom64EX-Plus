@@ -290,7 +290,7 @@ void W_Init(void) {
 
 	W_Read(wadfile, 0, &header, sizeof(header));
 
-	if (w3sstrnicmp(header.identification, "IWAD", 4)) {
+	if (w3sstrncasecmp(header.identification, "IWAD", 4)) {
 		I_Error("W_Init: Invalid main IWAD id");
 	}
 

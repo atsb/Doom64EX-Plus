@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022 AndrÃ© Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -22,11 +22,9 @@
 
 #include "i_w3swrapper.h"
 #include <stdio.h>
-#include <stdarg.h>
 #include <stddef.h>
 #include <string.h>
 #include <time.h>
-
 #ifndef _WIN32
 void w3ssleep(dword usecs)
 {

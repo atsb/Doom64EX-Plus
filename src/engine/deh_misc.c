@@ -175,7 +175,7 @@ static void DEH_MiscParseLine(deh_context_t *context, char *line, void *tag)
 
     ivalue = atoi(value);
 
-    if (!w3sstrcasecmp(variable_name, "Monsters Infight"))
+    if (!w3sstricmp(variable_name, "Monsters Infight"))
     {
         // See notes above.
  
