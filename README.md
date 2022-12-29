@@ -138,7 +138,11 @@ Use the Visual Studio solution and project files provided in the `Windows` direc
 
 ## Nintendo Switch
 
-Use the Makefile.ns to build the nso and nro files.
+Use the deviktro with Makefile.ns to build the nso and nro files.
+
+## Xbox
+Use the vcproj provided on the xbox folder to compile with vs2003 and you will need to have the latest Xbox XDK Installed + a Windows XP Machine
+to compile it.
 
 ## Usage
 
@@ -168,7 +172,13 @@ Then, you can start playing:
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
 `~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
-### Windows
+## Windows
 
 The asset data files need to be located in the same directory as `DOOM64EX+.exe`.
 Then, you can start playing by launching `DOOM64EX+.exe` (or optionally by using `DOOM64EX+ Launcher.exe` instead).
+
+# PS Vita
+The data files will be atm on: `ux0:/data/DOOM64EX+`
+
+## Xbox
+At the moment the assets will be on the root.

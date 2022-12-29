@@ -19,13 +19,11 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-
 #if defined(_WIN32) && defined(USE_XINPUT)
 #ifndef __I_XINPUT__
 #define __I_XINPUT__
 
 #include <windows.h>
-
 //
 // use Microsoft's bullcrap annotation macros if not already defined
 //
@@ -127,5 +125,5 @@ void        I_XInputVibrate(boolean leftside, byte amount, int windDown);
 void        I_XInputInit(void);
 void        I_InitXInputCommands(void);
 
-#endif // __I_XINPUT__
 #endif
+#endif // __I_XINPUT__

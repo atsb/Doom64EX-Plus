@@ -25,6 +25,14 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifdef __APPLE__
+#include <SDL2/SDL_timer.h>
+#elif defined(_XBOX)
+#include <time.h>
+#else
+#include <SDL_timer.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -34,7 +42,11 @@
 #include <pwd.h>
 #include <time.h>
 #else
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <windows.h>
+#endif
 #include <direct.h>
 #include <io.h>
 #endif

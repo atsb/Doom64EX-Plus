@@ -111,9 +111,13 @@ void I_InitScreen(void) {
 	}
 
 	usingGL = false;
-
+#ifdef _XBOX
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1); //FakeGL
+#else
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#endif
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);

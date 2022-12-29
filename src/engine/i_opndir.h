@@ -34,7 +34,11 @@
 #ifndef I_OPNDIR_H__
 #define I_OPNDIR_H__
 
+#ifdef _XBOX
+#include <SDL_stdinc.h>
+#else
 #include <stdint.h>
+#endif
 
 #ifdef _MSC_VER
 #include <direct.h>

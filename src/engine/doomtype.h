@@ -28,7 +28,11 @@
 #include <SDL_config.h> //Remove also here...
 #endif
 
+#ifdef _XBOX
+#include <SDL_stdinc.h>
+#else
 #include <stdint.h>
+#endif
 #include <limits.h>
 #ifndef C89
 #include <stdbool.h>

@@ -34,7 +34,11 @@
 #error i_exception.c is for Win32 only
 #endif
 
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <windows.h>
+#endif
 #include <tchar.h>
 #include "i_w3swrapper.h"
 

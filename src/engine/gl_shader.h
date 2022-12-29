@@ -24,6 +24,24 @@
 #define __GL_SHADER__H
 
 #include "doomtype.h"
+#ifndef _XBOX
+#ifdef _WIN32
+#include <glew.h>
+#endif
+#ifdef __APPLE__ 
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#elif defined SWITCH
+#include <GL/gl.h>
+#include <GL/glext.h>
+#elif defined(VITA)
+
+#else
+#include <GL/glu.h>
+#include <GL/gl.h>
+#endif
+#endif
+
 
 /*
 	Based on the following references:

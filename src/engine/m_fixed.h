@@ -30,6 +30,9 @@
 #else
 #include "i_w3swrapper.h"
 #endif
+#ifdef _XBOX
+#include <SDL_stdinc.h>
+#endif
 #ifdef __GNUG__
 #pragma interface
 #endif
@@ -37,7 +40,7 @@
 //
 // Fixed point, 32bit as 16.16.
 //
-#ifdef USE_FIXEDPTC
+#ifdef USE_FIXEDPTC 
 typedef fixedpt fixed_t;
 #else
 typedef w3suint64_t fixed_t;

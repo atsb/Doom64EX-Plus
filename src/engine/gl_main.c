@@ -29,10 +29,14 @@
 
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
+#ifdef _XBOX
+#include "fakeglx01.h"
+#else
 #include <SDL2/SDL_opengl.h>
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
+#endif
 #endif
 
 #include "doomdef.h"
