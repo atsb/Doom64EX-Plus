@@ -780,6 +780,8 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	if (special->flags & MF_COUNTSECRET) {
 		player->secretcount++;
+		player->message = FOUNDSECRETITEM;
+		player->messagepic = 40;
 	}
 
 	P_RemoveMobj(special);
