@@ -97,6 +97,7 @@
     <ClCompile Include="..\src\engine\w_wad.c" />
     <ClCompile Include="..\src\engine\wi_stuff.c" />
     <ClCompile Include="..\src\engine\z_zone.c" />
+    <ClCompile Include="..\src\engine\psnprntf.c" />
     <ClCompile Include="..\src\engine\i_w3swrapper.c" />
     <ClCompile Include="..\src\engine\gl_utils.c" />
   </ItemGroup>

@@ -30,7 +30,7 @@
 #else
 #include <SDL.h>
 #endif
-
+#include "gl_utils.h"
 #include "d_event.h"
 
 ////////////Video///////////////
@@ -43,5 +43,8 @@ void I_InitVideo(void);
 void I_InitScreen(void);
 void I_ShutdownVideo(void);
 void V_RegisterCvars();
+#ifdef USE_GLFW
+void I_ResizeCallback(OGL_DEFS, int width, int height);
+#endif
 
 #endif

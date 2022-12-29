@@ -54,6 +54,7 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * LibPNG
 * FluidSynth
 * OpenGL
+* GLFW
 
 ## System Requirements - 32 or 64bit
 

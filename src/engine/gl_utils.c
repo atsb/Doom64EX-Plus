@@ -18,11 +18,10 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 // 02111-1307, USA.
+//
+// DESCRIPTION:
+//		It stores some OpenGL utils here:
 // 
-//------------------------------------------------------------------------------
-
-#include "gl_utils.h"
-
 #ifdef __APPLE__
 #include <math.h>
 #endif
@@ -40,6 +39,21 @@ word statindice = 0;
 
 static word indicecnt = 0;
 static word drawIndices[MAXINDICES];
+
+void glGetVersion(int major, int minor)
+{
+	OGL_WINDOW_HINT(OGL_MAJOR_VERSION, major);
+	OGL_WINDOW_HINT(OGL_MINOR_VERSION, minor);
+}
+
+void glDestroyWindow(OGL_DEFS)
+{
+	if (Window)
+	{
+		OGL_DESTROY_WINDOW(Window);
+		Window = NULL;
+	}
+}
 
 //
 // glLogError

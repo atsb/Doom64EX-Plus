@@ -18,6 +18,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 // 02111-1307, USA.
 //
+// DESCRIPTION:
+//		OpenGL Shader compiling code.
+// 
 //-----------------------------------------------------------------------------
 
 #include "gl_shader.h"
@@ -63,7 +66,6 @@ void GL_LoadShader(const char* vertexShader, const char* fragmentShader)
 	GL_CreateProgram(ID, texture, fragment);
 
 	GL_DestroyShaders(texture, fragment);
-
 }
 
 void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment)
