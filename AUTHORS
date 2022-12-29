@@ -1,5 +1,5 @@
 This file is now the amalgamated list of authors, contributors and credits
-for Doom64 EX-Plus. Hopefully by keeping these all in one place, they will remain
+for Doom64EX+. Hopefully by keeping these all in one place, they will remain
 more accurate.
 
 Doom was originally written by id software; when playing with any id main
@@ -11,7 +11,7 @@ In October 1999, id Software re-released the Doom source code under the
 GNU General Public License.
 
 Samuel Villarreal <svkaiser@gmail.com>
-Doom64 EX Author
+Doom64EX Author
 
 Paul Brook
 Author of the Doom3D source port in which Doom64 EX was originally based off of
@@ -39,4 +39,7 @@ Team TNT
 For all Boom related enhancements and fixes.
 
 Adam 'Gibbon' Bilbrough
-Doom64EX-Plus Author
+Doom64EX+ Author
+
+André 'Wolf3s' Guilherme
+Doom64EX+ Major Contributor, Additional programming, multi-platform support and General Cleanup
