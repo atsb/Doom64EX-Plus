@@ -83,7 +83,7 @@ static CMD(DumpGLExtensions) {
 	int len = 0;
 
 	string = (int8_t*)glGetString(GL_EXTENSIONS);
-	len = dstrlen(string);
+	len = strlen(string);
 
 	for (i = 0; i < len; i++) {
 		if (string[i] == 0x20) {
@@ -121,7 +121,7 @@ static boolean FindExtension(const int8_t* ext) {
 		if (!where) {
 			break;
 		}
-		terminator = where + dstrlen(ext);
+		terminator = where + strlen(ext);
 		if (where == start || *(where - 1) == ' ') {
 			if (*terminator == ' ' || *terminator == '\0') {
 				return true;
@@ -490,7 +490,7 @@ static void CalcViewSize(void) {
 	ViewWidth = video_width;
 	ViewHeight = video_height;
 
-	widescreen = !dfcmp(((float)ViewWidth / (float)ViewHeight), (4.0f / 3.0f));
+	widescreen = !fcmp(((float)ViewWidth / (float)ViewHeight), (4.0f / 3.0f));
 
 	ViewWindowX = (video_width - ViewWidth) / 2;
 

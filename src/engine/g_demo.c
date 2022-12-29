@@ -132,8 +132,8 @@ void G_RecordDemo(const int8_t* name) {
 	demofp = NULL;
 	endDemo = false;
 
-	dstrcpy(demoname, name);
-	dstrcat(demoname, ".lmp");
+	strcpy(demoname, name);
+	strcat(demoname, ".lmp");
 	if (w3saccess(demoname, F_OK))
 	{
 		demofp = fopen(demoname, "wb");
@@ -215,11 +215,11 @@ void G_PlayDemo(const int8_t* name) {
 	p = M_CheckParm("-playdemo");
 	if (p && p < myargc - 1) {
 		// 20120107 bkw: add .lmp extension if missing.
-		if (dstrrchr(myargv[p + 1], '.')) {
-			dstrcpy(filename, myargv[p + 1]);
+		if (strrchr(myargv[p + 1], '.')) {
+			strncpy(filename, myargv[p + 1], myargv[p + 1]);
 		}
 		else {
-			dsprintf(filename, "%s.lmp", myargv[p + 1]);
+			sprintf(filename, "%s.lmp", myargv[p + 1]);
 		}
 
 		CON_DPrintf("--------Reading demo %s--------\n", filename);

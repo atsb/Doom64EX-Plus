@@ -100,7 +100,7 @@ void WI_Start(void) {
 		seconds = (leveltime / TICRATE) % 60;
 	}
 
-	dsnprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
+	snprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
 
 	// generate password
 	if (nextmap < 40) {

@@ -27,6 +27,8 @@
 
 #ifdef USE_STDINT 
 #include <stdint.h>
+#else
+#include "doomtype.h"
 #endif
 #ifdef _WIN32
 #include <fcntl.h>
@@ -43,7 +45,7 @@
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
 
-#ifdef C89 //Adding again becuse some platforms don´t support stdbool.h
+#ifdef C89 //Adding again because some platforms don´t support stdbool.h
 #define false 0
 #define true 1
 typedef unsigned char boolean;
@@ -84,6 +86,12 @@ typedef w3suint64_t dword;
 #define w3sread(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
 #define w3sclose(filehandle) _close(filehandle)
 #define w3sstrdup(source) _strdup(source)
+#define w3sstricmp(str1, str2, size) _stricmp(str1, str2)
+#define w3sstrupr(str) _strupr(str)
+#define w3sstrnicmp(str1, str2, size) _strnicmp(str1, str2, size)
+#define w3ssnprintf(buf, buffcount, format) _snprintf(buf, buffcount, format)
+#define w3svsnprintf(buf, buffcount, format, arglist) _vsnprintf(buf, buffcount, format, arglist)
+#define w3sstrlwr(str) _strlwr(str)
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
 #else
@@ -94,6 +102,13 @@ typedef w3suint64_t dword;
 #define w3sclose(filehandle) close(filehandle)
 #define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define w3sstrdup(source) strdup(source)
+#define w3sstrupr(str) strupr(str)
+#define w3sstricmp(str1, str2) stricmp(str1, str2)
+#define w3sstrnicmp(str1, str2, size) stricmp(str1, str2)
+#define w3sstrnicmp(str1, str2, size) strnicmp(str1, str2, size)
+#define w3ssnprintf(buf, buffcount, format) snprintf(buf, buffcount, format)
+#define w3svsnprintf vsnprintf(buf, buffcount, format, arglist)
+#define w3sstrlwr(str) strlwr(str)
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif
@@ -123,3 +138,10 @@ void w3ssleep(dword usecs);
 #else
 int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
+
+int         htoi(int8_t* str);
+boolean    fcmp(float f1, float f2);
+
+
+#define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
+#define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
