@@ -201,7 +201,7 @@ EV_DoPlat
 			if (plat->low > sec->floorheight)
 				plat->low = sec->floorheight;
 			plat->high = sec->floorheight;
-			plat->wait = 30 * PLATWAIT;
+			plat->wait = TICRATE * PLATWAIT;
 			plat->status = down;
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
@@ -214,7 +214,7 @@ EV_DoPlat
 				plat->speed = PLATSPEED*4;
 			plat->low = sec->floorheight - (globalint * FRACUNIT);
 			plat->high = sec->floorheight;
-			plat->wait = 30*PLATWAIT;
+			plat->wait = TICRATE * PLATWAIT;
 			plat->status = down;
 			S_StartSound((mobj_t *)&sec->soundorg,sfx_pstart);
 			break;
@@ -227,7 +227,7 @@ EV_DoPlat
 				plat->speed = PLATSPEED * 4;
 			plat->low = sec->floorheight;
 			plat->high = P_FindHighestFloorSurrounding(sec);
-			plat->wait = 30 * PLATWAIT;
+			plat->wait = TICRATE * PLATWAIT;
 			plat->status = up;
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
@@ -240,7 +240,7 @@ EV_DoPlat
 				plat->speed = PLATSPEED * 4;
 			plat->low = sec->floorheight;
 			plat->high = sec->floorheight + (globalint * FRACUNIT);
-			plat->wait = 30 * PLATWAIT;
+			plat->wait = TICRATE * PLATWAIT;
 			plat->status = up;
 			S_StartSound((mobj_t*)&sec->soundorg, sfx_pstart);
 			break;
