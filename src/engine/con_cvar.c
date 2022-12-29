@@ -109,7 +109,7 @@ int8_t* CON_CvarString(int8_t* name) {
 
 void CON_CvarSet(int8_t* var_name, int8_t* value) {
 	cvar_t* var;
-	dboolean changed;
+	int changed;
 
 	var = CON_CvarGet(var_name);
 	if (!var) {

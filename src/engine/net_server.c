@@ -42,6 +42,7 @@
 #include "net_packet.h"
 #include "net_server.h"
 #include "net_structure.h"
+#include "i_w3swrapper.h"
 
 typedef enum
 {
@@ -417,12 +418,7 @@ static void NET_SV_InitNewClient(net_client_t* client,
 	NET_Conn_InitServer(&client->connection, addr);
 	client->addr = addr;
 	client->last_send_time = -1;
-#ifdef _WIN32
-	client->name = _strdup(player_name);
-#else
-	client->name = strdup(player_name);
-#endif
-
+	client->name = w3sstrdup(player_name);
 	// init the ticcmd send queue
 
 	client->sendseq = 0;
@@ -815,7 +811,6 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 	int ackseq;
 	int num_tics;
 	uint32_t nowtime;
-	size_t i;
 	int player;
 	int resend_start, resend_end;
 	int index;
@@ -853,7 +848,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 	// Sanity checks
 
-	for (i = 0; i < num_tics; ++i)
+	for (size_t i = 0; i < num_tics; ++i)
 	{
 		net_ticdiff_t diff;
 		int32_t latency;

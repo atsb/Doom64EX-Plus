@@ -157,14 +157,16 @@
     <ClCompile Include="..\src\engine\deh_str.c" />
     <ClCompile Include="..\src\engine\deh_thing.c" />
     <ClCompile Include="..\src\engine\deh_weapon.c" />
-    <ClCompile Include="..\src\engine\dgl.c" />
     <ClCompile Include="..\src\engine\d_devstat.c" />
+    <ClCompile Include="..\src\engine\d_iwad.c" />
     <ClCompile Include="..\src\engine\d_main.c" />
     <ClCompile Include="..\src\engine\d_net.c" />
     <ClCompile Include="..\src\engine\f_finale.c" />
     <ClCompile Include="..\src\engine\gl_draw.c" />
     <ClCompile Include="..\src\engine\gl_main.c" />
-    <ClCompile Include="..\src\engine\gl_shader.c" />
+    <ClCompile Include="..\src\engine\gl_shader.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\src\engine\gl_texture.c" />
     <ClCompile Include="..\src\engine\gl_utils.c" />
     <ClCompile Include="..\src\engine\g_actions.c" />
@@ -173,14 +175,15 @@
     <ClCompile Include="..\src\engine\g_settings.c" />
     <ClCompile Include="..\src\engine\info.c" />
     <ClCompile Include="..\src\engine\in_stuff.c" />
-    <ClCompile Include="..\src\engine\i_audio.c">
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</WholeProgramOptimization>
-    </ClCompile>
+    <ClCompile Include="..\src\engine\i_audio.c" />
+    <ClCompile Include="..\src\engine\i_exception.c" />
     <ClCompile Include="..\src\engine\i_main.c" />
+    <ClCompile Include="..\src\engine\i_opndir.c" />
     <ClCompile Include="..\src\engine\i_png.c" />
     <ClCompile Include="..\src\engine\i_sdlinput.c" />
     <ClCompile Include="..\src\engine\i_system.c" />
     <ClCompile Include="..\src\engine\i_video.c" />
+    <ClCompile Include="..\src\engine\i_w3swrapper.c" />
     <ClCompile Include="..\src\engine\i_xinput.c" />
     <ClCompile Include="..\src\engine\md5.c" />
     <ClCompile Include="..\src\engine\m_cheat.c" />
@@ -242,18 +245,35 @@
     <ClCompile Include="..\src\engine\z_zone.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\engine\am_draw.h" />
+    <ClInclude Include="..\src\engine\am_map.h" />
+    <ClInclude Include="..\src\engine\con_console.h" />
+    <ClInclude Include="..\src\engine\con_cvar.h" />
+    <ClInclude Include="..\src\engine\deh_defs.h" />
+    <ClInclude Include="..\src\engine\deh_io.h" />
+    <ClInclude Include="..\src\engine\deh_main.h" />
+    <ClInclude Include="..\src\engine\deh_mapping.h" />
+    <ClInclude Include="..\src\engine\deh_misc.h" />
     <ClInclude Include="..\src\engine\deh_str.h" />
-    <ClInclude Include="..\src\engine\dgl.h" />
     <ClInclude Include="..\src\engine\doomdata.h" />
     <ClInclude Include="..\src\engine\doomdef.h" />
     <ClInclude Include="..\src\engine\doomstat.h" />
     <ClInclude Include="..\src\engine\doomtype.h" />
+    <ClInclude Include="..\src\engine\d_devstat.h" />
+    <ClInclude Include="..\src\engine\d_englsh.h" />
+    <ClInclude Include="..\src\engine\d_event.h" />
+    <ClInclude Include="..\src\engine\d_keywds.h" />
+    <ClInclude Include="..\src\engine\d_main.h" />
+    <ClInclude Include="..\src\engine\d_net.h" />
+    <ClInclude Include="..\src\engine\d_player.h" />
     <ClInclude Include="..\src\engine\d_think.h" />
     <ClInclude Include="..\src\engine\d_ticcmd.h" />
     <ClInclude Include="..\src\engine\f_finale.h" />
     <ClInclude Include="..\src\engine\gl_draw.h" />
     <ClInclude Include="..\src\engine\gl_main.h" />
-    <ClInclude Include="..\src\engine\gl_shader.h" />
+    <ClInclude Include="..\src\engine\gl_shader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\src\engine\gl_texture.h" />
     <ClInclude Include="..\src\engine\gl_utils.h" />
     <ClInclude Include="..\src\engine\g_actions.h" />
@@ -264,11 +284,13 @@
     <ClInclude Include="..\src\engine\g_settings.h" />
     <ClInclude Include="..\src\engine\info.h" />
     <ClInclude Include="..\src\engine\i_audio.h" />
+    <ClInclude Include="..\src\engine\i_opndir.h" />
     <ClInclude Include="..\src\engine\i_png.h" />
     <ClInclude Include="..\src\engine\i_sdlinput.h" />
     <ClInclude Include="..\src\engine\i_swap.h" />
     <ClInclude Include="..\src\engine\i_system.h" />
     <ClInclude Include="..\src\engine\i_video.h" />
+    <ClInclude Include="..\src\engine\i_w3swrapper.h" />
     <ClInclude Include="..\src\engine\i_xinput.h" />
     <ClInclude Include="..\src\engine\md5.h" />
     <ClInclude Include="..\src\engine\m_cheat.h" />
@@ -309,6 +331,7 @@
     <ClInclude Include="..\src\engine\r_things.h" />
     <ClInclude Include="..\src\engine\r_wipe.h" />
     <ClInclude Include="..\src\engine\sc_main.h" />
+    <ClInclude Include="..\src\engine\sha1.h" />
     <ClInclude Include="..\src\engine\sounds.h" />
     <ClInclude Include="..\src\engine\st_stuff.h" />
     <ClInclude Include="..\src\engine\s_sound.h" />
@@ -321,11 +344,140 @@
     <ClInclude Include="..\src\engine\z_zone.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\src\engine\defconfig.inc" />
+    <None Include="..\src\engine\doom64ex-plus.aps" />
+    <None Include="..\src\engine\doom64ex-plus.icns" />
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="..\src\engine\doom64ex-plus.ico" />
+    <Image Include="..\src\engine\doom64ex-plus.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />
   </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{f7595469-0b54-4529-b8fd-b73f4c061494}</ProjectGuid>
+    <RootNamespace>Doom64EX+</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>DOOM64EX+</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;USE_FIXEDPTC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes;$(ProjectDir)..\src\engine\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes;$(ProjectDir)..\src\engine\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x64</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes;$(ProjectDir)..\src\engine\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

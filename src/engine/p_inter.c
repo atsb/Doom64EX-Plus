@@ -95,11 +95,16 @@ dboolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 		return false;
 	}
 
-	if (num) {
+	if (num)
 		num *= clipammo[ammo];
-	}
-	else {
-		num = clipammo[ammo] / 2;
+	else
+	{
+		num = clipammo[ammo];
+		if (!(num >= 0))
+		{
+			num = num + 1;
+		}
+		num = num / 2;
 	}
 
 	if (gameskill == sk_baby
@@ -174,8 +179,7 @@ dboolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 // The weapon name may have a MF_DROPPED flag ored in.
 //
 dboolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, dboolean dropped) {
-	dboolean    gaveammo;
-	dboolean    gaveweapon;
+	dboolean gaveammo, gaveweapon;
 
 	if (netgame && (deathmatch != 2) && !dropped) {
 		if (item && item->flags & MF_TRIGTOUCH) {
@@ -370,8 +374,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	delta = special->z - toucher->z;
 
-	if (delta > toucher->height
-		|| delta < -8 * FRACUNIT) {
+	if (delta > toucher->height || delta < -8 * FRACUNIT) {
 		// out of reach
 		return;
 	}
@@ -769,8 +772,10 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 	}
 
-	if (special->flags & MF_COUNTITEM) {
-		player->itemcount++;
+	if (special->type != MT_FAKEITEM) {
+		if (special->flags & MF_COUNTITEM) {
+			player->itemcount++;
+		}
 	}
 
 	if (special->flags & MF_COUNTSECRET) {
@@ -806,6 +811,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_POSSESSED1:
 			if (z < 50) {
 				sprintf(omsg, "Immorpher will write a song\nin your honor.");
+			}
+			else if (z < 100) {
+				sprintf(omsg, "You got eaten by a wolf called: Wolf3s");
 			}
 			else {
 				sprintf(omsg, "you were tickled to death\nby a Zombieman.");
@@ -986,7 +994,7 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 // and other environmental stuff.
 //
 void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage) {
-	angle_t     ang;
+	angle_t     ang, an;
 	int         saved;
 	player_t* player;
 	fixed_t     thrust;
@@ -998,6 +1006,13 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 	if (target->health <= 0) {
 		return;
+	}
+
+	// [d64] stop all flying skull movement
+	if (target->flags & MF_SKULLFLY) {
+		target->momx = 0;
+		target->momy = 0;
+		target->momz = 0;
 	}
 
 	if (source && target) {
@@ -1013,13 +1028,6 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 				ST_AddDamageMarker(target, source);
 			}
 		}
-	}
-
-	// [d64] stop all flying skull movement
-	if (target->flags & MF_SKULLFLY) {
-		target->momx = 0;
-		target->momy = 0;
-		target->momz = 0;
 	}
 
 	player = target->player;
@@ -1038,33 +1046,29 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 		// make fall forwards sometimes
 		if (damage < 40 && damage > target->health &&
-			target->z - inflictor->z > 64 * FRACUNIT && (P_Random() & 1)) {
+			target->z - inflictor->z > 64 * FRACUNIT && (P_Random() & 1))
+		{
 			ang += ANG180;
 			thrust *= 4;
 		}
 
-		ang >>= ANGLETOFINESHIFT;
-
+		an = ang >> ANGLETOFINESHIFT;
 		thrust >>= 16;
-		target->momx += thrust * finecosine[ang];
-		target->momy += thrust * finesine[ang];
+		target->momx += thrust * finecosine[an];
+		target->momy += thrust * finesine[an];
 
-		if (target->momx < (16 * FRACUNIT)) {
-			if (target->momx < -(16 * FRACUNIT)) {
-				target->momx = -(16 * FRACUNIT);
-			}
-		}
-		else {
-			target->momx = (16 * FRACUNIT);
-		}
+		// [psx/d64]: clamp thrust for players only
+		if (target->player)
+		{
+			if (target->momx > MAXMOVE)
+				target->momx = MAXMOVE;
+			else if (target->momx < -MAXMOVE)
+				target->momx = -MAXMOVE;
 
-		if (target->momy < (16 * FRACUNIT)) {
-			if (target->momy < -(16 * FRACUNIT)) {
-				target->momy = -(16 * FRACUNIT);
-			}
-		}
-		else {
-			target->momy = (16 * FRACUNIT);
+			if (target->momy > MAXMOVE)
+				target->momy = MAXMOVE;
+			else if (target->momy < -MAXMOVE)
+				target->momy = -MAXMOVE;
 		}
 	}
 
@@ -1091,13 +1095,14 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 			player->armorpoints -= saved;
 			damage -= saved;
 		}
+		S_StartSound(target, sfx_plrpain);
 		player->health -= damage;       // mirror mobj health here for Dave
 		if (player->health < 0) {
 			player->health = 0;
 		}
 
 		player->attacker = source;
-		player->damagecount += (damage << 1);  // add damage after armor / invuln
+		player->damagecount += (damage);  // add damage after armor / invuln
 
 		if (player->damagecount > 100) {
 			player->damagecount = 100;    // teleport stomp does 10k points...
@@ -1121,24 +1126,24 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 		}
 	}
 
-	if ((P_Random() < target->info->painchance) && !(target->flags & MF_SKULLFLY)) {
+	if ((P_Random() < target->info->painchance) && !(target->flags & MF_SKULLFLY))
+	{
 		target->flags |= MF_JUSTHIT;    // fight back!
-		P_SetMobjState(target, target->info->painstate);
+		if (target->info->painstate)
+			P_SetMobjState(target, target->info->painstate);
 	}
 
 	target->reactiontime = 0;           // we're awake now...
-
-	if ((!(target->flags & MF_NOINFIGHTING)) &&
-		((!target->threshold) && source && source != target)) {
+	if (!target->threshold && source && (source->flags & MF_SHOOTABLE)
+		&& !(target->flags & MF_NOINFIGHTING))
+	{
 		// if not intent on another player,
 		// chase after this one
-
-		if (source->type != MT_DEST_PROJECTILE) {
-			P_SetTarget(&target->target, source);
-			target->threshold = BASETHRESHOLD;
-			if (target->state == &states[target->info->spawnstate] && target->info->seestate != S_NULL) {
-				P_SetMobjState(target, target->info->seestate);
-			}
+		P_SetTarget(&target->target, source);
+		target->threshold = BASETHRESHOLD;
+		if (target->state == &states[target->info->spawnstate] && target->info->seestate != S_NULL)
+		{
+			P_SetMobjState(target, target->info->seestate);
 		}
 	}
 }

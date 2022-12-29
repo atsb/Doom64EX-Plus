@@ -145,7 +145,6 @@ NETCVAR_PARAM(sv_allowcheats, 0, gameflags, GF_ALLOWCHEATS);
 NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE);
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
-NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
 
 CVAR_EXTERNAL(v_mlook);
@@ -159,6 +158,7 @@ CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
+CVAR_EXTERNAL(st_hud_color);
 
 //
 // G_RegisterCvars
@@ -166,7 +166,6 @@ CVAR_EXTERNAL(m_brutal);
 
 void G_RegisterCvars(void) {
 	CON_CvarRegister(&p_allowjump);
-	CON_CvarRegister(&p_autoaim);
 	CON_CvarRegister(&sv_nomonsters);
 	CON_CvarRegister(&sv_fastmonsters);
 	CON_CvarRegister(&sv_respawnitems);
@@ -178,6 +177,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&sv_keepitems);
 	CON_CvarRegister(&m_nospawnsound);
 	CON_CvarRegister(&m_brutal);
+	CON_CvarRegister(&st_hud_color);
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
 }
@@ -844,6 +844,41 @@ void G_ClearInput(void) {
 	}
 }
 
+#ifdef VITA
+//
+// G_DoCmdGamepadMove
+//
+
+extern float i_rsticksensitivity;
+CVAR_EXTERNAL(i_xinputscheme);
+
+void G_DoCmdGamepadMove(event_t *ev)
+{
+    // Most of this is taken from kaiser's xinput.c
+    playercontrols_t *pc = &Controls;
+
+    if (ev->type == ev_gamepad) {
+        pc->flags |= PCF_GAMEPAD;
+
+        //
+        // left analog stick
+        //
+        if (ev->data3 == GAMEPAD_LEFT_STICK) {
+            pc->joyx += (ev->data1) * 0.0015f;
+            pc->joyy += (ev->data2) * 0.0015f;
+        }
+        //
+        // right analog stick
+        //
+        else if (ev->data3 == GAMEPAD_RIGHT_STICK) {
+            int x = (ev->data1) * i_rsticksensitivity * 0.0015f;
+            int y = (ev->data2) * i_rsticksensitivity * 0.0015f;
+            pc->mousex += x;
+            pc->mousey += y;
+        }
+    }
+}
+#endif
 //
 // G_SetGameFlags
 //
@@ -857,8 +892,6 @@ static void G_SetGameFlags(void) {
 	if (sv_friendlyfire.value > 0)  gameflags |= GF_FRIENDLYFIRE;
 	if (sv_keepitems.value > 0)     gameflags |= GF_KEEPITEMS;
 	if (p_allowjump.value > 0)      gameflags |= GF_ALLOWJUMP;
-	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
-
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
 }
 
@@ -953,7 +986,10 @@ dboolean G_Responder(event_t* ev) {
 		}
 
 		if (demoplayback && gameaction == ga_nothing) {
-			if (ev->type == ev_keydown ||
+			if (
+#ifndef VITA			
+			ev->type == ev_keydown ||
+#endif
 				ev->type == ev_gamepad) {
 				G_CheckDemoStatus();
 				gameaction = ga_warpquick;
@@ -976,9 +1012,14 @@ dboolean G_Responder(event_t* ev) {
 	// Handle screen specific ticcmds
 	if (gamestate == GS_SKIPPABLE) {
 		if (gameaction == ga_nothing) {
+#ifdef VITA
+			if(ev->type == ev_keydown || 
+			(ev->type == ev_mouse && ev->data1)) {
+#else			
 			if (ev->type == ev_keydown ||
 				(ev->type == ev_mouse && ev->data1) ||
 				ev->type == ev_gamepad) {
+#endif				
 				gameaction = ga_title;
 				return true;
 			}

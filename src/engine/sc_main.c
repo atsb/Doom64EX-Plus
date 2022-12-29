@@ -48,6 +48,7 @@
 #include "m_misc.h"
 #include "sc_main.h"
 #include "con_console.h"
+#include "i_system.h"
 
 scparser_t sc_parser;
 
@@ -70,14 +71,14 @@ static void SC_Open(const int8_t* name) {
 		}
 	}
 	else {
-		sc_parser.buffer = (byte*)W_CacheLumpNum(lump, PU_STATIC);
+		sc_parser.buffer = W_CacheLumpNum(lump, PU_STATIC);
 		sc_parser.buffsize = W_LumpLength(lump);
 	}
 
 	CON_DPrintf("%s size: %ikb\n", name, sc_parser.buffsize >> 10);
 
-	sc_parser.pointer_start = (int8_t*)sc_parser.buffer;
-	sc_parser.pointer_end = (int8_t*)sc_parser.buffer + sc_parser.buffsize;
+	sc_parser.pointer_start = sc_parser.buffer;
+	sc_parser.pointer_end = sc_parser.buffer + sc_parser.buffsize;
 	sc_parser.linepos = 1;
 	sc_parser.rowpos = 1;
 	sc_parser.buffpos = 0;

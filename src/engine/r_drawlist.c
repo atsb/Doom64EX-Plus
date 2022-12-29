@@ -157,7 +157,7 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 
 			// setup texture ID
 			if (tag == DLT_SPRITE) {
-				intptr_t flags = ((visspritelist_t*)head->data)->spr->flags;
+				uint64_t flags = ((visspritelist_t*)head->data)->spr->flags;
 
 				// textid in sprites contains hack that stores palette index data
 				palette = head->texid >> 24;
@@ -167,11 +167,11 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 				// villsa 12152013 - change blend states for nightmare things
 				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
 					if (!checkNightmare && (flags & MF_NIGHTMARE)) {
-						dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+						glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
 						checkNightmare ^= 1;
 					}
 					else if (checkNightmare && !(flags & MF_NIGHTMARE)) {
-						dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						checkNightmare ^= 1;
 					}
 				}
@@ -183,9 +183,9 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 
 			// non sprite textures must repeat or mirrored-repeat
 			if (tag == DLT_WALL) {
-				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
 					head->flags & DLF_MIRRORS ? GL_MIRRORED_REPEAT : GL_REPEAT);
-				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
 
@@ -199,7 +199,7 @@ void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 				GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
 			}
 
-			dglDrawGeometry(drawcount, drawVertex);
+			glDrawGeometry(drawcount, drawVertex);
 
 			// count vertex size
 			if (devparm) {
@@ -238,7 +238,7 @@ int DL_GetDrawListSize(int tag) {
 //
 
 void DL_BeginDrawList(dboolean t) {
-	dglSetVertex(drawVertex);
+	glSetVertex(drawVertex);
 	GL_SetTextureUnit(0, t);
 }
 

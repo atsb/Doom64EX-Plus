@@ -832,7 +832,7 @@ static void P_LoadBlockMap(void) {
 
 	length = W_MapLumpLength(ML_BLOCKMAP);
 	blockmaplump = Z_Malloc(length, PU_LEVEL, 0);
-	src = (byte*)W_GetMapLump(ML_BLOCKMAP);
+	src = W_GetMapLump(ML_BLOCKMAP);
 	memmove(blockmaplump, src, length);
 
 	blockmap = blockmaplump + 4;//skip blockmap header

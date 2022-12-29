@@ -24,7 +24,10 @@
 #ifndef __M_MISC__
 #define __M_MISC__
 #include <stdarg.h>
+#ifndef C89
 #include <stdbool.h>
+#endif
+#include "i_w3swrapper.h"
 #include "doomtype.h"
 #include "m_fixed.h"
 #include "r_local.h"

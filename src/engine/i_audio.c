@@ -37,13 +37,12 @@
 #include <unistd.h>
 #endif
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#else
+#ifdef __APPLE__
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
 #endif
-
-#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
+#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
 #include <fluidsynth.h>
 #else
 #include <fluidlite.h> //ATSB: Fluidlite on WIN32/macOS and some other devices so we can distribute binaries without all the stupid dependencies
@@ -88,6 +87,14 @@ static dboolean seqready = false;
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
 #define MIDI_SEQUENCER  0x7f
+
+#define SAMPLE_RATE 44100
+#define SAMPLE_SIZE 2 //4: Float Buffer   2: Signed Int Buffer
+#define NUM_FRAMES SAMPLE_RATE
+#define SAMPLES 4096
+#define NUM_CHANNELS 2
+#define NUM_SAMPLES (NUM_FRAMES * NUM_CHANNELS)
+#define TIME_INTERVAL 1000000 //1500000:duration us
 
 //
 // MIDI DATA DEFINITIONS
@@ -165,8 +172,8 @@ typedef struct {
     dword       nexttic;
     dword       lasttic;
     dword       starttic;
-    Uint32      starttime;
-    Uint32      curtime;
+    uint64_t      starttime;
+    uint64_t      curtime;
     chanstate_e state;
     dboolean    paused;
 
@@ -188,8 +195,9 @@ static channel_t playlist[MIDI_CHANNELS];   // channels active in sequencer
 // by the audio thread.
 //
 
-typedef enum {
-    SEQ_SIGNAL_IDLE     = 0,    // idles. does nothing
+typedef int seqsignal_e;
+enum {
+    SEQ_SIGNAL_IDLE = 0,    // idles. does nothing
     SEQ_SIGNAL_SHUTDOWN,        // signal the sequencer to shutdown, cleaning up anything in the process
     SEQ_SIGNAL_READY,           // sequencer will read and play any midi track fed to it
     SEQ_SIGNAL_RESET,
@@ -198,7 +206,7 @@ typedef enum {
     SEQ_SIGNAL_STOPALL,
     SEQ_SIGNAL_SETGAIN,         // signal the sequencer to update output gain
     MAXSIGNALTYPES
-} seqsignal_e;
+};
 
 typedef union {
     sndsrc_t*   valsrc;
@@ -248,10 +256,10 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 // Callback for SDL
 //
-static void Audio_Play(void* user, Uint8* stream, int len)
+static void Audio_Play(void* data, Uint8* stream, int len)
 {
-    fluid_synth_t* synth = (fluid_synth_t*)user;
-    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, 2, stream, 1, 2);
+    fluid_synth_t* synth = (fluid_synth_t*)data;
+    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
 
 //
@@ -263,6 +271,19 @@ static void Audio_Play(void* user, Uint8* stream, int len)
 
 static void Seq_SetGain(doomseq_t* seq) {
     fluid_synth_set_gain(seq->synth, seq->gain);
+}
+
+//
+// Seq_SetReverb
+//
+
+static void Seq_SetReverb(doomseq_t* seq,
+    float size,
+    float damp,
+    float width,
+    float level) {
+    fluid_synth_set_reverb(seq->synth, size, damp, width, level);
+    fluid_synth_set_reverb_on(seq->synth, 1);
 }
 
 //
@@ -734,12 +755,17 @@ static int Signal_Pause(doomseq_t* seq) {
     channel_t* c;
 
     SEMAPHORE_LOCK()
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-    }
+        for (i = 0; i < MIDI_CHANNELS; i++) {
+            c = &playlist[i];
+
+            if (c->song && !c->paused) {
+                c->paused = true;
+                Chan_StopTrack(seq, c);
+            }
+        }
     SEMAPHORE_UNLOCK()
 
-    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -754,12 +780,17 @@ static int Signal_Resume(doomseq_t* seq) {
     channel_t* c;
 
     SEMAPHORE_LOCK()
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-    }
+        for (i = 0; i < MIDI_CHANNELS; i++) {
+            c = &playlist[i];
+
+            if (c->song && c->paused) {
+                c->paused = false;
+                fluid_synth_noteon(seq->synth, c->track->channel, c->key, c->velocity);
+            }
+        }
     SEMAPHORE_UNLOCK()
 
-    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -1046,8 +1077,29 @@ static dboolean Seq_RegisterSongs(doomseq_t* seq) {
 //
 
 static void Seq_Shutdown(doomseq_t* seq) {
+
+    //
+    // signal the sequencer to shut down
+    //
+    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
+
+    //
+    // wait until the audio thread is finished
+    //
+    SDL_WaitThread(seq->thread, NULL);
+
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
+
+    //
+    // fluidsynth cleanup stuff
+    //
+    delete_fluid_synth(seq->synth);
+    delete_fluid_settings(seq->settings);
+
+    seq->synth = NULL;
+    seq->driver = NULL;
+    seq->settings = NULL;
 }
 
 //
@@ -1061,7 +1113,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
     long start = SDL_GetTicks();
     long delay = 0;
     int status;
-    dword count = 0;
+    int count = 0;
     signalhandler signal;
 
     while(1) {
@@ -1200,6 +1252,7 @@ void I_InitSequencer(void) {
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
     Seq_SetGain(&doomseq);
+    Seq_SetReverb(&doomseq, 0.65f, 0.0f, 2.0f, 1.0f);
 
     //
     // if something went terribly wrong, then shutdown everything
@@ -1221,24 +1274,23 @@ void I_InitSequencer(void) {
 
     Song_ClearPlaylist();
 
-    SDL_Init(SDL_INIT_AUDIO);
-    SDL_AudioSpec spec;
-    SDL_zero(spec);
-    spec.format = AUDIO_S16;
-    spec.freq = 44100;
-    spec.samples = 4096;
-    spec.channels = 2;
-    spec.callback = Audio_Play;
-    spec.userdata = doomseq.synth;
-
-    int id;
-    if ((id = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0)) <= 0)
-    {
-        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-        exit(-1);
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
+        printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
 
-    SDL_PauseAudioDevice(id, SDL_FALSE);
+    SDL_AudioDeviceID audio_device;
+    SDL_AudioSpec required_spec;
+
+    SDL_memset(&required_spec, 0, sizeof(required_spec));
+    required_spec.format = AUDIO_S16;
+    required_spec.freq = SAMPLE_RATE;
+    required_spec.samples = SAMPLES;
+    required_spec.channels = NUM_CHANNELS;
+    required_spec.callback = Audio_Play;
+    required_spec.userdata = doomseq.synth;
+    audio_device = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0);
+
+    SDL_PauseAudioDevice(audio_device, SDL_FALSE);
 
     // 20120205 villsa - sequencer is now ready
     seqready = true;

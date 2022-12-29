@@ -5,6 +5,7 @@ Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
 * Support for the IWAD from Nightdive Studios' official remaster
+* Support for the Alpha Version of the game
 * Support for the Lost Levels campaign
 * Support for loading PWADs
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
@@ -135,6 +136,10 @@ Use the `build_openbsd.sh` script for a native build of OpenBSD
 ## Windows
 
 Use the Visual Studio solution and project files provided in the `Windows` directory of the repository for both 32-bit or 64-bit builds.
+
+## Nintendo Switch
+
+Use the Makefile.ns to build the nso and nro files.
 
 ## Usage
 

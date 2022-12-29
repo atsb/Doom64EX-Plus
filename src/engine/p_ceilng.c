@@ -31,7 +31,7 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "sounds.h"
-
+#include "i_system.h"
 //
 // CEILINGS
 //
@@ -155,12 +155,14 @@ int EV_DoCeiling(line_t* line, ceiling_e type, fixed_t speed) {
 		ceiling = Z_Malloc(sizeof(*ceiling), PU_LEVSPEC, 0);
 		P_AddThinker(&ceiling->thinker);
 		sec->specialdata = ceiling;
-		// Midway assumed that ceiling->instant is true only if the
-		// speed is equal to 2048*FRACUNIT, which doesn't seem very sufficient
-		ceiling->instant = (speed >= (CEILSPEED * 1024));
 		ceiling->thinker.function.acp1 = (actionf_p1)T_MoveCeiling;
 		ceiling->sector = sec;
 		ceiling->crush = false;
+
+		if (speed == (4096 * FRACUNIT))
+			ceiling->instant = true;
+		else
+			ceiling->instant = false;
 
 		switch (type) {
 		case silentCrushAndRaise:

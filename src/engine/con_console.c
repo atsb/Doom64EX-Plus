@@ -36,11 +36,12 @@
 #include "i_system.h"
 #include "gl_texture.h"
 
-#ifdef __OpenBSD__
-#include <SDL.h>
+
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
 #else
-#include <SDL2/SDL.h> // Gibbon - for *
-#endif
+#include <SDL.h> // Gibbon - for *
+#endif 
 
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2
@@ -67,17 +68,17 @@ static conline_t** console_buffer;
 static int          console_head;
 static int          console_lineoffset;
 static int          console_minline;
-static dboolean     console_enabled = false;
-static int8_t         console_linebuffer[CON_BUFFERSIZE];
+static bool			console_enabled = false;
+static int8_t       console_linebuffer[CON_BUFFERSIZE];
 static int          console_linelength;
-static dboolean     console_state = CST_UP;
+static int			console_state = CST_UP;
 static int          console_prevcmds[CMD_HISTORY_SIZE];
 static int          console_cmdhead;
 static int          console_nextcmd;
 
 int8_t        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
 int         console_inputlength;
-dboolean    console_initialized = false;
+bool    console_initialized = false;
 
 //
 // CON_Init
@@ -121,7 +122,7 @@ void CON_Init(void) {
 void CON_AddLine(int8_t* line, int len) {
 	conline_t* cline;
 	int         i;
-	dboolean    recursed = false;
+	bool    recursed = false;
 
 	if (!console_linebuffer) {
 		//not initialised yet
@@ -247,7 +248,7 @@ void CON_DPrintf(const int8_t* s, ...) {
 // CON_ParseKey
 //
 
-static dboolean shiftdown = false;
+static bool shiftdown = false;
 
 void CON_ParseKey(int8_t c) {
 	if (c < ' ') {
@@ -277,8 +278,8 @@ void CON_ParseKey(int8_t c) {
 // CON_Ticker
 //
 
-static dboolean keyheld = false;
-static dboolean lastevent = 0;
+static bool keyheld = false;
+static int lastevent = 0;
 static int lastkey = 0;
 static int ticpressed = 0;
 
@@ -298,9 +299,9 @@ void CON_Ticker(void) {
 
 void G_ClearInput(void);
 
-dboolean CON_Responder(event_t* ev) {
+bool CON_Responder(event_t* ev) {
 	int c;
-	dboolean clearheld = true;
+	bool clearheld = true;
 
 	if ((ev->type != ev_keyup) && (ev->type != ev_keydown)) {
 		return false;
@@ -476,20 +477,20 @@ void CON_Draw(void) {
 	GL_SetOrtho(1);
 	GL_SetState(GLSTATE_BLEND, 1);
 
-	dglDisable(GL_TEXTURE_2D);
-	dglColor4ub(0, 0, 0, 128);
-	dglRectf(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD, 0, 0);
+	glDisable(GL_TEXTURE_2D);
+	glColor4ub(0, 0, 0, 128);
+	glRectf(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD, 0, 0);
 
 	GL_SetState(GLSTATE_BLEND, 0);
 
-	dglColor4f(0, 1, 0, 1);
-	dglBegin(GL_LINES);
-	dglVertex2f(0, CONSOLE_Y - 1);
-	dglVertex2f(SCREENWIDTH, CONSOLE_Y - 1);
-	dglVertex2f(0, CONSOLE_Y + CONFONT_YPAD);
-	dglVertex2f(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD);
-	dglEnd();
-	dglEnable(GL_TEXTURE_2D);
+	glColor4f(0, 1, 0, 1);
+	glBegin(GL_LINES);
+	glVertex2f(0, CONSOLE_Y - 1);
+	glVertex2f(SCREENWIDTH, CONSOLE_Y - 1);
+	glVertex2f(0, CONSOLE_Y + CONFONT_YPAD);
+	glVertex2f(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
 
 	line = console_head;
 

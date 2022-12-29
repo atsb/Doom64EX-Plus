@@ -419,6 +419,10 @@ dboolean G_ActionResponder(event_t* ev) {
 	case ev_gamepad:
 		I_XInputReadActions(ev);
 		break;
+#elif defined(VITA)
+	case ev_gamepad:
+		G_DoCmdGamepadMove(ev);
+		break;
 #endif
 	}
 

@@ -42,13 +42,14 @@
 
 #include <stdlib.h>
 
+
 #define MAX_SPRITES    1024
 
 spritedef_t* spriteinfo;
-intptr_t             numsprites;
+int             numsprites;
 
 spriteframe_t   sprtemp[29];
-int             maxframe;
+int32_t             maxframe;
 int8_t* spritename;
 
 static visspritelist_t visspritelist[MAX_SPRITES];
@@ -66,29 +67,31 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, dboolean flipped) {
-	int    r;
+void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
+	boolean flipped)
+{
+	int r;
 
-	if (frame >= 29 || rotation > 8) {
+	if (frame >= 26 || rotation > 8)
 		I_Error("R_InstallSpriteLump: Bad frame characters in lump %i", lump);
-	}
 
-	if ((int)frame > maxframe) {
+	if ((int)frame > maxframe)
 		maxframe = frame;
-	}
 
-	if (rotation == 0) {
+	if (rotation == 0)
+	{
 		// the lump should be used for all rotations
-		if (sprtemp[frame].rotate == false) {
-			I_Error("R_InitSprites: Sprite %s frame %c has multiple rot=0 lump", spritename, 'A' + frame);
-		}
-
-		if (sprtemp[frame].rotate == true) {
-			I_Error("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump", spritename, 'A' + frame);
-		}
+		if (sprtemp[frame].rotate == false)
+			I_Error("R_InitSprites: Sprite %s frame %c has multip rot=0 lump",
+				spritename, 'A' + frame);
+		if (sprtemp[frame].rotate == true)
+			I_Error
+			("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump",
+				spritename, 'A' + frame);
 
 		sprtemp[frame].rotate = false;
-		for (r = 0; r < 8; r++) {
+		for (r = 0; r < 8; r++)
+		{
 			sprtemp[frame].lump[r] = lump - s_start;
 			sprtemp[frame].flip[r] = (byte)flipped;
 		}
@@ -96,16 +99,17 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, dboolean f
 	}
 
 	// the lump is only used for one rotation
-	if (sprtemp[frame].rotate == false) {
-		I_Error("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump", spritename, 'A' + frame);
-	}
+	if (sprtemp[frame].rotate == false)
+		I_Error
+		("R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump",
+			spritename, 'A' + frame);
 
 	sprtemp[frame].rotate = true;
 
-	// make 0 based
-	rotation--;
-	if ((sprtemp[frame].lump[rotation] != -1))
-		I_Error("R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it",
+	rotation--;                 // make 0 based
+	if (sprtemp[frame].lump[rotation] != -1)
+		I_Error
+		("R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it",
 			spritename, 'A' + frame, '1' + rotation);
 
 	sprtemp[frame].lump[rotation] = lump - s_start;
@@ -132,12 +136,10 @@ void R_InitSprites(int8_t** namelist) {
 	int8_t** check;
 	int     i;
 	int     l;
-	int     intname;
 	int     frame;
 	int     rotation;
 	int     start;
 	int     end;
-	int     patched;
 
 	// count the number of sprite names
 	check = namelist;
@@ -162,30 +164,30 @@ void R_InitSprites(int8_t** namelist) {
 
 	for (i = 0; i < numsprites; i++) {
 		spritename = namelist[i];
-		dmemset(sprtemp, -1, sizeof(sprtemp));
+		memset(sprtemp, -1, sizeof(sprtemp));
 
 		maxframe = -1;
-		intname = *(int*)namelist[i];
 
 		// scan the lumps,
 		//  filling in the frames for whatever is found
 
-		for (l = start + 1; l < end; l++) {
-			if (*(int*)lumpinfo[l].name == intname) {
+		for (l = start + 1; l < end; l++)
+#ifdef _WIN32
+			if (!_strnicmp(lumpinfo[l].name, spritename, 4))
+#else
+			if (!strncasecmp(lumpinfo[l].name, spritename, 4))
+#endif
+			{
 				frame = lumpinfo[l].name[4] - 'A';
 				rotation = lumpinfo[l].name[5] - '0';
-
-				patched = l;
-
-				R_InstallSpriteLump(patched, frame, rotation, false);
-
-				if (lumpinfo[l].name[6]) {
+				R_InstallSpriteLump(l, frame, rotation, false);
+				if (lumpinfo[l].name[6])
+				{
 					frame = lumpinfo[l].name[6] - 'A';
 					rotation = lumpinfo[l].name[7] - '0';
 					R_InstallSpriteLump(l, frame, rotation, true);
 				}
 			}
-		}
 
 		// check the frames that were found for completeness
 		if (maxframe == -1) {
@@ -220,7 +222,8 @@ void R_InitSprites(int8_t** namelist) {
 		spriteinfo[i].numframes = maxframe;
 		spriteinfo[i].spriteframes =
 			Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-		dmemcpy(spriteinfo[i].spriteframes, sprtemp, maxframe * sizeof(spriteframe_t));
+		memcpy(spriteinfo[i].spriteframes, sprtemp,
+			maxframe * sizeof(spriteframe_t));
 	}
 }
 
@@ -360,10 +363,10 @@ static dboolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex)
 
 	// [kex] nightmare things have a shade of dark green
 	if (thing->flags & MF_NIGHTMARE) {
-		dglSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
+		glSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
 	}
 	else if ((thing->frame & FF_FULLBRIGHT)) {
-		dglSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
+		glSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
 	}
 	else {
 		R_LightToVertex(vertex,
@@ -447,7 +450,7 @@ static dboolean R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) 
 
 	spritenum = W_GetNumForName("BOLTA0") - s_start;
 
-	dglSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
+	glSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
 
 	// setup texture mapping
 	vertex[0].tu = vertex[1].tu = 0;
@@ -649,23 +652,23 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-		dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+		glTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
 		if (v_accessibility.value < 1)
 		{
 			if (!nolights) {
 				GL_UpdateEnvTexture(WHITE);
 				GL_SetTextureUnit(1, true);
-				dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+				glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
 			}
 
 			if (st_flashoverlay.value <= 0) {
 				GL_SetTextureUnit(2, true);
-				dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+				glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
 			}
 		}
 
-		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
 		GL_SetTextureUnit(0, true);
 	}
@@ -683,10 +686,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	}
 
 	// render
-	dglSetVertex(v);
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
-	dglDrawGeometry(4, v);
+	glSetVertex(v);
+	glTriangle(0, 1, 2);
+	glTriangle(3, 2, 1);
+	glDrawGeometry(4, v);
 
 	GL_ResetViewport();
 
@@ -725,35 +728,35 @@ void R_DrawThingBBox(void) {
 	mobj_t* thing;
 
 #define DRAWBBOXPOLY(b1, b2, z) \
-    dglVertex3f(bbox[b1], bbox[b2], z)
+    glVertex3f(bbox[b1], bbox[b2], z)
 
 #define DRAWBBOXSIDE1(z) \
-    dglBegin(GL_POLYGON); \
+    glBegin(GL_POLYGON); \
     DRAWBBOXPOLY(BOXLEFT, BOXBOTTOM, z); \
     DRAWBBOXPOLY(BOXLEFT, BOXTOP, z); \
     DRAWBBOXPOLY(BOXRIGHT, BOXTOP, z); \
     DRAWBBOXPOLY(BOXRIGHT, BOXBOTTOM, z); \
-    dglEnd()
+    glEnd()
 
 #define DRAWBBOXSIDE2(b3) \
-    dglBegin(GL_POLYGON); \
+    glBegin(GL_POLYGON); \
     DRAWBBOXPOLY(BOXLEFT, b3, z1); \
     DRAWBBOXPOLY(BOXRIGHT, b3, z1); \
     DRAWBBOXPOLY(BOXRIGHT, b3, z2); \
     DRAWBBOXPOLY(BOXLEFT, b3, z2); \
-    dglEnd()
+    glEnd()
 
 #define DRAWBBOXSIDE3(b1) \
-    dglBegin(GL_POLYGON); \
+    glBegin(GL_POLYGON); \
     DRAWBBOXPOLY(b1, BOXBOTTOM, z1); \
     DRAWBBOXPOLY(b1, BOXBOTTOM, z2); \
     DRAWBBOXPOLY(b1, BOXTOP, z2); \
     DRAWBBOXPOLY(b1, BOXTOP, z1); \
-    dglEnd()
+    glEnd()
 
 	GL_SetState(GLSTATE_TEXTURE0, 0);
 	GL_SetState(GLSTATE_CULL, 0);
-	dglDepthRange(0.0f, 0.0f);
+	glDepthRange(0.0f, 0.0f);
 
 	for (i = 0; i < (vissprite - visspritelist); i++) {
 		thing = visspritelist[i].spr;
@@ -770,8 +773,8 @@ void R_DrawThingBBox(void) {
 		z2 = F2D3D(thing->z + thing->height);
 
 		GL_SetState(GLSTATE_BLEND, 1);
-		dglColor4ub(255, 255, 255, 64);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4ub(255, 255, 255, 64);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		DRAWBBOXSIDE1(z1);
 		DRAWBBOXSIDE1(z2);
@@ -781,8 +784,8 @@ void R_DrawThingBBox(void) {
 		DRAWBBOXSIDE3(BOXLEFT);
 
 		GL_SetState(GLSTATE_BLEND, 0);
-		dglColor4ub(255, 255, 255, 255);
-		dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glColor4ub(255, 255, 255, 255);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		DRAWBBOXSIDE1(z1);
 		DRAWBBOXSIDE1(z2);
@@ -792,8 +795,8 @@ void R_DrawThingBBox(void) {
 		DRAWBBOXSIDE3(BOXLEFT);
 	}
 
-	dglDepthRange(0.0f, 1.0f);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDepthRange(0.0f, 1.0f);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	GL_SetState(GLSTATE_TEXTURE0, 1);
 	GL_SetState(GLSTATE_CULL, 1);
 	GL_SetState(GLSTATE_BLEND, 0);

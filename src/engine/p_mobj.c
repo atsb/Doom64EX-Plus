@@ -296,8 +296,8 @@ void P_XYMovement(mobj_t* mo) {
 		mo->momy = 0;
 	}
 	else {
-		mo->momx = FixedMul(mo->momx, FRICTION);
-		mo->momy = FixedMul(mo->momy, FRICTION);
+		mo->momx = (mo->momx >> 8) * (FRICTION >> 8);
+		mo->momy = (mo->momy >> 8) * (FRICTION >> 8);
 	}
 }
 
@@ -374,6 +374,12 @@ void P_ZMovement(mobj_t* mo) {
 			mo->mobjfunc = P_ExplodeMissile;
 			return;
 		}
+		
+		if((mo->flags & MF_MISSILE)
+				&& !(mo->flags & MF_NOCLIP)) {
+            mo->mobjfunc = P_ExplodeMissile;
+            return;
+        }
 	}
 }
 
@@ -754,7 +760,6 @@ void P_SpawnPlayer(mapthing_t* mthing) {
 	p->viewheight = VIEWHEIGHT;
 	p->recoilpitch = 0;
 	p->palette = mthing->type - 1;
-	p->viewz = mobj->z + VIEWHEIGHT;
 	p->cameratarget = p->mo;
 
 	// setup gun psprite
@@ -1197,11 +1202,11 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 = Tries to aim at a nearby monster
 ================
 */
-extern line_t*	shotline;       // 800A56FC
+extern line_t* shotline;       // 800A56FC
 extern fixed_t	aimfrac;        // 800A5720
 
 void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
-	mobj_t*		th;
+	mobj_t* th;
 	angle_t     an;
 	fixed_t     x;
 	fixed_t     y;
@@ -1273,8 +1278,8 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	th->momy = FixedMul(frac, dsin(an));
 	th->momz = FixedMul(th->info->speed, slope);
 
-	x = source->x + (offset * F2INT(dcos(an)));
-	y = source->y + (offset * F2INT(dsin(an)));
+	x = source->x + (offset * finecosine[an >> ANGLETOFINESHIFT]);
+	y = source->y + (offset * finesine[an >> ANGLETOFINESHIFT]);
 
 	// [d64]: checking against very close lines?
 	if ((shotline && aimfrac <= 0xC80) || !P_TryMove(th, x, y))
@@ -1324,6 +1329,12 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
 	}
 
 	speed = th->info->speed;
+	
+	// [kex] nightmare missiles move faster
+    if(source && source->flags & MF_NIGHTMARE) {
+        th->flags |= MF_NIGHTMARE;
+        speed *= 2;
+    }
 
 	th->angle = an;
 	th->momx = FixedMul(speed, dcos(th->angle));

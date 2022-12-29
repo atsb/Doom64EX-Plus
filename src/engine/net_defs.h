@@ -38,8 +38,8 @@ typedef struct _net_context_s net_context_t;
 struct _net_packet_s
 {
 	byte* data;
-	size_t len;
-	size_t alloced;
+	int len;
+	int alloced;
 	uint32_t pos;
 };
 

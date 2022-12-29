@@ -290,7 +290,7 @@ static dboolean M_FindCheats(player_t* plyr, int key) {
 	if (!init) {
 		init = 1;
 		for (i = 0; cheat[i].cheat; i++) {
-			intptr_t c = 0, m = 0;
+			uint32_t c = 0, m = 0;
 			const int8_t* p;
 
 			for (p = cheat[i].cheat; *p; p++) {
