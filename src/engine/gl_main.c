@@ -205,7 +205,7 @@ void GL_SetOrtho(boolean stretch) {
 		dglViewport(ViewWindowX + (int)fitx, ViewWindowY, (int)fitwidth, ViewHeight);
 	}
 
-	width = SCREENWIDTH;
+	width = SCREENWIDTH & (int)~3;
 	height = SCREENHEIGHT;
 
 	if (glScaleFactor != 1.0f) {

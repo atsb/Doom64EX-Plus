@@ -54,7 +54,6 @@ typedef intptr_t	dword;
 #endif
 
 #ifdef _WIN32
-
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
 
