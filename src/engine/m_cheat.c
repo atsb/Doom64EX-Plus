@@ -52,23 +52,25 @@ typedef struct {
 static void M_CheatFa(player_t* player, int8_t dat[4]);
 static void M_CheatBerserk(player_t* player, int8_t dat[4]);
 static void M_CheatWarp(player_t* player, int8_t dat[4]);
+static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]);
 static void M_CheatMyPos(player_t* player, int8_t dat[4]);
 static void M_CheatAllMap(player_t* player, int8_t dat[4]);
 
 cheatinfo_t cheat[] = {
-	{   "iddqd",    M_CheatGod,         0   },
-	{   "idfa",     M_CheatFa,          0   },
-	{   "idkfa",    M_CheatKfa,         0   },
-	{   "idclip",   M_CheatClip,        0   },
-	{   "idclev",   M_CheatWarp,        -2  },
-	{   "idpos",    M_CheatMyPos,       0   },
-	{   "exm",		M_CheatAllMap,      0   },
-	{   "exr",		M_CheatBerserk,     0   },
-	{   "exw",		M_CheatGiveWeapon,  -1  },
-	{   "exg",		M_CheatGiveKey,     -1  },
-	{   "exk",		M_CheatBoyISuck,    0   },
-	{   "exa",		M_CheatArtifacts,   -1  },
-	{   NULL,       NULL,               0   }
+	{   "iddqd",    M_CheatGod,           0 },
+	{   "idfa",     M_CheatFa,            0 },
+	{   "idkfa",    M_CheatKfa,           0 },
+	{   "idclip",   M_CheatClip,          0 },
+	{   "idclev",   M_CheatWarp,        - 2 },
+	{   "exclev",   M_CheatWarpCarryOver, 2 },
+	{   "idpos",    M_CheatMyPos,         0 },
+	{   "exm",		M_CheatAllMap,        0 },
+	{   "exr",		M_CheatBerserk,       0 },
+	{   "exw",		M_CheatGiveWeapon,   -1 },
+	{   "exg",		M_CheatGiveKey,      -1 },
+	{   "exk",		M_CheatBoyISuck,      0 },
+	{   "exa",		M_CheatArtifacts,    -1 },
+	{   NULL,       NULL,                 0 }
 };
 
 void M_CheatGod(player_t* player, int8_t dat[4]) {
@@ -165,9 +167,31 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	if (lumpnum)
 	{
 		// So be it.
-		G_DeferedInitNew(gameskill, map);
+		G_InitNew(gameskill, map);
 		memset(passwordData, 0xff, 16);
 	}
+}
+
+static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]) {
+	char	lumpname[9];
+	int		lumpnum;
+	int map;
+	map = atoi(dat);
+	gameskill = (int)sv_skill.value;
+	gamemap = nextmap = map;
+
+	if (map < 1)
+	{
+		return;
+	}
+	if (map < 10)
+	{
+		DEH_snprintf(lumpname, 9, "MAP0%i", map);
+	}
+	else {
+		DEH_snprintf(lumpname, 9, "MAP%i", map);
+	}
+	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
 }
 
 static void M_CheatMyPos(player_t* player, int8_t dat[4]) {

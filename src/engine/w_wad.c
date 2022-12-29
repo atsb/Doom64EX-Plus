@@ -193,7 +193,7 @@ wad_file_t* W_AddFile(int8_t* filename) {
 
 	startlump = numlumps;
 
-	if (strcasecmp(filename + strlen(filename) - 3, "wad")) {
+	if (w3sstrcasecmp(filename + strlen(filename) - 3, "wad")) {
 		// single lump file
 
 		// fraggle: Swap the filepos and size here.  The WAD directory

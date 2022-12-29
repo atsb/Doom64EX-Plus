@@ -1849,11 +1849,18 @@ static const int Resolution16_10[MAX_RES16_10][2] = {
 	{   7680,   4800    }
 };
 
-static const float ratioVal[4] = {
+#define MAX_RES21_09  2
+static const int Resolution21_09[MAX_RES21_09][2] = {
+	{   2560,    1080     },
+	{   3840,    2160     }
+}; //For the samsung ultrawide monitors lol.
+
+static const float ratioVal[5] = {
 	4.0f / 3.0f,
 	16.0f / 9.0f,
 	16.0f / 10.0f,
 	5.0f / 4.0f,
+	21.0f / 9.0f
 };
 
 static int8_t gammamsg[21][28] = {
@@ -1897,6 +1904,12 @@ void M_Video(int choice) {
 	else if (fcmp(checkratio, ratioVal[3])) {
 		m_aspectRatio = 3;
 	}
+	else if (fcmp(checkratio, ratioVal[4])) {
+		m_aspectRatio = 4;
+	}
+	else if (fcmp(checkratio, ratioVal[5])) {
+		m_aspectRatio = 5;
+	}
 	else {
 		m_aspectRatio = 0;
 	}
@@ -1934,6 +1947,14 @@ void M_Video(int choice) {
 			}
 		}
 		break;
+	case 4:
+		for (i = 0; i < MAX_RES21_09; i++) {
+			if ((int)v_width.value == Resolution21_09[i][0]) {
+				m_ScreenSize = i;
+				return;
+			}
+		}
+		break;
 	}
 
 	m_ScreenSize = 1;
@@ -1941,10 +1962,10 @@ void M_Video(int choice) {
 
 void M_DrawVideo(void) {
 	static const int8_t* filterType[2] = { "Linear", "Nearest" };
-	static const int8_t* ratioName[4] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4" };
+	static const int8_t* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09" };
 	static const int8_t* frametype[2] = { "Off", "On" };
 #ifdef VITA	 
-    static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" };
+    static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" }; //Add this later for debug
 	static char bitValue[8];
 #endif
 
@@ -2100,6 +2121,10 @@ static void M_SetResolution(void) {
 		width = Resolution5_4[m_ScreenSize][0];
 		height = Resolution5_4[m_ScreenSize][1];
 		break;
+	case 4:
+		width = Resolution21_09[m_ScreenSize][0];
+		height = Resolution21_09[m_ScreenSize][1];
+		break;
 	}
 
 	M_SetCvar(&v_width, (float)width);
@@ -2110,12 +2135,12 @@ void M_ChangeRatio(int choice) {
 	int max = 0;
 
 	if (choice) {
-		if (++m_aspectRatio > 3) {
+		if (++m_aspectRatio > 4) {
 			if (choice == 3) {
 				m_aspectRatio = 0;
 			}
 			else {
-				m_aspectRatio = 3;
+				m_aspectRatio = 4;
 			}
 		}
 	}
@@ -2135,6 +2160,9 @@ void M_ChangeRatio(int choice) {
 		break;
 	case 3:
 		max = MAX_RES5_4;
+		break;
+	case 4:
+		max = MAX_RES21_09;
 		break;
 	}
 
@@ -2158,6 +2186,9 @@ void M_ChangeResolution(int choice) {
 		break;
 	case 3:
 		max = MAX_RES5_4;
+		break;
+	case 4:
+		max = MAX_RES21_09;
 		break;
 	}
 

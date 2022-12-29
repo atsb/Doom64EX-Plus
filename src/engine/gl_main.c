@@ -28,15 +28,13 @@
 
 
 #ifdef __APPLE__
-#include <SDL2/SDL.h>
-#ifdef _XBOX
-#include "fakeglx01.h"
-#else
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL.h>
+#elif _XBOX
+#include "fakeglx01.h"
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
-#endif
 #endif
 
 #include "doomdef.h"
@@ -201,7 +199,7 @@ void GL_SetOrtho(boolean stretch) {
 		glViewport(ViewWindowX + (int)fitx, ViewWindowY, (int)fitwidth, ViewHeight);
 	}
 
-	width = SCREENWIDTH;
+	width = SCREENWIDTH & (int)~3;;
 	height = SCREENHEIGHT;
 
 	if (glScaleFactor != 1.0f) {

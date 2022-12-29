@@ -88,6 +88,8 @@ typedef w3suint64_t dword;
 #define w3sstricmp(str1, str2, size) _stricmp(str1, str2)
 #define w3sstrupr(str) _strupr(str)
 #define w3sstrnicmp(str1, str2, size) _strnicmp(str1, str2, size)
+#define w3sstrcasecmp(str1, str2, size) w3sstricmp(str1, str2, size)
+#define w3sstrncasecmp(str1, str2, size) w3sstrnicmp(str1, str2, size)
 #define w3ssnprintf(buf, buffcount, format) _snprintf(buf, buffcount, format)
 #define w3svsnprintf(buf, buffcount, format, arglist) _vsnprintf(buf, buffcount, format, arglist)
 #define w3sstrlwr(str) _strlwr(str)
@@ -118,6 +120,8 @@ typedef w3suint64_t dword;
 #define w3ssnprintf(buf, buffcount, format) snprintf(buf, buffcount, format)
 #define w3svsnprintf vsnprintf(buf, buffcount, format, arglist)
 #define w3sstrlwr(str) strlwr(str)
+#define w3sstrcasecmp(str1, str2, size) w3sstricmp(str1, str2, size)
+#define w3sstrncasecmp(str1, str2, size) w3sstrnicmp(str1, str2, size)
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif
