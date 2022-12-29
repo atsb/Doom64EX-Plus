@@ -75,23 +75,23 @@ static void *DEH_FrameStart(deh_context_t *context, char *line)
 
 static void DEH_FrameOverflow(deh_context_t *context, char *varname, int value)
 {
-    if (!w3sstrcasecmp(varname, "Duration"))
+    if (!w3sstricmp(varname, "Duration"))
     {
         weaponinfo[0].ammo = value;
     }
-    else if (!w3sstrcasecmp(varname, "Codep frame")) 
+    else if (!w3sstricmp(varname, "Codep frame")) 
     {
         weaponinfo[0].upstate = value;
     }
-    else if (!w3sstrcasecmp(varname, "Next frame")) 
+    else if (!w3sstricmp(varname, "Next frame")) 
     {
         weaponinfo[0].downstate = value;
     }
-    else if (!w3sstrcasecmp(varname, "Unknown 1"))
+    else if (!w3sstricmp(varname, "Unknown 1"))
     {
         weaponinfo[0].readystate = value;
     }
-    else if (!w3sstrcasecmp(varname, "Unknown 2"))
+    else if (!w3sstricmp(varname, "Unknown 2"))
     {
         weaponinfo[0].atkstate = value;
     }

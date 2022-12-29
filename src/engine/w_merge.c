@@ -85,7 +85,7 @@ static int FindInList(searchlist_t* list, const int8_t* name) {
 	int i;
 
 	for (i = 0; i < list->numlumps; ++i) {
-		if (!w3sstrncasecmp(list->lumps[i].name, name, 8)) {
+		if (!w3sstrnicmp(list->lumps[i].name, name, 8)) {
 			return i;
 		}
 	}
@@ -368,16 +368,16 @@ static void DoMerge(void) {
 
 		switch (current_section) {
 		case SECTION_NORMAL:
-			if (!w3sstrncasecmp(lump->name, "T_START", 8)) {
+			if (!w3sstrnicmp(lump->name, "T_START", 8)) {
 				current_section = SECTION_TEXTURES;
 			}
-			else if (!w3sstrncasecmp(lump->name, "S_START", 8)) {
+			else if (!w3sstrnicmp(lump->name, "S_START", 8)) {
 				current_section = SECTION_SPRITES;
 			}
-			else if (!w3sstrncasecmp(lump->name, "SYMBOLS", 8)) {
+			else if (!w3sstrnicmp(lump->name, "SYMBOLS", 8)) {
 				current_section = SECTION_GFX;
 			}
-			else if (!w3sstrncasecmp(lump->name, "DM_START", 8)) {
+			else if (!w3sstrnicmp(lump->name, "DM_START", 8)) {
 				current_section = SECTION_SOUNDS;
 			}
 
