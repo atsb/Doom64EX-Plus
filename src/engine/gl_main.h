@@ -22,12 +22,15 @@
 
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
-#include <SDL_opengl.h>
 
 #ifdef __APPLE__
 #include <SDL2/SDL_opengl.h>
 #else
+#ifdef _XBOX
+#include "fakeglx_ex+.h"
+#else
 #include <SDL_opengl.h>
+#endif
 #endif
 
 #include "doomtype.h"

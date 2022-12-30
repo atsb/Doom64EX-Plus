@@ -3478,7 +3478,9 @@ void M_ReadSaveStrings(void) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
 
 		// handle = open(name, O_RDONLY | 0, 0666);
-		handle = w3sopen(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+#ifndef _XBOX
+		handle = w3sopen(P_GetSaveGameName(i), O_RDONLY | 0, 0666); //This macro needs to be fixed...
+#endif		
 		if (handle == -1) {
 			strcpy(&savegamestrings[i][0], EMPTYSTRING);
 			DoomLoadMenu[i].status = 0;

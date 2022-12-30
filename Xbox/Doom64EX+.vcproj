@@ -173,7 +173,7 @@
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\src\engine\3rdparty\Xbox\Includes\;..\src\engine\3rdparty\Includes\Xbox\fluidlite\;..\src\engine\3rdparty\Xbox\Includes\SDL2;..\src\engine\3rdparty\Includes"
+				AdditionalIncludeDirectories="..\src\engine\3rdparty\Xbox\Includes\;..\src\engine\3rdparty\Includes\Xbox\fluidlite\;..\src\engine\3rdparty\Xbox\Includes\SDL2;..\src\engine\3rdparty\Includes;..\Xbox\"
 				PreprocessorDefinitions="NDEBUG;_XBOX;C89;OLD_TYPE;WIN32_LEAN_AND_MEAN;WINDOWS;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;USE_FIXEDPTC"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -404,6 +404,12 @@
 		</File>
 		<File
 			RelativePath="..\src\engine\f_finale.h">
+		</File>
+		<File
+			RelativePath=".\fakeglx_ex+.c">
+		</File>
+		<File
+			RelativePath=".\fakeglx_ex+.h">
 		</File>
 		<File
 			RelativePath="..\src\engine\g_actions.c">

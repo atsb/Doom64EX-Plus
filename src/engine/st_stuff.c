@@ -1110,7 +1110,9 @@ void ST_Init(void) {
 
 	for (i = 0; i < MAXPLAYERS; i++) {
 		if (playeringame[i] && net_player_names[i][0]) {
-			w3ssnprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]);
+#ifndef _XBOX
+			w3ssnprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]); //This macro needs to be fixed.
+#endif
 		}
 	}
 
@@ -1497,7 +1499,9 @@ static void ST_DisplayName(int playernum) {
 	color |= ((255 - (int)((float)distance * 0.19921875f)) << 24);
 
 	// display player name
-	w3ssnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
+#ifndef _XBOX
+	w3ssnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]); //This macro needs to be fixed
+#endif
 	Draw_Text(screenx, screeny, color, 1.0f, 0, name);
 }
 
