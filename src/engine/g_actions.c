@@ -579,7 +579,7 @@ alist_t** G_FindKeyByName(int8_t* key) {
 
 	for (i = 0; i < NUMKEYS; i++) {
 		M_GetKeyName(buff, i);
-		if (w3sstricmp(key, buff) == 0) {
+		if (w3sstrcasecmp(key, buff) == 0) {
 			return(&KeyActions[i]);
 		}
 	}
@@ -1177,7 +1177,7 @@ static boolean IsSameAction(int8_t* cmd, alist_t* al) {
 		}
 	}
 	else {
-		if (w3sstricmp(cmd, al->cmd) != 0) {
+		if (w3sstrcasecmp(cmd, al->cmd) != 0) {
 			return false;
 		}
 	}

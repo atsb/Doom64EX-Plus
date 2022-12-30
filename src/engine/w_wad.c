@@ -193,7 +193,7 @@ wad_file_t* W_AddFile(int8_t* filename) {
 
 	startlump = numlumps;
 
-	if (w3sstricmp(filename + strlen(filename) - 3, "wad")) {
+	if (w3sstrcasecmp(filename + strlen(filename) - 3, "wad")) {
 		// single lump file
 
 		// fraggle: Swap the filepos and size here.  The WAD directory
@@ -290,7 +290,7 @@ void W_Init(void) {
 
 	W_Read(wadfile, 0, &header, sizeof(header));
 
-	if (w3sstrnicmp(header.identification, "IWAD", 4)) {
+	if (w3sstrncasecmp(header.identification, "IWAD", 4)) {
 		I_Error("W_Init: Invalid main IWAD id");
 	}
 

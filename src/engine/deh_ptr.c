@@ -103,7 +103,7 @@ static void DEH_PointerParseLine(deh_context_t *context, char *line, void *tag)
     
     // set the appropriate field
 
-    if (!w3sstricmp(variable_name, "Codep frame"))
+    if (!w3sstrcasecmp(variable_name, "Codep frame"))
     {
         if (ivalue < 0 || ivalue >= NUMSTATES)
         {

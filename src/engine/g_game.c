@@ -349,10 +349,10 @@ static CMD(Cheat) {
 			return;
 		}
 
-		if (!w3sstricmp(param[0], "all")) {
+		if (!w3sstrcasecmp(param[0], "all")) {
 			M_CheatKfa(player, NULL);
 		}
-		else if (!w3sstricmp(param[0], "weapon")) {
+		else if (!w3sstrcasecmp(param[0], "weapon")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Weapons:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -371,7 +371,7 @@ static CMD(Cheat) {
 				M_CheatGiveWeapon(player, param[1]);
 			}
 		}
-		else if (!w3sstricmp(param[0], "artifact")) {
+		else if (!w3sstrcasecmp(param[0], "artifact")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Artifacts:\n");
 				CON_Printf(GREEN, "-------------------------\n");
@@ -385,7 +385,7 @@ static CMD(Cheat) {
 				M_CheatArtifacts(player, param[1]);
 			}
 		}
-		else if (!w3sstricmp(param[0], "key")) {
+		else if (!w3sstrcasecmp(param[0], "key")) {
 			if (param[1] == NULL) {
 				CON_Printf(GREEN, "Keys:\n");
 				CON_Printf(GREEN, "-------------------------\n");

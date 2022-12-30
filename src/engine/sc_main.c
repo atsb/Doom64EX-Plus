@@ -108,7 +108,7 @@ static void SC_Close(void) {
 
 static void SC_Compare(const int8_t* token) {
 	sc_parser.find(false);
-	if (w3sstricmp(sc_parser.token, token)) {
+	if (w3sstrcasecmp(sc_parser.token, token)) {
 		I_Error("SC_Compare: Expected '%s', found '%s' (line = %i, pos = %i)",
 			token, sc_parser.token, sc_parser.linepos, sc_parser.rowpos);
 	}
@@ -153,7 +153,7 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 	boolean ok = false;
 
 	for (i = 0; table[i].token; i++) {
-		if (!w3sstricmp(table[i].token, sc_parser.token)) {
+		if (!w3sstrcasecmp(table[i].token, sc_parser.token)) {
 			byte* pointer = ((byte*)data + table[i].ptroffset);
 			int8_t* name;
 			byte rgb[3];

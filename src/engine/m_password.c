@@ -39,7 +39,7 @@
 
 byte passwordData[16];
 boolean doPassword = false;
-const int8_t* passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
+const int8_t* passwordChar = "abcdefghijklmnpqrstuvwxyz0123456789?";
 static const int passwordTable[10] = { 1, 8, 9, 5, 6, 2, 7, 0, 4, 3 };
 
 //

@@ -10,13 +10,20 @@ LIBS = -lfluidsynth -lSDL2 -lSDL_net -lvitaGL -lvitashark -lSceShaccCgExt -ltaih
 
 DEHACKED_OBJS = deh_ammo.o deh_doom.o deh_frame.o deh_io.o deh_main.o deh_mapping.o deh_misc.o deh_ptr.o deh_str.o deh_thing.o deh_weapon.o 
 
-COMMON_OBJS = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJS) f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_shader.o gl_texture.o gl_utils.o i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o p_user.o psnprntf.o r_bsp.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_sky.o r_things.o r_wipe.o s_sound.o sc_main.o sha1.o st_stuff.o tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o
+COMMON_OBJS = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJS) \
+f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_shader.o gl_texture.o gl_utils.o \
+i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o \
+m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o \
+net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o \
+p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o p_user.o psnprntf.o \
+r_bsp.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_sky.o r_things.o r_wipe.o s_sound.o sc_main.o sha1.o st_stuff.o \
+tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o \
 
 
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CFLAGS  = -Wl,-q  -O3 -g -mtune=cortex-a9 -mfpu=neon \
--I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -fno-optimize-sibling-calls -DWIP_VITA -Wall
+-I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -fno-optimize-sibling-calls -Wall
 
 ASFLAGS = $(CFLAGS)
 

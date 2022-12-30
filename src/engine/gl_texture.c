@@ -142,7 +142,7 @@ static void InitWorldTextures(void) {
 		textureptr[i] = (dtexture*)Z_Malloc(1 * sizeof(dtexture), PU_STATIC, 0);
 
 		// get starting index for switch textures
-		if (!w3sstrnicmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
+		if (!w3sstrncasecmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
 			swx_start = i;
 		}
 

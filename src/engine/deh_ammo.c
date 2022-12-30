@@ -70,9 +70,9 @@ static void DEH_AmmoParseLine(deh_context_t *context, char *line, void *tag)
 
     // maxammo
 
-    if (!w3sstricmp(variable_name, "Per ammo"))
+    if (!w3sstrcasecmp(variable_name, "Per ammo"))
         clipammo[ammo_number] = ivalue;
-    else if (!w3sstricmp(variable_name, "Max ammo"))
+    else if (!w3sstrcasecmp(variable_name, "Max ammo"))
         maxammo[ammo_number] = ivalue;
     else
     {

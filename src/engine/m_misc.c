@@ -73,7 +73,7 @@ int M_CheckParm(const int8_t* check) {
 	int        i;
 
 	for (i = 1; i < myargc; i++) {
-		if (!w3sstricmp(check, myargv[i])) { //strcasecmp
+		if (!w3sstrcasecmp(check, myargv[i])) { //strcasecmp
 			return i;
 		}
 	}

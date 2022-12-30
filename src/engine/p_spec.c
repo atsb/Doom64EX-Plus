@@ -104,7 +104,7 @@ static void P_InitAnimdef(void) {
 		//
 		// find animpic block
 		//
-		if (!w3sstricmp(sc_parser.token, "ANIMPIC")) {
+		if (!w3sstrcasecmp(sc_parser.token, "ANIMPIC")) {
 			memset(&anim, 0, sizeof(animdef_t));
 
 			sc_parser.find(false);

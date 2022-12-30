@@ -24,6 +24,7 @@
         "con_console.h": "c",
         "doomtype.h": "c",
         "gl.h": "c",
-        "sdl_opengl_glext.h": "c"
+        "sdl_opengl_glext.h": "c",
+        "strings.h": "c"
     }
 }
