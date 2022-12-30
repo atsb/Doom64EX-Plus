@@ -82,7 +82,7 @@ typedef w3suint16_t word;
 typedef w3suint64_t dword;
 
 #ifdef _WIN32
-#define w3sopen(FileName, OpenFlag, __VA_ARGS__) _open(FileName, OpenFlag, ...)
+#define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
 #define w3swrite(handle, buf, maxcharcount) _write(handle, buf, maxcharcount)
 #define w3saccess(filename, accessmode) _access(filename, accessmode)
 #define w3sread(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
@@ -93,13 +93,13 @@ typedef w3suint64_t dword;
 #define w3sstrnicmp(str1, str2, size) _strnicmp(str1, str2, size)
 #define w3sstrcasecmp(str1, str2) _stricmp(str1, str2)
 #define w3sstrncasecmp(str1, str2, size) _strnicmp(str1, str2, size)
-#define w3ssnprintf(buf, buffcount, format, __VA_ARGS__) _snprintf(buf, buffcount, format, ...)
+#define w3ssnprintf(buf, buffcount, format, ...) _snprintf(buf, buffcount, format, __VA_ARGS__)
 #define w3svsnprintf(buf, buffcount, format, arglist) _vsnprintf(buf, buffcount, format, arglist)
 #define w3sstrlwr(str) _strlwr(str)
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
 #else
-#define w3sopen(FileName, OpenFlag, __VA_ARGS__) open(FileName, OpenFlag, ...)
+#define w3sopen(FileName, OpenFlag, ...) open(FileName, OpenFlag, __VA_ARGS__)
 #define w3swrite(handle, buf, maxcharcount) write(handle, buf, maxcharcount)
 #define w3saccess(filename, accessmode) access(filename, accessmode)
 #define w3sclose(filehandle) close(filehandle)

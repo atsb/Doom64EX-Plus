@@ -258,6 +258,7 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 static void Audio_Play(void* userdata, Uint8* stream, int len)
 {
+    SDL_memset(stream, 0, len);
     fluid_synth_t* synth = (fluid_synth_t*)userdata;
     fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
@@ -1087,7 +1088,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
     // wait until the audio thread is finished
     //
     SDL_WaitThread(seq->thread, NULL);
-
+    
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
 
@@ -1273,11 +1274,11 @@ void I_InitSequencer(void) {
     }
 
     Song_ClearPlaylist();
-#ifndef _XBOX
+
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
-
+#ifndef _XBOX
     SDL_AudioDeviceID audio_device;
     SDL_AudioSpec required_spec;
 

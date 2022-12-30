@@ -160,9 +160,7 @@ boolean M_WriteFile(int8_t const* name, void* source, int length) {
 boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
 	int handle;
 	int count;
-#ifndef _XBOX
 	handle = w3sopen(name, O_WRONLY | O_CREAT | O_TRUNC, 0666); //This macro needs to be fixed.
-#endif
 	if (handle == -1) {
 		return false;
 	}

@@ -1110,9 +1110,7 @@ void ST_Init(void) {
 
 	for (i = 0; i < MAXPLAYERS; i++) {
 		if (playeringame[i] && net_player_names[i][0]) {
-#ifndef _XBOX
 			w3ssnprintf(player_names[i], MAXPLAYERNAME, "%s", net_player_names[i]); //This macro needs to be fixed.
-#endif
 		}
 	}
 
