@@ -33,6 +33,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <strings.h>
+#include <string.h>
 #endif
 #include <stdarg.h>
 
@@ -105,10 +106,10 @@ typedef w3suint64_t dword;
 #define w3sclose(filehandle) close(filehandle)
 #define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define w3sstrdup(source) strdup(source)
-#define w3sstrupr(str) strupr(str)
+char* w3sstrupr(char *str);
 #define w3ssnprintf(buf, buffcount, format, ...) snprintf(buf, buffcount, format, __VA_ARGS__)
 #define w3svsnprintf(buf, buffcount, format, arglist) vsnprintf(buf, buffcount, format, arglist)
-#define w3sstrlwr(str) strlwr(str)
+char* w3sstrlwr(char *str);
 #define w3sstricmp(str1, str2) stricmp(str1, str2)
 #define w3sstrnicmp(str1, str2, size) strnicmp(str1, str2, size)
 #define w3sstrcasecmp(str1, str2) strcasecmp(str1, str2)

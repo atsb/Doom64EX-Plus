@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 #ifndef _WIN32
 void w3ssleep(dword usecs)
 {
@@ -114,3 +115,26 @@ boolean fcmp(float f1, float f2) {
 		return false;
 	}
 }
+
+#ifndef _WIN32
+char* w3sstrlwr(char* x)
+{
+  int b;
+  for(b=0;x[b]!='\0';b++)
+  {
+    if(x[b]>='A'&&x[b]<='Z')
+    {
+      x[b]=x[b]-'A'+'a';
+    }
+  }
+  return x;
+}
+
+char* w3sstrupr( char* s )
+{
+  char* p = s;
+  while (*p = toupper( *p )) p++;
+  return s;
+}
+
+#endif
