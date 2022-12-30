@@ -83,7 +83,7 @@ static boolean seqready = false;
 // DEFINES
 //
 
-#define MIDI_CHANNELS   64
+#define MIDI_CHANNELS   128
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
@@ -257,9 +257,9 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 // Callback for SDL
 //
-static void Audio_Play(void* data, Uint8* stream, int len)
+static void Audio_Play(void* userdata, Uint8* stream, int len)
 {
-    fluid_synth_t* synth = (fluid_synth_t*)data;
+    fluid_synth_t* synth = (fluid_synth_t*)userdata;
     fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
 
