@@ -40,12 +40,10 @@
 #include "i_system.h"
 
 static int8_t* ConfigFileName =
-#ifdef _WIN32
-"config.cfg"
-#elif defined(VITA)
+#if defined(VITA)
 "ux0:data/Doom64EX+/config.cfg"
 #else
-NULL
+"config.cfg"
 #endif
 ;
 
@@ -58,7 +56,7 @@ int8_t    DefaultConfig[] =
 //
 
 int8_t* G_GetConfigFileName(void) {
-	return I_GetUserFile("config.cfg");
+	return I_GetUserFile(ConfigFileName);
 }
 
 void G_ExecuteMultipleCommands(int8_t* data) {
