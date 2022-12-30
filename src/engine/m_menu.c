@@ -1488,9 +1488,9 @@ enum {
 	display_damage,
 	display_weapon,
 	display_stats,
+	display_hud_color,
 	display_crosshair,
 	display_opacity,
-	display_hud_color,
 	display_empty1,
 	e_default,
 	display_return,
@@ -1504,9 +1504,9 @@ menuitem_t DisplayMenu[] = {
 	{2,"Damage Hud:",M_ToggleDamageHud, 'd'},
 	{2,"Show Weapon:",M_ToggleWpnDisplay, 'w'},
 	{2,"Show Stats:",M_ToggleShowStats, 't'},
+	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
 	{2,"Crosshair:",M_ChangeCrosshair, 'c'},
 	{3,"Crosshair Opacity",M_ChangeOpacity, 'o'},
-	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
 	{-1,"",0},
 	{-2,"Default",M_DoDefaults, 'd'},
 	{1,"/r Return",M_Return, 0x20}
@@ -1519,9 +1519,9 @@ int8_t* DisplayHints[display_end] = {
 	"toggle hud indicators when taking damage",
 	"shows the next or previous pending weapon",
 	"display level stats in automap",
+	"change the hud text colour",
 	"toggle crosshair",
 	"change opacity for crosshairs",
-	"change the hud text colour",
 	NULL,
 	NULL,
 	NULL
@@ -1533,9 +1533,9 @@ menudefault_t DisplayDefault[] = {
 	{ &p_damageindicator, 0 },
 	{ &st_showpendingweapon, 1 },
 	{ &st_showstats, 0 },
+	{ &st_hud_color, 0 },
 	{ &st_crosshair, 0 },
 	{ &st_crosshairopacity, 80 },
-	{ &st_hud_color, 0 },
 	{ NULL, -1 }
 };
 
@@ -1583,6 +1583,8 @@ void M_DrawDisplay(void) {
 		msgNames[(int)st_showpendingweapon.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_stats, MENUCOLORRED,
 		msgNames[(int)st_showstats.value]);
+	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
+		hud_color[(int)st_hud_color.value]);
 
 	if (st_crosshair.value <= 0) {
 		Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_crosshair, MENUCOLORRED,
@@ -1595,9 +1597,6 @@ void M_DrawDisplay(void) {
 
 	M_DrawThermo(DisplayDef.x, DisplayDef.y + LINEHEIGHT * (display_opacity + 1),
 		255, st_crosshairopacity.value);
-
-	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
-		hud_color[(int)st_hud_color.value]);
 
 	if (DisplayDef.hints[itemOn] != NULL) {
 		GL_SetOrthoScale(0.5f);
@@ -1646,7 +1645,7 @@ void M_ChangeOpacity(int choice)
 {
 	if (choice) {
 		if (st_crosshairopacity.value < 255.0f) {
-			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value + 255);
+			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value + 10);
 		}
 		else {
 			CON_CvarSetValue(st_crosshairopacity.name, 255);
@@ -1654,7 +1653,7 @@ void M_ChangeOpacity(int choice)
 	}
 	else {
 		if (st_crosshairopacity.value > 0.0f) {
-			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value - 255);
+			M_SetCvar(&st_crosshairopacity, st_crosshairopacity.value - 10);
 		}
 		else {
 			CON_CvarSetValue(st_crosshairopacity.name, 0);
