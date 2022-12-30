@@ -259,6 +259,7 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 static void Audio_Play(void* userdata, Uint8* stream, int len)
 {
+    SDL_memset(stream, 0, len);
     fluid_synth_t* synth = (fluid_synth_t*)userdata;
     fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
@@ -1081,6 +1082,9 @@ static void Seq_Shutdown(doomseq_t* seq)
 {
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
+
+    delete_fluid_synth(seq->synth);
+    delete_fluid_settings(seq->settings);
 }
 
 //
@@ -1261,7 +1265,6 @@ void I_InitSequencer(void) {
 
     SDL_AudioDeviceID audio_device;
     SDL_AudioSpec required_spec;
-
     SDL_memset(&required_spec, 0, sizeof(required_spec));
     required_spec.format = AUDIO_S16;
     required_spec.freq = SAMPLE_RATE;
