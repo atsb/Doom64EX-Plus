@@ -34,9 +34,6 @@
 #include <stdint.h>
 #endif
 #include <limits.h>
-#ifndef C89
-#include <stdbool.h>
-#endif
 #include "i_w3swrapper.h"
 #include <limits.h>
 #define D_MININT INT_MIN

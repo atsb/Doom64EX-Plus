@@ -46,7 +46,7 @@
 #include <string.h>
 
 #ifdef _XBOX
-#include <xtl.h>
+#include <xtl.h> /* for GetFileAttributes */
 #else
 #include <windows.h> /* for GetFileAttributes */
 #endif

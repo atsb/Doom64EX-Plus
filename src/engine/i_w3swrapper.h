@@ -58,8 +58,7 @@ typedef unsigned char boolean;
 #ifdef _WIN32
 #ifdef _XBOX
 #include <xtl.h>
-#include <rpc.h>
-#include <rpcndr.h>
+#include <XObjBase.h>
 #else
 #include <Windows.h>
 #include <rpc.h>

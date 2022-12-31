@@ -1,7 +1,6 @@
 #ifndef PSNPRINTF_H
 #define PSNPRINTF_H
 
-
 #ifdef _XBOX
 #include <SDL_stdinc.h>
 #else
