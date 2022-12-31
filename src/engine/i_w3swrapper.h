@@ -44,18 +44,26 @@
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
 #ifdef C89 //Adding again because some platforms don´t support stdbool.h
+#ifndef _WIN32
 #define false 0
 #define true 1
 typedef unsigned char boolean;
+#endif
 #else
+#ifndef _WIN32
 typedef unsigned char boolean;
+#endif
 #endif
 
 #ifdef _WIN32
 #ifdef _XBOX
 #include <xtl.h>
+#include <rpc.h>
+#include <rpcndr.h>
 #else
 #include <Windows.h>
+#include <rpc.h>
+#include <rpcndr.h>
 #endif
 
 #ifdef OLD_TYPE
@@ -82,38 +90,37 @@ typedef w3suint16_t word;
 typedef w3suint64_t dword;
 
 #ifdef _WIN32
-#define w3sopen(FileName, OpenFlag, ...) _open(FileName, OpenFlag, __VA_ARGS__)
-#define w3swrite(handle, buf, maxcharcount) _write(handle, buf, maxcharcount)
-#define w3saccess(filename, accessmode) _access(filename, accessmode)
-#define w3sread(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
-#define w3sclose(filehandle) _close(filehandle)
-#define w3sstrdup(source) _strdup(source)
-#define w3sstrupr(str) _strupr(str)
-#define w3sstricmp(str1, str2) _stricmp(str1, str2)
-#define w3sstrnicmp(str1, str2, size) _strnicmp(str1, str2, size)
-#define w3sstrcasecmp(str1, str2) _stricmp(str1, str2)
-#define w3sstrncasecmp(str1, str2, size) _strnicmp(str1, str2, size)
-#define w3ssnprintf(buf, buffcount, format, ...) _snprintf(buf, buffcount, format, __VA_ARGS__)
-#define w3svsnprintf(buf, buffcount, format, arglist) _vsnprintf(buf, buffcount, format, arglist)
-#define w3sstrlwr(str) _strlwr(str)
+#define w3sopen _open
+#define w3swrite _write
+#define w3saccess _access
+#define w3sread _read
+#define w3sclose _close
+#define w3sstrdup _strdup
+#define w3sstrupr _strupr
+#define w3sstricmp _stricmp
+#define w3sstrnicmp _strnicmp
+#define w3sstrcasecmp _stricmp
+#define w3sstrncasecmp _strnicmp
+#define w3ssnprintf _snprintf
+#define w3svsnprintf _vsnprintf
+#define w3sstrlwr _strlwr
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
 #else
-#define w3sopen(FileName, OpenFlag, ...) open(FileName, OpenFlag, __VA_ARGS__)
-#define w3swrite(handle, buf, maxcharcount) write(handle, buf, maxcharcount)
-#define w3saccess(filename, accessmode) access(filename, accessmode)
-#define w3sclose(filehandle) close(filehandle)
-#define w3sclose(filehandle) close(filehandle)
-#define w3sread(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
-#define w3sstrdup(source) strdup(source)
+#define w3sopen open
+#define w3swrite write
+#define w3saccess access
+#define w3sclose) close
+#define w3sread read
+#define w3sstrdup strdup
 char* w3sstrupr(char *str);
-#define w3ssnprintf(buf, buffcount, format, ...) snprintf(buf, buffcount, format, __VA_ARGS__)
-#define w3svsnprintf(buf, buffcount, format, arglist) vsnprintf(buf, buffcount, format, arglist)
+#define w3ssnprintf snprintf
+#define w3svsnprintf vsnprintf
 char* w3sstrlwr(char *str);
-#define w3sstricmp(str1, str2) stricmp(str1, str2)
-#define w3sstrnicmp(str1, str2, size) strnicmp(str1, str2, size)
-#define w3sstrcasecmp(str1, str2) strcasecmp(str1, str2)
-#define w3sstrncasecmp(str1, str2, size) strncasecmp(str1, str2, size)
+#define w3sstricmp stricmp
+#define w3sstrnicmp strnicmp
+#define w3sstrcasecmp strcasecmp
+#define w3sstrncasecmp strncasecmp
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif
@@ -127,16 +134,29 @@ char* w3sstrlwr(char *str);
 #endif
 
 #if defined(__linux__) || defined(__OpenBSD__)
-#define Free(userdir)	free(userdir)
+#define Free	free
 #else
-#define Free(userdir)	SDL_free(userdir)
+#define Free	SDL_free
 #endif
 
 #ifdef _WIN32 //TBD: Sony Playstation 2 port
-#define w3ssleep(usecs) Sleep(usecs)
+#define w3ssleep Sleep
 #else
 void w3ssleep(dword usecs);
 #endif
+
+#if defined(__GNUC__) //By James Haley
+#define d_inline __inline__
+#elif defined(_WIN32)
+#ifdef OLD_MSVC
+#define d_inline __inline
+#else
+#define d_inline inline
+#endif
+#else
+#define d_inline
+#endif
+
 
 #ifdef NO_VSNPRINTF
 #define w3svsnprintf(buf, format, arg) vsprintf(buf, format, arg)

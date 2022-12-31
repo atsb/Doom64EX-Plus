@@ -30,49 +30,6 @@
 
 // attribute hints are available only under GNU C
 
-#ifndef __GNUC__
-#define __attribute__(x)
-#endif
-
-// function inlining is available on most platforms, however,
-// the GNU C __inline__ is too common and conflicts with a
-// definition in SDL, so it needs to be factored out into a
-// custom macro definition
-
-#if defined(__GNUC__)
-#define d_inline __inline__
-#elif defined(_MSC_VER)
-#define d_inline __inline
-#else
-#define d_inline
-#endif
-
-//
-// Non-standard function availability defines
-//
-// These control the presence of custom code for some common
-// non-ANSI libc functions that are in m_misc.c -- in some cases
-// its not worth having the code when its already available in
-// the platform's libc
-//
-
-// HAVE_ITOA -- define this if your platform has ITOA
-// ITOA_NAME -- name of your platform's itoa function
-// #define HAVE_ITOA
-// #define ITOA_NAME itoa
-
-// known platforms with itoa -- you can add yours here, but it
-// isn't absolutely necessary
-#ifndef HAVE_ITOA
-#ifdef DJGPP
-#define HAVE_ITOA
-#define ITOA_NAME itoa
-#endif
-#ifdef _MSC_VER
-#define ITOA_NAME _itoa
-#endif
-#endif
-
 #endif // D_KEYWDS_H__
 
 // EOF

@@ -262,7 +262,6 @@
     <ClInclude Include="..\src\engine\d_devstat.h" />
     <ClInclude Include="..\src\engine\d_englsh.h" />
     <ClInclude Include="..\src\engine\d_event.h" />
-    <ClInclude Include="..\src\engine\d_keywds.h" />
     <ClInclude Include="..\src\engine\d_main.h" />
     <ClInclude Include="..\src\engine\d_net.h" />
     <ClInclude Include="..\src\engine\d_player.h" />

@@ -56,6 +56,10 @@
 // to disk.
 //
 
+#ifndef __GNUC__
+#define __attribute__(x)
+#endif
+
 #ifdef __GNUC__
 #define PACKEDATTR __attribute__((packed))
 #else
