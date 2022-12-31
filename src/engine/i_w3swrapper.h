@@ -126,10 +126,10 @@ char* w3sstrlwr(char *str);
 
 #ifdef DOOM_UNIX_INSTALL
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus")
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
-#define GetBasePath()	SDL_GetBasePath()
 #elif defined __ANDROID__
-#define GetBasePath()   SDL_AndroidGetInternalStoragePath()
+#define GetBasePath   SDL_AndroidGetInternalStoragePath
+#else
+#define GetBasePath	SDL_GetBasePath
 #endif
 
 #if defined(__linux__) || defined(__OpenBSD__)

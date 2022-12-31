@@ -282,7 +282,7 @@ int8_t* I_FindDataFile(int8_t* file) {
 	}
 
 #ifdef __APPLE__
-	if ((dir = SDL_GetBasePath())) {
+	if ((dir = GetBasePath())) {
 		snprintf(path, 511, "%s%s", dir, file);
 		
 		  Free(dir);
