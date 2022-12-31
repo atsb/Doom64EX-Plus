@@ -128,8 +128,6 @@ char* w3sstrlwr(char *str);
 
 #ifdef DOOM_UNIX_INSTALL
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus")
-//#elif defined VITA
-//#define GetBasePath()	SDL_GetPrefPath("", "DOOM64EX+")
 #elif defined __ANDROID__
 #define GetBasePath   SDL_AndroidGetInternalStoragePath
 #else
@@ -147,17 +145,6 @@ char* w3sstrlwr(char *str);
 #else
 void w3ssleep(dword usecs);
 #endif
-
-#if defined(_WIN32)
-#ifdef OLD_MSVC
-#define d_inline __inline
-#else
-#define d_inline inline
-#endif
-#else
-#define d_inline
-#endif
-
 
 #ifdef NO_VSNPRINTF
 #define w3svsnprintf(buf, format, arg) vsprintf(buf, format, arg)

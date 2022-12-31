@@ -31,7 +31,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
 #elif _XBOX
+#ifdef _USEFAKEGL09
 #include "fakeglx_ex+.h"
+#else
+#include <SDL.h>
+#include <SDL_opengl.h>
+#endif
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>

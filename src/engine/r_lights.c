@@ -222,12 +222,12 @@ void R_SetLightFactor(float lightfactor) {
 
 			R_LightGetHSV(light->r, light->g, light->b, &h, &s, &v);
 
-			v = MIN((int)((float)v * f), 255);
+			v = min((int)((float)v * f), 255);
 
 			R_LightGetRGB(h, s, v, (int*)&light->base_r, (int*)&light->base_g, (int*)&light->base_b);
 		}
 		else {
-			light->base_r = light->base_g = light->base_b = MIN((int)((float)l * f), 255);
+			light->base_r = light->base_g = light->base_b = min((int)((float)l * f), 255);
 		}
 
 		light->active_r = light->base_r;
@@ -299,7 +299,7 @@ rcolor R_SplitLineColor(seg_t* line, byte side) {
 	g2 = ((g2 / height) * sideheight2);
 	b2 = ((b2 / height) * sideheight2);
 
-	return D_RGBA((byte)MIN((r1 + r2), 0xff), (byte)MIN((g1 + g2), 0xff), (byte)MIN((b1 + b2), 0xff), 0xff);
+	return D_RGBA((byte)min((r1 + r2), 0xff), (byte)min((g1 + g2), 0xff), (byte)min((b1 + b2), 0xff), 0xff);
 }
 
 //

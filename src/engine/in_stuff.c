@@ -215,7 +215,7 @@ int IN_Ticker(void) {
 	}
 	else {
 		// fade in for finale
-		f_alpha = MIN(f_alpha + 8, 0xff);
+		f_alpha = min(f_alpha + 8, 0xff);
 
 		// wait until fully opaque
 		if (f_alpha < 0xff) {

@@ -135,8 +135,8 @@ void    P_ClearUserCamera(player_t* player);
 //
 // P_MOBJ
 //
-#define ONFLOORZ        D_MININT
-#define ONCEILINGZ      D_MAXINT
+#define ONFLOORZ        INT_MIN
+#define ONCEILINGZ      INT_MAX
 
 extern mapthing_t* spawnlist;
 extern int          numspawnlist;

@@ -379,8 +379,8 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	float dx2;
 	float dy1;
 	float dy2;
-	float cos;
-	float sin;
+	float dcos;
+	float dsin;
 	vtx_t vtx[4];
 
 	if (thing->flags & (MF_NOSECTOR | MF_RENDERLASER)) {
@@ -442,28 +442,27 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	dx2 = dx1 + width;
 	dy1 = -(height / 2.0f);
 	dy2 = dy1 + height;
-	cos = F2D3D(dcos(am_viewangle + ANG90));
-	sin = F2D3D(dsin(am_viewangle + ANG90));
-
+	dcos = F2D3D(dcos(am_viewangle + ANG90));
+	dsin = F2D3D(dsin(am_viewangle + ANG90));
 	glSetVertex(vtx);
 
-	vtx[0].x = tx - ((dx2 * sin) + (dy1 * cos));
-	vtx[0].y = ty + ((dx2 * cos) - (dy1 * sin));
+	vtx[0].x = tx - ((dx2 * dsin) + (dy1 * dcos));
+	vtx[0].y = ty + ((dx2 * dcos) - (dy1 * dsin));
 	vtx[0].z = fz;
 	vtx[0].tu = flip;
 	vtx[0].tv = 0.0f;
-	vtx[1].x = tx - ((dx2 * sin) + (dy2 * cos));
-	vtx[1].y = ty + ((dx2 * cos) - (dy2 * sin));
+	vtx[1].x = tx - ((dx2 * dsin) + (dy2 * dcos));
+	vtx[1].y = ty + ((dx2 * dcos) - (dy2 * dsin));
 	vtx[1].z = fz;
 	vtx[1].tu = flip;
 	vtx[1].tv = 1.0f;
-	vtx[2].x = tx - ((dx1 * sin) + (dy2 * cos));
-	vtx[2].y = ty + ((dx1 * cos) - (dy2 * sin));
+	vtx[2].x = tx - ((dx1 * dsin) + (dy2 * dcos));
+	vtx[2].y = ty + ((dx1 * dcos) - (dy2 * dsin));
 	vtx[2].z = fz;
 	vtx[2].tu = 1 - flip;
 	vtx[2].tv = 1.0f;
-	vtx[3].x = tx - ((dx1 * sin) + (dy1 * cos));
-	vtx[3].y = ty + ((dx1 * cos) - (dy1 * sin));
+	vtx[3].x = tx - ((dx1 * dsin) + (dy1 * dcos));
+	vtx[3].y = ty + ((dx1 * dcos) - (dy1 * dsin));
 	vtx[3].z = fz;
 	vtx[3].tu = 1 - flip;
 	vtx[3].tv = 0.0f;

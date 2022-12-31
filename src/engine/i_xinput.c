@@ -139,10 +139,10 @@ void I_XInputPollEvent(void) {
 		int temp;
 
 		temp = xgamepad.vibration.lMotorSpeed;
-		xgamepad.vibration.lMotorSpeed = MAX(temp - xgamepad.lMotorWindDown, 0);
+		xgamepad.vibration.lMotorSpeed = max(temp - xgamepad.lMotorWindDown, 0);
 
 		temp = xgamepad.vibration.rMotorSpeed;
-		xgamepad.vibration.rMotorSpeed = MAX(temp - xgamepad.rMotorWindDown, 0);
+		xgamepad.vibration.rMotorSpeed = max(temp - xgamepad.rMotorWindDown, 0);
 
 		I_XInputSetRumble(0, &xgamepad.vibration);
 	}

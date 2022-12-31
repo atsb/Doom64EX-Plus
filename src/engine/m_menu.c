@@ -2144,7 +2144,7 @@ void M_ChangeRatio(int choice) {
 		}
 	}
 	else {
-		m_aspectRatio = MAX(m_aspectRatio--, 0);
+		m_aspectRatio = max(m_aspectRatio--, 0);
 	}
 
 	switch (m_aspectRatio) {
@@ -2165,7 +2165,7 @@ void M_ChangeRatio(int choice) {
 		break;
 	}
 
-	m_ScreenSize = MIN(m_ScreenSize, max - 1);
+	m_ScreenSize = min(m_ScreenSize, max - 1);
 
 	M_SetResolution();
 }
@@ -2202,7 +2202,7 @@ void M_ChangeResolution(int choice) {
 		}
 	}
 	else {
-		m_ScreenSize = MAX(m_ScreenSize--, 0);
+		m_ScreenSize = max(m_ScreenSize--, 0);
 	}
 
 	M_SetResolution();

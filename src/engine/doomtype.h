@@ -38,17 +38,6 @@
 #endif
 #include <limits.h>
 #include "i_w3swrapper.h"
-#include <limits.h>
-#define D_MININT INT_MIN
-#define D_MAXINT INT_MAX
-
-#ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
-#endif
-
-#ifndef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
 
 #ifndef BETWEEN
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))

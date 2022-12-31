@@ -279,7 +279,7 @@ boolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v) {
 	return true;
 }
 
-d_inline static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bottom) {
+static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bottom) {
 	if (i_interpolateframes.value) {
 		fixed_t frame_c = sector->frame_z2[1];
 		fixed_t frame_f = sector->frame_z1[1];

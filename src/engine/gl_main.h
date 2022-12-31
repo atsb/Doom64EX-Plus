@@ -24,7 +24,12 @@
 #define __GL_MAIN_H__
 
 #ifdef _XBOX
+#ifdef _USEFAKEGL09
 #include "fakeglx_ex+.h"
+#else
+#include <SDL.h>
+#include <SDL_opengl.h>
+#endif
 #else
 #ifdef __APPLE__
 #include <SDL2/SDL.h>

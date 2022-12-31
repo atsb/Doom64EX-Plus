@@ -612,7 +612,7 @@ static int Credits_Ticker(void) {
 	switch (creditstage) {
 	case 0:
 		if (screenalpha < 0xff) {
-			screenalpha = MIN(screenalpha + 8, 0xff);
+			screenalpha = min(screenalpha + 8, 0xff);
 		}
 		else {
 			creditstage = 1;
@@ -621,7 +621,7 @@ static int Credits_Ticker(void) {
 
 	case 1:
 		if (screenalphatext < 0xff) {
-			screenalphatext = MIN(screenalphatext + 8, 0xff);
+			screenalphatext = min(screenalphatext + 8, 0xff);
 		}
 		else {
 			creditstage = 2;
@@ -630,8 +630,8 @@ static int Credits_Ticker(void) {
 
 	case 2:
 		if ((gametic - pagetic) >= (TICRATE * 6)) {
-			screenalpha = MAX(screenalpha - 8, 0);
-			screenalphatext = MAX(screenalphatext - 8, 0);
+			screenalpha = max(screenalpha - 8, 0);
+			screenalphatext = max(screenalphatext - 8, 0);
 
 			if (screenalpha <= 0) {
 				creditstage = 3;

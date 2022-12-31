@@ -596,7 +596,7 @@ boolean P_LookForPlayers(mobj_t* actor, boolean allaround) {
 		}
 
 		else {  // special case for player bots
-			fixed_t dist2 = D_MAXINT;
+			fixed_t dist2 = INT_MAX;
 			mobj_t* mobj;
 
 			for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
@@ -1813,7 +1813,7 @@ void A_FadeAlpha(mobj_t* mobj) {
 void A_TargetCamera(mobj_t* actor) {
 	mobj_t* mo;
 
-	actor->threshold = D_MAXINT;
+	actor->threshold = INT_MAX;
 
 	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
 		if (actor->tid + 1 == mo->tid) {

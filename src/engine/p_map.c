@@ -74,8 +74,6 @@ int             numspechit = 0;
 //
 // P_CheckThingCollision
 //
-
-d_inline
 static boolean P_CheckThingCollision(mobj_t* thing) {
 	fixed_t blockdist;
 
@@ -116,7 +114,6 @@ static boolean P_CheckThingCollision(mobj_t* thing) {
 
 extern byte forcecollision;
 
-d_inline
 static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 	fixed_t extent = MAXRADIUS;
 

@@ -774,7 +774,7 @@ void A_CloseShotgun2(player_t* player, pspdef_t* psp) {
 // P_LaserPointOnSide
 //
 
-d_inline static fixed_t P_LaserPointOnSide(fixed_t x, fixed_t y, node_t* node) {
+static fixed_t P_LaserPointOnSide(fixed_t x, fixed_t y, node_t* node) {
 	fixed_t    dx;
 	fixed_t    dy;
 	fixed_t    left;

@@ -50,7 +50,7 @@ CVAR_CMD(i_gamma, 0) {
 // I_PNGRowSize
 //
 
-d_inline static size_t I_PNGRowSize(int width, byte bits) {
+static size_t I_PNGRowSize(int width, byte bits) {
 	if (bits >= 8) {
 		return ((width * bits) >> 3);
 	}
@@ -89,8 +89,8 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 // I_GetRGBGamma
 //
 
-d_inline static byte I_GetRGBGamma(int c) {
-	return (byte)MIN(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
+static byte I_GetRGBGamma(int c) {
+	return (byte)min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
 }
 
 //

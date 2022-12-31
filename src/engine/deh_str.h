@@ -24,22 +24,20 @@
 
 // Used to do dehacked text substitutions throughout the program
 
+#if USE_DEH_DEFINES
+// Static macro versions of the functions above
+#define DEH_String(x) (x)
+#define DEH_printf printf
+#define DEH_fprintf fprintf
+#define DEH_snprintf snprintf
+#else
 const char *DEH_String(const char *s);
 void DEH_printf(const char *fmt, ...);
 void DEH_fprintf(FILE *fstream, const char *fmt, ...);
 void DEH_snprintf(char *buffer, size_t len, const char *fmt, ...);
 void DEH_AddStringReplacement(const char *from_text, const char *to_text);
-
-
-#if 0
-// Static macro versions of the functions above
-
-#define DEH_String(x) (x)
-#define DEH_printf printf
-#define DEH_fprintf fprintf
-#define DEH_snprintf snprintf
-
 #endif
+
 
 #endif /* #ifndef DEH_STR_H */
 

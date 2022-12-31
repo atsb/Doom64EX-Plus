@@ -136,9 +136,9 @@ int F_Ticker(void) {
 		}
 	}
 
-	finalePal.r = MIN(finalePal.r += 2, 250);
-	finalePal.g = MIN(finalePal.g += 2, 250);
-	finalePal.b = MIN(finalePal.b += 2, 250);
+	finalePal.r = min(finalePal.r += 2, 250);
+	finalePal.g = min(finalePal.g += 2, 250);
+	finalePal.b = min(finalePal.b += 2, 250);
 
 	if (!castdeath && castdying) {
 		S_StartSound(NULL, sfx_shotgun);
