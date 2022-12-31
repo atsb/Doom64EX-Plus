@@ -33,10 +33,10 @@
 #else
 #include <stdint.h>
 #endif
-#include <limits.h>
-#ifndef C89
-#include <stdbool.h>
+#if !defined C89 || !defined _XBOX
+#include <stdbool.h> //Oops
 #endif
+#include <limits.h>
 #include "i_w3swrapper.h"
 #include <limits.h>
 #define D_MININT INT_MIN

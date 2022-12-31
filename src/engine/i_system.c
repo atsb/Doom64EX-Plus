@@ -319,7 +319,7 @@ int8_t* I_FindDataFile(int8_t* file) {
 	{
 		int i;
 		const int8_t* paths[] = {
-				"ux0:/data/Doom64EX+/",
+				"ux0:/data/DOOM64EX+/",
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
@@ -328,8 +328,6 @@ int8_t* I_FindDataFile(int8_t* file) {
 				return path;
 		}
 	}
-
-
 #endif
 
 	Free(path);

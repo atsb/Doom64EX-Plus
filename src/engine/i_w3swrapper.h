@@ -58,8 +58,7 @@ typedef unsigned char boolean;
 #ifdef _WIN32
 #ifdef _XBOX
 #include <xtl.h>
-#include <rpc.h>
-#include <rpcndr.h>
+#include <XObjBase.h>
 #else
 #include <Windows.h>
 #include <rpc.h>
@@ -110,7 +109,7 @@ typedef w3suint64_t dword;
 #define w3sopen open
 #define w3swrite write
 #define w3saccess access
-#define w3sclose) close
+#define w3sclose close
 #define w3sread read
 #define w3sstrdup strdup
 char* w3sstrupr(char *str);
