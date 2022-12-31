@@ -43,7 +43,9 @@
 #define W32GetVersionEX(lpVersionInformation, wTypeMask, dwlConditionMask) VerifyVersionInfo(lpVersionInformation, wTypeMask, dwlConditionMask)
 #define W32OVERSIONINFO LPOSVERSIONINFOEXW
 #endif
+
 #ifdef C89 //Adding again because some platforms don´t support stdbool.h
+
 #ifndef _WIN32
 #define false 0
 #define true 1
@@ -126,13 +128,15 @@ char* w3sstrlwr(char *str);
 
 #ifdef DOOM_UNIX_INSTALL
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus")
+//#elif defined VITA
+//#define GetBasePath()	SDL_GetPrefPath("", "DOOM64EX+")
 #elif defined __ANDROID__
 #define GetBasePath   SDL_AndroidGetInternalStoragePath
 #else
 #define GetBasePath	SDL_GetBasePath
 #endif
 
-#if defined(__linux__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__) || defined(VITA)
 #define Free	free
 #else
 #define Free	SDL_free
@@ -144,9 +148,7 @@ char* w3sstrlwr(char *str);
 void w3ssleep(dword usecs);
 #endif
 
-#if defined(__GNUC__) //By James Haley
-#define d_inline __inline__
-#elif defined(_WIN32)
+#if defined(_WIN32)
 #ifdef OLD_MSVC
 #define d_inline __inline
 #else
@@ -163,8 +165,8 @@ void w3ssleep(dword usecs);
 int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
 
-int         htoi(int8_t* str);
-boolean    fcmp(float f1, float f2);
+int htoi(int8_t* str);
+boolean fcmp(float f1, float f2);
 
 
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
