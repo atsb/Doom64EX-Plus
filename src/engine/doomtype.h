@@ -33,6 +33,9 @@
 #else
 #include <stdint.h>
 #endif
+#if !defined C89 || !defined _XBOX
+#include <stdbool.h> //Oops
+#endif
 #include <limits.h>
 #include "i_w3swrapper.h"
 #include <limits.h>
