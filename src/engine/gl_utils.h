@@ -2,7 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022-2023 André Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,8 +32,13 @@
 #ifdef USE_GLFW
 #include <GLFW/glfw3.h>
 #else
+#ifdef __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#else
+#include <SDL.h>
+#include <SDL_opengl.h>
+#endif
 #endif
 
 //André: Use this as wrapper to all the functions.
@@ -145,6 +150,7 @@ HGLRC    Window
 SDL_GLContext   Window
 #endif
 #endif
+
 //
 // CUSTOM ROUTINES
 //
@@ -163,11 +169,17 @@ void glTexCombInterpolate(int t, float a);
 void glTexCombReplaceAlpha(int t);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
+#ifdef _WIN32
+#define glGetProcAddress wglGetProcAddress
+#else
+#define glGetProcAddress SDL_GL_GetProcAddress
+#endif
 
-
+#ifndef GLEW
 //
 // GL_ARB_multitexture
 //
 extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
 
 #define glActiveTextureARB(texture) _glActiveTextureARB(texture)
+#endif

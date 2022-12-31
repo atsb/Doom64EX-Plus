@@ -3,7 +3,7 @@
 //
 // Copyright(C) 2005 Simon Howard
 // Copyright(C) 2007-2014 Samuel Villarreal
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022-2023 André Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -614,7 +614,6 @@ void I_StartTic(void) {
 void I_FinishUpdate(void) {
 	I_UpdateGrab();
 	SDL_GL_SwapWindow(window);
-
 	BusyDisk = false;
 }
 

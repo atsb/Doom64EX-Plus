@@ -28,7 +28,7 @@
 
 
 #ifdef __APPLE__
-#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
 #elif _XBOX
 #include "fakeglx_ex+.h"
@@ -97,7 +97,6 @@ static CMD(DumpGLExtensions) {
 	CON_Printf(WHITE, "Written GL_EXTENSIONS.TXT\n");
 }
 
-PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL;
 
 
 //
@@ -155,7 +154,7 @@ boolean GL_CheckExtension(const int8_t* ext) {
 //
 
 void* GL_RegisterProc(const int8_t* address) {
-	void* proc = SDL_GL_GetProcAddress(address);
+	void* proc = glGetProcAddress(address);
 
 	if (!proc) {
 		CON_Warnf("GL_RegisterProc: Failed to get proc address: %s", address);
@@ -503,8 +502,9 @@ static void CalcViewSize(void) {
 		ViewWindowY = (ViewHeight) / 2;
 	}
 }
-
-//
+#ifndef GLEW
+PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
+#endif
 void GL_Init(void) {
 
 	gl_vendor = glGetString(GL_VENDOR);
@@ -543,7 +543,9 @@ void GL_Init(void) {
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
 	GL_CheckExtension("GL_ARB_multitexture");
+#ifndef GLEW
 	_glActiveTextureARB = GL_RegisterProc("glActiveTextureARB");
+#endif
 	GL_CheckExtension("GL_EXT_multi_draw_arrays");
 	GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
 	GL_CheckExtension("GL_EXT_fog_coord");
@@ -555,7 +557,6 @@ void GL_Init(void) {
 	if (!GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");
 	}
-
 
 	gl_has_combiner = (GL_ARB_texture_env_combine | GL_EXT_texture_env_combine);
 

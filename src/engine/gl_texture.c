@@ -24,8 +24,9 @@
 // DESCRIPTION: Texture handling
 //
 //-----------------------------------------------------------------------------
-
-#include "gl_utils.h"
+#ifdef GLEW
+#include <glew.h>
+#endif 
 #include "doomstat.h"
 #include "r_local.h"
 #include "i_png.h"
@@ -33,7 +34,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gl_texture.h"
-#include "gl_main.h"
 #include "p_spec.h"
 #include "p_local.h"
 #include "con_console.h"

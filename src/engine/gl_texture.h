@@ -2,7 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
-// Copyright(C) 2022 André Guilherme
+// Copyright(C) 2022-2023 André Guilherme
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@
 
 #ifndef __GL_TEXTURE_H__
 #define __GL_TEXTURE_H__
-
-#include "gl_utils.h"
 
 extern int                  curtexture;
 extern int                  cursprite;
