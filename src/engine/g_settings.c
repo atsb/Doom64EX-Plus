@@ -41,7 +41,7 @@
 
 static int8_t* ConfigFileName =
 #if defined(VITA)
-"ux0:data/Doom64EX+/config.cfg"
+"ux0:data/DOOM64EX+/config.cfg"
 #else
 "config.cfg"
 #endif
