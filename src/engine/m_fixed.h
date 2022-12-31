@@ -24,7 +24,6 @@
 #ifndef __M_FIXED__
 #define __M_FIXED__
 
-#include "d_keywds.h"
 #ifdef USE_FIXEDPTC
 #include <fixedptc.h>
 #else

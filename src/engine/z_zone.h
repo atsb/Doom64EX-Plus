@@ -25,8 +25,6 @@
 #ifndef __Z_ZONE__
 #define __Z_ZONE__
 
-#include "d_keywds.h" // haleyjd 05/22/02
-
 #undef strdup
 
 // Include system definitions so that prototypes become

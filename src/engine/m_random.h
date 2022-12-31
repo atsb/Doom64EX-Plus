@@ -25,7 +25,6 @@
 #define __M_RANDOM__
 
 #include "doomtype.h"
-#include "d_keywds.h"
 
 extern uint8_t rndtable[256];
 int M_Random(void);

@@ -30,7 +30,6 @@
 #include "doomstat.h"
 
 #include "r_local.h"
-#include "d_keywds.h"
 #include "p_local.h"
 
 rcolor    bspColor[5];

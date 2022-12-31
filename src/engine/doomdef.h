@@ -40,7 +40,6 @@
 #include <stdio.h>
 
 #include "doomtype.h"
-#include "d_keywds.h"
 #include "tables.h"
 #include "i_w3swrapper.h"
 
