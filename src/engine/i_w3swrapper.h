@@ -35,6 +35,7 @@
 #include <unistd.h>
 #include <strings.h>
 #include <string.h>
+#include <stdio.h>
 #endif
 #include <stdarg.h>
 
@@ -159,6 +160,9 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 int htoi(int8_t* str);
 boolean fcmp(float f1, float f2);
 
-
+#ifdef __linux__
+#define max fmax
+#define min fmin
+#endif
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
 #define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]

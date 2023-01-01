@@ -195,7 +195,7 @@ static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]) {
 }
 
 static void M_CheatMyPos(player_t* player, int8_t dat[4]) {
-	printf("ang = %d; x,y = (%d, %d)",
+	printf("ang = %d; x,y = (%lld, %lld)",
 		(int)(players[consoleplayer].mo->angle * (float)180 / ANG180),
 		F2INT(players[consoleplayer].mo->x),
 		F2INT(players[consoleplayer].mo->y));
