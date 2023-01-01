@@ -8,7 +8,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX 
 * Support for the Alpha Version of the game
 * Support for the Lost Levels campaign
 * Support for loading PWADs
-* Port to the C Programming Language
+* Port to the C Programming Language like the original game
 * Support for C89 && C99
 * Support for higher resolutions including 21:9 
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita and Microsoft Xbox.
@@ -21,7 +21,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX 
 
 There are a few bugs still present, which I am slowly fixing.
 
-This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/ but if any contributors wish to help, then GitHub is a better place for it.
+This GitHub repo is the same as: [sourceforge](https://sourceforge.net/projects/doom64ex-plus/) but if any contributors wish to help, then GitHub is a better place for it.
 
 ## Mod Support
 
@@ -42,8 +42,7 @@ No other changes are needed.
 ## Where are the PWADs?
 
 Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
-You can find them on moddb, just look for the EX+ / EX Plus wads:
-https://www.moddb.com/games/doom-64/downloads/
+You can find them on [moddb](https://www.moddb.com/games/doom-64/downloads/)
 
 ## Dehacked Support
 
@@ -116,8 +115,7 @@ Clone this repo
 Use the `build.sh` script for a native build.
 
 ## macOS
-Install it from MacSourcePorts:
-https://macsourceports.com/game/doom64
+Install it from [MacSourcePorts](https://macsourceports.com/game/doom64)
 
 Or if you feel adventurous, read below:
 Install MacPorts and get the dependencies.
@@ -162,7 +160,7 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 You can place the asset data described above to any of the following directories:
 
 * The directory in which `doom64ex-plus` resides
-* `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
+* `/usr/local/share/doom64ex-plus`
 
 ## macOS
 
