@@ -801,18 +801,16 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 	if (!target->player) {
 		return;
 	}
-#ifndef _XBOX
 	// Init the random generator
 	srand((unsigned int)time(NULL));
-	int z = rand() % 500;
 
 	if (source != NULL) {
 		switch (source->type) {
 		case MT_POSSESSED1:
-			if (z < 50) {
+			if (rand() % 500 < 50) {
 				sprintf(omsg, "Immorpher will write a song\nin your honor.");
 			}
-			else if (z < 100) {
+			else if (rand() % 500 < 100) {
 				sprintf(omsg, "You got eaten by a wolf called: Wolf3s");
 			}
 			else {
@@ -832,7 +830,7 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			sprintf(omsg, "you were chomped\nby a Demon.");
 			break;
 		case MT_DEMON2:
-			if (z < 20) {
+			if (rand() % 500 < 20) {
 				sprintf(omsg, "tried to beat a speedrun.");
 			}
 			else {
@@ -882,7 +880,6 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			players[i].message = omsg;
 		}
 	}
-#endif
 }
 
 //
