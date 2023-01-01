@@ -2867,7 +2867,7 @@ void M_BuildControlMenu(void) {
 	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
 	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
 	ADD_NONBINDABLE_ITEM(7, "Chat             t", 1);
-	ADD_NONBINDABLE_ITEM(8, "Console          BACKSLASH", 1);
+	ADD_NONBINDABLE_ITEM(8, "Console          TILDE and BACKQUOTE", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {
