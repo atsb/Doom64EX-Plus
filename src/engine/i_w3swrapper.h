@@ -25,6 +25,7 @@
 #else
 #include "doomtype.h"
 #endif
+
 #ifdef _WIN32
 #include <fcntl.h>
 #include <io.h>
@@ -46,9 +47,9 @@
 
 #ifdef C89 //Adding again because some platforms don´t support stdbool.h
 
-#ifndef _WIN32
 #define false 0
 #define true 1
+#ifndef _WIN32
 typedef unsigned char boolean;
 #endif
 #else
@@ -61,12 +62,15 @@ typedef unsigned char boolean;
 #ifdef _XBOX
 #include <xtl.h>
 #include <XObjBase.h>
+#include <basetsd.h>
 #else
 #include <Windows.h>
 #include <rpc.h>
 #include <rpcndr.h>
 #endif
+#endif 
 
+#ifdef WINDOWS_TYPES
 #ifdef OLD_TYPE
 typedef BYTE w3suint8_t;
 typedef WORD w3suint16_t;

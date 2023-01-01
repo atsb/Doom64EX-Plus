@@ -33,7 +33,7 @@
 #else
 #include <stdint.h>
 #endif
-#if !defined C89 || !defined _XBOX
+#ifndef C89
 #include <stdbool.h> //Oops
 #endif
 #include <limits.h>

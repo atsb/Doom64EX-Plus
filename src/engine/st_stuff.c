@@ -862,15 +862,17 @@ void ST_Drawer(void) {
 	//
 
 	// Secret messages
-#ifndef _XBOX
+#ifdef _XBOX
+	cvar_t hud_disablesecretmessages;
+#else
 	CVAR_EXTERNAL(hud_disablesecretmessages);
+#endif
 	if (st_hasjmsg && st_regionmsg.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		Draw_Text(80, 80, YELLOW, 1, false, st_msg);
 	}
-#endif
 	// Standard messages
 
 	if (st_hasjmsg && st_regionmsg.value && plyr->messagepic != 40) {

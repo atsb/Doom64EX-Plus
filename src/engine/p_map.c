@@ -75,14 +75,26 @@ int             numspechit = 0;
 // P_CheckThingCollision
 //
 static boolean P_CheckThingCollision(mobj_t* thing) {
-	fixed_t blockdist;
-
+#ifndef _XBOX
+	fixed_t blockdist = thing->radius + tmthing->radius;
+#endif
 	if (netgame && (tmthing->type == MT_PLAYER && thing->type == MT_PLAYER)) {
 		return true;    // 20120122 villsa - allow players to go through each other
 	}
-
-	blockdist = thing->radius + tmthing->radius;
-#ifndef _XBOX
+#ifdef _XBOX
+	if (!(abs(thing->x - tmx) < abs(thing->y - tmy))) {
+		if (((thing->radius + tmthing->radius - abs(thing->x - tmx) - abs(thing->y - tmy)) + (abs(thing->y - tmy) >> 1)) <= 0) {
+			// didn't hit it
+			return true;
+		}
+	}
+	else {
+		if (((thing->radius + tmthing->radius - abs(thing->x - tmx) - abs(thing->y - tmy)) + (abs(thing->x - tmx) >> 1)) <= 0) {
+			// didn't hit it
+			return true;
+		}
+	}
+#else
 	fixed_t x, y;
 	fixed_t rx, ry;
 

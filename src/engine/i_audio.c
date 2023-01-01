@@ -259,8 +259,10 @@ typedef int(*signalhandler)(doomseq_t*);
 static void Audio_Play(void* userdata, Uint8* stream, int len)
 {
     SDL_memset(stream, 0, len);
+#ifndef _XBOX
     fluid_synth_t* synth = (fluid_synth_t*)userdata;
-    fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
+	fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
+#endif
 }
 
 //

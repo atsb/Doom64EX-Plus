@@ -23,7 +23,7 @@
 
 #ifndef __M_MISC__
 #define __M_MISC__
-#if !defined C89 || !defined _XBOX
+#ifndef C89
 #include <stdbool.h>
 #endif
 #include <stdarg.h>
