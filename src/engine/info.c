@@ -61,7 +61,7 @@ int8_t* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"S008", "S009", "S010", "S011", "S012", "S013", "S014", "S017",
 	"S018", "S019", "S020", "S021", "S022", "S023", "S024", "S028",
 	"S029", "S031", "S032", "S027", "S036", "S037", "S038", "S040",
-	"S041", "S026", "S002", "S030", NULL
+	"S041", "S026", "S002", "S030", "CPOS", NULL
 };
 
 // Doesn't work with g++, needs actionf_p1
@@ -98,6 +98,8 @@ void A_FaceTarget();
 void A_PosAttack();
 void A_Scream();
 void A_SPosAttack();
+void A_CPosAttack();
+void A_CPosRefire();
 void A_Tracer();
 void A_FatRaise();
 void A_FatAttack1();
@@ -1072,6 +1074,36 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	{ SPR_S030,32769,4,NULL,S_MISC30_3 },// S_MISC30_2
 	{ SPR_S030,32770,4,NULL,S_MISC30_4 },// S_MISC30_3
 	{ SPR_S030,32771,4,NULL,S_MISC30_1 },// S_MISC30_4
+
+	/*S_CPOS_STND*/ { SPR_CPOS, 0, 10, {A_Look}, S_CPOS_STND2 },
+	/*S_CPOS_STND2*/{ SPR_CPOS, 1, 10, {A_Look}, S_CPOS_STND },
+	/*S_CPOS_RUN1*/ { SPR_CPOS, 0, 3, {A_Chase}, S_CPOS_RUN2 },
+	/*S_CPOS_RUN2*/ { SPR_CPOS, 0, 3, {A_Chase}, S_CPOS_RUN3 },
+	/*S_CPOS_RUN3*/ { SPR_CPOS, 1, 3, {A_Chase}, S_CPOS_RUN4 },
+	/*S_CPOS_RUN4*/ { SPR_CPOS, 1, 3, {A_Chase}, S_CPOS_RUN5 },
+	/*S_CPOS_RUN5*/ { SPR_CPOS, 2, 3, {A_Chase}, S_CPOS_RUN6 },
+	/*S_CPOS_RUN6*/ { SPR_CPOS, 2, 3, {A_Chase}, S_CPOS_RUN7 },
+	/*S_CPOS_RUN7*/ { SPR_CPOS, 3, 3, {A_Chase}, S_CPOS_RUN8 },
+	/*S_CPOS_RUN8*/ { SPR_CPOS, 3, 3, {A_Chase}, S_CPOS_RUN1 },
+	/*S_CPOS_ATK1*/ { SPR_CPOS, 4, 10, {A_FaceTarget}, S_CPOS_ATK2 },
+	/*S_CPOS_ATK2*/ { SPR_CPOS, 32773, 4, {A_CPosAttack}, S_CPOS_ATK3 },
+	/*S_CPOS_ATK3*/ { SPR_CPOS, 32772, 4, {A_CPosAttack}, S_CPOS_ATK4 },
+	/*S_CPOS_ATK4*/ { SPR_CPOS, 5, 1,{A_CPosRefire},S_CPOS_ATK2 },
+	/*S_CPOS_PAIN*/ { SPR_CPOS, 6, 3, {NULL}, S_CPOS_PAIN2 },
+	/*S_CPOS_PAIN2*/{ SPR_CPOS, 6, 3,{A_Pain},S_CPOS_RUN1 },
+	/*S_CPOS_DIE1*/ { SPR_CPOS, 7, 5, {NULL}, S_CPOS_DIE2 },
+	/*S_CPOS_DIE2*/ { SPR_CPOS, 8, 5, {A_Scream}, S_CPOS_DIE3 },
+	/*S_CPOS_DIE3*/ { SPR_CPOS, 9, 5, {A_Fall}, S_CPOS_DIE4 },
+	/*S_CPOS_DIE4*/ {SPR_CPOS,10,5,{NULL},S_CPOS_DIE5},
+	/*S_CPOS_DIE5*/ { SPR_CPOS,11,5,{NULL},S_CPOS_DIE6 },
+	/*S_CPOS_DIE6*/ { SPR_CPOS,12,5,{NULL},S_CPOS_DIE7 },
+	/*S_CPOS_DIE7*/ { SPR_CPOS, 13, -1, {NULL}, S_NULL },
+	/*S_CPOS_XDIE1*/{ SPR_CPOS, 14, 5, {NULL}, S_CPOS_XDIE2 },
+	/*S_CPOS_XDIE2*/{ SPR_CPOS, 15, 5, {A_XScream}, S_CPOS_XDIE3 },
+	/*S_CPOS_XDIE3*/{ SPR_CPOS, 16, 5, {A_Fall}, S_CPOS_XDIE4 },
+	/*S_CPOS_XDIE4*/{ SPR_CPOS, 17, 5, {NULL}, S_CPOS_XDIE5 },
+	/*S_CPOS_XDIE5*/{ SPR_CPOS, 18, 5, {NULL}, S_CPOS_XDIE6 },
+	/*S_CPOS_XDIE6*/{ SPR_CPOS, 19, -1, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -5822,5 +5854,33 @@ sfx_None,// activesound
 MF_SOLID,// flags
 0,// palette
 255// alpha
+},
+
+{
+/*MT_CHAINGUY*/
+4009,        //doomednum
+S_CPOS_STND,        //spawnstate
+70,        //spawnhealth
+S_CPOS_RUN1,        //seestate
+sfx_possit1,        //seesound
+8,        //reactiontime
+0,        //attacksound
+S_CPOS_PAIN,        //painstate
+170,        //painchance
+sfx_dbpain1,        //painsound
+S_NULL,        //meleestate
+S_CPOS_ATK1,        //missilestate
+S_CPOS_DIE1,        //deathstate
+S_CPOS_XDIE1,        //xdeathstate
+sfx_posdie1,        //deathsound
+8,        //speed
+20 * FRACUNIT,        //radius
+56 * FRACUNIT,        //height
+100,        //mass
+0,        //damage
+sfx_posact,        //activesound
+MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+0,        //palette
+255        //alpha
 },
 };

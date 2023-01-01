@@ -978,6 +978,42 @@ void A_SPosAttack(mobj_t* actor) {
 	}
 }
 
+void A_CPosAttack(mobj_t* actor)
+{
+	int		angle;
+	int		bangle;
+	int		damage;
+	int		slope;
+
+	if (!actor->target)
+		return;
+
+	S_StartSound(actor, sfx_pistol);
+	A_FaceTarget(actor);
+	bangle = actor->angle;
+	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
+
+	angle = bangle + (P_Random() << 20);
+	damage = ((P_Random() % 5) + 1) * 3;
+	P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
+}
+
+void A_CPosRefire(mobj_t* actor)
+{
+	// keep firing unless target got out of sight
+	A_FaceTarget(actor);
+
+	if (P_Random() < 40)
+		return;
+
+	if (!actor->target
+		|| actor->target->health <= 0
+		|| !P_CheckSight(actor, actor->target))
+	{
+		P_SetMobjState(actor, actor->info->seestate);
+	}
+}
+
 //
 // A_PlayAttack
 //
