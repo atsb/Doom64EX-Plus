@@ -43,11 +43,7 @@
 #include <SDL2/SDL.h>
 #endif
 
-#if !defined _WIN32 || __APPLE__ || __arm__ || __aarch64__
 #include <fluidsynth.h>
-#else
-#include <fluidlite.h> //ATSB: Fluidlite on WIN32/macOS and some other devices so we can distribute binaries without all the stupid dependencies
-#endif
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -259,7 +255,6 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 static void Audio_Play(void* userdata, Uint8* stream, int len)
 {
-    SDL_memset(stream, 0, len);
     fluid_synth_t* synth = (fluid_synth_t*)userdata;
     fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 }
