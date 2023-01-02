@@ -2164,10 +2164,9 @@ void M_ChangeRatio(int choice) {
 		dmax = MAX_RES21_09;
 		break;
 	}
-#ifndef __linux__
-	m_ScreenSize = min(m_ScreenSize, max - 1);
-#endif
+	m_ScreenSize = min(m_ScreenSize, dmax - 1);
 	M_SetResolution();
+
 }
 
 void M_ChangeResolution(int choice) {
@@ -2192,12 +2191,12 @@ void M_ChangeResolution(int choice) {
 	}
 
 	if (choice) {
-		if (++m_ScreenSize > max - 1) {
+		if (++m_ScreenSize > dmax - 1) {
 			if (choice == 2) {
 				m_ScreenSize = 0;
 			}
 			else {
-				m_ScreenSize = max - 1;
+				m_ScreenSize = dmax - 1;
 			}
 		}
 	}

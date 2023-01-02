@@ -1359,10 +1359,8 @@ static void ST_EatChatMsg(void) {
 			ST_AddChatMsg(st_chatstring[i], i);
 			memset(st_chatstring[i], 0, len);
 			break;
-		case KEY_BACKSPACE:
-#ifndef __linux__			
-			st_chatstring[i][max(len--, 0)] = 0;
-#endif			
+		case KEY_BACKSPACE:			
+			st_chatstring[i][max(len--, 0)] = 0;		
 			break;
 		default:
 			st_chatstring[i][len] = c;
