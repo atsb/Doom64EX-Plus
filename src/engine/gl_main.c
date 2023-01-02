@@ -568,7 +568,11 @@ void GL_Init(void) {
 	dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	dglEnableClientState(GL_COLOR_ARRAY);
 
+#if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 	DGL_CLAMP = GL_VERSION_2_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+#else
+	DGL_CLAMP = GL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+#endif
 
 	glScaleFactor = 1.0f;
 

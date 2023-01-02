@@ -111,8 +111,14 @@ void I_InitScreen(void) {
 
 	usingGL = false;
 
+#if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#else
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#endif
+
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
