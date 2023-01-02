@@ -2131,7 +2131,7 @@ static void M_SetResolution(void) {
 }
 
 void M_ChangeRatio(int choice) {
-	int max = 0;
+	int dmax = 0;
 
 	if (choice) {
 		if (++m_aspectRatio > 4) {
@@ -2149,45 +2149,45 @@ void M_ChangeRatio(int choice) {
 
 	switch (m_aspectRatio) {
 	case 0:
-		max = MAX_RES4_3;
+		dmax = MAX_RES4_3;
 		break;
 	case 1:
-		max = MAX_RES16_9;
+		dmax = MAX_RES16_9;
 		break;
 	case 2:
-		max = MAX_RES16_10;
+		dmax = MAX_RES16_10;
 		break;
 	case 3:
-		max = MAX_RES5_4;
+		dmax = MAX_RES5_4;
 		break;
 	case 4:
-		max = MAX_RES21_09;
+		dmax = MAX_RES21_09;
 		break;
 	}
-
+#ifndef __linux__
 	m_ScreenSize = min(m_ScreenSize, max - 1);
-
+#endif
 	M_SetResolution();
 }
 
 void M_ChangeResolution(int choice) {
-	int max = 0;
+	int dmax = 0;
 
 	switch (m_aspectRatio) {
 	case 0:
-		max = MAX_RES4_3;
+		dmax = MAX_RES4_3;
 		break;
 	case 1:
-		max = MAX_RES16_9;
+		dmax = MAX_RES16_9;
 		break;
 	case 2:
-		max = MAX_RES16_10;
+		dmax = MAX_RES16_10;
 		break;
 	case 3:
-		max = MAX_RES5_4;
+		dmax = MAX_RES5_4;
 		break;
 	case 4:
-		max = MAX_RES21_09;
+		dmax = MAX_RES21_09;
 		break;
 	}
 
