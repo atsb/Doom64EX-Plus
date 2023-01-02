@@ -5858,31 +5858,31 @@ MF_SOLID,// flags
 255// alpha
 },
 
-		{
-			/*MT_CHAINGUY*/
-			65,        //doomednum
-			S_CPOS_STND,        //spawnstate
-			70,        //spawnhealth
-			S_CPOS_RUN1,        //seestate
-			sfx_possit2,        //seesound
-			8,        //reactiontime
-			sfx_None/*sfx_000*/,        //attacksound
-			S_CPOS_PAIN,        //painstate
-			170,        //painchance
-			sfx_dbpain1,        //painsound
-			S_NULL,        //meleestate
-			S_CPOS_ATK1,        //missilestate
-			S_CPOS_DIE1,        //deathstate
-			S_CPOS_XDIE1,        //xdeathstate
-			sfx_posdie2,        //deathsound
-			8,        //speed
-			32 * FRACUNIT,        //radius
-			87 * FRACUNIT,        //height
-			100,        //mass
-			0,        //damage
-			sfx_posact,        //activesound
-			MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flag
-			0,        // palette
-			255        // alpha
-		},
+	{
+		/*MT_CHAINGUY*/
+		65,        //doomednum
+		S_CPOS_STND,        //spawnstate
+		70,        //spawnhealth
+		S_CPOS_RUN1,        //seestate
+		sfx_possit2,        //seesound
+		8,        //reactiontime
+		sfx_None,        //attacksound
+		S_CPOS_PAIN,        //painstate
+		170,        //painchance
+		sfx_dbpain1,        //painsound
+		S_NULL,        //meleestate
+		S_CPOS_ATK1,        //missilestate
+		S_CPOS_DIE1,        //deathstate
+		S_CPOS_XDIE1,        //xdeathstate
+		sfx_posdie2,        //deathsound
+		8,        //speed
+		32 * FRACUNIT,        //radius
+		87 * FRACUNIT,        //height
+		100,        //mass
+		0,        //damage
+		sfx_posact,        //activesound
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+		0,        // palette
+		255        // alpha
+	},
 };
