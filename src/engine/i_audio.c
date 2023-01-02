@@ -1094,11 +1094,13 @@ static void Seq_Shutdown(doomseq_t* seq) {
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
 
+#ifdef _WIN32
     //
     // fluidsynth cleanup stuff
     //
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
+#endif
 
     seq->synth = NULL;
     seq->driver = NULL;
