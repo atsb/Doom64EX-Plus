@@ -21,7 +21,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64EX a
 
 There are a few bugs still present, which I am slowly fixing.
 
-This [GitHub repo](https://github.com/atsb/Doom64EX-Plus) is the same as: [sourceforge](https://sourceforge.net/projects/doom64ex-plus/) but if any contributors wish to help, then here is a better place for it.
+This [GitHub repo](https://github.com/atsb/Doom64EX-Plus) is the same as [sourceforge](https://sourceforge.net/projects/doom64ex-plus/) but if any contributors wish to help, then here is a better place for it.
 
 ## Mod Support
 
