@@ -870,6 +870,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_CHAINGUY:
 			sprintf(omsg, "you were perforated\nby a Chaingunner.");
 			break;
+		case MT_UNDEAD:
+			sprintf(omsg, "you couldn't evade\nthe Revenant.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;

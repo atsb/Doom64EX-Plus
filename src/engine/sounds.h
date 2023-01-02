@@ -122,6 +122,8 @@ typedef enum {
 	sfx_rectdie,    //rectdie
 	sfx_rectpain,   //rectpain
 	sfx_rectsit,    //rectsit
+	sfx_skelsit,
+	sfx_skeldth,
 	mus_amb01,
 	mus_amb02,
 	mus_amb03,
