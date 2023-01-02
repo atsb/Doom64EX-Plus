@@ -117,7 +117,11 @@ void I_InitScreen(void) {
 
 	usingGL = false;
 
+#if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 	glGetVersion(2, 1);
+#else
+	glGetVersion(3, 1);
+#endif
 	OGL_WINDOW_HINT(OGL_RED, 0);
 	OGL_WINDOW_HINT(OGL_GREEN, 0);
 	OGL_WINDOW_HINT(OGL_BLUE, 0);
@@ -129,9 +133,7 @@ void I_InitScreen(void) {
 	OGL_WINDOW_HINT(OGL_ACCUM_ALPHA, 0);
 	OGL_WINDOW_HINT(OGL_BUFFER, 24);
 	OGL_WINDOW_HINT(OGL_DEPTH, 24);
-#ifndef USE_GLFW || defined(_XBOX)
-	OGL_WINDOW_HINT(OGL_DOUBLE_BUFFER, 1);
-#endif
+	OGL_WINDOW_HINT(OGL_DOUBLEBUFFER, 1);
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {

@@ -88,7 +88,7 @@ static CMD(DumpGLExtensions) {
 	int8_t* string;
 	int i = 0;
 	int len = 0;
-
+	
 	string = (int8_t*)glGetString(GL_EXTENSIONS);
 	len = strlen(string);
 
@@ -478,17 +478,6 @@ void GL_ClearView(rcolor clearcolor) {
 }
 
 //
-// GL_GetBool
-//
-
-boolean GL_GetBool(int x) {
-	byte b;
-	glGetBooleanv(x, &b);
-
-	return (boolean)b;
-}
-
-//
 // CalcViewSize
 //
 
@@ -577,7 +566,7 @@ void GL_Init(void) {
 #ifdef VITA
 	GL_VERSION ? GL_CLAMP_TO_EDGE : GL_CLAMP;
 #else
-	GL_VERSION_2_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+	OGL_VERSION_DETECTION;
 #endif
 	glScaleFactor = 1.0f;
 
@@ -588,6 +577,9 @@ void GL_Init(void) {
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
-
+#ifdef USE_GLFW	
+	glfwSwapInterval(v_vsync.value);
+#else	
 	SDL_GL_SetSwapInterval(v_vsync.value);
+#endif
 }

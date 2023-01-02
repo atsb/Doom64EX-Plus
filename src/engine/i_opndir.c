@@ -35,8 +35,6 @@
 
 //Villsa: Implemented for Doom64EX
 
-#ifdef _WIN32
-
 #ifndef _MSC_VER
 #error i_opndir.c is for Microsoft Visual C++ only
 #endif
@@ -314,4 +312,3 @@ void seekdir(DIR *dirp, long lPos) {
 }
 
 // EOF
-#endif
