@@ -66,6 +66,7 @@ int8_t* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"SKEL",
 	"ARCR",
 	"POW1",
+	"SPID",
 	NULL
 };
 
@@ -147,6 +148,7 @@ void A_MissileSetAlpha();
 void A_SkelWhoosh();
 void A_SkelFist();
 void A_SkelAttack();
+void A_SpidAttack();
 
 #pragma warning(push)
 #pragma warning(disable:4113)
@@ -1155,6 +1157,36 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_POW1_DIE6*/			{ SPR_POW1, 32773, 2, {NULL}, S_POW1_DIE7 },
 	/*S_POW1_DIE7*/			{ SPR_POW1, 32774, 2, {NULL}, S_POW1_DIE8 },
 	/*S_POW1_DIE8*/			{ SPR_POW1, 32775, 2, {NULL}, S_NULL },
+
+	/*S_SPID_STND*/			{ SPR_SPID, 0, 10, {A_Look}, S_SPID_STND2 },
+	/*S_SPID_STND2*/		{ SPR_SPID, 1, 10, {A_Look}, S_SPID_STND },
+	/*S_SPID_RUN1*/			{ SPR_SPID, 0, 4, {A_Metal}, S_SPID_RUN2 },
+	/*S_SPID_RUN2*/			{ SPR_SPID, 0, 4, {A_Chase}, S_SPID_RUN3 },
+	/*S_SPID_RUN3*/			{ SPR_SPID, 1, 4, {A_Chase}, S_SPID_RUN4 },
+	/*S_SPID_RUN4*/			{ SPR_SPID, 1, 4, {A_Chase}, S_SPID_RUN5 },
+	/*S_SPID_RUN5*/			{ SPR_SPID, 2, 4, {A_Metal}, S_SPID_RUN6 },
+	/*S_SPID_RUN6*/			{ SPR_SPID, 2, 4, {A_Chase}, S_SPID_RUN7 },
+	/*S_SPID_RUN7*/			{ SPR_SPID, 3, 4, {A_Chase}, S_SPID_RUN8 },
+	/*S_SPID_RUN8*/			{ SPR_SPID, 3, 4, {A_Chase}, S_SPID_RUN1 },
+	/*S_SPID_ATK1*/			{ SPR_SPID, 32768, 20, {A_BspiFaceTarget}, S_SPID_ATK2 },
+	/*S_SPID_ATK2*/			{ SPR_SPID, 32772, 2, {A_SpidAttack}, S_SPID_ATK3 },
+	/*S_SPID_ATK3*/			{ SPR_SPID, 32773, 2, {NULL}, S_SPID_ATK4 },
+	/*S_SPID_ATK4*/			{ SPR_SPID, 32774, 2, {A_SpidAttack}, S_SPID_ATK5 },
+	/*S_SPID_ATK5*/			{ SPR_SPID, 32775, 2, {NULL}, S_SPID_ATK6 },
+	/*S_SPID_ATK6*/			{ SPR_SPID, 32776, 2, {A_SpidRefire}, S_SPID_ATK2 },
+	/*S_SPID_PAIN*/			{ SPR_SPID, 9, 4, {NULL}, S_SPID_PAIN2 },
+	/*S_SPID_PAIN2*/		{ SPR_SPID, 9, 4, {A_Pain}, S_SPID_RUN1 },
+	/*S_SPID_DIE1*/			{ SPR_SPID, 10, 16, {A_Scream}, S_SPID_DIE2 },
+	/*S_SPID_DIE2*/			{ SPR_SPID, 10, 6, {A_Fall}, S_SPID_DIE3 },
+	/*S_SPID_DIE3*/			{ SPR_SPID, 10, 6, {NULL}, S_SPID_DIE4 },
+	/*S_SPID_DIE4*/			{ SPR_SPID, 10, 6, {NULL}, S_SPID_DIE5 },
+	/*S_SPID_DIE5*/			{ SPR_SPID, 11, 6, {NULL}, S_SPID_DIE6 },
+	/*S_SPID_DIE6*/			{ SPR_SPID, 11, 6, {NULL}, S_SPID_DIE7 },
+	/*S_SPID_DIE7*/			{ SPR_SPID, 12, 6, {NULL}, S_SPID_DIE8 },
+	/*S_SPID_DIE8*/			{ SPR_SPID, 12, 6, {NULL}, S_SPID_DIE9 },
+	/*S_SPID_DIE9*/			{ SPR_SPID, 13, 12, {NULL}, S_SPID_DIE10 },
+	/*S_SPID_DIE10*/		{ SPR_SPID, 14, 15, {A_OnDeathTrigger}, S_SPID_DIE11 },
+	/*S_SPID_DIE11*/		{ SPR_SPID, 15, -1, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -5990,4 +6022,32 @@ MF_SOLID,// flags
 		0,        //palette
 		255        //alpha
 	},
+
+	{
+		/*MT_SPIDER*/
+		7,        //doomednum
+		S_SPID_STND,        //spawnstate
+		3000,        //spawnhealth
+		S_SPID_RUN1,        //seestate
+		sfx_spisit,        //seesound
+		8,        //reactiontime
+		sfx_pistol,        //attacksound
+		S_SPID_PAIN,        //painstate
+		40,        //painchance
+		sfx_dbpain2,        //painsound
+		S_NULL,        //meleestate
+		S_SPID_ATK1,        //missilestate
+		S_SPID_DIE1,        //deathstate
+		S_NULL,        //xdeathstate
+		sfx_spidth,        //deathsound
+		12,        //speed
+		128 * FRACUNIT,        //radius
+		140 * FRACUNIT,        //height
+		1000,        //mass
+		0,        //damage
+		sfx_dbact,        //activesound
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags,
+		0,        // palette
+		255        // alpha
+	}
 };
