@@ -1078,8 +1078,11 @@ static void Seq_Shutdown(doomseq_t* seq)
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
 
+// Linux, macOS and general Unixy systems segfault when shutdown here
+#ifdef _WIN32
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
+#endif
 }
 
 //
