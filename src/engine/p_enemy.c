@@ -1937,3 +1937,31 @@ void A_SkelFist(mobj_t* actor)
 		P_DamageMobj(actor->target, actor, actor, damage);
 	}
 }
+
+//
+// A_SpidAttack
+//
+
+void A_SpidAttack(mobj_t* actor)
+{
+	int i;
+	int angle;
+	int bangle;
+	int damage;
+	int slope;
+
+	if (!actor->target)
+		return;
+
+	S_StartSound(actor, sfx_pistol);
+	A_FaceTarget(actor);
+	bangle = actor->angle;
+	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
+
+	for (i = 0; i < 3; i++)
+	{
+		angle = bangle + ((P_Random() - P_Random()) << 20);
+		damage = ((P_Random() & 5) * 3) + 3;
+		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
+	}
+}
