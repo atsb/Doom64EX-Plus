@@ -993,7 +993,7 @@ void A_CPosAttack(mobj_t* actor)
 	bangle = actor->angle;
 	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
 
-	angle = bangle + (P_Random() << 20);
+	angle = bangle + ((P_Random() - P_Random()) << 20);
 	damage = ((P_Random() % 5) + 1) * 3;
 	P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 }

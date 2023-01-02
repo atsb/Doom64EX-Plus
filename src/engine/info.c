@@ -1102,7 +1102,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_CPOS_XDIE2*/{ SPR_CPOS, 15, 5, {A_XScream}, S_CPOS_XDIE3 },
 	/*S_CPOS_XDIE3*/{ SPR_CPOS, 16, 5, {A_Fall}, S_CPOS_XDIE4 },
 	/*S_CPOS_XDIE4*/{ SPR_CPOS, 17, 5, {NULL}, S_CPOS_XDIE5 },
-	/*S_CPOS_XDIE5*/{ SPR_CPOS, 18, 5, {NULL}, S_CPOS_XDIE6 },
+	/*S_CPOS_XDIE5*/{ SPR_CPOS, 18, 5, {A_OnDeathTrigger}, S_CPOS_XDIE6 },
 	/*S_CPOS_XDIE6*/{ SPR_CPOS, 19, -1, {NULL}, S_NULL },
 };
 
