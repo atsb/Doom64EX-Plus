@@ -1859,3 +1859,81 @@ void A_TargetCamera(mobj_t* actor) {
 		}
 	}
 }
+
+//
+// A_SkelMissile
+//
+
+void A_SkelMissile(mobj_t* actor, int direction)
+{
+	mobj_t* mo;
+	angle_t angle;
+
+	if (direction == DP_LEFT) {
+		angle = actor->angle + ANG45;
+	}
+	else if (direction == DP_RIGHT) {
+		angle = actor->angle - ANG45;
+	}
+	else {
+		angle = actor->angle;
+	}
+	angle >>= ANGLETOFINESHIFT;
+
+	mo = P_SpawnMissile(actor,
+		actor->target,
+		MT_PROJ_UNDEAD,
+		FixedMul(26 * FRACUNIT, finecosine[angle]),
+		FixedMul(26 * FRACUNIT, finesine[angle]),
+		104,
+		true);
+	mo->x += mo->momx;
+	mo->y += mo->momy;
+	mo->tracer = actor->target;
+}
+
+//
+// A_SkelAttack
+//
+
+void A_SkelAttack(mobj_t* actor)
+{
+	if (!actor->target)
+		return;
+	A_FaceTarget(actor);
+	A_SkelMissile(actor, DP_LEFT);
+	A_SkelMissile(actor, DP_RIGHT);
+}
+
+//
+// A_SkelWhoosh
+//
+
+void A_SkelWhoosh(mobj_t* actor)
+{
+	if (!actor->target)
+		return;
+	A_FaceTarget(actor);
+	S_StartSound(actor, sfx_dart);
+}
+
+//
+// A_SkelFist
+//
+
+void A_SkelFist(mobj_t* actor)
+{
+	int	damage;
+
+	if (!actor->target)
+		return;
+
+	A_FaceTarget(actor);
+
+	if (P_CheckMeleeRange(actor))
+	{
+		damage = ((P_Random() % 10) + 1) * 6;
+		S_StartSound(actor, sfx_dartshoot);
+		P_DamageMobj(actor->target, actor, actor, damage);
+	}
+}

@@ -63,6 +63,9 @@ int8_t* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"S029", "S031", "S032", "S027", "S036", "S037", "S038", "S040",
 	"S041", "S026", "S002", "S030", 
 	"CPOS",
+	"SKEL",
+	"ARCR",
+	"POW1",
 	NULL
 };
 
@@ -141,6 +144,9 @@ void A_FadeOut();
 void A_FadeIn();
 void A_SkullSetAlpha();
 void A_MissileSetAlpha();
+void A_SkelWhoosh();
+void A_SkelFist();
+void A_SkelAttack();
 
 #pragma warning(push)
 #pragma warning(disable:4113)
@@ -1106,6 +1112,49 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_CPOS_XDIE4*/		{ SPR_CPOS, 17, 5, {NULL}, S_CPOS_XDIE5 },
 	/*S_CPOS_XDIE5*/		{ SPR_CPOS, 18, 5, {A_OnDeathTrigger}, S_CPOS_XDIE6 },
 	/*S_CPOS_XDIE6*/		{ SPR_CPOS, 19, -1, {NULL}, S_NULL },
+
+	/*S_SKEL_STND*/			{ SPR_SKEL, 0, 10, {A_Look}, S_SKEL_STND2 },
+	/*S_SKEL_STND2*/		{ SPR_SKEL, 1, 10, {A_Look}, S_SKEL_STND },	
+	/*S_SKEL_RUN1*/			{ SPR_SKEL, 0, 2, {A_Chase}, S_SKEL_RUN2 },	
+	/*S_SKEL_RUN2*/			{ SPR_SKEL, 0, 2, {A_Chase}, S_SKEL_RUN3 },	
+	/*S_SKEL_RUN3*/			{ SPR_SKEL, 1, 2, {A_Chase}, S_SKEL_RUN4 },	
+	/*S_SKEL_RUN4*/			{ SPR_SKEL, 1, 2, {A_Chase}, S_SKEL_RUN5 },	
+	/*S_SKEL_RUN5*/			{ SPR_SKEL, 2, 2, {A_Chase}, S_SKEL_RUN6 },	
+	/*S_SKEL_RUN6*/			{ SPR_SKEL, 2, 2, {A_Chase}, S_SKEL_RUN7 },	
+	/*S_SKEL_RUN7*/			{ SPR_SKEL, 3, 2, {A_Chase}, S_SKEL_RUN8 },	
+	/*S_SKEL_RUN8*/			{ SPR_SKEL, 3, 2, {A_Chase}, S_SKEL_RUN9 },	
+	/*S_SKEL_RUN9*/			{ SPR_SKEL, 4, 2, {A_Chase}, S_SKEL_RUN10 },
+	/*S_SKEL_RUN10*/		{ SPR_SKEL, 4, 2, {A_Chase}, S_SKEL_RUN11 },
+	/*S_SKEL_RUN11*/		{ SPR_SKEL, 5, 2, {A_Chase}, S_SKEL_RUN12 },
+	/*S_SKEL_RUN12*/		{ SPR_SKEL, 5, 2, {A_Chase}, S_SKEL_RUN1 },	
+	/*S_SKEL_FIST1*/		{ SPR_SKEL, 6, 0, {A_FaceTarget}, S_SKEL_FIST2 },
+	/*S_SKEL_FIST2*/		{ SPR_SKEL, 6, 6, {A_SkelWhoosh}, S_SKEL_FIST3 },
+	/*S_SKEL_FIST3*/		{ SPR_SKEL, 7, 6, {A_FaceTarget}, S_SKEL_FIST4 },
+	/*S_SKEL_FIST4*/		{ SPR_SKEL, 8, 6, {A_SkelFist}, S_SKEL_RUN1 },
+	/*S_SKEL_MISS1*/		{ SPR_SKEL, 32777, 0, {A_FaceTarget}, S_SKEL_MISS2 },
+	/*S_SKEL_MISS2*/		{ SPR_SKEL, 32777, 10, {A_FaceTarget}, S_SKEL_MISS3 },
+	/*S_SKEL_MISS3*/		{ SPR_SKEL, 10, 10, {A_SkelAttack}, S_SKEL_MISS4 },
+	/*S_SKEL_MISS4*/		{ SPR_SKEL, 10, 10, {A_FaceTarget}, S_SKEL_RUN1 },
+	/*S_SKEL_PAIN*/			{ SPR_SKEL, 11, 4, {NULL}, S_SKEL_PAIN2 },
+	/*S_SKEL_PAIN2*/		{ SPR_SKEL, 11, 4, {A_Pain}, S_SKEL_RUN1 },	
+	/*S_SKEL_DIE1*/			{ SPR_SKEL, 11, 6, {NULL}, S_SKEL_DIE2 },
+	/*S_SKEL_DIE2*/			{ SPR_SKEL, 12, 6, {NULL}, S_SKEL_DIE3 },
+	/*S_SKEL_DIE3*/			{ SPR_SKEL, 13, 6, {A_Scream}, S_SKEL_DIE4 },
+	/*S_SKEL_DIE4*/			{ SPR_SKEL, 14, 6, {A_Fall}, S_SKEL_DIE5 },	
+	/*S_SKEL_DIE5*/			{ SPR_SKEL, 15, 6, {A_OnDeathTrigger}, S_SKEL_DIE6 },
+	/*S_SKEL_DIE6*/			{ SPR_SKEL, 16, -1, {NULL}, S_NULL },
+
+	/*S_ARCR1*/				{ SPR_ARCR, 32768, 3, {A_Tracer}, S_ARCR2 },
+	/*S_ARCR2*/				{ SPR_ARCR, 32769, 3, {A_Tracer}, S_ARCR1 },
+
+	/*S_POW1_DIE1*/			{ SPR_POW1, 32768, 4, {A_FadeAlpha}, S_POW1_DIE2 },
+	/*S_POW1_DIE2*/			{ SPR_POW1, 32769, 3, {A_FadeAlpha}, S_POW1_DIE3 },
+	/*S_POW1_DIE3*/			{ SPR_POW1, 32770, 2, {A_FadeAlpha}, S_POW1_DIE4 },
+	/*S_POW1_DIE4*/			{ SPR_POW1, 32771, 2, {NULL}, S_POW1_DIE5 },
+	/*S_POW1_DIE5*/			{ SPR_POW1, 32772, 2, {NULL}, S_POW1_DIE6 },
+	/*S_POW1_DIE6*/			{ SPR_POW1, 32773, 2, {NULL}, S_POW1_DIE7 },
+	/*S_POW1_DIE7*/			{ SPR_POW1, 32774, 2, {NULL}, S_POW1_DIE8 },
+	/*S_POW1_DIE8*/			{ SPR_POW1, 32775, 2, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -5884,5 +5933,61 @@ MF_SOLID,// flags
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        // palette
 		255        // alpha
+	},
+
+	{
+		/*MT_UNDEAD*/
+		66,        // doomednum
+		S_SKEL_STND,        // spawnstate
+		300,        // spawnhealth
+		S_SKEL_RUN1,        // seestate
+		sfx_skelsit,        // seesound
+		8,        // reactiontime
+		sfx_None,        // attacksound
+		S_SKEL_PAIN,        // painstate
+		100,        // painchance
+		sfx_dbpain1,        // painsound
+		S_SKEL_FIST1,        // meleestate
+		S_SKEL_MISS1,        // missilestate
+		S_SKEL_DIE1,        // deathstate
+		S_NULL,        // xdeathstate
+		sfx_skeldth,        // deathsound
+		10,        // speed
+		32 * FRACUNIT,        // radius
+		120 * FRACUNIT,        // height
+		500,        // mass
+		0,        // damage
+		sfx_skelact,        // activesound
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        // flags
+		0,        // palette
+		255        //alpha
+	},
+
+	{
+		/*MT_PROJ_UNDEAD*/
+		-1,        //doomednum
+		S_ARCR1,        //spawnstate
+		1000,        //spawnhealth
+		S_NULL,        //seestate
+		sfx_tracer,        //seesound
+		8,        //reactiontime
+		sfx_None,        //attacksound
+		S_NULL,        //painstate
+		0,        //painchance
+		sfx_None,        //painsound
+		S_NULL,        //meleestate
+		S_NULL,        //missilestate
+		S_POW1_DIE1,        //deathstate
+		S_NULL,        //xdeathstate
+		sfx_explode,        //deathsound
+		7 * FRACUNIT,        //speed
+		11 * FRACUNIT,        //radius
+		8 * FRACUNIT,        //height
+		100,        //mass
+		5,        //damage
+		sfx_None,        //activesound
+		MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+		0,        //palette
+		255        //alpha
 	},
 };
