@@ -52,12 +52,12 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 
 ## Dependencies
 
-* SDL2 and SDL2_net
+* SDL2
 * ZLib
 * LibPNG
 * FluidSynth
 * OpenGL
-* GLFW
+* GLFW(Optional)
 
 ## System Requirements - 32 or 64bit
 
@@ -73,6 +73,7 @@ Linux / *BSD Desktop / Laptop
 - 2GB RAM
 - 80MB Disk Space
 - OpenGL 2.1+ Compliant Video Chip / Card
+Or OpenGL 3.1+ Compiling Video Chip / Card
 
 Windows
 
@@ -80,6 +81,7 @@ Windows
 - 4GB RAM
 - 80MB Disk Space
 - OpenGL 2.1+ Compliant Video Chip / Card
+Or OpenGL 3.1+ Compiling Video Chip / Card
 
 macOS
 
@@ -87,6 +89,7 @@ macOS
 - 4GB RAM
 - 80MB Disk Space
 - OpenGL 2.1+ Compliant Video Chip / Card
+Or OpenGL 3.1+ Compiling Video Chip / Card
 
 ## Installation
 
