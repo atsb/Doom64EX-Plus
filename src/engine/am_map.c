@@ -347,7 +347,7 @@ int AM_Responder(event_t* ev) {
 		// moving around with the stick
 		//
 		if (am_flags & AF_PANGAMEPAD) {
-			if (ev->data3 == GAMEPAD_LEFT_STICK) {
+			if (ev->data3 == GAMEPAD_LSTICK) {
 				float x;
 				float y;
 

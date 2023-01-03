@@ -34,6 +34,9 @@
 #include <stdio.h>
 #endif
 
+
+#define KEY_MAX 95
+
 #include "m_keys.h"
 #include "doomdef.h"
 
@@ -42,7 +45,7 @@ typedef struct {
 	int8_t* name;
 } keyinfo_t;
 
-static keyinfo_t    Keys[] = {
+static keyinfo_t Keys[KEY_MAX] = {
 	{KEY_RIGHTARROW,        "Right"},
 	{KEY_LEFTARROW,         "Left"},
 	{KEY_UPARROW,           "Up"},
@@ -135,8 +138,12 @@ static keyinfo_t    Keys[] = {
     {GAMEPAD_Y,          "ButtonY"},
     {GAMEPAD_LTRIGGER,   "LeftTrigger"},
     {GAMEPAD_RTRIGGER,   "RightTrigger"},
-
-	{0,                 NULL}
+	{GAMEPAD_BUTTON_MISC1, "ShareButton"},
+	{GAMEPAD_BUTTON_PADDLE1, "XoneElite paddle P1"},
+	{GAMEPAD_BUTTON_PADDLE2, "XoneElite paddle P2"},
+	{GAMEPAD_BUTTON_PADDLE3, "XoneElite paddle P3"},
+	{GAMEPAD_BUTTON_PADDLE4, "XoneElite paddle P4"},
+	{GAMEPAD_BUTTON_TOUCHPAD, "TouchPad"},
 };
 
 //

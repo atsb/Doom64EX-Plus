@@ -32,7 +32,6 @@
 #include "m_misc.h"
 #include "doomstat.h"
 #include "i_system.h"
-#include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
 #include <assert.h>
@@ -74,60 +73,105 @@ void s_clamp(Sint32 axis)
 SDL_GameController *s_controller;
 
 
-int translate_controller(int state) 
+int I_Translate_GameController(int state)
 {
-      switch (state) {
-
-      case SDL_CONTROLLER_BUTTON_A: 
-		return GAMEPAD_A;
-		break;
-      case SDL_CONTROLLER_BUTTON_B: 
-	  	return GAMEPAD_B;
-		break;
-      case SDL_CONTROLLER_BUTTON_X: 
-	  	return GAMEPAD_X;
-		break;
-      case SDL_CONTROLLER_BUTTON_Y: 
-	 	return GAMEPAD_Y;
-		break;
-      case SDL_CONTROLLER_BUTTON_BACK: 
-	  	return GAMEPAD_BACK;
-      	break;
-	  case SDL_CONTROLLER_BUTTON_GUIDE: 
-		return GAMEPAD_GUIDE;
-	  	break;
-      case SDL_CONTROLLER_BUTTON_START: 
-	  	return GAMEPAD_START;
-		break;
-      case SDL_CONTROLLER_BUTTON_LEFTSTICK: 
-	  	return GAMEPAD_LSTICK;
-		break;
-      case SDL_CONTROLLER_BUTTON_RIGHTSTICK: 
-	  	return GAMEPAD_RSTICK;
-		break;
-      case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: 
-	  	return GAMEPAD_LSHOULDER;
-		break;
-      case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: 
-	  	return GAMEPAD_RSHOULDER;
-		break;
-
-      case SDL_CONTROLLER_BUTTON_DPAD_UP: 
-	  	return GAMEPAD_DPAD_UP;
-      case SDL_CONTROLLER_BUTTON_DPAD_DOWN: 
-	  	return GAMEPAD_DPAD_DOWN;
-      case SDL_CONTROLLER_BUTTON_DPAD_LEFT: 
-	  	return GAMEPAD_DPAD_LEFT;
-      case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: 
-	  	return GAMEPAD_DPAD_RIGHT;
-
-      }
+	int rc = 0;
+	switch (state)
+	{
+      case SDL_CONTROLLER_BUTTON_A:
+		  return rc = GAMEPAD_A;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_B:
+		  return rc = GAMEPAD_B;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_X:
+		  return rc = GAMEPAD_X;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_Y:
+		  return rc = GAMEPAD_Y;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_BACK:
+		  return rc = GAMEPAD_BACK;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_GUIDE:
+		  return rc = GAMEPAD_GUIDE;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_START:
+		  return rc = GAMEPAD_START;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_LEFTSTICK:
+		  return rc = GAMEPAD_LSTICK;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+		  return rc = GAMEPAD_RSTICK;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+		  return rc = GAMEPAD_LSHOULDER;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+		  return rc = GAMEPAD_RSHOULDER;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_UP:
+		  return rc = GAMEPAD_DPAD_UP;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+		  return rc = GAMEPAD_DPAD_DOWN;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+		  return rc = GAMEPAD_DPAD_LEFT;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+		  return rc = GAMEPAD_DPAD_RIGHT;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_MISC1:
+		  return rc = GAMEPAD_BUTTON_MISC1;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE1:
+		  return rc = GAMEPAD_BUTTON_PADDLE1;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE2:
+		  return rc = GAMEPAD_BUTTON_PADDLE2;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE3:
+		  return rc = GAMEPAD_BUTTON_PADDLE3;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE4:
+		  return rc = GAMEPAD_BUTTON_PADDLE4;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_TOUCHPAD:
+		  return rc = GAMEPAD_BUTTON_TOUCHPAD;
+		  break;
+	  default:
+		  rc = state;
+		  break;
+	}
+	return rc;
 }
 
 //
+//I_InitEvent
+//
+void I_InitEvent()
+{
+	if(SDL_Init(SDL_INIT_EVENTS) < 0)
+	{
+		CON_Printf(RED, "Failed to initialize the SDL2 Events SDL Error: %s", SDL_GetError());
+	}
+}
+
+//
+//	I_InitGameController
+//
+void I_InitGameController()
+{
+	if(SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK))
+	{
+		CON_Printf(RED, "Failed to initialize the SDL2 Game Controller API, SDL Error: %s", SDL_GetError());
+	}
+}
+//
 // I_TranslateKey
 //
-
 static int I_TranslateKey(const int key) {
 	int rc = 0;
 
@@ -426,14 +470,14 @@ void I_GetEvent(SDL_Event* Event) {
 		break;
 
 	case SDL_CONTROLLERBUTTONDOWN:
-		event.type = (Event->type == SDL_CONTROLLERBUTTONDOWN);
-		event.data1 = translate_controller(Event->cbutton.button);
+		event.type = Event->type ? SDL_CONTROLLERBUTTONDOWN : ev_keydown;
+		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
 
 	case SDL_CONTROLLERBUTTONUP:
-		event.type = (Event->type == SDL_CONTROLLERBUTTONUP);
-		event.data1 = translate_controller(Event->cbutton.button);
+		event.type = Event->type ? SDL_CONTROLLERBUTTONUP : ev_gamepad;
+		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
 
@@ -512,7 +556,7 @@ void I_GetEvent(SDL_Event* Event) {
 		ev.type = ev_gamepad;
 		ev.data1 = x;
 		ev.data2 = -y;
-		ev.data3 = GAMEPAD_LEFT_STICK;
+		ev.data3 = GAMEPAD_LSTICK;
 		D_PostEvent(&ev);
 
 		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
@@ -524,7 +568,7 @@ void I_GetEvent(SDL_Event* Event) {
 		ev.type = ev_gamepad;
 		ev.data1 = x;
 		ev.data2 = -y;
-		ev.data3 = GAMEPAD_RIGHT_STICK;
+		ev.data3 = GAMEPAD_RSTICK;
 		D_PostEvent(&ev);
 
 		static boolean old_ltrigger = false;

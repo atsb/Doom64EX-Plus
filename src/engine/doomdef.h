@@ -304,14 +304,18 @@ enum
 	GAMEPAD_RSTICK,
 	GAMEPAD_LSHOULDER,
 	GAMEPAD_RSHOULDER,
-	GAMEPAD_LTRIGGER,
-	GAMEPAD_RTRIGGER,
 	GAMEPAD_DPAD_UP,
 	GAMEPAD_DPAD_DOWN,
 	GAMEPAD_DPAD_LEFT,
 	GAMEPAD_DPAD_RIGHT,
-	GAMEPAD_LEFT_STICK,
-	GAMEPAD_RIGHT_STICK
+	GAMEPAD_BUTTON_MISC1,    /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+	GAMEPAD_BUTTON_PADDLE1,  /* Xbox Elite paddle P1 */
+	GAMEPAD_BUTTON_PADDLE2,  /* Xbox Elite paddle P3 */
+	GAMEPAD_BUTTON_PADDLE3,  /* Xbox Elite paddle P2 */
+	GAMEPAD_BUTTON_PADDLE4,  /* Xbox Elite paddle P4 */
+	GAMEPAD_BUTTON_TOUCHPAD, /* PS4/PS5 touchpad button */
+	GAMEPAD_LTRIGGER,
+	GAMEPAD_RTRIGGER,
 };
 
 #include "doomtype.h"

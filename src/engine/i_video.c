@@ -207,7 +207,7 @@ void I_InitVideo(void) {
 #endif
 
 	if (SDL_Init(f) < 0) {
-		I_Error("ERROR - Failed to initialize SDL");
+		I_Error("ERROR - Failed to initialize SDL, ERROR: %", SDL_GetError());
 		return;
 	}
 

@@ -2699,8 +2699,13 @@ menu_t XGamePadDef = {
 };
 
 void M_XGamePadChoice(int choice) {
+#ifdef VITA
 	float slope1 = 10.0f / 100.0f;
 	float slope2 = 10.0f / 100.0f;
+#else
+	float slope1 = 0.0125f / 100.0f;
+	float slope2 = 100.0f / 50.0f;
+#endif
 
 	switch (itemOn) {
 	case xgp_sensitivityx:
@@ -4093,48 +4098,76 @@ void M_DrawXInputButton(int x, int y, int button) {
 	const rcolor color = MENUCOLORWHITE;
 
 	switch (button) {
-	case GAMEPAD_B:
+	case GAMEPAD_A:
 		index = 0;
 		break;
-	case GAMEPAD_A:
+	case GAMEPAD_B:
 		index = 1;
 		break;
-	case GAMEPAD_Y:
+	case GAMEPAD_X:
 		index = 2;
 		break;
-	case GAMEPAD_X:
+	case GAMEPAD_Y:
 		index = 3;
 		break;
-	case GAMEPAD_LSHOULDER:
+	case GAMEPAD_BACK:
 		index = 4;
 		break;
-	case GAMEPAD_RSHOULDER:
+	case GAMEPAD_GUIDE:
 		index = 5;
-		break;
-	case GAMEPAD_DPAD_LEFT:
-		index = 6;
-		break;
-	case GAMEPAD_DPAD_RIGHT:
-		index = 7;
-		break;
-	case GAMEPAD_DPAD_UP:
-		index = 8;
-		break;
-	case GAMEPAD_DPAD_DOWN:
-		index = 9;
 		break;
 	case GAMEPAD_START:
+		index = 6;
+		break;
+	case GAMEPAD_LSTICK:
+		index = 7;
+		break;
+	case GAMEPAD_RSTICK:
+		index = 8;
+		break;
+	case GAMEPAD_LSHOULDER:
+		index = 5;
+		break;
+	case GAMEPAD_RSHOULDER:
+		index = 6;
+		break;
+	case GAMEPAD_DPAD_UP:
+		index = 7;
+		break;
+	case GAMEPAD_DPAD_DOWN:
+		index = 8;
+		break;
+	case GAMEPAD_DPAD_LEFT:
+		index = 9;
+		break;
+	case GAMEPAD_DPAD_RIGHT:
 		index = 10;
 		break;
-	case GAMEPAD_BACK:
-		index = 11;
+	case GAMEPAD_BUTTON_MISC1:
+		index = 11; /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+		break;
+	case GAMEPAD_BUTTON_PADDLE1:
+		index = 12; /* Xbox Elite paddle P1 */
+		break;
+	case GAMEPAD_BUTTON_PADDLE2:
+		index = 13; /* Xbox Elite paddle P3 */
+		break;
+	case GAMEPAD_BUTTON_PADDLE3:  /* Xbox Elite paddle P2 */
+		index = 14;
+		break;
+	case GAMEPAD_BUTTON_PADDLE4: /* Xbox Elite paddle P4 */
+		index = 15;
+		break;
+	case GAMEPAD_BUTTON_TOUCHPAD: /* PS4/PS5 touchpad button */
+		index = 16;
 		break;
 	case GAMEPAD_LTRIGGER:
-		index = 4;
+		index = 17;
 		break;
 	case GAMEPAD_RTRIGGER:
-		index = 5;
+		index = 18;
 		break;	
+
 	default:
 		return;
 	}
