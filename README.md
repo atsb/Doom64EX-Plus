@@ -74,7 +74,7 @@ Linux / *BSD Desktop / Laptop
 - 2GB RAM
 - 80MB Disk Space
 - OpenGL 2.1+ Compliant Video Chip / Card
-Or OpenGL 3.1+ Compiling Video Chip / Card
+Or OpenGL 3.1+ Compliant Video Chip / Card
 
 Windows
 
@@ -82,7 +82,7 @@ Windows
 - 4GB RAM
 - 80MB Disk Space
 - OpenGL 2.1+ Compliant Video Chip / Card
-Or OpenGL 3.1+ Compiling Video Chip / Card
+Or OpenGL 3.1+ Compliant Video Chip / Card
 
 macOS
 
