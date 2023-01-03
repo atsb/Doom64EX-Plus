@@ -161,8 +161,8 @@ int htoi(int8_t* str);
 boolean fcmp(float f1, float f2);
 
 #ifdef __linux__
-#define max fmax
-#define min fmin
+#define max(num1, num2) ((num1)>(num2)?(num1):(num2))
+#define min(num1, num2) ((num1)<(num2)?(num1):(num2))
 #endif
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
 #define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
