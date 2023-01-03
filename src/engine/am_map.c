@@ -49,9 +49,6 @@
 #include "gl_draw.h"
 #include "g_actions.h"
 #include "g_controls.h"
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
-#endif
 
 // automap flags
 
@@ -106,13 +103,11 @@ CVAR(am_overlay, 0);
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
 
-#if defined(_WIN32) && defined(USE_XINPUT) // XINPUT
-CVAR_EXTERNAL(i_rsticksensitivity);
-CVAR_EXTERNAL(i_xinputscheme);
-#elif defined(VITA)
-float i_rsticksensitivity;
-CVAR_EXTERNAL(i_xinputscheme);
-#endif
+
+extern float i_rsticksensitivityy;
+extern float i_rsticksensitivityx;
+extern int i_xinputscheme;
+
 //
 // CMD_Automap
 //
@@ -345,114 +340,7 @@ int AM_Responder(event_t* ev) {
 			}
 		}
 	}
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 
-	else if (ev->type == ev_gamepad) {
-		//
-		// user has pan button held down and is
-		// moving around with the stick
-		//
-		if (am_flags & AF_PANGAMEPAD) {
-			if (ev->data3 == XINPUT_GAMEPAD_LEFT_STICK) {
-				float x;
-				float y;
-
-				x = (float)ev->data1 * i_rsticksensitivity.value / (1500.0f / scale);
-				y = (float)ev->data2 * i_rsticksensitivity.value / (1500.0f / scale);
-
-				mpanx = (int)x << 16;
-				mpany = (int)y << 16;
-
-				rc = true;
-			}
-		}
-	}
-	else if (automapactive) {
-		if (ev->type == ev_keydown) {
-			switch (ev->data1) {
-				//
-				// pan button
-				//
-			case BUTTON_A:
-				CMD_AutomapSetFlag(AF_PANGAMEPAD, NULL);
-				break;
-
-			case BUTTON_LEFT_SHOULDER:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_ZOOMIN, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_RIGHT_SHOULDER:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_ZOOMOUT, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_UP:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANTOP, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_DOWN:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANBOTTOM, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_LEFT:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANLEFT, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_RIGHT:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANRIGHT, NULL);
-					rc = true;
-				}
-				break;
-			}
-		}
-		else if (ev->type == ev_keyup) {
-			switch (ev->data1) {
-			case BUTTON_A:
-				CMD_AutomapSetFlag(AF_PANGAMEPAD | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_LEFT_SHOULDER:
-				CMD_AutomapSetFlag(AF_ZOOMIN | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_RIGHT_SHOULDER:
-				CMD_AutomapSetFlag(AF_ZOOMOUT | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_UP:
-				CMD_AutomapSetFlag(AF_PANTOP | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_DOWN:
-				CMD_AutomapSetFlag(AF_PANBOTTOM | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_LEFT:
-				CMD_AutomapSetFlag(AF_PANLEFT | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_RIGHT:
-				CMD_AutomapSetFlag(AF_PANRIGHT | PCKF_UP, NULL);
-				break;
-			}
-		}
-	}
-#elif defined(VITA)
 	else if (ev->type == ev_gamepad) {
 		//
 		// user has pan button held down and is
@@ -463,8 +351,8 @@ int AM_Responder(event_t* ev) {
 				float x;
 				float y;
 
-				x = (float)ev->data1 * i_rsticksensitivity / (1500.0f / scale);
-				y = (float)ev->data2 * i_rsticksensitivity / (1500.0f / scale);
+				x = (float)ev->data1 * i_rsticksensitivityx / (1500.0f / scale);
+				y = (float)ev->data2 * i_rsticksensitivityy / (1500.0f / scale);
 
 				mpanx = (int)x << 16;
 				mpany = (int)y << 16;
@@ -558,7 +446,6 @@ int AM_Responder(event_t* ev) {
 			}
 		}
 	}
-#endif
 	return rc;
 }
 
@@ -611,8 +498,6 @@ void AM_Ticker(void) {
 		}
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT) || defined(VITA)  // XINPUT
-
 	if (am_flags & AF_PANGAMEPAD) {
 		automappanx += mpanx;
 		automappany += mpany;
@@ -623,8 +508,6 @@ void AM_Ticker(void) {
 		automapy = plr->mo->y;
 		automapangle = plr->mo->angle;
 	}
-
-#endif
 
 	if ((!followplayer || (am_flags & AF_PANGAMEPAD)) &&
 		am_flags & (AF_PANLEFT | AF_PANRIGHT | AF_PANTOP | AF_PANBOTTOM)) {

@@ -35,12 +35,12 @@
 #include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
-#ifdef VITA
 #include <assert.h>
-#endif
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
-#endif
+#include "con_console.h"
+
+float i_rsticksensitivityy;
+float i_rsticksensitivityx;
+int i_xinputscheme;
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -60,7 +60,7 @@ int         DualMouse;
 boolean    MouseMode;//false=microsoft, true=mouse systems
 boolean window_mouse;
 
-#ifdef VITA
+
 Sint32 s_deadzone = 8000;
 
 void s_clamp(Sint32 axis)
@@ -72,9 +72,10 @@ void s_clamp(Sint32 axis)
 }
 
 SDL_GameController *s_controller;
-#endif
-#ifdef VITA
-int translate_controller(int state) {
+
+
+int translate_controller(int state) 
+{
       switch (state) {
 
       case SDL_CONTROLLER_BUTTON_A: 
@@ -121,8 +122,8 @@ int translate_controller(int state) {
 	  	return GAMEPAD_DPAD_RIGHT;
 
       }
-  }
-#endif	
+}
+
 //
 // I_TranslateKey
 //
@@ -412,26 +413,29 @@ void I_GetEvent(SDL_Event* Event) {
 		D_PostEvent(&event);
 		break;
 
-#ifdef VITA
-			case SDL_CONTROLLERDEVICEADDED:
-                printf("SDL: Controller added: {}", SDL_GameControllerNameForIndex(Event->cdevice.which));
-                s_controller = SDL_GameControllerOpen(Event->cdevice.which);
-                assert(s_controller);
-				break;
 
-			case SDL_CONTROLLERDEVICEREMOVED:
-                printf("SDL: Controller removed");
-                s_controller = NULL;
-                break;
+	case SDL_CONTROLLERDEVICEADDED:
+		CON_Printf(GREEN,"SDL: Controller added: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
+		s_controller = SDL_GameControllerOpen(Event->cdevice.which);
+		assert(s_controller);
+		break;
 
-            case SDL_CONTROLLERBUTTONDOWN:
-            case SDL_CONTROLLERBUTTONUP:
-                event.type = ev_keyup;
-				event.data1 = (Event->type == SDL_CONTROLLERBUTTONDOWN) ? ev_keydown : ev_keyup;
-             	translate_controller(Event->cbutton.button);
-                D_PostEvent(&event);
-				break;
-#endif
+	case SDL_CONTROLLERDEVICEREMOVED:
+		CON_Printf(RED, "SDL: Controller removed");
+		s_controller = NULL;
+		break;
+
+	case SDL_CONTROLLERBUTTONDOWN:
+		event.type = (Event->type == SDL_CONTROLLERBUTTONDOWN);
+		event.data1 = translate_controller(Event->cbutton.button);
+		D_PostEvent(&event);
+		break;
+
+	case SDL_CONTROLLERBUTTONUP:
+		event.type = (Event->type == SDL_CONTROLLERBUTTONUP);
+		event.data1 = translate_controller(Event->cbutton.button);
+		D_PostEvent(&event);
+		break;
 
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
@@ -494,69 +498,68 @@ void I_GetEvent(SDL_Event* Event) {
 	default:
 		break;
 	}
+	int x, y;
+	if (s_controller) 
+	{
+		event_t ev;
 
-#ifdef VITA
-        int x, y;
-		if (s_controller) {
-            event_t ev;
+		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTX);
+		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTY);
 
-            x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTX);
-            y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTY);
+		s_clamp(x);
+		s_clamp(y);
 
-            s_clamp(x);
-            s_clamp(y);
+		ev.type = ev_gamepad;
+		ev.data1 = x;
+		ev.data2 = -y;
+		ev.data3 = GAMEPAD_LEFT_STICK;
+		D_PostEvent(&ev);
 
-            ev.type = ev_gamepad;
-            ev.data1 = x;
-            ev.data2 = -y;
-            ev.data3 = GAMEPAD_LEFT_STICK;
-            D_PostEvent(&ev);
+		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
+		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTY);
 
-            x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
-            y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTY);
+		s_clamp(x);
+		s_clamp(y);
 
-            s_clamp(x);
-            s_clamp(y);
+		ev.type = ev_gamepad;
+		ev.data1 = x;
+		ev.data2 = -y;
+		ev.data3 = GAMEPAD_RIGHT_STICK;
+		D_PostEvent(&ev);
 
-            ev.type = ev_gamepad;
-            ev.data1 = x;
-            ev.data2 = -y;
-            ev.data3 = GAMEPAD_RIGHT_STICK;
-            D_PostEvent(&ev);
+		static boolean old_ltrigger = false;
+		static boolean old_rtrigger = false;
 
-            static boolean old_ltrigger = false;
-            static boolean old_rtrigger = false;
-
-            int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-            if (z >= 0x4000 && !old_ltrigger) {
-                old_ltrigger = true;
-                ev.type = ev_keydown;
-                ev.data1 = GAMEPAD_LTRIGGER;
-                D_PostEvent(&ev);
-            } else if (z < 0x4000 && old_ltrigger) {
-                old_ltrigger = false;
-                ev.type = ev_keyup;
-                ev.data1 = GAMEPAD_LTRIGGER;
-                D_PostEvent(&ev);
-            }
-
-            z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-            if (z >= 0x4000 && !old_rtrigger) {
-                old_rtrigger = true;
-                ev.type = ev_keydown;
-                ev.data1 = GAMEPAD_RTRIGGER;
-                D_PostEvent(&ev);
-            } else if (z < 0x4000 && old_rtrigger) {
-                old_rtrigger = false;
-                ev.type = ev_keyup;
-                ev.data1 = GAMEPAD_RTRIGGER;
-                D_PostEvent(&ev);
-			}
+		int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+		if (z >= 0x4000 && !old_ltrigger) {
+			old_ltrigger = true;
+			ev.type = ev_keydown;
+			ev.data1 = GAMEPAD_LTRIGGER;
+			D_PostEvent(&ev);
+		}
+		else if (z < 0x4000 && old_ltrigger) {
+			old_ltrigger = false;
+			ev.type = ev_keyup;
+			ev.data1 = GAMEPAD_LTRIGGER;
+			D_PostEvent(&ev);
 		}
 
-#endif
+		z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+		if (z >= 0x4000 && !old_rtrigger) {
+			old_rtrigger = true;
+			ev.type = ev_keydown;
+			ev.data1 = GAMEPAD_RTRIGGER;
+			D_PostEvent(&ev);
+		}
+		else if (z < 0x4000 && old_rtrigger) {
+			old_rtrigger = false;
+			ev.type = ev_keyup;
+			ev.data1 = GAMEPAD_RTRIGGER;
+			D_PostEvent(&ev);
+		}
+	}
 
-	if (mwheeluptic && mwheeluptic + 1 < tic) {
+	if(mwheeluptic && mwheeluptic + 1 < tic) {
 		event.type = ev_keyup;
 		event.data1 = KEY_MWHEELUP;
 		D_PostEvent(&event);
@@ -600,9 +603,6 @@ void I_StartTic(void) {
 		I_GetEvent(&Event);
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputPollEvent();
-#endif
 	I_InitInputs();
 	I_ReadMouse();
 }
@@ -625,10 +625,6 @@ void I_InitInputs(void) {
 	SDL_PumpEvents();
 	SDL_ShowCursor(m_menumouse.value < 1);
 	I_MouseAccelChange();
-
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputInit();
-#endif
 }
 
 //

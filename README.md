@@ -163,20 +163,20 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 You can place the asset data described above to any of the following directories:
 
 * The directory in which `doom64ex-plus` resides
-* `/usr/local/share/doom64ex-plus`
+* `/usr/local/share/DOOM64EX+`
 
 ## macOS
 
 You can place the asset data described above to:
 
-* `/Users/*user*/Library/Application Support/doom64ex-plus`
+* `/Users/*user*/Library/Application Support/DOOM64EX+`
 
 Then, you can start playing:
 
  $ DOOM64EX+
 
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
-`~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
+`~user/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
 ## Windows
 

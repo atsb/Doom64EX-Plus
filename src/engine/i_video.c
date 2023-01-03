@@ -49,9 +49,6 @@ const int8_t version_date[] = __DATE__;
 SDL_Window* window;
 OGL_DEFS;
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
-#endif
 
 CVAR(v_width, 640);
 CVAR(v_height, 480);
@@ -203,7 +200,7 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-	uint32_t f = SDL_INIT_VIDEO;
+	uint32_t f = SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
 
 #ifdef _DEBUG
 	f |= SDL_INIT_NOPARACHUTE;

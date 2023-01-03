@@ -844,41 +844,41 @@ void G_ClearInput(void) {
 	}
 }
 
-#ifdef VITA
 //
 // G_DoCmdGamepadMove
 //
 
-extern float i_rsticksensitivity;
-CVAR_EXTERNAL(i_xinputscheme);
+extern int i_xinputscheme;
+extern float i_rsticksensitivityy;
+extern float i_rsticksensitivityx;
 
-void G_DoCmdGamepadMove(event_t *ev)
+void G_DoCmdGamepadMove(event_t* ev)
 {
-    // Most of this is taken from kaiser's xinput.c
-    playercontrols_t *pc = &Controls;
+	// Most of this is taken from kaiser's xinput.c
+	playercontrols_t* pc = &Controls;
 
-    if (ev->type == ev_gamepad) {
-        pc->flags |= PCF_GAMEPAD;
+	if (ev->type == ev_gamepad) {
+		pc->flags |= PCF_GAMEPAD;
 
-        //
-        // left analog stick
-        //
-        if (ev->data3 == GAMEPAD_LEFT_STICK) {
-            pc->joyx += (ev->data1) * 0.0015f;
-            pc->joyy += (ev->data2) * 0.0015f;
-        }
-        //
-        // right analog stick
-        //
-        else if (ev->data3 == GAMEPAD_RIGHT_STICK) {
-            int x = (ev->data1) * i_rsticksensitivity * 0.0015f;
-            int y = (ev->data2) * i_rsticksensitivity * 0.0015f;
-            pc->mousex += x;
-            pc->mousey += y;
-        }
-    }
+		//
+		// left analog stick
+		//
+		if (ev->data3 == GAMEPAD_LEFT_STICK) {
+			pc->joyx += (float) ev->data1 * 0.0015f;
+			pc->joyy += (float) ev->data2 * 0.0015f;
+		}
+		//
+		// right analog stick
+		//
+		else if (ev->data3 == GAMEPAD_RIGHT_STICK) {
+			int x = (float)(ev->data1) * i_rsticksensitivityx * 0.0015f;
+			int y = (float)(ev->data2) * i_rsticksensitivityy * 0.0015f;
+			pc->mousex += x;
+			pc->mousey += y;
+		}
+	}
 }
-#endif
+
 //
 // G_SetGameFlags
 //
