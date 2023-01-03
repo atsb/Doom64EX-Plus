@@ -1160,11 +1160,6 @@ typedef enum {
 	S_SPID_DIE4,
 	S_SPID_DIE5,
 	S_SPID_DIE6,
-	S_SPID_DIE7,
-	S_SPID_DIE8,
-	S_SPID_DIE9,
-	S_SPID_DIE10,
-	S_SPID_DIE11,
 	NUMSTATES
 } statenum_t;
 
