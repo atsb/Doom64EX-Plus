@@ -182,7 +182,7 @@ Then, you can start playing:
 
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
 `~usr/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the `-DDOOM_UNIX_INSTALL`
-**January 3 of 2023NOTE for Linux and FreeBSD/OpenBSD users** As January 3 of 2023 The DOOM64EX+ by standard will be compiled with `-DDOOM_UNIX_INSTALL` due to SDL Path filesystem
+**NOTE for Linux and FreeBSD/OpenBSD users** As January 2 of 2023 The DOOM64EX+ by standard will be compiled with `-DDOOM_UNIX_INSTALL` due to SDL Path filesystem
 i need to replace this guy with opendir instead of the ~~shit~~ of SDL_GetPath.
 
 ## Windows
