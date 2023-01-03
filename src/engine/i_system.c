@@ -306,7 +306,7 @@ int8_t* I_FindDataFile(int8_t* file) {
 		int i;
 		const int8_t* paths[] = {
 			//André: Removed all useless directories, Only The dir usr/local is fine to use.
-				"/usr/local/share/doom64ex-plus/",
+				"/usr/local/share/DOOM64EX+/",
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
