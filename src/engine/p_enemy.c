@@ -978,6 +978,42 @@ void A_SPosAttack(mobj_t* actor) {
 	}
 }
 
+void A_CPosAttack(mobj_t* actor)
+{
+	int		angle;
+	int		bangle;
+	int		damage;
+	int		slope;
+
+	if (!actor->target)
+		return;
+
+	S_StartSound(actor, sfx_pistol);
+	A_FaceTarget(actor);
+	bangle = actor->angle;
+	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
+
+	angle = bangle + ((P_Random() - P_Random()) << 20);
+	damage = ((P_Random() % 5) * 3) + 3;
+	P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
+}
+
+void A_CPosRefire(mobj_t* actor)
+{
+	// keep firing unless target got out of sight
+	A_FaceTarget(actor);
+
+	if (P_Random() < 40)
+		return;
+
+	if (!actor->target
+		|| actor->target->health <= 0
+		|| !P_CheckSight(actor, actor->target))
+	{
+		P_SetMobjState(actor, actor->info->seestate);
+	}
+}
+
 //
 // A_PlayAttack
 //
@@ -1821,5 +1857,111 @@ void A_TargetCamera(mobj_t* actor) {
 			P_SetMobjState(actor, actor->info->missilestate);
 			return;
 		}
+	}
+}
+
+//
+// A_SkelMissile
+//
+
+void A_SkelMissile(mobj_t* actor, int direction)
+{
+	mobj_t* mo;
+	angle_t angle;
+
+	if (direction == DP_LEFT) {
+		angle = actor->angle + ANG45;
+	}
+	else if (direction == DP_RIGHT) {
+		angle = actor->angle - ANG45;
+	}
+	else {
+		angle = actor->angle;
+	}
+	angle >>= ANGLETOFINESHIFT;
+
+	mo = P_SpawnMissile(actor,
+		actor->target,
+		MT_PROJ_UNDEAD,
+		FixedMul(26 * FRACUNIT, finecosine[angle]),
+		FixedMul(26 * FRACUNIT, finesine[angle]),
+		104,
+		true);
+	mo->x += mo->momx;
+	mo->y += mo->momy;
+	mo->tracer = actor->target;
+}
+
+//
+// A_SkelAttack
+//
+
+void A_SkelAttack(mobj_t* actor)
+{
+	if (!actor->target)
+		return;
+	A_FaceTarget(actor);
+	A_SkelMissile(actor, DP_LEFT);
+	A_SkelMissile(actor, DP_RIGHT);
+}
+
+//
+// A_SkelWhoosh
+//
+
+void A_SkelWhoosh(mobj_t* actor)
+{
+	if (!actor->target)
+		return;
+	A_FaceTarget(actor);
+	S_StartSound(actor, sfx_dart);
+}
+
+//
+// A_SkelFist
+//
+
+void A_SkelFist(mobj_t* actor)
+{
+	int	damage;
+
+	if (!actor->target)
+		return;
+
+	A_FaceTarget(actor);
+
+	if (P_CheckMeleeRange(actor))
+	{
+		damage = ((P_Random() % 10) + 1) * 6;
+		S_StartSound(actor, sfx_dartshoot);
+		P_DamageMobj(actor->target, actor, actor, damage);
+	}
+}
+
+//
+// A_SpidAttack
+//
+
+void A_SpidAttack(mobj_t* actor)
+{
+	int i;
+	int angle;
+	int bangle;
+	int damage;
+	int slope;
+
+	if (!actor->target)
+		return;
+
+	S_StartSound(actor, sfx_pistol);
+	A_FaceTarget(actor);
+	bangle = actor->angle;
+	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
+
+	for (i = 0; i < 3; i++)
+	{
+		angle = bangle + ((P_Random() - P_Random()) << 20);
+		damage = ((P_Random() & 5) * 3) + 3;
+		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 	}
 }

@@ -61,8 +61,15 @@ int8_t* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"S008", "S009", "S010", "S011", "S012", "S013", "S014", "S017",
 	"S018", "S019", "S020", "S021", "S022", "S023", "S024", "S028",
 	"S029", "S031", "S032", "S027", "S036", "S037", "S038", "S040",
-	"S041", "S026", "S002", "S030", NULL
+	"S041", "S026", "S002", "S030",
+	"CPOS",
+	"SKEL",
+	"ARCR",
+	"POW1",
+	"SPID",
+	NULL
 };
+
 
 // Doesn't work with g++, needs actionf_p1
 void A_WeaponReady();
@@ -98,6 +105,8 @@ void A_FaceTarget();
 void A_PosAttack();
 void A_Scream();
 void A_SPosAttack();
+void A_CPosAttack();
+void A_CPosRefire();
 void A_Tracer();
 void A_FatRaise();
 void A_FatAttack1();
@@ -137,6 +146,10 @@ void A_FadeOut();
 void A_FadeIn();
 void A_SkullSetAlpha();
 void A_MissileSetAlpha();
+void A_SkelWhoosh();
+void A_SkelFist();
+void A_SkelAttack();
+void A_SpidAttack();
 
 #pragma warning(push)
 #pragma warning(disable:4113)
@@ -1072,6 +1085,60 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	{ SPR_S030,32769,4,NULL,S_MISC30_3 },// S_MISC30_2
 	{ SPR_S030,32770,4,NULL,S_MISC30_4 },// S_MISC30_3
 	{ SPR_S030,32771,4,NULL,S_MISC30_1 },// S_MISC30_4
+	{ SPR_CPOS, 0, 10, {A_Look}, S_CPOS_STND2 },
+	/*S_CPOS_STND*/{ SPR_CPOS, 0, 10, {A_Look}, S_CPOS_STND2 },
+	/*S_CPOS_STND2*/{ SPR_CPOS, 1, 10, {A_Look}, S_CPOS_STND },
+	/*S_CPOS_RUN1*/{ SPR_CPOS, 0, 3, {A_Chase}, S_CPOS_RUN2 },
+	/*S_CPOS_RUN2*/{ SPR_CPOS, 0, 3, {A_Chase}, S_CPOS_RUN3 },
+	/*S_CPOS_RUN3*/{ SPR_CPOS, 1, 3, {A_Chase}, S_CPOS_RUN4 },
+	/*S_CPOS_RUN4*/{ SPR_CPOS, 1, 3, {A_Chase}, S_CPOS_RUN5 },
+	/*S_CPOS_RUN5*/{ SPR_CPOS, 2, 3, {A_Chase}, S_CPOS_RUN6 },
+	/*S_CPOS_RUN6*/{ SPR_CPOS, 2, 3, {A_Chase}, S_CPOS_RUN7 },
+	/*S_CPOS_RUN7*/{ SPR_CPOS, 3, 3, {A_Chase}, S_CPOS_RUN8 },
+	/*S_CPOS_RUN8*/{ SPR_CPOS, 3, 3, {A_Chase}, S_CPOS_RUN1 },
+	/*S_CPOS_ATK1*/{ SPR_CPOS, 4, 10, {A_FaceTarget}, S_CPOS_ATK2 },
+	/*S_CPOS_ATK2*/{ SPR_CPOS, 32773, 4, {A_CPosAttack}, S_CPOS_ATK3 },
+	/*S_CPOS_ATK3*/{ SPR_CPOS, 32772, 4, {A_CPosAttack}, S_CPOS_ATK4 },
+	/*S_CPOS_ATK4*/{ SPR_CPOS, 5, 1, {A_CPosRefire},S_CPOS_ATK2 },
+	/*S_CPOS_PAIN*/{ SPR_CPOS, 6, 3, {NULL}, S_CPOS_PAIN2 },
+	/*S_CPOS_PAIN2*/{ SPR_CPOS, 6, 3, {A_Pain},S_CPOS_RUN1 },
+	/*S_CPOS_DIE1*/{ SPR_CPOS, 7, 5, {NULL}, S_CPOS_DIE2 },
+	/*S_CPOS_DIE2*/{ SPR_CPOS, 8, 5, {A_Scream}, S_CPOS_DIE3 },
+	/*S_CPOS_DIE3*/{ SPR_CPOS, 9, 5, {A_Fall}, S_CPOS_DIE4 },
+	/*S_CPOS_DIE4*/{ SPR_CPOS, 10, 5, {NULL},S_CPOS_DIE5 },
+	/*S_CPOS_DIE5*/{ SPR_CPOS, 11, 5, {NULL},S_CPOS_DIE6 },
+	/*S_CPOS_DIE6*/{ SPR_CPOS, 12, 5, {A_OnDeathTrigger},S_CPOS_DIE7 },
+	/*S_CPOS_DIE7*/{ SPR_CPOS, 13, -1, {NULL}, S_NULL },
+	/*S_CPOS_XDIE1*/{ SPR_CPOS, 14, 5, {NULL}, S_CPOS_XDIE2 },
+	/*S_CPOS_XDIE2*/{ SPR_CPOS, 15, 5, {A_XScream}, S_CPOS_XDIE3 },
+	/*S_CPOS_XDIE3*/{ SPR_CPOS, 16, 5, {A_Fall}, S_CPOS_XDIE4 },
+	/*S_CPOS_XDIE4*/{ SPR_CPOS, 17, 5, {NULL}, S_CPOS_XDIE5 },
+	/*S_CPOS_XDIE5*/{ SPR_CPOS, 18, 5, {A_OnDeathTrigger}, S_CPOS_XDIE6 },
+	/*S_CPOS_XDIE6*/{ SPR_CPOS, 19, -1, {NULL}, S_NULL },
+	/*S_SPID_STND*/{ SPR_SPID, 0, 10, {A_Look}, S_SPID_STND2 },
+	/*S_SPID_STND2*/{ SPR_SPID, 1, 10, {A_Look}, S_SPID_STND },
+	/*S_SPID_RUN1*/{ SPR_SPID, 0, 4, {A_Metal}, S_SPID_RUN2 },
+	/*S_SPID_RUN2*/{ SPR_SPID, 0, 4, {A_Chase}, S_SPID_RUN3 },
+	/*S_SPID_RUN3*/{ SPR_SPID, 1, 4, {A_Chase}, S_SPID_RUN4 },
+	/*S_SPID_RUN4*/{ SPR_SPID, 1, 4, {A_Chase}, S_SPID_RUN5 },
+	/*S_SPID_RUN5*/{ SPR_SPID, 2, 4, {A_Metal}, S_SPID_RUN6 },
+	/*S_SPID_RUN6*/{ SPR_SPID, 2, 4, {A_Chase}, S_SPID_RUN7 },
+	/*S_SPID_RUN7*/{ SPR_SPID, 3, 4, {A_Chase}, S_SPID_RUN8 },
+	/*S_SPID_RUN8*/{ SPR_SPID, 3, 4, {A_Chase}, S_SPID_RUN1 },
+	/*S_SPID_ATK1*/{ SPR_SPID, 32768, 20, {A_BspiFaceTarget}, S_SPID_ATK2 },
+	/*S_SPID_ATK2*/{ SPR_SPID, 32772, 2, {A_SpidAttack}, S_SPID_ATK3 },
+	/*S_SPID_ATK3*/{ SPR_SPID, 32773, 2, {NULL}, S_SPID_ATK4 },
+	/*S_SPID_ATK4*/{ SPR_SPID, 32774, 2, {A_SpidAttack}, S_SPID_ATK5 },
+	/*S_SPID_ATK5*/{ SPR_SPID, 32775, 2, {NULL}, S_SPID_ATK6 },
+	/*S_SPID_ATK6*/{ SPR_SPID, 32776, 2, {A_SpidRefire}, S_SPID_ATK2 },
+	/*S_SPID_PAIN*/{ SPR_SPID, 9, 4, {NULL}, S_SPID_PAIN2 },
+	/*S_SPID_PAIN2*/{ SPR_SPID, 9, 4, {A_Pain}, S_SPID_RUN1 },
+	/*S_SPID_DIE1*/{ SPR_SPID, 10, 16, {A_Scream}, S_SPID_DIE2 },
+	/*S_SPID_DIE2*/{ SPR_SPID, 10, 6, {A_Fall}, S_SPID_DIE3 },
+	/*S_SPID_DIE3*/{ SPR_SPID, 10, 6, {NULL}, S_SPID_DIE4 },
+	/*S_SPID_DIE4*/{ SPR_SPID, 10, 6, {NULL}, S_SPID_DIE5 },
+	/*S_SPID_DIE5*/{ SPR_SPID, 11, 6, {NULL}, S_SPID_DIE6 },
+	/*S_SPID_DIE6*/{ SPR_SPID, 11, 6, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -5823,4 +5890,58 @@ MF_SOLID,// flags
 0,// palette
 255// alpha
 },
+	{
+		/*MT_CHAINGUY*/
+		65,        //doomednum
+		S_CPOS_STND,        //spawnstate
+		70,        //spawnhealth
+		S_CPOS_RUN1,        //seestate
+		sfx_possit2,        //seesound
+		8,        //reactiontime
+		sfx_None,        //attacksound
+		S_CPOS_PAIN,        //painstate
+		170,        //painchance
+		sfx_dbpain1,        //painsound
+		S_NULL,        //meleestate
+		S_CPOS_ATK1,        //missilestate
+		S_CPOS_DIE1,        //deathstate
+		S_CPOS_XDIE1,        //xdeathstate
+		sfx_posdie2,        //deathsound
+		8,        //speed
+		32 * FRACUNIT,        //radius
+		87 * FRACUNIT,        //height
+		100,        //mass
+		0,        //damage
+		sfx_posact,        //activesound
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+		0,        // palette
+		255        // alpha
+	},
+		{
+			/*MT_SPIDER*/
+			7,        //doomednum
+			S_SPID_STND,        //spawnstate
+			3000,        //spawnhealth
+			S_SPID_RUN1,        //seestate
+			sfx_spisit,        //seesound
+			8,        //reactiontime
+			sfx_pistol,        //attacksound
+			S_SPID_PAIN,        //painstate
+			40,        //painchance
+			sfx_dbpain2,        //painsound
+			S_NULL,        //meleestate
+			S_SPID_ATK1,        //missilestate
+			S_SPID_DIE1,        //deathstate
+			S_NULL,        //xdeathstate
+			sfx_spidth,        //deathsound
+			12,        //speed
+			128 * FRACUNIT,        //radius
+			140 * FRACUNIT,        //height
+			1000,        //mass
+			0,        //damage
+			sfx_dbact,        //activesound
+			MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags,
+			0,        // palette
+			255        // alpha
+		},
 };
