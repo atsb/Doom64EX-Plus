@@ -52,10 +52,7 @@
 #include "gl_draw.h"
 #include "g_demo.h"
 #include "i_w3swrapper.h"
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
 void M_DrawXInputButton(int x, int y, int button);
-#endif
 CVAR(st_drawhud, 1);
 CVAR(st_crosshair, 0);
 CVAR(st_crosshairopacity, 80);
@@ -947,21 +944,12 @@ void ST_Drawer(void) {
 			int8_t contextstring[32];
 			float x;
 
-#if defined(_WIN32) && defined(USE_XINPUT) 
-			if (xgamepad.connected) {
-				M_DrawXInputButton(140, 156, XINPUT_GAMEPAD_A);
-				Draw_Text(213, 214, WHITEALPHA(0xA0), 0.75, false, "Use");
-			}
-			else
-#endif
-			{
-				G_GetActionBindings(usestring, "+use");
-				sprintf(contextstring, "(%s)Use", usestring);
+			G_GetActionBindings(usestring, "+use");
+			sprintf(contextstring, "(%s)Use", usestring);
 
-				x = (160 / 0.75f) - ((strlen(contextstring) * 8) / 2);
+			x = (160 / 0.75f) - ((strlen(contextstring) * 8) / 2);
 
-				Draw_Text((int)x, 214, WHITEALPHA(0xA0), 0.75f, false, contextstring);
-			}
+			Draw_Text((int)x, 214, WHITEALPHA(0xA0), 0.75f, false, contextstring);
 		}
 	}
 

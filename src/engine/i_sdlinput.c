@@ -32,15 +32,14 @@
 #include "m_misc.h"
 #include "doomstat.h"
 #include "i_system.h"
-#include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
-#ifdef VITA
 #include <assert.h>
-#endif
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
-#endif
+#include "con_console.h"
+
+float i_rsticksensitivityy;
+float i_rsticksensitivityx;
+int i_xinputscheme;
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -60,7 +59,7 @@ int         DualMouse;
 boolean    MouseMode;//false=microsoft, true=mouse systems
 boolean window_mouse;
 
-#ifdef VITA
+
 Sint32 s_deadzone = 8000;
 
 void s_clamp(Sint32 axis)
@@ -72,61 +71,107 @@ void s_clamp(Sint32 axis)
 }
 
 SDL_GameController *s_controller;
-#endif
-#ifdef VITA
-int translate_controller(int state) {
-      switch (state) {
 
-      case SDL_CONTROLLER_BUTTON_A: 
-		return GAMEPAD_A;
-		break;
-      case SDL_CONTROLLER_BUTTON_B: 
-	  	return GAMEPAD_B;
-		break;
-      case SDL_CONTROLLER_BUTTON_X: 
-	  	return GAMEPAD_X;
-		break;
-      case SDL_CONTROLLER_BUTTON_Y: 
-	 	return GAMEPAD_Y;
-		break;
-      case SDL_CONTROLLER_BUTTON_BACK: 
-	  	return GAMEPAD_BACK;
-      	break;
-	  case SDL_CONTROLLER_BUTTON_GUIDE: 
-		return GAMEPAD_GUIDE;
-	  	break;
-      case SDL_CONTROLLER_BUTTON_START: 
-	  	return GAMEPAD_START;
-		break;
-      case SDL_CONTROLLER_BUTTON_LEFTSTICK: 
-	  	return GAMEPAD_LSTICK;
-		break;
-      case SDL_CONTROLLER_BUTTON_RIGHTSTICK: 
-	  	return GAMEPAD_RSTICK;
-		break;
-      case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: 
-	  	return GAMEPAD_LSHOULDER;
-		break;
-      case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: 
-	  	return GAMEPAD_RSHOULDER;
-		break;
 
-      case SDL_CONTROLLER_BUTTON_DPAD_UP: 
-	  	return GAMEPAD_DPAD_UP;
-      case SDL_CONTROLLER_BUTTON_DPAD_DOWN: 
-	  	return GAMEPAD_DPAD_DOWN;
-      case SDL_CONTROLLER_BUTTON_DPAD_LEFT: 
-	  	return GAMEPAD_DPAD_LEFT;
-      case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: 
-	  	return GAMEPAD_DPAD_RIGHT;
+int I_Translate_GameController(int state)
+{
+	int rc = 0;
+	switch (state)
+	{
+      case SDL_CONTROLLER_BUTTON_A:
+		  return rc = GAMEPAD_A;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_B:
+		  return rc = GAMEPAD_B;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_X:
+		  return rc = GAMEPAD_X;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_Y:
+		  return rc = GAMEPAD_Y;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_BACK:
+		  return rc = GAMEPAD_BACK;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_GUIDE:
+		  return rc = GAMEPAD_GUIDE;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_START:
+		  return rc = GAMEPAD_START;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_LEFTSTICK:
+		  return rc = GAMEPAD_LSTICK;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+		  return rc = GAMEPAD_RSTICK;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+		  return rc = GAMEPAD_LSHOULDER;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+		  return rc = GAMEPAD_RSHOULDER;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_UP:
+		  return rc = GAMEPAD_DPAD_UP;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+		  return rc = GAMEPAD_DPAD_DOWN;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+		  return rc = GAMEPAD_DPAD_LEFT;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+		  return rc = GAMEPAD_DPAD_RIGHT;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_MISC1:
+		  return rc = GAMEPAD_BUTTON_MISC1;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE1:
+		  return rc = GAMEPAD_BUTTON_PADDLE1;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE2:
+		  return rc = GAMEPAD_BUTTON_PADDLE2;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE3:
+		  return rc = GAMEPAD_BUTTON_PADDLE3;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_PADDLE4:
+		  return rc = GAMEPAD_BUTTON_PADDLE4;
+		  break;
+	  case SDL_CONTROLLER_BUTTON_TOUCHPAD:
+		  return rc = GAMEPAD_BUTTON_TOUCHPAD;
+		  break;
+	  default:
+		  rc = state;
+		  break;
+	}
+	return rc;
+}
 
-      }
-  }
-#endif	
+//
+//I_InitEvent
+//
+void I_InitEvent()
+{
+	if(SDL_Init(SDL_INIT_EVENTS) < 0)
+	{
+		CON_Printf(RED, "Failed to initialize the SDL2 Events SDL Error: %s", SDL_GetError());
+	}
+}
+
+//
+//	I_InitGameController
+//
+void I_InitGameController()
+{
+	if(SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK))
+	{
+		CON_Printf(RED, "Failed to initialize the SDL2 Game Controller API, SDL Error: %s", SDL_GetError());
+	}
+}
 //
 // I_TranslateKey
 //
-
 static int I_TranslateKey(const int key) {
 	int rc = 0;
 
@@ -412,26 +457,29 @@ void I_GetEvent(SDL_Event* Event) {
 		D_PostEvent(&event);
 		break;
 
-#ifdef VITA
-			case SDL_CONTROLLERDEVICEADDED:
-                printf("SDL: Controller added: {}", SDL_GameControllerNameForIndex(Event->cdevice.which));
-                s_controller = SDL_GameControllerOpen(Event->cdevice.which);
-                assert(s_controller);
-				break;
 
-			case SDL_CONTROLLERDEVICEREMOVED:
-                printf("SDL: Controller removed");
-                s_controller = NULL;
-                break;
+	case SDL_CONTROLLERDEVICEADDED:
+		CON_Printf(GREEN,"SDL: Controller added: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
+		s_controller = SDL_GameControllerOpen(Event->cdevice.which);
+		assert(s_controller);
+		break;
 
-            case SDL_CONTROLLERBUTTONDOWN:
-            case SDL_CONTROLLERBUTTONUP:
-                event.type = ev_keyup;
-				event.data1 = (Event->type == SDL_CONTROLLERBUTTONDOWN) ? ev_keydown : ev_keyup;
-             	translate_controller(Event->cbutton.button);
-                D_PostEvent(&event);
-				break;
-#endif
+	case SDL_CONTROLLERDEVICEREMOVED:
+		CON_Printf(RED, "SDL: Controller removed");
+		s_controller = NULL;
+		break;
+
+	case SDL_CONTROLLERBUTTONDOWN:
+		event.type = Event->type ? SDL_CONTROLLERBUTTONDOWN : ev_keydown;
+		event.data1 = I_Translate_GameController(Event->cbutton.button);
+		D_PostEvent(&event);
+		break;
+
+	case SDL_CONTROLLERBUTTONUP:
+		event.type = Event->type ? SDL_CONTROLLERBUTTONUP : ev_gamepad;
+		event.data1 = I_Translate_GameController(Event->cbutton.button);
+		D_PostEvent(&event);
+		break;
 
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
@@ -494,69 +542,68 @@ void I_GetEvent(SDL_Event* Event) {
 	default:
 		break;
 	}
+	int x, y;
+	if (s_controller) 
+	{
+		event_t ev;
 
-#ifdef VITA
-        int x, y;
-		if (s_controller) {
-            event_t ev;
+		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTX);
+		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTY);
 
-            x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTX);
-            y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTY);
+		s_clamp(x);
+		s_clamp(y);
 
-            s_clamp(x);
-            s_clamp(y);
+		ev.type = ev_gamepad;
+		ev.data1 = x;
+		ev.data2 = -y;
+		ev.data3 = GAMEPAD_LSTICK;
+		D_PostEvent(&ev);
 
-            ev.type = ev_gamepad;
-            ev.data1 = x;
-            ev.data2 = -y;
-            ev.data3 = GAMEPAD_LEFT_STICK;
-            D_PostEvent(&ev);
+		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
+		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTY);
 
-            x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
-            y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTY);
+		s_clamp(x);
+		s_clamp(y);
 
-            s_clamp(x);
-            s_clamp(y);
+		ev.type = ev_gamepad;
+		ev.data1 = x;
+		ev.data2 = -y;
+		ev.data3 = GAMEPAD_RSTICK;
+		D_PostEvent(&ev);
 
-            ev.type = ev_gamepad;
-            ev.data1 = x;
-            ev.data2 = -y;
-            ev.data3 = GAMEPAD_RIGHT_STICK;
-            D_PostEvent(&ev);
+		static boolean old_ltrigger = false;
+		static boolean old_rtrigger = false;
 
-            static boolean old_ltrigger = false;
-            static boolean old_rtrigger = false;
-
-            int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-            if (z >= 0x4000 && !old_ltrigger) {
-                old_ltrigger = true;
-                ev.type = ev_keydown;
-                ev.data1 = GAMEPAD_LTRIGGER;
-                D_PostEvent(&ev);
-            } else if (z < 0x4000 && old_ltrigger) {
-                old_ltrigger = false;
-                ev.type = ev_keyup;
-                ev.data1 = GAMEPAD_LTRIGGER;
-                D_PostEvent(&ev);
-            }
-
-            z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-            if (z >= 0x4000 && !old_rtrigger) {
-                old_rtrigger = true;
-                ev.type = ev_keydown;
-                ev.data1 = GAMEPAD_RTRIGGER;
-                D_PostEvent(&ev);
-            } else if (z < 0x4000 && old_rtrigger) {
-                old_rtrigger = false;
-                ev.type = ev_keyup;
-                ev.data1 = GAMEPAD_RTRIGGER;
-                D_PostEvent(&ev);
-			}
+		int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+		if (z >= 0x4000 && !old_ltrigger) {
+			old_ltrigger = true;
+			ev.type = ev_keydown;
+			ev.data1 = GAMEPAD_LTRIGGER;
+			D_PostEvent(&ev);
+		}
+		else if (z < 0x4000 && old_ltrigger) {
+			old_ltrigger = false;
+			ev.type = ev_keyup;
+			ev.data1 = GAMEPAD_LTRIGGER;
+			D_PostEvent(&ev);
 		}
 
-#endif
+		z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+		if (z >= 0x4000 && !old_rtrigger) {
+			old_rtrigger = true;
+			ev.type = ev_keydown;
+			ev.data1 = GAMEPAD_RTRIGGER;
+			D_PostEvent(&ev);
+		}
+		else if (z < 0x4000 && old_rtrigger) {
+			old_rtrigger = false;
+			ev.type = ev_keyup;
+			ev.data1 = GAMEPAD_RTRIGGER;
+			D_PostEvent(&ev);
+		}
+	}
 
-	if (mwheeluptic && mwheeluptic + 1 < tic) {
+	if(mwheeluptic && mwheeluptic + 1 < tic) {
 		event.type = ev_keyup;
 		event.data1 = KEY_MWHEELUP;
 		D_PostEvent(&event);
@@ -600,9 +647,6 @@ void I_StartTic(void) {
 		I_GetEvent(&Event);
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputPollEvent();
-#endif
 	I_InitInputs();
 	I_ReadMouse();
 }
@@ -625,10 +669,6 @@ void I_InitInputs(void) {
 	SDL_PumpEvents();
 	SDL_ShowCursor(m_menumouse.value < 1);
 	I_MouseAccelChange();
-
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputInit();
-#endif
 }
 
 //

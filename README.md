@@ -11,6 +11,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64EX a
 * Port to the C Programming Language like the original game
 * Support for C89 and C99
 * Support for higher resolutions including 21:9 
+* Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
@@ -142,6 +143,10 @@ Use the `build_openbsd.sh` script for a native build of OpenBSD
 
 Use the Visual Studio solution and project files provided in the `Windows` directory of the repository for both 32-bit or 64-bit builds.
 
+## Vita
+
+Install the VITASDK and compile with `make all -f Makefile.vita` to build the vpk files.
+
 ## Nintendo Switch
 
 Install the devkitpro and compile with `make all -f Makefile.ns` to build the nso and nro files.
@@ -162,21 +167,21 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 
 You can place the asset data described above to any of the following directories:
 
-* The directory in which `doom64ex-plus` resides
-* `/usr/local/share/doom64ex-plus`
+* The directory in which `DOOM64EX+` resides
+* `/usr/local/share/DOOM64EX+`
 
 ## macOS
 
 You can place the asset data described above to:
 
-* `/Users/*user*/Library/Application Support/doom64ex-plus`
+* `/Users/*user*/Library/Application Support/DOOM64EX+`
 
 Then, you can start playing:
 
  $ DOOM64EX+
 
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
-`~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
+`~user/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
 ## Windows
 
