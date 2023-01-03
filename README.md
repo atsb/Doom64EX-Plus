@@ -181,7 +181,7 @@ Then, you can start playing:
   `$ DOOM64EX+`
 
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
-`~user/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
+`~usr/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
 
 ## Windows
 
