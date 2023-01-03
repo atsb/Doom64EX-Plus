@@ -23,7 +23,7 @@ INCS      = -I$(DEVKITPRO)/portlibs/switch/include -I$(DEVKITPRO)/portlibs/switc
 BIN       = Doom64EX+.elf
 BUILD	  =	build
 ARCH 	  = -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIE -fPIC -O3 -funsafe-math-optimizations -O2
-DEFINES   = -DSWITCH -D__SWITCH__
+DEFINES   = -DSWITCH -D__SWITCH__ -DUSE_FLUIDSYNTH
 CFLAGS    = $(INCS) $(DEFINES) $(ARCH) -Wall -W -g -Wpointer-arith -Wwrite-strings -Wcast-align -std=gnu99  
 RM        = rm -f
 LINK      = aarch64-none-elf-gcc
