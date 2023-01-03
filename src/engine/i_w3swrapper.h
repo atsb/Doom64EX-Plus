@@ -132,7 +132,11 @@ char* w3sstrlwr(char *str);
 #endif
 
 #ifdef DOOM_UNIX_INSTALL
+#ifdef VITA
+#define GetBasePath()	SDL_GetPrefPath("", "DOOM64EX+")
+#else
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus")
+#endif
 #elif defined __ANDROID__
 #define GetBasePath   SDL_AndroidGetInternalStoragePath
 #else
@@ -160,7 +164,8 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 int htoi(int8_t* str);
 boolean fcmp(float f1, float f2);
 
-#ifdef __linux__
+
+#if defined(__linux__) || defined(VITA) 
 #define max(num1, num2) ((num1)>(num2)?(num1):(num2))
 #define min(num1, num2) ((num1)<(num2)?(num1):(num2))
 #endif

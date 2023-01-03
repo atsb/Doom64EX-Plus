@@ -23,7 +23,7 @@ tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o \
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CFLAGS  = -Wl,-q  -O3 -g -mtune=cortex-a9 -mfpu=neon \
--I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -DUSE_FLUIDSYNTH -fno-optimize-sibling-calls -Wall
+-I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -DUSE_FLUIDSYNTH -DDOOM_UNIX_INSTALL -fno-optimize-sibling-calls -Wall
 
 ASFLAGS = $(CFLAGS)
 
