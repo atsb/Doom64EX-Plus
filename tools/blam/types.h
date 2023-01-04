@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -30,18 +30,39 @@
 #include <ctype.h>
 #include <string.h>
 #include <errno.h>
-
+#ifdef _WIN32
+#include <windows.h>
+#include <rpc.h>
+#include <rpcndr.h>
+#endif
 extern int myargc;
 extern char **myargv;
 
+#ifdef C89
 #define false 0
-#define true (!false)
+#define true 1
+#ifndef _WIN32
+typedef char boolean;
+#endif
+#else
+typedef char boolean;
+#endif
 
-typedef int             dboolean;
+#ifdef _WIN32
+#ifdef OLD_MSVC
+typedef BYTE byte;
+typedef WORD word;
+typedef DWORD dword;
+#else
+typedef UINT8 byte;
+typedef UINT16 word;
+typedef UINT64 dword;
+#endif
+#else
 typedef unsigned char   byte;
 typedef unsigned short  word;
 typedef unsigned long   dword;
-
+#endif
 #ifdef _WIN32
 
 #define DIR_SEPARATOR '\\'
@@ -61,20 +82,13 @@ typedef unsigned long   dword;
     #define strncasecmp _strnicmp
 #endif
 
-#if defined(__GNUC__)
-  #define d_inline __inline__
-#elif defined(_MSC_VER)
-  #define d_inline __inline
-#else
-  #define d_inline
-#endif
 
-static d_inline int Swap16(int x)
+static int Swap16(int x)
 {
     return (((word)(x & 0xff) << 8) | ((word)x >> 8));
 }
 
-static d_inline unsigned int Swap32(unsigned int x)
+static unsigned int Swap32(unsigned int x)
 {
     return(
         ((x & 0xff) << 24)          |

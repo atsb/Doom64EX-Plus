@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -57,7 +57,7 @@ typedef struct identifier_s
     struct identifier_s* prev;
     struct identifier_s* next;
     char name[64];
-    dboolean has_args;
+    boolean has_args;
     char argnames[MAX_IDENTIFIER_ARGS][MAX_IDENTIFIER_LEN];
     int numargs;
     char *buffer;
@@ -91,7 +91,7 @@ typedef struct
     int                 buffpos;
     int                 buffsize;
     tokentype_t         tokentype;
-    dboolean            isamacro;
+    boolean            isamacro;
     identifier_t        *identifier;
     identifer_stack_t   *stack;
     const char          *name;
@@ -100,7 +100,7 @@ typedef struct
 extern scparser_t *sc_parsers[MAX_NESTED_PARSERS];
 extern scparser_t *sc_parser;
 extern char sc_stringbuffer[256];
-extern dboolean verbose;
+extern boolean verbose;
 extern FILE *debugfile;
 
 void SC_Open(char* name);

@@ -417,8 +417,8 @@ superblock_t *CreateSegs(void)
       continue;
 
     // check for Humungously long lines
-    if (ABS(line->start->x - line->end->x) >= 10000 ||
-        ABS(line->start->y - line->end->y) >= 10000)
+    if (abs(line->start->x - line->end->x) >= 10000 ||
+        abs(line->start->y - line->end->y) >= 10000)
     {
       if (UtilComputeDist(line->start->x - line->end->x,
           line->start->y - line->end->y) >= 30000)
@@ -836,7 +836,7 @@ int ComputeBspHeight(node_t *node)
     right = ComputeBspHeight(node->r.node);
     left  = ComputeBspHeight(node->l.node);
 
-    return MAX(left, right) + 1;
+    return max(left, right) + 1;
   }
 
   return 1;

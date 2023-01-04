@@ -31,7 +31,7 @@
 
 #include "util.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <time.h>
@@ -144,7 +144,11 @@ char *UtilFormat(const char *str, ...)
       FatalError("Out of memory (formatting string)");
 
     va_start(args, str);
-    out_len = _vsnprintf(buf, buf_size, str, args);
+#ifdef _WIN32
+    out_len = w3ssnprintf(buf, buf_size, NULL, str, args);
+#else
+    out_len = w3ssnprintf(buf, buf_size, str, args);
+#endif
     va_end(args);
 
     // old versions of vsnprintf() simply return -1 when
@@ -217,8 +221,12 @@ angle_g UtilComputeAngle(float_g dx, float_g dy)
 //
 int UtilFileExists(const char *filename)
 {
-  FILE *fp = fopen(filename, "rb");
-
+#ifdef _WIN32
+   FILE* fp;
+   w3sfopen(&fp, filename, "rb");
+#else
+  FILE *fp = w3sfopen(filename, "rb");
+#endif
   if (fp)
   {
     fclose(fp);
@@ -233,8 +241,7 @@ int UtilFileExists(const char *filename)
 //
 char *UtilTimeString(void)
 {
-#ifdef WIN32
-
+#ifdef _WIN32
   SYSTEMTIME sys_time;
 
   GetSystemTime(&sys_time);

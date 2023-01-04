@@ -788,8 +788,8 @@ void TestForWindowEffect(linedef_t *L)
       if (fabs(dy2) < DIST_EPSILON)
         continue;
 
-      if ((MAX(N->start->y, N->end->y) < my - DIST_EPSILON) ||
-          (MIN(N->start->y, N->end->y) > my + DIST_EPSILON))
+      if ((max(N->start->y, N->end->y) < my - DIST_EPSILON) ||
+          (min(N->start->y, N->end->y) > my + DIST_EPSILON))
         continue;
 
       dist = (N->start->x + (my - N->start->y) * dx2 / dy2) - mx;
@@ -810,8 +810,8 @@ void TestForWindowEffect(linedef_t *L)
       if (fabs(dx2) < DIST_EPSILON)
         continue;
 
-      if ((MAX(N->start->x, N->end->x) < mx - DIST_EPSILON) ||
-          (MIN(N->start->x, N->end->x) > mx + DIST_EPSILON))
+      if ((max(N->start->x, N->end->x) < mx - DIST_EPSILON) ||
+          (min(N->start->x, N->end->x) > mx + DIST_EPSILON))
         continue;
 
       dist = (N->start->y + (mx - N->start->x) * dy2 / dx2) - my;

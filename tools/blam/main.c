@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -51,7 +51,7 @@ static void PrintUsage(void)
 
 int main(int argc, char **argv)
 {
-    dboolean decompile;
+    boolean decompile;
     int i;
 
     myargc = argc;
@@ -88,13 +88,20 @@ int main(int argc, char **argv)
         else if(!strcmp(myargv[i], "-v"))
         {
             verbose = true;
+#ifdef _WIN32
+            fopen_s(&debugfile, "blamdebug.txt", "w");
+#else
             debugfile = fopen("blamdebug.txt", "w");
+#endif
         }
         else if(!strcmp(myargv[i], "-i"))
         {
             int tail;
-
+#ifdef _WIN32
+            sprintf_s(ps_userdirectory, sizeof(ps_userdirectory), "%s", myargv[i++]);
+#else
             sprintf(ps_userdirectory, "%s", myargv[++i]);
+#endif
             tail = strlen(ps_userdirectory)-1;
 
             if(ps_userdirectory[tail] != '\\')

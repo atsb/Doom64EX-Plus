@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -441,7 +441,7 @@ void M_DecompileMacro(const char *file)
         int spec = 0;
         int tag = 0;
         int exitloopline;
-        dboolean enterloop;
+        boolean enterloop;
         macrodata_t *data;
 
         Com_FPrintf("//====================  macro %02d  ====================\n\n", i+1);

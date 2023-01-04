@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -24,7 +24,7 @@
 #include "common.h"
 #include "script.h"
 
-dboolean verbose = false;
+boolean verbose = false;
 FILE *debugfile;
 
 scparser_t *sc_parsers[MAX_NESTED_PARSERS];
@@ -73,7 +73,11 @@ static void SC_DebugPrintf(const char *str, ...)
     }
     
     va_start(v, str);
+#ifdef _WIN32
+    vsprintf_s(buf, sizeof(buf), str, v);
+#else
     vsprintf(buf, str,v);
+#endif
     va_end(v);
 
     fprintf(debugfile, buf);
@@ -86,7 +90,12 @@ static void SC_DebugPrintf(const char *str, ...)
 static void SC_PushNestedFilename(char *name)
 {
     SC_DebugPrintf("push nested file %s\n", name);
+#ifdef _WIN32
+    strcpy_s(sc_nested_filenames[sc_num_nested_filenames++], 
+    sizeof(sc_nested_filenames[sc_num_nested_filenames++]), name);
+#else
     strcpy(sc_nested_filenames[sc_num_nested_filenames++], name);
+#endif
 }
 
 //
@@ -172,7 +181,11 @@ void SC_Error(const char *msg, ...)
     va_list v;
     
     va_start(v,msg);
+#ifdef _WIN32
+    vsprintf_s(buf, sizeof(buf), msg, v);
+#else
     vsprintf(buf,msg,v);
+#endif
     va_end(v);
 
     Com_Error("%s : %s\n(line = %i, pos = %i)",
@@ -269,7 +282,11 @@ int SC_GetNumber(void)
 void SC_GetString(void)
 {
     SC_ExpectNextToken(TK_STRING);
+#ifdef _WIN32
+    strcpy_s(sc_stringbuffer, sizeof(sc_stringbuffer), sc_parser->token);
+#else
     strcpy(sc_stringbuffer, sc_parser->token);
+#endif
 }
 
 //
@@ -360,7 +377,12 @@ static void SC_CheckIdentifierArgs(void)
             SC_ClearToken();
 
             len = strlen(sc_parser->stack[i].value);
+#ifdef _WIN32
+            strncpy_s(sc_parser->token, sizeof(sc_parser->token), 
+            sc_parser->stack[i].value, len);
+#else
             strncpy(sc_parser->token, sc_parser->stack[i].value, len);
+#endif
             sc_parser->tokentype = sc_parser->stack[i].token_type;
 
             return;
@@ -634,7 +656,11 @@ void SC_AddIdentifier(void)
     int pos;
 
     id = (identifier_t*)Com_Alloc(sizeof(*id));
+#ifdef _WIN32
+    strcpy_s(id->name, sizeof(id->name), sc_parser->token);
+#else
     strcpy(id->name, sc_parser->token);
+#endif
     id->numargs = 0;
 
     row = sc_parser->rowpos;
@@ -652,8 +678,12 @@ void SC_AddIdentifier(void)
                 SC_Error("Arg name (%s) for %s is longer than %i characters",
                     sc_parser->token, id->name, MAX_IDENTIFIER_LEN);
             }
-
+#ifdef _WIN32
+            strcpy_s(id->argnames[id->numargs], 
+            sizeof(id->argnames[id->numargs]), sc_parser->token);
+#else
             strcpy(id->argnames[id->numargs], sc_parser->token);
+#endif
             id->numargs++;
 
             SC_Find();
@@ -695,8 +725,11 @@ void SC_AddIdentifier(void)
 
     id->bufsize = len;
     id->buffer = (char*)Com_Alloc(len);
+#ifdef _WIN32
+    strncpy_s(id->buffer, sizeof(id->buffer), buffer, len);
+#else
     strncpy(id->buffer, buffer, len);
-
+#endif
     id->buffer[len-1] = 127;
 
     identifier_cap.prev->next = id;
@@ -756,8 +789,12 @@ void SC_PushIdStack(char *name)
     id_stack[id_stack_count].token_type = sc_parser->tokentype;
     len = strlen(sc_parser->token);
     memset(id_stack[id_stack_count].value, 0, MAX_IDENTIFER_VALUE_LEN);
+#ifdef _WIN32
+    strncpy_s(id_stack[id_stack_count].value, 
+    sizeof(id_stack[id_stack_count].value), sc_parser->token, len);
+#else
     strncpy(id_stack[id_stack_count].value, sc_parser->token, len);
-
+#endif
     id_stack_count++;
     SC_DebugPrintf("push id stack\n");
 }

@@ -1746,21 +1746,33 @@ void FreeLevel(void)
 void PutGLOptions(void)
 {
   char option_buf[128];
+#ifdef _WIN32
+  w3ssprintf(option_buf, sizeof(option_buf), "-v%d -factor %d", cur_info->spec_version, cur_info->factor);
+  if (cur_info->fast) w3sstrcat(option_buf, sizeof(option_buf), " -f");
+  if (cur_info->force_normal) w3sstrcat(option_buf, sizeof(option_buf), " -n");
+  if (cur_info->merge_vert) w3sstrcat(option_buf, sizeof(option_buf), " -m");
+  if (cur_info->pack_sides) w3sstrcat(option_buf, sizeof(option_buf), " -p");
+  if (cur_info->prune_sect) w3sstrcat(option_buf, sizeof(option_buf), " -u");
+  if (cur_info->skip_self_ref) w3sstrcat(option_buf, sizeof(option_buf), " -s");
+  if (cur_info->window_fx) w3sstrcat(option_buf, sizeof(option_buf), " -y");
 
-  sprintf(option_buf, "-v%d -factor %d", cur_info->spec_version, cur_info->factor);
+  if (cur_info->no_normal) w3sstrcat(option_buf, sizeof(option_buf), " -xn");
+  if (cur_info->no_reject) w3sstrcat(option_buf, sizeof(option_buf), " -xr");
+  if (cur_info->no_prune) w3sstrcat(option_buf, sizeof(option_buf), " -xu");
+#else
+  w3ssprintf(option_buf, "-v%d -factor %d", cur_info->spec_version, cur_info->factor);
+  if (cur_info->fast         ) w3sstrcat(option_buf, " -f");
+  if (cur_info->force_normal ) w3sstrcat(option_buf, " -n");
+  if (cur_info->merge_vert   ) w3sstrcat(option_buf, " -m");
+  if (cur_info->pack_sides   ) w3sstrcat(option_buf, " -p");
+  if (cur_info->prune_sect   ) w3sstrcat(option_buf, " -u");
+  if (cur_info->skip_self_ref) w3sstrcat(option_buf, " -s");
+  if (cur_info->window_fx    ) w3sstrcat(option_buf, " -y");
 
-  if (cur_info->fast         ) strcat(option_buf, " -f");
-  if (cur_info->force_normal ) strcat(option_buf, " -n");
-  if (cur_info->merge_vert   ) strcat(option_buf, " -m");
-  if (cur_info->pack_sides   ) strcat(option_buf, " -p");
-  if (cur_info->prune_sect   ) strcat(option_buf, " -u");
-  if (cur_info->skip_self_ref) strcat(option_buf, " -s");
-  if (cur_info->window_fx    ) strcat(option_buf, " -y");
-
-  if (cur_info->no_normal) strcat(option_buf, " -xn");
-  if (cur_info->no_reject) strcat(option_buf, " -xr");
-  if (cur_info->no_prune ) strcat(option_buf, " -xu");
-
+  if (cur_info->no_normal) w3sstrcat(option_buf, " -xn");
+  if (cur_info->no_reject) w3sstrcat(option_buf, " -xr");
+  if (cur_info->no_prune ) w3sstrcat(option_buf, " -xu");
+#endif
   AddGLTextLine("OPTIONS", option_buf);
 }
 
@@ -1786,9 +1798,11 @@ void PutGLChecksum(void)
     Adler32_AddBlock(&crc, lump->data, lump->length);
 
   Adler32_Finish(&crc);
-
-  sprintf(num_buf, "0x%08x", crc);
-
+#ifdef _WIN32
+  w3ssprintf(num_buf, sizeof(num_buf), "0x¨%08x", crc);
+#else
+  w3ssprintf(num_buf, "0x%08x", crc);
+#endif
   AddGLTextLine("CHECKSUM", num_buf);
 }
 

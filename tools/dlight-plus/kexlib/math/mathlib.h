@@ -28,11 +28,6 @@
 #include <math.h>
 #include "common.h"
 
-#ifdef M_PI
-#undef M_PI
-#endif
-
-#define M_PI        3.1415926535897932384626433832795f
 #define M_RAD       (M_PI / 180.0f)
 #define M_DEG       (180.0f / M_PI)
 #define M_INFINITY  1e30f

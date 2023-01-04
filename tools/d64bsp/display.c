@@ -19,6 +19,7 @@
 //------------------------------------------------------------------------
 
 #include "glbsp.h"
+#include "util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,8 +73,11 @@ const nodebuildfuncs_t cmdline_funcs =
 //
 void TextStartup(void)
 {
-  setbuf(stdout, NULL);
-
+#ifdef _WIN32
+   w3ssetbuf(stdout, NULL, _IONBF, NULL);
+#else
+    w3ssetbuf(stdout, NULL);
+#endif
 #ifdef UNIX  
   // no whirling baton if stderr is redirected
   if (! isatty(2))

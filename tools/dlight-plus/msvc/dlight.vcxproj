@@ -72,7 +72,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\src\;..\src\pthreads_win32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\;..\pthreads_win32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -95,7 +95,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>.;..\src\;..\src\pthreads_win32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\;..\pthreads_win32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_TIMESPEC_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -117,9 +117,9 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\src\;..\src\pthreads_win32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\;..\pthreads_win32\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_TIMESPEC_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_TIMESPEC_DEFINED;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -131,43 +131,43 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\kexlib\binFile.cpp" />
-    <ClCompile Include="..\src\kexlib\kstring.cpp" />
-    <ClCompile Include="..\src\kexlib\math\angle.cpp" />
-    <ClCompile Include="..\src\kexlib\math\bounds.cpp" />
-    <ClCompile Include="..\src\kexlib\math\mathlib.cpp" />
-    <ClCompile Include="..\src\kexlib\math\matrix.cpp" />
-    <ClCompile Include="..\src\kexlib\math\plane.cpp" />
-    <ClCompile Include="..\src\kexlib\math\pluecker.cpp" />
-    <ClCompile Include="..\src\kexlib\math\quaternion.cpp" />
-    <ClCompile Include="..\src\kexlib\math\random.cpp" />
-    <ClCompile Include="..\src\kexlib\math\vector.cpp" />
-    <ClCompile Include="..\src\kexlib\memHeap.cpp" />
-    <ClCompile Include="..\src\kexlib\parser.cpp" />
-    <ClCompile Include="..\src\lightmap.cpp" />
-    <ClCompile Include="..\src\lightSurface.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\mapData.cpp" />
-    <ClCompile Include="..\src\surfaces.cpp" />
-    <ClCompile Include="..\src\trace.cpp" />
-    <ClCompile Include="..\src\wad.cpp" />
-    <ClCompile Include="..\src\worker.cpp" />
+    <ClCompile Include="..\kexlib\binFile.cpp" />
+    <ClCompile Include="..\kexlib\kstring.cpp" />
+    <ClCompile Include="..\kexlib\math\angle.cpp" />
+    <ClCompile Include="..\kexlib\math\bounds.cpp" />
+    <ClCompile Include="..\kexlib\math\mathlib.cpp" />
+    <ClCompile Include="..\kexlib\math\matrix.cpp" />
+    <ClCompile Include="..\kexlib\math\plane.cpp" />
+    <ClCompile Include="..\kexlib\math\pluecker.cpp" />
+    <ClCompile Include="..\kexlib\math\quaternion.cpp" />
+    <ClCompile Include="..\kexlib\math\random.cpp" />
+    <ClCompile Include="..\kexlib\math\vector.cpp" />
+    <ClCompile Include="..\kexlib\memHeap.cpp" />
+    <ClCompile Include="..\kexlib\parser.cpp" />
+    <ClCompile Include="..\lightmap.cpp" />
+    <ClCompile Include="..\lightSurface.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\mapData.cpp" />
+    <ClCompile Include="..\surfaces.cpp" />
+    <ClCompile Include="..\trace.cpp" />
+    <ClCompile Include="..\wad.cpp" />
+    <ClCompile Include="..\worker.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\common.h" />
-    <ClInclude Include="..\src\kexlib\array.h" />
-    <ClInclude Include="..\src\kexlib\binFile.h" />
-    <ClInclude Include="..\src\kexlib\kstring.h" />
-    <ClInclude Include="..\src\kexlib\math\mathlib.h" />
-    <ClInclude Include="..\src\kexlib\memHeap.h" />
-    <ClInclude Include="..\src\kexlib\parser.h" />
-    <ClInclude Include="..\src\lightmap.h" />
-    <ClInclude Include="..\src\lightSurface.h" />
-    <ClInclude Include="..\src\mapData.h" />
-    <ClInclude Include="..\src\surfaces.h" />
-    <ClInclude Include="..\src\trace.h" />
-    <ClInclude Include="..\src\wad.h" />
-    <ClInclude Include="..\src\worker.h" />
+    <ClInclude Include="..\common.h" />
+    <ClInclude Include="..\kexlib\array.h" />
+    <ClInclude Include="..\kexlib\binFile.h" />
+    <ClInclude Include="..\kexlib\kstring.h" />
+    <ClInclude Include="..\kexlib\math\mathlib.h" />
+    <ClInclude Include="..\kexlib\memHeap.h" />
+    <ClInclude Include="..\kexlib\parser.h" />
+    <ClInclude Include="..\lightmap.h" />
+    <ClInclude Include="..\lightSurface.h" />
+    <ClInclude Include="..\mapData.h" />
+    <ClInclude Include="..\surfaces.h" />
+    <ClInclude Include="..\trace.h" />
+    <ClInclude Include="..\wad.h" />
+    <ClInclude Include="..\worker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

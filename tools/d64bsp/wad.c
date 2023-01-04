@@ -265,9 +265,13 @@ static int ReadHeader(const char *filename)
 
   if (len != 1)
   {
+#ifdef _WIN32
+      SetErrorMsg("Trouble reading wad header for %s [%s]",
+          filename, w3sstrerror(errno, sizeof(errno), NULL));
+#else
     SetErrorMsg("Trouble reading wad header for %s [%s]", 
       filename, strerror(errno));
-
+#endif
     return FALSE;
   }
 
@@ -654,11 +658,19 @@ static void WriteHeader(void)
   switch (wad.kind)
   {
     case IWAD:
-      strncpy(header.type, "IWAD", 4);
+#ifdef _WIN32
+     w3sstrncpy(header.type, sizeof(header.type), "IWAD", 4);
+#else
+      w3sstrncpy(header.type, "IWAD", 4);
+#endif
       break;
 
     case PWAD:
-      strncpy(header.type, "PWAD", 4);
+#ifdef _WIN32
+      w3sstrncpy(header.type, sizeof(header.type), "PWAD", 4);
+#else
+      w3sstrncpy(header.type, "PWAD", 4);
+#endif
       break;
   }
 
@@ -685,12 +697,20 @@ lump_t *CreateGLMarker(void)
 
   if (strlen(level->name) <= 5)
   {
-    sprintf(name_buf, "GL_%s", level->name);
+#ifdef _WIN32
+    w3ssprintf(name_buf, sizeof(name_buf), "GL_%s", level->name);
+#else
+    w3ssprintf(name_buf, "GL_%s", level->name);
+#endif
   }
   else
   {
     // support for level names longer than 5 letters
+#ifdef _WIN32
+    w3sstrcpy(name_buf, sizeof(name_buf), "GL_LEVEL");
+#else
     strcpy(name_buf, "GL_LEVEL");
+#endif
     long_name = TRUE;
   }
 
@@ -913,8 +933,11 @@ static void WriteDirEntry(lump_t *lump)
 
   DisplayTicker();
 
-  strncpy(entry.name, lump->name, 8);
-
+#ifdef _WIN32
+  w3sstrncpy(entry.name, sizeof(entry.name), lump->name, 8);
+#else
+  w3sstrncpy(entry.name, lump->name, 8);
+#endif
   entry.start  = UINT32(lump->new_start);
   entry.length = UINT32(lump->length);
 
@@ -1007,18 +1030,25 @@ char *ReplaceExtension(const char *filename, const char *ext)
 {
   char *dot_pos;
   char buffer[512];
-
-  strcpy(buffer, filename);
-  
+#ifdef _WIN32
+  w3sstrcpy(buffer, sizeof(buffer), filename);
+#else
+  w3sstrcpy(buffer, filename);
+#endif  
   dot_pos = strrchr(buffer, '.');
 
   if (dot_pos)
     dot_pos[1] = 0;
   else
-    strcat(buffer, ".");
-  
-  strcat(buffer, ext);
+#ifdef _WIN32
+     w3sstrcat(buffer, sizeof(buffer), ".");
 
+  w3sstrcat(buffer, sizeof(buffer), ext);
+#else
+    w3sstrcat(buffer, ".");
+
+  w3sstrcat(buffer, ext);
+#endif
   return UtilStrDup(buffer);
 }
 
@@ -1132,12 +1162,12 @@ void AppendLevelLump(lump_t *lump, const void *data, int length)
 
   if (lump->length == 0)
   {
-    lump->space = MAX(length, APPEND_BLKSIZE);
+    lump->space = max(length, APPEND_BLKSIZE);
     lump->data = UtilCalloc(lump->space);
   }
   else if (lump->space < length)
   {
-    lump->space = MAX(length, APPEND_BLKSIZE);
+    lump->space = max(length, APPEND_BLKSIZE);
     lump->data = UtilRealloc(lump->data, lump->length + lump->space);
   }
 
@@ -1264,16 +1294,23 @@ glbsp_ret_e ReadWadFile(const char *filename)
   char *read_msg;
 
   // open input wad file & read header
-  in_file = fopen(filename, "rb");
-
+#ifdef _WIN32
+  w3sfopen(&in_file, filename, "rb");
+#else
+  in_file = w3sfopen(filename, "rb");
+#endif
   if (! in_file)
   {
     if (errno == ENOENT)
       SetErrorMsg("Cannot open WAD file: %s", filename); 
     else
+#ifdef _WIN32
+      SetErrorMsg("Cannot open WAD file: %s [%s]", filename,
+          w3sstrerror(errno, sizeof(errno), NULL));
+#else
       SetErrorMsg("Cannot open WAD file: %s [%s]", filename, 
-          strerror(errno));
-
+          w3sstrerror(errno));
+#endif
     return GLBSP_E_ReadError;
   }
   
@@ -1336,13 +1373,20 @@ glbsp_ret_e WriteWadFile(const char *filename)
   RecomputeDirectory();
 
   // create output wad file & write the header
-  out_file = fopen(filename, "wb");
-
+#ifdef _WIN32
+  w3sfopen(&out_file, filename, "wb");
+#else
+  out_file = w3sfopen(filename, "wb");
+#endif
   if (! out_file)
   {
+#ifdef _WIN32
     SetErrorMsg("Cannot create WAD file: %s [%s]", filename,
-        strerror(errno));
-
+        w3sstrerror(errno, sizeof(errno), NULL));
+#else
+    SetErrorMsg("Cannot create WAD file: %s [%s]", filename,
+        w3sstrerror(errno));
+#endif
     return GLBSP_E_WriteError;
   }
 

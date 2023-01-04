@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -37,7 +37,11 @@ void Com_Printf(char* s, ...)
     va_list v;
     
     va_start(v,s);
+#ifdef _WIN32
+    vsprintf_s(msg, sizeof(msg), s, v);
+#else
     vsprintf(msg,s,v);
+#endif
     va_end(v);
     
     printf("%s\n", msg);
@@ -53,7 +57,11 @@ void Com_Error(char *fmt, ...)
     char buff[1024];
     
     va_start(va, fmt);
+#ifdef _WIN32
+    vsprintf_s(buff, sizeof(buff), fmt, va);
+#else
     vsprintf(buff, fmt, va);
+#endif
     va_end(va);
     Com_Printf("\n**************************\n");
     Com_Printf("ERROR: %s\n", buff);
@@ -105,9 +113,11 @@ char* Com_BaseDir(void)
     {
         size_t len = strlen(*myargv);
         char *p = (base = malloc(len+1)) + len - 1;
-
+#ifdef _WIN32
+        strcpy_s(base, sizeof(base), *myargv); //Wrong?
+#else
         strcpy(base, *myargv);
-
+#endif
         while(p > base && *p!='/' && *p!='\\') *p--=0;
 
         if(*p=='/' || *p=='\\') *p--=0;
@@ -117,7 +127,11 @@ char* Com_BaseDir(void)
             free(base);
             base = malloc(1024);
             if(!_getcwd(base,1024))
+#ifdef _WIN32
+                strcpy_s(base, sizeof(base), current_dir_dummy);
+#else
                 strcpy(base, current_dir_dummy);
+#endif
         }
     }
 
@@ -134,7 +148,11 @@ static char *va(char *str, ...)
     static char vastr[1024];
 
     va_start(v, str);
+#ifdef _WIN32
+    vsnprintf_s(vastr, sizeof(vastr), NULL, str, v);
+#else
     vsprintf(vastr, str,v);
+#endif
     va_end(v);
 
     return vastr;
@@ -152,8 +170,11 @@ int Com_ReadFile(const char* name, byte** buffer)
     errno = 0;
 
     fileName = va("%s", name);
-
+#ifdef _WIN32
+    if ((fopen_s(&fp, fileName, "r")))
+#else
     if((fp = fopen(fileName, "r")))
+#endif
     {
         size_t length;
 
@@ -189,8 +210,11 @@ int Com_ReadBinaryFile(const char* name, byte** buffer)
     errno = 0;
 
     fileName = va("%s", name);
-
+#ifdef _WIN32
+    if ((fopen_s(&fp, fileName, "rb")))
+#else
     if((fp = fopen(fileName, "rb")))
+#endif
     {
         size_t length;
 
@@ -218,21 +242,28 @@ int Com_ReadBinaryFile(const char* name, byte** buffer)
 // Com_SetWriteFile
 //
 
-dboolean Com_SetWriteFile(char const* name, ...)
+boolean Com_SetWriteFile(char const* name, ...)
 {
     char filename[1024];
     char *otherFile;
     va_list v;
 
     va_start(v, name);
+#ifdef _WIN32
+    vsprintf_s(filename, sizeof(filename), name, v);
+#else
     vsprintf(filename, name, v);
+#endif
     va_end(v);
 
     errno = 0;
 
     otherFile = va("%s", filename);
-
+#ifdef _WIN32
+    if (!(fopen_s(&com_file, otherFile, "w")))
+#else
     if(!(com_file = fopen(otherFile, "w")))
+#endif
     {
         Com_Error("Com_SetWriteFile: Couldn't write %s", otherFile);
         return 0;
@@ -245,21 +276,29 @@ dboolean Com_SetWriteFile(char const* name, ...)
 // Com_SetWriteFile
 //
 
-dboolean Com_SetWriteBinaryFile(char const* name, ...)
+boolean Com_SetWriteBinaryFile(char const* name, ...)
 {
     char filename[1024];
     char *otherFile;
     va_list v;
 
     va_start(v, name);
+#ifdef _WIN32
+    vsprintf_s(filename, sizeof(filename), name, v);
+#else
     vsprintf(filename, name, v);
+#endif
     va_end(v);
 
     errno = 0;
 
     otherFile = va("%s", filename);
 
+#ifdef _WIN32
+    if (!(fopen_s(&com_file, otherFile, "wb")))
+#else
     if(!(com_file = fopen(otherFile, "wb")))
+#endif
     {
         Com_Error("Com_SetWriteBinaryFile: Couldn't write %s", otherFile);
         return 0;
@@ -371,7 +410,11 @@ void Com_FPrintf(char* s, ...)
     va_list v;
     
     va_start(v,s);
+#ifdef _WIN32
+    vsprintf_s(msg, sizeof(msg), s, v);
+#else
     vsprintf(msg,s,v);
+#endif
     va_end(v);
 
     fprintf(com_file, msg);
@@ -407,9 +450,11 @@ long Com_FileLength(FILE *handle)
 int Com_FileExists(const char *filename)
 {
     FILE *fstream;
-
+#ifdef _WIN32
+    fopen_s(&fstream, filename, "r");
+#else
     fstream = fopen(filename, "r");
-
+#endif
     if (fstream != NULL)
     {
         fclose(fstream);
@@ -434,7 +479,7 @@ int Com_FileExists(const char *filename)
 // Com_HasPath
 //
 
-dboolean Com_HasPath(char *name)
+boolean Com_HasPath(char *name)
 {
     unsigned int i;
 

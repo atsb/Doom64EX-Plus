@@ -22,25 +22,32 @@
 #define __GLBSP_UTIL_H__
 
 /* ----- useful macros ---------------------------- */
-
-#ifndef M_PI
-#define M_PI  3.14159265358979323846
-#endif
-
-#ifndef MAX
-#define MAX(x,y)  ((x) > (y) ? (x) : (y))
-#endif
-
-#ifndef MIN
-#define MIN(x,y)  ((x) < (y) ? (x) : (y))
-#endif
-
-#ifndef ABS
-#define ABS(x)  ((x) >= 0 ? (x) : -(x))
-#endif
+#include <math.h>
+//#include <stdio.h>
 
 #ifndef I_ROUND
 #define I_ROUND(x)  ((int) (((x) < 0.0f) ? ((x) - 0.5f) : ((x) + 0.5f)))
+#endif
+
+/*----- W3S Wrapper ------------------------------------------*/
+
+#ifdef _WIN32
+#define w3sfopen fopen_s
+#define w3ssetbuf setvbuf
+#define w3sstrcat strcat_s
+#define w3sstrcpy strcpy_s
+#define w3sstrncpy strncpy_s
+#define w3ssprintf sprintf_s
+#define w3ssnprintf _snprintf_s
+#define w3sstrerror strerror_s
+#define w3svsnprintf _vsnprintf_s
+#else
+#define w3sfopen fopen
+#define w3sstrcat strcat
+#define w3sstrncpy strncpy
+#define w3ssprintf sprintf
+#define w3sstrerror strerror
+#define w3svsnprintf _vsnprintf
 #endif
 
 /* ----- function prototypes ---------------------------- */

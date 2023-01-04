@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2012 Samuel Villarreal
@@ -31,7 +31,7 @@ static void PS_ParseOuter(void);
 
 static int ps_loopline;
 static int ps_loopvalue;
-static dboolean ps_enterloop;
+static boolean ps_enterloop;
 
 char ps_userdirectory[256];
 
@@ -215,10 +215,13 @@ static void PS_ParseOuter(void)
 
                         SC_GetString();
                         SC_PushParser();
-
+#ifdef _WIN32
+                        sprintf_s(includepath, sizeof(includepath), "%s%s",
+                            ps_userdirectory, sc_stringbuffer);
+#else
                         sprintf(includepath, "%s%s",
                             ps_userdirectory, sc_stringbuffer);
-
+#endif
                         SC_Open(includepath);
                         PS_ParseOuter();
                         SC_Close();
@@ -234,7 +237,11 @@ static void PS_ParseOuter(void)
                     break;
                 case TK_SETDIR:
                     SC_GetString();
+#ifdef _WIN32
+                    sprintf_s(ps_userdirectory, sizeof(ps_userdirectory), "%s", sc_parser->token);
+#else
                     sprintf(ps_userdirectory, "%s", sc_parser->token);
+#endif
                     break;
                 default:
                     break;

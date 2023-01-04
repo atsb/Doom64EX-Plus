@@ -310,7 +310,7 @@ kexVec3 kexLightmapBuilder::LightTexelSample(kexTrace &trace, const kexVec3 &ori
 
         dir.Normalize();
 
-        float r = MAX(radius - dist, 0);
+        float r = max(radius - dist, 0);
 
         colorAdd = ((r * plane.Normal().Dot(dir)) / radius) * intensity;
         kexMath::Clamp(colorAdd, 0, 1);

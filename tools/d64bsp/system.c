@@ -19,6 +19,7 @@
 //------------------------------------------------------------------------
 
 #include "system.h"
+#include "util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,7 +57,11 @@ void FatalError(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   (* cur_funcs->fatal_error)("\nError: *** %s ***\n\n", message_buf);
@@ -70,7 +75,11 @@ void InternalError(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   (* cur_funcs->fatal_error)("\nINTERNAL ERROR: *** %s ***\n\n", message_buf);
@@ -84,7 +93,11 @@ void PrintMsg(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   (* cur_funcs->print_msg)("%s", message_buf);
@@ -102,7 +115,11 @@ void PrintVerbose(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   if (! cur_info->quiet)
@@ -121,7 +138,11 @@ void PrintWarn(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   (* cur_funcs->print_msg)("Warning: %s", message_buf);
@@ -141,7 +162,11 @@ void PrintMiniWarn(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   if (cur_info->mini_warnings)
@@ -162,7 +187,11 @@ void SetErrorMsg(const char *str, ...)
   va_list args;
 
   va_start(args, str);
-  _vsnprintf(message_buf, sizeof(message_buf), str, args);
+#ifdef _WIN32
+  w3ssnprintf(message_buf, sizeof(message_buf), NULL, str, args);
+#else
+  w3ssnprintf(message_buf, sizeof(message_buf), str, args);
+#endif
   va_end(args);
 
   GlbspFree(cur_comms->message);

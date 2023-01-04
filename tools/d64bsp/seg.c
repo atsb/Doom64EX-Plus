@@ -459,9 +459,9 @@ static int EvalPartitionWorker(superblock_t *seg_list, seg_t *part,
       //       the cost.
 
       if (a <= DIST_EPSILON || b <= DIST_EPSILON)
-        qnty = IFFY_LEN / MAX(a, b);
+        qnty = IFFY_LEN / max(a, b);
       else
-        qnty = IFFY_LEN / MIN(a, b);
+        qnty = IFFY_LEN / min(a, b);
 
       info->cost += (int) (100 * factor * (qnty * qnty - 1.0));
       continue;
@@ -484,9 +484,9 @@ static int EvalPartitionWorker(superblock_t *seg_list, seg_t *part,
 
       // the closer the miss, the higher the cost (see note above)
       if (a >= -DIST_EPSILON || b >= -DIST_EPSILON)
-        qnty = IFFY_LEN / -MIN(a, b);
+        qnty = IFFY_LEN / -min(a, b);
       else
-        qnty = IFFY_LEN / -MAX(a, b);
+        qnty = IFFY_LEN / -max(a, b);
 
       info->cost += (int) (70 * factor * (qnty * qnty - 1.0));
       continue;
@@ -518,7 +518,7 @@ static int EvalPartitionWorker(superblock_t *seg_list, seg_t *part,
       info->iffy++;
 
       // the closer to the end, the higher the cost
-      qnty = IFFY_LEN / MIN(fa, fb);
+      qnty = IFFY_LEN / min(fa, fb);
       info->cost += (int) (140 * factor * (qnty * qnty - 1.0));
     }
   }
@@ -580,12 +580,12 @@ static int EvalPartition(superblock_t *seg_list, seg_t *part,
   }
 
   /* increase cost by the difference between left & right */
-  info.cost += 100 * ABS(info.real_left - info.real_right);
+  info.cost += 100 * abs(info.real_left - info.real_right);
 
   // -AJA- allow miniseg counts to affect the outcome, but only to a
   //       lesser degree than real segs.
   
-  info.cost += 50 * ABS(info.mini_left - info.mini_right);
+  info.cost += 50 * abs(info.mini_left - info.mini_right);
 
   // -AJA- Another little twist, here we show a slight preference for
   //       partition lines that lie either purely horizontally or
@@ -971,10 +971,10 @@ static void FindLimitWorker(superblock_t *block, bbox_t *bbox)
     float_g x2 = cur->end->x;
     float_g y2 = cur->end->y;
 
-    int lx = (int) floor(MIN(x1, x2));
-    int ly = (int) floor(MIN(y1, y2));
-    int hx = (int) ceil(MAX(x1, x2));
-    int hy = (int) ceil(MAX(y1, y2));
+    int lx = (int) floor(min(x1, x2));
+    int ly = (int) floor(min(y1, y2));
+    int hx = (int) ceil(max(x1, x2));
+    int hy = (int) ceil(max(y1, y2));
 
     if (lx < bbox->minx) bbox->minx = lx;
     if (ly < bbox->miny) bbox->miny = ly;

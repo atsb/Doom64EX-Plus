@@ -28,7 +28,7 @@
 #include <math.h>
 #include <limits.h>
 #include <assert.h>
-
+#include "util.h"
 #include "display.h"
 
 
@@ -108,8 +108,12 @@ static void ShowDivider(void)
 
 static int FileExists(const char *filename)
 {
+#ifdef _WIN32
+  FILE* fp;
+  w3sfopen(&fp, filename, "rb");
+#else
   FILE *fp = fopen(filename, "rb");
-
+#endif
   if (fp)
   {
     fclose(fp);
@@ -147,9 +151,12 @@ static void ProcessResponseFile(const char *filename)
 {
   int word_len = 0;
   int in_quote = 0;
- 
-  FILE *fp = fopen(filename, "rb");
-
+#ifdef _WIN32
+  FILE* fp;
+  w3sfopen(&fp, filename, "rb");
+#else
+  FILE *fp = w3sfopen(filename, "rb");
+#endif
   if (! fp)
     TextFatalError("Error: Cannot find RESPONSE file: %s\n", filename);
 
