@@ -149,25 +149,16 @@ int I_Translate_GameController(int state)
 }
 
 //
-//I_InitEvent
-//
-void I_InitEvent()
-{
-	if(SDL_Init(SDL_INIT_EVENTS) < 0)
-	{
-		CON_Printf(RED, "Failed to initialize the SDL2 Events SDL Error: %s", SDL_GetError());
-	}
-}
-
-//
 //	I_InitGameController
 //
-void I_InitGameController()
+int I_InitGameController()
 {
-	if(SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK) < 0)
+	if(SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
 	{
 		CON_Printf(RED, "Failed to initialize the SDL2 Game Controller API, SDL Error: %s", SDL_GetError());
+		return;
 	}
+	return 1;
 }
 //
 // I_TranslateKey
