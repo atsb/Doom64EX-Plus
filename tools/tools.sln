@@ -19,10 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KexLIB", "KexLIB", "{4B8DA6
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KexLIB", "KexLIB\build\MSVC2022\KexLIB.vcxproj", "{918438C5-5BF4-4C3A-88EC-E59F9AA5F724}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WadGen", "WadGen", "{529E161C-248D-4CE1-9B03-15E79B7845A1}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wadgen", "Wadgen\Windows\Wadgen.vcxproj", "{ACA5E000-5714-41F6-A4A2-1FE85A1388AF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
