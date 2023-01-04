@@ -34,16 +34,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "doomtype.h"
 #include "con_cvar.h"
+#include "m_misc.h"
+#include "i_system.h"
 
-// cannot include DOOM headers here; required externs:
-extern void I_Printf(char *string, ...);
-extern int M_CheckParm(const char *);
-extern int datoi(const char *str);
 extern int myargc;
 extern char **myargv;
 
@@ -95,7 +91,7 @@ void I_SetAffinityMask(void)
 
 	p = M_CheckParm("-affinity");
 	if (p && p < myargc - 1)
-		process_affinity_mask = datoi(myargv[p + 1]);
+		process_affinity_mask = atoi(myargv[p + 1]);
 	else
 		process_affinity_mask = 0;
 

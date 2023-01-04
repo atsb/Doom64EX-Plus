@@ -176,6 +176,7 @@
     <ClCompile Include="..\src\engine\info.c" />
     <ClCompile Include="..\src\engine\in_stuff.c" />
     <ClCompile Include="..\src\engine\i_audio.c" />
+    <ClCompile Include="..\src\engine\i_cpu.c" />
     <ClCompile Include="..\src\engine\i_exception.c" />
     <ClCompile Include="..\src\engine\i_main.c" />
     <ClCompile Include="..\src\engine\i_opndir.c" />

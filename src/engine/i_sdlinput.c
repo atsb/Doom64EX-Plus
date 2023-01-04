@@ -164,7 +164,7 @@ void I_InitEvent()
 //
 void I_InitGameController()
 {
-	if(SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK))
+	if(SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK) < 0)
 	{
 		CON_Printf(RED, "Failed to initialize the SDL2 Game Controller API, SDL Error: %s", SDL_GetError());
 	}

@@ -99,6 +99,7 @@
     <ClCompile Include="..\src\engine\i_w3swrapper.c" />
     <ClCompile Include="..\src\engine\gl_utils.c" />
     <ClCompile Include="..\src\engine\gl_main.c" />
+    <ClCompile Include="..\src\engine\i_cpu.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\am_draw.h" />

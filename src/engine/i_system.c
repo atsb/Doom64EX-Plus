@@ -384,8 +384,8 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
-	I_InitEvent();
-	I_InitGameController();
+	//I_InitEvent();
+	//I_InitGameController();
 	I_InitVideo();
 	I_InitClockRate();
 }

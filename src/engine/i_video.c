@@ -200,7 +200,7 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-	uint32_t f = SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
+	uint32_t f = SDL_INIT_VIDEO;
 
 #ifdef _DEBUG
 	f |= SDL_INIT_NOPARACHUTE;
