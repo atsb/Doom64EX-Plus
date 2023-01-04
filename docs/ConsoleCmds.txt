@@ -1,0 +1,76 @@
+****************************************************
+******** Doom64 EX Console Commands ********
+****************************************************
+
+Note that all console commands can be executed through ACTIONS.CFG
+To use the in-game console, press the ~ key.
+
+
+---------------------------------------------
+Commands
+---------------------------------------------
+
+bind <input> <action> <player number>
+	- Binds a key to a specified action for a specific player.
+	Below is a list of valid actions that can be entered:
+	+fire
+	+strafe
+	+use
+	+run
+	+jump
+	nextweap
+	+forward
+	+back
+	+right
+	autorun
+	+strafeleft
+	+straferight
+
+unbind <input> <player number>
+	- Unbinds a key for a specific player
+
+unbindall
+	- Unbinds all keys
+
+quit
+	- Quits the game
+
+exec
+	- Executes an addtional config file
+
+alias
+	- Unused?
+
+cmdlist
+	- Lists all console commands
+
+god
+	- Enables god mode
+
+noclip
+	- Enables no clip mode
+
+pause
+	- Pauses the game
+
+wireframe <toggle - 0 off, 1 on>
+	- Toggles wireframe mode.
+
+spawnthing <thing number>
+	- Spawns a thing in front of the player. TODO: List of thing types.
+
+exitlevel <nextmap>
+	- Exits to the next level specified. Exiting to level 99 in the last level (level 28) will
+	trigger the finale.
+
+trigger <line special> <tag>
+	- Performs a line special trigger on a tagged sector
+
+printglext
+	- Dumps a text file listing supported OpenGL extenstions
+
+setcamerastatic
+	- Detach camera from player's view
+
+setcamerachase
+	- Toggle chase cam

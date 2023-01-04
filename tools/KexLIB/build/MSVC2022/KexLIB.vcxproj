@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{918438C5-5BF4-4C3A-88EC-E59F9AA5F724}</ProjectGuid>
+    <RootNamespace>KexLIB</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.33205.214</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;__WIN32__;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\framework\binFile.cpp" />
+    <ClCompile Include="..\..\framework\cmd.cpp" />
+    <ClCompile Include="..\..\framework\cvar.cpp" />
+    <ClCompile Include="..\..\framework\defs.cpp" />
+    <ClCompile Include="..\..\framework\external\tinyxml2.cpp" />
+    <ClCompile Include="..\..\framework\external\unzip.cpp" />
+    <ClCompile Include="..\..\framework\fileSystem.cpp" />
+    <ClCompile Include="..\..\framework\keyinput.cpp" />
+    <ClCompile Include="..\..\framework\keymap.cpp" />
+    <ClCompile Include="..\..\framework\kstring.cpp" />
+    <ClCompile Include="..\..\framework\memHeap.cpp" />
+    <ClCompile Include="..\..\framework\object.cpp" />
+    <ClCompile Include="..\..\framework\parser.cpp" />
+    <ClCompile Include="..\..\framework\system.cpp" />
+    <ClCompile Include="..\..\framework\win32\opndir.cpp" />
+    <ClCompile Include="..\..\kexlib.cpp" />
+    <ClCompile Include="..\..\math\angle.cpp" />
+    <ClCompile Include="..\..\math\bounds.cpp" />
+    <ClCompile Include="..\..\math\mathlib.cpp" />
+    <ClCompile Include="..\..\math\matrix.cpp" />
+    <ClCompile Include="..\..\math\plane.cpp" />
+    <ClCompile Include="..\..\math\pluecker.cpp" />
+    <ClCompile Include="..\..\math\quaternion.cpp" />
+    <ClCompile Include="..\..\math\random.cpp" />
+    <ClCompile Include="..\..\math\vector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\framework\array.h" />
+    <ClInclude Include="..\..\framework\binFile.h" />
+    <ClInclude Include="..\..\framework\cachefilelist.h" />
+    <ClInclude Include="..\..\framework\cmd.h" />
+    <ClInclude Include="..\..\framework\cvar.h" />
+    <ClInclude Include="..\..\framework\defs.h" />
+    <ClInclude Include="..\..\framework\external\tinyxml2.h" />
+    <ClInclude Include="..\..\framework\external\unzip.h" />
+    <ClInclude Include="..\..\framework\filesystem.h" />
+    <ClInclude Include="..\..\framework\getter.h" />
+    <ClInclude Include="..\..\framework\inputSystem.h" />
+    <ClInclude Include="..\..\framework\keyinput.h" />
+    <ClInclude Include="..\..\framework\keymap.h" />
+    <ClInclude Include="..\..\framework\kstring.h" />
+    <ClInclude Include="..\..\framework\linkedlist.h" />
+    <ClInclude Include="..\..\framework\memHeap.h" />
+    <ClInclude Include="..\..\framework\object.h" />
+    <ClInclude Include="..\..\framework\parser.h" />
+    <ClInclude Include="..\..\framework\resourceManager.h" />
+    <ClInclude Include="..\..\framework\system.h" />
+    <ClInclude Include="..\..\framework\win32\opndir.h" />
+    <ClInclude Include="..\..\kexlib.h" />
+    <ClInclude Include="..\..\math\mathlib.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

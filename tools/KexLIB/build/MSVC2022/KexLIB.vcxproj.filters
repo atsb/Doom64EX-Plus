@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\kexlib.cpp" />
+    <ClCompile Include="..\..\math\angle.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\mathlib.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\matrix.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\bounds.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\plane.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\pluecker.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\quaternion.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\random.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\math\vector.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\binFile.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\cmd.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\cvar.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\defs.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\fileSystem.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\external\tinyxml2.cpp">
+      <Filter>framework\external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\external\unzip.cpp">
+      <Filter>framework\external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\win32\opndir.cpp">
+      <Filter>framework\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\keyinput.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\keymap.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\kstring.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\memHeap.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\object.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\parser.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\framework\system.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\kexlib.h" />
+    <ClInclude Include="..\..\math\mathlib.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\array.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\binFile.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\cachefilelist.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\cmd.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\cvar.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\defs.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\filesystem.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\getter.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\inputSystem.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\external\tinyxml2.h">
+      <Filter>framework\external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\external\unzip.h">
+      <Filter>framework\external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\win32\opndir.h">
+      <Filter>framework\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\keyinput.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\keymap.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\kstring.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\linkedlist.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\memHeap.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\object.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\parser.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\resourceManager.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\framework\system.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="framework">
+      <UniqueIdentifier>{c850d4fb-d029-4aba-ab26-cec596d0769c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{8884aad0-e81e-4885-ad3d-bb954e90ac53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\external">
+      <UniqueIdentifier>{029c2724-f4bd-44f4-9f19-3b0e0690b8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\win32">
+      <UniqueIdentifier>{507983a8-9412-447d-aec5-b32aa830e92a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

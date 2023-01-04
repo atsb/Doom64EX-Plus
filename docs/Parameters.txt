@@ -1,0 +1,101 @@
+**************************************************
+******** Doom64 EX Game Parameters ********
+**************************************************
+
+These can either be entered into the parameters box in the Launcher,
+or added to any shortcuts you create.
+
+An example would be:
+Doom64.exe -warp 28 -fast -file C:\Foo\Foo.wad
+
+---------------------------------------------
+Basic Parameters
+---------------------------------------------
+
+-iwad <filename>
+    specify main iwad name to use during load
+
+-file <name>.wad
+	specify pwad name
+
+-devparm
+	Enables developer mode. Very useful for testing custom wads (see DEVPARM.TXT
+	for more information about using developer mode).
+
+-nogun
+	don't draw player's gun sprite on screen.
+
+-nomonsters
+	No monsters are spawned in game
+
+-nosound
+	Disable sound interface, use this if you're having problems such as
+	"Unable to create primary sound buffer".
+
+-nomusic
+	Disable ingame music
+
+-noxinput
+	Disables XInput
+
+-fast
+	Enables fast monsters
+
+-respawn
+	Enables respawning monsters
+
+-respawnitem
+	Respawn items in game after being picked up
+
+-skill <0 - 4)
+	start game on specified skill
+
+-warp <1 - 33>
+	warp to specified level on load
+
+-record <demo lump name>
+	records a demo to a lump file
+
+-width <value>
+	specify screen width
+
+-height <value>
+	specify screen height
+
+-window
+	run game in window mode
+
+-fullscreen
+	run game in fullscreen mode
+
+-turbo <value>
+	Enables turbo mode based on speed value
+
+-playdemo <lump file>
+	Plays a demo lump
+
+-setvars <cvar name, value>
+	Set a cvar value. Can set multiple cvars following '-setvars'
+
+---------------------------------------------
+Advanced Parameters
+---------------------------------------------
+
+-config <filename>
+	use alternate config.cfg file.
+
+-heapsize <n>
+	Allocate an <n> MB heap (Default=32).
+	Hardware renderer needs less memory than software.
+	A setting of >half physical memory will probably cause 
+	excessive swapfile paging and deteriorated preformance.
+
+-server
+	Host a game. When one or more clients connects, press any
+	key to begin the network game.
+
+-connect <ip address>
+	Connect to a game hosted by the server
+
+-port <n>
+	Specify network port

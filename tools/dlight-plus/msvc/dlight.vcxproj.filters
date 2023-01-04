@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="kexlib">
+      <UniqueIdentifier>{5c1e22bb-8d13-459b-88e8-51d36782408e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kexlib\math">
+      <UniqueIdentifier>{e16d38aa-fc00-4f8e-82c3-3c1b6e907957}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\kexlib\math\angle.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\bounds.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\mathlib.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\matrix.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\plane.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\pluecker.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\quaternion.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\random.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\math\vector.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\binFile.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\kstring.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\memHeap.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\kexlib\parser.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lightmap.cpp" />
+    <ClCompile Include="..\src\lightSurface.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\mapData.cpp" />
+    <ClCompile Include="..\src\surfaces.cpp" />
+    <ClCompile Include="..\src\trace.cpp" />
+    <ClCompile Include="..\src\wad.cpp" />
+    <ClCompile Include="..\src\worker.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\kexlib\array.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\kexlib\binFile.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\kexlib\kstring.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\kexlib\memHeap.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\kexlib\parser.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\kexlib\math\mathlib.h">
+      <Filter>kexlib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common.h" />
+    <ClInclude Include="..\src\lightmap.h" />
+    <ClInclude Include="..\src\lightSurface.h" />
+    <ClInclude Include="..\src\mapData.h" />
+    <ClInclude Include="..\src\surfaces.h" />
+    <ClInclude Include="..\src\trace.h" />
+    <ClInclude Include="..\src\wad.h" />
+    <ClInclude Include="..\src\worker.h" />
+  </ItemGroup>
+</Project>

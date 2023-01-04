@@ -1,0 +1,155 @@
+//**************************************************************************
+//**
+//** common.txt
+//**
+//**************************************************************************
+
+//
+// SYSTEM (DO NOT MODIFY OR MOVE)
+//
+#define PushVar(var)                                    204:var
+#define Delay(tic)                                      203:tic; wait
+
+//
+// DOORS
+//
+#define Door_Open(tag)                                  2:tag
+#define Door_Close(tag)                                 3:tag
+#define Door_Raise(tag)                                 4:tag
+#define Door_CloseWait30Open(tag)                       16:tag
+#define Door_RaiseFast(tag)                             108:tag
+#define Door_OpenFast(tag)                              109:tag
+#define Door_CloseFast(tag)                             110:tag
+
+//
+// FLOORS
+//
+#define Floor_Raise(tag)                                5:tag
+#define Floor_Lower(tag)                                19:tag
+#define Floor_RaiseToNearest(tag)                       30:tag
+#define Floor_LowerFast(tag)                            36:tag
+#define Floor_LowerChange(tag)                          37:tag
+#define Floor_LowerToLowest(tag)                        38:tag
+#define Floor_RaiseCrush(tag)                           56:tag
+#define Floor_Raise24(tag)                              58:tag
+#define Floor_Raise24Change(tag)                        59:tag
+#define Floor_RaiseToNearest2(tag)                      119:tag
+#define Floor_MoveByValue(tag, value)                   PushVar(value); 212:tag
+#define Floor_MoveByValueFast(tag, value)               PushVar(value); 228:tag
+#define Floor_MoveByValueInstant(tag, value)            PushVar(value); 229:tag
+#define Floor_SetHeight(tag, height)                    PushVar(height); 244:tag
+#define Floor_MoveByHeight(tag, height)                 PushVar(height); 247:tag
+
+//
+// STAIRS
+//
+#define Stairs_Build(tag)                               8:tag
+#define Stairs_Build16Fast(tag)                         100:tag
+
+//
+// CEILINGS
+//
+#define Ceiling_RaiseCrush(tag)                         6:tag
+#define Ceiling_RaiseCrushOnce(tag)                     25:tag
+#define Ceiling_LowerToFloor(tag)                       43:tag
+#define Ceiling_RaiseCrush2(tag)                        44:tag
+#define Ceiling_StopCrusher(tag)                        57:tag
+#define Ceiling_SilentCrusher(tag)                      141:tag
+#define Ceiling_MoveByValue(tag, value)                 PushVar(value); 210:tag
+#define Ceiling_MoveByValueFast(tag, value)             PushVar(value); 226:tag
+#define Ceiling_MoveByValueInstant(tag, value)          PushVar(value); 227:tag
+#define Ceiling_RaiseCrushOnceFast(tag)                 232:tag
+#define Ceiling_SetHeight(tag, height)                  PushVar(height); 245:tag
+#define Ceiling_MoveByHeight(tag, height)               PushVar(height); 252:tag
+
+//
+// PLATFORMS
+//
+#define Plat_DownWaitUp(tag)                            10:tag
+#define Plat_RaiseChange(tag)                           22:tag
+#define Plat_PerpetualRaise(tag)                        53:tag
+#define Plat_Stop(tag)                                  54:tag
+#define Plat_DownWaitUp24(tag)                          66:tag
+#define Plat_DownWaitUp32(tag)                          67:tag
+#define Plat_DownWaitUpFast(tag)                        121:tag
+#define Plat_UpWaitDown(tag)                            122:tag
+#define Plat_UpWaitDownFast(tag)                        123:tag
+#define Plat_DownUpByValue(tag, value)                  PushVar(value); 236:tag
+#define Plat_DownUpFastByValue(tag, value)              PushVar(value); 237:tag
+#define Plat_UpDownByValue(tag, value)                  PushVar(value); 238:tag
+#define Plat_UpDownFastByValue(tag, value)              PushVar(value); 239:tag
+
+//
+// TELEPORT
+//
+#define Teleport_ToDest(tid)                            39:tid
+#define Teleport_Stomp(tid)                             249:tid
+
+//
+// ACTORS
+//
+#define Thing_ModifyFlags(tid)                          93:tid
+#define Thing_Alert(tid)                                94:tid
+#define Thing_SpawnDart(tid)                            202:tid
+#define Thing_Spawn(tid)                                224:tid
+#define Thing_SpawnTracer(tid)                          231:tid
+#define Thing_SetReactionTime(tics)                     233:tics
+#define Thing_Dissolve(tid)                             242:tid
+
+//
+// SECTORS
+//
+#define Sector_SetFloorColorID(tag, id)                 PushVar(id); 205:tag
+#define Sector_SetCeilingColorID(tag, id)               PushVar(id); 206:tag
+#define Sector_SetThingColorID(tag, id)                 PushVar(id); 207:tag
+#define Sector_SetUpperWallColorID(tag, id)             PushVar(id); 208:tag
+#define Sector_SetLowerWallColorID(tag, id)             PushVar(id); 209:tag
+#define Sector_CopyFlags(dsttag, srctag)                PushVar(srctag); 220:dsttag
+#define Sector_CopySpecials(dsttag, srctag)             PushVar(srctag); 221:dsttag
+#define Sector_CopyLights(dsttag, srctag)               PushVar(srctag); 222:dsttag
+#define Sector_CopyTextures(dsttag, srctag)             PushVar(srctag); 223:dsttag
+#define Sector_CopyLightsAndInterpolate(dsttag, srctag) PushVar(srctag); 235:dsttag
+
+//
+// LINES
+//
+#define Line_CopyFlags(dsttag, srctag)                  PushVar(srctag); 218:dsttag
+#define Line_CopyTextures(dsttag, srctag)               PushVar(srctag); 219:dsttag
+#define Line_CopySpecials(dsttag, srctag)               PushVar(srctag); 230:dsttag
+#define Line_TriggerRandomLinesByTag(tags)              240:tags
+
+//
+// ELEVATORS
+//
+#define Elevator_MoveByValue(tag, value)                PushVar(value); 214:tag
+
+//
+// PILLARS
+//
+#define Pillar_OpenByValue(tag, value)                  PushVar(value); 241:tag
+
+//
+// CAMERAS
+//
+#define Camera_Clear(tid)                               200:tid
+#define Camera_Set(tid)                                 201:tid
+#define Camera_MoveAndAim(tid, nexttid)                 PushVar(nexttid); 243:tid
+
+//
+// MACROS
+//
+#define Macro_Suspend(id)                               248:id
+#define Macro_Enable(id)                                250:id
+#define Macro_Disable(id)                               251:id
+
+//
+// MISC
+//
+#define Player_Freeze(tics)                             233:tics
+#define Quake(tics)                                     225:tics
+#define SetLightID(dst, src)                            PushVar(src); 234:dst
+#define Exit                                            52:0
+#define ExitToLevel(map)                                124:map
+#define UnlockCheatMenu                                 253:0
+#define DisplaySkyLogo                                  254:0
+#define No_Op                                           0:0

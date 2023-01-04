@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="common.c" />
+    <ClCompile Include="macro.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="parse.c" />
+    <ClCompile Include="script.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common.h" />
+    <ClInclude Include="macro.h" />
+    <ClInclude Include="parse.h" />
+    <ClInclude Include="script.h" />
+    <ClInclude Include="types.h" />
+  </ItemGroup>
+</Project>
