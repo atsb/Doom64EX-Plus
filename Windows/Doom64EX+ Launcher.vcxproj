@@ -142,19 +142,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\launcher\Launcher.h" />
-    <ClInclude Include="..\src\launcher\resource.h" />
-    <ClInclude Include="..\src\launcher\tk_lib.h" />
+    <ClInclude Include="..\launcher\Launcher.h" />
+    <ClInclude Include="..\launcher\resource.h" />
+    <ClInclude Include="..\launcher\tk_lib.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\src\launcher\Launcher.ico" />
+    <Image Include="..\launcher\Launcher.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\launcher\Launcher.c" />
-    <ClCompile Include="..\src\launcher\tk_lib.c" />
+    <ClCompile Include="..\launcher\Launcher.c" />
+    <ClCompile Include="..\launcher\tk_lib.c" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\src\launcher\Launcher.rc" />
+    <ResourceCompile Include="..\launcher\Launcher.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

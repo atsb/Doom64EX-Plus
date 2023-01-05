@@ -173,7 +173,7 @@
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\src\engine\3rdparty\Xbox\Includes\;..\src\engine\3rdparty\Includes\Xbox\fluidlite\;..\src\engine\3rdparty\Xbox\Includes\SDL2;..\src\engine\3rdparty\Includes;..\Xbox\"
+				AdditionalIncludeDirectories="..\engine\3rdparty\Xbox\Includes\;..\engine\3rdparty\Includes\Xbox\fluidlite\;..\engine\3rdparty\Xbox\Includes\SDL2;..\engine\3rdparty\Includes;..\Xbox\"
 				PreprocessorDefinitions="NDEBUG;_XBOX;WIN32_LEAN_AND_MEAN;WINDOWS_TYPES;OLD_TYPE;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;C89"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -195,7 +195,7 @@
 				AdditionalDependencies="xapilib.lib d3d8.lib d3dx8.lib xgraphics.lib dsound.lib dmusic.lib xacteng.lib xsndtrk.lib xvoice.lib xonlines.lib xboxkrnl.lib libSDL2x.lib libpngX.lib xzlib.lib FluidLiteX.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\src\engine\3rdparty\Xbox\Libs\"
+				AdditionalLibraryDirectories="..\engine\3rdparty\Xbox\Libs\"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="2"
@@ -271,139 +271,139 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\engine\am_draw.c">
+			RelativePath="..\engine\am_draw.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\am_draw.h">
+			RelativePath="..\engine\am_draw.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\am_map.c">
+			RelativePath="..\engine\am_map.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\am_map.h">
+			RelativePath="..\engine\am_map.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\con_console.c">
+			RelativePath="..\engine\con_console.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\con_console.h">
+			RelativePath="..\engine\con_console.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\con_cvar.c">
+			RelativePath="..\engine\con_cvar.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\con_cvar.h">
+			RelativePath="..\engine\con_cvar.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_devstat.c">
+			RelativePath="..\engine\d_devstat.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_devstat.h">
+			RelativePath="..\engine\d_devstat.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_englsh.h">
+			RelativePath="..\engine\d_englsh.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_event.h">
+			RelativePath="..\engine\d_event.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_iwad.c">
+			RelativePath="..\engine\d_iwad.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_keywds.h">
+			RelativePath="..\engine\d_keywds.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_main.c">
+			RelativePath="..\engine\d_main.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_main.h">
+			RelativePath="..\engine\d_main.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_net.c">
+			RelativePath="..\engine\d_net.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_net.h">
+			RelativePath="..\engine\d_net.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_player.h">
+			RelativePath="..\engine\d_player.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_think.h">
+			RelativePath="..\engine\d_think.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\d_ticcmd.h">
+			RelativePath="..\engine\d_ticcmd.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\defconfig.inc">
+			RelativePath="..\engine\defconfig.inc">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_ammo.c">
+			RelativePath="..\engine\deh_ammo.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_defs.h">
+			RelativePath="..\engine\deh_defs.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_doom.c">
+			RelativePath="..\engine\deh_doom.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_frame.c">
+			RelativePath="..\engine\deh_frame.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_io.c">
+			RelativePath="..\engine\deh_io.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_io.h">
+			RelativePath="..\engine\deh_io.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_main.c">
+			RelativePath="..\engine\deh_main.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_main.h">
+			RelativePath="..\engine\deh_main.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_mapping.c">
+			RelativePath="..\engine\deh_mapping.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_mapping.h">
+			RelativePath="..\engine\deh_mapping.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_misc.c">
+			RelativePath="..\engine\deh_misc.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_misc.h">
+			RelativePath="..\engine\deh_misc.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_ptr.c">
+			RelativePath="..\engine\deh_ptr.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_str.c">
+			RelativePath="..\engine\deh_str.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_str.h">
+			RelativePath="..\engine\deh_str.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_thing.c">
+			RelativePath="..\engine\deh_thing.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\deh_weapon.c">
+			RelativePath="..\engine\deh_weapon.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\doomdata.h">
+			RelativePath="..\engine\doomdata.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\doomdef.h">
+			RelativePath="..\engine\doomdef.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\doomstat.h">
+			RelativePath="..\engine\doomstat.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\doomtype.h">
+			RelativePath="..\engine\doomtype.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\f_finale.c">
+			RelativePath="..\engine\f_finale.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\f_finale.h">
+			RelativePath="..\engine\f_finale.h">
 		</File>
 		<File
 			RelativePath=".\fakeglx_ex+.c">
@@ -412,49 +412,49 @@
 			RelativePath=".\fakeglx_ex+.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_actions.c">
+			RelativePath="..\engine\g_actions.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_actions.h">
+			RelativePath="..\engine\g_actions.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_controls.h">
+			RelativePath="..\engine\g_controls.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_demo.c">
+			RelativePath="..\engine\g_demo.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_demo.h">
+			RelativePath="..\engine\g_demo.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_game.c">
+			RelativePath="..\engine\g_game.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_game.h">
+			RelativePath="..\engine\g_game.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_local.h">
+			RelativePath="..\engine\g_local.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_settings.c">
+			RelativePath="..\engine\g_settings.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\g_settings.h">
+			RelativePath="..\engine\g_settings.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_draw.c">
+			RelativePath="..\engine\gl_draw.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_draw.h">
+			RelativePath="..\engine\gl_draw.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_main.c">
+			RelativePath="..\engine\gl_main.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_main.h">
+			RelativePath="..\engine\gl_main.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_shader.c">
+			RelativePath="..\engine\gl_shader.c">
 			<FileConfiguration
 				Name="Release|Xbox"
 				ExcludedFromBuild="TRUE">
@@ -463,28 +463,28 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_shader.h">
+			RelativePath="..\engine\gl_shader.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_texture.c">
+			RelativePath="..\engine\gl_texture.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_texture.h">
+			RelativePath="..\engine\gl_texture.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_utils.c">
+			RelativePath="..\engine\gl_utils.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\gl_utils.h">
+			RelativePath="..\engine\gl_utils.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_audio.c">
+			RelativePath="..\engine\i_audio.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_audio.h">
+			RelativePath="..\engine\i_audio.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_exception.c">
+			RelativePath="..\engine\i_exception.c">
 			<FileConfiguration
 				Name="Release|Xbox"
 				ExcludedFromBuild="TRUE">
@@ -493,385 +493,385 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\src\engine\i_main.c">
+			RelativePath="..\engine\i_main.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_opndir.c">
+			RelativePath="..\engine\i_opndir.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_opndir.h">
+			RelativePath="..\engine\i_opndir.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_png.c">
+			RelativePath="..\engine\i_png.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_png.h">
+			RelativePath="..\engine\i_png.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_sdlinput.c">
+			RelativePath="..\engine\i_sdlinput.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_sdlinput.h">
+			RelativePath="..\engine\i_sdlinput.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_swap.h">
+			RelativePath="..\engine\i_swap.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_system.c">
+			RelativePath="..\engine\i_system.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_system.h">
+			RelativePath="..\engine\i_system.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_video.c">
+			RelativePath="..\engine\i_video.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_video.h">
+			RelativePath="..\engine\i_video.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_w3swrapper.c">
+			RelativePath="..\engine\i_w3swrapper.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_w3swrapper.h">
+			RelativePath="..\engine\i_w3swrapper.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_xinput.c">
+			RelativePath="..\engine\i_xinput.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\i_xinput.h">
+			RelativePath="..\engine\i_xinput.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\in_stuff.c">
+			RelativePath="..\engine\in_stuff.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\info.c">
+			RelativePath="..\engine\info.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\info.h">
+			RelativePath="..\engine\info.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_cheat.c">
+			RelativePath="..\engine\m_cheat.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_cheat.h">
+			RelativePath="..\engine\m_cheat.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_fixed.c">
+			RelativePath="..\engine\m_fixed.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_fixed.h">
+			RelativePath="..\engine\m_fixed.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_keys.c">
+			RelativePath="..\engine\m_keys.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_keys.h">
+			RelativePath="..\engine\m_keys.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_menu.c">
+			RelativePath="..\engine\m_menu.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_menu.h">
+			RelativePath="..\engine\m_menu.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_misc.c">
+			RelativePath="..\engine\m_misc.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_misc.h">
+			RelativePath="..\engine\m_misc.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_password.c">
+			RelativePath="..\engine\m_password.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_password.h">
+			RelativePath="..\engine\m_password.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_random.c">
+			RelativePath="..\engine\m_random.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_random.h">
+			RelativePath="..\engine\m_random.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_shift.c">
+			RelativePath="..\engine\m_shift.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\m_shift.h">
+			RelativePath="..\engine\m_shift.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\md5.c">
+			RelativePath="..\engine\md5.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\md5.h">
+			RelativePath="..\engine\md5.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_client.c">
+			RelativePath="..\engine\net_client.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_client.h">
+			RelativePath="..\engine\net_client.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_common.c">
+			RelativePath="..\engine\net_common.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_common.h">
+			RelativePath="..\engine\net_common.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_dedicated.c">
+			RelativePath="..\engine\net_dedicated.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_dedicated.h">
+			RelativePath="..\engine\net_dedicated.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_defs.h">
+			RelativePath="..\engine\net_defs.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_io.c">
+			RelativePath="..\engine\net_io.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_io.h">
+			RelativePath="..\engine\net_io.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_loop.c">
+			RelativePath="..\engine\net_loop.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_loop.h">
+			RelativePath="..\engine\net_loop.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_packet.c">
+			RelativePath="..\engine\net_packet.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_packet.h">
+			RelativePath="..\engine\net_packet.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_query.c">
+			RelativePath="..\engine\net_query.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_query.h">
+			RelativePath="..\engine\net_query.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_server.c">
+			RelativePath="..\engine\net_server.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_server.h">
+			RelativePath="..\engine\net_server.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_structure.c">
+			RelativePath="..\engine\net_structure.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\net_structure.h">
+			RelativePath="..\engine\net_structure.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_ceilng.c">
+			RelativePath="..\engine\p_ceilng.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_doors.c">
+			RelativePath="..\engine\p_doors.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_enemy.c">
+			RelativePath="..\engine\p_enemy.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_floor.c">
+			RelativePath="..\engine\p_floor.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_inter.c">
+			RelativePath="..\engine\p_inter.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_inter.h">
+			RelativePath="..\engine\p_inter.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_lights.c">
+			RelativePath="..\engine\p_lights.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_local.h">
+			RelativePath="..\engine\p_local.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_macros.c">
+			RelativePath="..\engine\p_macros.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_macros.h">
+			RelativePath="..\engine\p_macros.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_map.c">
+			RelativePath="..\engine\p_map.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_maputl.c">
+			RelativePath="..\engine\p_maputl.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_mobj.c">
+			RelativePath="..\engine\p_mobj.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_mobj.h">
+			RelativePath="..\engine\p_mobj.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_plats.c">
+			RelativePath="..\engine\p_plats.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_pspr.c">
+			RelativePath="..\engine\p_pspr.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_pspr.h">
+			RelativePath="..\engine\p_pspr.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_saveg.c">
+			RelativePath="..\engine\p_saveg.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_saveg.h">
+			RelativePath="..\engine\p_saveg.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_setup.c">
+			RelativePath="..\engine\p_setup.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_setup.h">
+			RelativePath="..\engine\p_setup.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_sight.c">
+			RelativePath="..\engine\p_sight.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_spec.c">
+			RelativePath="..\engine\p_spec.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_spec.h">
+			RelativePath="..\engine\p_spec.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_switch.c">
+			RelativePath="..\engine\p_switch.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_telept.c">
+			RelativePath="..\engine\p_telept.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_tick.c">
+			RelativePath="..\engine\p_tick.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_tick.h">
+			RelativePath="..\engine\p_tick.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\p_user.c">
+			RelativePath="..\engine\p_user.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\psnprntf.c">
+			RelativePath="..\engine\psnprntf.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\psnprntf.h">
+			RelativePath="..\engine\psnprntf.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_bsp.c">
+			RelativePath="..\engine\r_bsp.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_clipper.c">
+			RelativePath="..\engine\r_clipper.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_clipper.h">
+			RelativePath="..\engine\r_clipper.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_drawlist.c">
+			RelativePath="..\engine\r_drawlist.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_drawlist.h">
+			RelativePath="..\engine\r_drawlist.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_lights.c">
+			RelativePath="..\engine\r_lights.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_lights.h">
+			RelativePath="..\engine\r_lights.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_local.h">
+			RelativePath="..\engine\r_local.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_main.c">
+			RelativePath="..\engine\r_main.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_main.h">
+			RelativePath="..\engine\r_main.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_scene.c">
+			RelativePath="..\engine\r_scene.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_sky.c">
+			RelativePath="..\engine\r_sky.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_sky.h">
+			RelativePath="..\engine\r_sky.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_things.c">
+			RelativePath="..\engine\r_things.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_things.h">
+			RelativePath="..\engine\r_things.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_wipe.c">
+			RelativePath="..\engine\r_wipe.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\r_wipe.h">
+			RelativePath="..\engine\r_wipe.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\resource.h">
+			RelativePath="..\engine\resource.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\s_sound.c">
+			RelativePath="..\engine\s_sound.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\s_sound.h">
+			RelativePath="..\engine\s_sound.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\sc_main.c">
+			RelativePath="..\engine\sc_main.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\sc_main.h">
+			RelativePath="..\engine\sc_main.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\sha1.c">
+			RelativePath="..\engine\sha1.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\sha1.h">
+			RelativePath="..\engine\sha1.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\sounds.h">
+			RelativePath="..\engine\sounds.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\st_stuff.c">
+			RelativePath="..\engine\st_stuff.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\st_stuff.h">
+			RelativePath="..\engine\st_stuff.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\t_bsp.h">
+			RelativePath="..\engine\t_bsp.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\tables.c">
+			RelativePath="..\engine\tables.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\tables.h">
+			RelativePath="..\engine\tables.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\w_file.c">
+			RelativePath="..\engine\w_file.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\w_file.h">
+			RelativePath="..\engine\w_file.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\w_merge.c">
+			RelativePath="..\engine\w_merge.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\w_merge.h">
+			RelativePath="..\engine\w_merge.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\w_wad.c">
+			RelativePath="..\engine\w_wad.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\w_wad.h">
+			RelativePath="..\engine\w_wad.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\wi_stuff.c">
+			RelativePath="..\engine\wi_stuff.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\wi_stuff.h">
+			RelativePath="..\engine\wi_stuff.h">
 		</File>
 		<File
-			RelativePath="..\src\engine\z_zone.c">
+			RelativePath="..\engine\z_zone.c">
 		</File>
 		<File
-			RelativePath="..\src\engine\z_zone.h">
+			RelativePath="..\engine\z_zone.h">
 		</File>
 	</Files>
 	<Globals>
