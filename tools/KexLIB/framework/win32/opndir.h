@@ -29,7 +29,10 @@
 
 #ifndef I_OPNDIR_H__
 #define I_OPNDIR_H__
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #ifdef _MSC_VER
 
   #include <direct.h>
@@ -102,6 +105,11 @@ int closedir(DIR *);
 void rewinddir(DIR *);
 long telldir(DIR *);
 void seekdir(DIR *, long);
+
+#ifdef __cplusplus
+} 
+#endif
+
 
 #endif
 

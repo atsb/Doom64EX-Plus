@@ -1,4 +1,4 @@
-#include "kexlib.h"
+#include "kexlib.hpp"
 #include "unzip.h"
 
 /* unzip.h -- IO for uncompress .zip files using zlib 

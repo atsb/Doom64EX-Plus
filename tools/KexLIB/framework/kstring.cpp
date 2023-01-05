@@ -24,8 +24,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <ctype.h>
-#include "kexlib.h"
+#include <cctype>
+#include <string>
+#include "kexlib.hpp"
 
 //
 // kexStr::Init
@@ -56,7 +57,7 @@ void kexStr::CheckSize(int size, bool bKeepString) {
 
 void kexStr::CopyNew(const char *string, int len) {
     CheckSize(len+1, false);
-    strcpy(charPtr, string);
+    std::strcpy(charPtr, string);
     length = len;
 }
 
@@ -79,7 +80,7 @@ kexStr::kexStr(const char *string) {
         return;
     }
 
-    CopyNew(string, strlen(string));
+    CopyNew(string, std::strlen(string));
 }
 
 //
@@ -129,7 +130,7 @@ kexStr::~kexStr(void) {
 //
 
 kexStr &kexStr::Concat(const char *string) {
-    return Concat(string, strlen(string));
+    return Concat(string, std::strlen(string));
 }
 
 //
@@ -193,7 +194,7 @@ kexStr &kexStr::operator=(const kexStr &str) {
     int len = str.Length();
     
     CheckSize(len+1, false);
-    strncpy(charPtr, str.charPtr, len);
+    std::strncpy(charPtr, str.charPtr, len);
     length = len;
     charPtr[length] = '\0';
 
@@ -208,7 +209,7 @@ kexStr &kexStr::operator=(const char *str) {
     int len = strlen(str);
     
     CheckSize(len+1, false);
-    strncpy(charPtr, str, len);
+    std::strncpy(charPtr, str, len);
     length = len;
     charPtr[length] = '\0';
 
@@ -224,7 +225,7 @@ kexStr &kexStr::operator=(const bool b) {
     int len = strlen(str);
     
     CheckSize(len+1, false);
-    strncpy(charPtr, str, len);
+    std::strncpy(charPtr, str, len);
     length = len;
     charPtr[length] = '\0';
 
@@ -282,7 +283,7 @@ kexStr kexStr::operator+(const float f) {
     kexStr out(*this);
 
     char tmp[64];
-    sprintf(tmp, "%f", f);
+    std::sprintf(tmp, "%f", f);
     
     return out.Concat(tmp);
 }
@@ -341,7 +342,7 @@ void kexStr::Resize(int size, bool bKeepString) {
     char *newbuffer = new char[newsize];
 
     if(bKeepString) {
-        strncpy(newbuffer, charPtr, length);
+        std::strncpy(newbuffer, charPtr, length);
     }
 
     if(charPtr != defaultBuffer) {
@@ -357,7 +358,7 @@ void kexStr::Resize(int size, bool bKeepString) {
 //
 
 int kexStr::IndexOf(const char *pattern) const {
-    int patlen = strlen(pattern);
+    int patlen = std::strlen(pattern);
     int i = 0;
     int j = 0;
 
@@ -381,11 +382,11 @@ int kexStr::IndexOf(const char *pattern) const {
 //
 
 int kexStr::IndexOf(const char *string, const char *pattern) {
-    int patlen = strlen(pattern);
+    int patlen = std::strlen(pattern);
     int i = 0;
     int j = 0;
 
-    while(i + j < (int)strlen(string)) {
+    while(i + j < (int)std::strlen(string)) {
         if(string[i + j] == pattern[j]) {
             if(++j == patlen) {
                 return i;
@@ -506,7 +507,7 @@ char *kexStr::Format(const char *str, ...) {
     static char vastr[1024];
 	
     va_start(v, str);
-    vsprintf(vastr, str,v);
+    std::vsprintf(vastr, str,v);
     va_end(v);
     
     return vastr;	
@@ -561,7 +562,7 @@ void kexStr::Split(kexStrList &list, const char seperator) {
 //
 
 int kexStr::Atoi(void) {
-    return atoi(charPtr);
+    return std::atoi(charPtr);
 }
 
 //
@@ -569,7 +570,7 @@ int kexStr::Atoi(void) {
 //
 
 float kexStr::Atof(void) {
-    return (float)atof(charPtr);
+    return (float)std::atof(charPtr);
 }
 
 //
@@ -581,9 +582,9 @@ void kexStr::WriteToFile(const char *file) {
         return;
     }
 
-    FILE *f = fopen(file, "w");
-    fprintf(f, "%s", charPtr);
-    fclose(f);
+    FILE *f = std::fopen(file, "w");
+    std::fprintf(f, "%s", charPtr);
+    std::fclose(f);
 }
 
 //

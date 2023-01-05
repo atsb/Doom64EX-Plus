@@ -536,17 +536,9 @@ void GL_Init(void) {
 	glEnable(GL_DITHER);
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-	GL_CheckExtension("GL_ARB_multitexture");
 #ifndef GLEW
 	_glActiveTextureARB = GL_RegisterProc("glActiveTextureARB");
 #endif
-	GL_CheckExtension("GL_EXT_multi_draw_arrays");
-	GL_CheckExtension("GL_ARB_vertex_buffer_object"); \
-	GL_CheckExtension("GL_EXT_fog_coord");
-	GL_CheckExtension("GL_EXT_compiled_vertex_array");
-	GL_CheckExtension("GL_ARB_texture_env_combine");
-	GL_CheckExtension("GL_EXT_texture_env_combine");
-	GL_CheckExtension("GL_EXT_texture_filter_anisotropic");
 
 	if (!GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");

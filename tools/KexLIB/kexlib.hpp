@@ -58,7 +58,7 @@
 #else
 #include <dirent.h>
 #endif
-#include <time.h>
+#include <ctime>
 #ifndef KEX_WIN32
 #include <unistd.h>
 #endif
@@ -102,9 +102,7 @@ typedef union {
 #define PATH_SEPARATOR ':'
 #endif
 
-#include <limits.h>
-#define D_MININT INT_MIN
-#define D_MAXINT INT_MAX
+#include <climits>
 
 #ifndef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -168,7 +166,7 @@ typedef union {
 #define COLOR_YELLOW        RGBA(0xFF, 0xFF, 0, 0xFF)
 #define COLOR_CYAN          RGBA(0, 0xFF, 0xFF, 0xFF)
 
-#include "math/mathlib.h"
+#include "math/mathlib.hpp"
 #include "framework/system.h"
 #include "framework/kstring.h"
 #include "framework/inputSystem.h"
@@ -188,22 +186,23 @@ typedef union {
 #include "framework/getter.h"
 #include "framework/resourceManager.h"
 
-KEXLIB_NAMESPACE_START(kexlib)
+namespace kexlib
+{
 
-void Init(void);
+    void Init(void);
 
-extern kexCvar cvarDeveloper;
-extern kexCvar cvarBasePath;
+    extern kexCvar cvarDeveloper;
+    extern kexCvar cvarBasePath;
 
-extern kexSystem *system;
-extern kexInputSystem *inputSystem;
-extern kexFileSystem *fileSystem;
-extern kexCvarManager *cvars;
-extern kexCommand *commands;
-extern kexInputKey *inputBinds;
-extern kexParser *parser;
-extern kexDefManager *defs;
+    extern kexSystem* system;
+    extern kexInputSystem* inputSystem;
+    extern kexFileSystem* fileSystem;
+    extern kexCvarManager* cvars;
+    extern kexCommand* commands;
+    extern kexInputKey* inputBinds;
+    extern kexParser* parser;
+    extern kexDefManager* defs;
 
-KEXLIB_NAMESPACE_END
+}
 
 #endif

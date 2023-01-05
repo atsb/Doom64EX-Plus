@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "kexlib.h"
+#include "kexlib.hpp"
 
 static kexInputKey inputKey;
 kexInputKey *kexlib::inputBinds = &inputKey;

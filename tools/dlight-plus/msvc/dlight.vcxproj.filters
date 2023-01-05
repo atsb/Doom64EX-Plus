@@ -9,22 +9,48 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\kexlib\binFile.cpp" />
-    <ClCompile Include="..\kexlib\kstring.cpp" />
-    <ClCompile Include="..\kexlib\math\angle.cpp" />
-    <ClCompile Include="..\kexlib\math\bounds.cpp" />
-    <ClCompile Include="..\kexlib\math\mathlib.cpp" />
-    <ClCompile Include="..\kexlib\math\matrix.cpp" />
-    <ClCompile Include="..\kexlib\math\plane.cpp" />
-    <ClCompile Include="..\kexlib\math\pluecker.cpp" />
-    <ClCompile Include="..\kexlib\math\quaternion.cpp" />
-    <ClCompile Include="..\kexlib\math\random.cpp" />
-    <ClCompile Include="..\kexlib\math\vector.cpp" />
-    <ClCompile Include="..\kexlib\memHeap.cpp" />
-    <ClCompile Include="..\kexlib\parser.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\kexlib\math\angle.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\bounds.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\mathlib.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\matrix.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\plane.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\pluecker.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\random.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\quaternion.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\math\vector.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\binFile.cpp">
+      <Filter>kexlib\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\kstring.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\parser.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kexlib\memHeap.cpp">
+      <Filter>kexlib</Filter>
+    </ClCompile>
     <ClCompile Include="..\lightmap.cpp" />
     <ClCompile Include="..\lightSurface.cpp" />
-    <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\mapData.cpp" />
     <ClCompile Include="..\surfaces.cpp" />
     <ClCompile Include="..\trace.cpp" />
@@ -32,13 +58,25 @@
     <ClCompile Include="..\worker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\kexlib\math\mathlib.h">
+      <Filter>kexlib\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\kexlib\array.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\kexlib\kstring.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\kexlib\binFile.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\kexlib\parser.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\kexlib\memHeap.h">
+      <Filter>kexlib</Filter>
+    </ClInclude>
     <ClInclude Include="..\common.h" />
-    <ClInclude Include="..\kexlib\array.h" />
-    <ClInclude Include="..\kexlib\binFile.h" />
-    <ClInclude Include="..\kexlib\kstring.h" />
-    <ClInclude Include="..\kexlib\math\mathlib.h" />
-    <ClInclude Include="..\kexlib\memHeap.h" />
-    <ClInclude Include="..\kexlib\parser.h" />
     <ClInclude Include="..\lightmap.h" />
     <ClInclude Include="..\lightSurface.h" />
     <ClInclude Include="..\mapData.h" />

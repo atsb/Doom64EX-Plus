@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "kexlib.h"
+#include "kexlib.hpp"
 
 kexDefManager defManager;
 kexDefManager *kexlib::defs = &defManager;

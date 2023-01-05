@@ -24,22 +24,19 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "kexlib.h"
+#include "kexlib.hpp"
 
-KEXLIB_NAMESPACE_START(kexlib)
+kexCvar kexlib::cvarDeveloper("developer", CVF_BOOL|CVF_CONFIG, "0", "Developer mode");
+kexCvar kexlib::cvarBasePath("basepath", CVF_STRING|CVF_CONFIG, "", "Base file path to look for files");
 
-kexCvar cvarDeveloper("developer", CVF_BOOL|CVF_CONFIG, "0", "Developer mode");
-kexCvar cvarBasePath("basepath", CVF_STRING|CVF_CONFIG, "", "Base file path to look for files");
-
-void Init(void) {
-    system->Init();
-    cvars->Init();
+void kexlib::Init(void) {
+    kexlib::system->Init();
+    kexlib::cvars->Init();
     kexObject::Init();
-    inputSystem->Init();
-    inputBinds->Init();
-    fileSystem->Init();
+    kexlib::inputSystem->Init();
+    kexlib::inputBinds->Init();
+    kexlib::fileSystem->Init();
 
-    system->Printf("KexLib Initialized\n");
+    kexlib::system->Printf("KexLib Initialized\n");
 }
 
-KEXLIB_NAMESPACE_END

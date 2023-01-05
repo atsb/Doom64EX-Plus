@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "kexlib.h"
+#include "kexlib.hpp"
 
 static kexCommand command;
 kexCommand *kexlib::commands = &command;

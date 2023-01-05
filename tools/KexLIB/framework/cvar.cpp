@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "kexlib.h"
+#include "kexlib.hpp"
 
 static kexCvarManager cvarManager;
 kexCvarManager *kexlib::cvars = &cvarManager;

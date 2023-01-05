@@ -1,8 +1,9 @@
 // Emacs style mode select   -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2012 Samuel Villarreal
-//
+// Copyright(C) 2007-2012 Samuel Villarreal
+// Copytight(C) 2023 André Guilherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -19,53 +20,8 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-//
-// DESCRIPTION: Matrix (left handed) operations
-//
-// Reference:
-// _________________ 
-// | 0   4   8   12 |
-// | 1   5   9   13 |
-// | 2   6  10   14 |
-// | 3   7  11   15 |
-// _________________
-//
-// translation
-// _________________ 
-// | 0   4   8   x  |
-// | 1   5   9   y  |
-// | 2   6  10   z  |
-// | 3   7  11   15 |
-// _________________
-//
-// rotation x
-// _________________ 
-// |(1)  4   8   x  |
-// | 1   xc -xs  y  |
-// | 2   xs  xs  z  |
-// | 3   7  11  (1) |
-// _________________
-//
-// rotation y
-// _________________ 
-// | yc  4  ys   12 |
-// | 1  (1)  9   13 |
-// |-ys  6  yc   14 |
-// | 3   7  11  (1) |
-// _________________
-//
-// rotation z
-// _________________ 
-// | zc -zs  8   12 |
-// | zs  zc  9   13 |
-// | 2   6  (1)  14 |
-// | 3   7  11  (1) |
-// _________________
-//
-//-----------------------------------------------------------------------------
 
-#include <string.h>
-#include "mathlib.h"
+#include "mathlib.hpp"
 
 //
 // kexMatrix::kexMatrix

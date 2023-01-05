@@ -24,8 +24,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <assert.h>
-#include "kexlib.h"
+#include <cassert>
+#include "kexlib.hpp"
 
 int kexHeap::numHeapBlocks = 0;
 int kexHeap::currentHeapBlockID = -1;

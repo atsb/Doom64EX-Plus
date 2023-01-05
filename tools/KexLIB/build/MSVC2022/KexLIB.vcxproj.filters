@@ -50,7 +50,7 @@
     <ClCompile Include="..\..\framework\external\unzip.cpp">
       <Filter>framework\external</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\framework\win32\opndir.cpp">
+    <ClCompile Include="..\..\framework\win32\opndir.c">
       <Filter>framework\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\framework\keyinput.cpp">
@@ -76,10 +76,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\kexlib.h" />
-    <ClInclude Include="..\..\math\mathlib.h">
-      <Filter>math</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\kexlib.hpp" />
     <ClInclude Include="..\..\framework\array.h">
       <Filter>framework</Filter>
     </ClInclude>
@@ -142,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="..\..\framework\system.h">
       <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\math\mathlib.hpp">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

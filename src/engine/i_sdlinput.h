@@ -54,4 +54,5 @@ void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
 boolean I_UpdateGrab(void);
-int I_InitGameController();
+void I_InitGameController();
+void I_InitEvent();

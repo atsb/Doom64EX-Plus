@@ -1,8 +1,9 @@
 // Emacs style mode select   -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2012 Samuel Villarreal
-//
+// Copyright(C) 2007-2012 Samuel Villarreal
+// Copytight(C) 2023 André Guilherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -19,13 +20,9 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-//
-// DESCRIPTION: Random operations
-//
-//-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include "mathlib.h"
+#include <cstdlib>
+#include "mathlib.hpp"
 
 #define RANDOM_MAX  0x7FFF
 #define RANGE_MAX   10000
@@ -46,7 +43,7 @@ void kexRand::SetSeed(const int randSeed) {
 //
 
 int kexRand::SysRand(void) {
-    return rand();
+    return std::rand();
 }
 
 //

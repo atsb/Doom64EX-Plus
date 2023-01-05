@@ -24,8 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "kexlib.h"
-#include "../framework/external/unzip.h"
+#include "kexlib.hpp"
 
 #ifndef KEX_WIN32
 #include <unistd.h>

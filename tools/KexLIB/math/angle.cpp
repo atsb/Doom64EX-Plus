@@ -24,7 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "mathlib.h"
+#include "mathlib.hpp"
 
 #define FULLCIRCLE  (M_PI * 2)
 

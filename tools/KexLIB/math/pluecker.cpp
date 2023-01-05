@@ -25,7 +25,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "mathlib.h"
+#include "mathlib.hpp"
 
 //
 // kexPluecker::kexPluecker

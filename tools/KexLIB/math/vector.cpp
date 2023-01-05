@@ -1,8 +1,9 @@
 // Emacs style mode select   -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2012 Samuel Villarreal
-//
+// Copyright(C) 2007-2012 Samuel Villarreal
+// Copytight(C) 2023 André Guilherme
+// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -19,12 +20,8 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-//
-// DESCRIPTION: Vector operations
-//
-//-----------------------------------------------------------------------------
 
-#include "mathlib.h"
+#include "mathlib.hpp"
 
 const kexVec3 kexVec3::vecRight(1, 0, 0);
 const kexVec3 kexVec3::vecUp(0, 1, 0);
