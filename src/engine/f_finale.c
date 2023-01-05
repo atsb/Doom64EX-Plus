@@ -45,7 +45,7 @@
 
 static int          castrotation = 0;
 static int          castnum;
-static intptr_t     casttics;
+static unsigned int     casttics;
 static state_t* caststate;
 static boolean     castdeath;
 static boolean     castdying;
@@ -55,7 +55,7 @@ static boolean     castattacking;
 static dPalette_t   finalePal;
 
 typedef struct {
-	int8_t* name;
+	char* name;
 	mobjtype_t type;
 } castinfo_t;
 

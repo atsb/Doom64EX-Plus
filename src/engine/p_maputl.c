@@ -437,7 +437,7 @@ P_BlockLinesIterator
 	int            y,
 	boolean(*func)(line_t*)) {
 	int            offset;
-	int16_t* list;
+	short* list;
 	line_t* ld;
 
 	if (x < 0

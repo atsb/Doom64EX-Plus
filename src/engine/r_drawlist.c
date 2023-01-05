@@ -157,7 +157,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
 			// setup texture ID
 			if (tag == DLT_SPRITE) {
-				intptr_t flags = ((visspritelist_t*)head->data)->spr->flags;
+				unsigned int flags = ((visspritelist_t*)head->data)->spr->flags;
 
 				// textid in sprites contains hack that stores palette index data
 				palette = head->texid >> 24;

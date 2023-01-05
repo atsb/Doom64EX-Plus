@@ -31,7 +31,7 @@ GLuint ID;
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
 {
 	//Compile the code.
-	uint32_t texture, fragment;
+	unsigned int texture, fragment;
 	texture = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(texture, 1, vertexShader, NULL);
 	glCompileShader(texture);

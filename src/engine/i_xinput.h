@@ -77,10 +77,10 @@ typedef struct {
 	word    data;
 	byte    ltrigger;
 	byte    rtrigger;
-	int16_t   lx;
-	int16_t   ly;
-	int16_t   rx;
-	int16_t   ry;
+	short   lx;
+	short   ly;
+	short   rx;
+	short   ry;
 } xinputbuttons_t;
 
 //
@@ -89,7 +89,7 @@ typedef struct {
 // state data
 //
 typedef struct {
-	dword           id;
+	int           id;
 	xinputbuttons_t buttons;
 } xinputstate_t;
 

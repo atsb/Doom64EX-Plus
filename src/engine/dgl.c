@@ -53,10 +53,10 @@ static word drawIndices[MAXINDICES];
 //
 
 #ifdef USE_DEBUG_GLFUNCS
-void dglLogError(const int8_t* message, const int8_t* file, int line) {
+void dglLogError(const char* message, const char* file, int line) {
 	GLint err = glGetError();
 	if (err != GL_NO_ERROR) {
-		int8_t str[64];
+		char str[64];
 
 		switch (err) {
 		case GL_INVALID_ENUM:
@@ -133,7 +133,7 @@ void dglTriangle(int v0, int v1, int v2) {
 // dglDrawGeometry
 //
 
-void dglDrawGeometry(dword count, vtx_t* vtx) {
+void dglDrawGeometry(int count, vtx_t* vtx) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("dglDrawGeometry(count=0x%x, vtx=0x%p)\n", count, vtx);
 #endif

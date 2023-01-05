@@ -37,29 +37,29 @@
 #include "tables.h"
 
 // build version
-extern const int8_t version_date[];
+extern const char version_date[];
 
-void        _dprintf(const int8_t* s, ...);
-void* dmemcpy(void* s1, const void* s2, size_t n);
-void* dmemset(void* s, dword c, size_t n);
-int8_t* dstrcpy(int8_t* dest, const int8_t* src);
-void        dstrncpy(int8_t* dest, const int8_t* src, int maxcount);
-int         dstrcmp(const int8_t* s1, const int8_t* s2);
-int         dstrncmp(const int8_t* s1, const int8_t* s2, int len);
-int         dstricmp(const int8_t* s1, const int8_t* s2);
-int         dstrnicmp(const int8_t* s1, const int8_t* s2, int len);
-void        dstrupr(int8_t* s);
-void        dstrlwr(int8_t* s);
-int         dstrlen(const int8_t* string);
-int8_t* dstrrchr(int8_t* s, int8_t c);
-void        dstrcat(int8_t* dest, const int8_t* src);
-int8_t* dstrstr(int8_t* s1, int8_t* s2);
-int         datoi(const int8_t* str);
-float       datof(int8_t* str);
-int         dhtoi(int8_t* str);
+void        _dprintf(const char* s, ...);
+void* dmemcpy(void* s1, const void* s2, unsigned int n);
+void* dmemset(void* s, int c, unsigned int n);
+char* dstrcpy(char* dest, const char* src);
+void        dstrncpy(char* dest, const char* src, int maxcount);
+int         dstrcmp(const char* s1, const char* s2);
+int         dstrncmp(const char* s1, const char* s2, int len);
+int         dstricmp(const char* s1, const char* s2);
+int         dstrnicmp(const char* s1, const char* s2, int len);
+void        dstrupr(char* s);
+void        dstrlwr(char* s);
+int         dstrlen(const char* string);
+char* dstrrchr(char* s, char c);
+void        dstrcat(char* dest, const char* src);
+char* dstrstr(char* s1, char* s2);
+int         datoi(const char* str);
+float       datof(char* str);
+int         dhtoi(char* str);
 boolean    dfcmp(float f1, float f2);
-int         dsprintf(int8_t* buf, const int8_t* format, ...);
-int         dsnprintf(int8_t* src, size_t n, const int8_t* str, ...);
+int         dsprintf(char* buf, const char* format, ...);
+int         dsnprintf(char* src, unsigned int n, const char* str, ...);
 
 extern int D_abs(int x);
 extern float D_fabs(float x);

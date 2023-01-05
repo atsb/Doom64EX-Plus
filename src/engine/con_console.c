@@ -50,8 +50,8 @@
 
 typedef struct {
 	int    len;
-	dword  color;
-	int8_t   line[1];
+	int  color;
+	char   line[1];
 } conline_t;
 
 enum {
@@ -68,14 +68,14 @@ static int          console_head;
 static int          console_lineoffset;
 static int          console_minline;
 static boolean     console_enabled = false;
-static int8_t         console_linebuffer[CON_BUFFERSIZE];
+static char         console_linebuffer[CON_BUFFERSIZE];
 static int          console_linelength;
 static boolean     console_state = CST_UP;
 static int          console_prevcmds[CMD_HISTORY_SIZE];
 static int          console_cmdhead;
 static int          console_nextcmd;
 
-int8_t        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
+char        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
 int         console_inputlength;
 boolean    console_initialized = false;
 
@@ -118,7 +118,7 @@ void CON_Init(void) {
 // CON_AddLine
 //
 
-void CON_AddLine(int8_t* line, int len) {
+void CON_AddLine(char* line, int len) {
 	conline_t* cline;
 	int         i;
 	boolean    recursed = false;
@@ -171,9 +171,9 @@ void CON_AddLine(int8_t* line, int len) {
 // CON_AddText
 //
 
-void CON_AddText(int8_t* text) {
-	int8_t* src;
-	int8_t    c;
+void CON_AddText(char* text) {
+	char* src;
+	char    c;
 
 	if (!console_linebuffer) {
 		return;
@@ -198,8 +198,8 @@ void CON_AddText(int8_t* text) {
 // CON_Printf
 //
 
-void CON_Printf(rcolor clr, const int8_t* s, ...) {
-	static int8_t msg[MAX_MESSAGE_SIZE];
+void CON_Printf(rcolor clr, const char* s, ...) {
+	static char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 
 	va_start(va, s);
@@ -214,8 +214,8 @@ void CON_Printf(rcolor clr, const int8_t* s, ...) {
 // CON_Warnf
 //
 
-void CON_Warnf(const int8_t* s, ...) {
-	static int8_t msg[MAX_MESSAGE_SIZE];
+void CON_Warnf(const char* s, ...) {
+	static char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 
 	va_start(va, s);
@@ -230,9 +230,9 @@ void CON_Warnf(const int8_t* s, ...) {
 // CON_DPrintf
 //
 
-void CON_DPrintf(const int8_t* s, ...) {
+void CON_DPrintf(const char* s, ...) {
 	if (devparm) {
-		static int8_t msg[MAX_MESSAGE_SIZE];
+		static char msg[MAX_MESSAGE_SIZE];
 		va_list    va;
 
 		va_start(va, s);
@@ -249,7 +249,7 @@ void CON_DPrintf(const int8_t* s, ...) {
 
 static boolean shiftdown = false;
 
-void CON_ParseKey(int8_t c) {
+void CON_ParseKey(char c) {
 	if (c < ' ') {
 		return;
 	}

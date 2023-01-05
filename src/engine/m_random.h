@@ -27,7 +27,7 @@
 #include "doomtype.h"
 #include "d_keywds.h"
 
-extern uint8_t rndtable[256];
+extern unsigned char rndtable[256];
 int M_Random(void);
 int P_Random(void);
 void M_ClearRandom(void);

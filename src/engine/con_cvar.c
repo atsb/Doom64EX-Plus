@@ -61,7 +61,7 @@ static CMD(ListCvars) {
 // CON_CvarGet
 //
 
-cvar_t* CON_CvarGet(int8_t* name) {
+cvar_t* CON_CvarGet(char* name) {
 	cvar_t* var;
 
 	for (var = cvarcap; var; var = var->next) {
@@ -77,7 +77,7 @@ cvar_t* CON_CvarGet(int8_t* name) {
 // CON_CvarValue
 //
 
-float CON_CvarValue(int8_t* name) {
+float CON_CvarValue(char* name) {
 	cvar_t* var;
 
 	var = CON_CvarGet(name);
@@ -92,7 +92,7 @@ float CON_CvarValue(int8_t* name) {
 // CON_CvarString
 //
 
-int8_t* CON_CvarString(int8_t* name) {
+char* CON_CvarString(char* name) {
 	cvar_t* var;
 
 	var = CON_CvarGet(name);
@@ -107,7 +107,7 @@ int8_t* CON_CvarString(int8_t* name) {
 // CON_CvarSet
 //
 
-void CON_CvarSet(int8_t* var_name, int8_t* value) {
+void CON_CvarSet(char* var_name, char* value) {
 	cvar_t* var;
 	boolean changed;
 
@@ -135,8 +135,8 @@ void CON_CvarSet(int8_t* var_name, int8_t* value) {
 // CON_CvarSetValue
 //
 
-void CON_CvarSetValue(int8_t* var_name, float value) {
-	int8_t val[32];
+void CON_CvarSetValue(char* var_name, float value) {
+	char val[32];
 
 	sprintf(val, "%f", value);
 	CON_CvarSet(var_name, val);
@@ -147,7 +147,7 @@ void CON_CvarSetValue(int8_t* var_name, float value) {
 //
 
 void CON_CvarRegister(cvar_t* variable) {
-	int8_t* oldstr;
+	char* oldstr;
 
 	// first check to see if it has allready been defined
 	if (CON_CvarGet(variable->name)) {

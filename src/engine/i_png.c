@@ -40,7 +40,7 @@
 
 static byte* pngWriteData;
 static byte* pngReadData;
-static size_t   pngWritePos = 0;
+static unsigned int   pngWritePos = 0;
 
 CVAR_CMD(i_gamma, 0) {
 	GL_DumpTextures();
@@ -50,7 +50,7 @@ CVAR_CMD(i_gamma, 0) {
 // I_PNGRowSize
 //
 
-d_inline static size_t I_PNGRowSize(int width, byte bits) {
+d_inline static unsigned int I_PNGRowSize(int width, byte bits) {
 	if (bits >= 8) {
 		return ((width * bits) >> 3);
 	}
@@ -63,7 +63,7 @@ d_inline static size_t I_PNGRowSize(int width, byte bits) {
 // I_PNGReadFunc
 //
 
-static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
+static void I_PNGReadFunc(png_structp ctx, byte* area, unsigned int size) {
 	dmemcpy(area, pngReadData, size);
 	pngReadData += size;
 }
@@ -75,7 +75,7 @@ static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
 static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 	int* dat;
 
-	if (!dstrncmp((int8_t*)chunk->name, "grAb", 4) && chunk->size >= 8) {
+	if (!dstrncmp((char*)chunk->name, "grAb", 4) && chunk->size >= 8) {
 		dat = (int*)png_get_user_chunk_ptr(png_ptr);
 		dat[0] = I_SwapBE32(*(int*)(chunk->data));
 		dat[1] = I_SwapBE32(*(int*)(chunk->data + 4));
@@ -124,8 +124,8 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 	int         pixel_depth;
 	byte* png;
 	byte* out;
-	size_t      row;
-	size_t      rowSize;
+	unsigned int      row;
+	unsigned int      rowSize;
 	byte** row_pointers;
 
 	// get lump data
@@ -209,8 +209,8 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 			if (palindex) {
 				// palindex specifies each row (16 colors per row) in the palette for 4 bit color textures
 				if (bit_depth == 4) {
-					uint32_t pindex = (16 * palindex);
-					if (pindex >= (uint32_t)(num_pal)) {
+					unsigned int pindex = (16 * palindex);
+					if (pindex >= (unsigned int)(num_pal)) {
 						pindex = 0;
 					}
 
@@ -220,7 +220,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 				}
 				else if (bit_depth >= 8) {  // 8 bit and up requires an external palette lump
 					png_colorp pallump;
-					int8_t palname[9];
+					char palname[9];
 
 					sprintf(palname, "PAL");
 					dstrncpy(palname + 3, lumpinfo[lump].name, 4);
@@ -307,7 +307,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 	png_read_end(png_ptr, info_ptr);
 
 	if (alpha) {
-		size_t i;
+		unsigned int i;
 		int* check = (int*)out;
 
 		// need to reverse the bytes to ABGR format
@@ -337,7 +337,7 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 // I_PNGWriteFunc
 //
 
-static void I_PNGWriteFunc(png_structp png_ptr, byte* data, size_t length) {
+static void I_PNGWriteFunc(png_structp png_ptr, byte* data, unsigned int length) {
 	pngWriteData = (byte*)Z_Realloc(pngWriteData, pngWritePos + length, PU_STATIC, 0);
 	dmemcpy(pngWriteData + pngWritePos, data, length);
 	pngWritePos += length;
@@ -354,8 +354,8 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 	byte* out;
 	byte* pic;
 	byte** row_pointers;
-	size_t      j = 0;
-	size_t      row;
+	unsigned int      j = 0;
+	unsigned int      row;
 
 	// setup png pointer
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);

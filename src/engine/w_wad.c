@@ -71,7 +71,7 @@
 //
 typedef struct {
 	// Should be "IWAD" or "PWAD".
-	int8_t        identification[4];
+	char        identification[4];
 	int            numlumps;
 	int            infotableofs;
 } PACKEDATTR wadinfo_t;
@@ -79,7 +79,7 @@ typedef struct {
 typedef struct {
 	int            filepos;
 	int            size;
-	int8_t        name[8];
+	char        name[8];
 } PACKEDATTR filelump_t;
 
 #ifdef _MSC_VER
@@ -95,8 +95,8 @@ int            numlumps;
 #define CopyLumps(dest, src, count) dmemcpy(dest, src, (count)*sizeof(lumpinfo_t))
 #define CopyLump(dest, src) CopyLumps(dest, src, 1)
 
-void ExtractFileBase(int8_t* path, int8_t* dest) {
-	int8_t* src;
+void ExtractFileBase(char* path, char* dest) {
+	char* src;
 	int        length;
 
 	src = path + dstrlen(path) - 1;
@@ -125,9 +125,9 @@ void ExtractFileBase(int8_t* path, int8_t* dest) {
 // W_HashLumpName
 //
 
-uint32_t W_HashLumpName(const int8_t* str) {
-	uint32_t hash = 1315423911;
-	uint32_t i = 0;
+unsigned int W_HashLumpName(const char* str) {
+	unsigned int hash = 1315423911;
+	unsigned int i = 0;
 
 	for (i = 0; i < 8 && *str != '\0'; str++, i++) {
 		hash ^= ((hash << 5) + toupper((int)*str) + (hash >> 2));
@@ -142,7 +142,7 @@ uint32_t W_HashLumpName(const int8_t* str) {
 
 static void W_HashLumps(void) {
 	int i;
-	uint32_t hash;
+	unsigned int hash;
 
 	for (i = 0; i < numlumps; i++) {
 		lumpinfo[i].index = -1;
@@ -165,7 +165,7 @@ static void W_HashLumps(void) {
 // Other files are single lumps with the base filename
 //  for the lump name.
 
-wad_file_t* W_AddFile(int8_t* filename) {
+wad_file_t* W_AddFile(char* filename) {
 	wadinfo_t   header;
 	lumpinfo_t* lump_p;
 	int         i;
@@ -262,8 +262,8 @@ wad_file_t* W_AddFile(int8_t* filename) {
 //
 
 void W_Init(void) {
-	int8_t* iwad;
-	int8_t* doom64expluswad;
+	char* iwad;
+	char* doom64expluswad;
 	wadinfo_t       header;
 	lumpinfo_t* lump_p;
 	int             i;
@@ -344,7 +344,7 @@ void W_Init(void) {
 		// until end of parms or another - preceded parm
 		while (++p != myargc && myargv[p][0] != '-')
 		{
-			int8_t* filename;
+			char* filename;
 			filename = W_TryFindWADByName(myargv[p]);
 			W_MergeFile(filename);
 		}
@@ -353,7 +353,7 @@ void W_Init(void) {
 	else {
 		for (i = 1; i < myargc; i++) {
 			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
-				int8_t* filename;
+				char* filename;
 				if ((filename = W_TryFindWADByName(myargv[i]))) {
 					W_MergeFile(filename);
 				}
@@ -374,7 +374,7 @@ byte* mapLumpData = NULL;
 //
 
 void W_CacheMapLump(int map) {
-	int8_t name8[9];
+	char name8[9];
 	int lump;
 
 	sprintf(name8, "MAP%02d", map);
@@ -421,7 +421,7 @@ void W_FreeMapLump(void) {
 
 int W_MapLumpLength(int lump) {
 	if (nonmaplump) {
-		int8_t name8[9];
+		char name8[9];
 		int l;
 
 		sprintf(name8, "MAP%02d", gamemap);
@@ -445,7 +445,7 @@ int W_MapLumpLength(int lump) {
 
 void* W_GetMapLump(int lump) {
 	if (nonmaplump) {
-		int8_t name8[9];
+		char name8[9];
 		int l;
 
 		sprintf(name8, "MAP%02d", gamemap);
@@ -468,7 +468,7 @@ void* W_GetMapLump(int lump) {
 // Returns -1 if name not found.
 //
 
-int W_CheckNumForName(const int8_t* name) {
+int W_CheckNumForName(const char* name) {
 	int i = -1;
 
 	if (numlumps) {
@@ -487,7 +487,7 @@ int W_CheckNumForName(const int8_t* name) {
 // Calls W_CheckNumForName, but bombs out if not found.
 //
 
-int W_GetNumForName(const int8_t* name) {
+int W_GetNumForName(const char* name) {
 	int    i;
 
 	i = W_CheckNumForName(name);
@@ -519,7 +519,7 @@ int W_LumpLength(int lump) {
 //
 
 void W_ReadLump(int lump, void* dest) {
-	intptr_t c;
+	int c;
 	lumpinfo_t* l;
 
 	if (lump >= numlumps) {
@@ -573,7 +573,7 @@ void* W_CacheLumpNum(int lump, int tag) {
 // W_CacheLumpName
 //
 
-void* W_CacheLumpName(const int8_t* name, int tag) {
+void* W_CacheLumpName(const char* name, int tag) {
 	return W_CacheLumpNum(W_GetNumForName(name), tag);
 }
 
@@ -608,7 +608,7 @@ static int GetFileNumber(wad_file_t* handle) {
 }
 
 static void ChecksumAddLump(md5_context_t* md5_context, lumpinfo_t* lump) {
-	int8_t buf[9];
+	char buf[9];
 
 	strncpy(buf, lump->name, 8);
 	buf[8] = '\0';

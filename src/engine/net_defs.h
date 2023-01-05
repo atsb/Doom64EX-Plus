@@ -38,9 +38,9 @@ typedef struct _net_context_s net_context_t;
 struct _net_packet_s
 {
 	byte* data;
-	size_t len;
-	size_t alloced;
-	uint32_t pos;
+	unsigned int len;
+	unsigned int alloced;
+	unsigned int pos;
 };
 
 struct _net_module_s
@@ -154,8 +154,8 @@ typedef struct
 
 typedef struct
 {
-	int32_t latency;
-	uint32_t seq;
+	int latency;
+	unsigned int seq;
 	boolean playeringame[MAXPLAYERS];
 	net_ticdiff_t cmds[MAXPLAYERS];
 } net_full_ticcmd_t;

@@ -43,18 +43,18 @@
 #include "deh_str.h"
 
 typedef struct {
-	const int8_t* cheat;
-	void (* const func)(player_t*, int8_t[4]);
+	const char* cheat;
+	void (* const func)(player_t*, char[4]);
 	const int arg;
-	uint32_t code, mask;
+	unsigned int code, mask;
 } cheatinfo_t;
 
-static void M_CheatFa(player_t* player, int8_t dat[4]);
-static void M_CheatBerserk(player_t* player, int8_t dat[4]);
-static void M_CheatWarp(player_t* player, int8_t dat[4]);
-static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]);
-static void M_CheatMyPos(player_t* player, int8_t dat[4]);
-static void M_CheatAllMap(player_t* player, int8_t dat[4]);
+static void M_CheatFa(player_t* player, char dat[4]);
+static void M_CheatBerserk(player_t* player, char dat[4]);
+static void M_CheatWarp(player_t* player, char dat[4]);
+static void M_CheatWarpCarryOver(player_t* player, char dat[4]);
+static void M_CheatMyPos(player_t* player, char dat[4]);
+static void M_CheatAllMap(player_t* player, char dat[4]);
 
 cheatinfo_t cheat[] = {
 	{   "iddqd",    M_CheatGod,         0   },
@@ -73,7 +73,7 @@ cheatinfo_t cheat[] = {
 	{   NULL,       NULL,               0   }
 };
 
-void M_CheatGod(player_t* player, int8_t dat[4]) {
+void M_CheatGod(player_t* player, char dat[4]) {
 	player->cheats ^= CF_GODMODE;
 	if (player->cheats & CF_GODMODE) {
 		if (player->mo) {
@@ -88,7 +88,7 @@ void M_CheatGod(player_t* player, int8_t dat[4]) {
 	}
 }
 
-static void M_CheatFa(player_t* player, int8_t dat[4]) {
+static void M_CheatFa(player_t* player, char dat[4]) {
 	int i;
 
 	player->armorpoints = deh_idfa_armor;
@@ -105,7 +105,7 @@ static void M_CheatFa(player_t* player, int8_t dat[4]) {
 	player->message = STSTR_FAADDED;
 }
 
-void M_CheatKfa(player_t* player, int8_t dat[4]) {
+void M_CheatKfa(player_t* player, char dat[4]) {
 	int i;
 
 	player->armorpoints = deh_idkfa_armor;
@@ -126,7 +126,7 @@ void M_CheatKfa(player_t* player, int8_t dat[4]) {
 	player->message = STSTR_KFAADDED;
 }
 
-void M_CheatClip(player_t* player, int8_t dat[4]) {
+void M_CheatClip(player_t* player, char dat[4]) {
 	player->cheats ^= CF_NOCLIP;
 
 	if (player->cheats & CF_NOCLIP) {
@@ -137,13 +137,13 @@ void M_CheatClip(player_t* player, int8_t dat[4]) {
 	}
 }
 
-static void M_CheatBerserk(player_t* player, int8_t dat[4]) {
+static void M_CheatBerserk(player_t* player, char dat[4]) {
 	P_GivePower(player, pw_strength);
 	player->message = GOTBERSERK;
 }
 
 CVAR_EXTERNAL(sv_skill);
-static void M_CheatWarp(player_t* player, int8_t dat[4]) {
+static void M_CheatWarp(player_t* player, char dat[4]) {
 	char	lumpname[9];
 	int		lumpnum;
 	int map;
@@ -172,7 +172,7 @@ static void M_CheatWarp(player_t* player, int8_t dat[4]) {
 	}
 }
 
-static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]) {
+static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 	char	lumpname[9];
 	int		lumpnum;
 	int map;
@@ -201,22 +201,22 @@ static void M_CheatWarpCarryOver(player_t* player, int8_t dat[4]) {
 	}
 }
 
-static void M_CheatMyPos(player_t* player, int8_t dat[4]) {
+static void M_CheatMyPos(player_t* player, char dat[4]) {
 	_dprintf("ang = %d; x,y = (%d, %d)",
 		(int)(players[consoleplayer].mo->angle * (float)180 / ANG180),
 		F2INT(players[consoleplayer].mo->x),
 		F2INT(players[consoleplayer].mo->y));
 }
 
-static void M_CheatAllMap(player_t* player, int8_t dat[4]) {
+static void M_CheatAllMap(player_t* player, char dat[4]) {
 	amCheating = (amCheating + 1) % 3;
 }
 
-void M_CheatGiveWeapon(player_t* player, int8_t dat[4]) {
-	int8_t c = dat[0];
+void M_CheatGiveWeapon(player_t* player, char dat[4]) {
+	char c = dat[0];
 	int w = datoi(&c);
 
-	static int8_t* WeapGotNames[8] = {
+	static char* WeapGotNames[8] = {
 		GOTCHAINSAW,
 		GOTSHOTGUN,
 		GOTSHOTGUN2,
@@ -249,8 +249,8 @@ void M_CheatGiveWeapon(player_t* player, int8_t dat[4]) {
 	player->message = WeapGotNames[w - 1];
 }
 
-void M_CheatGiveKey(player_t* player, int8_t dat[4]) {
-	int8_t c = dat[0];
+void M_CheatGiveKey(player_t* player, char dat[4]) {
+	char c = dat[0];
 	int k = datoi(&c);
 
 	if (!k || k > NUMCARDS) {
@@ -261,16 +261,16 @@ void M_CheatGiveKey(player_t* player, int8_t dat[4]) {
 	player->message = player->cards[k - 1] ? "Key Added" : "Key Removed";
 }
 
-void M_CheatBoyISuck(player_t* player, int8_t dat[4]) {
+void M_CheatBoyISuck(player_t* player, char dat[4]) {
 	D_BoyISuck();
 	player->message = DEVKILLALL;
 }
 
-void M_CheatArtifacts(player_t* player, int8_t dat[4]) {
-	int8_t c = dat[0];
+void M_CheatArtifacts(player_t* player, char dat[4]) {
+	char c = dat[0];
 	int a = datoi(&c);
 
-	static int8_t* ArtiGotNames[3] = {
+	static char* ArtiGotNames[3] = {
 		GOTARTIFACT1,
 		GOTARTIFACT2,
 		GOTARTIFACT3
@@ -290,10 +290,10 @@ void M_CheatArtifacts(player_t* player, int8_t dat[4]) {
 
 static boolean M_FindCheats(player_t* plyr, int key) {
 	static unsigned long sr;
-	static int8_t argbuf[CHEAT_ARGS_MAX + 1], * arg;
+	static char argbuf[CHEAT_ARGS_MAX + 1], * arg;
 	static int init, argsleft, cht;
 	int i, ret, matchedbefore;
-	int8_t buff[4];
+	char buff[4];
 
 	if (argsleft) {
 		// store key in arg buffer
@@ -321,8 +321,8 @@ static boolean M_FindCheats(player_t* plyr, int key) {
 	if (!init) {
 		init = 1;
 		for (i = 0; cheat[i].cheat; i++) {
-			intptr_t c = 0, m = 0;
-			const int8_t* p;
+			unsigned int c = 0, m = 0;
+			const char* p;
 
 			for (p = cheat[i].cheat; *p; p++) {
 				unsigned key = tolower(*p) - 'a'; // convert to 0-31
@@ -388,7 +388,7 @@ static boolean M_FindCheats(player_t* plyr, int key) {
 	return ret;
 }
 
-void M_ParseNetCheat(int player, int type, int8_t* buff) {
+void M_ParseNetCheat(int player, int type, char* buff) {
 	player_t* p = &players[player];
 
 	cheat[type].func(p, buff);

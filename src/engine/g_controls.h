@@ -72,6 +72,6 @@ typedef struct {
 #define PCF_GAMEPAD     0x40
 
 extern playercontrols_t    Controls;
-extern int8_t* G_GetConfigFileName(void);
+extern char* G_GetConfigFileName(void);
 
 #endif

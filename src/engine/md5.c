@@ -35,12 +35,12 @@
 
 #else
 
-void ByteSwapBlock(uint32_t *buf, unsigned words)
+void ByteSwapBlock(unsigned int *buf, unsigned words)
 {
         byte *p = (byte *)buf;
 
         do {
-                *buf++ = (uint32_t)((unsigned)p[3] << 8 | p[2]) << 16 |
+                *buf++ = (unsigned int)((unsigned)p[3] << 8 | p[2]) << 16 |
                         ((unsigned)p[1] << 8 | p[0]);
                 p += 4;
         } while (--words);
@@ -71,7 +71,7 @@ MD5_Init(md5_context_t *ctx)
 void
 MD5_Update(md5_context_t *ctx, byte const *buf, unsigned len)
 {
-        uint32_t t;
+        unsigned int t;
 
         /* Update byte count */
 
@@ -104,7 +104,7 @@ MD5_Update(md5_context_t *ctx, byte const *buf, unsigned len)
         memcpy(ctx->in, buf, len);
 }
 
-void MD5_UpdateInt32(md5_context_t *context, uint32_t val)
+void MD5_UpdateInt32(md5_context_t *context, unsigned int val)
 {
         byte buf[4];
 
@@ -177,9 +177,9 @@ MD5_Final(byte digest[16], md5_context_t *ctx)
  * the data and converts bytes into longwords for this routine.
  */
 void
-MD5_Transform(uint32_t buf[4], uint32_t const in[16])
+MD5_Transform(unsigned int buf[4], unsigned int const in[16])
 {
-        register uint32_t a, b, c, d;
+        register unsigned int a, b, c, d;
 
         a = buf[0];
         b = buf[1];

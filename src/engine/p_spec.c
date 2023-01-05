@@ -54,7 +54,7 @@
 #include "r_sky.h"
 #include "sc_main.h"
 
-int16_t globalint = 0;
+short globalint = 0;
 static byte tryopentype[3];
 
 //
@@ -1634,7 +1634,6 @@ boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
-	bool     ok;
 	int         actionType;
 
 	actionType = SPECIALMASK(line->special);
@@ -1790,7 +1789,7 @@ void P_PlayerInSpecialSector(player_t* player) {
 boolean        levelTimer;
 int             levelTimeCount;
 extern line_t** linespeciallist;
-extern int16_t    numlinespecials;
+extern short    numlinespecials;
 
 #define SCROLLLIMIT (FRACUNIT*127)
 
@@ -1910,7 +1909,7 @@ void P_UpdateSpecials(void) {
 //
 
 line_t** linespeciallist;
-int16_t       numlinespecials;
+short       numlinespecials;
 
 void P_AddSectorSpecial(sector_t* sector) {
 	if (!sector->special) {

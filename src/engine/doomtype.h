@@ -32,10 +32,9 @@
 #include <limits.h>
 #include <stdbool.h>
 
-typedef unsigned char   boolean;
-typedef uint8_t         byte;
-typedef uint16_t	word;
-typedef intptr_t	dword;
+typedef unsigned char		boolean;
+typedef unsigned char		byte;
+typedef unsigned short		word;
 
 #include <limits.h>
 #define D_MININT INT_MIN

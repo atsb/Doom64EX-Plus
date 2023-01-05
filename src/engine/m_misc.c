@@ -63,7 +63,7 @@ char**   myargv;
 // Returns the argument number (1 to argc-1)
 // or 0 if not present
 
-int M_CheckParm(const int8_t* check) {
+int M_CheckParm(const char* check) {
 	int        i;
 
 	for (i = 1; i < myargc; i++) {
@@ -76,7 +76,7 @@ int M_CheckParm(const int8_t* check) {
 }
 
 // Safe, portable vsnprintf().
-int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args)
+int M_vsnprintf(char* buf, unsigned int buf_len, const char* s, va_list args)
 {
 	int result;
 
@@ -90,7 +90,7 @@ int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args)
 	// that is one byte shorter; otherwise this function is unsafe.
 	result = vsnprintf(buf, buf_len, s, args);
 
-	// If truncated, change the final int8_t in the buffer to a \0.
+	// If truncated, change the final char in the buffer to a \0.
 	// A negative result indicates a truncated buffer on Windows.
 	if (result < 0 || result >= buf_len)
 	{
@@ -106,9 +106,9 @@ int M_vsnprintf(int8_t* buf, size_t buf_len, const int8_t* s, va_list args)
 // allocated.
 //
 
-int8_t* M_StringDuplicate(const int8_t* orig)
+char* M_StringDuplicate(const char* orig)
 {
-	int8_t* result;
+	char* result;
 
 	result = strdup(orig);
 
@@ -153,7 +153,7 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-boolean M_WriteFile(int8_t const* name, void* source, int length) {
+boolean M_WriteFile(char const* name, void* source, int length) {
 	FILE* fp;
 	boolean result;
 
@@ -164,7 +164,7 @@ boolean M_WriteFile(int8_t const* name, void* source, int length) {
 	}
 
 	I_BeginRead();
-	result = (fwrite(source, 1, length, fp) == (dword)length);
+	result = (fwrite(source, 1, length, fp) == length);
 	fclose(fp);
 
 	if (!result) {
@@ -178,7 +178,7 @@ boolean M_WriteFile(int8_t const* name, void* source, int length) {
 // M_WriteTextFile
 //
 
-boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
+boolean M_WriteTextFile(char const* name, char* source, int length) {
 	int handle;
 	int count;
 #ifdef _WIN32
@@ -209,13 +209,13 @@ boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
 // M_ReadFile
 //
 
-int M_ReadFile(int8_t const* name, byte** buffer) {
+int M_ReadFile(char const* name, byte** buffer) {
 	FILE* fp;
 
 	errno = 0;
 
 	if ((fp = fopen(name, "rb"))) {
-		size_t length;
+		unsigned int length;
 
 		I_BeginRead();
 
@@ -269,8 +269,8 @@ long M_FileLength(FILE* handle) {
 // killough 11/98: rewritten
 //
 
-void M_NormalizeSlashes(int8_t* str) {
-	int8_t* p;
+void M_NormalizeSlashes(char* str) {
+	char* p;
 
 	// Convert all slashes/backslashes to DIR_SEPARATOR
 	for (p = str; *p; p++) {
@@ -292,7 +292,7 @@ void M_NormalizeSlashes(int8_t* str) {
 // Check if a wad file exists
 //
 
-int M_FileExists(int8_t* filename) {
+int M_FileExists(char* filename) {
 	FILE* fstream;
 
 	fstream = fopen(filename, "r");
@@ -340,7 +340,7 @@ void M_LoadDefaults(void) {
 //
 
 void M_ScreenShot(void) {
-	int8_t    name[13];
+	char    name[13];
 	int     shotnum = 0;
 	FILE* fh;
 	byte* buff;
@@ -390,9 +390,9 @@ void M_ScreenShot(void) {
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-bool M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size)
+bool M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 {
-	size_t len;
+	unsigned int len;
 
 	if (dest_size >= 1)
 	{

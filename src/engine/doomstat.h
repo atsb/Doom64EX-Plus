@@ -99,7 +99,8 @@ extern  boolean    mainmenuactive;
 extern  boolean    allowclearmenu;
 extern  boolean    paused;             // Game Pause?
 
-extern  boolean    InWindow;
+extern  int    InWindow;
+extern  int    InWindowBorderless;
 extern  boolean    setWindow;
 extern  int         ViewHeight;
 extern  int         ViewWidth;
@@ -168,7 +169,7 @@ extern  gamestate_t gamestate;
 //
 
 typedef struct {
-	int8_t        mapname[64];
+	char        mapname[64];
 	int         mapid;
 	int         music;
 	int         type;
@@ -186,12 +187,12 @@ typedef struct {
 	int         id;
 	int         music;
 	boolean    enteronly;
-	int16_t       pic_x;
-	int16_t       pic_y;
+	short       pic_x;
+	short       pic_y;
 	boolean    nointermission;
 	boolean    scrolltextend;
-	int8_t        text[512];
-	int8_t        pic[9];
+	char        text[512];
+	char        pic[9];
 } clusterdef_t;
 
 //-----------------------------
@@ -226,7 +227,7 @@ extern  int         maxammo[NUMAMMO];
 //
 
 // File handling stuff.
-extern  int8_t        basedefault[1024];
+extern  char        basedefault[1024];
 extern  FILE* debugfile;
 
 // if true, load all graphics at level load

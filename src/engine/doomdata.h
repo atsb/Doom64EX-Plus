@@ -71,18 +71,18 @@ typedef struct {
 	byte g;
 	byte b;
 	byte a;
-	int16_t tag;
+	short tag;
 } PACKEDATTR maplights_t;
 
 // A SideDef, defining the visual appearance of a wall,
 // by setting textures and offsets.
 typedef struct {
-	int16_t    textureoffset;
-	int16_t    rowoffset;
+	short    textureoffset;
+	short    rowoffset;
 	word    toptexture;
 	word    bottomtexture;
 	word    midtexture;
-	int16_t    sector;    // Front sector, towards viewer.
+	short    sector;    // Front sector, towards viewer.
 } PACKEDATTR mapsidedef_t;
 
 // A LineDef, as used for editing, and as input
@@ -91,8 +91,8 @@ typedef struct {
 	word    v1;
 	word    v2;
 	int     flags;
-	int16_t   special;
-	int16_t   tag;
+	short   special;
+	short   tag;
 	//
 	// support more than 32768 sidedefs
 	// use the unsigned value and special case the -1
@@ -173,13 +173,13 @@ typedef struct {
 
 // Sector definition, from editing.
 typedef    struct {
-	int16_t    floorheight;
-	int16_t    ceilingheight;
+	short    floorheight;
+	short    ceilingheight;
 	word    floorpic;
 	word    ceilingpic;
 	word    colors[5];
-	int16_t    special;
-	int16_t    tag;
+	short    special;
+	short    tag;
 	word    flags;
 } PACKEDATTR mapsector_t;
 
@@ -215,10 +215,10 @@ typedef struct {
 typedef struct {
 	word    v1;
 	word    v2;
-	int16_t    angle;
+	short    angle;
 	word    linedef;
-	int16_t    side;
-	int16_t    offset;
+	short    side;
+	short    offset;
 } PACKEDATTR mapseg_t;
 
 // BSP node structure.
@@ -228,14 +228,14 @@ typedef struct {
 
 typedef struct {
 	// Partition line from (x,y) to x+dx,y+dy)
-	int16_t    x;
-	int16_t    y;
-	int16_t    dx;
-	int16_t    dy;
+	short    x;
+	short    y;
+	short    dx;
+	short    dy;
 
 	// Bounding box for each child,
 	// clip against view frustum.
-	int16_t    bbox[2][4];
+	short    bbox[2][4];
 
 	// If NF_SUBSECTOR its a subsector,
 	// else it's a node of another subtree.
@@ -245,13 +245,13 @@ typedef struct {
 // Thing definition, position, orientation and type,
 // plus skill/visibility flags and attributes.
 typedef struct {
-	int16_t    x;
-	int16_t    y;
-	int16_t    z;
-	int16_t    angle;
-	int16_t    type;
-	int16_t    options;
-	int16_t    tid;
+	short    x;
+	short    y;
+	short    z;
+	short    angle;
+	short    type;
+	short    options;
+	short    tid;
 } PACKEDATTR mapthing_t;
 
 #ifdef _MSC_VER

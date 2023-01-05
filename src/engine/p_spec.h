@@ -31,11 +31,11 @@
 extern    boolean levelTimer;
 extern    int    levelTimeCount;
 
-extern int16_t globalint;
+extern short globalint;
 
 typedef struct {
 	int         delay;
-	int8_t        name[9];
+	char        name[9];
 	int         frames;
 	int         speed;
 	boolean    reverse;
@@ -172,7 +172,7 @@ void        P_SpawnSequenceLight(sector_t* sector, boolean first);
 void        P_CombineLightSpecials(sector_t* sector);
 void        T_Combine(combine_t* combine);
 boolean    P_ChangeLightByTag(int tag1, int tag2);
-int         P_DoSectorLightChange(line_t* line, int16_t tag);
+int         P_DoSectorLightChange(line_t* line, short tag);
 void        P_FadeInBrightness(void);
 
 typedef enum
@@ -369,7 +369,7 @@ typedef struct {
 	sector_t* sector;
 	int          direction;
 	int          newspecial;
-	int16_t        texture;
+	short        texture;
 	fixed_t      floordestheight;
 	fixed_t      speed;
 	boolean     instant;
