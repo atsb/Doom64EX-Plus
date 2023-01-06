@@ -208,4 +208,7 @@
   <ItemGroup>
     <ResourceCompile Include="..\engine\DOOM64EX+.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\engine\doom64ex-plus.ico" />
+  </ItemGroup>
 </Project>

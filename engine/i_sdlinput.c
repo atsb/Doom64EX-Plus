@@ -171,7 +171,7 @@ void I_InitGameController()
 		CON_Printf(RED, "Failed to initialize the SDL2 Game Controller API, SDL Error: %s", SDL_GetError());
 		return;
 	}
-}
+>>>>>>> origin/stable:src/engine/i_sdlinput.c
 //
 // I_TranslateKey
 //
@@ -422,7 +422,7 @@ boolean I_UpdateGrab(void) {
 		SDL_SetWindowGrab(window, 1);
 	}
 
-	if (!InWindow && m_menumouse.value <= 0) {
+	if (!InWindow || !InWindowBorderless && m_menumouse.value <= 0) {
 		return true;
 	}
 
@@ -442,8 +442,8 @@ boolean I_UpdateGrab(void) {
 
 void I_GetEvent(SDL_Event* Event) {
 	event_t event;
-	uint32_t mwheeluptic = 0, mwheeldowntic = 0;
-	uint32_t tic = gametic;
+	unsigned int mwheeluptic = 0, mwheeldowntic = 0;
+	unsigned int tic = gametic;
 
 	switch (Event->type) {
 	case SDL_KEYDOWN:
@@ -513,7 +513,7 @@ void I_GetEvent(SDL_Event* Event) {
 		event.data2 = event.data3 = 0;
 		D_PostEvent(&event);
 		break;
-		
+
 	case SDL_WINDOWEVENT:
 		switch (Event->window.event) {
 		case SDL_WINDOWEVENT_FOCUS_GAINED:

@@ -26,25 +26,23 @@
 
 #define MAX_ACTIONPARAM        2
 
-typedef void (*actionproc_t)(int64_t data, int8_t** param);
+typedef void (*actionproc_t)(int64_t data, char** param);
 
-#define CMD(name) void CMD_ ## name(int64_t data, int8_t** param)
+#define CMD(name) void CMD_ ## name(int64_t data, char** param)
 
 void        G_InitActions(void);
 boolean    G_ActionResponder(event_t* ev);
-void        G_AddCommand(int8_t* name, actionproc_t proc, int64_t data);
+void        G_AddCommand(char* name, actionproc_t proc, int64_t data);
 void        G_ActionTicker(void);
-void        G_ExecuteCommand(int8_t* action);
-void        G_BindActionByName(int8_t* key, int8_t* action);
-boolean    G_BindActionByEvent(event_t* ev, int8_t* action);
-void        G_ShowBinding(int8_t* key);
-void        G_GetActionBindings(int8_t* buff, int8_t* action);
-void        G_UnbindAction(int8_t* action);
+void        G_ExecuteCommand(char* action);
+void        G_BindActionByName(char* key, char* action);
+boolean    G_BindActionByEvent(event_t* ev, char* action);
+void        G_ShowBinding(char* key);
+void        G_GetActionBindings(char* buff, char* action);
+void        G_UnbindAction(char* action);
 int         G_ListCommands(void);
 void        G_OutputBindings(FILE* fh);
 void        G_DoCmdMouseMove(int x, int y);
-void G_DoCmdGamepadMove(event_t *ev);
-
 
 extern boolean    ButtonAction;
 

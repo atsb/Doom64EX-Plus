@@ -49,6 +49,8 @@ typedef w3suint64_t fixed_t;
 #define FLOATTOFIXED(x) ((fixed_t)((x)*FRACUNIT))
 #define F2D3D(x)         (((float)(x))/FRACUNIT)
 
+typedef int fixed_t;
+
 fixed_t FixedMul(fixed_t a, fixed_t b);
 fixed_t FixedDiv(fixed_t a, fixed_t b);
 fixed_t FixedDiv2(fixed_t a, fixed_t b);

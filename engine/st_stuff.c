@@ -104,7 +104,7 @@ static keyflash_t flashCards[NUMCARDS];    /* INFO FOR FLASHING CARDS & SKULLS *
 static player_t* plyr;   // main player in game
 static int              st_msgtic = 0;
 static int              st_msgalpha = 0xff;
-static int8_t* st_msg = NULL;
+static char* st_msg = NULL;
 static vtx_t            st_vtx[32];
 static int              st_vtxcount = 0;
 static byte             st_flash_r;
@@ -117,7 +117,7 @@ static boolean         st_wpndisplay_show;
 static byte             st_wpndisplay_alpha;
 static int              st_wpndisplay_ticks;
 
-int8_t* chat_macros[] = {
+char* chat_macros[] = {
 	HUSTR_CHATMACRO0,
 	HUSTR_CHATMACRO1,
 	HUSTR_CHATMACRO2,
@@ -130,7 +130,7 @@ int8_t* chat_macros[] = {
 	HUSTR_CHATMACRO9
 };
 
-int8_t player_names[MAXPLAYERS][MAXPLAYERNAME] = {
+char player_names[MAXPLAYERS][MAXPLAYERNAME] = {
 	HUSTR_PLR1,
 	HUSTR_PLR2,
 	HUSTR_PLR3,
@@ -151,7 +151,7 @@ static const rcolor st_chatcolors[MAXPLAYERS] = {
 #define STCHATY         384
 
 typedef struct {
-	int8_t msg[MAXCHATSIZE];
+	char msg[MAXCHATSIZE];
 	int tics;
 	rcolor color;
 } stchat_t;
@@ -159,7 +159,7 @@ typedef struct {
 static stchat_t stchat[MAXCHATNODES];
 static int st_chatcount = 0;
 boolean st_chatOn = false;
-static int8_t st_chatstring[MAXPLAYERS][MAXCHATSIZE];
+static char st_chatstring[MAXPLAYERS][MAXCHATSIZE];
 
 #define STQUEUESIZE        256
 static int st_chathead;
@@ -275,16 +275,16 @@ static void ST_DrawDamageMarkers(void) {
 			R_PointToAngle2(dmgmarker->source->x, dmgmarker->source->y,
 				p->mo->x, p->mo->y));
 
-		glPushMatrix();
-		glTranslatef(160, 120, 0);
-		glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		glTranslatef(0, 16, 0);
-		glDisable(GL_TEXTURE_2D);
-		glSetVertex(v);
-		glTriangle(0, 1, 2);
-		glDrawGeometry(3, v);
-		glEnable(GL_TEXTURE_2D);
-		glPopMatrix();
+		dglPushMatrix();
+		dglTranslatef(160, 120, 0);
+		dglRotatef(angle, 0.0f, 0.0f, 1.0f);
+		dglTranslatef(0, 16, 0);
+		dglDisable(GL_TEXTURE_2D);
+		dglSetVertex(v);
+		dglTriangle(0, 1, 2);
+		dglDrawGeometry(3, v);
+		dglEnable(GL_TEXTURE_2D);
+		dglPopMatrix();
 
 		GL_ResetViewport();
 		GL_SetState(GLSTATE_BLEND, 0);
@@ -476,10 +476,10 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 		GL_SetState(GLSTATE_BLEND, 1);
 		GL_SetOrtho(1);
 
-		glDisable(GL_TEXTURE_2D);
-		glColor4ubv((byte*)&c);			
-		glRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
-		glEnable(GL_TEXTURE_2D);
+		dglDisable(GL_TEXTURE_2D);
+		dglColor4ubv((byte*)&c);
+		dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
+		dglEnable(GL_TEXTURE_2D);
 
 		GL_SetState(GLSTATE_BLEND, 0);
 	}
@@ -492,10 +492,10 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 static void ST_DrawStatusItem(const float xy[4][2], const float uv[4][2], rcolor color) {
 	int i;
 
-	glTriangle(st_vtxcount + 0, st_vtxcount + 1, st_vtxcount + 2);
-	glTriangle(st_vtxcount + 0, st_vtxcount + 2, st_vtxcount + 3);
+	dglTriangle(st_vtxcount + 0, st_vtxcount + 1, st_vtxcount + 2);
+	dglTriangle(st_vtxcount + 0, st_vtxcount + 2, st_vtxcount + 3);
 
-	glSetVertexColor(st_vtx + st_vtxcount, color, 4);
+	dglSetVertexColor(st_vtx + st_vtxcount, color, 4);
 
 	for (i = 0; i < 4; i++) {
 		st_vtx[st_vtxcount + i].x = xy[i][0];
@@ -586,8 +586,8 @@ static void ST_DrawStatus(void) {
 	width = (float)gfxwidth[lump];
 	height = (float)gfxheight[lump];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 	if (st_drawhud.value >= 2) {
 		GL_SetOrthoScale(0.725f);
@@ -595,7 +595,7 @@ static void ST_DrawStatus(void) {
 
 	GL_SetOrtho(0);
 
-	glSetVertex(st_vtx);
+	dglSetVertex(st_vtx);
 	st_vtxcount = 0;
 
 	if (st_drawhud.value == 1) {
@@ -654,7 +654,7 @@ static void ST_DrawStatus(void) {
 
 	ST_DrawKey(it_redskull, uv, st_key3Vertex);
 
-	glDrawGeometry(st_vtxcount, st_vtx);
+	dglDrawGeometry(st_vtxcount, st_vtx);
 
 	GL_ResetViewport();
 	GL_SetState(GLSTATE_BLEND, 0);
@@ -686,8 +686,8 @@ void ST_DrawCrosshair(int x, int y, int slot, byte scalefactor, rcolor color) {
 	GL_BindGfxTexture("CRSHAIRS", true);
 	GL_SetState(GLSTATE_BLEND, 1);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 	u = 1.0f / st_crosshairs;
 	scale = scalefactor == 0 ? ST_CROSSHAIRSIZE : (ST_CROSSHAIRSIZE / (1 << scalefactor));
@@ -708,10 +708,10 @@ static void ST_DrawJMessage(int pic) {
 	GL_BindGfxTexture(lumpinfo[lump].name, true);
 	GL_SetState(GLSTATE_BLEND, 1);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	GL_SetupAndDraw2DQuad(
 		20,
@@ -876,7 +876,7 @@ void ST_Drawer(void) {
 		Draw_Text(20, 20, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), 1, false, st_msg);
 	}
 	else if (automapactive) {
-		int8_t str[128];
+		char str[128];
 		mapdef_t* map = P_GetMapInfo(gamemap);
 
 		if (map) {
@@ -937,8 +937,8 @@ void ST_Drawer(void) {
 
 	if (p_usecontext.value) {
 		if (P_UseLines(&players[consoleplayer], true)) {
-			int8_t usestring[16];
-			int8_t contextstring[32];
+			char usestring[16];
+			char contextstring[32];
 			float x;
 
 			G_GetActionBindings(usestring, "+use");
@@ -1134,8 +1134,8 @@ void ST_Init(void) {
 // ST_AddChatMsg
 //
 
-void ST_AddChatMsg(int8_t* msg, int player) {
-	int8_t str[MAXCHATSIZE];
+void ST_AddChatMsg(char* msg, int player) {
+	char str[MAXCHATSIZE];
 
 	sprintf(str, "%s: %s", player_names[player], msg);
 	memset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
@@ -1154,7 +1154,7 @@ void ST_AddChatMsg(int8_t* msg, int player) {
 // Broadcast message to all clients
 //
 
-void ST_Notification(int8_t* msg) {
+void ST_Notification(char* msg) {
 	int i;
 
 	for (i = 0; i < MAXPLAYERS; i++) {
@@ -1197,7 +1197,7 @@ static void ST_DrawChatText(void) {
 	}
 
 	if (st_chatOn) {
-		int8_t tmp[MAXCHATSIZE];
+		char tmp[MAXCHATSIZE];
 
 		sprintf(tmp, "%s_", st_chatstring[consoleplayer]);
 		Draw_Text(STCHATX, STCHATY + 8, WHITE, 0.5f, false, tmp);
@@ -1208,7 +1208,7 @@ static void ST_DrawChatText(void) {
 // ST_QueueChatChar
 //
 
-static void ST_QueueChatChar(int8_t ch) {
+static void ST_QueueChatChar(char ch) {
 	if (((st_chattail + 1) & (STQUEUESIZE - 1)) == st_chathead) {
 		return;    // the queue is full
 	}
@@ -1221,7 +1221,7 @@ static void ST_QueueChatChar(int8_t ch) {
 // ST_DequeueChatChar
 //
 
-int8_t ST_DequeueChatChar(void) {
+char ST_DequeueChatChar(void) {
 	byte temp;
 
 	if (st_chathead == st_chattail) {
@@ -1254,14 +1254,14 @@ static void ST_FeedChatMsg(event_t* ev) {
 
 	case KEY_ENTER:
 	case KEY_KEYPADENTER:
-		ST_QueueChatChar((int8_t)c);
+		ST_QueueChatChar((char)c);
 		st_chatOn = false;
 		break;
 	case KEY_BACKSPACE:
 		if (ev->type != ev_keydown) {
 			return;
 		}
-		ST_QueueChatChar((int8_t)c);
+		ST_QueueChatChar((char)c);
 		break;
 	case KEY_ESCAPE:
 		len = strlen(st_chatstring[consoleplayer]);
@@ -1312,7 +1312,7 @@ static void ST_FeedChatMsg(event_t* ev) {
 		if (st_shiftOn) {
 			c = shiftxform[c];
 		}
-		ST_QueueChatChar((int8_t)c);
+		ST_QueueChatChar((char)c);
 		break;
 	}
 }
@@ -1392,7 +1392,7 @@ static void ST_DisplayName(int playernum) {
 	fixed_t     ypitch;
 	fixed_t     screeny;
 	player_t* player;
-	int8_t        name[MAXPLAYERNAME];
+	char        name[MAXPLAYERNAME];
 	rcolor      color;
 	fixed_t     distance;
 

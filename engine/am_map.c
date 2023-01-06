@@ -312,7 +312,7 @@ static void AM_GetBounds(void) {
 // Handle events (user inputs) in automap mode
 //
 
-int AM_Responder(event_t* ev) {
+boolean AM_Responder(event_t* ev) {
 	int rc = false;
 
 	if (am_flags & AF_PANMODE) {
@@ -469,11 +469,6 @@ void AM_Ticker(void) {
 		scale += 32.0f;
 		if (scale > 1500.0f) {
 			scale = 1500.0f;
-		}
-	}
-	if (am_flags & AF_ZOOMIN) {
-		scale -= 32.0f;
-		if (scale < 200.0f) {
 			scale = 200.0f;
 		}
 	}

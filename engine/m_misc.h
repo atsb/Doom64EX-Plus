@@ -45,7 +45,7 @@ extern  char** myargv;
 
 // Returns the position of the given parameter
 // in the arg list (0 if not found).
-int M_CheckParm(const int8_t* check);
+int M_CheckParm(const char* check);
 
 // Bounding box coordinate storage.
 enum {
@@ -64,18 +64,19 @@ M_AddToBox
 	fixed_t    x,
 	fixed_t    y);
 
-boolean M_WriteFile(int8_t const* name, void* source, int length);
-int M_ReadFile(int8_t const* name, byte** buffer);
-void M_NormalizeSlashes(int8_t* str);
-int M_FileExists(int8_t* filename);
+boolean M_WriteFile(char const* name, void* source, int length);
+int M_ReadFile(char const* name, byte** buffer);
+void M_NormalizeSlashes(char* str);
+int M_FileExists(char* filename);
 long M_FileLength(FILE* handle);
-boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length);
+boolean M_WriteTextFile(char const* name, char* source, int length);
 void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
-boolean M_StringCopy(int8_t* dest, const int8_t* src, size_t dest_size);
-int8_t* M_StringDuplicate(const int8_t* orig);
+bool M_StringCopy(char* dest, const char* src, unsigned int dest_size);
+char* M_StringDuplicate(const char* orig);
+int M_vsnprintf(char* buf, unsigned int buf_len, const char* s, va_list args);
 
 //
 // DEFAULTS
@@ -85,7 +86,7 @@ extern int        DualMouse;
 extern int      viewwidth;
 extern int      viewheight;
 
-extern int8_t* chat_macros[];
+extern char* chat_macros[];
 
 //extern boolean HighSound;
 

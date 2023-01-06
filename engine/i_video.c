@@ -35,7 +35,7 @@
 #else
 #include <SDL_opengl.h>
 #endif
-#include "i_w3swrapper.h"
+
 #include "m_misc.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -44,15 +44,15 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "gl_main.h"
-const int8_t version_date[] = __DATE__;
+const char version_date[] = __DATE__;
 
 SDL_Window* window;
 OGL_DEFS;
 
-
 CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
+CVAR(v_windowborderless, 0);
 
 SDL_Surface* screen;
 int video_width;
@@ -78,19 +78,23 @@ void I_InitScreen(void) {
 	int     newwidth;
 	int     newheight;
 	int     p;
-	uint32_t  flags = 0;
-	int8_t    title[256];
+	unsigned int  flags = 0;
+	char    title[256];
 
 	InWindow = (int)v_windowed.value;
+	InWindowBorderless = (int)v_windowborderless.value;
 	video_width = (int)v_width.value;
 	video_height = (int)v_height.value;
 	video_ratio = (float)video_width / (float)video_height;
 
+	if (M_CheckParm("-borderless")) {
+		InWindowBorderless = 1;
+	}
 	if (M_CheckParm("-window")) {
-		InWindow = true;
+		InWindow = 1;
 	}
 	if (M_CheckParm("-fullscreen")) {
-		InWindow = false;
+		InWindow = 0;
 	}
 
 	newwidth = newheight = 0;
@@ -134,11 +138,15 @@ void I_InitScreen(void) {
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {
-		flags |= SDL_WINDOW_BORDERLESS;
+		flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 	}
 
 	if (!InWindow) {
 		flags |= SDL_WINDOW_FULLSCREEN;
+	}
+
+	if (InWindowBorderless) {
+		flags |= SDL_WINDOW_BORDERLESS;
 	}
 
 	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
@@ -200,7 +208,7 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-	uint32_t f = SDL_INIT_VIDEO;
+	unsigned int f = SDL_INIT_VIDEO;
 
 #ifdef _DEBUG
 	f |= SDL_INIT_NOPARACHUTE;
@@ -224,4 +232,5 @@ void V_RegisterCvars(void) {
 	CON_CvarRegister(&v_width);
 	CON_CvarRegister(&v_height);
 	CON_CvarRegister(&v_windowed);
+	CON_CvarRegister(&v_windowborderless);
 }

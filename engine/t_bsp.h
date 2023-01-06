@@ -28,7 +28,7 @@
 #include "m_fixed.h"
 #include "d_think.h"
 #include "p_mobj.h"
-#include "i_w3swrapper.h"
+
 //
 // INTERNAL MAP TYPES
 //  used by play and refresh
@@ -79,12 +79,12 @@ typedef    struct {
 	fixed_t         ceilingheight;
 	word            floorpic;
 	word            ceilingpic;
-	int16_t            lightlevel;
-	int16_t           special;
-	int16_t           tag;
+	short            lightlevel;
+	short           special;
+	short           tag;
 
 	// [d64] color indexes references for the lights lump
-	int16_t           colors[5];
+	short           colors[5];
 
 	// [d64] special flags for sector
 	word            flags;
@@ -139,9 +139,9 @@ typedef struct {
 
 	// Texture indices.
 	// We do not maintain names here.
-	int16_t    toptexture;
-	int16_t    bottomtexture;
-	int16_t    midtexture;
+	short    toptexture;
+	short    bottomtexture;
+	short    midtexture;
 
 	// Sector the SideDef is facing.
 	sector_t* sector;
@@ -167,8 +167,8 @@ typedef struct line_s {
 	fixed_t         dy;
 
 	int             flags;
-	int16_t           special;
-	int16_t           tag;
+	short           special;
+	short           tag;
 
 	// Visual appearance: SideDefs.
 	//  sidenum[1] will be -1 if one sided
@@ -230,10 +230,10 @@ typedef struct {
 	// If false use 0 for any position.
 	// Note: as eight entries are available,
 	//  we might as well insert the same name eight times.
-	boolean	    rotate;
+	boolean    rotate;
 
 	// Lump to use for view angles 0-7.
-	int16_t    lump[8];
+	short    lump[8];
 
 	// Flip bit (1 = flip) to use for view angles 0-7.
 	byte    flip[8];
@@ -285,7 +285,7 @@ typedef struct {
 	fixed_t    bbox[2][4];
 
 	// If NF_SUBSECTOR its a subsector.
-	uint16_t children[2];
+	unsigned short children[2];
 } node_t;
 
 //
@@ -309,26 +309,26 @@ typedef struct {
 	byte r;
 	byte g;
 	byte b;
-	int16_t tag;
+	short tag;
 } light_t;
 
 //
 // Macros
 //
 typedef struct {
-	int16_t id;
-	int16_t tag;
-	int16_t special;
+	short id;
+	short tag;
+	short special;
 } macrodata_t;
 
 typedef struct {
-	int16_t count;
+	short count;
 	macrodata_t* data;
 } macrodef_t;
 
 typedef struct {
-	int16_t macrocount;
-	int16_t specialcount;
+	short macrocount;
+	short specialcount;
 	macrodef_t* def;
 } macroinfo_t;
 

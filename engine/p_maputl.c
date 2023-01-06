@@ -38,7 +38,6 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "z_zone.h"
-#include "i_system.h"
 
 //
 // P_AproxDistance
@@ -438,7 +437,7 @@ P_BlockLinesIterator
 	int            y,
 	boolean(*func)(line_t*)) {
 	int            offset;
-	int16_t* list;
+	short* list;
 	line_t* ld;
 
 	if (x < 0
@@ -645,10 +644,10 @@ boolean PIT_AddThingIntercepts(mobj_t* thing) {
 //
 boolean
 P_TraverseIntercepts
-(traverser_t    func,
-	fixed_t    maxfrac) {
-	int            count;
-	fixed_t        dist;
+(traverser_t     func,
+	fixed_t      maxfrac) {
+	int64_t		 count;
+	fixed_t      dist;
 	intercept_t* scan;
 	intercept_t* in;
 

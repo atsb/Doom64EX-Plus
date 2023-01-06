@@ -47,7 +47,7 @@ static int8_t* ConfigFileName =
 #endif
 ;
 
-int8_t    DefaultConfig[] = 
+char    DefaultConfig[] = 
 #include "defconfig.inc"    
 ;
 
@@ -59,11 +59,11 @@ int8_t* G_GetConfigFileName(void) {
 	return I_GetUserFile(ConfigFileName);
 }
 
-void G_ExecuteMultipleCommands(int8_t* data) {
-	int8_t* p;
-	int8_t* q;
-	int8_t    c;
-	int8_t    line[1024];
+void G_ExecuteMultipleCommands(char* data) {
+	char* p;
+	char* q;
+	char    c;
+	char    line[1024];
 
 	p = data;
 	c = *p;
@@ -87,9 +87,9 @@ void G_ExecuteMultipleCommands(int8_t* data) {
 // G_ExecuteFile
 //
 
-void G_ExecuteFile(int8_t* name) {
+void G_ExecuteFile(char* name) {
 	FILE* fh;
-	int8_t* buff;
+	char* buff;
 	int        len;
 
 	if (!name) {

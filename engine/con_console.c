@@ -36,12 +36,11 @@
 #include "i_system.h"
 #include "gl_texture.h"
 
-
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
+#ifdef __OpenBSD__
+#include <SDL.h>
 #else
-#include <SDL.h> // Gibbon - for *
-#endif 
+#include <SDL2/SDL.h> // Gibbon - for *
+#endif
 
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2
@@ -51,8 +50,8 @@
 
 typedef struct {
 	int    len;
-	dword  color;
-	int8_t   line[1];
+	int  color;
+	char   line[1];
 } conline_t;
 
 enum {
@@ -68,15 +67,15 @@ static conline_t** console_buffer;
 static int          console_head;
 static int          console_lineoffset;
 static int          console_minline;
-static boolean			console_enabled = false;
-static int8_t       console_linebuffer[CON_BUFFERSIZE];
+static boolean     console_enabled = false;
+static char         console_linebuffer[CON_BUFFERSIZE];
 static int          console_linelength;
-static int			console_state = CST_UP;
+static boolean     console_state = CST_UP;
 static int          console_prevcmds[CMD_HISTORY_SIZE];
 static int          console_cmdhead;
 static int          console_nextcmd;
 
-int8_t        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
+char        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
 int         console_inputlength;
 boolean    console_initialized = false;
 
@@ -119,7 +118,7 @@ void CON_Init(void) {
 // CON_AddLine
 //
 
-void CON_AddLine(int8_t* line, int len) {
+void CON_AddLine(char* line, int len) {
 	conline_t* cline;
 	int         i;
 	boolean    recursed = false;
@@ -172,9 +171,9 @@ void CON_AddLine(int8_t* line, int len) {
 // CON_AddText
 //
 
-void CON_AddText(int8_t* text) {
-	int8_t* src;
-	int8_t    c;
+void CON_AddText(char* text) {
+	char* src;
+	char    c;
 
 	if (!console_linebuffer) {
 		return;
@@ -199,8 +198,8 @@ void CON_AddText(int8_t* text) {
 // CON_Printf
 //
 
-void CON_Printf(rcolor clr, const int8_t* s, ...) {
-	static int8_t msg[MAX_MESSAGE_SIZE];
+void CON_Printf(rcolor clr, const char* s, ...) {
+	static char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 
 	va_start(va, s);
@@ -215,8 +214,8 @@ void CON_Printf(rcolor clr, const int8_t* s, ...) {
 // CON_Warnf
 //
 
-void CON_Warnf(const int8_t* s, ...) {
-	static int8_t msg[MAX_MESSAGE_SIZE];
+void CON_Warnf(const char* s, ...) {
+	static char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 
 	va_start(va, s);
@@ -231,9 +230,9 @@ void CON_Warnf(const int8_t* s, ...) {
 // CON_DPrintf
 //
 
-void CON_DPrintf(const int8_t* s, ...) {
+void CON_DPrintf(const char* s, ...) {
 	if (devparm) {
-		static int8_t msg[MAX_MESSAGE_SIZE];
+		static char msg[MAX_MESSAGE_SIZE];
 		va_list    va;
 
 		va_start(va, s);
@@ -250,7 +249,7 @@ void CON_DPrintf(const int8_t* s, ...) {
 
 static boolean shiftdown = false;
 
-void CON_ParseKey(int8_t c) {
+void CON_ParseKey(char c) {
 	if (c < ' ') {
 		return;
 	}
@@ -279,7 +278,7 @@ void CON_ParseKey(int8_t c) {
 //
 
 static boolean keyheld = false;
-static int lastevent = 0;
+static boolean lastevent = 0;
 static int lastkey = 0;
 static int ticpressed = 0;
 
@@ -335,6 +334,11 @@ boolean CON_Responder(event_t* ev) {
 		if (ev->type == ev_keydown) {
 			switch (c) {
 			case '`':
+				console_state = CST_UP;
+				console_enabled = false;
+				break;
+
+			case '~':
 				console_state = CST_UP;
 				console_enabled = false;
 				break;
@@ -440,7 +444,7 @@ boolean CON_Responder(event_t* ev) {
 		// AB (GIB) - Oh Kaiser...  you plumb! :)
 		// Why the hell do this?  It only works on UK/US keyboards
 		// Gibbon fixes it!
-			//if(c == '`') { <-- BOO!
+		//if(c == '`') { <-- BOO!
 		if (c == '~' || c == '`') {
 			if (ev->type == ev_keydown) {
 				console_state = CST_DOWN;
@@ -479,20 +483,20 @@ void CON_Draw(void) {
 	GL_SetOrtho(1);
 	GL_SetState(GLSTATE_BLEND, 1);
 
-	glDisable(GL_TEXTURE_2D);
-	glColor4ub(0, 0, 0, 128);
-	glRectf(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD, 0, 0);
+	dglDisable(GL_TEXTURE_2D);
+	dglColor4ub(0, 0, 0, 128);
+	dglRectf(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD, 0, 0);
 
 	GL_SetState(GLSTATE_BLEND, 0);
 
-	glColor4f(0, 1, 0, 1);
-	glBegin(GL_LINES);
-	glVertex2f(0, CONSOLE_Y - 1);
-	glVertex2f(SCREENWIDTH, CONSOLE_Y - 1);
-	glVertex2f(0, CONSOLE_Y + CONFONT_YPAD);
-	glVertex2f(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD);
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
+	dglColor4f(0, 1, 0, 1);
+	dglBegin(GL_LINES);
+	dglVertex2f(0, CONSOLE_Y - 1);
+	dglVertex2f(SCREENWIDTH, CONSOLE_Y - 1);
+	dglVertex2f(0, CONSOLE_Y + CONFONT_YPAD);
+	dglVertex2f(SCREENWIDTH, CONSOLE_Y + CONFONT_YPAD);
+	dglEnd();
+	dglEnable(GL_TEXTURE_2D);
 
 	line = console_head;
 

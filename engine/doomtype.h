@@ -25,7 +25,7 @@
 #define __DOOMTYPE__
 
 #ifdef _WIN32
-#include <SDL_config.h> //Remove also here...
+#include <SDL2/SDL_config.h>
 #endif
 
 #ifdef _XBOX
@@ -43,4 +43,14 @@
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))
 #endif
 
+#ifdef _WIN32
+#define DIR_SEPARATOR '\\'
+#define PATH_SEPARATOR ';'
+
+#else
+
+#define DIR_SEPARATOR '/'
+#define PATH_SEPARATOR ':'
+
+#endif
 #endif

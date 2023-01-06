@@ -50,7 +50,6 @@
 #include "m_misc.h"
 #include "sc_main.h"
 #include "con_console.h"
-#include "i_system.h"
 
 scparser_t sc_parser;
 
@@ -58,7 +57,7 @@ scparser_t sc_parser;
 // SC_Open
 //
 
-static void SC_Open(const int8_t* name) {
+static void SC_Open(const char* name) {
 	int lump;
 
 	CON_DPrintf("--------SC_Open: Reading %s--------\n", name);
@@ -106,7 +105,7 @@ static void SC_Close(void) {
 // SC_Compare
 //
 
-static void SC_Compare(const int8_t* token) {
+static void SC_Compare(const char* token) {
 	sc_parser.find(false);
 	if (w3sstrcasecmp(sc_parser.token, token)) {
 		I_Error("SC_Compare: Expected '%s', found '%s' (line = %i, pos = %i)",
@@ -126,7 +125,7 @@ static int SC_ReadTokens(void) {
 // SC_GetString
 //
 
-static int8_t* SC_GetString(void) {
+static char* SC_GetString(void) {
 	sc_parser.compare("="); // expect a '='
 	sc_parser.find(false);  // get next token which should be a string
 
@@ -155,7 +154,7 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 	for (i = 0; table[i].token; i++) {
 		if (!w3sstrcasecmp(table[i].token, sc_parser.token)) {
 			byte* pointer = ((byte*)data + table[i].ptroffset);
-			int8_t* name;
+			char* name;
 			byte rgb[3];
 
 			ok = true;
@@ -163,12 +162,12 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 			switch (table[i].type) {
 			case 's':
 				name = sc_parser.getstring();
-				strncpy((int8_t*)pointer, name, strlen(name));
+				strncpy((char*)pointer, name, strlen(name));
 				break;
 			case 'S':
 				name = sc_parser.getstring();
 				w3sstrupr(name);
-				strncpy((int8_t*)pointer, name, strlen(name));
+				strncpy((char*)pointer, name, strlen(name));
 				break;
 			case 'i':
 				*(int*)pointer = sc_parser.getint();
@@ -200,7 +199,7 @@ static int SC_SetData(byte* data, const scdatatable_t* table) {
 //
 
 static int SC_Find(boolean forceupper) {
-	int8_t c = 0;
+	char c = 0;
 	int i = 0;
 	boolean comment = false;
 	boolean havetoken = false;
@@ -284,7 +283,7 @@ static int SC_Find(boolean forceupper) {
 // SC_GetChar
 //
 
-static int8_t SC_GetChar(void) {
+static char SC_GetChar(void) {
 	sc_parser.rowpos++;
 	return sc_parser.buffer[sc_parser.buffpos++];
 }
@@ -302,7 +301,7 @@ static void SC_Rewind(void) {
 // SC_Error
 //
 
-static void SC_Error(const int8_t* function) {
+static void SC_Error(const char* function) {
 	if (sc_parser.token[0] < ' ') {
 		return;
 	}

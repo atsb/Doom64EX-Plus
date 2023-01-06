@@ -60,8 +60,8 @@ static unsigned long save_offset = 0;
 // P_GetSaveGameName
 //
 
-int8_t* P_GetSaveGameName(int num) {
-    int8_t name[256];
+char* P_GetSaveGameName(int num) {
+    char name[256];
 
     sprintf(name, SAVEGAMENAME "%d.dsg", num);
     return I_GetUserFile(name);
@@ -86,7 +86,7 @@ static void saveg_write8(byte value) {
     save_offset++;
 }
 
-static int16_t saveg_read16(void) {
+static short saveg_read16(void) {
     int result;
 
     result = saveg_read8();
@@ -95,7 +95,7 @@ static int16_t saveg_read16(void) {
     return result;
 }
 
-static void saveg_write16(int16_t value) {
+static void saveg_write16(short value) {
     saveg_write8(value & 0xff);
     saveg_write8((value >> 8) & 0xff);
 }
@@ -298,14 +298,14 @@ static void saveg_write_mapthing_t(mapthing_t* mt) {
 //
 
 static void saveg_read_ticcmd_t(ticcmd_t* cmd) {
-    cmd->forwardmove = saveg_read8();
-    cmd->sidemove = saveg_read8();
-    cmd->angleturn = saveg_read16();
-    cmd->pitch = saveg_read16();
-    cmd->consistency = saveg_read8();
-    cmd->chatchar = saveg_read8();
-    cmd->buttons = saveg_read8();
-    cmd->buttons2 = saveg_read8();
+    cmd->forwardmove    = saveg_read8();
+    cmd->sidemove       = saveg_read8();
+    cmd->angleturn      = saveg_read16();
+    cmd->pitch          = saveg_read16();
+    cmd->consistency    = saveg_read8();
+    cmd->chatchar       = saveg_read8();
+    cmd->buttons        = saveg_read8();
+    cmd->buttons2       = saveg_read8();
 }
 
 static void saveg_write_ticcmd_t(ticcmd_t* cmd) {
@@ -511,6 +511,7 @@ static void saveg_write_player_t(player_t* p) {
 
     saveg_write32(p->palette);
     saveg_write32(p->onground);
+    saveg_write32(p->autoaim);
 }
 
 static void saveg_read_player_t(player_t* p) {
@@ -580,6 +581,7 @@ static void saveg_read_player_t(player_t* p) {
 
     p->palette = saveg_read32();
     p->onground = saveg_read32();
+    p->autoaim = saveg_read32();
 }
 
 //
@@ -1094,7 +1096,7 @@ static void saveg_read_laserthinker_t(void* data) {
 //
 //------------------------------------------------------------------------
 
-static int8_t* saveg_gettime(void) {
+static char* saveg_gettime(void) {
     time_t clock;
     struct tm* lt;
 
@@ -1103,10 +1105,10 @@ static int8_t* saveg_gettime(void) {
     return asctime(lt);
 }
 
-static void saveg_write_header(int8_t* description) {
+static void saveg_write_header(char* description) {
     int i;
     int size;
-    int8_t date[32];
+    char date[32];
     byte* tbn;
 
     for (i = 0; description[i] != '\0'; i++) {
@@ -1247,7 +1249,7 @@ static void saveg_write_marker(int marker) {
 // P_WriteSaveGame
 //
 
-boolean P_WriteSaveGame(int8_t* description, int slot) {
+boolean P_WriteSaveGame(char* description, int slot) {
 
     // setup game save file
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
@@ -1278,12 +1280,7 @@ boolean P_WriteSaveGame(int8_t* description, int slot) {
 //
 // P_ReadSaveGame
 //
-
-boolean P_ReadSaveGame(int8_t* name) {
-    M_ReadFile(name, &savebuffer);
-    save_offset = 0;
-
-    saveg_read_header();
+boolean P_ReadSaveGame(char* name) {
 
     // load a base level
     G_InitNew(gameskill, gamemap);
@@ -1308,7 +1305,7 @@ boolean P_ReadSaveGame(int8_t* name) {
 // P_QuickReadSaveHeader
 //
 
-boolean P_QuickReadSaveHeader(int8_t* name, int8_t* date,
+boolean P_QuickReadSaveHeader(char* name, char* date,
     int* thumbnail, int* skill, int* map) {
     int i;
     int size;

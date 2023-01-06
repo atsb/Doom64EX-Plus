@@ -14,8 +14,8 @@
  *  
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307, USA
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA
  */
 
 #ifndef _FLUIDSYNTH_LOG_H
@@ -41,11 +41,12 @@ extern "C" {
  * and ignores all other messages by setting the log function to
  * NULL:
  *
- * DOCME (formatting)
- * fluid_set_log_function(FLUID_PANIC, show_dialog, (void*) root_window);
- * fluid_set_log_function(FLUID_ERR, NULL, NULL);
- * fluid_set_log_function(FLUID_WARN, NULL, NULL);
- * fluid_set_log_function(FLUID_DBG, NULL, NULL);
+ * @code
+ *   fluid_set_log_function(FLUID_PANIC, show_dialog, (void*) root_window);
+ *   fluid_set_log_function(FLUID_ERR, NULL, NULL);
+ *   fluid_set_log_function(FLUID_WARN, NULL, NULL);
+ *   fluid_set_log_function(FLUID_DBG, NULL, NULL);
+ * @endcode
  */
 
 /**
@@ -73,7 +74,7 @@ fluid_log_function_t fluid_set_log_function(int level, fluid_log_function_t fun,
 
 FLUIDSYNTH_API void fluid_default_log_function(int level, char* message, void* data);
 
-FLUIDSYNTH_API int fluid_log(int level, char * fmt, ...);
+FLUIDSYNTH_API int fluid_log(int level, const char *fmt, ...);
 
 
 #ifdef __cplusplus

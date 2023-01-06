@@ -51,10 +51,10 @@ typedef enum {
 } skyflags_e;
 
 typedef struct {
-	int8_t        flat[9];
+	char        flat[9];
 	int         flags;
-	int8_t        pic[9];
-	int8_t        backdrop[9];
+	char        pic[9];
+	char        backdrop[9];
 	rcolor      fogcolor;
 	rcolor      skycolor[3];
 	int         fognear;

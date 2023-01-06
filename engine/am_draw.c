@@ -49,7 +49,6 @@ CVAR_EXTERNAL(am_fulldraw);
 CVAR_EXTERNAL(am_ssect);
 CVAR_EXTERNAL(r_texturecombiner);
 
-
 //
 // AM_BeginDraw
 //
@@ -64,19 +63,19 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 		// increase the rgb scale so the automap can look good while transparent (overlay mode)
 		//
 		GL_SetTextureMode(GL_COMBINE);
-		glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
 	}
 
-	glDepthRange(0.0f, 0.0f);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glViewFrustum(video_width, video_height, 45.0f, 0.1f);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glPushMatrix();
-	glTranslatef(-F2D3D(automappanx), -F2D3D(automappany), 0);
-	glRotatef(-(float)TRUEANGLES(am_viewangle), 0.0f, 0.0f, 1.0f);
-	glTranslatef(-F2D3D(x), -F2D3D(y), 0);
+	dglDepthRange(0.0f, 0.0f);
+	dglMatrixMode(GL_PROJECTION);
+	dglLoadIdentity();
+	dglViewFrustum(video_width, video_height, 45.0f, 0.1f);
+	dglMatrixMode(GL_MODELVIEW);
+	dglLoadIdentity();
+	dglPushMatrix();
+	dglTranslatef(-F2D3D(automappanx), -F2D3D(automappany), 0);
+	dglRotatef(-(float)TRUEANGLES(am_viewangle), 0.0f, 0.0f, 1.0f);
+	dglTranslatef(-F2D3D(x), -F2D3D(y), 0);
 
 	drawlist[DLT_AMAP].index = 0;
 
@@ -89,8 +88,8 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 //
 
 void AM_EndDraw(void) {
-	glPopMatrix();
-	glDepthRange(0.0f, 1.0f);
+	dglPopMatrix();
+	dglDepthRange(0.0f, 1.0f);
 
 	if (r_texturecombiner.value > 0 && am_overlay.value) {
 		GL_SetState(GLSTATE_BLEND, 0);
@@ -120,7 +119,7 @@ static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	count = *drawcount;
 
 	for (j = 0; j < sub->numleafs - 2; j++) {
-		glTriangle(count, count + 1 + j, count + 2 + j);
+		dglTriangle(count, count + 1 + j, count + 2 + j);
 	}
 
 	tx = (leaf->vertex->x >> 6) & ~(FRACUNIT - 1);
@@ -165,7 +164,7 @@ static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 
 	v = &drawVertex[count];
 
-	glSetVertexColor(v, color, sub->numleafs);
+	dglSetVertexColor(v, color, sub->numleafs);
 
 	//
 	// setup vertex data
@@ -254,10 +253,10 @@ void AM_DrawLeafs(float scale) {
 
 	if (r_texturecombiner.value > 0) {
 		if (!nolights) {
-			glTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
+			dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
 		}
 		else {
-			glTexCombReplace();
+			dglTexCombReplace();
 		}
 	}
 	else {
@@ -286,23 +285,23 @@ void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
 
 	v[0].y = v[1].y = (scale * 2);
 
-	glSetVertexColor(v, c, 2);
+	dglSetVertexColor(v, c, 2);
 
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_LINES);
-	glColor4ub(v[0].r, v[0].g, v[0].b, v[0].a);
-	glVertex3f(v[0].x, v[0].z, -v[0].y);
-	glColor4ub(v[1].r, v[1].g, v[1].b, v[1].a);
-	glVertex3f(v[1].x, v[1].z, -v[1].y);
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
+	dglDisable(GL_TEXTURE_2D);
+	dglBegin(GL_LINES);
+	dglColor4ub(v[0].r, v[0].g, v[0].b, v[0].a);
+	dglVertex3f(v[0].x, v[0].z, -v[0].y);
+	dglColor4ub(v[1].r, v[1].g, v[1].b, v[1].a);
+	dglVertex3f(v[1].x, v[1].z, -v[1].y);
+	dglEnd();
+	dglEnable(GL_TEXTURE_2D);
 }
 
 //
 // AM_DrawTriangle
 //
 
-void AM_DrawTriangle(mobj_t* mobj, float scale, int solid, byte r, byte g, byte b) {
+void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, byte b) {
 	vtx_t tri[3];
 	fixed_t x;
 	fixed_t y;
@@ -341,15 +340,15 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, int solid, byte r, byte g, byte 
 		return;
 	}
 
-	glPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
+	dglPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
 
-	glSetVertex(tri);
-	glTriangle(0, 1, 2);
-	glDisable(GL_TEXTURE_2D);
-	glDrawGeometry(3, tri);
-	glEnable(GL_TEXTURE_2D);
+	dglSetVertex(tri);
+	dglTriangle(0, 1, 2);
+	dglDisable(GL_TEXTURE_2D);
+	dglDrawGeometry(3, tri);
+	dglEnable(GL_TEXTURE_2D);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	if (devparm) {
 		vertCount += 3;
@@ -482,16 +481,16 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 		c = R_GetSectorLight(alpha, thing->subsector->sector->colors[LIGHT_THING]);
 	}
 
-	glSetVertexColor(vtx, c, 4);
+	dglSetVertexColor(vtx, c, 4);
 
 	//
 	// do the drawing
 	//
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTriangle(2, 1, 0);
-	glTriangle(2, 0, 3);
-	glDrawGeometry(4, vtx);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTriangle(2, 1, 0);
+	dglTriangle(2, 0, 3);
+	dglDrawGeometry(4, vtx);
 
 	GL_SetState(GLSTATE_BLEND, 0);
 }

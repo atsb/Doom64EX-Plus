@@ -777,6 +777,8 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	if (special->flags & MF_COUNTSECRET) {
 		player->secretcount++;
+		player->message = FOUNDSECRETITEM;
+		player->messagepic = 40;
 	}
 
 	P_RemoveMobj(special);
@@ -792,7 +794,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 //
 
 static void P_Obituary(mobj_t* source, mobj_t* target) {
-	static int8_t omsg[512];
+	static char omsg[512];
 	int i;
 
 	if (!target->player) {
@@ -806,9 +808,6 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_POSSESSED1:
 			if (rand() % 500 < 50) {
 				sprintf(omsg, "Immorpher will write a song\nin your honor.");
-			}
-			else if (rand() % 500 < 100) {
-				sprintf(omsg, "You got eaten by a wolf called: Wolf3s");
 			}
 			else {
 				sprintf(omsg, "you were tickled to death\nby a Zombieman.");

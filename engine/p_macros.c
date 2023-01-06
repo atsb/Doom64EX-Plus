@@ -36,8 +36,8 @@ thinker_t* macrothinker = NULL;
 macrodef_t* macro = NULL;
 macrodata_t* nextmacro = NULL;
 mobj_t* mobjmacro = NULL;
-int16_t           macrocounter = -1;
-int16_t           macroid = -1;
+short           macrocounter = -1;
+short           macroid = -1;
 
 int             taglist[MAXQUEUELIST];
 int             taglistidx = 0;

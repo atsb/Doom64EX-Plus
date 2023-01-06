@@ -43,6 +43,7 @@
 #endif
 
 #ifdef _MSC_VER
+#include <wtypes.h>
 #include <direct.h>
 #include <io.h>
 #include "i_w3swrapper.h"

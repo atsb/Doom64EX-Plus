@@ -35,8 +35,8 @@ extern thinker_t* macrothinker;
 extern macrodef_t* macro;
 extern macrodata_t* nextmacro;
 extern mobj_t* mobjmacro;
-extern int16_t        macrocounter;
-extern int16_t        macroid;
+extern short        macrocounter;
+extern short        macroid;
 
 void P_InitMacroVars(void);
 void P_ToggleMacros(int tag, boolean toggleon);

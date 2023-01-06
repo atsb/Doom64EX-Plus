@@ -147,7 +147,7 @@ static void PrintResponse(queryresponse_t* response)
 
 static void NET_Query_ParsePacket(net_addr_t* addr, net_packet_t* packet)
 {
-	uint32_t packet_type;
+	unsigned int packet_type;
 	net_querydata_t querydata;
 	queryresponse_t* response;
 

@@ -126,6 +126,7 @@
 #define GOTLASER        "What the !@#%%* is this!"
 
 #define FOUNDSECRET     "You found a secret area!"
+#define FOUNDSECRETITEM "You found a secret item!"
 
 #define MOCKPLAYER1     "HAHAHAHA!"
 #define MOCKPLAYER2     "YOU SHOULDN'T HAVE DONE THAT."

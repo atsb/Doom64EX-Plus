@@ -46,11 +46,11 @@
 #define MAX_SPRITES    1024
 
 spritedef_t* spriteinfo;
-int             numsprites;
+intptr_t        numsprites;
 
 spriteframe_t   sprtemp[29];
-int32_t             maxframe;
-int8_t* spritename;
+int             maxframe;
+char* spritename;
 
 static visspritelist_t visspritelist[MAX_SPRITES];
 static visspritelist_t* vissprite = NULL;
@@ -132,8 +132,8 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
 // The rotation character can be 0 to signify no rotations.
 //
 
-void R_InitSprites(int8_t** namelist) {
-	int8_t** check;
+void R_InitSprites(char** namelist) {
+	char** check;
 	int     i;
 	int     l;
 	int     frame;
@@ -363,10 +363,10 @@ static boolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) 
 
 	// [kex] nightmare things have a shade of dark green
 	if (thing->flags & MF_NIGHTMARE) {
-		glSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
+		dglSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
 	}
 	else if ((thing->frame & FF_FULLBRIGHT)) {
-		glSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
+		dglSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
 	}
 	else {
 		R_LightToVertex(vertex,
@@ -450,7 +450,7 @@ static boolean R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) {
 
 	spritenum = W_GetNumForName("BOLTA0") - s_start;
 
-	glSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
+	dglSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
 
 	// setup texture mapping
 	vertex[0].tu = vertex[1].tu = 0;
@@ -652,23 +652,23 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-		glTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+		dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
 		if (v_accessibility.value < 1)
 		{
 			if (!nolights) {
 				GL_UpdateEnvTexture(WHITE);
 				GL_SetTextureUnit(1, true);
-				glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+				dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
 			}
 
 			if (st_flashoverlay.value <= 0) {
 				GL_SetTextureUnit(2, true);
-				glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+				dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
 			}
 		}
 
-		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
 		GL_SetTextureUnit(0, true);
 	}
@@ -686,10 +686,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	}
 
 	// render
-	glSetVertex(v);
-	glTriangle(0, 1, 2);
-	glTriangle(3, 2, 1);
-	glDrawGeometry(4, v);
+	dglSetVertex(v);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
+	dglDrawGeometry(4, v);
 
 	GL_ResetViewport();
 

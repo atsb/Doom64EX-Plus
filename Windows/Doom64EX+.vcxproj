@@ -97,7 +97,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Includes;$(ProjectDir)..\engine\3rdparty\Source Files\glad\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>

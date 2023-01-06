@@ -32,7 +32,7 @@ typedef struct _wad_file_s wad_file_t;
 typedef struct {
 	// Open a file for reading.
 
-	wad_file_t* (*OpenFile)(int8_t* path);
+	wad_file_t* (*OpenFile)(char* path);
 
 	// Close the specified file.
 
@@ -41,8 +41,8 @@ typedef struct {
 	// Read data from the specified position in the file into the
 	// provided buffer.  Returns the number of bytes read.
 
-	size_t(*Read)(wad_file_t* file, uint32_t offset,
-		void* buffer, size_t buffer_len);
+	unsigned int(*Read)(wad_file_t* file, unsigned int offset,
+		void* buffer, unsigned int buffer_len);
 } wad_file_class_t;
 
 struct _wad_file_s {
@@ -57,13 +57,13 @@ struct _wad_file_s {
 
 	// Length of the file, in bytes.
 
-	uint64_t length;
+	unsigned int length;
 };
 
 // Open the specified file. Returns a pointer to a new wad_file_t
 // handle for the WAD file, or NULL if it could not be opened.
 
-wad_file_t* W_OpenFile(int8_t* path);
+wad_file_t* W_OpenFile(char* path);
 
 // Close the specified WAD file.
 
@@ -73,11 +73,11 @@ void W_CloseFile(wad_file_t* wad);
 // data is read from the specified offset from the start of the file.
 // Returns the number of bytes read.
 
-size_t W_Read(wad_file_t* wad, uint32_t offset,
-	void* buffer, size_t buffer_len);
+unsigned int W_Read(wad_file_t* wad, unsigned int offset,
+	void* buffer, unsigned int buffer_len);
 
-int8_t* W_FindWADByName(int8_t* filename);
-int8_t* W_TryFindWADByName(int8_t* filename);
-int8_t* W_FindIWAD(void);
+char* W_FindWADByName(char* filename);
+char* W_TryFindWADByName(char* filename);
+char* W_FindIWAD(void);
 
 #endif /*__W_FILE__*/

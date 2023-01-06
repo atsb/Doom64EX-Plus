@@ -27,10 +27,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef C89
-#include <stdbool.h>
-#endif
-
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -42,8 +38,8 @@
 #else
 #include <dirent.h>
 #endif
+
 #include <fcntl.h>
-#include "i_w3swrapper.h"
 #include "doomdef.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
@@ -96,15 +92,15 @@ boolean            mainmenuactive = false;
 boolean            allowclearmenu = true;              // can user hit escape to clear menu?
 
 static boolean     newmenu = false;    // 20120323 villsa
-static int8_t* messageBindCommand;
+static char* messageBindCommand;
 static int          quickSaveSlot;                      // -1 = no quicksave slot picked!
 static int          saveSlot;                           // which slot to save in
-static int8_t         savegamestrings[10][MENUSTRINGSIZE];
+static char         savegamestrings[10][MENUSTRINGSIZE];
 static boolean     alphaprevmenu = false;
 static int          menualphacolor = 0xff;
 
-static int8_t         inputString[MENUSTRINGSIZE];
-static int8_t         oldInputString[MENUSTRINGSIZE];
+static char         inputString[MENUSTRINGSIZE];
+static char         oldInputString[MENUSTRINGSIZE];
 static boolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
@@ -121,8 +117,8 @@ void(*menufadefunc)(void) = NULL;
 // static variables
 //
 
-static int8_t     MenuBindBuff[256];
-static int8_t     MenuBindMessage[256];
+static char     MenuBindBuff[256];
+static char     MenuBindMessage[256];
 static boolean MenuBindActive = false;
 static boolean showfullitemvalue[3] = { false, false, false };
 static int      levelwarp = 0;
@@ -139,15 +135,15 @@ static int      m_ScreenSize = 1;
 typedef struct {
 	// -3 = disabled/hidden item, -2 = enter key ok, -1 = disabled, 0 = no cursor here,
 	// 1 = ok, 2 = arrows ok, 3 = for sliders
-	int16_t status;
+	short status;
 
-	int8_t name[64];
+	char name[64];
 
 	// choice = menu item #
 	void (*routine)(int choice);
 
 	// hotkey in menu
-	int8_t alphaKey;
+	char alphaKey;
 } menuitem_t;
 
 typedef struct {
@@ -162,35 +158,35 @@ typedef struct {
 } menuthermobar_t;
 
 typedef struct menu_s {
-	int16_t               numitems;           // # of menu items
+	short               numitems;           // # of menu items
 	boolean            textonly;
 	struct menu_s* prevMenu;          // previous menu
 	menuitem_t* menuitems;         // menu items
 	void (*routine)(void);                  // draw routine
-	int8_t                title[64];
-	int16_t               x;
-	int16_t               y;                  // x,y of menu
-	int16_t               lastOn;             // last item user was on in menu
+	char                title[64];
+	short               x;
+	short               y;                  // x,y of menu
+	short               lastOn;             // last item user was on in menu
 	boolean            smallfont;          // draw text using small fonts
 	menudefault_t* defaultitems;      // pointer to default values for cvars
-	int16_t               numpageitems;       // number of items to display per page
-	int16_t               menupageoffset;
+	short               numpageitems;       // number of items to display per page
+	short               menupageoffset;
 	float               scale;
-	int8_t** hints;
+	char** hints;
 	menuthermobar_t* thermobars;
 } menu_t;
 
 typedef struct {
-	int8_t* name;
-	int8_t* action;
+	char* name;
+	char* action;
 } menuaction_t;
 
-int16_t           itemOn;                 // menu item skull is on
-int16_t           itemSelected;
-int16_t           skullAnimCounter;       // skull animation counter
-int16_t           whichSkull;             // which skull to draw
+short           itemOn;                 // menu item skull is on
+short           itemSelected;
+short           skullAnimCounter;       // skull animation counter
+short           whichSkull;             // which skull to draw
 
-int8_t    msgNames[2][4] = { "Off","On" };
+char    msgNames[2][4] = { "Off","On" };
 
 // current menudef
 static menu_t* currentMenu;
@@ -210,8 +206,8 @@ void M_ClearMenus(void);
 void M_QuickSave(void);
 void M_QuickLoad(void);
 
-static int M_StringWidth(const int8_t* string);
-static int M_BigStringWidth(const int8_t* string);
+static int M_StringWidth(const char* string);
+static int M_BigStringWidth(const char* string);
 
 static void M_DrawThermo(int x, int y, int thermWidth, float thermDot);
 static void M_DoDefaults(int choice);
@@ -219,9 +215,9 @@ static void M_Return(int choice);
 static void M_ReturnToOptions(int choice);
 static void M_SetCvar(cvar_t* cvar, float value);
 static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t* cvar);
-static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item);
+static void M_DrawSmbString(const char* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
-static void M_SetInputString(int8_t* string, int len);
+static void M_SetInputString(char* string, int len);
 static void M_Scroll(menu_t* menu, boolean up);
 static void M_DoVideoReset(int choice);
 
@@ -706,7 +702,7 @@ menuitem_t OptionsMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* OptionHints[opt_end] = {
+char* OptionHints[opt_end] = {
 	"control configuration",
 	"adjust sound volume",
 	"miscellaneous options for gameplay and other features",
@@ -815,7 +811,7 @@ menudefault_t NetworkDefault[] = {
 	{ NULL, -1 }
 };
 
-int8_t* NetworkHints[network_end] = {
+char* NetworkHints[network_end] = {
 	NULL,
 	"set a name for yourself",
 	NULL,
@@ -890,7 +886,7 @@ void M_NetworkChoice(int choice) {
 
 void M_DrawNetwork(void) {
 	int y;
-	static const int8_t* respawnitemstrings[11] = {
+	static const char* respawnitemstrings[11] = {
 		"Off",
 		"1 Minute",
 		"2 Minutes",
@@ -904,7 +900,7 @@ void M_DrawNetwork(void) {
 		"10 Minutes"
 	};
 
-	static const int8_t* networkscalestrings[3] = {
+	static const char* networkscalestrings[3] = {
 		"x 1",
 		"x 2",
 		"x 3"
@@ -1028,7 +1024,7 @@ menuitem_t MiscMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* MiscHints[misc_end] = {
+char* MiscHints[misc_end] = {
 	NULL,
 	"change transition speeds between switching menus",
 	NULL,
@@ -1209,10 +1205,10 @@ void M_MiscChoice(int choice) {
 }
 
 void M_DrawMisc(void) {
-	static const int8_t* autoruntype[2] = { "Off", "On" };
-	static const int8_t* mapdisplaytype[2] = { "Hide", "Show" };
-	static const int8_t* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
-	static const int8_t* disablesecretmessages[2] = { "Enabled", "Disabled" };
+	static const char* autoruntype[2] = { "Off", "On" };
+	static const char* mapdisplaytype[2] = { "Hide", "Show" };
+	static const char* objectdrawtype[3] = { "Arrows", "Sprites", "Both" };
+	static const char* disablesecretmessages[2] = { "Enabled", "Disabled" };
 	int y;
 
 	if (currentMenu->menupageoffset <= misc_menufade + 1 &&
@@ -1509,7 +1505,7 @@ menuitem_t DisplayMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* DisplayHints[display_end] = {
+char* DisplayHints[display_end] = {
 	"toggle messages displaying on hud",
 	"change look and style for hud",
 	"use texture environment or a simple overlay for flashes",
@@ -1564,9 +1560,9 @@ void M_Display(int choice) {
 }
 
 void M_DrawDisplay(void) {
-	static const int8_t* hudtype[3] = { "Off", "Classic", "Arranged" };
-	static const int8_t* flashtype[2] = { "Environment", "Overlay" };
-	static const int8_t* hud_color[2] = { "Red", "White" };
+	static const char* hudtype[3] = { "Off", "Classic", "Arranged" };
+	static const char* flashtype[2] = { "Environment", "Overlay" };
+	static const char* hud_color[2] = { "Red", "White" };
 
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * messages, MENUCOLORRED,
 		msgNames[(int)m_messages.value]);
@@ -1717,23 +1713,19 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
-#ifndef VITA	
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
 	{2,"Windowed:",M_ChangeWindowed, 'w'},
-#endif	
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
 	{2,"Resolution:",M_ChangeResolution, 'r'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
-#ifndef VITA	
 	{2,"Vsync:",M_ChangeVerticalSynchronisation, 'v'},
-#endif
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
 	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* VideoHints[video_end] = {
+char* VideoHints[video_end] = {
 	"change light color intensity",
 	NULL,
 	"adjust screen gamma",
@@ -1753,14 +1745,10 @@ menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
-#ifndef VITA	
 	{ &r_anisotropic, 1 },
 	{ &v_windowed, 0 },
-#endif
 	{ &i_interpolateframes, 1 },
-#ifndef VITA
 	{ &v_vsync, 1 },
-#endif
 	{ &v_accessibility, 0 },
 	{ NULL, -1 }
 };
@@ -1781,11 +1769,7 @@ menu_t VideoDef = {
 	0,
 	false,
 	VideoDefault,
-#ifdef VITA
-    10,
-#else
-    12,
-#endif
+	12,
 	0,
 	0.65f,
 	VideoHints,
@@ -1832,10 +1816,11 @@ static const int Resolution16_9[MAX_RES16_9][2] = {
 	{   3840,   2160    }
 };
 
-#define MAX_RES16_10  9
+#define MAX_RES16_10  10
 static const int Resolution16_10[MAX_RES16_10][2] = {
 	{   320,    200     },
 	{   1024,   640     },
+	{	1280,   600		},
 	{   1280,   800     },
 	{   1440,   900     },
 	{   1680,   1050    },
@@ -1858,9 +1843,6 @@ static const float ratioVal[5] = {
 	5.0f / 4.0f,
 	21.0f / 9.0f
 };
-
-static int8_t gammamsg[21][28] = {
-	GAMMALVL0,
 	GAMMALVL1,
 	GAMMALVL2,
 	GAMMALVL3,
@@ -1957,15 +1939,15 @@ void M_Video(int choice) {
 }
 
 void M_DrawVideo(void) {
-	static const int8_t* filterType[2] = { "Linear", "Nearest" };
-	static const int8_t* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09" };
-	static const int8_t* frametype[2] = { "Off", "On" };
+	static const char* constfilterType[2] = { "Linear", "Nearest" };
+	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09" };
+	static const char* frametype[2] = { "Off", "On" };
 #ifdef VITA	 
     static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" }; //Add this later for debug
 	static char bitValue[8];
 #endif
 
-	int8_t res[16];
+	char res[16];
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
@@ -1991,20 +1973,14 @@ void M_DrawVideo(void) {
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
-#ifndef VITA	
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
-#endif
 	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
 
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
-#ifdef VITA
-	DRAWVIDEOITEM2(vsync, v_vsync.value, vsyncType);
-#else	
 	DRAWVIDEOITEM2(vsync, v_vsync.value, frametype);
-#endif
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, frametype);
 
 #undef DRAWVIDEOITEM
@@ -2083,11 +2059,10 @@ void M_ChangeGammaLevel(int choice)
 	}
 }
 
-
 void M_ChangeFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_filter);
 }
-#ifndef VITA
+
 void M_ChangeAnisotropic(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_anisotropic);
 }
@@ -2095,7 +2070,7 @@ void M_ChangeAnisotropic(int choice) {
 void M_ChangeWindowed(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_windowed);
 }
-#endif
+
 static void M_SetResolution(void) {
 	int width = SCREENWIDTH;
 	int height = SCREENHEIGHT;
@@ -2160,6 +2135,9 @@ void M_ChangeRatio(int choice) {
 	case 4:
 		dmax = MAX_RES21_09;
 		break;
+	case 4:
+		max = MAX_RES21_09;
+		break;
 	}
 	m_ScreenSize = min(m_ScreenSize, dmax - 1);
 	M_SetResolution();
@@ -2184,6 +2162,9 @@ void M_ChangeResolution(int choice) {
 		break;
 	case 4:
 		dmax = MAX_RES21_09;
+		break;
+	case 4:
+		max = MAX_RES21_09;
 		break;
 	}
 
@@ -2211,11 +2192,7 @@ void M_ChangeInterpolateFrames(int choice)
 
 void M_ChangeVerticalSynchronisation(int choice)
 {
-#ifdef VITA
-	M_SetOptionValue(choice, 0, 2, 1, &v_vsync);
-#else	
 	M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
-#endif
 }
 
 void M_ChangeAccessibility(int choice)
@@ -2268,7 +2245,7 @@ void M_Password(int choice) {
 }
 
 void M_DrawPassword(void) {
-	int8_t password[2];
+	char password[2];
 	byte* passData;
 	int i = 0;
 
@@ -2314,7 +2291,7 @@ static void M_PasswordSelect(void) {
 	S_StartSound(NULL, sfx_switch2);
 	passwordData[curPasswordSlot++] = (byte)itemOn;
 	if (curPasswordSlot > 15) {
-		static const int8_t* hecticdemo = "rvnh3ct1cd3m0???";
+		static const char* hecticdemo = "rvnh3ct1cd3m0???";
 		int i;
 
 		for (i = 0; i < 16; i++) {
@@ -2891,11 +2868,11 @@ void M_BuildControlMenu(void) {
 	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
 	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
 	ADD_NONBINDABLE_ITEM(7, "Chat             t", 1);
-	ADD_NONBINDABLE_ITEM(8, "Console          Backslash", 1);
+	ADD_NONBINDABLE_ITEM(8, "Console          TILDE and BACKQUOTE", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {
-	int8_t action[128];
+	char action[128];
 	sprintf(action, "%s %d", PlayerActions[choice].action, 1);
 	strcpy(MenuBindBuff, action);
 	messageBindCommand = MenuBindBuff;
@@ -2932,7 +2909,7 @@ menuitem_t ControlsMenu[] = {
 	{1,"/r Return",M_Return, 0x20}
 };
 
-int8_t* ControlsHints[controls_end] = {
+char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
 	"configure gamepad functionality",
@@ -3167,7 +3144,7 @@ void M_DrawSave(void) {
 	M_DrawSaveGameFrontend(&SaveDef);
 
 	for (i = 0; i < load_end; i++) {
-		int8_t* string;
+		char* string;
 
 		if (i == saveSlot && inputEnter) {
 			string = inputString;
@@ -3298,7 +3275,7 @@ void M_DrawLoad(void) {
 // User wants to load this game
 //
 void M_LoadSelect(int choice) {
-	//int8_t name[256];
+	//char name[256];
 
 	// sprintf(name, SAVEGAMENAME"%d.dsg", choice);
 	// G_LoadGame(name);
@@ -3334,7 +3311,7 @@ void M_LoadGame(int choice) {
 void M_ReadSaveStrings(void) {
 	int     handle;
 	int     i;
-	// int8_t    name[256];
+	// char    name[256];
 
 	for (i = 0; i < load_end; i++) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
@@ -3346,8 +3323,13 @@ void M_ReadSaveStrings(void) {
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
-		w3sread(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		w3sclose(handle);
+#ifdef _WIN32
+		_read(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		_close(handle);
+#else
+		read(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		close(handle);
+#endif
 		DoomLoadMenu[i].status = 1;
 	}
 }
@@ -3565,7 +3547,7 @@ static void M_ReturnInstant(void) {
 // M_SetInputString
 //
 
-static void M_SetInputString(int8_t* string, int len) {
+static void M_SetInputString(char* string, int len) {
 	inputEnter = true;
 	strcpy(oldInputString, string);
 
@@ -3587,7 +3569,7 @@ static void M_SetInputString(int8_t* string, int len) {
 // M_DrawSmbString
 //
 
-static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item) {
+static void M_DrawSmbString(const char* text, menu_t* menu, int item) {
 	int x;
 	int y;
 
@@ -3601,7 +3583,7 @@ static void M_DrawSmbString(const int8_t* text, menu_t* menu, int item) {
 // Find string width from hu_font chars
 //
 
-static int M_StringWidth(const int8_t* string) {
+static int M_StringWidth(const char* string) {
 	int i;
 	int w = 0;
 	int c;
@@ -3624,9 +3606,9 @@ static int M_StringWidth(const int8_t* string) {
 // Find string width from bigfont chars
 //
 
-static int M_BigStringWidth(const int8_t* string) {
+static int M_BigStringWidth(const char* string) {
 	int width = 0;
-	int8_t t = 0;
+	char t = 0;
 	int id = 0;
 	int len = 0;
 	int i = 0;
@@ -3955,7 +3937,7 @@ static void M_DrawThermo(int x, int y, int thermWidth, float thermDot) {
 // M_SetThumbnail
 //
 
-static int8_t thumbnail_date[32];
+static char thumbnail_date[32];
 static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
@@ -3987,16 +3969,16 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
 
-	glDisable(GL_TEXTURE_2D);
+	dglDisable(GL_TEXTURE_2D);
 
 	//
 	// draw back panels
 	//
-	glColor4ub(4, 4, 4, menualphacolor);
+	dglColor4ub(4, 4, 4, menualphacolor);
 	//
 	// save game panel
 	//
-	glRecti(
+	dglRecti(
 		def->x - 48,
 		def->y - 12,
 		def->x + 256,
@@ -4005,7 +3987,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// stats panel
 	//
-	glRecti(
+	dglRecti(
 		def->x + 272,
 		def->y - 12,
 		def->x + 464,
@@ -4015,12 +3997,12 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// draw outline for panels
 	//
-	glColor4ub(240, 86, 84, menualphacolor);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	dglColor4ub(240, 86, 84, menualphacolor);
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//
 	// save game panel
 	//
-	glRecti(
+	dglRecti(
 		def->x - 48,
 		def->y - 12,
 		def->x + 256,
@@ -4029,20 +4011,20 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// stats panel
 	//
-	glRecti(
+	dglRecti(
 		def->x + 272,
 		def->y - 12,
 		def->x + 464,
 		def->y + 116
 	);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_TEXTURE_2D);
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	dglEnable(GL_TEXTURE_2D);
 
 	//
 	// draw thumbnail texture and stats
 	//
 	if (M_SetThumbnail(itemOn)) {
-		int8_t string[128];
+		char string[128];
 
 		curgfx = -1;
 
@@ -4182,11 +4164,11 @@ void M_DrawXInputButton(int x, int y, int button) {
 	width = (float)gfxwidth[pic];
 	height = (float)gfxheight[pic];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
-	glEnable(GL_BLEND);
-	glSetVertex(vtx);
+	dglEnable(GL_BLEND);
+	dglSetVertex(vtx);
 
 	GL_SetOrtho(0);
 
@@ -4211,12 +4193,12 @@ void M_DrawXInputButton(int x, int y, int button) {
 		color
 	);
 
-	glTriangle(0, 1, 2);
-	glTriangle(3, 2, 1);
-	glDrawGeometry(4, vtx);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
+	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
-	glDisable(GL_BLEND);
+	dglDisable(GL_BLEND);
 }
 #endif
 //
@@ -4636,11 +4618,11 @@ static void M_DrawMenuSkull(int x, int y) {
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
-	glEnable(GL_BLEND);
-	glSetVertex(vtx);
+	dglEnable(GL_BLEND);
+	dglSetVertex(vtx);
 
 	GL_SetOrtho(0);
 
@@ -4670,12 +4652,12 @@ static void M_DrawMenuSkull(int x, int y) {
 		color
 	);
 
-	glTriangle(0, 1, 2);
-	glTriangle(3, 2, 1);
-	glDrawGeometry(4, vtx);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
+	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
-	glDisable(GL_BLEND);
+	dglDisable(GL_BLEND);
 }
 
 //
@@ -4692,8 +4674,8 @@ static void M_DrawCursor(int x, int y) {
 		gfxIdx = GL_BindGfxTexture("CURSOR", true);
 		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 		GL_SetOrthoScale(scale);
 		GL_SetState(GLSTATE_BLEND, 1);
@@ -4713,10 +4695,10 @@ static void M_DrawCursor(int x, int y) {
 //
 
 void M_Drawer(void) {
-	int16_t x;
-	int16_t y;
-	int16_t i;
-	int16_t max;
+	short x;
+	short y;
+	short i;
+	short max;
 	int start;
 	int height;
 
@@ -5156,7 +5138,7 @@ void M_Init(void) {
 		PasswordMenu[i].status = 1;
 		PasswordMenu[i].name[0] = passwordChar[i];
 		PasswordMenu[i].routine = NULL;
-		PasswordMenu[i].alphaKey = (int8_t)passwordChar[i];
+		PasswordMenu[i].alphaKey = (char)passwordChar[i];
 	}
 
 	memset(passwordData, 0xff, 16);

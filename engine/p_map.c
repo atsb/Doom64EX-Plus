@@ -510,21 +510,25 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 	// if any special lines were hit, do the effect
 	if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP)))
 	{
-		while (numspechit--) {
+		while (numspechit > 0)
+		{
+			numspechit--;
+
 			// see if the line was crossed
 			ld = spechit[numspechit];
+
 			side = P_PointOnLineSide(thing->x, thing->y, ld);
 			oldside = P_PointOnLineSide(oldx, oldy, ld);
+
 			if (side != oldside)
 			{
-				if (ld->special & MLU_CROSS)
+				if (!(ld->flags & ML_TRIGGERFRONT) || (side))
 				{
 					P_UseSpecialLine(thing, ld, oldside);
 				}
 			}
 		}
 	}
-	numspechit = 0;
 
 	return true;
 }
@@ -1009,6 +1013,10 @@ boolean PTR_AimTraverse(intercept_t* in) {
 	if (in->isaline) {
 		li = in->d.line;
 
+		// [kex] if a line was already hit, then ignore
+		//if(!shotsideline)
+		//aimfrac = in->frac;
+
 		if (!(li->flags & ML_TWOSIDED)) {
 			aimfrac = in->frac;
 			shotline = li;
@@ -1323,8 +1331,12 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	if (t1->player) {
 		pitch = dcos(abs(t1->pitch - ANG90));
 
+		// [kex] check for autoaim option. skip if bfg spray
 		if (distance != (ATTACKRANGE + 1)) {
+			if (!t1->player->autoaim &&
+				distance != MELEERANGE && distance != (MELEERANGE + 1)) {
 				flags &= ~PT_ADDTHINGS;
+			}
 		}
 	}
 

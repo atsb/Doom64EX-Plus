@@ -39,7 +39,7 @@
 #ifdef _WIN32
 #include "i_opndir.h"
 #endif
-#include "i_w3swrapper.h"
+
 #if !defined _WIN32
 #include <unistd.h>
 #endif
@@ -51,7 +51,7 @@ void        G_WriteDemoTiccmd(ticcmd_t* cmd);
 
 FILE* demofp;
 byte* demo_p;
-int8_t            demoname[256];
+char            demoname[256];
 boolean        demorecording = false;
 boolean        demoplayback = false;
 boolean        netdemo = false;
@@ -72,7 +72,7 @@ extern int      starttime;
 //
 
 void G_ReadDemoTiccmd(ticcmd_t* cmd) {
-	uint32_t lowbyte;
+	unsigned int lowbyte;
 
 	if (*demo_p == DEMOMARKER) {
 		// end of demo data stream
@@ -80,14 +80,14 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 		return;
 	}
 
-	cmd->forwardmove = ((int8_t)*demo_p++);
-	cmd->sidemove = ((int8_t)*demo_p++);
-	lowbyte = (uint8_t)(*demo_p++);
-	cmd->angleturn = (((int32_t)(*demo_p++)) << 8) + lowbyte;
-	lowbyte = (uint8_t)(*demo_p++);
-	cmd->pitch = (((int32_t)(*demo_p++)) << 8) + lowbyte;
-	cmd->buttons = (uint8_t)*demo_p++;
-	cmd->buttons2 = (uint8_t)*demo_p++;
+	cmd->forwardmove = ((char)*demo_p++);
+	cmd->sidemove = ((char)*demo_p++);
+	lowbyte = (unsigned char)(*demo_p++);
+	cmd->angleturn = (((int)(*demo_p++)) << 8) + lowbyte;
+	lowbyte = (unsigned char)(*demo_p++);
+	cmd->pitch = (((int)(*demo_p++)) << 8) + lowbyte;
+	cmd->buttons = (unsigned char)*demo_p++;
+	cmd->buttons2 = (unsigned char)*demo_p++;
 }
 
 //
@@ -95,10 +95,10 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 //
 
 void G_WriteDemoTiccmd(ticcmd_t* cmd) {
-	int8_t buf[8];
-	int16_t angleturn;
-	int16_t pitch;
-	int8_t* p = buf;
+	char buf[8];
+	short angleturn;
+	short pitch;
+	char* p = buf;
 
 	angleturn = cmd->angleturn;
 	pitch = cmd->pitch;
@@ -125,7 +125,7 @@ void G_WriteDemoTiccmd(ticcmd_t* cmd) {
 // G_RecordDemo
 //
 
-void G_RecordDemo(const int8_t* name) {
+void G_RecordDemo(const char* name) {
 	byte* demostart, * dm_p;
 	int i;
 
@@ -187,7 +187,7 @@ void G_RecordDemo(const int8_t* name) {
 		*dm_p++ = playeringame[i];
 	}
 
-	if (fwrite(demostart, 1, dm_p - demostart, demofp) != (size_t)(dm_p - demostart)) {
+	if (fwrite(demostart, 1, dm_p - demostart, demofp) != (unsigned int)(dm_p - demostart)) {
 		I_Error("G_RecordDemo: Error writing demo header");
 	}
 
@@ -204,10 +204,10 @@ void G_RecordDemo(const int8_t* name) {
 // G_PlayDemo
 //
 
-void G_PlayDemo(const int8_t* name) {
+void G_PlayDemo(const char* name) {
 	int i;
 	int p;
-	int8_t filename[256];
+	char filename[256];
 
 	gameaction = ga_nothing;
 	endDemo = false;
@@ -349,7 +349,7 @@ int G_PlayDemoPtr(int skill, int map) // 800049D0
 	return exit;
 }
 
-int D_RunDemo(int8_t* name, skill_t skill, int map) // 8002B2D0
+int D_RunDemo(char* name, skill_t skill, int map) // 8002B2D0
 {
 	int lump;
 	int exit;

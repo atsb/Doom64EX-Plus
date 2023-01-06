@@ -31,7 +31,7 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_drawlist.h"
-#include "i_system.h"
+
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fog);
@@ -55,8 +55,8 @@ static boolean ProcessWalls(vtxlist_t* vl, int* drawcount) {
 		return false;
 	}
 
-	glTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
-	glTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
+	dglTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
+	dglTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
 
 	*drawcount += 4;
 
@@ -82,7 +82,7 @@ static boolean ProcessFlats(vtxlist_t* vl, int* drawcount) {
 	count = *drawcount;
 
 	for (j = 0; j < ss->numleafs - 2; j++) {
-		glTriangle(count, count + 1 + j, count + 2 + j);
+		dglTriangle(count, count + 1 + j, count + 2 + j);
 	}
 
 	// need to keep texture coords small to avoid
@@ -189,8 +189,8 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 
 	GL_SetState(GLSTATE_CULL, !(mobj->flags & MF_RENDERLASER));
 
-	glTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
-	glTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
+	dglTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
+	dglTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
 
 	*drawcount += 4;
 
@@ -207,10 +207,10 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 //
 
 static void SetupFog(void) {
-	glFogi(GL_FOG_MODE, GL_LINEAR);
+	dglFogi(GL_FOG_MODE, GL_LINEAR);
 
 	if (!skyflatnum) {
-		glDisable(GL_FOG);
+		dglDisable(GL_FOG);
 	}
 	else if (r_fog.value) {
 		rfloat color[4] = { 0, 0, 0, 0 };
@@ -229,7 +229,7 @@ static void SetupFog(void) {
 			fogfactor = 1;
 		}
 
-		glEnable(GL_FOG);
+		dglEnable(GL_FOG);
 
 		// do exponential fog if color is black
 		if (sky && (sky->fogcolor & 0xFFFFFF) != 0) {
@@ -240,8 +240,8 @@ static void SetupFog(void) {
 			min = ((fognear - 500) * 256) / fogfactor;
 
 			fogcolor = sky->fogcolor;
-			glFogi(GL_FOG_MODE, GL_EXP);
-			glFogf(GL_FOG_DENSITY, 14.0f / (max + min));
+			dglFogi(GL_FOG_MODE, GL_EXP);
+			dglFogf(GL_FOG_DENSITY, 14.0f / (max + min));
 		}
 		// do linear rendering for colored fog
 		else {
@@ -258,12 +258,12 @@ static void SetupFog(void) {
 			min = 5.0f / position;
 			max = 30.0f / position;
 
-			glFogf(GL_FOG_START, min);
-			glFogf(GL_FOG_END, max);
+			dglFogf(GL_FOG_START, min);
+			dglFogf(GL_FOG_END, max);
 		}
 
-		glGetColorf(fogcolor, color);
-		glFogfv(GL_FOG_COLOR, color);
+		dglGetColorf(fogcolor, color);
+		dglFogfv(GL_FOG_COLOR, color);
 	}
 }
 
@@ -272,14 +272,14 @@ static void SetupFog(void) {
 //
 
 void R_SetViewMatrix(void) {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glViewFrustum(video_width, video_height, r_fov.value, 0.1f);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
-	glRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
-	glTranslatef(-fviewx, -fviewy, -fviewz);
+	dglMatrixMode(GL_PROJECTION);
+	dglLoadIdentity();
+	dglViewFrustum(video_width, video_height, r_fov.value, 0.1f);
+	dglMatrixMode(GL_MODELVIEW);
+	dglLoadIdentity();
+	dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
+	dglRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
+	dglTranslatef(-fviewx, -fviewy, -fviewz);
 }
 
 //
@@ -289,7 +289,7 @@ void R_SetViewMatrix(void) {
 void R_RenderWorld(void) {
 	SetupFog();
 
-	glEnable(GL_DEPTH_TEST);
+	dglEnable(GL_DEPTH_TEST);
 
 	DL_BeginDrawList(1);
 
@@ -298,15 +298,15 @@ void R_RenderWorld(void) {
 		if (!nolights) {
 			GL_UpdateEnvTexture(WHITE);
 			GL_SetTextureUnit(1, true);
-			glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+			dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
 		}
 
 		if (st_flashoverlay.value <= 0) {
 			GL_SetTextureUnit(2, true);
-			glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+			dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
 		}
 
-		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
 		GL_SetTextureUnit(0, true);
 	}
@@ -320,7 +320,7 @@ void R_RenderWorld(void) {
 		}
 	}
 
-	glEnable(GL_ALPHA_TEST);
+	dglEnable(GL_ALPHA_TEST);
 
 	// begin draw list loop
 
@@ -341,15 +341,15 @@ void R_RenderWorld(void) {
 
 	R_SetupSprites();
 
-	glDepthMask(GL_FALSE);
+	dglDepthMask(GL_FALSE);
 	DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
 
 	// -------------- Restore states -----------------------------
 
-	glDisable(GL_ALPHA_TEST);
-	glDepthMask(GL_TRUE);
-	glDisable(GL_FOG);
-	glDisable(GL_DEPTH_TEST);
+	dglDisable(GL_ALPHA_TEST);
+	dglDepthMask(GL_TRUE);
+	dglDisable(GL_FOG);
+	dglDisable(GL_DEPTH_TEST);
 
 	GL_SetOrthoScale(1.0f);
 	GL_SetState(GLSTATE_BLEND, 0);
@@ -357,5 +357,5 @@ void R_RenderWorld(void) {
 	GL_SetDefaultCombiner();
 
 	// villsa 12152013 - make sure we're using the default blend function
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

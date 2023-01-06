@@ -42,7 +42,6 @@
 #include "net_packet.h"
 #include "net_server.h"
 #include "net_structure.h"
-#include "i_w3swrapper.h"
 
 typedef enum
 {
@@ -80,7 +79,7 @@ typedef struct
 
 	// Latest acknowledged by the client
 
-	uint32_t acknowledged;
+	unsigned int acknowledged;
 
 	// Observer: receives data but does not participate in the game.
 
@@ -101,11 +100,11 @@ typedef struct
 
 	// Latency value received from the client
 
-	int32_t latency;
+	int latency;
 
 	// Last time we sent a resend request for this tic
 
-	uint32_t resend_time;
+	unsigned int resend_time;
 
 	// Tic data itself
 
@@ -117,13 +116,13 @@ static boolean server_initialised = false;
 static net_client_t clients[MAXNETNODES];
 static net_client_t* sv_players[MAXPLAYERS];
 static net_context_t* server_context;
-static uint32_t sv_gamemode;
-static uint32_t sv_gamemission;
+static unsigned int sv_gamemode;
+static unsigned int sv_gamemission;
 static net_gamesettings_t sv_settings;
 
 // receive window
 
-static uint32_t recvwindow_start;
+static unsigned int recvwindow_start;
 static net_client_recv_t recvwindow[BACKUPTICS][MAXPLAYERS];
 
 #define NET_SV_ExpandTicNum(b) NET_ExpandTicNum(recvwindow_start, (b))
@@ -281,9 +280,9 @@ static int NET_SV_NumClients(void)
 // Find the latest tic which has been acknowledged as received by
 // all clients.
 
-static uint32_t NET_SV_LatestAcknowledged(void)
+static unsigned int NET_SV_LatestAcknowledged(void)
 {
-	uint32_t lowtic = UINT_MAX;
+	unsigned int lowtic = UINT_MAX;
 	int i;
 
 	for (i = 0; i < MAXNETNODES; ++i)
@@ -305,7 +304,7 @@ static uint32_t NET_SV_LatestAcknowledged(void)
 
 static void NET_SV_AdvanceWindow(void)
 {
-	uint32_t lowtic;
+	unsigned int lowtic;
 	int i;
 
 	if (NET_SV_NumPlayers() <= 0)
@@ -418,7 +417,12 @@ static void NET_SV_InitNewClient(net_client_t* client,
 	NET_Conn_InitServer(&client->connection, addr);
 	client->addr = addr;
 	client->last_send_time = -1;
-	client->name = w3sstrdup(player_name);
+#ifdef _WIN32
+	client->name = _strdup(player_name);
+#else
+	client->name = strdup(player_name);
+#endif
+
 	// init the ticcmd send queue
 
 	client->sendseq = 0;
@@ -436,9 +440,9 @@ static void NET_SV_ParseSYN(net_packet_t* packet,
 	net_client_t* client,
 	net_addr_t* addr)
 {
-	uint32_t magic;
-	uint32_t cl_gamemode = 0, cl_gamemission = 0;
-	uint32_t cl_recording_lowres = 0;
+	unsigned int magic;
+	unsigned int cl_gamemode = 0, cl_gamemission = 0;
+	unsigned int cl_recording_lowres = 0;
 	int cl_drone;
 	md5_digest_t wad_md5sum;
 	char* player_name;
@@ -703,7 +707,7 @@ static void NET_SV_SendResendRequest(net_client_t* client, int start, int end)
 	net_packet_t* packet;
 	net_client_recv_t* recvobj;
 	int i;
-	uint32_t nowtime;
+	unsigned int nowtime;
 	int index;
 
 	//printf("SV: send resend for %i-%i\n", start, end);
@@ -745,7 +749,7 @@ static void NET_SV_CheckResends(net_client_t* client)
 	int i;
 	int player;
 	int resend_start, resend_end;
-	uint32_t nowtime;
+	unsigned int nowtime;
 
 	nowtime = I_GetTimeMS();
 
@@ -808,11 +812,10 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 {
 	net_client_recv_t* recvobj;
 	int seq;
-	int ackseq;
-	int num_tics = 0;
-		//VS2003 Piece of crap
-	size_t i = 0;
-	uint32_t nowtime;
+	unsigned int ackseq;
+	int num_tics;
+	unsigned int nowtime;
+	int i;
 	int player;
 	int resend_start, resend_end;
 	int index;
@@ -850,10 +853,10 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 	// Sanity checks
 
-	for(i = 0; i<num_tics; ++i)
+	for (i = 0; i < num_tics; ++i)
 	{
 		net_ticdiff_t diff;
-		int32_t latency;
+		int latency;
 
 		if (!NET_ReadSInt16(packet, &latency)
 			|| !NET_ReadTiccmdDiff(packet, &diff, 0))
@@ -941,7 +944,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 static void NET_SV_ParseGameDataACK(net_packet_t* packet, net_client_t* client)
 {
-	int ackseq;
+	unsigned int ackseq;
 
 	if (server_state != SERVER_IN_GAME)
 	{
@@ -968,10 +971,10 @@ static void NET_SV_ParseGameDataACK(net_packet_t* packet, net_client_t* client)
 }
 
 static void NET_SV_SendTics(net_client_t* client,
-	uint32_t start, uint32_t end)
+	unsigned int start, unsigned int end)
 {
 	net_packet_t* packet;
-	uint32_t i;
+	unsigned int i;
 
 	packet = NET_NewPacket(500);
 
@@ -1011,9 +1014,9 @@ static void NET_SV_SendTics(net_client_t* client,
 
 static void NET_SV_ParseResendRequest(net_packet_t* packet, net_client_t* client)
 {
-	uint32_t start, last;
+	unsigned int start, last;
 	int num_tics;
-	uint32_t i;
+	unsigned int i;
 
 	// Read the starting tic and number of tics
 
@@ -1124,7 +1127,7 @@ static void NET_SV_ParseCheatRequest(net_packet_t* packet, net_client_t* client)
 static void NET_SV_Packet(net_packet_t* packet, net_addr_t* addr)
 {
 	net_client_t* client;
-	uint32_t packet_type;
+	unsigned int packet_type;
 
 	// Find which client this packet came from
 

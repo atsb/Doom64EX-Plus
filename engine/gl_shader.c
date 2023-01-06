@@ -25,34 +25,16 @@
 
 #include "gl_shader.h"
 
-#ifdef __APPLE__ 
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#elif defined SWITCH
-#include <GL/gl.h>
-#include <GL/glext.h>
-#elif defined _WIN32
-#include <glew.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
-#elif defined VITA
-
-#else
-#include <GL/glu.h>
-#include <GL/gl.h>
-#endif
-
 #include "con_console.h"
 #include "doomdef.h"
 #include <stdio.h>
 
-#ifndef VITA 
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
 {
 	//Compile the code.
-	uint32_t texture, fragment;
+	unsigned int texture, fragment;
 	texture = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(texture, 1, vertexShader, NULL);
 	glCompileShader(texture);
@@ -68,7 +50,7 @@ void GL_LoadShader(const char* vertexShader, const char* fragmentShader)
 	GL_DestroyShaders(texture, fragment);
 }
 
-void GL_CreateProgram(uint32_t Program_ID, uint32_t shader, uint32_t fragment)
+void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment)
 {
 	//Create The Program.
 	Program_ID = glCreateProgram();
@@ -84,7 +66,7 @@ void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
 	glDeleteShader(fragmentShader);
 }
 
-boolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
+boolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 {
 	boolean success;
 	char log[1024];
@@ -132,4 +114,3 @@ boolean GL_CheckShaderErrors(uint32_t shader, uint32_t type)
 	}
 	return success;
 }
-#endif

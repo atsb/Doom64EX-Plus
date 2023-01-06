@@ -36,7 +36,7 @@
 #include <stdarg.h>
 #include "doomtype.h"
 #include "doomstat.h"
-#include "gl_main.h"
+#include "dgl.h"
 #include "r_things.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
@@ -46,11 +46,11 @@
 // Draw_GfxImage
 //
 
-void Draw_GfxImage(int x, int y, const int8_t* name, rcolor color, boolean alpha) {
+void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) {
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetupAndDraw2DQuad((float)x, (float)y,
@@ -122,7 +122,7 @@ static vtx_t vtxstring[MAX_MESSAGE_SIZE];
 //
 
 int Draw_Text(int x, int y, rcolor color, float scale,
-	boolean wrap, const int8_t* string, ...) {
+	boolean wrap, const char* string, ...) {
 	int c;
 	int i;
 	int vi = 0;
@@ -130,7 +130,7 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	const float size = 0.03125f;
 	float fcol, frow;
 	int start = 0;
-	int8_t msg[MAX_MESSAGE_SIZE];
+	char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 	const int ix = x;
 
@@ -142,8 +142,8 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 
 	GL_BindGfxTexture("SFONT", true);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
 	GL_SetOrthoScale(scale);
 	GL_SetOrtho(0);
@@ -196,10 +196,10 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 			vtxstring[vi + 3].tu = fcol + 0.0015f;
 			vtxstring[vi + 3].tv = frow + 0.5f;
 
-			glSetVertexColor(vtxstring + vi, color, 4);
+			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			glTriangle(vi + 0, vi + 1, vi + 2);
-			glTriangle(vi + 0, vi + 2, vi + 3);
+			dglTriangle(vi + 0, vi + 1, vi + 2);
+			dglTriangle(vi + 0, vi + 2, vi + 3);
 
 			if (devparm) {
 				vertCount += 4;
@@ -209,7 +209,7 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	}
 
 	if (vi) {
-		glDrawGeometry(vi, vtxstring);
+		dglDrawGeometry(vi, vtxstring);
 	}
 
 	GL_ResetViewport();
@@ -325,9 +325,9 @@ const symboldata_t symboldata[] = {  //0x5B9BC
 // Center_Text
 //
 
-int Center_Text(const int8_t* string) {
+int Center_Text(const char* string) {
 	int width = 0;
-	int8_t t = 0;
+	char t = 0;
 	int id = 0;
 	int len = 0;
 	int i = 0;
@@ -390,7 +390,7 @@ int Center_Text(const int8_t* string) {
 // Draw_BigText
 //
 
-int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
+int Draw_BigText(int x, int y, rcolor color, const char* string) {
 	int c = 0;
 	int i = 0;
 	int vi = 0;
@@ -418,10 +418,10 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 	smbwidth = (float)gfxwidth[pic];
 	smbheight = (float)gfxheight[pic];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
 
-	glSetVertex(vtxstring);
+	dglSetVertex(vtxstring);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
@@ -534,10 +534,10 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 			vtxstring[vi + 3].tu = tx1;
 			vtxstring[vi + 3].tv = ty1;
 
-			glSetVertexColor(vtxstring + vi, color, 4);
+			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			glTriangle(vi + 2, vi + 1, vi + 0);
-			glTriangle(vi + 3, vi + 2, vi + 0);
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
 
 			if (devparm) {
 				vertCount += 4;
@@ -548,7 +548,7 @@ int Draw_BigText(int x, int y, rcolor color, const int8_t* string) {
 	}
 
 	if (vi) {
-		glDrawGeometry(vi, vtxstring);
+		dglDrawGeometry(vi, vtxstring);
 	}
 
 	GL_ResetViewport();
@@ -567,7 +567,7 @@ void Draw_Number(int x, int y, int num, int type, rcolor c) {
 	int nx = 0;
 	int count;
 	int j;
-	int8_t str[2];
+	char str[2];
 
 	for (count = 0, j = 0; count < 16; count++, j++) {
 		digits[j] = num % 10;
@@ -882,7 +882,7 @@ static const symboldata_t confontmap[256] = {
 //
 
 float Draw_ConsoleText(float x, float y, rcolor color,
-	float scale, const int8_t* string, ...) {
+	float scale, const char* string, ...) {
 	int c = 0;
 	int i = 0;
 	int vi = 0;
@@ -894,7 +894,7 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	float tx2 = 0.0f;
 	float ty1 = 0.0f;
 	float ty2 = 0.0f;
-	int8_t msg[MAX_MESSAGE_SIZE];
+	char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 	float width;
 	float height;
@@ -909,12 +909,12 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	width = (float)gfxwidth[pic];
 	height = (float)gfxheight[pic];
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	glSetVertex(vtxstring);
+	dglSetVertex(vtxstring);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
@@ -954,10 +954,10 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 			vtxstring[vi + 3].tu = tx1;
 			vtxstring[vi + 3].tv = ty1;
 
-			glSetVertexColor(vtxstring + vi, color, 4);
+			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			glTriangle(vi + 2, vi + 1, vi + 0);
-			glTriangle(vi + 3, vi + 2, vi + 0);
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
 
 			if (devparm) {
 				vertCount += 4;
@@ -968,7 +968,7 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 	}
 
 	if (vi) {
-		glDrawGeometry(vi, vtxstring);
+		dglDrawGeometry(vi, vtxstring);
 	}
 
 	GL_ResetViewport();

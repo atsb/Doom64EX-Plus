@@ -37,16 +37,16 @@
 #include <unistd.h>
 #endif
 
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#else
+#ifdef __OpenBSD__
 #include <SDL.h>
 #endif
 #if defined(USE_FLUIDSYNTH) //!defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
 #include <fluidsynth.h>
 #else
-#include <fluidlite.h> //ATSB: Fluidlite on WIN32/macOS and some other devices so we can distribute binaries without all the stupid dependencies
+#include <SDL2/SDL.h>
 #endif
+
+#include <fluidsynth.h>
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -75,7 +75,7 @@ static SDL_sem *semaphore = NULL;
 #define SEMAPHORE_LOCK()    if(SDL_SemWait(semaphore) == 0) {
 #define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
 
-// 20120205 villsa - boolean to determine if sequencer is ready or not
+// 20120205 villsa - bool to determine if sequencer is ready or not
 static boolean seqready = false;
 
 //
@@ -104,22 +104,22 @@ static boolean seqready = false;
 //
 
 typedef struct {
-    int8_t        header[4];
+    char        header[4];
     int         length;
     byte*       data;
     byte        channel;
 } track_t;
 
 typedef struct {
-    int8_t        header[4];
+    char        header[4];
     int         chunksize;
     short       type;
     word        ntracks;
     word        delta;
     byte*       data;
-    dword       length;
+    int       length;
     track_t*    tracks;
-    dword       tempo;
+    int       tempo;
     double      timediv;
 } song_t;
 
@@ -168,12 +168,12 @@ typedef struct {
     byte        velocity;
     byte*       pos;
     byte*       jump;
-    dword       tics;
-    dword       nexttic;
-    dword       lasttic;
-    dword       starttic;
-    uint64_t      starttime;
-    uint64_t      curtime;
+    int       tics;
+    int       nexttic;
+    int       lasttic;
+    int       starttic;
+    unsigned int      starttime;
+    unsigned int      curtime;
     chanstate_e state;
     boolean    paused;
 
@@ -222,9 +222,9 @@ typedef struct {
     fluid_audio_driver_t*   driver;
     int                     sfont_id; // 20120112 bkw: needs to be signed
     SDL_Thread*             thread;
-    dword                   playtime;
+    int                   playtime;
 
-    dword                   voices;
+    int                   voices;
 
     // tweakable settings for the sequencer
     float                   musicvolume;
@@ -258,7 +258,7 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 static void Audio_Play(void* userdata, Uint8* stream, int len)
 {
-    SDL_memset(stream, 0, len);
+    memset(stream, 0, len);
 #ifndef _XBOX
     fluid_synth_t* synth = (fluid_synth_t*)userdata;
 	fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
@@ -353,7 +353,7 @@ static void Chan_SetSoundVolume(doomseq_t* seq, channel_t* chan) {
 //
 
 static byte Chan_GetNextMidiByte(channel_t* chan) {
-    if((dword)(chan->pos - chan->song->data) >= chan->song->length) {
+    if((int)(chan->pos - chan->song->data) >= chan->song->length) {
         I_Error("Chan_GetNextMidiByte: Unexpected end of track");
     }
 
@@ -367,7 +367,7 @@ static byte Chan_GetNextMidiByte(channel_t* chan) {
 //
 
 static boolean Chan_CheckTrackEnd(channel_t* chan) {
-    return ((dword)(chan->pos - chan->song->data) >= chan->song->length);
+    return ((int)(chan->pos - chan->song->data) >= chan->song->length);
 }
 
 //
@@ -376,8 +376,8 @@ static boolean Chan_CheckTrackEnd(channel_t* chan) {
 // Read the midi track to get the next delta time
 //
 
-static dword Chan_GetNextTick(channel_t* chan) {
-    dword tic;
+static int Chan_GetNextTick(channel_t* chan) {
+    int tic;
     int i;
 
     tic = Chan_GetNextMidiByte(chan);
@@ -401,7 +401,7 @@ static dword Chan_GetNextTick(channel_t* chan) {
         }
     }
 
-    return (chan->starttic + (dword)((double)tic * chan->song->timediv));
+    return (chan->starttic + (int)((double)tic * chan->song->timediv));
 }
 
 //
@@ -619,7 +619,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
     int meta;
     int b;
     int i;
-    int8_t string[256];
+    char string[256];
 
     meta = Chan_GetNextMidiByte(chan);
 
@@ -855,7 +855,7 @@ static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
 // Main midi parsing routine
 //
 
-static void Chan_RunSong(doomseq_t* seq, channel_t* chan, dword msecs) {
+static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     byte event;
     byte c;
     song_t* song;
@@ -952,7 +952,7 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, dword msecs) {
 // Seq_RunSong
 //
 
-static void Seq_RunSong(doomseq_t* seq, dword msecs) {
+static void Seq_RunSong(doomseq_t* seq, int msecs) {
     int i;
     channel_t* chan;
 
@@ -1079,8 +1079,12 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 // Seq_Shutdown
 //
 
-static void Seq_Shutdown(doomseq_t* seq) {
-
+static void Seq_Shutdown(doomseq_t* seq)
+{
+#ifndef _WIN32
+    // Close SDL Audio Device
+    SDL_CloseAudioDevice(1);
+#else
     //
     // signal the sequencer to shut down
     //
@@ -1098,6 +1102,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
     //
     // fluidsynth cleanup stuff
     //
+    SDL_CloseAudioDevice(1);
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
 #endif
@@ -1105,6 +1110,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
+#endif
 }
 
 //
@@ -1165,7 +1171,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 
 void I_InitSequencer(void) {
     boolean sffound;
-    int8_t *sfpath;
+    char *sfpath;
 
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
@@ -1279,7 +1285,7 @@ void I_InitSequencer(void) {
 
     Song_ClearPlaylist();
 
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
 #ifndef _XBOX

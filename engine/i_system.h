@@ -63,16 +63,17 @@ ticcmd_t* I_BaseTiccmd(void);
 void I_Quit(void);
 
 void I_BeginRead(void);
-void I_Error(const int8_t* error, ...);
-void I_Printf(const int8_t* msg, ...);
+void I_Error(const char* error, ...);
+void I_Printf(const char* msg, ...);
 
-int8_t* I_GetUserDir(void);
-int8_t* I_GetUserFile(int8_t* file);
-int8_t* I_FindDataFile(int8_t* file);
+char* I_GetUserDir(void);
+char* I_GetUserFile(char* file);
+char* I_FindDataFile(char* file);
 
-boolean I_FileExists(const int8_t* path);
+boolean I_FileExists(const char* path);
 
 void I_RegisterCvars(void);
+
 extern FILE* DebugFile;
 extern boolean    DigiJoy;
 

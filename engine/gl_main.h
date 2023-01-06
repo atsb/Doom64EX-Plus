@@ -36,8 +36,10 @@
 #else
 #include <SDL_opengl.h>
 #endif
-#endif
 
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#endif
 
 #include "doomtype.h"
 
@@ -45,11 +47,8 @@ typedef GLuint        dtexture;
 typedef GLfloat        rfloat;
 typedef GLuint        rcolor;
 typedef GLuint        rbuffer;
-#ifdef VITA
-typedef GLuint         rhandle;
-#else
 typedef GLhandleARB    rhandle;
-#endif
+
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
 extern boolean gl_has_combiner;
@@ -94,13 +93,15 @@ extern int ViewWindowY;
 
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
 
+extern int DGL_CLAMP;
 
 extern boolean usingGL;
 
-boolean GL_CheckExtension(const int8_t* ext);
-void* GL_RegisterProc(const int8_t* address);
+boolean GL_CheckExtension(const char* ext);
+void* GL_RegisterProc(const char* address);
 void GL_Init(void);
 void GL_ClearView(rcolor clearcolor);
+boolean GL_GetBool(int x);
 void GL_CheckFillMode(void);
 void GL_SwapBuffers(void);
 byte* GL_GetScreenBuffer(int x, int y, int width, int height);

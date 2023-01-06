@@ -54,6 +54,7 @@
 #include "m_misc.h"
 #include "g_actions.h"
 #include "i_sdlinput.h"
+
 int ViewWindowX = 0;
 int ViewWindowY = 0;
 int ViewWidth = 0;
@@ -63,14 +64,14 @@ int gl_max_texture_units;
 int gl_max_texture_size;
 boolean gl_has_combiner;
 
-const int8_t* gl_vendor;
-const int8_t* gl_renderer;
-const int8_t* gl_version;
+const char* gl_vendor;
+const char* gl_renderer;
+const char* gl_version;
 
 static float glScaleFactor = 1.0f;
 
-
 boolean    usingGL = false;
+int         DGL_CLAMP = GL_CLAMP;
 float       max_anisotropic = 0;
 boolean    widescreen = false;
 
@@ -85,11 +86,11 @@ CVAR_EXTERNAL(st_flashoverlay);
 //
 
 static CMD(DumpGLExtensions) {
-	int8_t* string;
+	char* string;
 	int i = 0;
 	int len = 0;
-	
-	string = (int8_t*)glGetString(GL_EXTENSIONS);
+
+	string = (char*)glGetString(GL_EXTENSIONS);
 	len = strlen(string);
 
 	for (i = 0; i < len; i++) {
@@ -103,15 +104,14 @@ static CMD(DumpGLExtensions) {
 }
 
 
-
 //
 // FindExtension
 //
 
-static boolean FindExtension(const int8_t* ext) {
-	const int8_t* extensions = NULL;
-	const int8_t* start;
-	const int8_t* where, * terminator;
+static boolean FindExtension(const char* ext) {
+	const char* extensions = NULL;
+	const char* start;
+	const char* where, * terminator;
 
 	// Extension names should not have spaces.
 	where = strrchr(ext, ' ');
@@ -119,7 +119,7 @@ static boolean FindExtension(const int8_t* ext) {
 		return 0;
 	}
 
-	extensions = glGetString(GL_EXTENSIONS);
+	extensions = dglGetString(GL_EXTENSIONS);
 
 	start = extensions;
 	for (;;) {
@@ -142,7 +142,7 @@ static boolean FindExtension(const int8_t* ext) {
 // GL_CheckExtension
 //
 
-boolean GL_CheckExtension(const int8_t* ext) {
+boolean GL_CheckExtension(const char* ext) {
 	if (FindExtension(ext)) {
 		CON_Printf(WHITE, "GL Extension: %s = true\n", ext);
 		return true;
@@ -190,20 +190,20 @@ void GL_SetOrtho(boolean stretch) {
 		}
 	}
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	dglMatrixMode(GL_MODELVIEW);
+	dglLoadIdentity();
+	dglMatrixMode(GL_PROJECTION);
+	dglLoadIdentity();
 
 	if (widescreen && !stretch) {
 		const float ratio = (4.0f / 3.0f);
 		float fitwidth = ViewHeight * ratio;
 		float fitx = (ViewWidth - fitwidth) / 2.0f;
 
-		glViewport(ViewWindowX + (int)fitx, ViewWindowY, (int)fitwidth, ViewHeight);
+		dglViewport(ViewWindowX + (int)fitx, ViewWindowY, (int)fitwidth, ViewHeight);
 	}
 
-	width = SCREENWIDTH & (int)~3;;
+	width = SCREENWIDTH & (int)~3;
 	height = SCREENHEIGHT;
 
 	if (glScaleFactor != 1.0f) {
@@ -211,7 +211,7 @@ void GL_SetOrtho(boolean stretch) {
 		height /= glScaleFactor;
 	}
 
-	glOrtho(0, width, height, 0, -1, 1);
+	dglOrtho(0, width, height, 0, -1, 1);
 
 	checkortho = (stretch && widescreen) ? 2 : 1;
 }
@@ -222,7 +222,7 @@ void GL_SetOrtho(boolean stretch) {
 
 void GL_ResetViewport(void) {
 	if (widescreen) {
-		glViewport(ViewWindowX, ViewWindowY, ViewWidth, ViewHeight);
+		dglViewport(ViewWindowX, ViewWindowY, ViewWidth, ViewHeight);
 	}
 }
 
@@ -272,11 +272,11 @@ byte* GL_GetScreenBuffer(int x, int y, int width, int height) {
 	//
 	// 20120313 villsa - force pack alignment to 1
 	//
-	glGetIntegerv(GL_PACK_ALIGNMENT, &pack);
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glFlush();
-	glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-	glPixelStorei(GL_PACK_ALIGNMENT, pack);
+	dglGetIntegerv(GL_PACK_ALIGNMENT, &pack);
+	dglPixelStorei(GL_PACK_ALIGNMENT, 1);
+	dglFlush();
+	dglReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+	dglPixelStorei(GL_PACK_ALIGNMENT, pack);
 
 	//
 	// Need to vertically flip the image
@@ -307,15 +307,15 @@ void GL_SetTextureFilter(void) {
 		return;
 	}
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
-	if (GL_EXT_texture_filter_anisotropic) {
+	if (has_GL_EXT_texture_filter_anisotropic) {
 		if (r_anisotropic.value) {
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_anisotropic);
+			dglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_anisotropic);
 		}
 		else {
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 0);
+			dglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 0);
 		}
 	}
 }
@@ -328,8 +328,8 @@ void GL_SetDefaultCombiner(void) {
 	    if (!usingGL) {
         return;
     }
-  
-	if (GL_ARB_multitexture) {
+    
+	if (has_GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, false);
 		GL_SetTextureUnit(2, false);
 		GL_SetTextureUnit(3, false);
@@ -339,7 +339,7 @@ void GL_SetDefaultCombiner(void) {
 	GL_CheckFillMode();
 
 	if (r_texturecombiner.value > 0) {
-		glTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
+		dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
 	}
 	else {
 		GL_SetTextureMode(GL_MODULATE);
@@ -375,7 +375,7 @@ void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
 	v[2].tv = v2;
 	v[3].tv = v2;
 
-	glSetVertexColor(v, c, 4);
+	dglSetVertexColor(v, c, 4);
 }
 
 //
@@ -385,10 +385,10 @@ void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
 void GL_Draw2DQuad(vtx_t* v, boolean stretch) {
 	GL_SetOrtho(stretch);
 
-	glSetVertex(v);
-	glTriangle(0, 1, 2);
-	glTriangle(3, 2, 1);
-	glDrawGeometry(4, v);
+	dglSetVertex(v);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
+	dglDrawGeometry(4, v);
 
 	GL_ResetViewport();
 
@@ -419,12 +419,12 @@ void GL_SetState(int bit, boolean enable) {
 #define TOGGLEGLBIT(flag, bit)                          \
     if(enable && !(glstate_flag & (1 << flag)))         \
     {                                                   \
-        glEnable(bit);                                 \
+        dglEnable(bit);                                 \
         glstate_flag |= (1 << flag);                    \
     }                                                   \
     else if(!enable && (glstate_flag & (1 << flag)))    \
     {                                                   \
-        glDisable(bit);                                \
+        dglDisable(bit);                                \
         glstate_flag &= ~(1 << flag);                   \
     }
 
@@ -470,11 +470,11 @@ void GL_CheckFillMode(void) {
 void GL_ClearView(rcolor clearcolor) {
 	float f[4];
 
-	glGetColorf(clearcolor, f);
-	glClearColor(f[0], f[1], f[2], f[3]);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(ViewWindowX, ViewWindowY, ViewWidth, ViewHeight);
-	glScissor(ViewWindowX, ViewWindowY, ViewWidth, ViewHeight);
+	dglGetColorf(clearcolor, f);
+	dglClearColor(f[0], f[1], f[2], f[3]);
+	dglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	dglViewport(ViewWindowX, ViewWindowY, ViewWidth, ViewHeight);
+	dglScissor(ViewWindowX, ViewWindowY, ViewWidth, ViewHeight);
 }
 
 //
@@ -501,46 +501,49 @@ PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
 #endif
 void GL_Init(void) {
 
-	gl_vendor = glGetString(GL_VENDOR);
+	gl_vendor = dglGetString(GL_VENDOR);
 	I_Printf("GL_VENDOR: %s\n", gl_vendor);
-	gl_version = glGetString(GL_VERSION);
+	gl_version = dglGetString(GL_VERSION);
 	I_Printf("GL_VERSION: %s\n", gl_version);
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_max_texture_size);
+	dglGetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_max_texture_size);
 	I_Printf("GL_MAX_TEXTURE_SIZE: %i\n", gl_max_texture_size);
-#ifdef VITA
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &gl_max_texture_units);
-	I_Printf("GL_MAX_TEXTURE_UNITS: %i\n", gl_max_texture_units);
-#else
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &gl_max_texture_units);
+	dglGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &gl_max_texture_units);
 	I_Printf("GL_MAX_TEXTURE_UNITS_ARB: %i\n", gl_max_texture_units);
-#endif
+
 	if (gl_max_texture_units <= 2) {
 		CON_Warnf("Not enough texture units supported...\n");
 	}
 
 	CalcViewSize();
 
-	glViewport(0, 0, video_width, video_height);
-	glClearDepth(1.0f);
-	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
-	glShadeModel(GL_SMOOTH);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glDepthFunc(GL_LEQUAL);
-	glAlphaFunc(GL_GEQUAL, ALPHACLEARGLOBAL);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glFogi(GL_FOG_MODE, GL_LINEAR);
-	glHint(GL_FOG_HINT, GL_NICEST);
-	glEnable(GL_SCISSOR_TEST);
-	glEnable(GL_DITHER);
+	dglViewport(0, 0, video_width, video_height);
+	dglClearDepth(1.0f);
+	dglDisable(GL_TEXTURE_2D);
+	dglEnable(GL_CULL_FACE);
+	dglCullFace(GL_FRONT);
+	dglShadeModel(GL_SMOOTH);
+	dglHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	dglDepthFunc(GL_LEQUAL);
+	dglAlphaFunc(GL_GEQUAL, ALPHACLEARGLOBAL);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	dglFogi(GL_FOG_MODE, GL_LINEAR);
+	dglHint(GL_FOG_HINT, GL_NICEST);
+	dglEnable(GL_SCISSOR_TEST);
+	dglEnable(GL_DITHER);
+
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
 #ifndef GLEW
 	_glActiveTextureARB = GL_RegisterProc("glActiveTextureARB");
 #endif
 
-	if (!GL_ARB_multitexture) {
+	GL_ARB_multitexture_Init();
+	GL_EXT_compiled_vertex_array_Init();
+	GL_ARB_texture_env_combine_Init();
+	GL_EXT_texture_env_combine_Init();
+	GL_EXT_texture_filter_anisotropic_Init();
+
+	if (!has_GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");
 	}
 
@@ -558,8 +561,8 @@ void GL_Init(void) {
 	OGL_VERSION_DETECTION;
 	glScaleFactor = 1.0f;
 
-	if (GL_EXT_texture_filter_anisotropic) {
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
+	if (has_GL_EXT_texture_filter_anisotropic) {
+		dglGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
 	}
 
 	usingGL = true;

@@ -70,6 +70,7 @@ POINT Resolutions[] =
 
 	{   320,    200     },
 	{   1024,   640     },
+	{   1280,   600     },
 	{   1280,   800     },
 	{   1440,   900     },
 	{   1680,   1050    },
@@ -238,7 +239,7 @@ void L_InitResolution(HWND hWnd)
 			sprintf(buff, "%dx%d (4:3)", p->x, p->y);
 		else if (i <= 24)
 			sprintf(buff, "%dx%d (16:9)", p->x, p->y);
-		else if (i <= 33)
+		else if (i <= 34)
 			sprintf(buff, "%dx%d (16:10)", p->x, p->y);
 		else if (i <= 36)
 			sprintf(buff, "%dx%d (5:4)", p->x, p->y);
