@@ -555,11 +555,7 @@ void GL_Init(void) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-#ifdef VITA
-	GL_VERSION ? GL_CLAMP_TO_EDGE : GL_CLAMP;
-#else
 	OGL_VERSION_DETECTION;
-#endif
 	glScaleFactor = 1.0f;
 
 	if (GL_EXT_texture_filter_anisotropic) {
