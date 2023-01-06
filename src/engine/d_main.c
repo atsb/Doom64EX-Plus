@@ -230,7 +230,7 @@ static void D_FinishDraw(void) {
 }
 
 int D_MiniLoop(void (*start)(void), void (*stop)(void),
-	void (*draw)(void), boolean(*tick)(void)) {
+	void (*draw)(void), int(*tick)(void)) {
 	int action = gameaction = ga_nothing;
 
 	if (start) {

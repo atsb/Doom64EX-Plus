@@ -644,10 +644,10 @@ boolean PIT_AddThingIntercepts(mobj_t* thing) {
 //
 boolean
 P_TraverseIntercepts
-(traverser_t    func,
-	fixed_t    maxfrac) {
-	int            count;
-	fixed_t        dist;
+(traverser_t     func,
+	fixed_t      maxfrac) {
+	int64_t		 count;
+	fixed_t      dist;
 	intercept_t* scan;
 	intercept_t* in;
 

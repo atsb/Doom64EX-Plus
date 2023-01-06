@@ -812,10 +812,10 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 {
 	net_client_recv_t* recvobj;
 	int seq;
-	int ackseq;
+	unsigned int ackseq;
 	int num_tics;
 	unsigned int nowtime;
-	unsigned int i;
+	int i;
 	int player;
 	int resend_start, resend_end;
 	int index;
@@ -945,7 +945,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 static void NET_SV_ParseGameDataACK(net_packet_t* packet, net_client_t* client)
 {
-	int ackseq;
+	unsigned int ackseq;
 
 	if (server_state != SERVER_IN_GAME)
 	{

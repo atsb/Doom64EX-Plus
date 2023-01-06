@@ -414,19 +414,6 @@ char* (Z_Strdup)(const char* s, int tag, void* user, const char* file, int line)
 }
 
 //
-// Z_Strdupa
-//
-// strdup that uses alloca, for convenience.
-//
-
-char* (Z_Strdupa)(const char* s, const char* file, int line) {
-#ifdef ZONEFILE
-	Z_LogPrintf("* Z_Strdupa(file=%s:%d)\n", file, line);
-#endif
-	return dstrcpy((Z_Alloca)(strlen(s) + 1, file, line), s);
-}
-
-//
 // Z_Touch
 //
 

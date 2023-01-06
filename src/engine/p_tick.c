@@ -385,10 +385,10 @@ void P_Stop(void) {
 // P_Drawer
 //
 
-void P_Drawer(void) {
+int P_Drawer(void) {
 	// [kex] don't draw on first tic
 	if (!leveltime) {
-		return;
+		return 0;
 	}
 
 	GL_ClearView(0xFF000000);
@@ -399,6 +399,8 @@ void P_Drawer(void) {
 
 	AM_Drawer();
 	ST_Drawer();
+
+	return 0;
 }
 
 //

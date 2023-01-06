@@ -78,7 +78,7 @@ int M_CheckParm(const char* check) {
 // Safe, portable vsnprintf().
 int M_vsnprintf(char* buf, unsigned int buf_len, const char* s, va_list args)
 {
-	int result;
+	unsigned int result;
 
 	if (buf_len < 1)
 	{

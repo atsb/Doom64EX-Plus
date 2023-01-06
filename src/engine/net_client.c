@@ -552,7 +552,7 @@ static void NET_CL_ParseWaitingData(net_packet_t* packet)
 	char* player_names[MAXPLAYERS];
 	char* player_addr[MAXPLAYERS];
 	md5_digest_t wad_md5sum;
-	unsigned int i;
+	int i;
 
 	if (!NET_ReadInt8(packet, &num_players)
 		|| !NET_ReadInt8(packet, &num_drones)
@@ -621,7 +621,7 @@ static void NET_CL_ParseGameStart(net_packet_t* packet)
 	net_gamesettings_t settings;
 	int num_players;
 	int player_number;
-	unsigned int i;
+	int i;
 
 	if (!NET_ReadInt8(packet, &num_players)
 		|| !NET_ReadSInt8(packet, &player_number)
@@ -817,7 +817,7 @@ static void NET_CL_ParseGameData(net_packet_t* packet)
 	int seq, num_tics;
 	unsigned int nowtime;
 	int resend_start, resend_end;
-	unsigned int i;
+	int i;
 	int index;
 
 	// Read header
