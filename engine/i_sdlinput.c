@@ -123,6 +123,7 @@ int I_Translate_GameController(int state)
 	  case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
 		  return rc = GAMEPAD_DPAD_RIGHT;
 		  break;
+#ifndef _XBOX
 	  case SDL_CONTROLLER_BUTTON_MISC1:
 		  return rc = GAMEPAD_BUTTON_MISC1;
 		  break;
@@ -141,6 +142,7 @@ int I_Translate_GameController(int state)
 	  case SDL_CONTROLLER_BUTTON_TOUCHPAD:
 		  return rc = GAMEPAD_BUTTON_TOUCHPAD;
 		  break;
+#endif
 	  default:
 		  rc = state;
 		  break;
@@ -457,8 +459,7 @@ void I_GetEvent(SDL_Event* Event) {
 		event.data1 = I_TranslateKey(Event->key.keysym.sym);
 		D_PostEvent(&event);
 		break;
-
-
+#ifdef FUCKED_GAMECONTROLLER
 	case SDL_CONTROLLERDEVICEADDED:
 		CON_Printf(GREEN,"SDL: Controller added: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
 		s_controller = SDL_GameControllerOpen(Event->cdevice.which);
@@ -481,7 +482,7 @@ void I_GetEvent(SDL_Event* Event) {
 		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
-
+#endif
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
 		if (!window_focused)
@@ -543,6 +544,7 @@ void I_GetEvent(SDL_Event* Event) {
 	default:
 		break;
 	}
+#ifdef FUCKED
 	int x, y;
 	if (s_controller) 
 	{
@@ -603,7 +605,7 @@ void I_GetEvent(SDL_Event* Event) {
 			D_PostEvent(&ev);
 		}
 	}
-
+#endif
 	if(mwheeluptic && mwheeluptic + 1 < tic) {
 		event.type = ev_keyup;
 		event.data1 = KEY_MWHEELUP;

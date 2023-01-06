@@ -735,6 +735,7 @@ static void ST_DrawJMessage(int pic) {
 
 void ST_Drawer(void) {
 	boolean checkautomap;
+	CVAR_EXTERNAL(hud_disablesecretmessages);
 
 	//
 	// flash overlay
@@ -859,11 +860,7 @@ void ST_Drawer(void) {
 	//
 
 	// Secret messages
-#ifdef _XBOX
-	cvar_t hud_disablesecretmessages;
-#else
-	CVAR_EXTERNAL(hud_disablesecretmessages);
-#endif
+
 	if (st_hasjmsg && st_regionmsg.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
@@ -1487,9 +1484,7 @@ static void ST_DisplayName(int playernum) {
 	color |= ((255 - (int)((float)distance * 0.19921875f)) << 24);
 
 	// display player name
-#ifndef _XBOX
-	w3ssnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]); //This macro needs to be fixed
-#endif
+	w3ssnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]); 
 	Draw_Text(screenx, screeny, color, 1.0f, 0, name);
 }
 

@@ -809,11 +809,9 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 	net_client_recv_t* recvobj;
 	int seq;
 	int ackseq;
-#ifdef _XBOX
 	int num_tics = 0;
-#else
-	int num_tics;
-#endif
+		//VS2003 Piece of crap
+	size_t i = 0;
 	uint32_t nowtime;
 	int player;
 	int resend_start, resend_end;
@@ -852,9 +850,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 	// Sanity checks
 
-	//VS2003 Piece of crap
-	size_t i = 0;
-	for (size_t i = 0; i<num_tics; ++i)
+	for(i = 0; i<num_tics; ++i)
 	{
 		net_ticdiff_t diff;
 		int32_t latency;
@@ -870,9 +866,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 		if (index < 0 || index >= BACKUPTICS)
 		{
 			// Not in range of the recv window
-#ifndef _XBOX
 			continue;
-#endif
 		}
 
 		recvobj = &recvwindow[index][player];
@@ -882,7 +876,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 		client->last_gamedata_time = nowtime;
 	}
-#endif
+
 	// Higher acknowledgement point?
 
 	if (ackseq > client->acknowledged)

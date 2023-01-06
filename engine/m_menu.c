@@ -2642,7 +2642,7 @@ void M_DoFeature(int choice) {
 // GAMEPAD CONTROLLER MENU
 //
 //------------------------------------------------------------------------
-
+#ifdef FUCKED_GAMECONTROLLER
 void M_XGamePadChoice(int choice);
 void M_DrawXGamePad(void);
 
@@ -2761,7 +2761,7 @@ void M_DrawXGamePad(void) {
 	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_invert, MENUCOLORRED,
 		msgNames[(int)v_mlookinvert.value]);
 }
-
+#endif
 //------------------------------------------------------------------------
 //
 // CONTROLS MENU
@@ -2966,10 +2966,14 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
+#ifdef FUCKED_GAMECONTROLLER
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
 	}
+#else
+	}
+#endif
 }
 
 void M_DrawControlMenu(void) {
@@ -4058,6 +4062,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	GL_SetState(GLSTATE_BLEND, 0);
 }
 
+#ifdef FUCKED_GAMECONTROLLER
 //------------------------------------------------------------------------
 //
 // CONTROL PANEL
@@ -4213,7 +4218,7 @@ void M_DrawXInputButton(int x, int y, int button) {
 	GL_ResetViewport();
 	glDisable(GL_BLEND);
 }
-
+#endif
 //
 // M_Responder
 //
@@ -4931,17 +4936,17 @@ void M_Drawer(void) {
 	if (currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
-			M_DrawXInputButton(4, 271, GAMEPAD_B);
+			//M_DrawXInputButton(4, 271, GAMEPAD_B);
 			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
 		}
 
 		GL_SetOrthoScale(0.75f);
-		M_DrawXInputButton(4, 287, GAMEPAD_A);
+		//M_DrawXInputButton(4, 287, GAMEPAD_A);
 		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
 
 		if (currentMenu != &PauseDef) {
 			GL_SetOrthoScale(0.75f);
-			M_DrawXInputButton(5, 303, GAMEPAD_START);
+			//M_DrawXInputButton(5, 303, GAMEPAD_START);
 			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
 		}
 

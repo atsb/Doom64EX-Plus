@@ -27,8 +27,6 @@
 
 #ifdef __APPLE__
 #include <SDL2/SDL_timer.h>
-#elif defined(_XBOX)
-#include <time.h>
 #else
 #include <SDL_timer.h>
 #endif

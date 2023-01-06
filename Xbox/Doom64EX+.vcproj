@@ -535,12 +535,6 @@
 			RelativePath="..\engine\i_w3swrapper.h">
 		</File>
 		<File
-			RelativePath="..\engine\i_xinput.c">
-		</File>
-		<File
-			RelativePath="..\engine\i_xinput.h">
-		</File>
-		<File
 			RelativePath="..\engine\in_stuff.c">
 		</File>
 		<File
