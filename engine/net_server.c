@@ -852,13 +852,9 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 	// Sanity checks
 
-#ifndef _XBOX
-#ifdef _XBOX
-	int i;
-	for (i = 0; i < num_tics; ++i)	
-#else
+	//VS2003 Piece of crap
+	size_t i = 0;
 	for (size_t i = 0; i<num_tics; ++i)
-#endif
 	{
 		net_ticdiff_t diff;
 		int32_t latency;
