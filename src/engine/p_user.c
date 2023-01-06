@@ -56,7 +56,7 @@
 int deathmocktics = 0;
 #define MAXMOCKTEXT     13
 
-static int8_t* mockstrings[MAXMOCKTEXT] = {
+static char* mockstrings[MAXMOCKTEXT] = {
     MOCKPLAYER1,
     MOCKPLAYER2,
     MOCKPLAYER3,

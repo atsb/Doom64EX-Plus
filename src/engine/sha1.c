@@ -56,8 +56,8 @@ void SHA1_Init(sha1_context_t *hd)
  */
 static void Transform(sha1_context_t *hd, byte *data)
 {
-    uint32_t a,b,c,d,e,tm;
-    uint32_t x[16];
+    unsigned int a,b,c,d,e,tm;
+    unsigned int x[16];
 
     /* get values from the chaining vars */
     a = hd->h0;
@@ -197,7 +197,7 @@ static void Transform(sha1_context_t *hd, byte *data)
 /* Update the message digest with the contents
  * of INBUF with length INLEN.
  */
-void SHA1_Update(sha1_context_t *hd, byte *inbuf, size_t inlen)
+void SHA1_Update(sha1_context_t *hd, byte *inbuf, unsigned int inlen)
 {
     if (hd->count == 64)
     {
@@ -239,7 +239,7 @@ void SHA1_Update(sha1_context_t *hd, byte *inbuf, size_t inlen)
 
 void SHA1_Final(sha1_digest_t digest, sha1_context_t *hd)
 {
-    uint32_t t, msb, lsb;
+    unsigned int t, msb, lsb;
     byte *p;
 
     SHA1_Update(hd, NULL, 0); /* flush */;
@@ -287,7 +287,7 @@ void SHA1_Final(sha1_digest_t digest, sha1_context_t *hd)
 
     p = hd->buf;
 #ifdef SYS_BIG_ENDIAN
-#define X(a) do { *(uint32_t*)p = hd->h##a ; p += 4; } while(0)
+#define X(a) do { *(unsigned int*)p = hd->h##a ; p += 4; } while(0)
 #else /* little endian */
 #define X(a) do { *p++ = hd->h##a >> 24; *p++ = hd->h##a >> 16;	 \
 		      *p++ = hd->h##a >> 8; *p++ = hd->h##a; } while(0)

@@ -89,8 +89,8 @@ extern int DGL_CLAMP;
 
 extern boolean usingGL;
 
-boolean GL_CheckExtension(const int8_t* ext);
-void* GL_RegisterProc(const int8_t* address);
+boolean GL_CheckExtension(const char* ext);
+void* GL_RegisterProc(const char* address);
 void GL_Init(void);
 void GL_ClearView(rcolor clearcolor);
 boolean GL_GetBool(int x);

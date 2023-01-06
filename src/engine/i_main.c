@@ -49,14 +49,14 @@
 #include "i_system.h"
 #include "con_console.h"
 
-const int8_t version_date[] = __DATE__;
+const char version_date[] = __DATE__;
 
 //
 // _dprintf
 //
 
-void _dprintf(const int8_t* s, ...) {
-	static int8_t msg[MAX_MESSAGE_SIZE];
+void _dprintf(const char* s, ...) {
+	static char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 
 	va_start(va, s);
@@ -70,9 +70,9 @@ void _dprintf(const int8_t* s, ...) {
 // dmemcpy
 //
 
-void* dmemcpy(void* s1, const void* s2, size_t n) {
-	int8_t* r1 = s1;
-	const int8_t* r2 = s2;
+void* dmemcpy(void* s1, const void* s2, unsigned int n) {
+	char* r1 = s1;
+	const char* r2 = s2;
 
 	while (n) {
 		*r1++ = *r2++;
@@ -86,11 +86,11 @@ void* dmemcpy(void* s1, const void* s2, size_t n) {
 // dmemset
 //
 
-void* dmemset(void* s, dword c, size_t n) {
-	int8_t* p = (int8_t*)s;
+void* dmemset(void* s, int c, unsigned int n) {
+	char* p = (char*)s;
 
 	while (n) {
-		*p++ = (int8_t)c;
+		*p++ = (char)c;
 		--n;
 	}
 
@@ -101,7 +101,7 @@ void* dmemset(void* s, dword c, size_t n) {
 // dstrcpy
 //
 
-int8_t* dstrcpy(int8_t* dest, const int8_t* src) {
+char* dstrcpy(char* dest, const char* src) {
 	dstrncpy(dest, src, dstrlen(src));
 	return dest;
 }
@@ -110,9 +110,9 @@ int8_t* dstrcpy(int8_t* dest, const int8_t* src) {
 // dstrncpy
 //
 
-void dstrncpy(int8_t* dest, const int8_t* src, int maxcount) {
-	int8_t* p1 = dest;
-	const int8_t* p2 = src;
+void dstrncpy(char* dest, const char* src, int maxcount) {
+	char* p1 = dest;
+	const char* p2 = src;
 	while ((maxcount--) >= 0) {
 		*p1++ = *p2++;
 	}
@@ -122,7 +122,7 @@ void dstrncpy(int8_t* dest, const int8_t* src, int maxcount) {
 // dstrcmp
 //
 
-int dstrcmp(const int8_t* s1, const int8_t* s2) {
+int dstrcmp(const char* s1, const char* s2) {
 	while (*s1 && *s2) {
 		if (*s1 != *s2) {
 			return *s2 - *s1;
@@ -140,7 +140,7 @@ int dstrcmp(const int8_t* s1, const int8_t* s2) {
 // dstrncmp
 //
 
-int dstrncmp(const int8_t* s1, const int8_t* s2, int len) {
+int dstrncmp(const char* s1, const char* s2, int len) {
 	while (*s1 && *s2) {
 		if (*s1 != *s2) {
 			return *s2 - *s1;
@@ -161,7 +161,7 @@ int dstrncmp(const int8_t* s1, const int8_t* s2, int len) {
 // dstricmp
 //
 
-int dstricmp(const int8_t* s1, const int8_t* s2) {
+int dstricmp(const char* s1, const char* s2) {
 	return strcasecmp(s1, s2);
 }
 
@@ -169,7 +169,7 @@ int dstricmp(const int8_t* s1, const int8_t* s2) {
 // dstrnicmp
 //
 
-int dstrnicmp(const int8_t* s1, const int8_t* s2, int len) {
+int dstrnicmp(const char* s1, const char* s2, int len) {
 	return strncasecmp(s1, s2, len);
 }
 
@@ -177,8 +177,8 @@ int dstrnicmp(const int8_t* s1, const int8_t* s2, int len) {
 // dstrupr
 //
 
-void dstrupr(int8_t* s) {
-	int8_t c;
+void dstrupr(char* s) {
+	char c;
 
 	while ((c = *s) != 0) {
 		if (c >= 'a' && c <= 'z') {
@@ -192,8 +192,8 @@ void dstrupr(int8_t* s) {
 // dstrlwr
 //
 
-void dstrlwr(int8_t* s) {
-	int8_t c;
+void dstrlwr(char* s) {
+	char c;
 
 	while ((c = *s) != 0) {
 		if (c >= 'A' && c <= 'Z') {
@@ -207,7 +207,7 @@ void dstrlwr(int8_t* s) {
 // dstrnlen
 //
 
-int dstrlen(const int8_t* string) {
+int dstrlen(const char* string) {
 	int rc = 0;
 	if (string)
 		while (*(string++)) {
@@ -224,7 +224,7 @@ int dstrlen(const int8_t* string) {
 // dstrrchr
 //
 
-int8_t* dstrrchr(int8_t* s, int8_t c) {
+char* dstrrchr(char* s, char c) {
 	int len = dstrlen(s);
 	s += len;
 	while (len--)
@@ -238,7 +238,7 @@ int8_t* dstrrchr(int8_t* s, int8_t c) {
 // dstrcat
 //
 
-void dstrcat(int8_t* dest, const int8_t* src) {
+void dstrcat(char* dest, const char* src) {
 	dest += dstrlen(dest);
 	dstrcpy(dest, src);
 }
@@ -247,8 +247,8 @@ void dstrcat(int8_t* dest, const int8_t* src) {
 // dstrstr
 //
 
-int8_t* dstrstr(int8_t* s1, int8_t* s2) {
-	int8_t* p = s1;
+char* dstrstr(char* s1, char* s2) {
+	char* p = s1;
 	int len = dstrlen(s2);
 
 	for (; (p = dstrrchr(p, *s2)) != 0; p++) {
@@ -264,7 +264,7 @@ int8_t* dstrstr(int8_t* s1, int8_t* s2) {
 // datoi
 //
 
-int datoi(const int8_t* str) {
+int datoi(const char* str) {
 	int val;
 	int sign;
 	int c;
@@ -324,7 +324,7 @@ int datoi(const int8_t* str) {
 // datof
 //
 
-float datof(int8_t* str) {
+float datof(char* str) {
 	double    val;
 	int        sign;
 	int        c;
@@ -397,8 +397,8 @@ float datof(int8_t* str) {
 // dhtoi
 //
 
-int dhtoi(int8_t* str) {
-	int8_t* s;
+int dhtoi(char* str) {
+	char* s;
 	int num;
 
 	num = 0;
@@ -461,7 +461,7 @@ float D_fabs(float x) {
 // dsprintf
 //
 
-int dsprintf(int8_t* buf, const int8_t* format, ...) {
+int dsprintf(char* buf, const char* format, ...) {
 	va_list arg;
 	int x;
 
@@ -480,7 +480,7 @@ int dsprintf(int8_t* buf, const int8_t* format, ...) {
 // dsnprintf
 //
 
-int dsnprintf(int8_t* src, size_t n, const int8_t* str, ...) {
+int dsnprintf(char* src, unsigned int n, const char* str, ...) {
 	int x;
 	va_list argptr;
 	va_start(argptr, str);

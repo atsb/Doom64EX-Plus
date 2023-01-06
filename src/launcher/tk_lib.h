@@ -10,24 +10,24 @@
 
 typedef struct
 {
-	int8_t* field;
-	int8_t type;
+	char* field;
+	char type;
 	int defaultvalue;
 	int* value;
-	const int8_t* defaultstring;
-	int8_t** strValue;
+	const char* defaultstring;
+	char** strValue;
 } tDefTypes_t;
 
 extern byte* parse;
-extern uint32_t lastByte;
-extern uint32_t tkPos;
+extern unsigned int lastByte;
+extern unsigned int tkPos;
 extern int tkLine;
 
-extern int8_t stringToken[32];
+extern char stringToken[32];
 extern int intToken;
-int8_t dataStrToken[MAXSTROKENS][64];
+char dataStrToken[MAXSTROKENS][64];
 
-extern int8_t* DefaultConfigFile;
+extern char* DefaultConfigFile;
 
 void	tk_ProcessDefs(tDefTypes_t* def);
 int		tk_getTokenLen(void);

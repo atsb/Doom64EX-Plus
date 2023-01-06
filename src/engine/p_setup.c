@@ -115,9 +115,9 @@ static skydef_t* skydefs;
 // Blockmap size.
 int                 bmapwidth;
 int                 bmapheight;     // size in mapblocks
-int16_t* blockmap;       // int for larger maps
+short* blockmap;       // int for larger maps
 // offsets in blockmap are from here
-int16_t* blockmaplump;
+short* blockmaplump;
 // origin of block map
 fixed_t             bmaporgx;
 fixed_t             bmaporgy;
@@ -374,8 +374,8 @@ void P_LoadLights(int lump) {
 //
 
 void P_LoadMacros(int lump) {
-	int16_t* data;
-	int16_t count;
+	short* data;
+	short count;
 	int size = 0;
 	int i = 0;
 	int j = 0;
@@ -390,7 +390,7 @@ void P_LoadMacros(int lump) {
 		return;
 	}
 
-	data = (int16_t*)W_GetMapLump(lump);
+	data = (short*)W_GetMapLump(lump);
 
 	macros.macrocount = SHORT(*data++);
 	macros.specialcount = SHORT(*data++);
@@ -457,7 +457,7 @@ void P_LoadNodes(int lump) {
 void P_LoadLeafs(int lump) {
 	int         i;
 	int         j;
-	int16_t* mlf;
+	short* mlf;
 	leaf_t* lf;
 	int         length;
 	int         size;
@@ -471,7 +471,7 @@ void P_LoadLeafs(int lump) {
 	size = 0;
 
 	if (length) {
-		int16_t* src = mlf;
+		short* src = mlf;
 		int     next;
 
 		while (((byte*)src - (byte*)mlf) < length) {
@@ -592,8 +592,8 @@ void P_LoadThings(int lump) {
 		// 20120122 villsa - updated to spawn co-op players away from
 		// player 1 by radius
 		if (netgame && mt->type == 1) {
-			int16_t x = mt->x;
-			int16_t y = mt->y;
+			short x = mt->x;
+			short y = mt->y;
 
 			if (!p2start) {
 				mt->type = 2;
@@ -749,7 +749,7 @@ void P_LoadReject(int lump) {
 	dmemcpy(rejectmatrix, (byte*)W_GetMapLump(lump), size);
 }
 
-static const int8_t* bmaperrormsg;
+static const char* bmaperrormsg;
 
 //
 // P_VerifyBlockMap
@@ -759,15 +759,15 @@ static const int8_t* bmaperrormsg;
 static boolean P_VerifyBlockMap(int count) {
 	boolean isvalid = true;
 	int x, y;
-	int16_t* maxoffs = blockmaplump + count;
+	short* maxoffs = blockmaplump + count;
 
 	bmaperrormsg = NULL;
 
 	for (y = 0; y < bmapheight; ++y) {
 		for (x = 0; x < bmapwidth; ++x) {
 			int offset;
-			int16_t* list, * tmplist;
-			int16_t* blockoffset;
+			short* list, * tmplist;
+			short* blockoffset;
 
 			offset = y * bmapwidth + x;
 			blockoffset = blockmaplump + offset + 4;
@@ -1172,7 +1172,7 @@ static void P_InitMapInfo(void) {
 					// get music track ID
 					//
 					if (!dstricmp(sc_parser.token, "MUSIC")) {
-						int8_t* text;
+						char* text;
 						int ds_start;
 						int ds_end;
 						int lump;
@@ -1247,7 +1247,7 @@ static void P_InitMapInfo(void) {
 				}
 
 				if (!sc_parser.setdata(&cluster, clusterdatatable)) {
-					int8_t* text;
+					char* text;
 
 					//
 					// get music track ID

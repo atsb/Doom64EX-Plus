@@ -307,7 +307,7 @@ boolean I_UpdateGrab(void) {
 		SDL_SetWindowGrab(window, 1);
 	}
 
-	if (!InWindow && m_menumouse.value <= 0) {
+	if (!InWindow || !InWindowBorderless && m_menumouse.value <= 0) {
 		return true;
 	}
 
@@ -327,8 +327,8 @@ boolean I_UpdateGrab(void) {
 
 void I_GetEvent(SDL_Event* Event) {
 	event_t event;
-	uint32_t mwheeluptic = 0, mwheeldowntic = 0;
-	uint32_t tic = gametic;
+	unsigned int mwheeluptic = 0, mwheeldowntic = 0;
+	unsigned int tic = gametic;
 
 	switch (Event->type) {
 	case SDL_KEYDOWN:

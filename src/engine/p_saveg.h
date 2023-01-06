@@ -35,10 +35,10 @@
 #define SAVEGAMETBSIZE  0xC000
 #define SAVESTRINGSIZE  16
 
-int8_t* P_GetSaveGameName(int num);
-boolean P_WriteSaveGame(int8_t* description, int slot);
-boolean P_ReadSaveGame(int8_t* name);
-boolean P_QuickReadSaveHeader(int8_t* name, int8_t* date, int* thumbnail, int* skill, int* map);
+char* P_GetSaveGameName(int num);
+boolean P_WriteSaveGame(char* description, int slot);
+boolean P_ReadSaveGame(char* name);
+boolean P_QuickReadSaveHeader(char* name, char* date, int* thumbnail, int* skill, int* map);
 
 // Persistent storage/archiving.
 // These are the load / save game routines.

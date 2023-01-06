@@ -43,7 +43,7 @@
 
 #define MAX_IWAD_DIRS 128
 
-static int8_t* iwad_dirs[MAX_IWAD_DIRS];
+static char* iwad_dirs[MAX_IWAD_DIRS];
 static int num_iwad_dirs = 0;
 
 typedef struct {
@@ -53,7 +53,7 @@ typedef struct {
 
 extern wad_file_class_t stdc_wad_file;
 
-static wad_file_t* W_StdC_OpenFile(int8_t* path) {
+static wad_file_t* W_StdC_OpenFile(char* path) {
 	stdc_wad_file_t* result;
 	FILE* fstream;
 
@@ -86,10 +86,10 @@ static void W_StdC_CloseFile(wad_file_t* wad) {
 // Read data from the specified position in the file into the
 // provided buffer.  Returns the number of bytes read.
 
-size_t W_StdC_Read(wad_file_t* wad, uint32_t offset,
-	void* buffer, size_t buffer_len) {
+unsigned int W_StdC_Read(wad_file_t* wad, unsigned int offset,
+	void* buffer, unsigned int buffer_len) {
 	stdc_wad_file_t* stdc_wad;
-	size_t result;
+	unsigned int result;
 
 	stdc_wad = (stdc_wad_file_t*)wad;
 
@@ -110,7 +110,7 @@ wad_file_class_t stdc_wad_file = {
 	W_StdC_Read,
 };
 
-wad_file_t* W_OpenFile(int8_t* path) {
+wad_file_t* W_OpenFile(char* path) {
 	return stdc_wad_file.OpenFile(path);
 }
 
@@ -118,8 +118,8 @@ void W_CloseFile(wad_file_t* wad) {
 	wad->file_class->CloseFile(wad);
 }
 
-size_t W_Read(wad_file_t* wad, uint32_t offset,
-	void* buffer, size_t buffer_len) {
+unsigned int W_Read(wad_file_t* wad, unsigned int offset,
+	void* buffer, unsigned int buffer_len) {
 	return wad->file_class->Read(wad, offset, buffer, buffer_len);
 }
 
@@ -128,8 +128,8 @@ size_t W_Read(wad_file_t* wad, uint32_t offset,
 // Searches WAD search paths for an WAD with a specific filename.
 //
 
-int8_t* W_FindWADByName(int8_t* name) {
-	int8_t* buf;
+char* W_FindWADByName(char* name) {
+	char* buf;
 	int i;
 	boolean exists;
 
@@ -167,8 +167,8 @@ int8_t* W_FindWADByName(int8_t* name) {
 // if not found.
 //
 
-int8_t* W_TryFindWADByName(int8_t* filename) {
-	int8_t* result;
+char* W_TryFindWADByName(char* filename) {
+	char* result;
 
 	result = W_FindWADByName(filename);
 
@@ -185,7 +185,7 @@ int8_t* W_TryFindWADByName(int8_t* filename) {
 // Checks availability of IWAD files by name,
 //
 
-int8_t* W_FindIWAD(void)
+char* W_FindIWAD(void)
 {
 	return I_FindDataFile("DOOM64.WAD");
 }

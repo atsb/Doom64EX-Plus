@@ -105,7 +105,7 @@ static void R_CloudThunder(void) {
 		sky->skycolor[1] -= 0x001111;
 	}
 
-	thunderCounter = (M_Random() & 7) + 1;    // Do int16_t delay loops for lightning flickers
+	thunderCounter = (M_Random() & 7) + 1;    // Do short delay loops for lightning flickers
 	lightningCounter++;
 }
 

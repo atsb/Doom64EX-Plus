@@ -74,9 +74,9 @@ fixed_t         scrollfrac;
 int             logoAlpha = 0;
 
 int             vertCount = 0;
-uint32_t    renderTic = 0;
-uint32_t    spriteRenderTic = 0;
-uint32_t    glBindCalls = 0;
+unsigned int    renderTic = 0;
+unsigned int    spriteRenderTic = 0;
+unsigned int    glBindCalls = 0;
 
 boolean        bRenderSky = false;
 
@@ -323,8 +323,8 @@ void R_SetupLevel(void) {
 //
 
 void R_PrecacheLevel(void) {
-	int8_t* texturepresent;
-	int8_t* spritepresent;
+	char* texturepresent;
+	char* spritepresent;
 	int    i;
 	int j;
 	int    p;
@@ -334,8 +334,8 @@ void R_PrecacheLevel(void) {
 	CON_DPrintf("--------R_PrecacheLevel--------\n");
 	GL_DumpTextures();
 
-	texturepresent = (int8_t*)Z_Alloca(numtextures);
-	spritepresent = (int8_t*)Z_Alloca(NUMSPRITES);
+	texturepresent = (char*)Z_Alloca(numtextures);
+	spritepresent = (char*)Z_Alloca(NUMSPRITES);
 
 	for (i = 0; i < numsides; i++) {
 		texturepresent[sides[i].toptexture] = 1;

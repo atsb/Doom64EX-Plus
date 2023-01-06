@@ -264,7 +264,7 @@ static boolean NET_Conn_ReliablePacket(net_connection_t* conn,
 // Returns true if eaten by common code
 
 boolean NET_Conn_Packet(net_connection_t* conn, net_packet_t* packet,
-	uint32_t* packet_type)
+	unsigned int* packet_type)
 {
 	conn->keepalive_recv_time = I_GetTimeMS();
 
@@ -331,7 +331,7 @@ void NET_Conn_Disconnect(net_connection_t* conn)
 void NET_Conn_Run(net_connection_t* conn)
 {
 	net_packet_t* packet;
-	uint32_t nowtime;
+	unsigned int nowtime;
 
 	nowtime = I_GetTimeMS();
 
@@ -492,10 +492,10 @@ net_packet_t* NET_Conn_NewReliable(net_connection_t* conn, int packet_type)
 // Used to expand the least significant byte of a tic number into
 // the full tic number, from the current tic number
 
-uint32_t NET_ExpandTicNum(uint32_t relative, uint32_t b)
+unsigned int NET_ExpandTicNum(unsigned int relative, unsigned int b)
 {
-	uint32_t l, h;
-	uint32_t result;
+	unsigned int l, h;
+	unsigned int result;
 
 	h = relative & ~0xff;
 	l = relative & 0xff;

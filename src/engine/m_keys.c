@@ -40,7 +40,7 @@
 
 typedef struct {
 	int        code;
-	int8_t* name;
+	char* name;
 } keyinfo_t;
 
 static keyinfo_t    Keys[] = {
@@ -145,11 +145,11 @@ static keyinfo_t    Keys[] = {
 // M_GetKeyName
 //
 
-int M_GetKeyName(int8_t* buff, int key) {
+int M_GetKeyName(char* buff, int key) {
 	keyinfo_t* pkey;
 
 	if (((key >= 'a') && (key <= 'z')) || ((key >= '0') && (key <= '9'))) {
-		buff[0] = (int8_t)toupper(key);
+		buff[0] = (char)toupper(key);
 		buff[1] = 0;
 		return true;
 	}

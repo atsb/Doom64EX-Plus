@@ -16,9 +16,9 @@
 #include <sys/stat.h>
 #include "resource.h"
 
-typedef uint8_t	byte;
-typedef uint16_t	word;
-typedef uint32_t	uint;
+typedef unsigned char	byte;
+typedef unsigned short	word;
+typedef unsigned int	uint;
 typedef BOOL			bool;
 typedef byte* cache;
 typedef wchar_t* path[MAX_PATH];

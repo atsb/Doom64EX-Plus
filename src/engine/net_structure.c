@@ -64,10 +64,10 @@ boolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings)
 		&& NET_ReadInt8(packet, (int*)&settings->gameversion)
 		&& NET_ReadInt8(packet, (int*)&settings->lowres_turn)
 		&& NET_ReadInt8(packet, (int*)&settings->new_sync)
-		&& NET_ReadInt32(packet, (uint32_t*)&settings->timelimit)
+		&& NET_ReadInt32(packet, (unsigned int*)&settings->timelimit)
 		&& NET_ReadSInt8(packet, (int*)&settings->loadgame)
-		&& NET_ReadInt32(packet, (uint32_t*)&settings->compatflags)
-		&& NET_ReadInt32(packet, (uint32_t*)&settings->gameflags);
+		&& NET_ReadInt32(packet, (unsigned int*)&settings->compatflags)
+		&& NET_ReadInt32(packet, (unsigned int*)&settings->gameflags);
 }
 
 boolean NET_ReadQueryData(net_packet_t* packet, net_querydata_t* query)
@@ -319,7 +319,7 @@ boolean NET_ReadFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, boolean
 
 void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, boolean lowres_turn)
 {
-	uint32_t bitfield;
+	unsigned int bitfield;
 	int i;
 
 	// Write the latency

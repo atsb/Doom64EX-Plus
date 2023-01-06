@@ -60,8 +60,8 @@ static unsigned long save_offset = 0;
 // P_GetSaveGameName
 //
 
-int8_t* P_GetSaveGameName(int num) {
-    int8_t name[256];
+char* P_GetSaveGameName(int num) {
+    char name[256];
 
     sprintf(name, SAVEGAMENAME "%d.dsg", num);
     return I_GetUserFile(name);
@@ -86,7 +86,7 @@ static void saveg_write8(byte value) {
     save_offset++;
 }
 
-static int16_t saveg_read16(void) {
+static short saveg_read16(void) {
     int result;
 
     result = saveg_read8();
@@ -95,7 +95,7 @@ static int16_t saveg_read16(void) {
     return result;
 }
 
-static void saveg_write16(int16_t value) {
+static void saveg_write16(short value) {
     saveg_write8(value & 0xff);
     saveg_write8((value >> 8) & 0xff);
 }
@@ -1096,7 +1096,7 @@ static void saveg_read_laserthinker_t(void* data) {
 //
 //------------------------------------------------------------------------
 
-static int8_t* saveg_gettime(void) {
+static char* saveg_gettime(void) {
     time_t clock;
     struct tm* lt;
 
@@ -1105,10 +1105,10 @@ static int8_t* saveg_gettime(void) {
     return asctime(lt);
 }
 
-static void saveg_write_header(int8_t* description) {
+static void saveg_write_header(char* description) {
     int i;
     int size;
-    int8_t date[32];
+    char date[32];
     byte* tbn;
 
     for (i = 0; description[i] != '\0'; i++) {
@@ -1249,7 +1249,7 @@ static void saveg_write_marker(int marker) {
 // P_WriteSaveGame
 //
 
-boolean P_WriteSaveGame(int8_t* description, int slot) {
+boolean P_WriteSaveGame(char* description, int slot) {
 
     // setup game save file
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
@@ -1281,7 +1281,7 @@ boolean P_WriteSaveGame(int8_t* description, int slot) {
 // P_ReadSaveGame
 //
 
-boolean P_ReadSaveGame(int8_t* name) {
+boolean P_ReadSaveGame(char* name) {
     M_ReadFile(name, &savebuffer);
     save_offset = 0;
 
@@ -1310,7 +1310,7 @@ boolean P_ReadSaveGame(int8_t* name) {
 // P_QuickReadSaveHeader
 //
 
-boolean P_QuickReadSaveHeader(int8_t* name, int8_t* date,
+boolean P_QuickReadSaveHeader(char* name, char* date,
     int* thumbnail, int* skill, int* map) {
     int i;
     int size;

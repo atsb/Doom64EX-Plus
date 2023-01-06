@@ -47,10 +47,10 @@ xinputgamepad_t xgamepad;
 typedef void (WINAPI* LPXINPUTENABLE)(boolean enable);
 static LPXINPUTENABLE   I_XInputEnable = NULL;
 
-typedef dword(WINAPI* LPXINPUTGETSTATE)(dword userID, xinputstate_t* state);
+typedef int(WINAPI* LPXINPUTGETSTATE)(int userID, xinputstate_t* state);
 static LPXINPUTGETSTATE I_XInputGetState = NULL;
 
-typedef dword(WINAPI* LPXINPUTSETRUMBLE)(dword userID, xinputrumble_t* rumble);
+typedef int(WINAPI* LPXINPUTSETRUMBLE)(int userID, xinputrumble_t* rumble);
 static LPXINPUTSETRUMBLE I_XInputSetRumble = NULL;
 
 CVAR(i_rsticksensitivity, 0.0080);

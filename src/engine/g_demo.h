@@ -28,12 +28,12 @@
 
 boolean G_CheckDemoStatus(void);
 
-void G_RecordDemo(const int8_t* name);
-void G_PlayDemo(const int8_t* name);
+void G_RecordDemo(const char* name);
+void G_PlayDemo(const char* name);
 void G_ReadDemoTiccmd(ticcmd_t* cmd);
 void G_WriteDemoTiccmd(ticcmd_t* cmd);
 
-extern int8_t             demoname[256];  // name of demo lump
+extern char             demoname[256];  // name of demo lump
 extern boolean         demorecording;  // currently recording a demo
 extern boolean         demoplayback;   // currently playing a demo
 extern boolean         netdemo;
@@ -46,5 +46,5 @@ extern boolean         iwadDemo;       // hide hud, end playback after one level
 
 /* VANILLA */
 int G_PlayDemoPtr(int skill, int map); // 800049D0
-int D_RunDemo(int8_t* name, skill_t skill, int map); // 8002B2D0
+int D_RunDemo(char* name, skill_t skill, int map); // 8002B2D0
 #endif

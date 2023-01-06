@@ -39,7 +39,7 @@
 
 byte passwordData[16];
 boolean doPassword = false;
-const int8_t* passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
+const char* passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
 static const int passwordTable[10] = { 1, 8, 9, 5, 6, 2, 7, 0, 4, 3 };
 
 //
@@ -93,7 +93,7 @@ void M_EncodePassword(void) {
 	byte encode[10];
 	int i;
 	int bit = 0;
-	int16_t decodebit[3];
+	short decodebit[3];
 	int passBit = 0;
 	int xbit1 = 8;
 	int xbit2 = 0;
@@ -167,12 +167,12 @@ void M_EncodePassword(void) {
 
 	encode[5] |= (player->artifacts << 2);
 
-	decodebit[0] = I_SwapBE16(*(int16_t*)&encode[0]);
-	decodebit[1] = I_SwapBE16(*(int16_t*)&encode[2]);
-	decodebit[2] = I_SwapBE16(*(int16_t*)&encode[4]);
+	decodebit[0] = I_SwapBE16(*(short*)&encode[0]);
+	decodebit[1] = I_SwapBE16(*(short*)&encode[2]);
+	decodebit[2] = I_SwapBE16(*(short*)&encode[4]);
 
-	*(int16_t*)&encode[6] = I_SwapBE16(~(decodebit[0] + decodebit[1] + decodebit[2]));
-	*(int16_t*)&encode[8] = I_SwapBE16(~(decodebit[0] ^ decodebit[1] ^ decodebit[2]));
+	*(short*)&encode[6] = I_SwapBE16(~(decodebit[0] + decodebit[1] + decodebit[2]));
+	*(short*)&encode[8] = I_SwapBE16(~(decodebit[0] ^ decodebit[1] ^ decodebit[2]));
 
 	for (i = 0; i < 10; i++) {
 		bit = *(byte*)(encode + passwordTable[i]);
@@ -231,10 +231,10 @@ boolean M_DecodePassword(boolean checkOnly) {
 	byte decode[10];
 	int bit = 0;
 	int i = 0;
-	int16_t xbit1 = 0;
-	int16_t xbit2 = 0;
-	int16_t xbit3 = 0;
-	int16_t x, y;
+	short xbit1 = 0;
+	short xbit2 = 0;
+	short xbit3 = 0;
+	short x, y;
 	player_t* player;
 
 	dmemcpy(data, passwordData, 16);
@@ -285,19 +285,19 @@ boolean M_DecodePassword(boolean checkOnly) {
 	//
 	// verify decoded password
 	//
-	xbit1 = I_SwapBE16(*(int16_t*)&decode[0]);
-	xbit2 = I_SwapBE16(*(int16_t*)&decode[2]);
-	xbit3 = I_SwapBE16(*(int16_t*)&decode[4]);
+	xbit1 = I_SwapBE16(*(short*)&decode[0]);
+	xbit2 = I_SwapBE16(*(short*)&decode[2]);
+	xbit3 = I_SwapBE16(*(short*)&decode[4]);
 
 	x = ((~((xbit1 + xbit2) + xbit3) << 16) >> 16);
-	y = I_SwapBE16(*(int16_t*)&decode[6]);
+	y = I_SwapBE16(*(short*)&decode[6]);
 
 	if (x != y) {
 		return false;
 	}
 
 	x = ((~(xbit1 ^ (xbit2 ^ xbit3)) << 16) >> 16);
-	y = I_SwapBE16(*(int16_t*)&decode[8]);
+	y = I_SwapBE16(*(short*)&decode[8]);
 
 	if (x != y) {
 		return false;

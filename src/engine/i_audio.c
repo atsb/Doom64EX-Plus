@@ -101,22 +101,22 @@ static boolean seqready = false;
 //
 
 typedef struct {
-    int8_t        header[4];
+    char        header[4];
     int         length;
     byte*       data;
     byte        channel;
 } track_t;
 
 typedef struct {
-    int8_t        header[4];
+    char        header[4];
     int         chunksize;
     short       type;
     word        ntracks;
     word        delta;
     byte*       data;
-    dword       length;
+    int       length;
     track_t*    tracks;
-    dword       tempo;
+    int       tempo;
     double      timediv;
 } song_t;
 
@@ -165,12 +165,12 @@ typedef struct {
     byte        velocity;
     byte*       pos;
     byte*       jump;
-    dword       tics;
-    dword       nexttic;
-    dword       lasttic;
-    dword       starttic;
-    uint32_t      starttime;
-    uint32_t      curtime;
+    int       tics;
+    int       nexttic;
+    int       lasttic;
+    int       starttic;
+    unsigned int      starttime;
+    unsigned int      curtime;
     chanstate_e state;
     boolean    paused;
 
@@ -219,9 +219,9 @@ typedef struct {
     fluid_audio_driver_t*   driver;
     int                     sfont_id; // 20120112 bkw: needs to be signed
     SDL_Thread*             thread;
-    dword                   playtime;
+    int                   playtime;
 
-    dword                   voices;
+    int                   voices;
 
     // tweakable settings for the sequencer
     float                   musicvolume;
@@ -347,7 +347,7 @@ static void Chan_SetSoundVolume(doomseq_t* seq, channel_t* chan) {
 //
 
 static byte Chan_GetNextMidiByte(channel_t* chan) {
-    if((dword)(chan->pos - chan->song->data) >= chan->song->length) {
+    if((int)(chan->pos - chan->song->data) >= chan->song->length) {
         I_Error("Chan_GetNextMidiByte: Unexpected end of track");
     }
 
@@ -361,7 +361,7 @@ static byte Chan_GetNextMidiByte(channel_t* chan) {
 //
 
 static boolean Chan_CheckTrackEnd(channel_t* chan) {
-    return ((dword)(chan->pos - chan->song->data) >= chan->song->length);
+    return ((int)(chan->pos - chan->song->data) >= chan->song->length);
 }
 
 //
@@ -370,8 +370,8 @@ static boolean Chan_CheckTrackEnd(channel_t* chan) {
 // Read the midi track to get the next delta time
 //
 
-static dword Chan_GetNextTick(channel_t* chan) {
-    dword tic;
+static int Chan_GetNextTick(channel_t* chan) {
+    int tic;
     int i;
 
     tic = Chan_GetNextMidiByte(chan);
@@ -395,7 +395,7 @@ static dword Chan_GetNextTick(channel_t* chan) {
         }
     }
 
-    return (chan->starttic + (dword)((double)tic * chan->song->timediv));
+    return (chan->starttic + (int)((double)tic * chan->song->timediv));
 }
 
 //
@@ -613,7 +613,7 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
     int meta;
     int b;
     int i;
-    int8_t string[256];
+    char string[256];
 
     meta = Chan_GetNextMidiByte(chan);
 
@@ -849,7 +849,7 @@ static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
 // Main midi parsing routine
 //
 
-static void Chan_RunSong(doomseq_t* seq, channel_t* chan, dword msecs) {
+static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     byte event;
     byte c;
     song_t* song;
@@ -946,7 +946,7 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, dword msecs) {
 // Seq_RunSong
 //
 
-static void Seq_RunSong(doomseq_t* seq, dword msecs) {
+static void Seq_RunSong(doomseq_t* seq, int msecs) {
     int i;
     channel_t* chan;
 
@@ -1075,13 +1075,30 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 
 static void Seq_Shutdown(doomseq_t* seq)
 {
+#ifndef _WIN32
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
+#else
+    //
+    // signal the sequencer to shut down
+    //
+    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
 
-// Linux, macOS and general Unixy systems segfault when shutdown here
-#ifdef _WIN32
+    //
+    // wait until the audio thread is finished
+    //
+    SDL_WaitThread(seq->thread, NULL);
+
+    //
+    // fluidsynth cleanup stuff
+    //
+    SDL_CloseAudioDevice(1);
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
+
+    seq->synth = NULL;
+    seq->driver = NULL;
+    seq->settings = NULL;
 #endif
 }
 
@@ -1096,7 +1113,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
     long start = SDL_GetTicks();
     long delay = 0;
     int status;
-    dword count = 0;
+    int count = 0;
     signalhandler signal;
 
     while(1) {
@@ -1143,7 +1160,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 
 void I_InitSequencer(void) {
     boolean sffound;
-    int8_t *sfpath;
+    char *sfpath;
 
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 

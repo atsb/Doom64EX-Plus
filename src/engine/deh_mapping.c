@@ -65,7 +65,7 @@ static void *GetStructField(void *structptr,
                             deh_mapping_t *mapping,
                             deh_mapping_entry_t *entry)
 {
-    intptr_t offset;
+    unsigned int offset;
 
     offset = (uint8_t *)entry->location - (uint8_t *)mapping->base;
 

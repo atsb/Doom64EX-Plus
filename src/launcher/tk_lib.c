@@ -22,28 +22,28 @@
 //
 //-----------------------------------------------------------------------------
 #ifdef RCSID
-static const int8_t rcsid[] = "$Id: tk_lib.c 337 2009-02-01 21:27:07Z svkaiser $";
+static const char rcsid[] = "$Id: tk_lib.c 337 2009-02-01 21:27:07Z svkaiser $";
 #endif
 
 #include <stdint.h>
 #include "tk_lib.h"
 
 byte* parse;
-uint32_t lastByte;
-uint32_t tkPos = 0;
+unsigned int lastByte;
+unsigned int tkPos = 0;
 int tkLine = 1;
 
 #define MAXSTRSIZE	512
 
-int8_t stringToken[32];
+char stringToken[32];
 int intToken;
-int8_t dataStrToken[MAXSTROKENS][64];
+char dataStrToken[MAXSTROKENS][64];
 
 static int tkStrSlot = 0;
 
 static FILE* tk_file;
-int8_t* DefaultConfigFile = "launcher.cfg";
-static uint16_t dataPos = -1;
+char* DefaultConfigFile = "launcher.cfg";
+static unsigned short dataPos = -1;
 
 void tk_ProcessDefs(tDefTypes_t* def)
 {
@@ -84,7 +84,7 @@ void tk_getTokenNum(void)
 {
 	bool foundToken = false;
 	int i = 0, k;
-	int8_t text[32];
+	char text[32];
 	intToken = 0;
 	do
 	{
@@ -178,7 +178,7 @@ void tk_ResetConfig(tDefTypes_t* cfgdefault)
 
 	for (def = cfgdefault; def->field; def++)
 	{
-		if (def->value == NULL) *def->strValue = (int8_t*)def->defaultstring;
+		if (def->value == NULL) *def->strValue = (char*)def->defaultstring;
 		else *def->value = def->defaultvalue;
 	}
 }
@@ -199,7 +199,7 @@ void tk_SaveConfig(tDefTypes_t* cfg)
 
 	for (def = cfg; def->field; def++)
 	{
-		if (def->value == NULL) fprintf(tk_file, "%s \"%s\"\n", def->field, *(int8_t**)def->strValue);
+		if (def->value == NULL) fprintf(tk_file, "%s \"%s\"\n", def->field, *(char**)def->strValue);
 		else fprintf(tk_file, "%s %i\n", def->field, *def->value);
 	}
 }

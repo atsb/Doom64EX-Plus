@@ -276,10 +276,10 @@ static void InitGfxTextures(void) {
 	g_end = W_GetNumForName("MOUNTC");
 	numgfx = (g_end - g_start) + 1;
 	gfxptr = Z_Calloc(numgfx * sizeof(dtexture), PU_STATIC, NULL);
-	gfxwidth = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
-	gfxorigwidth = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
-	gfxheight = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
-	gfxorigheight = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
+	gfxwidth = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
+	gfxorigwidth = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
+	gfxheight = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
+	gfxorigheight = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
 
 	for (i = 0; i < numgfx; i++) {
 		byte* png;
@@ -304,7 +304,7 @@ static void InitGfxTextures(void) {
 // GL_BindGfxTexture
 //
 
-int GL_BindGfxTexture(const int8_t* name, boolean alpha) {
+int GL_BindGfxTexture(const char* name, boolean alpha) {
 	byte* png;
 	int lump;
 	int width;
@@ -381,7 +381,7 @@ static void InitSpriteTextures(void) {
 		for (j = 0; j < NUMSPRITES; j++) {
 			// start looking for external palette lumps
 			if (!dstrncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
-				int8_t palname[9];
+				char palname[9];
 
 				// increase the count if a palette lump is found
 				for (p = 1; p < 10; p++) {
@@ -406,7 +406,7 @@ static void InitSpriteTextures(void) {
 		byte* png;
 		int w;
 		int h;
-		size_t x;
+		unsigned int x;
 
 		// allocate # of sprites per pointer
 		spriteptr[i] = (dtexture*)Z_Malloc(spritecount[i] * sizeof(dtexture), PU_STATIC, 0);
