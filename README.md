@@ -11,7 +11,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64EX a
 * Port to the C Programming Language like the original game
 * Support for C89 and C99
 * Support for higher resolutions including 21:9 
-* Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
+* Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have(atm it´s buggy).
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
@@ -49,7 +49,7 @@ You can find them on [moddb](https://www.moddb.com/games/doom-64/downloads/)
 
 For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
 
-## [Discord server](https://discord.gg/Ktxz8nz)
+## [DOOM64 Discord server](https://discord.gg/Ktxz8nz)
 
 ## Dependencies
 
@@ -178,7 +178,7 @@ You can place the asset data described above to:
 
 Then, you can start playing:
 
-  `$ DOOM64EX+`
+* `$ DOOM64EX+`
 
 **NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
 `~usr/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the `-DDOOM_UNIX_INSTALL`
@@ -194,4 +194,4 @@ of the executable or you can start playing by launching `DOOM64EX+ Launcher.exe`
 The data files will be atm on: `ux0:/data/DOOM64EX+`
 
 ## Microsoft Xbox
-At the moment the assets will be on the root.
+At the moment the assets will be on the d:\\.
