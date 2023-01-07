@@ -36,10 +36,10 @@
 #include "i_system.h"
 #include "gl_texture.h"
 
-#ifdef __OpenBSD__
-#include <SDL.h>
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
 #else
-#include <SDL2/SDL.h> // Gibbon - for *
+#include <SDL.h>
 #endif
 
 #define CONSOLE_PROMPTCHAR      '>'

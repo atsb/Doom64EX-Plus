@@ -26,11 +26,16 @@
 #ifdef _XBOX
 #ifdef _USEFAKEGL09
 #include "fakeglx_ex+.h"
+#else
+#include <SDL_opengl.h>
+#include <SDL_opengl.h>
 #endif
 #else
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #else
+#include <SDL_opengl.h>
 #include <SDL_opengl.h>
 #endif
 #endif

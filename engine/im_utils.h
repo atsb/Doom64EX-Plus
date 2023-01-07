@@ -1,9 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 1993-1997 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
-// Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2023 André Guilherme 
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -22,29 +20,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef __I_VIDEO_H__
-#define __I_VIDEO_H__
-
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
-#include "gl_utils.h"
-#include "d_event.h"
-
-////////////Video///////////////
-
-extern SDL_Surface* screen;
-extern SDL_Window* window;
-extern const int8_t version_date[];
-
-void I_InitVideo(void);
-void I_InitScreen(void);
-void I_ShutdownVideo(void);
-void V_RegisterCvars();
-#ifdef USE_GLFW
-void I_ResizeCallback(OGL_DEFS, int width, int height);
-#endif
-
-#endif
+#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#include <cimgui.h>
+extern void IM_Init();
