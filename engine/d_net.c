@@ -38,7 +38,11 @@
 #include "con_console.h"
 
 #ifdef __APPLE__
+#ifdef USE_SDL3
+#include <SDL3/SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 #else
 #include <SDL.h>
 #endif

@@ -27,8 +27,13 @@
 #include <math.h>
 
 #ifdef __APPLE__
+#ifdef USE_SDL3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
+#endif
 #elif _XBOX
 #ifdef _USEFAKEGL09
 #include "fakeglx_ex+.h"
