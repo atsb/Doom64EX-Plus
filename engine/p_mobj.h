@@ -195,7 +195,7 @@ typedef struct mobj_s {
 
     int			        tics;	// state tic counter
     state_t*            state;
-    intptr_t			flags;
+    long long			flags;
     int			        health;
 
     // [d64] alpha value for rendering

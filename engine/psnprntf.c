@@ -314,8 +314,8 @@ int pvsnfmt_char(pvsnfmt_vars *info, int8_t c) {
 }
 
 /* strnlen not available on all platforms.. maybe autoconf it? */
-size_t pstrnlen(const int8_t *s, size_t count) {
-    const int8_t *p = s;
+unsigned int pstrnlen(const int8_t *s, unsigned int count) {
+    const char *p = s;
     while(*p && count-- > 0) {
         p++;
     }

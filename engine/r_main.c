@@ -418,7 +418,7 @@ void R_PrecacheLevel(void) {
 
 	CON_DPrintf("%i sprites cached\n", num);
 
-	if (has_GL_ARB_multitexture) {
+	if (GL_ARB_multitexture) {
 		GL_SetTextureUnit(1, true);
 		GL_BindEnvTexture();
 
@@ -649,28 +649,28 @@ static void R_DrawContextWall(line_t* line) {
 	//
 	GL_SetState(GLSTATE_BLEND, 1);
 
-	dglDepthRange(0.0f, 0.0f);
-	dglDisable(GL_TEXTURE_2D);
-	dglDisable(GL_CULL_FACE);
-	dglColor4ub(128, 128, 128, 64);
-	dglBegin(GL_POLYGON);
-	dglVertex3f(vtx[0].x, vtx[0].y, vtx[0].z);
-	dglVertex3f(vtx[1].x, vtx[1].y, vtx[1].z);
-	dglVertex3f(vtx[2].x, vtx[2].y, vtx[2].z);
-	dglVertex3f(vtx[3].x, vtx[3].y, vtx[3].z);
-	dglEnd();
-	dglColor4ub(255, 255, 255, 255);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	dglBegin(GL_POLYGON);
-	dglVertex3f(vtx[0].x, vtx[0].y, vtx[0].z);
-	dglVertex3f(vtx[1].x, vtx[1].y, vtx[1].z);
-	dglVertex3f(vtx[2].x, vtx[2].y, vtx[2].z);
-	dglVertex3f(vtx[3].x, vtx[3].y, vtx[3].z);
-	dglEnd();
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	dglEnable(GL_TEXTURE_2D);
-	dglEnable(GL_CULL_FACE);
-	dglDepthRange(0.0f, 1.0f);
+	glDepthRange(0.0f, 0.0f);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_CULL_FACE);
+	glColor4ub(128, 128, 128, 64);
+	glBegin(GL_POLYGON);
+	glVertex3f(vtx[0].x, vtx[0].y, vtx[0].z);
+	glVertex3f(vtx[1].x, vtx[1].y, vtx[1].z);
+	glVertex3f(vtx[2].x, vtx[2].y, vtx[2].z);
+	glVertex3f(vtx[3].x, vtx[3].y, vtx[3].z);
+	glEnd();
+	glColor4ub(255, 255, 255, 255);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_POLYGON);
+	glVertex3f(vtx[0].x, vtx[0].y, vtx[0].z);
+	glVertex3f(vtx[1].x, vtx[1].y, vtx[1].z);
+	glVertex3f(vtx[2].x, vtx[2].y, vtx[2].z);
+	glVertex3f(vtx[3].x, vtx[3].y, vtx[3].z);
+	glEnd();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
+	glDepthRange(0.0f, 1.0f);
 
 	GL_SetState(GLSTATE_BLEND, 0);
 }

@@ -1169,8 +1169,8 @@ typedef enum {
 typedef struct
 {
 	spritenum_t sprite;
-	int			info_frame;
-	int			info_tics;
+	long		info_frame;
+	long		info_tics;
 	actionf_t	action;
 	statenum_t	nextstate;
 	int			misc1;
@@ -1384,7 +1384,7 @@ typedef struct {
 } mobjinfo_t;
 
 extern state_t states[NUMSTATES];
-extern char* sprnames[NUMSPRITES + 1];
+extern int8_t* sprnames[NUMSPRITES + 1];
 
 extern mobjinfo_t mobjinfo[NUMMOBJTYPES];
 

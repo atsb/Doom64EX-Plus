@@ -34,6 +34,7 @@
 #include "r_drawlist.h"
 #include "i_system.h"
 #include "z_zone.h"
+#include "gl_utils.h"
 
 vtx_t drawVertex[MAXDLDRAWCOUNT];
 
@@ -167,11 +168,11 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				// villsa 12152013 - change blend states for nightmare things
 				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
 					if (!checkNightmare && (flags & MF_NIGHTMARE)) {
-						dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+						glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
 						checkNightmare ^= 1;
 					}
 					else if (checkNightmare && !(flags & MF_NIGHTMARE)) {
-						dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						checkNightmare ^= 1;
 					}
 				}
@@ -183,9 +184,9 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
 			// non sprite textures must repeat or mirrored-repeat
 			if (tag == DLT_WALL) {
-				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
 					head->flags & DLF_MIRRORS ? GL_MIRRORED_REPEAT : GL_REPEAT);
-				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
 
@@ -199,7 +200,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
 			}
 
-			dglDrawGeometry(drawcount, drawVertex);
+			glDrawGeometry(drawcount, drawVertex);
 
 			// count vertex size
 			if (devparm) {

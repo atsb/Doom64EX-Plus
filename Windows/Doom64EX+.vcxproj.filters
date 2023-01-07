@@ -100,6 +100,142 @@
     <ClCompile Include="..\engine\w_merge.c" />
     <ClCompile Include="..\engine\w_wad.c" />
     <ClCompile Include="..\engine\z_zone.c" />
+    <ClCompile Include="..\backend\imgui\cimgui.cpp">
+      <Filter>backend\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\imgui\imgui.cpp">
+      <Filter>backend\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\imgui\imgui_demo.cpp">
+      <Filter>backend\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\imgui\imgui_draw.cpp">
+      <Filter>backend\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\imgui\imgui_tables.cpp">
+      <Filter>backend\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\imgui\imgui_widgets.cpp">
+      <Filter>backend\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\mat3.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\mat4.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\plane.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\project.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\quat.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\ray.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\sphere.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\vec2.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\vec3.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\vec4.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\affine.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\affine2d.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\bezier.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\box.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\cam.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\curve.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\ease.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\euler.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\frustum.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\io.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\ivec2.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\ivec3.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\ivec4.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\mat2.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\persp_lh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\persp_rh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\persp_rh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\project_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\project_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\view_lh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\view_lh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\view_rh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\view_rh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\ortho_lh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\ortho_lh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\ortho_rh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\ortho_rh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\clipspace\persp_lh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\backend\cglm\src\swift\empty.c">
+      <Filter>backend\cglm\src\swift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\im_init.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
@@ -195,6 +331,471 @@
     <ClInclude Include="..\engine\w_merge.h" />
     <ClInclude Include="..\engine\w_wad.h" />
     <ClInclude Include="..\engine\z_zone.h" />
+    <ClInclude Include="..\backend\imgui\cimgui.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\imgui\imconfig.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\imgui\imgui.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\imgui\imgui_internal.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\imgui\imstb_rectpack.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\imgui\imstb_textedit.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\imgui\imstb_truetype.h">
+      <Filter>backend\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\types-struct.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\util.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\vec2.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\vec2-ext.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\vec3.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\vec3-ext.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\vec4.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\vec4-ext.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\version.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\affine.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\affine2d.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\affine-mat.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\affine-post.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\affine-pre.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\applesimd.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\bezier.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\box.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\cam.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\cglm.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\color.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\common.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\curve.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\ease.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\euler.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\frustum.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\io.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\ivec2.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\ivec3.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\ivec4.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\mat2.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\mat3.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\mat4.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\plane.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\project.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\quat.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\ray.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\sphere.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\types.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\persp_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\project_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\project_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\view_lh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\view_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\view_rh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\view_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\ortho_lh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\ortho_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\ortho_rh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\ortho_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\persp_lh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\persp_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\clipspace\persp_rh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\mat2.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\mat3.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\mat4.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\plane.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\project.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\quat.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\ray.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\sphere.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\vec2.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\vec3.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\vec4.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\affine.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\affine2d.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\bezier.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\box.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\cam.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\curve.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\ease.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\euler.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\frustum.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\io.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\ivec2.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\ivec3.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\call\ivec4.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\view_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\view_rh.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\view_rh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\view_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\ortho_lh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\ortho_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\ortho_rh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\ortho_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\persp.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\persp_lh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\persp_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\persp_rh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\persp_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\project_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\project_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\view_lh.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\clipspace\view_lh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\arm.h">
+      <Filter>backend\cglm\include\cglm\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\intrin.h">
+      <Filter>backend\cglm\include\cglm\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\x86.h">
+      <Filter>backend\cglm\include\cglm\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\avx\mat4.h">
+      <Filter>backend\cglm\include\cglm\simd\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\avx\affine.h">
+      <Filter>backend\cglm\include\cglm\simd\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\neon\mat2.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\neon\mat4.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\neon\quat.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\neon\affine.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\sse2\mat3.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\sse2\mat4.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\sse2\quat.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\sse2\affine.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\simd\sse2\mat2.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\mat4.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\plane.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\project.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\quat.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\sphere.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\vec2.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\vec2-ext.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\vec3.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\vec3-ext.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\vec4.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\vec4-ext.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\affine.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\affine2d.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\affine-post.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\affine-pre.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\box.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\cam.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\color.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\curve.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\euler.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\frustum.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\io.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\mat2.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\mat3.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\view_lh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\view_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\view_rh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\view_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\ortho_lh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\ortho_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\ortho_rh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\ortho_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\persp_lh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\persp_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\persp_rh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\persp_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\project_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\include\cglm\struct\clipspace\project_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\backend\cglm\src\config.h">
+      <Filter>backend\cglm\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\defconfig.inc" />
@@ -209,6 +810,56 @@
     <ResourceCompile Include="..\engine\DOOM64EX+.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\src\engine\doom64ex-plus.ico" />
+    <Filter Include="backend">
+      <UniqueIdentifier>{c29a38b1-1556-48b0-9c37-b03db607bcff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\imgui">
+      <UniqueIdentifier>{f836736a-100d-4e18-a567-03b2e535c50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm">
+      <UniqueIdentifier>{b6f1fca1-d429-4798-85df-68aa37242008}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include">
+      <UniqueIdentifier>{64316953-a7d2-4b77-8c4d-cf528eebcc07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm">
+      <UniqueIdentifier>{ac1b361c-d2c4-44f3-8ade-3f2060c79761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\call">
+      <UniqueIdentifier>{4f0bd749-0b37-484d-ba5d-74daa6897188}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\clipspace">
+      <UniqueIdentifier>{fa29c7b6-5a2f-4622-a0e6-7bf4c64414b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd">
+      <UniqueIdentifier>{e7a1c947-c4d8-49d9-8909-5c48297b659c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\struct">
+      <UniqueIdentifier>{9811614c-ef1e-43ff-a00a-1b2d30111311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\call\clipspace">
+      <UniqueIdentifier>{f4fc074b-9740-4217-bcb2-c89e9ca1f264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd\avx">
+      <UniqueIdentifier>{40ad0904-c7e3-4692-bf65-9e0f9b9705d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd\neon">
+      <UniqueIdentifier>{e0bd1244-0cc8-4c9a-90a7-d0d6d8017456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd\sse2">
+      <UniqueIdentifier>{2961812f-61d7-4349-839f-90f9ff046d18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\struct\clipspace">
+      <UniqueIdentifier>{22564f8a-62d7-4cfd-948f-50891af1996c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\src">
+      <UniqueIdentifier>{f8e319cb-8154-4edd-9b0d-a7f965fe12fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\src\clipspace">
+      <UniqueIdentifier>{2ec41008-7f77-4fcd-8698-aef0b2f7d626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\src\swift">
+      <UniqueIdentifier>{faa9191c-c866-4d19-9a7d-45de98e7c701}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

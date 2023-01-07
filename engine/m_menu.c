@@ -1843,6 +1843,8 @@ static const float ratioVal[5] = {
 	5.0f / 4.0f,
 	21.0f / 9.0f
 };
+static int8_t gammamsg[21][28] = {
+	GAMMALVL0,
 	GAMMALVL1,
 	GAMMALVL2,
 	GAMMALVL3,
@@ -1972,7 +1974,7 @@ void M_DrawVideo(void) {
 
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
-	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
+	DRAWVIDEOITEM2(filter, r_filter.value, constfilterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
 	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
@@ -2135,9 +2137,6 @@ void M_ChangeRatio(int choice) {
 	case 4:
 		dmax = MAX_RES21_09;
 		break;
-	case 4:
-		max = MAX_RES21_09;
-		break;
 	}
 	m_ScreenSize = min(m_ScreenSize, dmax - 1);
 	M_SetResolution();
@@ -2162,9 +2161,6 @@ void M_ChangeResolution(int choice) {
 		break;
 	case 4:
 		dmax = MAX_RES21_09;
-		break;
-	case 4:
-		max = MAX_RES21_09;
 		break;
 	}
 
@@ -3969,16 +3965,16 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetOrtho(0);
 
-	dglDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 
 	//
 	// draw back panels
 	//
-	dglColor4ub(4, 4, 4, menualphacolor);
+	glColor4ub(4, 4, 4, menualphacolor);
 	//
 	// save game panel
 	//
-	dglRecti(
+	glRecti(
 		def->x - 48,
 		def->y - 12,
 		def->x + 256,
@@ -3987,7 +3983,7 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// stats panel
 	//
-	dglRecti(
+	glRecti(
 		def->x + 272,
 		def->y - 12,
 		def->x + 464,
@@ -3997,12 +3993,12 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// draw outline for panels
 	//
-	dglColor4ub(240, 86, 84, menualphacolor);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glColor4ub(240, 86, 84, menualphacolor);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//
 	// save game panel
 	//
-	dglRecti(
+	glRecti(
 		def->x - 48,
 		def->y - 12,
 		def->x + 256,
@@ -4011,14 +4007,14 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	//
 	// stats panel
 	//
-	dglRecti(
+	glRecti(
 		def->x + 272,
 		def->y - 12,
 		def->x + 464,
 		def->y + 116
 	);
-	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	dglEnable(GL_TEXTURE_2D);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_TEXTURE_2D);
 
 	//
 	// draw thumbnail texture and stats
@@ -4164,11 +4160,11 @@ void M_DrawXInputButton(int x, int y, int button) {
 	width = (float)gfxwidth[pic];
 	height = (float)gfxheight[pic];
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	dglEnable(GL_BLEND);
-	dglSetVertex(vtx);
+	glEnable(GL_BLEND);
+	glSetVertex(vtx);
 
 	GL_SetOrtho(0);
 
@@ -4193,12 +4189,12 @@ void M_DrawXInputButton(int x, int y, int button) {
 		color
 	);
 
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
-	dglDrawGeometry(4, vtx);
+	glTriangle(0, 1, 2);
+	glTriangle(3, 2, 1);
+	glDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
-	dglDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 }
 #endif
 //
@@ -4618,11 +4614,11 @@ static void M_DrawMenuSkull(int x, int y) {
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	dglEnable(GL_BLEND);
-	dglSetVertex(vtx);
+	glEnable(GL_BLEND);
+	glSetVertex(vtx);
 
 	GL_SetOrtho(0);
 
@@ -4652,12 +4648,12 @@ static void M_DrawMenuSkull(int x, int y) {
 		color
 	);
 
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
-	dglDrawGeometry(4, vtx);
+	glTriangle(0, 1, 2);
+	glTriangle(3, 2, 1);
+	glDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
-	dglDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 }
 
 //
@@ -4674,8 +4670,8 @@ static void M_DrawCursor(int x, int y) {
 		gfxIdx = GL_BindGfxTexture("CURSOR", true);
 		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
 
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		GL_SetOrthoScale(scale);
 		GL_SetState(GLSTATE_BLEND, 1);

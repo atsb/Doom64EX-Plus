@@ -75,21 +75,6 @@ CVAR(v_accessibility, 0);
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
-#ifdef DOOM_UNIX_INSTALL
-#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
-#define GetBasePath()	SDL_GetBasePath();
-#elif defined __ANDROID__
-#define GetBasePath()   SDL_AndroidGetInternalStoragePath();
-#endif
-
-#if defined(__LINUX__) || defined(__OpenBSD__)
-#define Free(userdir)	free(userdir);
-#else
-#define Free(userdir)	SDL_free(userdir);
-#endif
-
-
 ticcmd_t        emptycmd;
 
 //

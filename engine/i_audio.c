@@ -37,16 +37,17 @@
 #include <unistd.h>
 #endif
 
-#ifdef __OpenBSD__
-#include <SDL.h>
-#endif
 #if defined(USE_FLUIDSYNTH) //!defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
 #include <fluidsynth.h>
 #else
+#include <fluidlite.h>
+#endif
+#ifdef __APPLE__
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
 #endif
 
-#include <fluidsynth.h>
 
 #include "doomtype.h"
 #include "doomdef.h"

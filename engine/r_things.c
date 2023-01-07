@@ -39,6 +39,7 @@
 #include "r_clipper.h"
 #include "m_misc.h"
 #include "con_console.h"
+#include "gl_utils.h"
 
 #include <stdlib.h>
 
@@ -46,7 +47,7 @@
 #define MAX_SPRITES    1024
 
 spritedef_t* spriteinfo;
-intptr_t        numsprites;
+long long       numsprites;
 
 spriteframe_t   sprtemp[29];
 int             maxframe;
@@ -363,10 +364,10 @@ static boolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) 
 
 	// [kex] nightmare things have a shade of dark green
 	if (thing->flags & MF_NIGHTMARE) {
-		dglSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
+		glSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
 	}
 	else if ((thing->frame & FF_FULLBRIGHT)) {
-		dglSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
+		glSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
 	}
 	else {
 		R_LightToVertex(vertex,
@@ -450,7 +451,7 @@ static boolean R_GenerateLaserPlane(visspritelist_t* vissprite, vtx_t* vertex) {
 
 	spritenum = W_GetNumForName("BOLTA0") - s_start;
 
-	dglSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
+	glSetVertexColor(vertex, D_RGBA(255, 0, 0, thing->alpha), 4);
 
 	// setup texture mapping
 	vertex[0].tu = vertex[1].tu = 0;
@@ -652,23 +653,23 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-		dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+		glTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
 		if (v_accessibility.value < 1)
 		{
 			if (!nolights) {
 				GL_UpdateEnvTexture(WHITE);
 				GL_SetTextureUnit(1, true);
-				dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+				glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
 			}
 
 			if (st_flashoverlay.value <= 0) {
 				GL_SetTextureUnit(2, true);
-				dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+				glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
 			}
 		}
 
-		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
 		GL_SetTextureUnit(0, true);
 	}
@@ -686,10 +687,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	}
 
 	// render
-	dglSetVertex(v);
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
-	dglDrawGeometry(4, v);
+	glSetVertex(v);
+	glTriangle(0, 1, 2);
+	glTriangle(3, 2, 1);
+	glDrawGeometry(4, v);
 
 	GL_ResetViewport();
 

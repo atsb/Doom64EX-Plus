@@ -40,6 +40,7 @@
 #include <windows.h>
 #endif
 #include <tchar.h>
+#include "i_w3swrapper.h"
 
 //=============================================================================
 //
@@ -359,18 +360,18 @@ static void PrintUserInfo(void) {
 // Prints out version information for the operating system.
 //
 static void PrintOSInfo(void) {
-    OSVERSIONINFO osinfo;
+    W32OVERSIONINFO osinfo = 0; //init mem
     TCHAR         mmb[64];
 
     ZeroMemory(mmb, sizeof(mmb));
 
-    osinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    osinfo->dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-    if(GetVersionEx(&osinfo)) {
-        DWORD platformId   = osinfo.dwPlatformId;
-        DWORD minorVersion = osinfo.dwMinorVersion;
-        DWORD majorVersion = osinfo.dwMajorVersion;
-        DWORD buildNumber  = osinfo.dwBuildNumber & 0xFFFF;
+    if (W32GetVersionEX(osinfo, 0, 0)) {
+        DWORD platformId = osinfo->dwPlatformId;
+        DWORD minorVersion = osinfo->dwMinorVersion;
+        DWORD majorVersion = osinfo->dwMajorVersion;
+        DWORD buildNumber = osinfo->dwBuildNumber & 0xFFFF;
 
         wsprintf(mmb, _T("%u.%u.%u"), majorVersion, minorVersion, buildNumber);
 

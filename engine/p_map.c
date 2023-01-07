@@ -1330,14 +1330,6 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 
 	if (t1->player) {
 		pitch = dcos(abs(t1->pitch - ANG90));
-
-		// [kex] check for autoaim option. skip if bfg spray
-		if (distance != (ATTACKRANGE + 1)) {
-			if (!t1->player->autoaim &&
-				distance != MELEERANGE && distance != (MELEERANGE + 1)) {
-				flags &= ~PT_ADDTHINGS;
-			}
-		}
 	}
 
 	if (linetarget)

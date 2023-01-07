@@ -43,14 +43,4 @@
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))
 #endif
 
-#ifdef _WIN32
-#define DIR_SEPARATOR '\\'
-#define PATH_SEPARATOR ';'
-
-#else
-
-#define DIR_SEPARATOR '/'
-#define PATH_SEPARATOR ':'
-
-#endif
 #endif

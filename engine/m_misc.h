@@ -64,7 +64,7 @@ M_AddToBox
 	fixed_t    x,
 	fixed_t    y);
 
-boolean M_WriteFile(char const* name, void* source, int length);
+boolean M_WriteFile(const char* name, void* source, int length);
 int M_ReadFile(char const* name, byte** buffer);
 void M_NormalizeSlashes(char* str);
 int M_FileExists(char* filename);
@@ -74,9 +74,8 @@ void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
-bool M_StringCopy(char* dest, const char* src, unsigned int dest_size);
+boolean M_StringCopy(char* dest, const char* src, unsigned int dest_size);
 char* M_StringDuplicate(const char* orig);
-int M_vsnprintf(char* buf, unsigned int buf_len, const char* s, va_list args);
 
 //
 // DEFAULTS

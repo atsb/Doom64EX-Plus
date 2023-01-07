@@ -31,6 +31,7 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "sounds.h"
+#include "gl_utils.h"
 
 //
 // CEILINGS

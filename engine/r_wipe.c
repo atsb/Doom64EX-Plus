@@ -76,7 +76,7 @@ void WIPE_FadeScreen(int fadetics) {
 	padh = GL_PadTextureDims(video_height);
 
 	GL_SetState(GLSTATE_BLEND, 1);
-	dglEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
 	//
 	// setup vertex coordinates for plane
@@ -98,7 +98,7 @@ void WIPE_FadeScreen(int fadetics) {
 	v[0].tv = v[1].tv = (float)video_height / (float)padh;
 	v[2].tv = v[3].tv = 0.0f;
 
-	dglBindTexture(GL_TEXTURE_2D, wipeMeltTexture);
+	glBindTexture(GL_TEXTURE_2D, wipeMeltTexture);
 
 	//
 	// begin fade out
@@ -120,7 +120,7 @@ void WIPE_FadeScreen(int fadetics) {
 		//
 		color = D_RGBA(wipeFadeAlpha, wipeFadeAlpha, wipeFadeAlpha, 0xff);
 
-		dglSetVertexColor(v, color, 4);
+		glSetVertexColor(v, color, 4);
 		GL_Draw2DQuad(v, 1);
 
 		GL_SwapBuffers();
@@ -156,7 +156,7 @@ void WIPE_MeltScreen(void) {
 	padh = GL_PadTextureDims(video_height);
 
 	GL_SetState(GLSTATE_BLEND, 1);
-	dglEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
 	//
 	// setup vertex coordinates for plane
@@ -180,7 +180,7 @@ void WIPE_MeltScreen(void) {
 
 	memcpy(v2, v, sizeof(vtx_t) * 4);
 
-	dglBindTexture(GL_TEXTURE_2D, wipeMeltTexture);
+	glBindTexture(GL_TEXTURE_2D, wipeMeltTexture);
 	GL_SetTextureMode(GL_ADD);
 
 	for (i = 0; i < 160; i += 2) {
@@ -188,10 +188,10 @@ void WIPE_MeltScreen(void) {
 
 		GL_ClearView(0xFF000000);
 
-		dglSetVertexColor(v2, D_RGBA(1, 0, 0, 0xff), 4);
+		glSetVertexColor(v2, D_RGBA(1, 0, 0, 0xff), 4);
 		GL_Draw2DQuad(v2, 1);
 
-		dglSetVertexColor(v, D_RGBA(0, 0, 0, 0x10), 4);
+		glSetVertexColor(v, D_RGBA(0, 0, 0, 0x10), 4);
 		GL_Draw2DQuad(v, 1);
 
 		//
@@ -205,7 +205,7 @@ void WIPE_MeltScreen(void) {
 		//
 		// update screen buffer
 		//
-		dglCopyTexSubImage2D(
+		glCopyTexSubImage2D(
 			GL_TEXTURE_2D,
 			0,
 			0,

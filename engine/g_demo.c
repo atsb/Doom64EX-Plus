@@ -216,7 +216,7 @@ void G_PlayDemo(const char* name) {
 	if (p && p < myargc - 1) {
 		// 20120107 bkw: add .lmp extension if missing.
 		if (strrchr(myargv[p + 1], '.')) {
-			strncpy(filename, myargv[p + 1], myargv[p + 1]);
+			strncpy(filename, myargv[p + 1], sizeof(myargv[p + 1]));
 		}
 		else {
 			sprintf(filename, "%s.lmp", myargv[p + 1]);

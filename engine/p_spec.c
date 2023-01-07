@@ -1635,7 +1635,7 @@ boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
-	boolean     ok;
+	boolean     ok = true;
 	int         actionType;
 
 	actionType = SPECIALMASK(line->special);
@@ -1652,17 +1652,17 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	{
 		/* Missiles should NOT trigger specials... */
 		if (thing->flags & MF_MISSILE)
-			return false;
+			return ok = false;
 
 		if (!(line->flags & ML_THINGTRIGGER))
 		{
 			/* never open secret doors */
 			if (line->flags & ML_SECRET)
-				return false;
+				return ok = false;
 
 			/* never allow a non-player mobj to use lines with these useflags */
 			if (line->special & (MLU_BLUE | MLU_YELLOW | MLU_RED))
-				return false;
+				return ok = false;
 
 			/*
 				actionType == 1 // MANUAL DOOR RAISE
@@ -1676,7 +1676,7 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 			if (!((line->special & MLU_USE && actionType == 1) ||
 				(line->special & MLU_CROSS && (actionType == 4 || actionType == 10 || actionType == 39 || actionType == 125)) ||
 				(line->special & MLU_SHOOT && actionType == 2)))
-				return false;
+				return ok = false;
 		}
 	}
 	else {
@@ -1687,7 +1687,7 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 0;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[0]] = true;
-				return false;
+				return ok = false;
 			}
 		}
 		else if (line->special & MLU_YELLOW) {
@@ -1696,7 +1696,7 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 1;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[1]] = true;
-				return false;
+				return ok = false;
 			}
 		}
 		else if (line->special & MLU_RED) {
@@ -1705,12 +1705,12 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 				player->messagepic = 2;
 				S_StartSound(thing, sfx_noway);
 				player->tryopen[tryopentype[2]] = true;
-				return false;
+				return ok = false;
 			}
 		}
 	}
 
-	return P_InitSpecialLine(thing, line, side);
+	return ok = P_InitSpecialLine(thing, line, side);
 }
 
 //

@@ -1,0 +1,11 @@
+﻿# CLion
+/.idea/workspace.xml
+/.idea/tasks.xml
+/cmake-*
+
+# Visual Studio 2017
+/.vs
+/slnx.VC.db
+
+# Misc.
+/build

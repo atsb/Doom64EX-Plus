@@ -6,6 +6,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64EX a
 
 * Support for the IWAD from Nightdive Studios' official remaster
 * Support for the Lost Levels campaign
+* Support for the Alpha Version of the game
 * Support for loading PWADs
 * Port to the C Programming Language like the original game
 * Support for C89 and C99

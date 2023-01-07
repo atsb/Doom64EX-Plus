@@ -26,9 +26,6 @@
 #ifdef _XBOX
 #ifdef _USEFAKEGL09
 #include "fakeglx_ex+.h"
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
 #endif
 #else
 #ifdef __APPLE__
@@ -36,7 +33,7 @@
 #else
 #include <SDL_opengl.h>
 #endif
-
+#endif
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #endif
@@ -92,8 +89,6 @@ extern int ViewWindowY;
 #define MAX_COORD           32767.0f
 
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
-
-extern int DGL_CLAMP;
 
 extern boolean usingGL;
 

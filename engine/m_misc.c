@@ -52,6 +52,7 @@
 #include "i_png.h"
 #include "gl_texture.h"
 #include "p_saveg.h"
+#include "i_system.h"
 
 int      myargc;
 char**   myargv;
@@ -127,7 +128,7 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-boolean M_WriteFile(int8_t const* name, void* source, int length) {
+boolean M_WriteFile(const char* name, void* source, int length) {
 	FILE* fp;
 	boolean result;
 
@@ -151,7 +152,7 @@ boolean M_WriteFile(int8_t const* name, void* source, int length) {
 //
 // M_WriteTextFile
 //
-boolean M_WriteTextFile(int8_t const* name, int8_t* source, int length) {
+boolean M_WriteTextFile(const char* name, char* source, int length) {
 	int handle;
 	int count;
 	handle = w3sopen(name, O_WRONLY | O_CREAT | O_TRUNC, 0666); //This macro needs to be fixed.
@@ -358,7 +359,7 @@ void M_ScreenShot(void) {
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-boolean M_StringCopy(char* dest, const char* src, size_t dest_size)
+boolean M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 {
 	unsigned int len;
 

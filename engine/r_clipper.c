@@ -284,8 +284,8 @@ viewMatrix[g] * projMatrix[h])
 void R_FrustrumSetup(void) {
 	float clip[16];
 
-	dglGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
-	dglGetDoublev(GL_MODELVIEW_MATRIX, viewMatrix);
+	glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+	glGetDoublev(GL_MODELVIEW_MATRIX, viewMatrix);
 
 	clip[0] = CALCMATRIX(0, 0, 1, 4, 2, 8, 3, 12);
 	clip[1] = CALCMATRIX(0, 1, 1, 5, 2, 9, 3, 13);

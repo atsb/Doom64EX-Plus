@@ -147,35 +147,6 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 	char	lumpname[9];
 	int		lumpnum;
 	int map;
-	map = datoi(dat);
-	gameskill = (int)sv_skill.value;
-	gamemap = nextmap = map;
-
-	if (map < 1)
-	{
-		return;
-	}
-	if (map < 10)
-	{
-		DEH_snprintf(lumpname, 9, "MAP0%i", map);
-	}
-	else {
-		DEH_snprintf(lumpname, 9, "MAP%i", map);
-	}
-	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
-
-	if (lumpnum)
-	{
-		// So be it.
-		G_InitNew(gameskill, map);
-		dmemset(passwordData, 0xff, 16);
-	}
-}
-
-static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
-	char	lumpname[9];
-	int		lumpnum;
-	int map;
 	map = atoi(dat);
 	gameskill = (int)sv_skill.value;
 	gamemap = nextmap = map;
@@ -221,6 +192,13 @@ static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 		DEH_snprintf(lumpname, 9, "MAP%i", map);
 	}
 	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
+
+	if (lumpnum)
+	{
+		// So be it.
+		G_InitNew(gameskill, map);
+		memset(passwordData, 0xff, 16);
+	}
 }
 
 static void M_CheatMyPos(player_t* player, char dat[4]) {

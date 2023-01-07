@@ -762,7 +762,4 @@ void P_PlayerThink(player_t* player) {
     // [d64] - recoil pitch from weapons
     if (player->recoilpitch)
     	player->recoilpitch = (((player->recoilpitch << 2) - player->recoilpitch) >> 2);
-
-    // [kex] check cvar for autoaim
-    player->autoaim = (gameflags & GF_ALLOWAUTOAIM);
 }

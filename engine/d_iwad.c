@@ -22,11 +22,7 @@
 #include <string.h>
 
 #include "deh_str.h"
-#include "doomkeys.h"
-#include "d_iwad.h"
 #include "i_system.h"
-#include "m_argv.h"
-#include "m_config.h"
 #include "m_misc.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -38,22 +34,22 @@
 #define MAX_IWAD_DIRS 128
 
 static boolean iwad_dirs_built = false;
-static int8_t *iwad_dirs[MAX_IWAD_DIRS];
+static int8_t* iwad_dirs[MAX_IWAD_DIRS];
 static int num_iwad_dirs = 0;
 
 //
 // Searches WAD search paths for an WAD with a specific filename.
 // 
 
-int8_t *D_FindWADByName(int8_t *name)
+int8_t* D_FindWADByName(int8_t* name)
 {
-    int8_t *path;
-    int8_t *probe;
+    int8_t* path;
+    int8_t* probe;
     int i;
-    
+
     // Absolute path?
 
-    probe = M_FileCaseExists(name);
+    probe = M_FileExists(name);
     if (probe != NULL)
     {
         return probe;
@@ -61,23 +57,23 @@ int8_t *D_FindWADByName(int8_t *name)
 
     // Search through all IWAD paths for a file with the given name.
 
-    for (i=0; i<num_iwad_dirs; ++i)
+    for (i = 0; i < num_iwad_dirs; ++i)
     {
         // As a special case, if this is in DOOMWADDIR or DOOMWADPATH,
         // the "directory" may actually refer directly to an IWAD
         // file.
 
-        probe = M_FileCaseExists(iwad_dirs[i]);
-        if (DirIsFile(iwad_dirs[i], name) && probe != NULL)
+        probe = M_FileExists(iwad_dirs[i]);
+        //if (DirIsFile(iwad_dirs[i], name) && probe != NULL)
         {
             return probe;
         }
 
         // Construct a string for the full path
 
-        path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR, name, NULL);
+        //path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR, name, NULL);
 
-        probe = M_FileCaseExists(path);
+        probe = M_FileExists(path);
         if (probe != NULL)
         {
             return probe;
@@ -98,9 +94,9 @@ int8_t *D_FindWADByName(int8_t *name)
 // if not found.
 //
 
-int8_t *D_TryFindWADByName(int8_t *filename)
+int8_t* D_TryFindWADByName(int8_t* filename)
 {
-    int8_t *result;
+    int8_t* result;
 
     result = D_FindWADByName(filename);
 

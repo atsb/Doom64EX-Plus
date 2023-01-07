@@ -30,6 +30,7 @@
 #include "p_mobj.h"
 
 #include "net_client.h"
+#include "gl_utils.h"
 
 //
 // STATUS BAR
