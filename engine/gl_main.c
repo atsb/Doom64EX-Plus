@@ -26,7 +26,6 @@
 
 #include <math.h>
 
-
 #ifdef __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
@@ -484,7 +483,7 @@ static void CalcViewSize(void) {
 	ViewHeight = video_height;
 
 	widescreen = !fcmp(((float)ViewWidth / (float)ViewHeight), (4.0f / 3.0f));
-
+	
 	ViewWindowX = (video_width - ViewWidth) / 2;
 
 	if (ViewWidth == video_width) {

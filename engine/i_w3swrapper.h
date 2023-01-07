@@ -28,8 +28,12 @@
 
 #ifdef _WIN32
 #include <fcntl.h>
+#ifdef USE_GLM
+#include <cglm/io.h>
+#endif
 #include <io.h>
 #include <string.h>
+#include <Windows.h>
 #else
 #include <fcntl.h>
 #include <unistd.h>
