@@ -24,6 +24,7 @@
 ImGuiIO *io;
 ImGuiContext* ctx;
 //Only for code testing since ImGUI is C++ Aka: C++98 this wrapper is pure C.
+//WIP...
 void IM_Init()
 {
 	io = igGetIO();
