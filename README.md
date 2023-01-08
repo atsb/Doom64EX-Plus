@@ -90,7 +90,7 @@ macOS
 - 4GB RAM
 - 80MB Disk Space
 - OpenGL 2.1+ Compliant Video Chip / Card
-Or OpenGL 3.1+ Compiling Video Chip / Card
+Or OpenGL 3.1+ Compliant Video Chip / Card
 
 ## Installation
 
