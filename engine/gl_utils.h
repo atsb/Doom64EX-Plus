@@ -33,8 +33,13 @@
 #include <GLFW/glfw3.h>
 #else
 #ifdef __APPLE__
+#ifdef USE_SDL3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#endif
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>

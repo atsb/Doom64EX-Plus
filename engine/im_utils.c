@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2023 André Guilherme 
+// Copyright(C) 2023 AndrÃ© Guilherme 
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 ImGuiIO *io;
 ImGuiContext* ctx;
 //Only for code testing since ImGUI is C++ Aka: C++98 this wrapper is pure C.
-//WIP...
 void IM_Init()
 {
 	io = igGetIO();
