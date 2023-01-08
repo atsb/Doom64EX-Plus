@@ -53,6 +53,7 @@ CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
+CVAR_EXTERNAL(v_vsync);
 
 SDL_Surface* screen;
 int video_width;
@@ -135,6 +136,7 @@ void I_InitScreen(void) {
 	OGL_WINDOW_HINT(OGL_BUFFER, 24);
 	OGL_WINDOW_HINT(OGL_DEPTH, 24);
 	OGL_WINDOW_HINT(OGL_DOUBLEBUFFER, 1);
+	SDL_GL_SetSwapInterval(v_vsync.value);
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {
