@@ -41,7 +41,7 @@
 
 extern SDL_Surface* screen;
 extern SDL_Window* window;
-extern const int8_t version_date[];
+extern const char version_date[];
 
 void I_InitVideo(void);
 void I_InitScreen(void);

@@ -30,7 +30,10 @@
 #include "i_w3swrapper.h"
 #include "doomtype.h"
 #include "m_fixed.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
+
 
 //
 // MISC

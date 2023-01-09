@@ -29,7 +29,10 @@
 
 #include "doomstat.h"
 
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
+
 #include "p_local.h"
 
 rcolor    bspColor[5];

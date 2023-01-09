@@ -34,14 +34,13 @@
 #include <stdint.h>
 #endif
 
-typedef struct md5_context_s md5_context_t;
 typedef byte md5_digest_t[16];
 
-struct md5_context_s {
+typedef struct md5_context_s {
         unsigned int buf[4];
         unsigned int bytes[2];
         unsigned int in[16];
-};
+}md5_context_t;
 
 void MD5_Init(md5_context_t *context);
 void MD5_Update(md5_context_t *context, byte const *buf, unsigned len);

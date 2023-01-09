@@ -27,14 +27,14 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef _WIN32
-#error i_opndir.c is for Win32 only
-#endif
-
 //Villsa: Implemented for Doom64EX
 
 #ifndef I_OPNDIR_H__
 #define I_OPNDIR_H__
+
+#ifndef _WIN32
+#error i_opndir.c is for Win32 only
+#endif
 
 #ifdef _XBOX
 #include <SDL_stdinc.h>

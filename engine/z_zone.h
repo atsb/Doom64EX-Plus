@@ -42,16 +42,14 @@
 
 // ZONE MEMORY
 
-typedef struct memblock_s memblock_t;
-
-struct memblock_s {
+typedef struct memblock_s {
 	int id; // = ZONEID
 	int tag;
 	int size;
 	void** user;
-	memblock_t* prev;
-	memblock_t* next;
-};
+	struct memblock_s* prev;
+	struct memblock_s* next;
+}memblock_t;
 
 // PU - purge tags.
 enum {

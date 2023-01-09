@@ -160,7 +160,7 @@ boolean GL_CheckExtension(const char* ext) {
 // GL_RegisterProc
 //
 
-void* GL_RegisterProc(const int8_t* address) {
+void* GL_RegisterProc(const char* address) {
 	void* proc = glGetProcAddress(address);
 
 	if (!proc) {

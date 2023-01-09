@@ -29,7 +29,10 @@
 #include "doomstat.h"
 #include "z_zone.h"
 #include "p_tick.h"
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "g_demo.h"
 #include "m_misc.h"
 #include "m_random.h"
@@ -38,9 +41,7 @@
 
 #ifdef _WIN32
 #include "i_opndir.h"
-#endif
-
-#if !defined _WIN32
+#else
 #include <unistd.h>
 #endif
 

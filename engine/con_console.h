@@ -33,8 +33,6 @@ extern char     console_inputbuffer[];
 extern int      console_inputlength;
 extern boolean console_initialized;
 
-#define CONCLEARINPUT() (memset(console_inputbuffer+1, 0, MAX_CONSOLE_INPUT_LEN-1))
-
 void CON_Init(void);
 void CON_AddText(char *text);
 void CON_Printf(rcolor clr, const char *s, ...);

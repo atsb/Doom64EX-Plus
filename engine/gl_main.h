@@ -101,7 +101,6 @@ boolean GL_CheckExtension(const char* ext);
 void* GL_RegisterProc(const char* address);
 void GL_Init(void);
 void GL_ClearView(rcolor clearcolor);
-boolean GL_GetBool(int x);
 void GL_CheckFillMode(void);
 void GL_SwapBuffers(void);
 byte* GL_GetScreenBuffer(int x, int y, int width, int height);

@@ -27,7 +27,9 @@
 
 #include <math.h>
 
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "r_clipper.h"
 #include "i_system.h"
 #include "doomstat.h"

@@ -28,7 +28,10 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "m_keys.h"
 #include "i_system.h"
 #include "i_video.h"
@@ -42,28 +45,24 @@
 
 #define MAX_CURRENTACTIONS    16
 
-typedef struct action_s action_t;
-
-struct action_s {
+typedef struct action_s {
 	char* name;
 	actionproc_t    proc;
-	action_t* children[2];
-	action_t* parent;
-	int64_t           data;
-};
+	struct action_s* children[2];
+	struct action_s* parent;
+	long long           data;
+}action_t;
 
 static action_t* Actions = NULL;
 
-typedef struct alist_s alist_t;
-
-struct alist_s {
+typedef struct alist_s {
 	char* buff;
 	char* cmd;
-	alist_t* next;
+	struct alist_s* next;
 	int         refcount;
 	//should allocate to required size?
 	char* param[MAX_ACTIONPARAM + 1];//NULL terminated list
-};
+}alist_t;
 
 void G_RunAlias(int64_t data, char** param);
 void G_DoOptimizeActionTree(void);
@@ -952,7 +951,7 @@ static void AddAction(action_t* action) {
 // Adds a new action to the list
 //
 
-void G_AddCommand(char* name, actionproc_t proc, int64_t data) {
+void G_AddCommand(char* name, actionproc_t proc, long long data) {
 	action_t* action;
 
 	action = (action_t*)Z_Malloc(sizeof(action_t), PU_STATIC, NULL);
@@ -1050,7 +1049,7 @@ static CMD(Alias) {
 		G_UnregisterAction(param[0]);
 	}
 	else {
-		G_AddCommand(param[0], G_RunAlias, (int64_t)al);
+		G_AddCommand(param[0], G_RunAlias, (long long)al);
 	}
 }
 

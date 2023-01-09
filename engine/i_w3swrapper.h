@@ -58,6 +58,7 @@
 typedef unsigned char boolean;
 #endif
 #else
+#include <stdbool.h> //for true and false.
 #ifndef _WIN32
 typedef unsigned char boolean;
 #endif

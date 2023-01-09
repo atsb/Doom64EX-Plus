@@ -270,7 +270,6 @@
     <ClInclude Include="..\engine\g_controls.h" />
     <ClInclude Include="..\engine\g_demo.h" />
     <ClInclude Include="..\engine\g_game.h" />
-    <ClInclude Include="..\engine\g_local.h" />
     <ClInclude Include="..\engine\g_settings.h" />
     <ClInclude Include="..\engine\info.h" />
     <ClInclude Include="..\engine\i_audio.h" />
@@ -308,7 +307,6 @@
     <ClInclude Include="..\engine\p_pspr.h" />
     <ClInclude Include="..\engine\p_saveg.h" />
     <ClInclude Include="..\engine\p_setup.h" />
-    <ClInclude Include="..\engine\p_spec.h" />
     <ClInclude Include="..\engine\p_tick.h" />
     <ClInclude Include="..\engine\resource.h" />
     <ClInclude Include="..\engine\r_clipper.h" />

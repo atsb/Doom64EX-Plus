@@ -78,7 +78,7 @@ CVAR(v_accessibility, 0);
 ticcmd_t        emptycmd;
 
 //
-// I_uSleep
+// I_Sleep
 //
 
 void I_Sleep(unsigned long usecs) {

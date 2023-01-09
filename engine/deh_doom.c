@@ -28,7 +28,7 @@ char* deh_signatures[] =
 // deh_ammo.c:
 extern deh_section_t deh_section_ammo;
 // deh_cheat.c:
-extern deh_section_t deh_section_cheat;
+//extern deh_section_t deh_section_cheat;
 // deh_frame.c:
 extern deh_section_t deh_section_frame;
 // deh_misc.c:

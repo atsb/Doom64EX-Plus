@@ -27,9 +27,22 @@
 #include <stdio.h>
 #include "doomtype.h"
 
-typedef struct _wad_file_s wad_file_t;
+typedef struct _wad_file_s {
+	// Class of this file.
 
-typedef struct {
+	struct wad_file_class_s* file_class;
+
+	// If this is NULL, the file cannot be mapped into memory.  If this
+	// is non-NULL, it is a pointer to the mapped file.
+
+	byte* mapped;
+
+	// Length of the file, in bytes.
+
+	unsigned int length;
+}wad_file_t;
+
+typedef struct wad_file_class_s{
 	// Open a file for reading.
 
 	wad_file_t* (*OpenFile)(char* path);
@@ -44,21 +57,6 @@ typedef struct {
 	unsigned int(*Read)(wad_file_t* file, unsigned int offset,
 		void* buffer, unsigned int buffer_len);
 } wad_file_class_t;
-
-struct _wad_file_s {
-	// Class of this file.
-
-	wad_file_class_t* file_class;
-
-	// If this is NULL, the file cannot be mapped into memory.  If this
-	// is non-NULL, it is a pointer to the mapped file.
-
-	byte* mapped;
-
-	// Length of the file, in bytes.
-
-	unsigned int length;
-};
 
 // Open the specified file. Returns a pointer to a new wad_file_t
 // handle for the WAD file, or NULL if it could not be opened.

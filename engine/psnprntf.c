@@ -62,14 +62,16 @@ int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
     return ret;
 }
 
-#define STATE_NONE 0
-#define STATE_OPERATOR 1 /* Just received % */
-#define STATE_FLAG 2     /* Just received a flag or prefix or width */
-#define STATE_WIDTH 3
-#define STATE_BEFORE_PRECISION 4 /* just got dot */
-#define STATE_PRECISION 5 /* got at least one number after dot */
-#define STATE_PREFIX 6   /* just received prefix (h, l or L) */
-
+enum
+{
+    STATE_NONE = 0,
+    STATE_OPERATOR = 1, /* Just received % */
+    STATE_FLAG = 2,    /* Just received a flag or prefix or width */
+    STATE_WIDTH = 3,
+    STATE_BEFORE_PRECISION = 4, /* just got dot */
+    STATE_PRECISION = 5, /* got at least one number after dot */
+    STATE_PREFIX = 6   /* just received prefix (h, l or L) */
+};
 #define UNKNOWN_WIDTH 0
 #define VARIABLE_WIDTH -2
 #define UNKNOWN_PRECISION -1
@@ -309,7 +311,7 @@ int pvsnprintf(int8_t *str, size_t nmax, const int8_t *format, va_list ap) {
     return ncount;
 }
 
-int pvsnfmt_char(pvsnfmt_vars *info, int8_t c) {
+int pvsnfmt_char(pvsnfmt_vars *info, char c) {
     if(info->nmax > 1) {
         *(info->pinsertion) = c;
         info->pinsertion += 1;
@@ -319,7 +321,7 @@ int pvsnfmt_char(pvsnfmt_vars *info, int8_t c) {
 }
 
 /* strnlen not available on all platforms.. maybe autoconf it? */
-unsigned int pstrnlen(const int8_t *s, unsigned int count) {
+unsigned int pstrnlen(const char *s, unsigned int count) {
     const char *p = s;
     while(*p && count-- > 0) {
         p++;
@@ -338,8 +340,8 @@ unsigned int pstrnlen(const int8_t *s, unsigned int count) {
  *   ap             Argument list
  */
 
-int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
-    const int8_t *str = s;
+int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
+    const char *str = s;
     int nprinted;
     int len;
     int pad = 0;

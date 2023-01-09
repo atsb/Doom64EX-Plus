@@ -59,10 +59,9 @@ int         DualMouse;
 boolean    MouseMode;//false=microsoft, true=mouse systems
 boolean window_mouse;
 
+signed int s_deadzone = 8000;
 
-Sint32 s_deadzone = 8000;
-
-void s_clamp(Sint32 axis)
+void s_clamp(signed int axis)
 {
       if (axis < s_deadzone && axis > -s_deadzone) 
 	  {

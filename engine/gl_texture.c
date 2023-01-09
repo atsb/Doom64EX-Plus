@@ -28,13 +28,14 @@
 #include <glew.h>
 #endif 
 #include "doomstat.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "i_png.h"
 #include "i_system.h"
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gl_texture.h"
-#include "p_spec.h"
 #include "p_local.h"
 #include "con_console.h"
 #include "g_actions.h"

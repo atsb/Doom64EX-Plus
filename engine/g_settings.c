@@ -33,7 +33,10 @@
 #include <sys/types.h>
 #endif
 
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "z_zone.h"
 #include "m_misc.h"
 #include "con_console.h"

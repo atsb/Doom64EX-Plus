@@ -126,7 +126,7 @@ void MD5_UpdateString(md5_context_t *context, char *str)
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
 void
-MD5_Final(byte digest[16], md5_context_t *ctx)
+MD5_Final(unsigned char digest[16], md5_context_t *ctx)
 {
         int count = ctx->bytes[0] & 0x3f;       /* Number of bytes in ctx->in */
         byte *p = (byte *)ctx->in + count;

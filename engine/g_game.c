@@ -52,10 +52,15 @@
 #include "sounds.h"
 #include "tables.h"
 #include "info.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "r_wipe.h"
 #include "con_console.h"
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "m_password.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
@@ -190,7 +195,7 @@ void G_RegisterCvars(void) {
 
 static CMD(Button) {
 	playercontrols_t* pc;
-	int64_t			  key;
+	long long key;
 
 	pc = &Controls;
 

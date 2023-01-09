@@ -63,13 +63,16 @@ typedef struct {
 	int            flags;
 } playercontrols_t;
 
-#define PCF_NEXTWEAPON    0x01
-#define PCF_FDCLICK        0x02
-#define PCF_FDCLICK2    0x04
-#define PCF_SDCLICK        0x08
-#define PCF_SDCLICK2    0x10
-#define PCF_PREVWEAPON    0x20
-#define PCF_GAMEPAD     0x40
+enum
+{
+	PCF_NEXTWEAPON = 0x01,
+	PCF_FDCLICK = 0x02,
+	PCF_FDCLICK2 = 0x04,
+	PCF_SDCLICK = 0x08,
+	PCF_SDCLICK2 = 0x10,
+	PCF_PREVWEAPON = 0x20,
+    PCF_GAMEPAD = 0x40
+};
 
 extern playercontrols_t    Controls;
 extern char* G_GetConfigFileName(void);

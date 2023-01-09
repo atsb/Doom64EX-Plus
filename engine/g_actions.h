@@ -26,13 +26,13 @@
 
 #define MAX_ACTIONPARAM        2
 
-typedef void (*actionproc_t)(int64_t data, char** param);
+typedef void (*actionproc_t)(long long data, char** param);
 
-#define CMD(name) void CMD_ ## name(int64_t data, char** param)
+#define CMD(name) void CMD_ ## name(long long data, char** param)
 
 void        G_InitActions(void);
 boolean    G_ActionResponder(event_t* ev);
-void        G_AddCommand(char* name, actionproc_t proc, int64_t data);
+void        G_AddCommand(char* name, actionproc_t proc, long long data);
 void        G_ActionTicker(void);
 void        G_ExecuteCommand(char* action);
 void        G_BindActionByName(char* key, char* action);

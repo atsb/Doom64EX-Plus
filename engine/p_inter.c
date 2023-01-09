@@ -43,7 +43,9 @@
 #include "p_local.h"
 #include "p_macros.h"
 #include "s_sound.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "con_console.h"
 #include "st_stuff.h"
 
