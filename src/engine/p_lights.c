@@ -261,6 +261,7 @@ void T_Glow(glow_t* g) {
 
 		if (g->sector->special != g->special)
 		{
+			g->sector->lightlevel = 0;
 			P_RemoveThinker(&g->thinker);
 			return;
 		}
