@@ -64,7 +64,7 @@ typedef struct alist_s {
 	char* param[MAX_ACTIONPARAM + 1];//NULL terminated list
 }alist_t;
 
-void G_RunAlias(int64_t data, char** param);
+void G_RunAlias(long long data, char** param);
 void G_DoOptimizeActionTree(void);
 
 alist_t* CurrentActions[MAX_CURRENTACTIONS];
@@ -966,7 +966,7 @@ void G_AddCommand(char* name, actionproc_t proc, long long data) {
 // G_RunAlias
 //
 
-void G_RunAlias(int64_t data, char** param) {
+void G_RunAlias(long long data, char** param) {
 	AddActions(DoRunActions((alist_t*)data, false));
 }
 

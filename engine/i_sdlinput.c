@@ -36,11 +36,11 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-
+#ifdef FUCKED_GAMECONTROLLER
 float i_rsticksensitivityy;
 float i_rsticksensitivityx;
 int i_xinputscheme;
-
+#endif
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
 CVAR(v_macceleration, 0);
@@ -68,7 +68,7 @@ void s_clamp(signed int axis)
           axis = 0;
       }
 }
-
+#ifdef FUCKED_GAMECONTROLLER
 SDL_GameController *s_controller;
 
 
@@ -171,6 +171,7 @@ void I_InitGameController()
 		return;
 	}
 }
+#endif
 //
 // I_TranslateKey
 //
@@ -543,7 +544,7 @@ void I_GetEvent(SDL_Event* Event) {
 	default:
 		break;
 	}
-#ifdef FUCKED
+#ifdef FUCKED_GAMECONTROLLER
 	int x, y;
 	if (s_controller) 
 	{

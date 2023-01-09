@@ -53,7 +53,9 @@
 #include "g_demo.h"
 #include "i_w3swrapper.h"
 #include "gl_utils.h"
+#ifdef FUCKED_GAMECONTROLLER
 void M_DrawXInputButton(int x, int y, int button);
+#endif
 CVAR(st_drawhud, 1);
 CVAR(st_crosshair, 0);
 CVAR(st_crosshairopacity, 80);

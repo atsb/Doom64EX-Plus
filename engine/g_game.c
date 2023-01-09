@@ -851,6 +851,7 @@ void G_ClearInput(void) {
 	}
 }
 
+#ifdef FUCKED_GAMECONTROLLER
 //
 // G_DoCmdGamepadMove
 //
@@ -885,7 +886,7 @@ void G_DoCmdGamepadMove(event_t* ev)
 		}
 	}
 }
-
+#endif
 //
 // G_SetGameFlags
 //

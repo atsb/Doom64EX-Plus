@@ -2895,7 +2895,9 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
+#ifdef FUCKED_GAMECONTROLLER
 	controls_gamepad,
+#endif
 	controls_return,
 	controls_end
 } controls_e;
@@ -2910,7 +2912,9 @@ menuitem_t ControlsMenu[] = {
 char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
+#ifdef FUCKED_GAMECONTROLLER
 	"configure gamepad functionality",
+#endif
 	NULL
 };
 
@@ -4912,26 +4916,27 @@ void M_Drawer(void) {
 	if (currentMenu->scale != 1) {
 		GL_SetOrthoScale(1.0f);
 	}
-
+#ifdef FUCKED_GAMECONTROLLER
 	if (currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
-			//M_DrawXInputButton(4, 271, GAMEPAD_B);
+			M_DrawXInputButton(4, 271, GAMEPAD_B);
 			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
 		}
 
 		GL_SetOrthoScale(0.75f);
-		//M_DrawXInputButton(4, 287, GAMEPAD_A);
+		M_DrawXInputButton(4, 287, GAMEPAD_A);
 		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
 
 		if (currentMenu != &PauseDef) {
 			GL_SetOrthoScale(0.75f);
-			//M_DrawXInputButton(5, 303, GAMEPAD_START);
+			M_DrawXInputButton(5, 303, GAMEPAD_START);
 			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
 		}
 
 		GL_SetOrthoScale(1);
 	}
+#endif
 
 	M_DrawCursor(mouse_x, mouse_y);
 }
