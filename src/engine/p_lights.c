@@ -261,38 +261,43 @@ void T_Glow(glow_t* g) {
 
 		if (g->sector->special != g->special)
 		{
+			g->sector->lightlevel = 0;
 			P_RemoveThinker(&g->thinker);
 			return;
 		}
 
 		g->count = 2;
 
-		switch (g->direction)
-		{
-		case -1:		/* DOWN */
+		if (g->direction == -1) {
 			g->sector->lightlevel -= GLOWSPEED;
-			if (g->sector->lightlevel < g->minlight)
-			{
-				g->sector->lightlevel = g->minlight;
-
-				if (g->type == PULSERANDOM)
-					g->maxlight = (P_Random() & 31) + 17;
-
-				g->direction = 1;
+			if (!(g->sector->lightlevel < g->minlight)) {
+				return;
 			}
-			break;
-		case 1:			/* UP */
+
+			g->sector->lightlevel = g->minlight;
+
+			if (g->type == PULSERANDOM) {
+				g->maxlight = (P_Random() & 31) + 17;
+			}
+
+			g->direction = 1;
+
+			return;
+		}
+		else if (g->direction == 1) {
 			g->sector->lightlevel += GLOWSPEED;
-			if (g->maxlight < g->sector->lightlevel)
-			{
-				g->sector->lightlevel = g->maxlight;
-
-				if (g->type == PULSERANDOM)
-					g->minlight = (P_Random() & 15);
-
-				g->direction = -1;
+			if (!(g->maxlight < g->sector->lightlevel)) {
+				return;
 			}
-			break;
+
+			if (g->type == PULSERANDOM) {
+				g->minlight = (P_Random() & 15);
+			}
+
+			g->direction = -1;
+		}
+		else {
+			return;
 		}
 	}
 }
@@ -317,15 +322,11 @@ void P_SpawnGlowingLight(sector_t* sector, byte type) {
 		g->thinker.function.acp1 = (actionf_p1)T_Glow;
 		g->minlight = 0;
 
-		switch (type)
-		{
-		case PULSENORMAL:
+		if (g->type == PULSENORMAL) {
 			g->maxlight = 32;
-			break;
-		case PULSESLOW:
-		case PULSERANDOM:
+		}
+		else if (g->type == PULSERANDOM || g->type == PULSESLOW) {
 			g->maxlight = 48;
-			break;
 		}
 	}
 }
