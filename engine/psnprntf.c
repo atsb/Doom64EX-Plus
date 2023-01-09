@@ -12,10 +12,15 @@
 #include <stdlib.h> /* for fcvt */
 
 #ifdef __APPLE__
+#ifdef USE_SDL3
+#include <SDL3/SDL.h> // villsa
+#else
 #include <SDL2/SDL.h> // villsa
+#endif
 #else
 #include <SDL.h>
 #endif
+
 #include "psnprntf.h"
 
 /* Windows stdlib defines fcvt differently <sigh> */

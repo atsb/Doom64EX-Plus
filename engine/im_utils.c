@@ -1,7 +1,7 @@
 // Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2023 André Guilherme 
+// Copyright(C) 2023 AndrÃ© Guilherme 
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
