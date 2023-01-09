@@ -78,7 +78,6 @@ boolean    usingGL = false;
 float       max_anisotropic = 0;
 boolean    widescreen = false;
 
-CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_anisotropic);
@@ -564,9 +563,4 @@ void GL_Init(void) {
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
-#ifdef USE_GLFW	
-	glfwSwapInterval(v_vsync.value);
-#else	
-	SDL_GL_SetSwapInterval(v_vsync.value);
-#endif
 }
