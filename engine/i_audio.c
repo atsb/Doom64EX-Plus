@@ -119,8 +119,8 @@ typedef struct {
     char        header[4];
     int         chunksize;
     short       type;
-    word        ntracks;
-    word        delta;
+    unsigned short        ntracks;
+    unsigned short        delta;
     byte*       data;
     int       length;
     track_t*    tracks;

@@ -35,10 +35,10 @@ typedef struct {
     signed char	sidemove;	// *2048 for move
     short       angleturn;    // <<16 for angle delta
     short       pitch;
-    byte        consistency;    // checks for net game
-    byte        chatchar;
-    byte        buttons;
-    byte        buttons2;
+    unsigned char       consistency;    // checks for net game
+    unsigned char        chatchar;
+    unsigned char        buttons;
+    unsigned char        buttons2;
 } ticcmd_t;
 
 #endif

@@ -47,7 +47,7 @@ CVAR_EXTERNAL(r_texturecombiner);
 // R_LightToVertex
 //
 
-void R_LightToVertex(vtx_t* v, int idx, word c) {
+void R_LightToVertex(vtx_t* v, int idx, unsigned short c) {
 	int i = 0;
 
 	for (i = 0; i < c; i++) {
@@ -255,7 +255,7 @@ void R_RefreshBrightness(void) {
 // R_GetSectorLight
 //
 
-rcolor R_GetSectorLight(byte alpha, word ptr) {
+rcolor R_GetSectorLight(byte alpha, unsigned short ptr) {
 	return D_RGBA((byte)lights[ptr].active_r,
 		(byte)lights[ptr].active_g, (byte)lights[ptr].active_b, alpha);
 }

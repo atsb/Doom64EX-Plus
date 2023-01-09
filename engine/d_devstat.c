@@ -42,7 +42,7 @@
 #include "i_sdlinput.h"
 static boolean showstats = true;
 
-extern word statindice;
+extern unsigned short statindice;
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);

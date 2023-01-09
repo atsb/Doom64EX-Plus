@@ -35,8 +35,8 @@ typedef struct _wad_file_s {
 	// If this is NULL, the file cannot be mapped into memory.  If this
 	// is non-NULL, it is a pointer to the mapped file.
 
-	byte* mapped;
-
+	unsigned char* mapped;
+	
 	// Length of the file, in bytes.
 
 	unsigned int length;

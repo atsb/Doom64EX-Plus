@@ -175,7 +175,7 @@ void* GL_RegisterProc(const char* address) {
 // GL_SetOrtho
 //
 
-static byte checkortho = 0;
+static unsigned char checkortho = 0;
 
 void GL_SetOrtho(boolean stretch) {
 	float width;
@@ -256,9 +256,9 @@ void GL_SwapBuffers(void) {
 // GL_GetScreenBuffer
 //
 
-byte* GL_GetScreenBuffer(int x, int y, int width, int height) {
-	byte* buffer;
-	byte* data;
+unsigned char* GL_GetScreenBuffer(int x, int y, int width, int height) {
+	unsigned char* buffer;
+	unsigned char* data;
 	int i;
 	int j;
 	int offset1;
@@ -267,8 +267,8 @@ byte* GL_GetScreenBuffer(int x, int y, int width, int height) {
 	int col;
 
 	col = (width * 3);
-	data = (byte*)Z_Calloc(height * width * 3, PU_STATIC, 0);
-	buffer = (byte*)Z_Calloc(col, PU_STATIC, 0);
+	data = (unsigned char*)Z_Calloc(height * width * 3, PU_STATIC, 0);
+	buffer = (unsigned char*)Z_Calloc(col, PU_STATIC, 0);
 
 	//
 	// 20120313 villsa - force pack alignment to 1

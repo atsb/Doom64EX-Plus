@@ -147,14 +147,14 @@ mapthing_t          playerstarts[MAXPLAYERS];
 // P_InitTextureHashTable
 //
 
-static word* texturehashlist[2];
+static unsigned short* texturehashlist[2];
 
 static void P_InitTextureHashTable(void) {
 	int i;
 	int t = W_GetNumForName("T_START") + 1;
 
-	texturehashlist[0] = Z_Alloca(numtextures * sizeof(word));
-	texturehashlist[1] = Z_Alloca(numtextures * sizeof(word));
+	texturehashlist[0] = Z_Alloca(numtextures * sizeof(unsigned short));
+	texturehashlist[1] = Z_Alloca(numtextures * sizeof(unsigned short));
 
 	for (i = 0; i < numtextures; i++) {
 		texturehashlist[0][i] = W_HashLumpName(lumpinfo[t + i].name) % 65536;
@@ -166,7 +166,7 @@ static void P_InitTextureHashTable(void) {
 // P_GetTextureHashKey
 //
 
-static word P_GetTextureHashKey(int hash) {
+static unsigned short P_GetTextureHashKey(int hash) {
 	int i;
 
 	for (i = 0; i < numtextures; i++) {
@@ -229,13 +229,13 @@ void P_LoadSegs(void)
 
 	for (i = 0; i < numsegs; i++, li++, ml++)
 	{
-		li->v1 = &vertexes[(word)SHORT(ml->v1)];
-		li->v2 = &vertexes[(word)SHORT(ml->v2)];
+		li->v1 = &vertexes[(unsigned short)SHORT(ml->v1)];
+		li->v2 = &vertexes[(unsigned short)SHORT(ml->v2)];
 
 		li->angle = INT2F(SHORT(ml->angle));
 		li->offset = INT2F(SHORT(ml->offset));
 
-		linedef = (word)SHORT(ml->linedef);
+		linedef = (unsigned short)SHORT(ml->linedef);
 		ldef = &lines[linedef];
 		li->linedef = ldef;
 
@@ -280,8 +280,8 @@ void P_LoadSubsectors(int lump) {
 	ss = subsectors;
 
 	for (i = 0; i < numsubsectors; i++, ss++, ms++) {
-		ss->numlines = (word)SHORT(ms->numsegs);
-		ss->firstline = (word)SHORT(ms->firstseg);
+		ss->numlines = (unsigned short)SHORT(ms->numsegs);
+		ss->firstline = (unsigned short)SHORT(ms->firstseg);
 		ss->leaf = 0;
 		ss->numleafs = 0;
 	}
@@ -479,7 +479,7 @@ void P_LoadLeafs(int lump) {
 
 		while (((byte*)src - (byte*)mlf) < length) {
 			count++;
-			size += (word)SHORT(*src);
+			size += (unsigned short)SHORT(*src);
 			next = (*src << 2) + 2;
 			src += (next >> 1);
 		}
@@ -501,7 +501,7 @@ void P_LoadLeafs(int lump) {
 	count = 0;
 
 	for (i = 0; i < numleafs; i++, ss++) {
-		ss->numleafs = (word)SHORT(*mlf++);
+		ss->numleafs = (unsigned short)SHORT(*mlf++);
 		ss->leaf = (lf - leafs);
 
 		if (ss->numleafs) {
@@ -509,7 +509,7 @@ void P_LoadLeafs(int lump) {
 			int seg;
 
 			for (j = 0; j < ss->numleafs; j++, lf++) {
-				vertex = (word)SHORT(*mlf++);
+				vertex = (unsigned short)SHORT(*mlf++);
 				if (vertex > numvertexes) {
 					I_Error("P_LoadLeafs: vertex out of range: %i - %i\n", vertex, numvertexes);
 				}
@@ -530,7 +530,7 @@ void P_LoadLeafs(int lump) {
 						}
 					}
 
-					lf->seg = &segs[(word)seg];
+					lf->seg = &segs[(unsigned short)seg];
 				}
 			}
 		}
@@ -649,8 +649,8 @@ void P_LoadLineDefs(int lump) {
 		ld->flags = mld->flags;
 		ld->special = mld->special;
 		ld->tag = SHORT(mld->tag);
-		v1 = ld->v1 = &vertexes[(word)SHORT(mld->v1)];
-		v2 = ld->v2 = &vertexes[(word)SHORT(mld->v2)];
+		v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)];
+		v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)];
 		ld->dx = v2->x - v1->x;
 		ld->dy = v2->y - v1->y;
 
@@ -693,8 +693,8 @@ void P_LoadLineDefs(int lump) {
 			ld->bbox[BOXTOP] = v1->y;
 		}
 
-		ld->sidenum[0] = (word)SHORT(mld->sidenum[0]);
-		ld->sidenum[1] = (word)SHORT(mld->sidenum[1]);
+		ld->sidenum[0] = (unsigned short)SHORT(mld->sidenum[0]);
+		ld->sidenum[1] = (unsigned short)SHORT(mld->sidenum[1]);
 
 		if (ld->sidenum[0] != NO_SIDE_INDEX) {
 			ld->frontsector = sides[ld->sidenum[0]].sector;

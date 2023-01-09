@@ -108,14 +108,14 @@ static int              st_msgalpha = 0xff;
 static char* st_msg = NULL;
 static vtx_t            st_vtx[32];
 static int              st_vtxcount = 0;
-static byte             st_flash_r;
-static byte             st_flash_g;
-static byte             st_flash_b;
-static byte             st_flash_a;
+static unsigned char             st_flash_r;
+static unsigned char             st_flash_g;
+static unsigned char             st_flash_b;
+static unsigned char             st_flash_a;
 static int              st_jmessages[ST_JMESSAGES];   // japan-specific messages
 static boolean         st_hasjmsg = false;
 static boolean         st_wpndisplay_show;
-static byte             st_wpndisplay_alpha;
+static unsigned char             st_wpndisplay_alpha;
 static int              st_wpndisplay_ticks;
 
 char* chat_macros[] = {
@@ -165,7 +165,7 @@ static char st_chatstring[MAXPLAYERS][MAXCHATSIZE];
 #define STQUEUESIZE        256
 static int st_chathead;
 static int st_chattail;
-static byte st_chatqueue[STQUEUESIZE];
+static unsigned char st_chatqueue[STQUEUESIZE];
 
 #define ST_CROSSHAIRSIZE    32
 int st_crosshairs = 0;
@@ -251,7 +251,7 @@ static void ST_DrawDamageMarkers(void) {
 		static vtx_t v[3];
 		player_t* p;
 		float angle;
-		byte alpha;
+		unsigned char alpha;
 
 		GL_SetState(GLSTATE_BLEND, 1);
 		GL_SetOrtho(0);
@@ -469,7 +469,7 @@ void ST_Ticker(void) {
 // ST_FlashingScreen
 //
 
-void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
+void ST_FlashingScreen(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	if (v_accessibility.value < 1)
 	{
 		rcolor c = D_RGBA(r, g, b, a);
@@ -478,7 +478,7 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 		GL_SetOrtho(1);
 
 		glDisable(GL_TEXTURE_2D);
-		glColor4ubv((byte*)&c);
+		glColor4ubv((unsigned char*)&c);
 		glRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
 		glEnable(GL_TEXTURE_2D);
 
@@ -669,7 +669,7 @@ static void ST_DrawStatus(void) {
 // ST_DrawCrosshair
 //
 
-void ST_DrawCrosshair(int x, int y, int slot, byte scalefactor, rcolor color) {
+void ST_DrawCrosshair(int x, int y, int slot, unsigned char scalefactor, rcolor color) {
 	float u;
 	int index;
 	int scale;
@@ -1223,7 +1223,7 @@ static void ST_QueueChatChar(char ch) {
 //
 
 char ST_DequeueChatChar(void) {
-	byte temp;
+	unsigned char temp;
 
 	if (st_chathead == st_chattail) {
 		return 0;    // queue is empty

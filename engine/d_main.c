@@ -586,23 +586,23 @@ static void Credits_Drawer(void) {
 	switch (creditscreenstage) {
 	case 0:
 		Draw_GfxImage(72, 24, "IDCRED1",
-			D_RGBA(255, 255, 255, (byte)screenalpha), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalpha), true);
 
 		Draw_GfxImage(40, 40, "IDCRED2",
-			D_RGBA(255, 255, 255, (byte)screenalphatext), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalphatext), true);
 		break;
 
 	case 1:
 		Draw_GfxImage(16, 80, "WMSCRED1",
-			D_RGBA(255, 255, 255, (byte)screenalpha), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalpha), true);
 
 		Draw_GfxImage(32, 24, "WMSCRED2",
-			D_RGBA(255, 255, 255, (byte)screenalphatext), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalphatext), true);
 		break;
 
 	case 2:
 		Draw_GfxImage(64, 30, "EVIL",
-			D_RGBA(255, 255, 255, (byte)screenalpha), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalpha), true);
 		break;
 	}
 }

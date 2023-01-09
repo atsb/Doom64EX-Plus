@@ -214,7 +214,7 @@ void D_StartGameLoop(void) {
 //
 
 static boolean had_warning = false;
-static void PrintMD5Digest(char* s, byte* digest) {
+static void PrintMD5Digest(char* s, unsigned char* digest) {
 	unsigned int i;
 
 	I_Printf("%s: ", s);

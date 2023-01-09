@@ -47,10 +47,10 @@
 
 #define MAXINDICES  0x10000
 
-word statindice = 0;
+unsigned short statindice = 0;
 
-static word indicecnt = 0;
-static word drawIndices[MAXINDICES];
+static unsigned short indicecnt = 0;
+static unsigned short drawIndices[MAXINDICES];
 
 void glGetVersion(int major, int minor)
 {
@@ -216,7 +216,7 @@ void glViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 // glSetVertexColor
 //
 
-void glSetVertexColor(vtx_t* v, rcolor c, word count) {
+void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count) {
 	int i = 0;
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("glSetVertexColor(v=0x%p, c=0x%x, count=0x%x)\n", v, c, count);

@@ -61,19 +61,19 @@ typedef struct {
 	rfloat    z;
 	rfloat    tu;
 	rfloat    tv;
-	byte r;
-	byte g;
-	byte b;
-	byte a;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
 } vtx_t;
 
 #define MAXSPRPALSETS       4
 
 typedef struct {
-	byte r;
-	byte g;
-	byte b;
-	byte a;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
 } dPalette_t;
 
 #define GLSTATE_BLEND       0
@@ -93,7 +93,7 @@ extern int ViewWindowY;
 #define ALPHACLEARTEXTURE   0.8f
 #define MAX_COORD           32767.0f
 
-#define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
+#define TESTALPHA(x)        ((unsigned char)((x >> 24) & 0xff) < 0xff)
 
 extern boolean usingGL;
 
@@ -103,7 +103,7 @@ void GL_Init(void);
 void GL_ClearView(rcolor clearcolor);
 void GL_CheckFillMode(void);
 void GL_SwapBuffers(void);
-byte* GL_GetScreenBuffer(int x, int y, int width, int height);
+unsigned char* GL_GetScreenBuffer(int x, int y, int width, int height);
 void GL_SetTextureFilter(void);
 void GL_SetOrtho(boolean stretch);
 void GL_ResetViewport(void);

@@ -495,7 +495,7 @@ void L_Complain(wchar_t* fmt, ...)
 	va_start(va, fmt);
 	vsprintf(buff, fmt, va);
 	va_end(va);
-	MessageBox(NULL, buff, L"Error", MB_OK);
+	MessageBoxA(NULL, buff, L"Error", MB_OK);
 	exit(1);
 }
 

@@ -110,7 +110,7 @@ static int      savecompatflags = 0;
 int             totalkills, totalitems, totalsecret;
 boolean        precache = true;     // if true, load all graphics at start
 
-byte            consistency[MAXPLAYERS][BACKUPTICS];
+unsigned char           consistency[MAXPLAYERS][BACKUPTICS];
 
 #define MAXPLMOVE       (forwardmove[1])
 #define TURBOTHRESHOLD  0x32
@@ -136,8 +136,8 @@ playercontrols_t    Controls;
 mobj_t* bodyque[BODYQUESIZE];
 int         bodyqueslot;
 
-byte forcejump = 0;
-byte forcefreelook = 0;
+unsigned char forcejump = 0;
+unsigned char forcefreelook = 0;
 
 NETCVAR(sv_nomonsters, 0);
 NETCVAR(sv_fastmonsters, 0);
@@ -1435,7 +1435,7 @@ void G_RunTitleMap(void) {
 		return;
 	}
 
-	demobuffer = (byte*)Z_Calloc(0x16000, PU_STATIC, NULL);
+	demobuffer = (unsigned char*)Z_Calloc(0x16000, PU_STATIC, NULL);
 	demo_p = demobuffer;
 	demobuffer[0x16000 - 1] = DEMOMARKER;
 

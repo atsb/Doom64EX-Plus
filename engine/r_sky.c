@@ -55,8 +55,8 @@ byte* fireBuffer;
 dPalette_t  firePal16[256];
 int         fireLump = -1;
 
-static word CloudOffsetY = 0;
-static word CloudOffsetX = 0;
+static unsigned short CloudOffsetY = 0;
+static unsigned short CloudOffsetX = 0;
 static float sky_cloudpan1 = 0;
 static float sky_cloudpan2 = 0;
 

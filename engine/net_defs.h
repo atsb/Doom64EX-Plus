@@ -34,7 +34,7 @@
 
 typedef struct _net_packet_s
 {
-	byte* data;
+	unsigned char* data;
 	unsigned int len;
 	unsigned int alloced;
 	unsigned int pos;
