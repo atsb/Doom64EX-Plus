@@ -20,11 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef USE_STDINT 
-#include <stdint.h>
-#else
 #include "doomtype.h"
-#endif
 
 #ifdef _WIN32
 #include <fcntl.h>

@@ -25,11 +25,6 @@
 #ifndef __INFO__
 #define __INFO__
 
-#ifdef _XBOX
-#include <SDL2/SDL_stdinc.h>
-#else
-#include <stdint.h>
-#endif
 // Needed for action function pointer handling.
 #include "d_think.h"
 
@@ -1384,7 +1379,7 @@ typedef struct {
 } mobjinfo_t;
 
 extern state_t states[NUMSTATES];
-extern int8_t* sprnames[NUMSPRITES + 1];
+extern char* sprnames[NUMSPRITES + 1];
 
 extern mobjinfo_t mobjinfo[NUMMOBJTYPES];
 

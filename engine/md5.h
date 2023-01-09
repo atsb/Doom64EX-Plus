@@ -24,14 +24,11 @@
 #define MD5_H
 
 #include "doomtype.h"
-#ifdef __OpenBSD__
-#include <SDL_config.h>
-#else 
-#include <SDL2/SDL_config.h>
-#endif
 
-#ifdef HAVE_STDINT_H
-#include <stdint.h>
+#ifdef __APPLE__
+#include <SDL2/SDL_config.h>
+#else 
+#include <SDL_config.h>
 #endif
 
 typedef byte md5_digest_t[16];

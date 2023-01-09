@@ -36,12 +36,6 @@
 #error i_opndir.c is for Win32 only
 #endif
 
-#ifdef _XBOX
-#include <SDL_stdinc.h>
-#else
-#include <stdint.h>
-#endif
-
 #ifdef _MSC_VER
 #include <wtypes.h>
 #include <direct.h>
@@ -62,9 +56,9 @@
 
 struct dirent {
 	long          d_ino;    /* Always zero. */
-	uint16_t d_reclen; /* Always zero. */
-	uint16_t d_namlen; /* Length of name in d_name. */
-	int8_t           d_name[FILENAME_MAX]; /* File name. */
+	unsigned short d_reclen; /* Always zero. */
+	unsigned short d_namlen; /* Length of name in d_name. */
+	char           d_name[FILENAME_MAX]; /* File name. */
 };
 
 /*
