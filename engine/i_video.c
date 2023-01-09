@@ -136,8 +136,14 @@ void I_InitScreen(void) {
 	OGL_WINDOW_HINT(OGL_BUFFER, 24);
 	OGL_WINDOW_HINT(OGL_DEPTH, 24);
 	OGL_WINDOW_HINT(OGL_DOUBLEBUFFER, 1);
+	
+#ifdef USE_GLFW	
+	glfwSwapInterval(v_vsync.value);
+#else	
 	SDL_GL_SetSwapInterval(v_vsync.value);
-	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+#endif
+	
+        flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {
 		flags |= SDL_WINDOW_ALLOW_HIGHDPI;
