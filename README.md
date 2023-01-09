@@ -1,4 +1,4 @@
-## Doom 64EX+
+## DOOM64EX+
 
 [![Doom64EX-Plus! Icon](https://github.com/atsb/Doom64EX-Plus/blob/wolfy/engine/DOOM64EX+.png)](https://github.com/atsb/Doom64EX-Plus)
 
