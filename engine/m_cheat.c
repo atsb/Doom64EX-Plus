@@ -249,8 +249,8 @@ void M_CheatGiveWeapon(player_t* player, char dat[4]) {
 	player->message = WeapGotNames[w - 1];
 }
 
-void M_CheatGiveKey(player_t* player, int8_t dat[4]) {
-	int8_t c = dat[0];
+void M_CheatGiveKey(player_t* player, char dat[4]) {
+	char c = dat[0];
 	int k = atoi(&c);
 
 	if (!k || k > NUMCARDS) {

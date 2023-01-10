@@ -2244,7 +2244,7 @@ void M_Password(int choice) {
 
 void M_DrawPassword(void) {
 	char password[2];
-	byte* passData;
+	unsigned char* passData;
 	int i = 0;
 
 	
@@ -2287,7 +2287,7 @@ void M_DrawPassword(void) {
 
 static void M_PasswordSelect(void) {
 	S_StartSound(NULL, sfx_switch2);
-	passwordData[curPasswordSlot++] = (byte)itemOn;
+	passwordData[curPasswordSlot++] = (unsigned char)itemOn;
 	if (curPasswordSlot > 15) {
 		static const char* hecticdemo = "rvnh3ct1cd3m0???";
 		int i;
@@ -3944,7 +3944,7 @@ static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
 static boolean M_SetThumbnail(int which) {
-	byte* data;
+	unsigned char* data;
 
 	data = Z_Malloc(SAVEGAMETBSIZE, PU_STATIC, 0);
 

@@ -21,7 +21,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
 #include "i_opndir.h"
+#else
+#include <unistd.h>
+#endif
 #include "doomtype.h"
 #include "i_system.h"
 #include "m_misc.h"

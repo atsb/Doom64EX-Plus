@@ -52,7 +52,7 @@
 #define FCVT M_Fcvt
 #endif
 
-int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
+int psnprintf(char *str, unsigned int n, const char *format, ...) {
     va_list args;
     int ret;
 
@@ -189,7 +189,7 @@ enum
     } \
     ncount++;
 
-int pvsnprintf(int8_t *str, size_t nmax, const int8_t *format, va_list ap) {
+int pvsnprintf(char *str, unsigned int nmax, const char *format, va_list ap) {
     /* nmax gives total size of buffer including null
      * null is ALWAYS added, even if buffer too small for format
      * (contrary to C99)

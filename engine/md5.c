@@ -37,7 +37,7 @@
 
 void ByteSwapBlock(unsigned int *buf, unsigned words)
 {
-        byte *p = (byte *)buf;
+        unsigned char *p = (unsigned char *)buf;
 
         do {
                 *buf++ = (unsigned int)((unsigned)p[3] << 8 | p[2]) << 16 |
@@ -69,7 +69,7 @@ MD5_Init(md5_context_t *ctx)
  * of bytes.
  */
 void
-MD5_Update(md5_context_t *ctx, byte const *buf, unsigned len)
+MD5_Update(md5_context_t *ctx, unsigned char const *buf, unsigned len)
 {
         unsigned int t;
 
@@ -81,11 +81,11 @@ MD5_Update(md5_context_t *ctx, byte const *buf, unsigned len)
 
         t = 64 - (t & 0x3f);    /* Space available in ctx->in (at least 1) */
         if (t > len) {
-                memcpy((byte *)ctx->in + 64 - t, buf, len);
+                memcpy((unsigned char *)ctx->in + 64 - t, buf, len);
                 return;
         }
         /* First chunk is an odd size */
-        memcpy((byte *)ctx->in + 64 - t, buf, t);
+        memcpy((unsigned char *)ctx->in + 64 - t, buf, t);
         ByteSwapBlock(ctx->in, 16);
         MD5_Transform(ctx->buf, ctx->in);
         buf += t;
@@ -106,7 +106,7 @@ MD5_Update(md5_context_t *ctx, byte const *buf, unsigned len)
 
 void MD5_UpdateInt32(md5_context_t *context, unsigned int val)
 {
-        byte buf[4];
+        unsigned char buf[4];
 
         buf[0] = (val >> 24) & 0xff;
         buf[1] = (val >> 16) & 0xff;
@@ -118,7 +118,7 @@ void MD5_UpdateInt32(md5_context_t *context, unsigned int val)
 
 void MD5_UpdateString(md5_context_t *context, char *str)
 {
-        MD5_Update(context, (byte *) str, strlen(str) + 1);
+        MD5_Update(context, (unsigned char*) str, strlen(str) + 1);
 }
 
 /*
@@ -129,7 +129,7 @@ void
 MD5_Final(unsigned char digest[16], md5_context_t *ctx)
 {
         int count = ctx->bytes[0] & 0x3f;       /* Number of bytes in ctx->in */
-        byte *p = (byte *)ctx->in + count;
+        unsigned char *p = (unsigned char*)ctx->in + count;
 
         /* Set the first char of padding to 0x80.  There is always room. */
         *p++ = 0x80;
@@ -141,7 +141,7 @@ MD5_Final(unsigned char digest[16], md5_context_t *ctx)
                 memset(p, 0, count + 8);
                 ByteSwapBlock(ctx->in, 16);
                 MD5_Transform(ctx->buf, ctx->in);
-                p = (byte *)ctx->in;
+                p = (unsigned char *)ctx->in;
                 count = 56;
         }
         memset(p, 0, count);

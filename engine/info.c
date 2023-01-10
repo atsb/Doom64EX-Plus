@@ -37,7 +37,7 @@
 
 #include "p_mobj.h"
 
-int8_t * sprnames[NUMSPRITES + 1] = {  //0x5FA30
+char * sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"SPOT", "PLAY", "SARG", "FATT", "POSS", "TROO", "HEAD", "BOSS",
 	"SKUL", "BSPI", "CYBR", "PAIN", "RECT", "MISL", "PLSS", "BFS1",
 	"LASS", "BAL1", "BAL3", "BAL2", "BAL7", "BAL8", "APLS", "MANF",

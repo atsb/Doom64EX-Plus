@@ -20,8 +20,11 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
-
+#ifdef _WIN32
 #include "i_opndir.h"
+#else
+#include <unistd.h>
+#endif
 #include "doomtype.h"
 #include "i_system.h"
 #include "w_wad.h"

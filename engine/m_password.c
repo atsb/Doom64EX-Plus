@@ -37,9 +37,9 @@
 // PASSWORD STUFF
 //
 
-byte passwordData[16];
+unsigned char passwordData[16];
 boolean doPassword = false;
-const char* passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
+const char* passwordChar = "abcdefghijklmnpqorstuvwxyz0123456789?";
 static const int passwordTable[10] = { 1, 8, 9, 5, 6, 2, 7, 0, 4, 3 };
 
 //
@@ -59,8 +59,8 @@ static void M_EncodePassItem(int* bit, int value, int maxvalue) {
 // M_CheckPassCode
 //
 
-static boolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
-	byte checkByte = 0;
+static boolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, unsigned char* encode) {
+	unsigned char checkByte = 0;
 	if (*bit1 < 0) {
 		*bit2 = (*bit1 + 7) >> 3;
 	}
@@ -76,7 +76,7 @@ static boolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
 		}
 	}
 
-	checkByte = *(byte*)(encode + *bit2);
+	checkByte = *(unsigned char*)(encode + *bit2);
 
 	if ((checkByte & (0x80 >> *bit3)) != 0) {
 		return true;
@@ -90,7 +90,7 @@ static boolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
 //
 
 void M_EncodePassword(void) {
-	byte encode[10];
+	unsigned char encode[10];
 	int i;
 	int bit = 0;
 	short decodebit[3];
@@ -175,7 +175,7 @@ void M_EncodePassword(void) {
 	*(short*)&encode[8] = I_SwapBE16(~(decodebit[0] ^ decodebit[1] ^ decodebit[2]));
 
 	for (i = 0; i < 10; i++) {
-		bit = *(byte*)(encode + passwordTable[i]);
+		bit = *(unsigned char*)(encode + passwordTable[i]);
 		encode[i] = (encode[i] ^ bit);
 	}
 
@@ -200,7 +200,7 @@ void M_EncodePassword(void) {
 			bit++;
 		}
 
-		*(byte*)(passwordData + ((bit - 1) / 5)) = passBit;
+		*(unsigned char*)(passwordData + ((bit - 1) / 5)) = passBit;
 	}
 }
 
@@ -227,8 +227,8 @@ static int M_DecodePassItem(int bytecode, int maxvalue) {
 //
 
 boolean M_DecodePassword(boolean checkOnly) {
-	byte data[16];
-	byte decode[10];
+	unsigned char data[16];
+	unsigned char decode[10];
 	int bit = 0;
 	int i = 0;
 	short xbit1 = 0;
@@ -247,7 +247,7 @@ boolean M_DecodePassword(boolean checkOnly) {
 	while (bit < 0x50) {
 		int passBit = 0;
 		int decodeBit = 0x80;
-		byte checkByte = 0;
+		unsigned char checkByte = 0;
 
 		i = 0;
 
@@ -257,7 +257,7 @@ boolean M_DecodePassword(boolean checkOnly) {
 			i += 4;
 
 			for (j = 0; j < 4; j++) {
-				checkByte = *(byte*)(data + (bit / 5));
+				checkByte = *(unsigned char*)(data + (bit / 5));
 				if ((checkByte & (16 >> (bit % 5)))) {
 					passBit |= decodeBit;
 				}
@@ -274,11 +274,11 @@ boolean M_DecodePassword(boolean checkOnly) {
 			checkByte = (((bit - 1) + 7) >> 3);
 		}
 
-		*(byte*)(decode + checkByte) = passBit;
+		*(unsigned char*)(decode + checkByte) = passBit;
 	}
 
 	for (i = 9; i >= 0; i--) {
-		bit = *(byte*)(decode + passwordTable[i]);
+		bit = *(unsigned char*)(decode + passwordTable[i]);
 		decode[i] = (decode[i] ^ bit);
 	}
 

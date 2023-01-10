@@ -111,8 +111,8 @@ static boolean seqready = false;
 typedef struct {
     char        header[4];
     int         length;
-    byte*       data;
-    byte        channel;
+    unsigned char*       data;
+    unsigned char        channel;
 } track_t;
 
 typedef struct {
@@ -121,7 +121,7 @@ typedef struct {
     short       type;
     unsigned short        ntracks;
     unsigned short        delta;
-    byte*       data;
+    unsigned char*       data;
     int       length;
     track_t*    tracks;
     int       tempo;
@@ -156,7 +156,7 @@ typedef struct {
 
     // channel id for identifying an active channel
     // used primarily by normal sounds
-    byte        id;
+    unsigned char       id;
 
     // these are both accessed by the
     // audio thread and the game code
@@ -164,15 +164,15 @@ typedef struct {
     // the mutex whenever these need
     // to be modified..
     float       volume;
-    byte        pan;
+    unsigned char        pan;
     sndsrc_t*   origin;
     int         depth;
 
     // accessed by the audio thread only
-    byte        key;
-    byte        velocity;
-    byte*       pos;
-    byte*       jump;
+    unsigned char        key;
+    unsigned char        velocity;
+    unsigned char*       pos;
+    unsigned char*       jump;
     int       tics;
     int       nexttic;
     int       lasttic;
@@ -357,7 +357,7 @@ static void Chan_SetSoundVolume(doomseq_t* seq, channel_t* chan) {
 // Gets the next byte in a midi track
 //
 
-static byte Chan_GetNextMidiByte(channel_t* chan) {
+static unsigned char Chan_GetNextMidiByte(channel_t* chan) {
     if((int)(chan->pos - chan->song->data) >= chan->song->length) {
         I_Error("Chan_GetNextMidiByte: Unexpected end of track");
     }
@@ -387,7 +387,7 @@ static int Chan_GetNextTick(channel_t* chan) {
 
     tic = Chan_GetNextMidiByte(chan);
     if(tic & 0x80) {
-        byte mb;
+        unsigned char mb;
 
         tic = tic & 0x7f;
 
@@ -861,10 +861,10 @@ static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
 //
 
 static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
-    byte event;
-    byte c;
+    unsigned char event;
+    unsigned char c;
     song_t* song;
-    byte channel;
+    unsigned char channel;
     track_t* track;
 
     song = chan->song;
@@ -989,7 +989,7 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
 
 static boolean Song_RegisterTracks(song_t* song) {
     int i;
-    byte* data;
+    unsigned char* data;
 
     song->tracks = (track_t*)Z_Calloc(sizeof(track_t) * song->ntracks, PU_STATIC, 0);
     data = song->data + 0x0e;
@@ -1086,6 +1086,7 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 
 static void Seq_Shutdown(doomseq_t* seq)
 {
+#ifndef __linux__    
 #ifndef _WIN32
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
@@ -1115,6 +1116,7 @@ static void Seq_Shutdown(doomseq_t* seq)
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
+#endif
 #endif
 }
 
@@ -1356,7 +1358,7 @@ void I_UpdateChannel(int c, int volume, int pan) {
 
     chan            = &playlist[c];
     chan->basevol   = (float)volume;
-    chan->pan       = (byte)(pan >> 1);
+    chan->pan       = (unsigned char)(pan >> 1);
 }
 
 //
@@ -1518,7 +1520,7 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
         }
 
         chan->volume = (float)volume;
-        chan->pan = (byte)(pan >> 1);
+        chan->pan = (unsigned char)(pan >> 1);
         chan->origin = origin;
         chan->depth = reverb;
     }

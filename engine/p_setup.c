@@ -134,7 +134,7 @@ mobj_t** blocklinks;
 // Without special effect, this could be
 //  used as a PVS lookup as well.
 //
-byte* rejectmatrix;
+unsigned char* rejectmatrix;
 
 // Maintain single and multi player starting spots.
 #define MAX_DEATHMATCH_STARTS   10
@@ -477,7 +477,7 @@ void P_LoadLeafs(int lump) {
 		short* src = mlf;
 		int     next;
 
-		while (((byte*)src - (byte*)mlf) < length) {
+		while (((unsigned char*)src - (unsigned char*)mlf) < length) {
 			count++;
 			size += (unsigned short)SHORT(*src);
 			next = (*src << 2) + 2;
@@ -747,9 +747,9 @@ void P_LoadReject(int lump) {
 	int size = 0;
 
 	size = W_MapLumpLength(lump);
-	rejectmatrix = (byte*)Z_Malloc(size, PU_LEVEL, 0);
+	rejectmatrix = (unsigned char*)Z_Malloc(size, PU_LEVEL, 0);
 	memset(rejectmatrix, 0, size);
-	memcpy(rejectmatrix, (byte*)W_GetMapLump(lump), size);
+	memcpy(rejectmatrix, (unsigned char*)W_GetMapLump(lump), size);
 }
 
 static const char* bmaperrormsg;
@@ -831,7 +831,7 @@ static void P_LoadBlockMap(void) {
 	int		count;
 	int		i;
 	int     length;
-	byte*	src;
+	unsigned char*	src;
 
 	length = W_MapLumpLength(ML_BLOCKMAP);
 	blockmaplump = Z_Malloc(length, PU_LEVEL, 0);

@@ -39,10 +39,10 @@ enum {
 
 extern rcolor    bspColor[5];
 
-rcolor R_GetSectorLight(byte alpha, unsigned short ptr);
+rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr);
 void R_SetLightFactor(float lightfactor);
 void R_RefreshBrightness(void);
 void R_LightToVertex(vtx_t* v, int idx, unsigned short c);
-void R_SetSegLineColor(seg_t* line, vtx_t* v, byte side);
+void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side);
 
 #endif

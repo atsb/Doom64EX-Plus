@@ -122,7 +122,7 @@ static boolean P_CheckThingCollision(mobj_t* thing) {
 // P_BlockMapBox
 //
 
-extern byte forcecollision;
+extern unsigned char forcecollision;
 
 static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 	fixed_t extent = MAXRADIUS;

@@ -257,7 +257,7 @@ void    P_RadiusAttack(mobj_t* spot, mobj_t* source, int damage);
 //
 // P_SETUP
 //
-extern byte* rejectmatrix;    // for fast sight rejection
+extern unsigned char* rejectmatrix;    // for fast sight rejection
 extern short* blockmaplump;    // offsets in blockmap are from here
 extern short* blockmap;
 extern int            bmapwidth;
@@ -423,7 +423,7 @@ void        P_SpawnStrobeFlash(sector_t* sector, int speed);
 void        P_SpawnStrobeAltFlash(sector_t* sector, int speed);
 void        EV_StartLightStrobing(line_t* line);
 void        T_Glow(glow_t* g);
-void        P_SpawnGlowingLight(sector_t* sector, byte type);
+void        P_SpawnGlowingLight(sector_t* sector, unsigned char type);
 void        P_SpawnSequenceLight(sector_t* sector, boolean first);
 void        P_CombineLightSpecials(sector_t* sector);
 void        T_Combine(combine_t* combine);

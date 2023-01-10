@@ -134,7 +134,7 @@ void w3ssleep(long long usecs);
 int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
 
-int htoi(int8_t* str);
+int htoi(char* str);
 boolean fcmp(float f1, float f2);
 
 

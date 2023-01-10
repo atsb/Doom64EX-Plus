@@ -31,7 +31,7 @@
 #include <SDL_config.h>
 #endif
 
-typedef byte md5_digest_t[16];
+typedef unsigned char md5_digest_t[16];
 
 typedef struct md5_context_s {
         unsigned int buf[4];
@@ -40,7 +40,7 @@ typedef struct md5_context_s {
 }md5_context_t;
 
 void MD5_Init(md5_context_t *context);
-void MD5_Update(md5_context_t *context, byte const *buf, unsigned len);
+void MD5_Update(md5_context_t *context, unsigned char const *buf, unsigned len);
 void MD5_UpdateInt32(md5_context_t *context, unsigned int val);
 void MD5_UpdateString(md5_context_t *context, char *str);
 void MD5_Final(unsigned char digest[16], md5_context_t *context);

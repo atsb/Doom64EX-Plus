@@ -94,7 +94,7 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
 		for (r = 0; r < 8; r++)
 		{
 			sprtemp[frame].lump[r] = lump - s_start;
-			sprtemp[frame].flip[r] = (byte)flipped;
+			sprtemp[frame].flip[r] = (unsigned char)flipped;
 		}
 		return;
 	}
@@ -114,7 +114,7 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
 			spritename, 'A' + frame, '1' + rotation);
 
 	sprtemp[frame].lump[rotation] = lump - s_start;
-	sprtemp[frame].flip[rotation] = (byte)flipped;
+	sprtemp[frame].flip[rotation] = (unsigned char)flipped;
 }
 
 //
@@ -589,7 +589,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	int             spritenum;
 	int             flip;
 	rcolor          color;
-	byte            alpha;
+	unsigned char            alpha;
 	float           x;
 	float           y;
 	int             width;

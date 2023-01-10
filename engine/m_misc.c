@@ -184,7 +184,7 @@ boolean M_WriteTextFile(const char* name, char* source, int length) {
 // M_ReadFile
 //
 
-int M_ReadFile(char const* name, byte** buffer) {
+int M_ReadFile(char const* name, unsigned char** buffer) {
 	FILE* fp;
 
 	errno = 0;
@@ -325,8 +325,8 @@ void M_ScreenShot(void) {
 	char    name[13];
 	int     shotnum = 0;
 	FILE* fh;
-	byte* buff;
-	byte* png;
+	unsigned char* buff;
+	unsigned char* png;
 	int     size;
 
 	while (shotnum < 1000) {
@@ -399,9 +399,9 @@ boolean M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 // uncompressed 128x128 RGB textures
 //
 
-int M_CacheThumbNail(byte** data) {
-	byte* buff;
-	byte* tbn;
+int M_CacheThumbNail(unsigned char** data) {
+	unsigned char* buff;
+	unsigned char* tbn;
 
 	buff = GL_GetScreenBuffer(0, 0, video_width, video_height);
 	tbn = Z_Calloc(SAVEGAMETBSIZE, PU_STATIC, 0);

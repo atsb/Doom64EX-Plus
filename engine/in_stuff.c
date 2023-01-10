@@ -126,7 +126,7 @@ void IN_Stop(void) {
 
 void IN_Drawer(void) {
 	int i = 0;
-	byte alpha = 0;
+	unsigned char alpha = 0;
 	int y = 0;
 	rcolor color;
 
@@ -159,7 +159,7 @@ void IN_Drawer(void) {
 	// draw strings
 	for (i = 0;; i++) {
 		if (i == fInterSlot) {
-			alpha = (byte)fInterAlpha;
+			alpha = (unsigned char)fInterAlpha;
 		}
 		else {
 			alpha = 0xff;

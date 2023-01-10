@@ -58,7 +58,7 @@ char    DefaultConfig[] =
 // G_ExecuteMultipleCommands
 //
 
-int8_t* G_GetConfigFileName(void) {
+char* G_GetConfigFileName(void) {
 	return I_GetUserFile(ConfigFileName);
 }
 
