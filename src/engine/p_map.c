@@ -364,12 +364,8 @@ boolean PIT_CheckThing(mobj_t* thing) {
     // check for special pickup
     if (thing->flags & MF_SPECIAL) {
         if (tmflags & MF_PICKUP) {
-            if (thing->z <= (tmthing->z + (tmthing->height >> 1)) || thing->flags & MF_NOSECTOR)
-            {
-                // [d64] store off special thing and return true
-                blockthing = thing;
-                return true;
-            }
+            blockthing = thing;
+            return true;
         }
     }
 
@@ -516,14 +512,22 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     P_SetThingPosition(thing);
 
     // if any special lines were hit, do the effect
-    if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP))) {
-        while (numspechit--) {
+    if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP)))
+    {
+        while (numspechit > 0)
+        {
+            numspechit--;
+
             // see if the line was crossed
             ld = spechit[numspechit];
+
             side = P_PointOnLineSide(thing->x, thing->y, ld);
             oldside = P_PointOnLineSide(oldx, oldy, ld);
-            if (side != oldside) {
-                if (ld->special & MLU_CROSS) {
+
+            if (side != oldside)
+            {
+                if (!(ld->flags & ML_TRIGGERFRONT) || (side))
+                {
                     P_UseSpecialLine(thing, ld, oldside);
                 }
             }
