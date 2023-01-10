@@ -38,7 +38,9 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "sounds.h"
 #include "tables.h"
 #include "r_sky.h"
@@ -120,7 +122,7 @@ static boolean P_CheckThingCollision(mobj_t* thing) {
 // P_BlockMapBox
 //
 
-extern byte forcecollision;
+extern unsigned char forcecollision;
 
 static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 	fixed_t extent = MAXRADIUS;

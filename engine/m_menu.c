@@ -59,7 +59,9 @@
 #include "m_menu.h"
 #include "m_fixed.h"
 #include "d_devstat.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "m_shift.h"
 #include "m_password.h"
 #include "r_wipe.h"
@@ -2242,7 +2244,7 @@ void M_Password(int choice) {
 
 void M_DrawPassword(void) {
 	char password[2];
-	byte* passData;
+	unsigned char* passData;
 	int i = 0;
 
 	
@@ -2285,7 +2287,7 @@ void M_DrawPassword(void) {
 
 static void M_PasswordSelect(void) {
 	S_StartSound(NULL, sfx_switch2);
-	passwordData[curPasswordSlot++] = (byte)itemOn;
+	passwordData[curPasswordSlot++] = (unsigned char)itemOn;
 	if (curPasswordSlot > 15) {
 		static const char* hecticdemo = "rvnh3ct1cd3m0???";
 		int i;
@@ -2893,7 +2895,9 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
+#ifdef FUCKED_GAMECONTROLLER
 	controls_gamepad,
+#endif
 	controls_return,
 	controls_end
 } controls_e;
@@ -2908,7 +2912,9 @@ menuitem_t ControlsMenu[] = {
 char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
+#ifdef FUCKED_GAMECONTROLLER
 	"configure gamepad functionality",
+#endif
 	NULL
 };
 
@@ -3938,7 +3944,7 @@ static int thumbnail_skill = -1;
 static int thumbnail_map = -1;
 
 static boolean M_SetThumbnail(int which) {
-	byte* data;
+	unsigned char* data;
 
 	data = Z_Malloc(SAVEGAMETBSIZE, PU_STATIC, 0);
 
@@ -4910,26 +4916,27 @@ void M_Drawer(void) {
 	if (currentMenu->scale != 1) {
 		GL_SetOrthoScale(1.0f);
 	}
-
+#ifdef FUCKED_GAMECONTROLLER
 	if (currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
-			//M_DrawXInputButton(4, 271, GAMEPAD_B);
+			M_DrawXInputButton(4, 271, GAMEPAD_B);
 			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
 		}
 
 		GL_SetOrthoScale(0.75f);
-		//M_DrawXInputButton(4, 287, GAMEPAD_A);
+		M_DrawXInputButton(4, 287, GAMEPAD_A);
 		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
 
 		if (currentMenu != &PauseDef) {
 			GL_SetOrthoScale(0.75f);
-			//M_DrawXInputButton(5, 303, GAMEPAD_START);
+			M_DrawXInputButton(5, 303, GAMEPAD_START);
 			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
 		}
 
 		GL_SetOrthoScale(1);
 	}
+#endif
 
 	M_DrawCursor(mouse_x, mouse_y);
 }

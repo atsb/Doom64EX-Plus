@@ -29,39 +29,6 @@
 #include "deh_defs.h"
 #include "deh_io.h"
 
-typedef enum
-{
-    DEH_INPUT_FILE,
-    DEH_INPUT_LUMP
-} deh_input_type_t;
-
-struct deh_context_s
-{
-    deh_input_type_t type;
-    char *filename;
-
-    // If the input comes from a memory buffer, pointer to the memory
-    // buffer.
-    unsigned char *input_buffer;
-    size_t input_buffer_len;
-    unsigned int input_buffer_pos;
-    int lumpnum;
-
-    // If the input comes from a file, the file stream for reading
-    // data.
-    FILE *stream;
-
-    // Current line number that we have reached:
-    int linenum;
-
-    // Used by DEH_ReadLine:
-    boolean last_was_newline;
-    char *readbuffer;
-    int readbuffer_size;
-
-    // Error handling.
-    boolean had_error;
-};
 
 static deh_context_t *DEH_NewContext(void)
 {
@@ -88,9 +55,11 @@ deh_context_t *DEH_OpenFile(char *filename)
 {
     FILE *fstream;
     deh_context_t *context;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+    fopen_s(&fstream, filename, "r");
+#else
     fstream = fopen(filename, "r");
-
+#endif
     if (fstream == NULL)
         return NULL;
 

@@ -20,18 +20,17 @@
 
 #include "doomtype.h"
 
-typedef struct sha1_context_s sha1_context_t;
-typedef byte sha1_digest_t[20];
+typedef unsigned char sha1_digest_t[20];
 
-struct sha1_context_s {
-    uint32_t h0,h1,h2,h3,h4;
-    uint32_t nblocks;
-    byte buf[64];
+typedef struct sha1_context_s {
+    unsigned int h0,h1,h2,h3,h4;
+    unsigned int nblocks;
+    unsigned char buf[64];
     int count;
-};
+}sha1_context_t;
 
 void SHA1_Init(sha1_context_t *context);
-void SHA1_Update(sha1_context_t *context, byte *buf, unsigned int len);
+void SHA1_Update(sha1_context_t *context, unsigned char *buf, unsigned int len);
 void SHA1_Final(sha1_digest_t digest, sha1_context_t *context);
 void SHA1_UpdateInt32(sha1_context_t *context, unsigned int val);
 void SHA1_UpdateString(sha1_context_t *context, char *str);

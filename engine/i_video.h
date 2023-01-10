@@ -34,6 +34,19 @@
 #else
 #include <SDL.h>
 #endif
+#ifdef USE_IMGUI
+#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+#define CIMGUI_USE_OPENGL3
+#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#include <cimgui.h>
+#include <backend/imgui_impl_sdl.h>
+#ifdef __LEGACYGL__
+#include <backend/imgui_impl_opengl2.h>
+#else
+#include <backend/imgui_impl_opengl3.h>
+#endif
+#endif
+
 #include "gl_utils.h"
 #include "d_event.h"
 
@@ -41,8 +54,16 @@
 
 extern SDL_Surface* screen;
 extern SDL_Window* window;
-extern const int8_t version_date[];
-
+extern const char version_date[];
+#ifdef USE_IMGUI
+extern ImGuiIO* io;
+extern ImGuiContext* ctx;
+#ifdef __LEGACYGL__
+#define ImGuiImplGL ImGui_ImplOpenGL2_Init
+#else
+#define ImGuiImplGL ImGui_ImplOpenGL3_Init
+#endif
+#endif
 void I_InitVideo(void);
 void I_InitScreen(void);
 void I_ShutdownVideo(void);

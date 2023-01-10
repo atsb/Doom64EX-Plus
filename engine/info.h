@@ -25,11 +25,6 @@
 #ifndef __INFO__
 #define __INFO__
 
-#ifdef _XBOX
-#include <SDL2/SDL_stdinc.h>
-#else
-#include <stdint.h>
-#endif
 // Needed for action function pointer handling.
 #include "d_think.h"
 
@@ -203,6 +198,7 @@ typedef enum {
 	SPR_ARCR,
 	SPR_POW1,
 	SPR_SPID,
+	SPR_TEST,
 	NUMSPRITES
 } spritenum_t;
 
@@ -1163,6 +1159,31 @@ typedef enum {
 	S_SPID_DIE4,
 	S_SPID_DIE5,
 	S_SPID_DIE6,
+	S_TEST_STND,
+	S_TEST_STND2,
+	S_TEST_STND3,
+	S_TEST_STND4,
+	S_TEST_RUN1,
+	S_TEST_RUN2,
+	S_TEST_RUN3,
+	S_TEST_RUN4,
+	S_TEST_RUN5,
+	S_TEST_RUN6,
+	S_TEST_RUN7,
+	S_TEST_RUN8,
+	S_TEST_ATK1,
+	S_TEST_ATK2,
+	S_TEST_ATK3,
+	S_TEST_ATK4,
+	S_TEST_PAIN,
+	S_TEST_PAIN2,
+	S_TEST_PAIN3,
+	S_TEST_DIE1,
+	S_TEST_DIE2,
+	S_TEST_DIE3,
+	S_TEST_DIE4,
+	S_TEST_DIE5,
+	S_TEST_DIE6,
 	NUMSTATES
 } statenum_t;
 
@@ -1307,53 +1328,54 @@ typedef enum {
 	MT_PROP_BLOODYPOLE,        // 126
 	MT_GIB_HANGMACE2,        // 127
 	MT_GIB_HANGWHITEMEAT,    // 128
-	MT_GIB_HANGHEAD,        // 129
-	MT_GIB_HANGRIB,            // 130
-	MT_MISC2,
-	MT_MISC3,
-	MT_MISC4,
-	MT_MISC5,
-	MT_MISC6,
-	MT_MISC7,
-	MT_MISC8,
-	MT_MISC9,
-	MT_MISC10,
-	MT_MISC11,
-	MT_MISC12,
-	MT_MISC13,
-	MT_MISC14,
-	MT_MISC15,
-	MT_MISC16,
-	MT_MISC17,
-	MT_MISC18,
-	MT_MISC19,
-	MT_MISC20,
-	MT_MISC21,
-	MT_MISC22,
-	MT_MISC23,
-	MT_MISC24,
-	MT_MISC25,
-	MT_MISC26,
-	MT_MISC27,
-	MT_MISC28,
-	MT_MISC29,
-	MT_MISC30,
-	MT_MISC31,
-	MT_MISC32,
-	MT_MISC33,
-	MT_MISC34,
-	MT_MISC35,
-	MT_MISC36,
-	MT_MISC37,
-	MT_MISC38,
-	MT_MISC39,
-	MT_MISC40,
-	MT_MISC41,
-	MT_CHAINGUY,
-	MT_UNDEAD,
-	MT_PROJ_UNDEAD,
-	MT_SPIDER,
-	NUMMOBJTYPES
+	MT_GIB_HANGHEAD,    //129
+	MT_GIB_HANGRIB,     //130
+	MT_MISC2,           //131
+	MT_MISC3,			//132
+	MT_MISC4,           //133
+	MT_MISC5,           //134
+	MT_MISC6,           //135
+	MT_MISC7,           //136
+	MT_MISC8,           //137
+	MT_MISC9,			//138
+	MT_MISC10,          //139
+	MT_MISC11,		    //140
+	MT_MISC12,			//141
+	MT_MISC13,			//142
+	MT_MISC14,			//143
+	MT_MISC15,			//144
+	MT_MISC16,			//145
+	MT_MISC17,			//146
+	MT_MISC18,			//147
+	MT_MISC19,			//148
+	MT_MISC20,			//149
+	MT_MISC21,			//150
+	MT_MISC22,			//151
+	MT_MISC23,			//152
+	MT_MISC24,			//153
+	MT_MISC25,			//154
+	MT_MISC26,			//155
+	MT_MISC27,			//156
+	MT_MISC28,			//157
+	MT_MISC29,			//158
+	MT_MISC30,			//159
+	MT_MISC31,			//160
+	MT_MISC32,			//161
+	MT_MISC33,			//162
+	MT_MISC34,			//163
+	MT_MISC35,			//164
+	MT_MISC36,			//165
+	MT_MISC37,			//166
+	MT_MISC38,			//167
+	MT_MISC39,			//168
+	MT_MISC40,			//169
+	MT_MISC41,			//170
+	MT_CHAINGUY,		//171
+	MT_UNDEAD,			//172
+	MT_PROJ_UNDEAD,		//173
+	MT_SPIDER,			//174
+	MT_TESTA0,			//175
+	NUMMOBJTYPES		//176
 } mobjtype_t;
 
 typedef struct {
@@ -1384,7 +1406,7 @@ typedef struct {
 } mobjinfo_t;
 
 extern state_t states[NUMSTATES];
-extern int8_t* sprnames[NUMSPRITES + 1];
+extern char* sprnames[NUMSPRITES + 1];
 
 extern mobjinfo_t mobjinfo[NUMMOBJTYPES];
 

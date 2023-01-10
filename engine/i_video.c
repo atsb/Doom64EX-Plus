@@ -71,6 +71,10 @@ void I_ResizeCallback(OGL_DEFS, int width, int height)
 }
 #endif
 
+#ifdef USE_IMGUI
+ImGuiIO* io;
+ImGuiContext* ctx;
+#endif
 //
 // I_InitScreen
 //
@@ -136,14 +140,13 @@ void I_InitScreen(void) {
 	OGL_WINDOW_HINT(OGL_BUFFER, 24);
 	OGL_WINDOW_HINT(OGL_DEPTH, 24);
 	OGL_WINDOW_HINT(OGL_DOUBLEBUFFER, 1);
-	
 #ifdef USE_GLFW	
 	glfwSwapInterval(v_vsync.value);
 #else	
 	SDL_GL_SetSwapInterval(v_vsync.value);
 #endif
 	
-        flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+     flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {
 		flags |= SDL_WINDOW_ALLOW_HIGHDPI;
@@ -192,6 +195,16 @@ void I_InitScreen(void) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
+#endif
+#ifdef USE_IMGUI
+	//André: Adding the context
+	io = igGetIO();
+	ctx = igCreateContext(NULL);
+#ifdef __LEGACYGL__
+	ImGuiImplGL();
+#else
+	ImGuiImplGL("#version 330 core"); 
+#endif
 #endif
 }
 

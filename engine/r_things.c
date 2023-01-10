@@ -94,7 +94,7 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
 		for (r = 0; r < 8; r++)
 		{
 			sprtemp[frame].lump[r] = lump - s_start;
-			sprtemp[frame].flip[r] = (byte)flipped;
+			sprtemp[frame].flip[r] = (unsigned char)flipped;
 		}
 		return;
 	}
@@ -114,7 +114,7 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
 			spritename, 'A' + frame, '1' + rotation);
 
 	sprtemp[frame].lump[rotation] = lump - s_start;
-	sprtemp[frame].flip[rotation] = (byte)flipped;
+	sprtemp[frame].flip[rotation] = (unsigned char)flipped;
 }
 
 //
@@ -589,7 +589,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	int             spritenum;
 	int             flip;
 	rcolor          color;
-	byte            alpha;
+	unsigned char            alpha;
 	float           x;
 	float           y;
 	int             width;
@@ -635,10 +635,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	width = spritewidth[spritenum];
 	height = spriteheight[spritenum];
-	u1 = (rfloat)flip;
-	u2 = (rfloat)1 - flip;
-	v1 = (rfloat)flip;
-	v2 = (rfloat)1 - flip;
+	u1 = (float)flip;
+	u2 = (float)1 - flip;
+	v1 = (float)flip;
+	v2 = (float)1 - flip;
 
 	GL_SetOrtho(0);
 	GL_Set2DQuad(v, x, y, width, height, u1, u2, v1, v2, color);

@@ -24,7 +24,10 @@
 #ifndef D3DR_LIGHTS_H
 #define D3DR_LIGHTS_H
 
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
+
 
 enum {
 	LIGHT_FLOOR,
@@ -36,10 +39,10 @@ enum {
 
 extern rcolor    bspColor[5];
 
-rcolor R_GetSectorLight(byte alpha, word ptr);
+rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr);
 void R_SetLightFactor(float lightfactor);
 void R_RefreshBrightness(void);
-void R_LightToVertex(vtx_t* v, int idx, word c);
-void R_SetSegLineColor(seg_t* line, vtx_t* v, byte side);
+void R_LightToVertex(vtx_t* v, int idx, unsigned short c);
+void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side);
 
 #endif

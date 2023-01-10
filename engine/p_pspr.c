@@ -37,7 +37,9 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "z_zone.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "doomstat.h"
 #include "sounds.h"
 #include "p_pspr.h"
@@ -942,7 +944,7 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 	fixed_t         x;
 	fixed_t         y;
 	fixed_t         z;
-	byte            type;
+	unsigned char            type;
 	laser_t* laser[3];
 	laserthinker_t* laserthinker[3];
 	//fixed_t         laserfrac;
@@ -955,7 +957,7 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 
 	// the original used a lookup table with the values "0, 1, 1, 2, 1, 2, 2, 3"
 	// this is an alternative to using that table
-	type = (byte)(((player->artifacts & 3) != 0) +
+	type = (unsigned char)(((player->artifacts & 3) != 0) +
 		((player->artifacts & 3) == 3) + ((player->artifacts & 4) != 0));
 
 	// setup laser type

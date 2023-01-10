@@ -27,7 +27,9 @@
 
 #include <math.h>
 
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "r_clipper.h"
 #include "i_system.h"
 #include "doomstat.h"
@@ -279,7 +281,7 @@ boolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v) {
 	return true;
 }
 
-static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bottom) {
+static void GetSideTopBottom(sector_t* sector, float* top, float* bottom) {
 	if (i_interpolateframes.value) {
 		fixed_t frame_c = sector->frame_z2[1];
 		fixed_t frame_f = sector->frame_z1[1];
@@ -300,15 +302,15 @@ static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bottom) {
 static boolean R_GenerateLowerSegPlane(seg_t* line, vtx_t* v) {
 	line_t* linedef;
 	side_t* sidedef;
-	rfloat      top;
-	rfloat      bottom;
-	rfloat      btop;
-	rfloat      bbottom;
+	float      top;
+	float      bottom;
+	float      btop;
+	float      bbottom;
 	int         height;
 	int         width;
-	rfloat      length;
-	rfloat      rowoffs;
-	rfloat      coloffs;
+	float      length;
+	float      rowoffs;
+	float      coloffs;
 	float       x;
 	float       y;
 
@@ -323,7 +325,7 @@ static boolean R_GenerateLowerSegPlane(seg_t* line, vtx_t* v) {
 	v[1].x = v[3].x = F2D3D(line->v2->x);
 	v[1].y = v[3].y = F2D3D(line->v2->y);
 
-	length = (rfloat)line->length;
+	length = (float)line->length;
 
 	R_SetSegLineColor(line, v, 0);
 	GetSideTopBottom(line->frontsector, &top, &bottom);
@@ -370,15 +372,15 @@ static boolean R_GenerateLowerSegPlane(seg_t* line, vtx_t* v) {
 static boolean R_GenerateUpperSegPlane(seg_t* line, vtx_t* v) {
 	line_t* linedef;
 	side_t* sidedef;
-	rfloat      top;
-	rfloat      bottom;
-	rfloat      btop;
-	rfloat      bbottom;
+	float      top;
+	float      bottom;
+	float      btop;
+	float      bbottom;
 	int         height;
 	int         width;
-	rfloat      length;
-	rfloat      rowoffs;
-	rfloat      coloffs;
+	float      length;
+	float      rowoffs;
+	float      coloffs;
 	float       x;
 	float       y;
 
@@ -393,7 +395,7 @@ static boolean R_GenerateUpperSegPlane(seg_t* line, vtx_t* v) {
 	v[1].x = v[3].x = F2D3D(line->v2->x);
 	v[1].y = v[3].y = F2D3D(line->v2->y);
 
-	length = (rfloat)line->length;
+	length = (float)line->length;
 
 	R_SetSegLineColor(line, v, 0);
 	GetSideTopBottom(line->frontsector, &top, &bottom);
@@ -444,15 +446,15 @@ static boolean R_GenerateUpperSegPlane(seg_t* line, vtx_t* v) {
 static boolean R_GenerateMiddleSegPlane(seg_t* line, vtx_t* v) {
 	line_t* linedef;
 	side_t* sidedef;
-	rfloat      top;
-	rfloat      bottom;
-	rfloat      btop;
-	rfloat      bbottom;
+	float      top;
+	float      bottom;
+	float      btop;
+	float      bbottom;
 	int         height;
 	int         width;
-	rfloat      length;
-	rfloat      rowoffs;
-	rfloat      coloffs;
+	float      length;
+	float      rowoffs;
+	float      coloffs;
 	float       x;
 	float       y;
 
@@ -469,12 +471,12 @@ static boolean R_GenerateMiddleSegPlane(seg_t* line, vtx_t* v) {
 	v[1].x = v[3].x = F2D3D(line->v2->x);
 	v[1].y = v[3].y = F2D3D(line->v2->y);
 
-	length = (rfloat)line->length;
+	length = (float)line->length;
 
 	R_SetSegLineColor(line, v, 0);
 	GetSideTopBottom(line->frontsector, &top, &bottom);
 
-	length = (rfloat)line->length;
+	length = (float)line->length;
 
 	if (line->backsector) {
 		GetSideTopBottom(line->backsector, &btop, &bbottom);
@@ -590,10 +592,10 @@ static void R_AddLine(seg_t* line) {
 	vtx_t       v[4];
 	line_t* linedef;
 	side_t* sidedef;
-	rfloat      top;
-	rfloat      bottom;
-	rfloat      btop;
-	rfloat      bbottom;
+	float      top;
+	float      bottom;
+	float      btop;
+	float      bbottom;
 	float       x;
 	float       y;
 

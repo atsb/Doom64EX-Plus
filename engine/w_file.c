@@ -56,9 +56,11 @@ extern wad_file_class_t stdc_wad_file;
 static wad_file_t* W_StdC_OpenFile(char* path) {
 	stdc_wad_file_t* result;
 	FILE* fstream;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fstream, path, "rb");
+#else
 	fstream = fopen(path, "rb");
-
+#endif
 	if (fstream == NULL) {
 		return NULL;
 	}

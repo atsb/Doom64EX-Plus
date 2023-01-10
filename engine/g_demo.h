@@ -37,9 +37,9 @@ extern char             demoname[256];  // name of demo lump
 extern boolean         demorecording;  // currently recording a demo
 extern boolean         demoplayback;   // currently playing a demo
 extern boolean         netdemo;
-extern byte* demobuffer;
-extern byte* demo_p;
-extern byte* demoend;
+extern unsigned char* demobuffer;
+extern unsigned char* demo_p;
+extern unsigned char* demoend;
 extern boolean         singledemo;
 extern boolean         endDemo;        // signal recorder to stop on next tick
 extern boolean         iwadDemo;       // hide hud, end playback after one level

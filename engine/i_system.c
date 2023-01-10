@@ -78,12 +78,12 @@ CVAR(v_accessibility, 0);
 ticcmd_t        emptycmd;
 
 //
-// I_uSleep
+// I_Sleep
 //
 
 void I_Sleep(unsigned long usecs) {
 #ifdef _WIN32
-	Sleep((DWORD)usecs);
+	Sleep((long long)usecs);
 #else
 	struct timespec tc;
 	tc.tv_sec = usecs / 1000;
@@ -387,8 +387,10 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
+#ifdef FUCKED_GAMECONTROLLER
 	I_InitEvent();
 	I_InitGameController();
+#endif
 	I_InitVideo();
 	I_InitClockRate();
 }

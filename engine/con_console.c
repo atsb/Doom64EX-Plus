@@ -370,7 +370,7 @@ boolean CON_Responder(event_t* ev) {
 				console_prevcmds[console_cmdhead] = -1;
 				G_ExecuteCommand(&console_inputbuffer[1]);
 				console_inputlength = 1;
-				CONCLEARINPUT();
+				memset(console_inputbuffer + 1, 0, MAX_CONSOLE_INPUT_LEN - 1);
 				break;
 
 			case KEY_UPARROW:

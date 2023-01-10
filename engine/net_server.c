@@ -26,12 +26,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include "config.h"
-
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_system.h"
-//#include "i_timer.h"
 #include "m_misc.h"
 
 #include "net_client.h"

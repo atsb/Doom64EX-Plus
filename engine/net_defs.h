@@ -30,20 +30,23 @@
 #include "doomtype.h"
 #include "d_ticcmd.h"
 
-typedef struct _net_module_s net_module_t;
-typedef struct _net_packet_s net_packet_t;
-typedef struct _net_addr_s net_addr_t;
-typedef struct _net_context_s net_context_t;
+#define MAX_MODULES 16
 
-struct _net_packet_s
+typedef struct _net_packet_s
 {
-	byte* data;
+	unsigned char* data;
 	unsigned int len;
 	unsigned int alloced;
 	unsigned int pos;
-};
+}net_packet_t;
 
-struct _net_module_s
+typedef struct _net_addr_s
+{
+	struct net_module_s *module;
+	void* handle;
+}net_addr_t;
+
+typedef struct net_module_s
 {
 	// Initialise this module for use as a client
 
@@ -74,15 +77,14 @@ struct _net_module_s
 	// Try to resolve a name to an address
 
 	net_addr_t* (*ResolveAddress)(char* addr);
-};
+}net_module_t;
 
 // net_addr_t
-
-struct _net_addr_s
+typedef struct net_context_s
 {
-	net_module_t* module;
-	void* handle;
-};
+	net_module_t* modules[MAX_MODULES];
+	int num_modules;
+}net_context_t;
 
 // magic number sent when connecting to check this is a valid client
 

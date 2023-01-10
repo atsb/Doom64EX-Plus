@@ -93,7 +93,7 @@ boolean NET_ReadInt8(net_packet_t* packet, int* data)
 
 boolean NET_ReadInt16(net_packet_t* packet, unsigned int* data)
 {
-	byte* p;
+	unsigned char* p;
 
 	if (packet->pos + 2 > packet->len)
 		return false;
@@ -111,7 +111,7 @@ boolean NET_ReadInt16(net_packet_t* packet, unsigned int* data)
 
 boolean NET_ReadInt32(net_packet_t* packet, unsigned int* data)
 {
-	byte* p;
+	unsigned char* p;
 
 	if (packet->pos + 4 > packet->len)
 		return false;
@@ -213,7 +213,7 @@ char* NET_ReadString(net_packet_t* packet)
 
 static void NET_IncreasePacket(net_packet_t* packet)
 {
-	byte* newdata;
+	unsigned char* newdata;
 
 	total_packet_memory -= packet->alloced;
 
@@ -244,7 +244,7 @@ void NET_WriteInt8(net_packet_t* packet, unsigned int i)
 
 void NET_WriteInt16(net_packet_t* packet, unsigned int i)
 {
-	byte* p;
+	unsigned char* p;
 
 	if (packet->len + 2 > packet->alloced)
 		NET_IncreasePacket(packet);
@@ -261,7 +261,7 @@ void NET_WriteInt16(net_packet_t* packet, unsigned int i)
 
 void NET_WriteInt32(net_packet_t* packet, unsigned int i)
 {
-	byte* p;
+	unsigned char* p;
 
 	if (packet->len + 4 > packet->alloced)
 		NET_IncreasePacket(packet);
@@ -278,7 +278,7 @@ void NET_WriteInt32(net_packet_t* packet, unsigned int i)
 
 void NET_WriteString(net_packet_t* packet, char* string)
 {
-	byte* p;
+	unsigned char* p;
 
 	// Increase the packet size until large enough to hold the string
 

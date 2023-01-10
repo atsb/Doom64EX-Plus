@@ -52,7 +52,7 @@ void G_DoLoadLevel(void);
 #define SAVEGAME_MOBJ   0x4A424F4D
 
 static FILE* save_stream;
-static byte* savebuffer;
+static unsigned char* savebuffer;
 
 static unsigned long save_offset = 0;
 
@@ -73,15 +73,15 @@ char* P_GetSaveGameName(int num) {
 //
 //------------------------------------------------------------------------
 
-static byte saveg_read8(void) {
-    byte result;
+static unsigned char saveg_read8(void) {
+    unsigned char result;
 
     result = savebuffer[save_offset++];
 
     return result;
 }
 
-static void saveg_write8(byte value) {
+static void saveg_write8(unsigned char value) {
     fwrite(&value, 1, 1, save_stream);
     save_offset++;
 }
@@ -1107,7 +1107,7 @@ static void saveg_write_header(char* description) {
     int i;
     int size;
     char date[32];
-    byte* tbn;
+    unsigned char* tbn;
 
     for (i = 0; description[i] != '\0'; i++) {
         saveg_write8(description[i]);
@@ -1169,7 +1169,7 @@ static void saveg_write_header(char* description) {
 static void saveg_read_header(void) {
     int i;
     int size;
-    byte a, b, c;
+    unsigned char a, b, c;
 
     // skip the description field
     for (i = 0; i < SAVESTRINGSIZE; i++) {
@@ -1250,8 +1250,11 @@ static void saveg_write_marker(int marker) {
 boolean P_WriteSaveGame(char* description, int slot) {
 
     // setup game save file
+#ifdef USE_OPTMIZED_FFUNCTION
+    fopen_s(&save_stream, P_GetSaveGameName(slot), "wb");
+#else
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
-
+#endif
     // success?
     if (save_stream == NULL) {
         return false;
@@ -1820,7 +1823,7 @@ void P_ArchiveSpecials(void) {
 void P_UnArchiveSpecials(void) {
     int         i;
     boolean    specialthinker;
-    byte        tclass;
+    unsigned char       tclass;
     void* thinker;
     thinker_t* currentthinker;
     thinker_t* next;
@@ -1934,7 +1937,7 @@ void P_ArchiveMacros(void) {
 void P_UnArchiveMacros(void) {
     int i;
     int current;
-    byte havemacro;
+    unsigned char havemacro;
 
     saveg_read_pad();
 

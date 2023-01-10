@@ -25,7 +25,6 @@
 static const char rcsid[] = "$Id: tk_lib.c 337 2009-02-01 21:27:07Z svkaiser $";
 #endif
 
-#include <stdint.h>
 #include "tk_lib.h"
 
 byte* parse;
@@ -185,7 +184,11 @@ void tk_ResetConfig(tDefTypes_t* cfgdefault)
 
 void tk_Open(void)
 {
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&tk_file, DefaultConfigFile, "w");
+#else
 	tk_file = fopen(DefaultConfigFile, "w");
+#endif
 }
 
 void tk_Close(void)

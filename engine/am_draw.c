@@ -42,7 +42,7 @@
 
 extern fixed_t automappanx;
 extern fixed_t automappany;
-extern byte amModeCycle;
+extern unsigned char amModeCycle;
 
 static angle_t am_viewangle;
 
@@ -302,7 +302,7 @@ void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
 // AM_DrawTriangle
 //
 
-void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, byte b) {
+void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, unsigned char r, unsigned char g, unsigned char b) {
 	vtx_t tri[3];
 	fixed_t x;
 	fixed_t y;
@@ -370,7 +370,7 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	float height;
 	int rot = 0;
 	rcolor c;
-	byte alpha;
+	unsigned char alpha;
 	float scalefactor;
 	float fz;
 	float tx;

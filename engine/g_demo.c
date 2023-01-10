@@ -29,7 +29,10 @@
 #include "doomstat.h"
 #include "z_zone.h"
 #include "p_tick.h"
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "g_demo.h"
 #include "m_misc.h"
 #include "m_random.h"
@@ -38,9 +41,7 @@
 
 #ifdef _WIN32
 #include "i_opndir.h"
-#endif
-
-#if !defined _WIN32
+#else
 #include <unistd.h>
 #endif
 
@@ -50,13 +51,13 @@ void        G_ReadDemoTiccmd(ticcmd_t* cmd);
 void        G_WriteDemoTiccmd(ticcmd_t* cmd);
 
 FILE* demofp;
-byte* demo_p;
+unsigned char* demo_p;
 char            demoname[256];
 boolean        demorecording = false;
 boolean        demoplayback = false;
 boolean        netdemo = false;
-byte* demobuffer;
-byte* demoend;
+unsigned char* demobuffer;
+unsigned char* demoend;
 boolean        singledemo = false;    // quit after playing a demo from cmdline
 boolean        endDemo;
 boolean        iwadDemo = false;
@@ -117,7 +118,7 @@ void G_WriteDemoTiccmd(ticcmd_t* cmd) {
 	}
 
 	// alias demo_p to it so we can read it back
-	demo_p = (byte*)buf;
+	demo_p = (unsigned char*)buf;
 	G_ReadDemoTiccmd(cmd);    // make SURE it is exactly the same
 }
 
@@ -126,7 +127,7 @@ void G_WriteDemoTiccmd(ticcmd_t* cmd) {
 //
 
 void G_RecordDemo(const char* name) {
-	byte* demostart, * dm_p;
+	unsigned char* demostart, * dm_p;
 	int i;
 
 	demofp = NULL;
@@ -136,7 +137,11 @@ void G_RecordDemo(const char* name) {
 	strcat(demoname, ".lmp");
 	if (w3saccess(demoname, F_OK))
 	{
+#ifdef USE_OPTMIZED_FFUNCTION
+		fopen_s(&demofp, demoname, "wb");
+#else
 		demofp = fopen(demoname, "wb");
+#endif
 	}
 	else {
 		int demonum = 0;
@@ -145,7 +150,11 @@ void G_RecordDemo(const char* name) {
 			sprintf(demoname, "%s%i.lmp", name, demonum);
 			if (w3saccess(demoname, F_OK))
 			{
+#ifdef USE_OPTMIZED_FFUNCTION
+				fopen_s(&demofp, demoname, "wb");
+#else
 				demofp = fopen(demoname, "wb");
+#endif
 				break;
 			}
 			demonum++;
@@ -160,7 +169,7 @@ void G_RecordDemo(const char* name) {
 
 	CON_DPrintf("--------Recording %s--------\n", demoname);
 
-	demostart = dm_p = (byte*)malloc(1000);
+	demostart = dm_p = (unsigned char*)malloc(1000);
 
 	G_InitNew(startskill, startmap);
 
@@ -173,15 +182,15 @@ void G_RecordDemo(const char* name) {
 	*dm_p++ = nomonsters;
 	*dm_p++ = consoleplayer;
 
-	*dm_p++ = (byte)((gameflags >> 24) & 0xff);
-	*dm_p++ = (byte)((gameflags >> 16) & 0xff);
-	*dm_p++ = (byte)((gameflags >> 8) & 0xff);
-	*dm_p++ = (byte)(gameflags & 0xff);
+	*dm_p++ = (unsigned char)((gameflags >> 24) & 0xff);
+	*dm_p++ = (unsigned char)((gameflags >> 16) & 0xff);
+	*dm_p++ = (unsigned char)((gameflags >> 8) & 0xff);
+	*dm_p++ = (unsigned char)(gameflags & 0xff);
 
-	*dm_p++ = (byte)((compatflags >> 24) & 0xff);
-	*dm_p++ = (byte)((compatflags >> 16) & 0xff);
-	*dm_p++ = (byte)((compatflags >> 8) & 0xff);
-	*dm_p++ = (byte)(compatflags & 0xff);
+	*dm_p++ = (unsigned char)((compatflags >> 24) & 0xff);
+	*dm_p++ = (unsigned char)((compatflags >> 16) & 0xff);
+	*dm_p++ = (unsigned char)((compatflags >> 8) & 0xff);
+	*dm_p++ = (unsigned char)(compatflags & 0xff);
 
 	for (i = 0; i < MAXPLAYERS; i++) {
 		*dm_p++ = playeringame[i];
@@ -237,7 +246,7 @@ void G_PlayDemo(const char* name) {
 		}
 
 		CON_DPrintf("--------Playing demo %s--------\n", name);
-		demobuffer = demo_p = (byte*)W_CacheLumpName(name, PU_STATIC);
+		demobuffer = demo_p = (unsigned char*)W_CacheLumpName(name, PU_STATIC);
 	}
 
 	G_SaveDefaults();

@@ -71,16 +71,16 @@ fixed_t         automapx = 0;
 fixed_t         automapy = 0;
 fixed_t         automappanx = 0;
 fixed_t         automappany = 0;
-byte            amModeCycle = 0;        // textured or line mode?
+unsigned char            amModeCycle = 0;        // textured or line mode?
 int             followplayer = 1;        // specifies whether to follow the player around
 
 static player_t* plr;                       // the player represented by an arrow
 static boolean stopped = true;
-static word     am_blink = 0;        // player arrow blink tics
+static unsigned short     am_blink = 0;        // player arrow blink tics
 static angle_t  automapangle = 0;
 static float    scale = 640.0f;   // todo: reset scale after changing levels
 static fixed_t  am_box[4];                  // automap bounding box of level
-static byte     am_flags;                   // action flags for automap. Mostly for controls
+static unsigned char     am_flags;                   // action flags for automap. Mostly for controls
 static int      mpanx;
 static int      mpany;
 static angle_t  autoprevangle = 0;
@@ -103,10 +103,11 @@ CVAR(am_overlay, 0);
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
 
-
+#ifdef FUCKED_GAMECONTROLLER
 extern float i_rsticksensitivityy;
 extern float i_rsticksensitivityx;
 extern int i_xinputscheme;
+#endif
 
 //
 // CMD_Automap
@@ -340,7 +341,7 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
-
+#ifdef FUCKED_GAMECONTROLLER
 	else if (ev->type == ev_gamepad) {
 		//
 		// user has pan button held down and is
@@ -361,6 +362,7 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
+
 	else if (automapactive) {
 		if (ev->type == ev_keydown) {
 			switch (ev->data1) {
@@ -446,6 +448,7 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
+#endif
 	return rc;
 }
 
@@ -818,7 +821,7 @@ void AM_DrawWalls(void) {
 void AM_drawPlayers(void) {
 	int         i;
 	player_t* p;
-	byte        flash;
+	unsigned char       flash;
 
 	flash = am_blink & 0xff;
 
@@ -894,7 +897,7 @@ void AM_drawThings(void) {
 			//
 			else if (am_showkeymarkers.value) {
 				if (t->type >= MT_ITEM_BLUECARDKEY && t->type <= MT_ITEM_ARTIFACT3) {
-					byte r, g, b;
+					unsigned char r, g, b;
 
 					switch (t->type) {
 					case MT_ITEM_BLUECARDKEY:

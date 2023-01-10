@@ -80,7 +80,16 @@ typedef enum
 
 #define MAX_RETRIES 5
 
-typedef struct net_reliable_packet_s net_reliable_packet_t;
+// reliable packet that is guaranteed to reach its destination
+
+typedef struct net_reliable_packet_s
+{
+	net_packet_t* packet;
+	int last_send_time;
+	int seq;
+	struct net_reliable_packet_s* next;
+} net_reliable_packet_t;
+
 
 typedef struct
 {
