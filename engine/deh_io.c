@@ -55,9 +55,11 @@ deh_context_t *DEH_OpenFile(char *filename)
 {
     FILE *fstream;
     deh_context_t *context;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+    fopen_s(&fstream, filename, "r");
+#else
     fstream = fopen(filename, "r");
-
+#endif
     if (fstream == NULL)
         return NULL;
 

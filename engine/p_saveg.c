@@ -1250,8 +1250,11 @@ static void saveg_write_marker(int marker) {
 boolean P_WriteSaveGame(char* description, int slot) {
 
     // setup game save file
+#ifdef USE_OPTMIZED_FFUNCTION
+    fopen_s(&save_stream, P_GetSaveGameName(slot), "wb");
+#else
     save_stream = fopen(P_GetSaveGameName(slot), "wb");
-
+#endif
     // success?
     if (save_stream == NULL) {
         return false;

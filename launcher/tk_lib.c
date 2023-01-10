@@ -184,7 +184,11 @@ void tk_ResetConfig(tDefTypes_t* cfgdefault)
 
 void tk_Open(void)
 {
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&tk_file, DefaultConfigFile, "w");
+#else
 	tk_file = fopen(DefaultConfigFile, "w");
+#endif
 }
 
 void tk_Close(void)

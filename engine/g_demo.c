@@ -137,7 +137,11 @@ void G_RecordDemo(const char* name) {
 	strcat(demoname, ".lmp");
 	if (w3saccess(demoname, F_OK))
 	{
+#ifdef USE_OPTMIZED_FFUNCTION
+		fopen_s(&demofp, demoname, "wb");
+#else
 		demofp = fopen(demoname, "wb");
+#endif
 	}
 	else {
 		int demonum = 0;
@@ -146,7 +150,11 @@ void G_RecordDemo(const char* name) {
 			sprintf(demoname, "%s%i.lmp", name, demonum);
 			if (w3saccess(demoname, F_OK))
 			{
+#ifdef USE_OPTMIZED_FFUNCTION
+				fopen_s(&demofp, demoname, "wb");
+#else
 				demofp = fopen(demoname, "wb");
+#endif
 				break;
 			}
 			demonum++;

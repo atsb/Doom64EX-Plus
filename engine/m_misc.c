@@ -136,8 +136,11 @@ boolean M_WriteFile(const char* name, void* source, int length) {
 	boolean result;
 
 	errno = 0;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	if (!(fopen_s(&fp, name, "wb"))) {
+#else
 	if (!(fp = fopen(name, "wb"))) {
+#endif
 		return 0;
 	}
 
@@ -185,8 +188,11 @@ int M_ReadFile(char const* name, byte** buffer) {
 	FILE* fp;
 
 	errno = 0;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	if ((fopen_s(&fp, name, "rb"))) {
+#else
 	if ((fp = fopen(name, "rb"))) {
+#endif
 		unsigned int length;
 
 		I_BeginRead();
@@ -196,7 +202,6 @@ int M_ReadFile(char const* name, byte** buffer) {
 		fseek(fp, 0, SEEK_SET);
 
 		*buffer = Z_Malloc(length, PU_STATIC, 0);
-
 		if (fread(*buffer, 1, length, fp) == length) {
 			fclose(fp);
 			return length;
@@ -266,9 +271,11 @@ void M_NormalizeSlashes(char* str) {
 
 int M_FileExists(char* filename) {
 	FILE* fstream;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fstream, filename, "r");
+#else
 	fstream = fopen(filename, "r");
-
+#endif
 	if (fstream != NULL) {
 		fclose(fstream);
 		return 1;
@@ -291,8 +298,11 @@ int M_FileExists(char* filename) {
 
 void M_SaveDefaults(void) {
 	FILE* fh;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen(&fh, G_GetConfigFileName(), "wt");
+#else
 	fh = fopen(G_GetConfigFileName(), "wt");
+#endif
 	if (fh) {
 		G_OutputBindings(fh);
 		fclose(fh);
@@ -335,8 +345,11 @@ void M_ScreenShot(void) {
 	if (shotnum >= 1000) {
 		return;
 	}
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fh, name, "wb");
+#else
 	fh = fopen(name, "wb");
+#endif
 	if (!fh) {
 		return;
 	}

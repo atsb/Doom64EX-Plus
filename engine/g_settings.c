@@ -98,20 +98,28 @@ void G_ExecuteFile(char* name) {
 	if (!name) {
 		I_Error("G_ExecuteFile: No config name specified");
 	}
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fh, name, "rb");
+#else
 	fh = fopen(name, "rb");
-
+#endif
 	if (!fh) {
+#ifdef USE_OPTMIZED_FFUNCTION
+		fopen_s(&fh, name, "w");
+#else
 		fh = fopen(name, "w");
+#endif
 		if (!fh) {
 			I_Error("G_ExecuteFile: Unable to create %s", name);
 		}
 
 		fprintf(fh, "%s", DefaultConfig);
 		fclose(fh);
-
+#ifdef USE_OPTMIZED_FFUNCTION
+		fopen_s(&fh, name, "rb");
+#else
 		fh = fopen(name, "rb");
-
+#endif
 		if (!fh) {
 			I_Error("G_ExecuteFile: Failed to read %s", name);
 		}

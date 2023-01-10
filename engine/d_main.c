@@ -786,7 +786,11 @@ static void FindResponseFile(void) {
 			char* firstargv;
 
 			// READ THE RESPONSE FILE INTO MEMORY
+#ifdef USE_OPTMIZED_FFUNCTION
+			fopen_s(&handle, &myargv[i][1], "rb");
+#else
 			handle = fopen(&myargv[i][1], "rb");
+#endif
 			if (!handle) {
 				//                I_Warnf (IWARNMINOR, "\nNo such response file!");
 				exit(1);
@@ -796,7 +800,11 @@ static void FindResponseFile(void) {
 			size = ftell(handle);
 			fseek(handle, 0, SEEK_SET);
 			file = (char*)malloc(size);
+#ifdef USE_OPTMIZED_FFUNCTION
+			fread_s(file, sizeof(file), size, 1, handle);
+#else
 			fread(file, size, 1, handle);
+#endif
 			fclose(handle);
 
 			// KEEP ALL CMDLINE ARGS FOLLOWING @RESPONSEFILE ARG
