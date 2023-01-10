@@ -183,12 +183,24 @@
     <ClCompile Include="..\engine\backend\cglm\src\vec2.c" />
     <ClCompile Include="..\engine\backend\cglm\src\vec3.c" />
     <ClCompile Include="..\engine\backend\cglm\src\vec4.c" />
-    <ClCompile Include="..\engine\backend\imgui\cimgui.cpp" />
-    <ClCompile Include="..\engine\backend\imgui\imgui.cpp" />
-    <ClCompile Include="..\engine\backend\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\engine\backend\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\engine\backend\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\engine\backend\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\engine\backend\imgui\cimgui.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\imgui\imgui.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\imgui\imgui_demo.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\imgui\imgui_draw.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\imgui\imgui_tables.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\imgui\imgui_widgets.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+    </ClCompile>
     <ClCompile Include="..\engine\con_console.c" />
     <ClCompile Include="..\engine\con_cvar.c" />
     <ClCompile Include="..\engine\deh_ammo.c" />
@@ -218,7 +230,6 @@
     <ClCompile Include="..\engine\g_demo.c" />
     <ClCompile Include="..\engine\g_game.c" />
     <ClCompile Include="..\engine\g_settings.c" />
-    <ClCompile Include="..\engine\im_utils.c" />
     <ClCompile Include="..\engine\info.c" />
     <ClCompile Include="..\engine\in_stuff.c" />
     <ClCompile Include="..\engine\i_audio.c" />
@@ -233,6 +244,7 @@
     <ClCompile Include="..\engine\i_w3swrapper.c" />
     <ClCompile Include="..\engine\md5.c" />
     <ClCompile Include="..\engine\m_cheat.c" />
+    <ClCompile Include="..\engine\m_fcvt.c" />
     <ClCompile Include="..\engine\m_fixed.c" />
     <ClCompile Include="..\engine\m_keys.c" />
     <ClCompile Include="..\engine\m_menu.c" />
@@ -481,7 +493,6 @@
     <ClInclude Include="..\engine\g_demo.h" />
     <ClInclude Include="..\engine\g_game.h" />
     <ClInclude Include="..\engine\g_settings.h" />
-    <ClInclude Include="..\engine\im_utils.h" />
     <ClInclude Include="..\engine\info.h" />
     <ClInclude Include="..\engine\i_audio.h" />
     <ClInclude Include="..\engine\i_opndir.h" />
@@ -493,6 +504,7 @@
     <ClInclude Include="..\engine\i_w3swrapper.h" />
     <ClInclude Include="..\engine\md5.h" />
     <ClInclude Include="..\engine\m_cheat.h" />
+    <ClInclude Include="..\engine\m_fcvt.h" />
     <ClInclude Include="..\engine\m_fixed.h" />
     <ClInclude Include="..\engine\m_keys.h" />
     <ClInclude Include="..\engine\m_menu.h" />
@@ -664,7 +676,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;USE_IMGUI;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;CIMGUI_USE_OPENGL3;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\cglm;$(ProjectDir)..\engine\backend\cglm\include;$(ProjectDir)..\engine\backend\imgui</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>

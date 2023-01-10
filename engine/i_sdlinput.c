@@ -629,6 +629,9 @@ int I_ShutdownWait(void) {
 	static SDL_Event event;
 
 	while (SDL_PollEvent(&event)) {
+#ifdef USE_IMGUI
+		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
+#endif
 		if (event.type == SDL_QUIT ||
 			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
@@ -647,6 +650,9 @@ void I_StartTic(void) {
 	SDL_Event Event;
 
 	while (SDL_PollEvent(&Event)) {
+#ifdef USE_IMGUI
+		ImGui_ImplSDL2_ProcessEvent(&Event);//Process the events.
+#endif
 		I_GetEvent(&Event);
 	}
 

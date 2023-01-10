@@ -235,7 +235,7 @@
     <ClCompile Include="..\engine\backend\imgui\imgui_widgets.cpp">
       <Filter>backend\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\im_utils.c" />
+    <ClCompile Include="..\engine\m_fcvt.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
@@ -794,7 +794,7 @@
     <ClInclude Include="..\engine\backend\imgui\imstb_truetype.h">
       <Filter>backend\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\im_utils.h" />
+    <ClInclude Include="..\engine\m_fcvt.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\defconfig.inc" />
