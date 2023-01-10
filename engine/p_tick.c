@@ -332,7 +332,7 @@ void P_Stop(void) {
 	}
 
 	// free level tags
-	Z_FreeTags(PU_LEVEL, PU_PURGELEVEL - 1);
+	Z_FreeTags(PU_LEVEL, PU_CACHE - 1);
 
 	if (automapactive) {
 		AM_Stop();

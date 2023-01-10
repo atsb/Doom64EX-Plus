@@ -47,7 +47,9 @@
 #include "g_game.h"
 #include "s_sound.h"
 #include "d_englsh.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "sounds.h"
 #include "gl_texture.h"
 #include "m_misc.h"
@@ -56,7 +58,7 @@
 #include "sc_main.h"
 
 short globalint = 0;
-static byte tryopentype[3];
+static unsigned char tryopentype[3];
 
 //
 //      source animation definition
@@ -1069,7 +1071,7 @@ static boolean P_ModifyMobjFlags(int tid, int flags) {
 // P_CheckArtifact
 //
 
-int P_CheckArtifact(line_t* line, mobj_t* mo, byte type) {
+int P_CheckArtifact(line_t* line, mobj_t* mo, unsigned char type) {
 	int num = 0;
 
 	if (mo->player->artifacts & (1 << type)) {

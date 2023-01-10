@@ -39,7 +39,7 @@
 #ifdef USE_FIXEDPTC 
 typedef fixedpt fixed_t;
 #else
-typedef w3suint64_t fixed_t;
+typedef long long fixed_t;
 #endif
 #define FRACBITS        16
 #define FRACUNIT        (1<<FRACBITS)
@@ -48,8 +48,6 @@ typedef w3suint64_t fixed_t;
 #define F2INT(x)        ((x)>>FRACBITS)
 #define FLOATTOFIXED(x) ((fixed_t)((x)*FRACUNIT))
 #define F2D3D(x)         (((float)(x))/FRACUNIT)
-
-typedef int fixed_t;
 
 fixed_t FixedMul(fixed_t a, fixed_t b);
 fixed_t FixedDiv(fixed_t a, fixed_t b);

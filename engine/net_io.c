@@ -29,13 +29,6 @@
 #include "net_io.h"
 #include "z_zone.h"
 
-#define MAX_MODULES 16
-
-struct _net_context_s
-{
-	net_module_t* modules[MAX_MODULES];
-	int num_modules;
-};
 
 net_addr_t net_broadcast_addr;
 

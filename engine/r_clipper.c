@@ -25,7 +25,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
+
 #include "tables.h"
 #include "m_fixed.h"
 #include "z_zone.h"

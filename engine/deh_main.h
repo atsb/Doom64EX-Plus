@@ -18,7 +18,11 @@
 #ifndef DEH_MAIN_H
 #define DEH_MAIN_H
 
+#ifdef _WIN32
 #include "i_opndir.h"
+#else
+#include <unistd.h>
+#endif
 #include "doomtype.h"
 #include "sha1.h"
 

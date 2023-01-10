@@ -29,7 +29,10 @@
 
 #include "doomstat.h"
 
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
+
 #include "p_local.h"
 
 rcolor    bspColor[5];
@@ -44,7 +47,7 @@ CVAR_EXTERNAL(r_texturecombiner);
 // R_LightToVertex
 //
 
-void R_LightToVertex(vtx_t* v, int idx, word c) {
+void R_LightToVertex(vtx_t* v, int idx, unsigned short c) {
 	int i = 0;
 
 	for (i = 0; i < c; i++) {
@@ -252,16 +255,16 @@ void R_RefreshBrightness(void) {
 // R_GetSectorLight
 //
 
-rcolor R_GetSectorLight(byte alpha, word ptr) {
-	return D_RGBA((byte)lights[ptr].active_r,
-		(byte)lights[ptr].active_g, (byte)lights[ptr].active_b, alpha);
+rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
+	return D_RGBA((unsigned char)lights[ptr].active_r,
+		(unsigned char)lights[ptr].active_g, (unsigned char)lights[ptr].active_b, alpha);
 }
 
 //
 // R_SplitLineColor
 //
 
-rcolor R_SplitLineColor(seg_t* line, byte side) {
+rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
 	int height = 0;
 	int sideheight1 = 0;
 	int sideheight2 = 0;
@@ -299,18 +302,18 @@ rcolor R_SplitLineColor(seg_t* line, byte side) {
 	g2 = ((g2 / height) * sideheight2);
 	b2 = ((b2 / height) * sideheight2);
 
-	return D_RGBA((byte)min((r1 + r2), 0xff), (byte)min((g1 + g2), 0xff), (byte)min((b1 + b2), 0xff), 0xff);
+	return D_RGBA((unsigned char)min((r1 + r2), 0xff), (unsigned char)min((g1 + g2), 0xff), (unsigned char)min((b1 + b2), 0xff), 0xff);
 }
 
 //
 // R_SetSegLineColor
 //
 
-void R_SetSegLineColor(seg_t* line, vtx_t* v, byte side) {
+void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side) {
 	int i;
 	rcolor c[4];
-	byte lwr = LIGHT_LWRWALL;
-	byte upr = LIGHT_UPRWALL;
+	unsigned char lwr = LIGHT_LWRWALL;
+    unsigned char upr = LIGHT_UPRWALL;
 
 	if (line->linedef->flags & ML_BLENDING) {
 		if (line->backsector && side != 0) {

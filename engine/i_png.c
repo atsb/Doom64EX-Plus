@@ -37,8 +37,8 @@
 #include "con_console.h"
 #include "i_png.h"
 
-static byte* pngWriteData;
-static byte* pngReadData;
+static unsigned char* pngWriteData;
+static unsigned char* pngReadData;
 static unsigned int   pngWritePos = 0;
 
 CVAR_CMD(i_gamma, 0) {
@@ -49,7 +49,7 @@ CVAR_CMD(i_gamma, 0) {
 // I_PNGRowSize
 //
 
-static unsigned int I_PNGRowSize(int width, byte bits) {
+static unsigned int I_PNGRowSize(int width, unsigned char bits) {
 	if (bits >= 8) {
 		return ((width * bits) >> 3);
 	}
@@ -62,7 +62,7 @@ static unsigned int I_PNGRowSize(int width, byte bits) {
 // I_PNGReadFunc
 //
 
-static void I_PNGReadFunc(png_structp ctx, byte* area, unsigned int size) {
+static void I_PNGReadFunc(png_structp ctx, unsigned char* area, unsigned int size) {
 	memcpy(area, pngReadData, size);
 	pngReadData += size;
 }
@@ -88,8 +88,8 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 // I_GetRGBGamma
 //
 
-static byte I_GetRGBGamma(int c) {
-	return (byte)min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
+static unsigned char I_GetRGBGamma(int c) {
+	return (unsigned char)min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
 }
 
 //
@@ -111,7 +111,7 @@ static void I_TranslatePalette(png_colorp dest) {
 // I_PNGReadData
 //
 
-byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
+unsigned char* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 	int* w, int* h, int* offset, int palindex) {
 	png_structp png_ptr;
 	png_infop   info_ptr;
@@ -121,11 +121,11 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 	int         color_type;
 	int         interlace_type;
 	int         pixel_depth;
-	byte* png;
-	byte* out;
+	unsigned char* png;
+	unsigned char* out;
 	unsigned int      row;
 	unsigned int      rowSize;
-	byte** row_pointers;
+	unsigned char** row_pointers;
 
 	// get lump data
 	png = W_CacheLumpNum(lump, PU_STATIC);
@@ -295,8 +295,8 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 	}
 
 	// allocate output and row pointers
-	out = (byte*)Z_Calloc(rowSize * height, PU_STATIC, 0);
-	row_pointers = (byte**)Z_Malloc(sizeof(byte*) * height, PU_STATIC, 0);
+	out = (unsigned char*)Z_Calloc(rowSize * height, PU_STATIC, 0);
+	row_pointers = (unsigned char**)Z_Malloc(sizeof(unsigned char*) * height, PU_STATIC, 0);
 
 	for (row = 0; row < height; row++) {
 		row_pointers[row] = out + (row * rowSize);
@@ -313,10 +313,10 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 		for (i = 0; i < (height * rowSize) / 4; i++) {
 			int c = *check;
 
-			byte b = (byte)((c >> 24) & 0xff);
-			byte g = (byte)((c >> 16) & 0xff);
-			byte r = (byte)((c >> 8) & 0xff);
-			byte a = (byte)(c & 0xff);
+			unsigned char b = (unsigned char)((c >> 24) & 0xff);
+			unsigned char g = (unsigned char)((c >> 16) & 0xff);
+			unsigned char r = (unsigned char)((c >> 8) & 0xff);
+			unsigned char a = (unsigned char)(c & 0xff);
 
 			*check = ((a << 24) | (b << 16) | (g << 8) | r);
 
@@ -336,8 +336,8 @@ byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
 // I_PNGWriteFunc
 //
 
-static void I_PNGWriteFunc(png_structp png_ptr, byte* data, unsigned int length) {
-	pngWriteData = (byte*)Z_Realloc(pngWriteData, sizeof(pngWritePos) + length, PU_STATIC, 0);
+static void I_PNGWriteFunc(png_structp png_ptr, unsigned char* data, unsigned int length) {
+	pngWriteData = (unsigned char*)Z_Realloc(pngWriteData, sizeof(pngWritePos) + length, PU_STATIC, 0);
 	memcpy(pngWriteData + pngWritePos, data, sizeof(length));
 	pngWritePos += length;
 }
@@ -346,13 +346,13 @@ static void I_PNGWriteFunc(png_structp png_ptr, byte* data, unsigned int length)
 // I_PNGCreate
 //
 
-byte* I_PNGCreate(int width, int height, byte* data, int* size) {
+unsigned char* I_PNGCreate(int width, int height, unsigned char* data, int* size) {
 	png_structp png_ptr;
 	png_infop   info_ptr;
 	int         i = 0;
-	byte* out;
-	byte* pic;
-	byte** row_pointers;
+	unsigned char* out;
+	unsigned char* pic;
+	unsigned char** row_pointers;
 	unsigned int      j = 0;
 	unsigned int      row;
 
@@ -396,13 +396,13 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 	// add png info to data
 	png_write_info(png_ptr, info_ptr);
 
-	row_pointers = (byte**)Z_Malloc(sizeof(byte*) * height, PU_STATIC, 0);
+	row_pointers = (unsigned char**)Z_Malloc(sizeof(unsigned char*) * height, PU_STATIC, 0);
 	row = I_PNGRowSize(width, 24 /*info_ptr->pixel_depth*/);
 	pic = data;
 
 	for (i = 0; i < height; i++) {
 		row_pointers[i] = NULL;
-		row_pointers[i] = (byte*)Z_Malloc(row, PU_STATIC, 0);
+		row_pointers[i] = (unsigned char*)Z_Malloc(row, PU_STATIC, 0);
 
 		for (j = 0; j < row; j++) {
 			row_pointers[i][j] = *pic;
@@ -427,7 +427,7 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 
 	// allocate output
-	out = (byte*)Z_Malloc(pngWritePos, PU_STATIC, 0);
+	out = (unsigned char*)Z_Malloc(pngWritePos, PU_STATIC, 0);
 	memcpy(out, pngWriteData, pngWritePos);
 	*size = pngWritePos;
 

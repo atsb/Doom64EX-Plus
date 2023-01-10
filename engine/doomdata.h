@@ -67,10 +67,10 @@ typedef struct {
 } PACKEDATTR mapvertex_t;
 
 typedef struct {
-	byte r;
-	byte g;
-	byte b;
-	byte a;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
 	short tag;
 } PACKEDATTR maplights_t;
 
@@ -79,17 +79,17 @@ typedef struct {
 typedef struct {
 	short    textureoffset;
 	short    rowoffset;
-	word    toptexture;
-	word    bottomtexture;
-	word    midtexture;
+	unsigned short    toptexture;
+	unsigned short   bottomtexture;
+	unsigned short    midtexture;
 	short    sector;    // Front sector, towards viewer.
 } PACKEDATTR mapsidedef_t;
 
 // A LineDef, as used for editing, and as input
 // to the BSP builder.
 typedef struct {
-	word    v1;
-	word    v2;
+	unsigned short    v1;
+	unsigned short    v2;
 	int     flags;
 	short   special;
 	short   tag;
@@ -98,18 +98,19 @@ typedef struct {
 	// use the unsigned value and special case the -1
 	// sidenum[1] will be -1 (NO_INDEX) if one sided
 	//
-	word    sidenum[2]; // sidenum[1] will be -1 if one sided
+	unsigned short    sidenum[2]; // sidenum[1] will be -1 if one sided
 } PACKEDATTR maplinedef_t;
 
-#define NO_SIDE_INDEX   ((word)-1)
+#define NO_SIDE_INDEX   ((unsigned short)-1)
 
 //
 // LineDef attributes.
 //
-
-#define ML_BLOCKING             1               // Solid, is an obstacle.
-#define ML_BLOCKMONSTERS        2               // Blocks monsters only.
-#define ML_TWOSIDED             4               // Backside will not be present at all if not two sided.
+enum {
+	ML_BLOCKING = 1,               // Solid, is an obstacle.
+	ML_BLOCKMONSTERS = 2,               // Blocks monsters only.
+	ML_TWOSIDED = 4,               // Backside will not be present at all if not two sided.
+};
 
 // If a texture is pegged, the texture will have
 // the end exposed to air held constant at the
@@ -120,49 +121,51 @@ typedef struct {
 // the texture at the top pixel of the line for both
 // top and bottom textures (use next to windows).
 
-#define ML_DONTPEGTOP           8               // upper texture unpegged
-#define ML_DONTPEGBOTTOM        16              // lower texture unpegged
-#define ML_SECRET               32              // In AutoMap: don't map as two sided: IT'S A SECRET!
-#define ML_SOUNDBLOCK           64              // Sound rendering: don't let sound cross two of these.
-#define ML_DONTDRAW             128             // Don't draw on the automap at all.
-#define ML_MAPPED               256             // Set if already seen, thus drawn in automap.
-#define ML_DRAWMIDTEXTURE       0x200           // Draw middle texture on sidedef
-#define ML_DONTOCCLUDE          0x400           // Don't add to occlusion buffer
-#define ML_DONTPEGMID           0x800           // middle texture unpegged
-#define ML_THINGTRIGGER         0x1000          // Line is triggered by dead thing (flagged as ondeathtrigger)
-#define ML_SWITCHX02            0x2000          // Switch flag 1
-#define ML_SWITCHX04            0x4000          // Switch flag 2
-#define ML_SWITCHX08            0x8000          // Switch flag 3
-#define ML_CHECKFLOORHEIGHT     0x10000         // if true then check the switch's floor height, else use the ceiling height
-#define ML_SCROLLRIGHT          0x20000         // scroll texture to the right
-#define ML_SCROLLLEFT           0x40000         // scroll texture to the left
-#define ML_SCROLLUP             0x80000         // scroll texture up
-#define ML_SCROLLDOWN           0x100000        // scroll texture down
-#define ML_BLENDFULLTOP         0x200000        // do not extend blending for top texture
-#define ML_BLENDFULLBOTTOM      0x400000        // do not extend blending for bottom texture
-#define ML_BLENDING             0x800000        // use sector color blending (top/lower, ceiling, floor colors).
-#define ML_TRIGGERFRONT         0x1000000       // can only trigger from the front of the line
-#define ML_HIDEAUTOMAPTRIGGER   0x2000000       // don't display as yellow line special in automap
-#define ML_INVERSEBLEND         0x4000000       // reverse the blending of the sector colors
-#define ML_UNKNOWN8000000       0x8000000       // reserved
-#define ML_UNKNOWN10000000      0x10000000      // reserved
-#define ML_UNKNOWN20000000      0x20000000      // reserved
-#define ML_HMIRROR              0x40000000      // horizontal mirror the texture
-#define ML_VMIRROR              0x80000000      // vertical mirror the texture
+enum {	
+	ML_DONTPEGTOP = 8,          // upper texture unpegged
+	ML_DONTPEGBOTTOM = 16,              // lower texture unpegged
+	ML_SECRET = 32,              // In AutoMap: don't map as two sided: IT'S A SECRET!
+	ML_SOUNDBLOCK = 64,              // Sound rendering: don't let sound cross two of these.
+	ML_DONTDRAW = 128,             // Don't draw on the automap at all.
+	ML_MAPPED = 256,             // Set if already seen, thus drawn in automap.
+	ML_DRAWMIDTEXTURE = 0x200,           // Draw middle texture on sidedef
+	ML_DONTOCCLUDE = 0x400,           // Don't add to occlusion buffer
+	ML_DONTPEGMID = 0x800,           // middle texture unpegged
+	ML_THINGTRIGGER = 0x1000,          // Line is triggered by dead thing (flagged as ondeathtrigger)
+	ML_SWITCHX02 = 0x2000,          // Switch flag 1
+	ML_SWITCHX04 = 0x4000,          // Switch flag 2
+	ML_SWITCHX08 = 0x8000,          // Switch flag 3
+	ML_CHECKFLOORHEIGHT = 0x10000,         // if true then check the switch's floor height, else use the ceiling height
+	ML_SCROLLRIGHT = 0x20000,         // scroll texture to the right
+	ML_SCROLLLEFT = 0x40000,         // scroll texture to the left
+	ML_SCROLLUP = 0x80000,         // scroll texture up
+	ML_SCROLLDOWN = 0x100000,        // scroll texture down
+	ML_BLENDFULLTOP = 0x200000,        // do not extend blending for top texture
+	ML_BLENDFULLBOTTOM = 0x400000,        // do not extend blending for bottom texture
+	ML_BLENDING = 0x800000,        // use sector color blending (top/lower, ceiling, floor colors).
+	ML_TRIGGERFRONT = 0x1000000,       // can only trigger from the front of the line
+	ML_HIDEAUTOMAPTRIGGER = 0x2000000,       // don't display as yellow line special in automap
+	ML_INVERSEBLEND = 0x4000000,       // reverse the blending of the sector colors
+	ML_UNKNOWN8000000 = 0x8000000,       // reserved
+	ML_UNKNOWN10000000 = 0x10000000,      // reserved
+	ML_UNKNOWN20000000 = 0x20000000,     // reserved
+	ML_HMIRROR = 0x40000000,      // horizontal mirror the texture
+	ML_VMIRROR = 0x80000000      // vertical mirror the texture
+};
 
 //
 // Special attributes.
 //
-
-#define MLU_MACRO               0x100            // line is set to be used as a macro
-#define MLU_RED                 0x200            // requires red key
-#define MLU_BLUE                0x400            // requires blue key
-#define MLU_YELLOW              0x800            // requires yellow key
-#define MLU_CROSS               0x1000            // must cross to trigger
-#define MLU_SHOOT               0x2000            // must shoot the line to trigger
-#define MLU_USE                 0x4000            // must press use on the line to trigger
-#define MLU_REPEAT              0x8000            // line can be reactivated again
-
+enum {
+	MLU_MACRO = 0x100,            // line is set to be used as a macro
+	MLU_RED = 0x200,            // requires red key
+	MLU_BLUE = 0x400,            // requires blue key
+	MLU_YELLOW = 0x800,            // requires yellow key
+	MLU_CROSS = 0x1000,            // must cross to trigger
+	MLU_SHOOT = 0x2000,            // must shoot the line to trigger
+	MLU_USE = 0x4000,            // must press use on the line to trigger
+	MLU_REPEAT = 0x8000            // line can be reactivated again
+};
 //
 // Line masks
 //
@@ -175,48 +178,50 @@ typedef struct {
 typedef    struct {
 	short    floorheight;
 	short    ceilingheight;
-	word    floorpic;
-	word    ceilingpic;
-	word    colors[5];
+	unsigned short    floorpic;
+	unsigned short    ceilingpic;
+	unsigned short    colors[5];
 	short    special;
 	short    tag;
-	word    flags;
+	unsigned short    flags;
 } PACKEDATTR mapsector_t;
 
 //
 // Sector Flags
 //
-
-#define MS_REVERB               1       // sounds are echoed in this sector
-#define MS_REVERBHEAVY          2       // heavier echo effect
-#define MS_LIQUIDFLOOR          4       // water effect (blitting two flats together)
-#define MS_SYNCSPECIALS         8       // sync light special with multiple sectors
-#define MS_SCROLLFAST           16      // faster ceiling/floor scrolling
-#define MS_SECRET               32      // count secret when entering and display message
-#define MS_DAMAGEX5             64      // damage player x5
-#define MS_DAMAGEX10            128     // damage player x10
-#define MS_DAMAGEX20            256     // damage player x20
-#define MS_HIDESSECTOR          512     // hide subsectors in automap (textured mode)
-#define MS_SCROLLCEILING        1024    // enable ceiling scrolling
-#define MS_SCROLLFLOOR          2048    // enable floor scrolling
-#define MS_SCROLLLEFT           4096    // scroll flat to the left
-#define MS_SCROLLRIGHT          8192    // scroll flat to the right
-#define MS_SCROLLUP             16384   // scroll flat to the north
-#define MS_SCROLLDOWN           32768   // scroll flat to the south
+enum
+{
+	MS_REVERB = 1,       // sounds are echoed in this sector
+	MS_REVERBHEAVY = 2,       // heavier echo effect
+	MS_LIQUIDFLOOR = 4,       // water effect (blitting two flats together)
+	MS_SYNCSPECIALS = 8,       // sync light special with multiple sectors
+	MS_SCROLLFAST = 16,      // faster ceiling/floor scrolling
+	MS_SECRET = 32,      // count secret when entering and display message
+	MS_DAMAGEX5 = 64,      // damage player x5
+	MS_DAMAGEX10 = 128,     // damage player x10
+	MS_DAMAGEX20 = 256,     // damage player x20
+	MS_HIDESSECTOR = 512,     // hide subsectors in automap (textured mode)
+	MS_SCROLLCEILING = 1024,    // enable ceiling scrolling
+	MS_SCROLLFLOOR = 2048,    // enable floor scrolling
+	MS_SCROLLLEFT = 4096,    // scroll flat to the left
+	MS_SCROLLRIGHT = 8192,    // scroll flat to the right
+	MS_SCROLLUP = 16384,   // scroll flat to the north
+	MS_SCROLLDOWN = 32768   // scroll flat to the south
+};
 
 // SubSector, as generated by BSP.
 typedef struct {
-	word    numsegs;
-	word    firstseg;   // Index of first one, segs are stored sequentially.
+	unsigned short    numsegs;
+	unsigned short    firstseg;   // Index of first one, segs are stored sequentially.
 } PACKEDATTR mapsubsector_t;
 
 // LineSeg, generated by splitting LineDefs
 // using partition lines selected by BSP builder.
 typedef struct {
-	word    v1;
-	word    v2;
+	unsigned short    v1;
+	unsigned short   v2;
 	short    angle;
-	word    linedef;
+	unsigned short    linedef;
 	short    side;
 	short    offset;
 } PACKEDATTR mapseg_t;
@@ -239,7 +244,7 @@ typedef struct {
 
 	// If NF_SUBSECTOR its a subsector,
 	// else it's a node of another subtree.
-	word    children[2];
+	unsigned short    children[2];
 } PACKEDATTR mapnode_t;
 
 // Thing definition, position, orientation and type,

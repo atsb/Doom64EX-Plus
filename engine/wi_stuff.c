@@ -417,7 +417,7 @@ void WI_Drawer(void) {
 	// draw password and name of next map
 	if (wi_stage > 4 && (P_GetMapInfo(nextmap) != NULL)) {
 		char password[20];
-		byte* passData;
+		unsigned char* passData;
 		int i = 0;
 		int y = 145;
 

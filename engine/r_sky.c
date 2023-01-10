@@ -51,12 +51,12 @@ int         thunderCounter = 0;
 int         lightningCounter = 0;
 int         thundertic = 1;
 boolean    skyfadeback = false;
-byte* fireBuffer;
+unsigned char* fireBuffer;
 dPalette_t  firePal16[256];
 int         fireLump = -1;
 
-static word CloudOffsetY = 0;
-static word CloudOffsetX = 0;
+static unsigned short CloudOffsetY = 0;
+static unsigned short CloudOffsetX = 0;
 static float sky_cloudpan1 = 0;
 static float sky_cloudpan2 = 0;
 
@@ -473,7 +473,7 @@ static void R_DrawVoidSky(void) {
 	GL_SetOrtho(1);
 
 	glDisable(GL_TEXTURE_2D);
-	glColor4ubv((byte*)&sky->skycolor[2]);
+	glColor4ubv((unsigned char*)&sky->skycolor[2]);
 	glRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
 	glEnable(GL_TEXTURE_2D);
 
@@ -494,7 +494,7 @@ static void R_DrawTitleSky(void) {
 //
 
 static void R_DrawClouds(void) {
-	rfloat pos = 0.0f;
+	float pos = 0.0f;
 	vtx_t v[4];
 
 	GL_SetTextureUnit(0, true);
@@ -577,19 +577,19 @@ static void R_DrawClouds(void) {
 // R_SpreadFire
 //
 
-static void R_SpreadFire(byte* src1, byte* src2, int pixel, int counter, int* rand) {
+static void R_SpreadFire(unsigned char* src1, unsigned char* src2, int pixel, int counter, int* rand) {
 	int randIdx = 0;
-	byte* tmpSrc;
+	unsigned char* tmpSrc;
 
 	if (pixel != 0) {
 		randIdx = rndtable[*rand];
 		*rand = ((*rand + 2) & 0xff);
 
 		tmpSrc = (src1 + (((counter - (randIdx & 3)) + 1) & (FIRESKY_WIDTH - 1)));
-		*(byte*)(tmpSrc - FIRESKY_WIDTH) = pixel - ((randIdx & 1));
+		*(unsigned char*)(tmpSrc - FIRESKY_WIDTH) = pixel - ((randIdx & 1));
 	}
 	else {
-		*(byte*)(src2 - FIRESKY_WIDTH) = 0;
+		*(unsigned char*)(src2 - FIRESKY_WIDTH) = 0;
 	}
 }
 
@@ -597,13 +597,13 @@ static void R_SpreadFire(byte* src1, byte* src2, int pixel, int counter, int* ra
 // R_Fire
 //
 
-static void R_Fire(byte* buffer) {
+static void R_Fire(unsigned char* buffer) {
 	int counter = 0;
 	int rand = 0;
 	int step = 0;
 	int pixel = 0;
-	byte* src;
-	byte* srcoffset;
+	unsigned char* src;
+	unsigned char* srcoffset;
 
 	rand = (M_Random() & 0xff);
 	src = buffer;
@@ -612,7 +612,7 @@ static void R_Fire(byte* buffer) {
 
 	do {  // width
 		srcoffset = (src + counter);
-		pixel = *(byte*)srcoffset;
+		pixel = *(unsigned char*)srcoffset;
 
 		step = 2;
 
@@ -622,12 +622,12 @@ static void R_Fire(byte* buffer) {
 		srcoffset += FIRESKY_WIDTH;
 
 		do {  // height
-			pixel = *(byte*)srcoffset;
+			pixel = *(unsigned char*)srcoffset;
 			step += 2;
 
 			R_SpreadFire(src, srcoffset, pixel, counter, &rand);
 
-			pixel = *(byte*)(srcoffset + FIRESKY_WIDTH);
+			pixel = *(unsigned char*)(srcoffset + FIRESKY_WIDTH);
 			src += FIRESKY_WIDTH;
 			srcoffset += FIRESKY_WIDTH;
 
@@ -693,7 +693,7 @@ static void R_DrawFire(void) {
 	//
 	memset(firetexture, 0, sizeof(int) * FIRESKY_WIDTH * FIRESKY_HEIGHT);
 	for (i = 0; i < FIRESKY_WIDTH * FIRESKY_HEIGHT; i++) {
-		byte rgb[3];
+		unsigned char rgb[3];
 
 		rgb[0] = firePal16[fireBuffer[i]].r;
 		rgb[1] = firePal16[fireBuffer[i]].g;

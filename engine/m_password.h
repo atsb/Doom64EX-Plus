@@ -26,7 +26,7 @@
 
 #include "doomtype.h"
 
-extern byte passwordData[16];
+extern unsigned char passwordData[16];
 extern const char* passwordChar;
 extern boolean doPassword;
 

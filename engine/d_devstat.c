@@ -30,7 +30,9 @@
 #include "doomstat.h"
 #include "p_local.h"
 #include "i_system.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "z_zone.h"
 #include "gl_draw.h"
 #include "s_sound.h"
@@ -40,7 +42,7 @@
 #include "i_sdlinput.h"
 static boolean showstats = true;
 
-extern word statindice;
+extern unsigned short statindice;
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);

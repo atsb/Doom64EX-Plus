@@ -33,7 +33,10 @@
 #include <sys/types.h>
 #endif
 
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "z_zone.h"
 #include "m_misc.h"
 #include "con_console.h"
@@ -55,7 +58,7 @@ char    DefaultConfig[] =
 // G_ExecuteMultipleCommands
 //
 
-int8_t* G_GetConfigFileName(void) {
+char* G_GetConfigFileName(void) {
 	return I_GetUserFile(ConfigFileName);
 }
 
@@ -95,20 +98,28 @@ void G_ExecuteFile(char* name) {
 	if (!name) {
 		I_Error("G_ExecuteFile: No config name specified");
 	}
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fh, name, "rb");
+#else
 	fh = fopen(name, "rb");
-
+#endif
 	if (!fh) {
+#ifdef USE_OPTMIZED_FFUNCTION
+		fopen_s(&fh, name, "w");
+#else
 		fh = fopen(name, "w");
+#endif
 		if (!fh) {
 			I_Error("G_ExecuteFile: Unable to create %s", name);
 		}
 
 		fprintf(fh, "%s", DefaultConfig);
 		fclose(fh);
-
+#ifdef USE_OPTMIZED_FFUNCTION
+		fopen_s(&fh, name, "rb");
+#else
 		fh = fopen(name, "rb");
-
+#endif
 		if (!fh) {
 			I_Error("G_ExecuteFile: Failed to read %s", name);
 		}

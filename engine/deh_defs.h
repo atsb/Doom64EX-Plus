@@ -21,15 +21,47 @@
 #include <stdbool.h>
 #include "sha1.h"
 
-typedef struct deh_context_s deh_context_t;
-typedef struct deh_section_s deh_section_t;
-typedef void (*deh_section_init_t)(void);
-typedef void *(*deh_section_start_t)(deh_context_t *context, char *line);
-typedef void (*deh_section_end_t)(deh_context_t *context, void *tag);
-typedef void (*deh_line_parser_t)(deh_context_t *context, char *line, void *tag);
-typedef void (*deh_sha1_hash_t)(sha1_context_t *context);
+typedef enum
+{
+    DEH_INPUT_FILE,
+    DEH_INPUT_LUMP
+} deh_input_type_t;
 
-struct deh_section_s
+typedef struct deh_context_s
+{
+    deh_input_type_t type;
+    char* filename;
+
+    // If the input comes from a memory buffer, pointer to the memory
+    // buffer.
+    unsigned char* input_buffer;
+    size_t input_buffer_len;
+    unsigned int input_buffer_pos;
+    int lumpnum;
+
+    // If the input comes from a file, the file stream for reading
+    // data.
+    FILE* stream;
+
+    // Current line number that we have reached:
+    int linenum;
+
+    // Used by DEH_ReadLine:
+    boolean last_was_newline;
+    char* readbuffer;
+    int readbuffer_size;
+
+    // Error handling.
+    boolean had_error;
+} deh_context_t;
+
+typedef void (*deh_section_init_t)(void);
+typedef void* (*deh_section_start_t)(deh_context_t* context, char* line);
+typedef void (*deh_section_end_t)(deh_context_t* context, void* tag);
+typedef void (*deh_line_parser_t)(deh_context_t* context, char* line, void* tag);
+typedef void (*deh_sha1_hash_t)(sha1_context_t* context);
+
+typedef struct deh_section_s
 {
     char *name;
 
@@ -53,7 +85,9 @@ struct deh_section_s
     // Called when generating an SHA1 sum of the dehacked state
 
     deh_sha1_hash_t sha1_hash;
-};
+} deh_section_t;
+
+
 
 #endif /* #ifndef DEH_DEFS_H */
 

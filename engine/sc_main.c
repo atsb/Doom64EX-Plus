@@ -147,15 +147,15 @@ static int SC_GetInteger(void) {
 // SC_SetData
 //
 
-static int SC_SetData(byte* data, const scdatatable_t* table) {
+static int SC_SetData(unsigned char* data, const scdatatable_t* table) {
 	int i;
 	boolean ok = false;
 
 	for (i = 0; table[i].token; i++) {
 		if (!w3sstrcasecmp(table[i].token, sc_parser.token)) {
-			byte* pointer = ((byte*)data + table[i].ptroffset);
+			unsigned char* pointer = ((unsigned char*)data + table[i].ptroffset);
 			char* name;
-			byte rgb[3];
+			unsigned char rgb[3];
 
 			ok = true;
 
@@ -333,7 +333,9 @@ void SC_Init(void) {
 	sc_parser.rewind = SC_Rewind;
 	sc_parser.getstring = SC_GetString;
 	sc_parser.getint = SC_GetInteger;
+#ifndef __linux__	
 	sc_parser.setdata = SC_SetData;
+#endif	
 	sc_parser.readtokens = SC_ReadTokens;
 	sc_parser.error = SC_Error;
 }

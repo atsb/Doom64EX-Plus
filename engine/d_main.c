@@ -59,7 +59,9 @@
 #include "d_main.h"
 #include "con_console.h"
 #include "d_devstat.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "r_wipe.h"
 #include "g_controls.h"
 #include "g_demo.h"
@@ -584,23 +586,23 @@ static void Credits_Drawer(void) {
 	switch (creditscreenstage) {
 	case 0:
 		Draw_GfxImage(72, 24, "IDCRED1",
-			D_RGBA(255, 255, 255, (byte)screenalpha), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalpha), true);
 
 		Draw_GfxImage(40, 40, "IDCRED2",
-			D_RGBA(255, 255, 255, (byte)screenalphatext), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalphatext), true);
 		break;
 
 	case 1:
 		Draw_GfxImage(16, 80, "WMSCRED1",
-			D_RGBA(255, 255, 255, (byte)screenalpha), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalpha), true);
 
 		Draw_GfxImage(32, 24, "WMSCRED2",
-			D_RGBA(255, 255, 255, (byte)screenalphatext), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalphatext), true);
 		break;
 
 	case 2:
 		Draw_GfxImage(64, 30, "EVIL",
-			D_RGBA(255, 255, 255, (byte)screenalpha), true);
+			D_RGBA(255, 255, 255, (unsigned char)screenalpha), true);
 		break;
 	}
 }
@@ -784,7 +786,11 @@ static void FindResponseFile(void) {
 			char* firstargv;
 
 			// READ THE RESPONSE FILE INTO MEMORY
+#ifdef USE_OPTMIZED_FFUNCTION
+			fopen_s(&handle, &myargv[i][1], "rb");
+#else
 			handle = fopen(&myargv[i][1], "rb");
+#endif
 			if (!handle) {
 				//                I_Warnf (IWARNMINOR, "\nNo such response file!");
 				exit(1);
@@ -794,7 +800,11 @@ static void FindResponseFile(void) {
 			size = ftell(handle);
 			fseek(handle, 0, SEEK_SET);
 			file = (char*)malloc(size);
+#ifdef USE_OPTMIZED_FFUNCTION
+			fread_s(file, sizeof(file), size, 1, handle);
+#else
 			fread(file, size, 1, handle);
+#endif
 			fclose(handle);
 
 			// KEEP ALL CMDLINE ARGS FOLLOWING @RESPONSEFILE ARG

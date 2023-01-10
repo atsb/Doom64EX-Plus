@@ -39,7 +39,7 @@ extern boolean     skyfadeback;
 // Used for rendering, as well as tracking projectiles etc.
 extern int          skyflatnum;
 
-extern byte* fireBuffer;
+extern unsigned char* fireBuffer;
 extern dPalette_t   firePal16[256];
 extern int          fireLump;
 

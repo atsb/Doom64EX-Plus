@@ -24,12 +24,6 @@
 #ifndef M_KEYS_H
 #define M_KEYS_H
 
-#ifdef _XBOX
-#include <SDL2/SDL_stdinc.h>
-#else
-#include <stdint.h>
-#endif
-
 #define MAX_KEY_NAME_LENGTH    32
 
 int M_GetKeyName(char* buff, int key);

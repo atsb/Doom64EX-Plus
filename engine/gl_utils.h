@@ -234,8 +234,8 @@ SDL_GLContext   Window
 void glSetVertex(vtx_t* vtx);
 void glTriangle(int v0, int v1, int v2);
 void glDrawGeometry(int count, vtx_t* vtx);
-void glViewFrustum(int width, int height, rfloat fovy, rfloat znear);
-void glSetVertexColor(vtx_t* v, rcolor c, word count);
+void glViewFrustum(int width, int height, float fovy, float znear);
+void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count);
 void glGetColorf(rcolor color, float* argb);
 void glTexCombReplace(void);
 void glTexCombColor(int t, rcolor c, int func);

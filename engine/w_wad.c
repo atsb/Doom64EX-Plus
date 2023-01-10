@@ -372,7 +372,7 @@ static boolean nonmaplump = false;
 
 filelump_t* mapLump;
 int numMapLumps;
-byte* mapLumpData = NULL;
+unsigned char* mapLumpData = NULL;
 
 //
 // W_CacheMapLump
@@ -393,7 +393,7 @@ void W_CacheMapLump(int map) {
 		return;
 	}
 	else {
-		mapLumpData = (byte*)W_CacheLumpNum(lump, PU_STATIC);
+		mapLumpData = (unsigned char*)W_CacheLumpNum(lump, PU_STATIC);
 	}
 
 	numMapLumps = ((wadinfo_t*)mapLumpData)->numlumps;

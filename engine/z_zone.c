@@ -42,7 +42,11 @@
 static FILE* zonelog;
 
 static void Z_OpenLogFile(void) {
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&zonelog, "zonelog.txt", "w");
+#else
 	zonelog = fopen("zonelog.txt", "w");
+#endif
 }
 
 static void Z_CloseLogFile(void) {
@@ -135,7 +139,7 @@ void Z_Init(void) {
 void (Z_Free)(void* ptr, const char* file, int line) {
 	memblock_t* block;
 
-	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+	block = (memblock_t*)((unsigned char*)ptr - sizeof(memblock_t));
 
 	if (block->id != ZONEID) {
 		I_Error("Z_Free: freed a pointer without ZONEID (%s:%d)", file, line);
@@ -230,7 +234,7 @@ void* (Z_Malloc)(int size, int tag, void* user, const char* file, int line) {
 		I_Error("Z_Malloc: tag out of range: %i (%s:%d)", tag, file, line);
 	}
 
-	if (user == NULL && tag >= PU_PURGELEVEL) {
+	if (user == NULL && tag >= PU_CACHE) {
 		I_Error("Z_Malloc: an owner is required for purgable blocks (%s:%d)", file, line);
 	}
 
@@ -295,11 +299,11 @@ void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const char* file, in
 		I_Error("Z_Realloc: tag out of range: %i (%s:%d)", tag, file, line);
 	}
 
-	if (user == NULL && tag >= PU_PURGELEVEL) {
+	if (user == NULL && tag >= PU_CACHE) {
 		I_Error("Z_Realloc: an owner is required for purgable blocks (%s:%d)", file, line);
 	}
 
-	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+	block = (memblock_t*)((unsigned char*)ptr - sizeof(memblock_t));
 
 	newblock = NULL;
 
@@ -433,7 +437,7 @@ char* (Z_Strdupa)(const char* s, const char* file, int line) {
 void (Z_Touch)(void* ptr, const char* file, int line) {
 	memblock_t* block;
 
-	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+	block = (memblock_t*)((unsigned char*)ptr - sizeof(memblock_t));
 
 	if (block->id != ZONEID) {
 		I_Error("Z_Touch: touched a pointer without ZONEID (%s:%d)", file, line);
@@ -506,7 +510,7 @@ void (Z_CheckHeap)(const char* file, int line) {
 int (Z_CheckTag)(void* ptr, const char* file, int line) {
 	memblock_t* block;
 
-	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+	block = (memblock_t*)((unsigned char*)ptr - sizeof(memblock_t));
 
 	(Z_CheckHeap)(file, line);
 
@@ -524,13 +528,13 @@ int (Z_CheckTag)(void* ptr, const char* file, int line) {
 void (Z_ChangeTag)(void* ptr, int tag, const char* file, int line) {
 	memblock_t* block;
 
-	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+	block = (memblock_t*)((unsigned char*)ptr - sizeof(memblock_t));
 
 	if (block->id != ZONEID)
 		I_Error("Z_ChangeTag: block without a ZONEID! (%s:%d)",
 			file, line);
 
-	if (tag >= PU_PURGELEVEL && block->user == NULL) {
+	if (tag >= PU_CACHE && block->user == NULL) {
 		I_Error("Z_ChangeTag: an owner is required for purgable blocks (%s:%d)", file, line);
 	}
 

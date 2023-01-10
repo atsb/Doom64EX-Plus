@@ -37,7 +37,7 @@
 
 #include "p_mobj.h"
 
-int8_t * sprnames[NUMSPRITES + 1] = {  //0x5FA30
+char * sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"SPOT", "PLAY", "SARG", "FATT", "POSS", "TROO", "HEAD", "BOSS",
 	"SKUL", "BSPI", "CYBR", "PAIN", "RECT", "MISL", "PLSS", "BFS1",
 	"LASS", "BAL1", "BAL3", "BAL2", "BAL7", "BAL8", "APLS", "MANF",
@@ -64,6 +64,7 @@ int8_t * sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"ARCR",
 	"POW1",
 	"SPID",
+	"TEST",
 	NULL,
 };
 
@@ -1136,6 +1137,33 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SPID_DIE4*/{ SPR_SPID, 10, 6, {NULL}, S_SPID_DIE5 },
 	/*S_SPID_DIE5*/{ SPR_SPID, 11, 6, {NULL}, S_SPID_DIE6 },
 	/*S_SPID_DIE6*/{ SPR_SPID, 11, 6, {NULL}, S_NULL },
+	//The one true TESTA0
+
+	/*S_HEAD_STND*/{ SPR_TEST, 0, 15, {A_Look}, S_TEST_STND2 },
+	/*S_HEAD_STND2*/{ SPR_TEST, 1, 15, {A_Look}, S_TEST_STND3 },
+	/*S_HEAD_STND3*/{ SPR_TEST, 2, 15, {A_Look}, S_TEST_STND4 },
+	/*S_HEAD_STND4*/{ SPR_TEST, 3, 15, {A_Look}, S_TEST_STND },
+	/*S_HEAD_RUN1*/{ SPR_TEST, 0, 3, {A_Chase}, S_TEST_RUN2 },
+	/*S_HEAD_RUN2*/{ SPR_TEST, 0, 3, {A_Chase}, S_TEST_RUN3 },
+	/*S_HEAD_RUN3*/{ SPR_TEST, 1, 3, {A_Chase}, S_TEST_RUN4 },
+	/*S_HEAD_RUN4*/{ SPR_TEST, 1, 3, {A_Chase}, S_TEST_RUN5 },
+	/*S_HEAD_RUN5*/{ SPR_TEST, 2, 3, {A_Chase}, S_TEST_RUN6 },
+	/*S_HEAD_RUN6*/{ SPR_TEST, 2, 3, {A_Chase}, S_TEST_RUN7 },
+	/*S_HEAD_RUN7*/{ SPR_TEST, 3, 3, {A_Chase}, S_TEST_RUN8 },
+	/*S_HEAD_RUN8*/{ SPR_TEST, 3, 3, {A_Chase}, S_TEST_RUN1 },
+	/*S_HEAD_ATK1*/{ SPR_TEST, 4, 5, {A_FaceTarget}, S_TEST_ATK2 },
+	/*S_HEAD_ATK2*/{ SPR_TEST, 5, 5, {A_RectMissile}, S_TEST_ATK3 },
+	/*S_HEAD_ATK3*/{ SPR_TEST, 6, 5, {A_FaceTarget}, S_TEST_ATK4 },
+	/*S_HEAD_ATK4*/{ SPR_TEST, 6, 0, {A_RectMissile}, S_TEST_RUN1 },
+	/*S_HEAD_PAIN*/{ SPR_TEST, 1, 3, {NULL}, S_TEST_PAIN2 },
+	/*S_HEAD_PAIN2*/{ SPR_TEST, 1, 3, {A_Pain}, S_TEST_PAIN3 },
+	/*S_HEAD_PAIN3*/{ SPR_TEST, 1, 6, {NULL}, S_TEST_RUN1 },
+	/*S_HEAD_DIE1*/{ SPR_TEST, 7, 8, {NULL}, S_TEST_DIE2 },
+	/*S_HEAD_DIE2*/{ SPR_TEST, 8, 8, {A_Scream}, S_TEST_DIE3 },
+	/*S_HEAD_DIE3*/{ SPR_TEST, 9, 8, {NULL}, S_TEST_DIE4 },
+	/*S_HEAD_DIE4*/{ SPR_TEST, 10, 8, {A_Fall}, S_TEST_DIE5 },
+	/*S_HEAD_DIE5*/{ SPR_TEST, 11, 8, {A_OnDeathTrigger}, S_TEST_DIE6 },
+	/*S_HEAD_DIE6*/{ SPR_TEST, 12, -1, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -5940,5 +5968,32 @@ MF_SOLID,// flags
 			MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags,
 			0,        // palette
 			255        // alpha
+		},
+		{
+			/*MT_TESTA0*/
+			9005,        //doomednum
+			S_TEST_STND,        //spawnstate
+			800,        //spawnhealth
+			S_TEST_RUN1,        //seestate
+			sfx_headsit,        //seesound
+			8,        //reactiontime
+			sfx_None/*sfx_000*/,        //attacksound
+			S_TEST_PAIN,        //painstate
+			128,        //painchance
+			sfx_dbpain2,        //painsound
+			S_NULL,        //meleestate
+			S_TEST_ATK1,        //missilestate
+			S_TEST_DIE1,        //deathstate
+			S_NULL,        //xdeathstate
+			sfx_headdie,        //deathsound
+			12,        //speed
+			55 * FRACUNIT,        //radius
+			90 * FRACUNIT,        //height
+			500,        //mass
+			0,        //damage
+			sfx_dbact,        //activesound
+			MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
+			0,        //palette
+			255        //alpha
 		},
 };

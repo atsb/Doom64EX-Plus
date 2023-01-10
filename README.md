@@ -1,6 +1,9 @@
-## Doom 64EX+
+## DOOM64EX+
 
-Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
+[![Doom64EX-Plus! Icon](https://github.com/atsb/Doom64EX-Plus/blob/wolfy/engine/DOOM64EX+.png)](https://github.com/atsb/Doom64EX-Plus)
+
+
+DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
@@ -22,7 +25,7 @@ Doom 64EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64EX a
 
 There are a few bugs still present, which I am slowly fixing.
 
-This [GitHub repo](https://github.com/atsb/Doom64EX-Plus) is the same as [sourceforge](https://sourceforge.net/projects/doom64ex-plus/) but if any contributors wish to help, then here is a better place for it.
+This [GitHub repo](https://github.com/atsb/Doom64EX-Plus) is the same as [sourceforge](https://sourceforge.net/projects/doom64ex-plus/) but if any contributors wish to help, then github is a better place for it.
 
 ## Mod Support
 

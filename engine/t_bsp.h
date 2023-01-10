@@ -77,8 +77,8 @@ typedef struct {
 typedef    struct {
 	fixed_t         floorheight;
 	fixed_t         ceilingheight;
-	word            floorpic;
-	word            ceilingpic;
+	unsigned short            floorpic;
+	unsigned short            ceilingpic;
 	short            lightlevel;
 	short           special;
 	short           tag;
@@ -87,7 +87,7 @@ typedef    struct {
 	short           colors[5];
 
 	// [d64] special flags for sector
-	word            flags;
+	unsigned short            flags;
 
 	// [d64] x/y offsets for scrolling flats
 	int             xoffset;
@@ -172,7 +172,7 @@ typedef struct line_s {
 
 	// Visual appearance: SideDefs.
 	//  sidenum[1] will be -1 if one sided
-	word            sidenum[2];
+	unsigned short           sidenum[2];
 
 	// Neat. Another bounding box, for the extent
 	//  of the LineDef.
@@ -205,10 +205,10 @@ typedef struct line_s {
 // Also includes boundary vertices when gl-friendly nodes used
 typedef struct subsector_s {
 	sector_t* sector;
-	word        numlines;
-	word        firstline;
-	word        numleafs;
-	word        leaf;
+	unsigned short        numlines;
+	unsigned short        firstline;
+	unsigned short        numleafs;
+	unsigned short        leaf;
 } subsector_t;
 
 //
@@ -236,7 +236,7 @@ typedef struct {
 	short    lump[8];
 
 	// Flip bit (1 = flip) to use for view angles 0-7.
-	byte    flip[8];
+	unsigned char    flip[8];
 } spriteframe_t;
 
 //
@@ -300,15 +300,15 @@ typedef struct {
 // Light Data
 //
 typedef struct {
-	byte base_r;
-	byte base_g;
-	byte base_b;
-	byte active_r;
-	byte active_g;
-	byte active_b;
-	byte r;
-	byte g;
-	byte b;
+	unsigned char base_r;
+	unsigned char base_g;
+	unsigned char base_b;
+	unsigned char active_r;
+	unsigned char active_g;
+	unsigned char active_b;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
 	short tag;
 } light_t;
 

@@ -24,27 +24,23 @@
 #define MD5_H
 
 #include "doomtype.h"
-#ifdef __OpenBSD__
-#include <SDL_config.h>
-#else 
+
+#ifdef __APPLE__
 #include <SDL2/SDL_config.h>
+#else 
+#include <SDL_config.h>
 #endif
 
-#ifdef HAVE_STDINT_H
-#include <stdint.h>
-#endif
+typedef unsigned char md5_digest_t[16];
 
-typedef struct md5_context_s md5_context_t;
-typedef byte md5_digest_t[16];
-
-struct md5_context_s {
+typedef struct md5_context_s {
         unsigned int buf[4];
         unsigned int bytes[2];
         unsigned int in[16];
-};
+}md5_context_t;
 
 void MD5_Init(md5_context_t *context);
-void MD5_Update(md5_context_t *context, byte const *buf, unsigned len);
+void MD5_Update(md5_context_t *context, unsigned char const *buf, unsigned len);
 void MD5_UpdateInt32(md5_context_t *context, unsigned int val);
 void MD5_UpdateString(md5_context_t *context, char *str);
 void MD5_Final(unsigned char digest[16], md5_context_t *context);

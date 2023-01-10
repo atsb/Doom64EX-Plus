@@ -119,9 +119,9 @@ static keyinfo_t Keys[KEY_MAX] = {
 	{'9',                   "9"},
 	{KEY_MWHEELUP,          "MouseWheelUp"},
 	{KEY_MWHEELDOWN,        "MouseWheelDown"},
-
+#ifdef FUCKED_GAMECONTROLLER
 	// villsa 01052014
-	// Andr�: Changed to SDL_GameController
+	// André: Changed to SDL_GameController
 	{GAMEPAD_DPAD_UP,    "DPadUp"},
     {GAMEPAD_DPAD_DOWN,  "DPadDown"},
     {GAMEPAD_DPAD_LEFT,  "DPadLeft"},
@@ -144,6 +144,7 @@ static keyinfo_t Keys[KEY_MAX] = {
 	{GAMEPAD_BUTTON_PADDLE3, "XoneElite paddle P3"},
 	{GAMEPAD_BUTTON_PADDLE4, "XoneElite paddle P4"},
 	{GAMEPAD_BUTTON_TOUCHPAD, "TouchPad"},
+#endif
 };
 
 //

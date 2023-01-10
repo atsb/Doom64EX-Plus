@@ -39,16 +39,6 @@
 
 #define KEEPALIVE_PERIOD 1
 
-// reliable packet that is guaranteed to reach its destination
-
-struct net_reliable_packet_s
-{
-	net_packet_t* packet;
-	int last_send_time;
-	int seq;
-	net_reliable_packet_t* next;
-};
-
 static void NET_Conn_Init(net_connection_t* conn, net_addr_t* addr)
 {
 	conn->last_send_time = -1;

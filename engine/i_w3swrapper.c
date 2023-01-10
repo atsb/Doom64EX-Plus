@@ -27,7 +27,7 @@
 #include <time.h>
 #include <ctype.h>
 #ifndef _WIN32
-void w3ssleep(dword usecs)
+void w3ssleep(long long usecs)
 {
 	struct timespec tc;
 	tc.tv_sec = usecs / 1000;
@@ -74,8 +74,8 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
 // dhtoi
 //
 
-int htoi(int8_t* str) {
-	int8_t* s;
+int htoi(char* str) {
+	char* s;
 	int num;
 
 	num = 0;

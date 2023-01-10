@@ -28,13 +28,14 @@
 #include <glew.h>
 #endif 
 #include "doomstat.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "i_png.h"
 #include "i_system.h"
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gl_texture.h"
-#include "p_spec.h"
 #include "p_local.h"
 #include "con_console.h"
 #include "g_actions.h"
@@ -53,10 +54,10 @@ int         t_end;
 int         swx_start;
 int         numtextures;
 dtexture** textureptr;
-word* texturewidth;
-word* textureheight;
-word* texturetranslation;
-word* palettetranslation;
+unsigned short* texturewidth;
+unsigned short* textureheight;
+unsigned short* texturetranslation;
+unsigned short* palettetranslation;
 
 // gfx textures
 
@@ -64,10 +65,10 @@ int         g_start;
 int         g_end;
 int         numgfx;
 dtexture* gfxptr;
-word* gfxwidth;
-word* gfxorigwidth;
-word* gfxheight;
-word* gfxorigheight;
+unsigned short* gfxwidth;
+unsigned short* gfxorigwidth;
+unsigned short* gfxheight;
+unsigned short* gfxorigheight;
 
 // sprite textures
 
@@ -75,11 +76,11 @@ int         s_start;
 int         s_end;
 dtexture** spriteptr;
 int         numsprtex;
-word* spritewidth;
+unsigned short* spritewidth;
 float* spriteoffset;
 float* spritetopoffset;
-word* spriteheight;
-word* spritecount;
+unsigned short* spriteheight;
+unsigned short* spritecount;
 
 typedef struct {
 	int mode;
@@ -128,13 +129,13 @@ static void InitWorldTextures(void) {
 	swx_start = -1;
 	numtextures = (t_end - t_start) + 1;
 	textureptr = (dtexture**)Z_Calloc(sizeof(dtexture*) * numtextures, PU_STATIC, NULL);
-	texturetranslation = Z_Calloc(numtextures * sizeof(word), PU_STATIC, NULL);
-	palettetranslation = Z_Calloc(numtextures * sizeof(word), PU_STATIC, NULL);
-	texturewidth = Z_Calloc(numtextures * sizeof(word), PU_STATIC, NULL);
-	textureheight = Z_Calloc(numtextures * sizeof(word), PU_STATIC, NULL);
+	texturetranslation = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
+	palettetranslation = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
+	texturewidth = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
+	textureheight = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
 
 	for (i = 0; i < numtextures; i++) {
-		byte* png;
+		unsigned char* png;
 		int w;
 		int h;
 
@@ -167,7 +168,7 @@ static void InitWorldTextures(void) {
 //
 
 void GL_BindWorldTexture(int texnum, int* width, int* height) {
-	byte* png;
+	unsigned char* png;
 	int w;
 	int h;
 
@@ -235,7 +236,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 //
 // GL_SetNewPalette
 //
-void GL_SetNewPalette(int id, byte palID) {
+void GL_SetNewPalette(int id, unsigned char palID) {
 	palettetranslation[id] = palID;
 
 }
@@ -244,7 +245,7 @@ void GL_SetNewPalette(int id, byte palID) {
 // SetTextureImage
 //
 
-static void SetTextureImage(byte* data, int bits, int* origwidth, int* origheight, int format, int type) {
+static void SetTextureImage(unsigned char* data, int bits, int* origwidth, int* origheight, int format, int type) {
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
@@ -278,7 +279,7 @@ static void InitGfxTextures(void) {
 	gfxorigheight = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
 
 	for (i = 0; i < numgfx; i++) {
-		byte* png;
+		unsigned char* png;
 		int w;
 		int h;
 
@@ -301,7 +302,7 @@ static void InitGfxTextures(void) {
 //
 
 int GL_BindGfxTexture(const char* name, boolean alpha) {
-	byte* png;
+	unsigned char* png;
 	int lump;
 	int width;
 	int height;
@@ -363,12 +364,12 @@ static void InitSpriteTextures(void) {
 	s_start = W_GetNumForName("S_START") + 1;
 	s_end = W_GetNumForName("S_END") - 1;
 	numsprtex = (s_end - s_start) + 1;
-	spritewidth = (word*)Z_Malloc(numsprtex * sizeof(word), PU_STATIC, 0);
+	spritewidth = (unsigned short*)Z_Malloc(numsprtex * sizeof(unsigned short), PU_STATIC, 0);
 	spriteoffset = (float*)Z_Malloc(numsprtex * sizeof(float), PU_STATIC, 0);
 	spritetopoffset = (float*)Z_Malloc(numsprtex * sizeof(float), PU_STATIC, 0);
-	spriteheight = (word*)Z_Malloc(numsprtex * sizeof(word), PU_STATIC, 0);
+	spriteheight = (unsigned short*)Z_Malloc(numsprtex * sizeof(unsigned short), PU_STATIC, 0);
 	spriteptr = (dtexture**)Z_Malloc(sizeof(dtexture*) * numsprtex, PU_STATIC, 0);
-	spritecount = (word*)Z_Calloc(numsprtex * sizeof(word), PU_STATIC, 0);
+	spritecount = (unsigned short*)Z_Calloc(numsprtex * sizeof(unsigned short), PU_STATIC, 0);
 
 	// gather # of sprites per texture pointer
 	for (i = 0; i < numsprtex; i++) {
@@ -399,7 +400,7 @@ static void InitSpriteTextures(void) {
 	CON_DPrintf("%i external palettes initialized\n", palcnt);
 
 	for (i = 0; i < numsprtex; i++) {
-		byte* png;
+		unsigned char* png;
 		int w;
 		int h;
 		unsigned int x;
@@ -429,7 +430,7 @@ static void InitSpriteTextures(void) {
 //
 
 void GL_BindSpriteTexture(int spritenum, int pal) {
-	byte* png;
+	unsigned char* png;
 	int w;
 	int h;
 
@@ -535,7 +536,7 @@ void GL_BindDummyTexture(void) {
 		// build dummy texture
 		//
 
-		byte rgb[48];   // 4x4 RGB texture
+		unsigned char rgb[48];   // 4x4 RGB texture
 
 		memset(rgb, 0xff, 48);
 
@@ -567,7 +568,7 @@ void GL_BindEnvTexture(void) {
 	if (envtexture == 0) {
 		glGenTextures(1, &envtexture);
 		glBindTexture(GL_TEXTURE_2D, envtexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)rgb);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)rgb);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -588,7 +589,7 @@ static rcolor lastenvcolor = 0;
 void GL_UpdateEnvTexture(rcolor color) {
 	rcolor env;
 	rcolor rgb[16];
-	byte* c;
+	unsigned char* c;
 	int i;
 
 	if (!GL_ARB_multitexture) {
@@ -603,15 +604,15 @@ void GL_UpdateEnvTexture(rcolor color) {
 
 	env = color;
 	lastenvcolor = color;
-	c = (byte*)rgb;
+	c = (unsigned char*)rgb;
 
 	memset(rgb, 0, sizeof(rcolor) * 16);
 
 	for (i = 0; i < 16; i++) {
-		*c++ = (byte)((env >> 0) & 0xff);
-		*c++ = (byte)((env >> 8) & 0xff);
-		*c++ = (byte)((env >> 16) & 0xff);
-		*c++ = (byte)((env >> 24) & 0xff);
+		*c++ = (unsigned char)((env >> 0) & 0xff);
+		*c++ = (unsigned char)((env >> 8) & 0xff);
+		*c++ = (unsigned char)((env >> 16) & 0xff);
+		*c++ = (unsigned char)((env >> 24) & 0xff);
 	}
 
 	glTexSubImage2D(
@@ -623,7 +624,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 		4,
 		GL_RGBA,
 		GL_UNSIGNED_BYTE,
-		(byte*)rgb
+		(unsigned char*)rgb
 	);
 
 	glActiveTextureARB(GL_TEXTURE0_ARB);

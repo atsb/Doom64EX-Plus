@@ -20,11 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef USE_STDINT 
-#include <stdint.h>
-#else
 #include "doomtype.h"
-#endif
 
 #ifdef _WIN32
 #include <fcntl.h>
@@ -58,6 +54,7 @@
 typedef unsigned char boolean;
 #endif
 #else
+#include <stdbool.h> //for true and false.
 #ifndef _WIN32
 typedef unsigned char boolean;
 #endif
@@ -74,30 +71,6 @@ typedef unsigned char boolean;
 #include <rpcndr.h>
 #endif
 #endif 
-
-#ifdef WINDOWS_TYPES
-#ifdef OLD_TYPE
-typedef BYTE w3suint8_t;
-typedef WORD w3suint16_t;
-typedef DWORD w3suint64_t;
-#else
-typedef UINT8  w3suint8_t;
-typedef UINT16 w3suint16_t;
-typedef UINT64 w3suint64_t;
-#endif
-#elif defined(USE_STDINT)
-typedef uint8_t  w3suint8_t;
-typedef uint16_t w3suint16_t;
-typedef uint64_t w3suint64_t;
-#else
-typedef unsigned char w3suint8_t;
-typedef unsigned short w3suint16_t;
-typedef unsigned long long w3suint64_t;
-#endif 
-
-typedef w3suint8_t  byte;
-typedef w3suint16_t word;
-typedef w3suint64_t dword;
 
 #ifdef _WIN32
 #define w3sopen _open
@@ -152,7 +125,7 @@ char* w3sstrlwr(char *str);
 #ifdef _WIN32 //TBD: Sony Playstation 2 port
 #define w3ssleep Sleep
 #else
-void w3ssleep(dword usecs);
+void w3ssleep(long long usecs);
 #endif
 
 #ifdef NO_VSNPRINTF
@@ -161,7 +134,7 @@ void w3ssleep(dword usecs);
 int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
 
-int htoi(int8_t* str);
+int htoi(char* str);
 boolean fcmp(float f1, float f2);
 
 

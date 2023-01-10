@@ -47,10 +47,10 @@
 
 #define MAXINDICES  0x10000
 
-word statindice = 0;
+unsigned short statindice = 0;
 
-static word indicecnt = 0;
-static word drawIndices[MAXINDICES];
+static unsigned short indicecnt = 0;
+static unsigned short drawIndices[MAXINDICES];
 
 void glGetVersion(int major, int minor)
 {
@@ -171,20 +171,20 @@ void glDrawGeometry(int count, vtx_t* vtx) {
 // glViewFrustum
 //
 
-void glViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
-	rfloat left;
-	rfloat right;
-	rfloat bottom;
-	rfloat top;
-	rfloat aspect;
-	rfloat m[16];
+void glViewFrustum(int width, int height, float fovy, float znear) {
+	float left;
+	float right;
+	float bottom;
+	float top;
+	float aspect;
+	float m[16];
 
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("glViewFrustum(width=%i, height=%i, fovy=%f, znear=%f)\n", width, height, fovy, znear);
 #endif
 
-	aspect = (rfloat)width / (rfloat)height;
-	top = znear * (rfloat)tan((double)fovy * M_PI / 360.0f);
+	aspect = (float)width / (float)height;
+	top = znear * (float)tan((double)fovy * M_PI / 360.0f);
 	bottom = -top;
 	left = bottom * aspect;
 	right = top * aspect;
@@ -216,7 +216,7 @@ void glViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
 // glSetVertexColor
 //
 
-void glSetVertexColor(vtx_t* v, rcolor c, word count) {
+void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count) {
 	int i = 0;
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("glSetVertexColor(v=0x%p, c=0x%x, count=0x%x)\n", v, c, count);

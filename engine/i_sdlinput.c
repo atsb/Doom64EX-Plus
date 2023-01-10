@@ -36,11 +36,11 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-
+#ifdef FUCKED_GAMECONTROLLER
 float i_rsticksensitivityy;
 float i_rsticksensitivityx;
 int i_xinputscheme;
-
+#endif
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
 CVAR(v_macceleration, 0);
@@ -59,17 +59,16 @@ int         DualMouse;
 boolean    MouseMode;//false=microsoft, true=mouse systems
 boolean window_mouse;
 
+signed int s_deadzone = 8000;
 
-Sint32 s_deadzone = 8000;
-
-void s_clamp(Sint32 axis)
+void s_clamp(signed int axis)
 {
       if (axis < s_deadzone && axis > -s_deadzone) 
 	  {
           axis = 0;
       }
 }
-
+#ifdef FUCKED_GAMECONTROLLER
 SDL_GameController *s_controller;
 
 
@@ -172,6 +171,7 @@ void I_InitGameController()
 		return;
 	}
 }
+#endif
 //
 // I_TranslateKey
 //
@@ -544,7 +544,7 @@ void I_GetEvent(SDL_Event* Event) {
 	default:
 		break;
 	}
-#ifdef FUCKED
+#ifdef FUCKED_GAMECONTROLLER
 	int x, y;
 	if (s_controller) 
 	{
@@ -629,6 +629,9 @@ int I_ShutdownWait(void) {
 	static SDL_Event event;
 
 	while (SDL_PollEvent(&event)) {
+#ifdef USE_IMGUI
+		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
+#endif
 		if (event.type == SDL_QUIT ||
 			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
@@ -647,6 +650,9 @@ void I_StartTic(void) {
 	SDL_Event Event;
 
 	while (SDL_PollEvent(&Event)) {
+#ifdef USE_IMGUI
+		ImGui_ImplSDL2_ProcessEvent(&Event);//Process the events.
+#endif
 		I_GetEvent(&Event);
 	}
 

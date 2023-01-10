@@ -47,7 +47,10 @@
 #include "doomstat.h"
 #include "m_misc.h"
 #include "z_zone.h"
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "st_stuff.h"
 #include "i_png.h"
 #include "gl_texture.h"
@@ -85,7 +88,7 @@ char* M_StringDuplicate(const char* orig)
 {
 	char* result;
 
-	result = strdup(orig);
+	result = Z_Strdup(orig, PU_STATIC, NULL);
 
 	if (result == NULL)
 	{
@@ -133,8 +136,11 @@ boolean M_WriteFile(const char* name, void* source, int length) {
 	boolean result;
 
 	errno = 0;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	if (!(fopen_s(&fp, name, "wb"))) {
+#else
 	if (!(fp = fopen(name, "wb"))) {
+#endif
 		return 0;
 	}
 
@@ -178,12 +184,15 @@ boolean M_WriteTextFile(const char* name, char* source, int length) {
 // M_ReadFile
 //
 
-int M_ReadFile(char const* name, byte** buffer) {
+int M_ReadFile(char const* name, unsigned char** buffer) {
 	FILE* fp;
 
 	errno = 0;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	if ((fopen_s(&fp, name, "rb"))) {
+#else
 	if ((fp = fopen(name, "rb"))) {
+#endif
 		unsigned int length;
 
 		I_BeginRead();
@@ -193,7 +202,6 @@ int M_ReadFile(char const* name, byte** buffer) {
 		fseek(fp, 0, SEEK_SET);
 
 		*buffer = Z_Malloc(length, PU_STATIC, 0);
-
 		if (fread(*buffer, 1, length, fp) == length) {
 			fclose(fp);
 			return length;
@@ -263,9 +271,11 @@ void M_NormalizeSlashes(char* str) {
 
 int M_FileExists(char* filename) {
 	FILE* fstream;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fstream, filename, "r");
+#else
 	fstream = fopen(filename, "r");
-
+#endif
 	if (fstream != NULL) {
 		fclose(fstream);
 		return 1;
@@ -288,8 +298,11 @@ int M_FileExists(char* filename) {
 
 void M_SaveDefaults(void) {
 	FILE* fh;
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen(&fh, G_GetConfigFileName(), "wt");
+#else
 	fh = fopen(G_GetConfigFileName(), "wt");
+#endif
 	if (fh) {
 		G_OutputBindings(fh);
 		fclose(fh);
@@ -312,8 +325,8 @@ void M_ScreenShot(void) {
 	char    name[13];
 	int     shotnum = 0;
 	FILE* fh;
-	byte* buff;
-	byte* png;
+	unsigned char* buff;
+	unsigned char* png;
 	int     size;
 
 	while (shotnum < 1000) {
@@ -332,8 +345,11 @@ void M_ScreenShot(void) {
 	if (shotnum >= 1000) {
 		return;
 	}
-
+#ifdef USE_OPTMIZED_FFUNCTION
+	fopen_s(&fh, name, "wb");
+#else
 	fh = fopen(name, "wb");
+#endif
 	if (!fh) {
 		return;
 	}
@@ -383,9 +399,9 @@ boolean M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 // uncompressed 128x128 RGB textures
 //
 
-int M_CacheThumbNail(byte** data) {
-	byte* buff;
-	byte* tbn;
+int M_CacheThumbNail(unsigned char** data) {
+	unsigned char* buff;
+	unsigned char* tbn;
 
 	buff = GL_GetScreenBuffer(0, 0, video_width, video_height);
 	tbn = Z_Calloc(SAVEGAMETBSIZE, PU_STATIC, 0);

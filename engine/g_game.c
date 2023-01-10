@@ -52,10 +52,15 @@
 #include "sounds.h"
 #include "tables.h"
 #include "info.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
+#include "r_lights.h"
 #include "r_wipe.h"
 #include "con_console.h"
-#include "g_local.h"
+#include "g_game.h"
+#include "g_actions.h"
+#include "g_controls.h"
+#include "g_settings.h"
 #include "m_password.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
@@ -105,7 +110,7 @@ static int      savecompatflags = 0;
 int             totalkills, totalitems, totalsecret;
 boolean        precache = true;     // if true, load all graphics at start
 
-byte            consistency[MAXPLAYERS][BACKUPTICS];
+unsigned char           consistency[MAXPLAYERS][BACKUPTICS];
 
 #define MAXPLMOVE       (forwardmove[1])
 #define TURBOTHRESHOLD  0x32
@@ -131,8 +136,8 @@ playercontrols_t    Controls;
 mobj_t* bodyque[BODYQUESIZE];
 int         bodyqueslot;
 
-byte forcejump = 0;
-byte forcefreelook = 0;
+unsigned char forcejump = 0;
+unsigned char forcefreelook = 0;
 
 NETCVAR(sv_nomonsters, 0);
 NETCVAR(sv_fastmonsters, 0);
@@ -190,7 +195,7 @@ void G_RegisterCvars(void) {
 
 static CMD(Button) {
 	playercontrols_t* pc;
-	int64_t			  key;
+	long long key;
 
 	pc = &Controls;
 
@@ -846,6 +851,7 @@ void G_ClearInput(void) {
 	}
 }
 
+#ifdef FUCKED_GAMECONTROLLER
 //
 // G_DoCmdGamepadMove
 //
@@ -880,7 +886,7 @@ void G_DoCmdGamepadMove(event_t* ev)
 		}
 	}
 }
-
+#endif
 //
 // G_SetGameFlags
 //
@@ -1430,7 +1436,7 @@ void G_RunTitleMap(void) {
 		return;
 	}
 
-	demobuffer = (byte*)Z_Calloc(0x16000, PU_STATIC, NULL);
+	demobuffer = (unsigned char*)Z_Calloc(0x16000, PU_STATIC, NULL);
 	demo_p = demobuffer;
 	demobuffer[0x16000 - 1] = DEMOMARKER;
 

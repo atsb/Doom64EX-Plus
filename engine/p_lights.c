@@ -301,7 +301,7 @@ void T_Glow(glow_t* g) {
 // P_SpawnGlowingLight
 //
 
-void P_SpawnGlowingLight(sector_t* sector, byte type) {
+void P_SpawnGlowingLight(sector_t* sector, unsigned char type) {
 	if (v_accessibility.value < 1)
 	{
 		glow_t* g;
