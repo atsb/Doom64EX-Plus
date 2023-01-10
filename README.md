@@ -21,6 +21,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 * Support of MAP slots up to MAP40
 * The "medkit you REALLY need!" message fix
 * Many bugfixes and cleanups
+* Added cglm for advanced math and cimgui(optional and wip)
 * KEX - This is pretty much removed.  The only remnants are some comments with [kex] and the rendering stuff that is used in later versions. I wanted to keep Doom 64 EX+ very close in format to other source ports for familiarity purposes and for ease of porting code from Erick's DOOM64-RE project.
 
 There are a few bugs still present, which I am slowly fixing.
