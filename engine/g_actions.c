@@ -480,7 +480,7 @@ alist_t* ParseActions(char* actions) {
 
 	alist = (alist_t*)Z_Malloc(sizeof(alist_t), PU_STATIC, NULL);
 	al = alist;
-	al->buff = strdup(p);
+	al->buff = Z_Strdup(p, PU_STATIC, NULL);
 	p = al->buff;
 	quoted = false;
 
@@ -955,7 +955,7 @@ void G_AddCommand(char* name, actionproc_t proc, long long data) {
 	action_t* action;
 
 	action = (action_t*)Z_Malloc(sizeof(action_t), PU_STATIC, NULL);
-	action->name = strdup(name);
+	action->name = Z_Strdup(name, PU_STATIC, NULL);
 	w3sstrlwr(action->name);
 	action->proc = proc;
 	action->data = data;

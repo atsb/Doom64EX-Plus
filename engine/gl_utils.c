@@ -171,20 +171,20 @@ void glDrawGeometry(int count, vtx_t* vtx) {
 // glViewFrustum
 //
 
-void glViewFrustum(int width, int height, rfloat fovy, rfloat znear) {
-	rfloat left;
-	rfloat right;
-	rfloat bottom;
-	rfloat top;
-	rfloat aspect;
-	rfloat m[16];
+void glViewFrustum(int width, int height, float fovy, float znear) {
+	float left;
+	float right;
+	float bottom;
+	float top;
+	float aspect;
+	float m[16];
 
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("glViewFrustum(width=%i, height=%i, fovy=%f, znear=%f)\n", width, height, fovy, znear);
 #endif
 
-	aspect = (rfloat)width / (rfloat)height;
-	top = znear * (rfloat)tan((double)fovy * M_PI / 360.0f);
+	aspect = (float)width / (float)height;
+	top = znear * (float)tan((double)fovy * M_PI / 360.0f);
 	bottom = -top;
 	left = bottom * aspect;
 	right = top * aspect;

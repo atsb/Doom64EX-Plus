@@ -25,8 +25,6 @@
 #ifndef __Z_ZONE__
 #define __Z_ZONE__
 
-#undef strdup
-
 // Include system definitions so that prototypes become
 // active before macro replacements below are in effect.
 
@@ -63,8 +61,6 @@ enum {
 	PU_MAX      // Must always be last -- killough
 };
 
-#define PU_PURGELEVEL PU_CACHE        /* First purgable tag's level */
-
 void* (Z_Malloc)(int size, int tag, void* user, const char*, int);
 void (Z_Free)(void* ptr, const char*, int);
 void (Z_FreeTags)(int lowtag, int hightag, const char*, int);
@@ -92,8 +88,6 @@ void (Z_Touch)(void* ptr, const char*, int);
 #define Z_CheckTag(a)       (Z_CheckTag)    (a,      __FILE__,__LINE__)
 #define Z_Touch(a)          (Z_Touch)       (a,      __FILE__,__LINE__)
 #define Z_FreeAlloca()      (Z_FreeAlloca)  (        __FILE__,__LINE__)
-
-#define strdup(s)           (Z_Strdup) (s, PU_STATIC,0,__FILE__,__LINE__)
 
 int Z_TagUsage(int tag);
 int Z_FreeMemory(void);

@@ -88,7 +88,7 @@ char* M_StringDuplicate(const char* orig)
 {
 	char* result;
 
-	result = strdup(orig);
+	result = Z_Strdup(orig, PU_STATIC, NULL);
 
 	if (result == NULL)
 	{

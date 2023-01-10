@@ -230,7 +230,7 @@ void* (Z_Malloc)(int size, int tag, void* user, const char* file, int line) {
 		I_Error("Z_Malloc: tag out of range: %i (%s:%d)", tag, file, line);
 	}
 
-	if (user == NULL && tag >= PU_PURGELEVEL) {
+	if (user == NULL && tag >= PU_CACHE) {
 		I_Error("Z_Malloc: an owner is required for purgable blocks (%s:%d)", file, line);
 	}
 
@@ -295,7 +295,7 @@ void* (Z_Realloc)(void* ptr, int size, int tag, void* user, const char* file, in
 		I_Error("Z_Realloc: tag out of range: %i (%s:%d)", tag, file, line);
 	}
 
-	if (user == NULL && tag >= PU_PURGELEVEL) {
+	if (user == NULL && tag >= PU_CACHE) {
 		I_Error("Z_Realloc: an owner is required for purgable blocks (%s:%d)", file, line);
 	}
 
@@ -530,7 +530,7 @@ void (Z_ChangeTag)(void* ptr, int tag, const char* file, int line) {
 		I_Error("Z_ChangeTag: block without a ZONEID! (%s:%d)",
 			file, line);
 
-	if (tag >= PU_PURGELEVEL && block->user == NULL) {
+	if (tag >= PU_CACHE && block->user == NULL) {
 		I_Error("Z_ChangeTag: an owner is required for purgable blocks (%s:%d)", file, line);
 	}
 

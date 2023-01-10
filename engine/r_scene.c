@@ -215,7 +215,7 @@ static void SetupFog(void) {
 		glDisable(GL_FOG);
 	}
 	else if (r_fog.value) {
-		rfloat color[4] = { 0, 0, 0, 0 };
+		float color[4] = { 0, 0, 0, 0 };
 		rcolor fogcolor = 0;
 		int fognear = 0;
 		int fogfactor;

@@ -35,6 +35,8 @@
 #include <SDL.h>
 #endif
 #ifdef USE_IMGUI
+#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+#define CIMGUI_USE_OPENGL3
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include <cimgui.h>
 #include <backend/imgui_impl_sdl.h>

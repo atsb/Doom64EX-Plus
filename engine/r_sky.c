@@ -494,7 +494,7 @@ static void R_DrawTitleSky(void) {
 //
 
 static void R_DrawClouds(void) {
-	rfloat pos = 0.0f;
+	float pos = 0.0f;
 	vtx_t v[4];
 
 	GL_SetTextureUnit(0, true);

@@ -39,6 +39,9 @@
 #include <SDL_opengl.h>
 #endif
 #endif
+#ifdef USE_GLM
+#include <cglm/cglm.h>
+#endif
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #endif
@@ -46,7 +49,6 @@
 #include "doomtype.h"
 
 typedef GLuint        dtexture;
-typedef GLfloat        rfloat;
 typedef GLuint        rcolor;
 typedef GLuint        rbuffer;
 typedef GLhandleARB    rhandle;
@@ -54,13 +56,12 @@ typedef GLhandleARB    rhandle;
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
 extern boolean gl_has_combiner;
-
 typedef struct {
-	rfloat    x;
-	rfloat    y;
-	rfloat    z;
-	rfloat    tu;
-	rfloat    tv;
+	float    x;
+	float    y;
+	float    z;
+	float    tu;
+	float    tv;
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
