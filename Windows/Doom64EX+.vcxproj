@@ -183,24 +183,6 @@
     <ClCompile Include="..\engine\backend\cglm\src\vec2.c" />
     <ClCompile Include="..\engine\backend\cglm\src\vec3.c" />
     <ClCompile Include="..\engine\backend\cglm\src\vec4.c" />
-    <ClCompile Include="..\engine\backend\imgui\cimgui.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_demo.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_draw.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_tables.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_widgets.cpp">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
-    </ClCompile>
     <ClCompile Include="..\engine\con_console.c" />
     <ClCompile Include="..\engine\con_cvar.c" />
     <ClCompile Include="..\engine\deh_ammo.c" />
@@ -453,13 +435,6 @@
     <ClInclude Include="..\engine\backend\cglm\include\cglm\vec4.h" />
     <ClInclude Include="..\engine\backend\cglm\include\cglm\version.h" />
     <ClInclude Include="..\engine\backend\cglm\src\config.h" />
-    <ClInclude Include="..\engine\backend\imgui\cimgui.h" />
-    <ClInclude Include="..\engine\backend\imgui\imconfig.h" />
-    <ClInclude Include="..\engine\backend\imgui\imgui.h" />
-    <ClInclude Include="..\engine\backend\imgui\imgui_internal.h" />
-    <ClInclude Include="..\engine\backend\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\engine\backend\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\engine\backend\imgui\imstb_truetype.h" />
     <ClInclude Include="..\engine\con_console.h" />
     <ClInclude Include="..\engine\con_cvar.h" />
     <ClInclude Include="..\engine\deh_defs.h" />
@@ -554,7 +529,6 @@
     <ClInclude Include="..\engine\z_zone.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\engine\backend\imgui\LICENSE" />
     <None Include="..\engine\defconfig.inc" />
     <None Include="..\engine\doom64ex-plus.icns" />
   </ItemGroup>
@@ -564,9 +538,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\engine\DOOM64EX+.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\engine\backend\imgui\LICENSE.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

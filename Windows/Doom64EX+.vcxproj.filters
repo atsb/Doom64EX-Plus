@@ -217,24 +217,6 @@
     <ClCompile Include="..\engine\backend\cglm\src\swift\empty.c">
       <Filter>backend\cglm\src\swift</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\cimgui.cpp">
-      <Filter>backend\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui.cpp">
-      <Filter>backend\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_demo.cpp">
-      <Filter>backend\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_draw.cpp">
-      <Filter>backend\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_tables.cpp">
-      <Filter>backend\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\backend\imgui\imgui_widgets.cpp">
-      <Filter>backend\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="..\engine\m_fcvt.c" />
   </ItemGroup>
   <ItemGroup>
@@ -773,35 +755,11 @@
     <ClInclude Include="..\engine\backend\cglm\src\config.h">
       <Filter>backend\cglm\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\cimgui.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\imconfig.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\imgui.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\imgui_internal.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\imstb_rectpack.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\imstb_textedit.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\backend\imgui\imstb_truetype.h">
-      <Filter>backend\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\m_fcvt.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\defconfig.inc" />
     <None Include="..\engine\doom64ex-plus.icns" />
-    <None Include="..\engine\backend\imgui\LICENSE">
-      <Filter>backend\imgui</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\engine\DOOM64EX+.ico" />
@@ -813,9 +771,6 @@
   <ItemGroup>
     <Filter Include="backend">
       <UniqueIdentifier>{c29a38b1-1556-48b0-9c37-b03db607bcff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="backend\imgui">
-      <UniqueIdentifier>{f836736a-100d-4e18-a567-03b2e535c50e}</UniqueIdentifier>
     </Filter>
     <Filter Include="backend\cglm">
       <UniqueIdentifier>{b6f1fca1-d429-4798-85df-68aa37242008}</UniqueIdentifier>
@@ -862,10 +817,5 @@
     <Filter Include="backend\cglm\src\swift">
       <UniqueIdentifier>{faa9191c-c866-4d19-9a7d-45de98e7c701}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\engine\backend\imgui\LICENSE.txt">
-      <Filter>backend\imgui</Filter>
-    </Text>
   </ItemGroup>
 </Project>
