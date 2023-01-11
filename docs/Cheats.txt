@@ -1,0 +1,16 @@
+*******************************************************
+******** Doom64 EX Cheats *************************
+*******************************************************
+
+IDDQD		- God mode
+IDFA		- Weapons/Ammo
+IDKFA		- Weapons/Ammo/Keys
+IDCLIP		- NoClip mode
+IDCLEV##	- Warp to map## ( 1 - 33 )
+IDPOS		- Display pos
+EXMAP		- Complete automap
+EXRAGE		- Give beserk
+EXGIVEW#	- Give weapon # ( 1 - 9 )
+EXGIVEK#	- Give key # ( 1 - 6 )
+EXKILL		- Kill all existing enemies in level
+EXGIVEA#	- Give artifact # ( 1 - 3 )

@@ -1,0 +1,17 @@
+*******************************************************
+******** Doom64 EX Developer Mode Guide ********
+*******************************************************
+
+-devparm will enable developer mode which enables a series of unique features
+that is aimed to make developing custom levels easier and faster. This feature
+is still being worked on and will continue to improve in the future.
+
+When devparm is enabled, the following keys are changed:
+
+F1	 - 	Demo mode (Take damage but don't die)
+F2	 -	Spectator mode
+F3	 - 	Lock Monsters
+F4	 -	Kill everything
+F7	 -	Wireframe mode
+F8	 - 	Toggle lights
+F9	 -	Hide stats

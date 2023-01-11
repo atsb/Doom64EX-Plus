@@ -1,0 +1,60 @@
+//**************************************************************************
+//**
+//** utils.txt
+//**
+//**************************************************************************
+
+#define TIME_1SEC    30
+#define TIME_1_5SEC  45
+#define TIME_2SEC    60
+#define TIME_2_5SEC  75
+#define TIME_3SEC    90
+#define TIME_3_5SEC  105
+#define TIME_4SEC    120
+#define TIME_4_5SEC  135
+#define TIME_5SEC    150
+
+#define Security_Camera(cam, plr, tics) \
+    Camera_Set(cam);                    \
+    Player_Freeze(tics);                \
+    Delay(tics);                        \
+    Camera_Clear(plr);                  \
+    wait
+
+#define Shoot_Tracers(num, tid, tics)   \
+    loop(num)                           \
+    {                                   \
+        Thing_SpawnTracer(tid);         \
+        Delay(tics);                    \
+    }
+
+#define Shoot_Tracers_Wall(tid, tag)    \
+    Pillar_OpenByValue(tag, 32);        \
+    wait;                               \
+    Delay(10);                          \
+    Thing_SpawnTracer(tid);             \
+    wait;                               \
+    Delay(10);                          \
+    Pillar_OpenByValue(tag, -32);       \
+    wait
+
+#define Shoot_Darts(num, tid, tics)     \
+    loop(num)                           \
+    {                                   \
+        Thing_SpawnDart(tid);           \
+        Delay(tics);                    \
+    }
+
+#define Shoot_Darts_Wall(tid, tag)      \
+    Pillar_OpenByValue(tag, 32);        \
+    wait;                               \
+    Delay(10);                          \
+    Thing_SpawnDart(tid);               \
+    wait;                               \
+    Delay(10);                          \
+    Pillar_OpenByValue(tag, -32);       \
+    wait
+
+#define Delayed_Exit(tics)              \
+    Delay(tics);                        \
+    Exit

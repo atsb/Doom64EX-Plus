@@ -1,0 +1,83 @@
+fluidsynth_src = files(
+    'utils/fluid_conv.c',
+    'utils/fluid_conv.h',
+    'utils/fluid_hash.c',
+    'utils/fluid_hash.h',
+    'utils/fluid_list.c',
+    'utils/fluid_list.h',
+    'utils/fluid_ringbuffer.c',
+    'utils/fluid_ringbuffer.h',
+    'utils/fluid_settings.c',
+    'utils/fluid_settings.h',
+    'utils/fluidsynth_priv.h',
+    'utils/fluid_sys.c',
+    'utils/fluid_sys.h',
+    'sfloader/fluid_defsfont.c',
+    'sfloader/fluid_defsfont.h',
+    'sfloader/fluid_ramsfont.c',
+    'sfloader/fluid_ramsfont.h',
+    'sfloader/fluid_sfont.h',
+    'rvoice/fluid_adsr_env.c',
+    'rvoice/fluid_adsr_env.h',
+    'rvoice/fluid_chorus.c',
+    'rvoice/fluid_chorus.h',
+    'rvoice/fluid_iir_filter.c',
+    'rvoice/fluid_iir_filter.h',
+    'rvoice/fluid_lfo.c',
+    'rvoice/fluid_lfo.h',
+    'rvoice/fluid_rvoice.h',
+    'rvoice/fluid_rvoice.c',
+    'rvoice/fluid_rvoice_dsp.c',
+    'rvoice/fluid_rvoice_event.h',
+    'rvoice/fluid_rvoice_event.c',
+    'rvoice/fluid_rvoice_mixer.h',
+    'rvoice/fluid_rvoice_mixer.c',
+    'rvoice/fluid_phase.h',
+    'rvoice/fluid_rev.c',
+    'rvoice/fluid_rev.h',
+    'synth/fluid_chan.c',
+    'synth/fluid_chan.h',
+    'synth/fluid_event.c',
+    'synth/fluid_event_priv.h',
+    'synth/fluid_event_queue.h',
+    'synth/fluid_gen.c',
+    'synth/fluid_gen.h',
+    'synth/fluid_mod.c',
+    'synth/fluid_mod.h',
+    'synth/fluid_synth.c',
+    'synth/fluid_synth.h',
+    'synth/fluid_tuning.c',
+    'synth/fluid_tuning.h',
+    'synth/fluid_voice.c',
+    'synth/fluid_voice.h',
+    'midi/fluid_midi.c',
+    'midi/fluid_midi.h',
+    'midi/fluid_midi_router.c',
+    'midi/fluid_midi_router.h',
+    'midi/fluid_seqbind.c',
+    'midi/fluid_seq.c'
+)
+
+fluidsynth_inc = include_directories(
+  '.',
+  '..',
+  '../include',
+  'synth',
+  'rvoice',
+  'midi',
+  'utils',
+  'sfloader'
+)
+
+fluidsynth_lib = library(
+  'fluidsynth',
+  sources : fluidsynth_src,
+  dependencies : [thread_dep, m_dep],
+  include_directories : fluidsynth_inc,
+  c_args : ['-D_GNU_SOURCE', '-DHAVE_CONFIG_H']
+)
+
+fluidsynth_dep = declare_dependency(
+  link_with : fluidsynth_lib,
+  include_directories : include_directories('../include')
+)

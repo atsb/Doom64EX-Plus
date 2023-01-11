@@ -1,0 +1,108 @@
+Doom64EX+
+Myself and contributors have worked hard to make this the best EX+ release yet, by far.
+
+This is also the first instance of a DOOM64 source port being truly portable to many architectures and Operating Systems, I have a huge amount of respect for the *BSD userbase and so I'm very happy I could make this a reality for them.
+
+
+Changes in 3.6.5
+
+FEATURE: Adding ability to compile with a macro that allows UNIX users to have config/save files written to a typical system directory instead of to the same directory as the executable (usually ~/.local/)
+FEATURE: Mouse support on menu is back and working perfectly
+ENHANCEMENT: Rename UnMaykr to Unmaker
+ENHANCEMENT: Addition of DehackEd64 Patches and Documentation
+ENHANCEMENT: Code and README cleanups
+ENHANCEMENT: Replacing some free() calls to SDL_Free()
+ENHANCEMENT: Man updates for Unix
+ENHANCEMENT: Making the HUD more contrasty for easier viewing, but still keeping it nearly OG
+ENHANCEMENT: Forcing an OpenGL 2.1 rendering context
+ENHANCEMENT: Some code brought over from Chocolate Doom for WAD loading
+ENHANCEMENT: ALSA is now default on Linux and OSS on BSD
+BUGFIX: Fixes for menu sliders getting stuck and skipping
+BUGFIX: Fixing the pistol not having the correct refire frame
+BUGFIX: Fixes for case-sensitive filesystems
+BUGFIX: Drag and drop on Windows now works
+BUGFIX: Micro stutters and framedrops with lots of enemies
+BUGFIX: Linux builds crashing
+BUGFIX: RPI3 builds have better performance
+BUGFIX: Do not hide anisotropic filtering menu option on devices that don't support it
+BUGFIX: Shootable switches and secrets function
+BUGFIX: 32bit and 64bit builds fully functional
+BUGFIX: Improving the performance of fluidsynth
+BUGFIX: Tracks with many simultaneous notes no longer desync
+BUGFIX: Most midi tracks no longer have a long pause when unpausing the game
+Again, thanks to all the contributors who made this release possible!
+
+UNIX USERS
+The binaries for *BSD and Linux systems come WITHOUT libraries. To use the binaries, please install the required dependencies (see README.md) from your package manager.
+
+The software also supports AARCH64/ARM64 as well as macOS systems. I have not provided binaries yet as macOS builds are not ready for general use (I need to fix the RPATH of all my libraries), I (for now) would expect that ARM64 users on BSD and Linux would probably compile it themselves.
+
+Enjoy this release of Doom64EX+
+
+Changes in 3.6.4
+
+* Initital DeHackED support (from Chocolate Doom)
+* Linux save directory is now a base path, instead of a pref path
+* Changes to IDKFA cheat to NOT give a backpack
+* Accessibility option menu for those people who are sensitive to flashing lights
+* VSync on Linux is now done via SDL_GL
+* Fixed width type change for short and char (int16 and int8)
+
+Enjoy!
+
+~ Gibbon
+
+Please note:
+
+DeHackED support is in its infancy here.  All MISC options will work, such as giving yourself 1000 health or
+setting a maxammo limit, per ammo limit etc..  all 'bugs' from Doom Classic are also represented.
+
+However none of the 'thing' types, 'weapon' types or 'monster' types will work.  This is because in INFO.C and INFO.H
+the pointers and positions are in a different order, for example, the Seargeant (POSS2 in D64) is in position 6, not 3.
+
+This will be rectified in the next version where I am planning to have near 100% parity with Choco.  However, sounds, cheats,
+BEX and string support is NOT being done.  This is because we have MAPINFO by default in DOOM64 and things can be customised there.
+
+Changes in 3.6.3
+
+* Micro stutter fixes
+* Additional resolutions in EX+ and Launcher (to match the main program)
+* Glext-based Vsync support with menu toggles
+* Ability to set some video settings without having to restart
+* IDCLEV cheat is removed, use the features menu to warp
+* Buffer is raised to 32 from 24
+
+Changes in 3.6.2
+
+* OpenGL rendering fixes
+* Renderer bleeding fixes
+* VSync support by default
+* Doublebuffering for inputs on some mice by default
+* Depth and Buffers are set to 24 to prevent some stuttering and graphical bugs
+* Vanilla demo playback of demos from titlescreen, they desync, but it is a start
+* Animated pallette textures fixed (credit to Erick!) - Updated 30.10.2022
+
+Changes in 3.6.1:
+
+* Visual Studio project files
+* Code cleanups for MSVC compilers
+* Removed the WIN32 startup box that never really worked well.
+
+Changes in 3.6.0:
+
+* Lost Levels support
+
+Note: Lost Levels are available after beating Hectic, or by using IDCLEV 34 or higher.
+
+Changes in 3.5.0:
+
+* Nightdive IWAD compatibility
+
+Note: Please do NOT replace the default doom64ex-plus.wad file if compiling yourself.  This is now required 'as is' as it holds
+the midi files that are still required, since the remaster uses FMOD, this is the only way to support the audio as it currently is.
+
+Changes in 3.4.0:
+
+* Fixes for the laser tracers of the UnMaker
+* Fixing the UnMaker pickup text 'What the is this" display - Fix attributed to the_kovic
+* Fixing the MED KIT YOU REALLY NEED bug

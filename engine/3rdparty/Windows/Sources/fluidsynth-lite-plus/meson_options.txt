@@ -1,0 +1,4 @@
+option('enable-floats', type : 'boolean', value : false, description : 'enable type float instead of double for DSP samples')
+option('enable-profiling', type : 'boolean', value : false, description : 'profile the dsp code')
+option('enable-trap-on-fpe', type : 'boolean', value : false, description : 'enable SIGFPE trap on Floating Point Exceptions')
+option('enable-fpe-check', type : 'boolean', value : false, description : 'enable Floating Point Exception checks and debug messages')

@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlibvc", "xzlibvc.vcproj", "{07503C8D-9620-4346-8E8B-DBFB49FF8674}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+		ReleaseAxp = ReleaseAxp
+		ReleaseWithoutAsm = ReleaseWithoutAsm
+		ReleaseWithoutCrtdll = ReleaseWithoutCrtdll
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.Debug.ActiveCfg = Debug|Xbox
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.Debug.Build.0 = Debug|Xbox
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.Release.ActiveCfg = Release|Xbox
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.Release.Build.0 = Release|Xbox
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.ReleaseAxp.ActiveCfg = ReleaseAxp|Win32
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.ReleaseAxp.Build.0 = ReleaseAxp|Win32
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.ReleaseWithoutAsm.ActiveCfg = ReleaseWithoutAsm|Win32
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.ReleaseWithoutAsm.Build.0 = ReleaseWithoutAsm|Win32
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.ReleaseWithoutCrtdll.ActiveCfg = ReleaseWithoutCrtdll|Win32
+		{07503C8D-9620-4346-8E8B-DBFB49FF8674}.ReleaseWithoutCrtdll.Build.0 = ReleaseWithoutCrtdll|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

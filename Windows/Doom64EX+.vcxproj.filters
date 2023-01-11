@@ -1,212 +1,821 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\src\engine\am_draw.c" />
-    <ClCompile Include="..\src\engine\am_map.c" />
-    <ClCompile Include="..\src\engine\con_console.c" />
-    <ClCompile Include="..\src\engine\con_cvar.c" />
-    <ClCompile Include="..\src\engine\d_devstat.c" />
-    <ClCompile Include="..\src\engine\d_iwad.c" />
-    <ClCompile Include="..\src\engine\d_main.c" />
-    <ClCompile Include="..\src\engine\d_net.c" />
-    <ClCompile Include="..\src\engine\deh_ammo.c" />
-    <ClCompile Include="..\src\engine\deh_doom.c" />
-    <ClCompile Include="..\src\engine\deh_frame.c" />
-    <ClCompile Include="..\src\engine\deh_io.c" />
-    <ClCompile Include="..\src\engine\deh_main.c" />
-    <ClCompile Include="..\src\engine\deh_mapping.c" />
-    <ClCompile Include="..\src\engine\deh_misc.c" />
-    <ClCompile Include="..\src\engine\deh_ptr.c" />
-    <ClCompile Include="..\src\engine\deh_str.c" />
-    <ClCompile Include="..\src\engine\deh_thing.c" />
-    <ClCompile Include="..\src\engine\deh_weapon.c" />
-    <ClCompile Include="..\src\engine\f_finale.c" />
-    <ClCompile Include="..\src\engine\g_actions.c" />
-    <ClCompile Include="..\src\engine\g_demo.c" />
-    <ClCompile Include="..\src\engine\g_game.c" />
-    <ClCompile Include="..\src\engine\g_settings.c" />
-    <ClCompile Include="..\src\engine\gl_draw.c" />
-    <ClCompile Include="..\src\engine\gl_main.c" />
-    <ClCompile Include="..\src\engine\gl_shader.c" />
-    <ClCompile Include="..\src\engine\gl_texture.c" />
-    <ClCompile Include="..\src\engine\i_audio.c" />
-    <ClCompile Include="..\src\engine\i_exception.c" />
-    <ClCompile Include="..\src\engine\i_main.c" />
-    <ClCompile Include="..\src\engine\i_opndir.c" />
-    <ClCompile Include="..\src\engine\i_png.c" />
-    <ClCompile Include="..\src\engine\i_sdlinput.c" />
-    <ClCompile Include="..\src\engine\i_system.c" />
-    <ClCompile Include="..\src\engine\i_video.c" />
-    <ClCompile Include="..\src\engine\i_xinput.c" />
-    <ClCompile Include="..\src\engine\in_stuff.c" />
-    <ClCompile Include="..\src\engine\info.c" />
-    <ClCompile Include="..\src\engine\m_cheat.c" />
-    <ClCompile Include="..\src\engine\m_fixed.c" />
-    <ClCompile Include="..\src\engine\m_keys.c" />
-    <ClCompile Include="..\src\engine\m_menu.c" />
-    <ClCompile Include="..\src\engine\m_misc.c" />
-    <ClCompile Include="..\src\engine\m_password.c" />
-    <ClCompile Include="..\src\engine\m_random.c" />
-    <ClCompile Include="..\src\engine\m_shift.c" />
-    <ClCompile Include="..\src\engine\md5.c" />
-    <ClCompile Include="..\src\engine\net_client.c" />
-    <ClCompile Include="..\src\engine\net_common.c" />
-    <ClCompile Include="..\src\engine\net_dedicated.c" />
-    <ClCompile Include="..\src\engine\net_io.c" />
-    <ClCompile Include="..\src\engine\net_loop.c" />
-    <ClCompile Include="..\src\engine\net_packet.c" />
-    <ClCompile Include="..\src\engine\net_query.c" />
-    <ClCompile Include="..\src\engine\net_server.c" />
-    <ClCompile Include="..\src\engine\net_structure.c" />
-    <ClCompile Include="..\src\engine\p_ceilng.c" />
-    <ClCompile Include="..\src\engine\p_doors.c" />
-    <ClCompile Include="..\src\engine\p_enemy.c" />
-    <ClCompile Include="..\src\engine\p_floor.c" />
-    <ClCompile Include="..\src\engine\p_inter.c" />
-    <ClCompile Include="..\src\engine\p_lights.c" />
-    <ClCompile Include="..\src\engine\p_macros.c" />
-    <ClCompile Include="..\src\engine\p_map.c" />
-    <ClCompile Include="..\src\engine\p_maputl.c" />
-    <ClCompile Include="..\src\engine\p_mobj.c" />
-    <ClCompile Include="..\src\engine\p_plats.c" />
-    <ClCompile Include="..\src\engine\p_pspr.c" />
-    <ClCompile Include="..\src\engine\p_saveg.c" />
-    <ClCompile Include="..\src\engine\p_setup.c" />
-    <ClCompile Include="..\src\engine\p_sight.c" />
-    <ClCompile Include="..\src\engine\p_spec.c" />
-    <ClCompile Include="..\src\engine\p_switch.c" />
-    <ClCompile Include="..\src\engine\p_telept.c" />
-    <ClCompile Include="..\src\engine\p_tick.c" />
-    <ClCompile Include="..\src\engine\p_user.c" />
-    <ClCompile Include="..\src\engine\r_bsp.c" />
-    <ClCompile Include="..\src\engine\r_clipper.c" />
-    <ClCompile Include="..\src\engine\r_drawlist.c" />
-    <ClCompile Include="..\src\engine\r_lights.c" />
-    <ClCompile Include="..\src\engine\r_main.c" />
-    <ClCompile Include="..\src\engine\r_scene.c" />
-    <ClCompile Include="..\src\engine\r_sky.c" />
-    <ClCompile Include="..\src\engine\r_things.c" />
-    <ClCompile Include="..\src\engine\r_wipe.c" />
-    <ClCompile Include="..\src\engine\s_sound.c" />
-    <ClCompile Include="..\src\engine\sc_main.c" />
-    <ClCompile Include="..\src\engine\sha1.c" />
-    <ClCompile Include="..\src\engine\st_stuff.c" />
-    <ClCompile Include="..\src\engine\tables.c" />
-    <ClCompile Include="..\src\engine\w_file.c" />
-    <ClCompile Include="..\src\engine\w_merge.c" />
-    <ClCompile Include="..\src\engine\w_wad.c" />
-    <ClCompile Include="..\src\engine\wi_stuff.c" />
-    <ClCompile Include="..\src\engine\z_zone.c" />
-    <ClCompile Include="..\src\engine\i_w3swrapper.c" />
-    <ClCompile Include="..\src\engine\gl_utils.c" />
+    <ClCompile Include="..\engine\am_draw.c" />
+    <ClCompile Include="..\engine\am_map.c" />
+    <ClCompile Include="..\engine\con_console.c" />
+    <ClCompile Include="..\engine\con_cvar.c" />
+    <ClCompile Include="..\engine\deh_ammo.c" />
+    <ClCompile Include="..\engine\deh_doom.c" />
+    <ClCompile Include="..\engine\deh_frame.c" />
+    <ClCompile Include="..\engine\deh_io.c" />
+    <ClCompile Include="..\engine\deh_main.c" />
+    <ClCompile Include="..\engine\deh_mapping.c" />
+    <ClCompile Include="..\engine\deh_misc.c" />
+    <ClCompile Include="..\engine\deh_ptr.c" />
+    <ClCompile Include="..\engine\deh_str.c" />
+    <ClCompile Include="..\engine\deh_thing.c" />
+    <ClCompile Include="..\engine\deh_weapon.c" />
+    <ClCompile Include="..\engine\d_devstat.c" />
+    <ClCompile Include="..\engine\d_iwad.c" />
+    <ClCompile Include="..\engine\d_main.c" />
+    <ClCompile Include="..\engine\d_net.c" />
+    <ClCompile Include="..\engine\f_finale.c" />
+    <ClCompile Include="..\engine\gl_draw.c" />
+    <ClCompile Include="..\engine\gl_main.c" />
+    <ClCompile Include="..\engine\gl_shader.c" />
+    <ClCompile Include="..\engine\gl_texture.c" />
+    <ClCompile Include="..\engine\gl_utils.c" />
+    <ClCompile Include="..\engine\g_actions.c" />
+    <ClCompile Include="..\engine\g_demo.c" />
+    <ClCompile Include="..\engine\g_game.c" />
+    <ClCompile Include="..\engine\g_settings.c" />
+    <ClCompile Include="..\engine\info.c" />
+    <ClCompile Include="..\engine\in_stuff.c" />
+    <ClCompile Include="..\engine\i_audio.c" />
+    <ClCompile Include="..\engine\i_cpu.c" />
+    <ClCompile Include="..\engine\i_exception.c" />
+    <ClCompile Include="..\engine\i_main.c" />
+    <ClCompile Include="..\engine\i_opndir.c" />
+    <ClCompile Include="..\engine\i_png.c" />
+    <ClCompile Include="..\engine\i_sdlinput.c" />
+    <ClCompile Include="..\engine\i_system.c" />
+    <ClCompile Include="..\engine\i_video.c" />
+    <ClCompile Include="..\engine\i_w3swrapper.c" />
+    <ClCompile Include="..\engine\md5.c" />
+    <ClCompile Include="..\engine\m_cheat.c" />
+    <ClCompile Include="..\engine\m_fixed.c" />
+    <ClCompile Include="..\engine\m_keys.c" />
+    <ClCompile Include="..\engine\m_menu.c" />
+    <ClCompile Include="..\engine\m_misc.c" />
+    <ClCompile Include="..\engine\m_password.c" />
+    <ClCompile Include="..\engine\m_random.c" />
+    <ClCompile Include="..\engine\m_shift.c" />
+    <ClCompile Include="..\engine\net_client.c" />
+    <ClCompile Include="..\engine\net_common.c" />
+    <ClCompile Include="..\engine\net_dedicated.c" />
+    <ClCompile Include="..\engine\net_io.c" />
+    <ClCompile Include="..\engine\net_loop.c" />
+    <ClCompile Include="..\engine\net_packet.c" />
+    <ClCompile Include="..\engine\net_query.c" />
+    <ClCompile Include="..\engine\net_server.c" />
+    <ClCompile Include="..\engine\net_structure.c" />
+    <ClCompile Include="..\engine\psnprntf.c" />
+    <ClCompile Include="..\engine\p_ceilng.c" />
+    <ClCompile Include="..\engine\p_doors.c" />
+    <ClCompile Include="..\engine\p_enemy.c" />
+    <ClCompile Include="..\engine\p_floor.c" />
+    <ClCompile Include="..\engine\p_inter.c" />
+    <ClCompile Include="..\engine\p_lights.c" />
+    <ClCompile Include="..\engine\p_macros.c" />
+    <ClCompile Include="..\engine\p_map.c" />
+    <ClCompile Include="..\engine\p_maputl.c" />
+    <ClCompile Include="..\engine\p_mobj.c" />
+    <ClCompile Include="..\engine\p_plats.c" />
+    <ClCompile Include="..\engine\p_pspr.c" />
+    <ClCompile Include="..\engine\p_saveg.c" />
+    <ClCompile Include="..\engine\p_setup.c" />
+    <ClCompile Include="..\engine\p_sight.c" />
+    <ClCompile Include="..\engine\p_spec.c" />
+    <ClCompile Include="..\engine\p_switch.c" />
+    <ClCompile Include="..\engine\p_telept.c" />
+    <ClCompile Include="..\engine\p_tick.c" />
+    <ClCompile Include="..\engine\p_user.c" />
+    <ClCompile Include="..\engine\r_bsp.c" />
+    <ClCompile Include="..\engine\r_clipper.c" />
+    <ClCompile Include="..\engine\r_drawlist.c" />
+    <ClCompile Include="..\engine\r_lights.c" />
+    <ClCompile Include="..\engine\r_main.c" />
+    <ClCompile Include="..\engine\r_scene.c" />
+    <ClCompile Include="..\engine\r_sky.c" />
+    <ClCompile Include="..\engine\r_things.c" />
+    <ClCompile Include="..\engine\r_wipe.c" />
+    <ClCompile Include="..\engine\sc_main.c" />
+    <ClCompile Include="..\engine\sha1.c" />
+    <ClCompile Include="..\engine\st_stuff.c" />
+    <ClCompile Include="..\engine\s_sound.c" />
+    <ClCompile Include="..\engine\tables.c" />
+    <ClCompile Include="..\engine\wi_stuff.c" />
+    <ClCompile Include="..\engine\w_file.c" />
+    <ClCompile Include="..\engine\w_merge.c" />
+    <ClCompile Include="..\engine\w_wad.c" />
+    <ClCompile Include="..\engine\z_zone.c" />
+    <ClCompile Include="..\engine\backend\cglm\src\project.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\quat.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\ray.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\sphere.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\vec2.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\vec3.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\vec4.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\affine.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\affine2d.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\bezier.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\box.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\cam.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\curve.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\ease.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\euler.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\frustum.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\io.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\ivec2.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\ivec3.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\ivec4.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\mat2.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\mat3.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\mat4.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\plane.c">
+      <Filter>backend\cglm\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_lh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_lh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_rh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_rh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_lh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_lh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_rh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_rh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_lh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_lh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_rh_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_rh_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\project_no.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\clipspace\project_zo.c">
+      <Filter>backend\cglm\src\clipspace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\backend\cglm\src\swift\empty.c">
+      <Filter>backend\cglm\src\swift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\m_fcvt.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\engine\am_draw.h" />
-    <ClInclude Include="..\src\engine\am_map.h" />
-    <ClInclude Include="..\src\engine\con_console.h" />
-    <ClInclude Include="..\src\engine\con_cvar.h" />
-    <ClInclude Include="..\src\engine\d_devstat.h" />
-    <ClInclude Include="..\src\engine\d_englsh.h" />
-    <ClInclude Include="..\src\engine\d_event.h" />
-    <ClInclude Include="..\src\engine\d_keywds.h" />
-    <ClInclude Include="..\src\engine\d_main.h" />
-    <ClInclude Include="..\src\engine\d_net.h" />
-    <ClInclude Include="..\src\engine\d_player.h" />
-    <ClInclude Include="..\src\engine\d_think.h" />
-    <ClInclude Include="..\src\engine\d_ticcmd.h" />
-    <ClInclude Include="..\src\engine\deh_defs.h" />
-    <ClInclude Include="..\src\engine\deh_io.h" />
-    <ClInclude Include="..\src\engine\deh_main.h" />
-    <ClInclude Include="..\src\engine\deh_mapping.h" />
-    <ClInclude Include="..\src\engine\deh_misc.h" />
-    <ClInclude Include="..\src\engine\deh_str.h" />
-    <ClInclude Include="..\src\engine\doomdata.h" />
-    <ClInclude Include="..\src\engine\doomdef.h" />
-    <ClInclude Include="..\src\engine\doomstat.h" />
-    <ClInclude Include="..\src\engine\doomtype.h" />
-    <ClInclude Include="..\src\engine\f_finale.h" />
-    <ClInclude Include="..\src\engine\g_actions.h" />
-    <ClInclude Include="..\src\engine\g_controls.h" />
-    <ClInclude Include="..\src\engine\g_demo.h" />
-    <ClInclude Include="..\src\engine\g_game.h" />
-    <ClInclude Include="..\src\engine\g_local.h" />
-    <ClInclude Include="..\src\engine\g_settings.h" />
-    <ClInclude Include="..\src\engine\gl_draw.h" />
-    <ClInclude Include="..\src\engine\gl_main.h" />
-    <ClInclude Include="..\src\engine\gl_shader.h" />
-    <ClInclude Include="..\src\engine\gl_texture.h" />
-    <ClInclude Include="..\src\engine\i_audio.h" />
-    <ClInclude Include="..\src\engine\i_opndir.h" />
-    <ClInclude Include="..\src\engine\i_png.h" />
-    <ClInclude Include="..\src\engine\i_sdlinput.h" />
-    <ClInclude Include="..\src\engine\i_swap.h" />
-    <ClInclude Include="..\src\engine\i_system.h" />
-    <ClInclude Include="..\src\engine\i_video.h" />
-    <ClInclude Include="..\src\engine\i_xinput.h" />
-    <ClInclude Include="..\src\engine\info.h" />
-    <ClInclude Include="..\src\engine\m_cheat.h" />
-    <ClInclude Include="..\src\engine\m_fixed.h" />
-    <ClInclude Include="..\src\engine\m_keys.h" />
-    <ClInclude Include="..\src\engine\m_menu.h" />
-    <ClInclude Include="..\src\engine\m_misc.h" />
-    <ClInclude Include="..\src\engine\m_password.h" />
-    <ClInclude Include="..\src\engine\m_random.h" />
-    <ClInclude Include="..\src\engine\m_shift.h" />
-    <ClInclude Include="..\src\engine\md5.h" />
-    <ClInclude Include="..\src\engine\net_client.h" />
-    <ClInclude Include="..\src\engine\net_common.h" />
-    <ClInclude Include="..\src\engine\net_dedicated.h" />
-    <ClInclude Include="..\src\engine\net_defs.h" />
-    <ClInclude Include="..\src\engine\net_io.h" />
-    <ClInclude Include="..\src\engine\net_loop.h" />
-    <ClInclude Include="..\src\engine\net_packet.h" />
-    <ClInclude Include="..\src\engine\net_query.h" />
-    <ClInclude Include="..\src\engine\net_server.h" />
-    <ClInclude Include="..\src\engine\net_structure.h" />
-    <ClInclude Include="..\src\engine\p_inter.h" />
-    <ClInclude Include="..\src\engine\p_local.h" />
-    <ClInclude Include="..\src\engine\p_macros.h" />
-    <ClInclude Include="..\src\engine\p_mobj.h" />
-    <ClInclude Include="..\src\engine\p_pspr.h" />
-    <ClInclude Include="..\src\engine\p_saveg.h" />
-    <ClInclude Include="..\src\engine\p_setup.h" />
-    <ClInclude Include="..\src\engine\p_spec.h" />
-    <ClInclude Include="..\src\engine\p_tick.h" />
-    <ClInclude Include="..\src\engine\psnprntf.h" />
-    <ClInclude Include="..\src\engine\r_clipper.h" />
-    <ClInclude Include="..\src\engine\r_drawlist.h" />
-    <ClInclude Include="..\src\engine\r_lights.h" />
-    <ClInclude Include="..\src\engine\r_local.h" />
-    <ClInclude Include="..\src\engine\r_main.h" />
-    <ClInclude Include="..\src\engine\r_sky.h" />
-    <ClInclude Include="..\src\engine\r_things.h" />
-    <ClInclude Include="..\src\engine\r_wipe.h" />
-    <ClInclude Include="..\src\engine\resource.h" />
-    <ClInclude Include="..\src\engine\s_sound.h" />
-    <ClInclude Include="..\src\engine\sc_main.h" />
-    <ClInclude Include="..\src\engine\sha1.h" />
-    <ClInclude Include="..\src\engine\sounds.h" />
-    <ClInclude Include="..\src\engine\st_stuff.h" />
-    <ClInclude Include="..\src\engine\t_bsp.h" />
-    <ClInclude Include="..\src\engine\tables.h" />
-    <ClInclude Include="..\src\engine\w_file.h" />
-    <ClInclude Include="..\src\engine\w_merge.h" />
-    <ClInclude Include="..\src\engine\w_wad.h" />
-    <ClInclude Include="..\src\engine\wi_stuff.h" />
-    <ClInclude Include="..\src\engine\z_zone.h" />
-    <ClInclude Include="..\src\engine\i_w3swrapper.h" />
-    <ClInclude Include="..\src\engine\gl_utils.h" />
+    <ClInclude Include="..\engine\am_draw.h" />
+    <ClInclude Include="..\engine\am_map.h" />
+    <ClInclude Include="..\engine\con_console.h" />
+    <ClInclude Include="..\engine\con_cvar.h" />
+    <ClInclude Include="..\engine\deh_defs.h" />
+    <ClInclude Include="..\engine\deh_io.h" />
+    <ClInclude Include="..\engine\deh_main.h" />
+    <ClInclude Include="..\engine\deh_mapping.h" />
+    <ClInclude Include="..\engine\deh_misc.h" />
+    <ClInclude Include="..\engine\deh_str.h" />
+    <ClInclude Include="..\engine\doomdata.h" />
+    <ClInclude Include="..\engine\doomdef.h" />
+    <ClInclude Include="..\engine\doomstat.h" />
+    <ClInclude Include="..\engine\doomtype.h" />
+    <ClInclude Include="..\engine\d_devstat.h" />
+    <ClInclude Include="..\engine\d_englsh.h" />
+    <ClInclude Include="..\engine\d_event.h" />
+    <ClInclude Include="..\engine\d_main.h" />
+    <ClInclude Include="..\engine\d_net.h" />
+    <ClInclude Include="..\engine\d_player.h" />
+    <ClInclude Include="..\engine\d_think.h" />
+    <ClInclude Include="..\engine\d_ticcmd.h" />
+    <ClInclude Include="..\engine\f_finale.h" />
+    <ClInclude Include="..\engine\gl_draw.h" />
+    <ClInclude Include="..\engine\gl_main.h" />
+    <ClInclude Include="..\engine\gl_shader.h" />
+    <ClInclude Include="..\engine\gl_texture.h" />
+    <ClInclude Include="..\engine\gl_utils.h" />
+    <ClInclude Include="..\engine\g_actions.h" />
+    <ClInclude Include="..\engine\g_controls.h" />
+    <ClInclude Include="..\engine\g_demo.h" />
+    <ClInclude Include="..\engine\g_game.h" />
+    <ClInclude Include="..\engine\g_settings.h" />
+    <ClInclude Include="..\engine\info.h" />
+    <ClInclude Include="..\engine\i_audio.h" />
+    <ClInclude Include="..\engine\i_opndir.h" />
+    <ClInclude Include="..\engine\i_png.h" />
+    <ClInclude Include="..\engine\i_sdlinput.h" />
+    <ClInclude Include="..\engine\i_swap.h" />
+    <ClInclude Include="..\engine\i_system.h" />
+    <ClInclude Include="..\engine\i_video.h" />
+    <ClInclude Include="..\engine\i_w3swrapper.h" />
+    <ClInclude Include="..\engine\md5.h" />
+    <ClInclude Include="..\engine\m_cheat.h" />
+    <ClInclude Include="..\engine\m_fixed.h" />
+    <ClInclude Include="..\engine\m_keys.h" />
+    <ClInclude Include="..\engine\m_menu.h" />
+    <ClInclude Include="..\engine\m_misc.h" />
+    <ClInclude Include="..\engine\m_password.h" />
+    <ClInclude Include="..\engine\m_random.h" />
+    <ClInclude Include="..\engine\m_shift.h" />
+    <ClInclude Include="..\engine\net_client.h" />
+    <ClInclude Include="..\engine\net_common.h" />
+    <ClInclude Include="..\engine\net_dedicated.h" />
+    <ClInclude Include="..\engine\net_defs.h" />
+    <ClInclude Include="..\engine\net_io.h" />
+    <ClInclude Include="..\engine\net_loop.h" />
+    <ClInclude Include="..\engine\net_packet.h" />
+    <ClInclude Include="..\engine\net_query.h" />
+    <ClInclude Include="..\engine\net_server.h" />
+    <ClInclude Include="..\engine\net_structure.h" />
+    <ClInclude Include="..\engine\psnprntf.h" />
+    <ClInclude Include="..\engine\p_inter.h" />
+    <ClInclude Include="..\engine\p_local.h" />
+    <ClInclude Include="..\engine\p_macros.h" />
+    <ClInclude Include="..\engine\p_mobj.h" />
+    <ClInclude Include="..\engine\p_pspr.h" />
+    <ClInclude Include="..\engine\p_saveg.h" />
+    <ClInclude Include="..\engine\p_setup.h" />
+    <ClInclude Include="..\engine\p_tick.h" />
+    <ClInclude Include="..\engine\resource.h" />
+    <ClInclude Include="..\engine\r_clipper.h" />
+    <ClInclude Include="..\engine\r_drawlist.h" />
+    <ClInclude Include="..\engine\r_lights.h" />
+    <ClInclude Include="..\engine\r_local.h" />
+    <ClInclude Include="..\engine\r_main.h" />
+    <ClInclude Include="..\engine\r_sky.h" />
+    <ClInclude Include="..\engine\r_things.h" />
+    <ClInclude Include="..\engine\r_wipe.h" />
+    <ClInclude Include="..\engine\sc_main.h" />
+    <ClInclude Include="..\engine\sha1.h" />
+    <ClInclude Include="..\engine\sounds.h" />
+    <ClInclude Include="..\engine\st_stuff.h" />
+    <ClInclude Include="..\engine\s_sound.h" />
+    <ClInclude Include="..\engine\tables.h" />
+    <ClInclude Include="..\engine\t_bsp.h" />
+    <ClInclude Include="..\engine\wi_stuff.h" />
+    <ClInclude Include="..\engine\w_file.h" />
+    <ClInclude Include="..\engine\w_merge.h" />
+    <ClInclude Include="..\engine\w_wad.h" />
+    <ClInclude Include="..\engine\z_zone.h" />
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec4-ext.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\version.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine2d.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine-mat.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine-post.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine-pre.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\applesimd.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\bezier.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\box.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\cam.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\cglm.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\color.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\common.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\curve.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\ease.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\euler.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\frustum.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\io.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\ivec2.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\ivec3.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\ivec4.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\mat2.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\mat3.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\mat4.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\plane.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\project.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\quat.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\ray.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\sphere.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\types.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\types-struct.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\util.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec2.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec2-ext.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec3.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec3-ext.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec4.h">
+      <Filter>backend\cglm\include\cglm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\mat3.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\mat4.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\plane.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\project.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\quat.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ray.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\sphere.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\vec2.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\vec3.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\vec4.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\affine.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\affine2d.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\bezier.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\box.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\cam.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\curve.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ease.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\euler.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\frustum.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\io.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ivec2.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ivec3.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ivec4.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\mat2.h">
+      <Filter>backend\cglm\include\cglm\call</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_rh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_lh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_rh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_lh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_rh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\project_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\project_zo.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_lh_no.h">
+      <Filter>backend\cglm\include\cglm\call\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_rh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_lh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_rh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\project_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\project_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_lh.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_lh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_rh.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_rh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_lh_no.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\arm.h">
+      <Filter>backend\cglm\include\cglm\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\intrin.h">
+      <Filter>backend\cglm\include\cglm\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\x86.h">
+      <Filter>backend\cglm\include\cglm\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\avx\mat4.h">
+      <Filter>backend\cglm\include\cglm\simd\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\avx\affine.h">
+      <Filter>backend\cglm\include\cglm\simd\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\quat.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\affine.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\mat2.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\mat4.h">
+      <Filter>backend\cglm\include\cglm\simd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\mat4.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\quat.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\affine.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\mat2.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\mat3.h">
+      <Filter>backend\cglm\include\cglm\simd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\curve.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\euler.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\frustum.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\io.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\mat2.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\mat3.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\mat4.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\plane.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\project.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\quat.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\sphere.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec2.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec2-ext.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec3.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec3-ext.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec4.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec4-ext.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine2d.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine-post.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine-pre.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\box.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\cam.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\color.h">
+      <Filter>backend\cglm\include\cglm\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_lh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_rh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\project_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\project_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_lh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_rh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_rh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_lh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_lh_zo.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_rh_no.h">
+      <Filter>backend\cglm\include\cglm\struct\clipspace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\backend\cglm\src\config.h">
+      <Filter>backend\cglm\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\m_fcvt.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\engine\defconfig.inc" />
-    <None Include="..\src\engine\doom64ex-plus.aps" />
-    <None Include="..\src\engine\doom64ex-plus.icns" />
+    <None Include="..\engine\defconfig.inc" />
+    <None Include="..\engine\doom64ex-plus.icns" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\src\engine\doom64ex-plus.ico" />
-    <Image Include="..\src\engine\doom64ex-plus.png" />
+    <Image Include="..\engine\DOOM64EX+.ico" />
+    <Image Include="..\engine\DOOM64EX+.png" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />
+    <ResourceCompile Include="..\engine\DOOM64EX+.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="backend">
+      <UniqueIdentifier>{c29a38b1-1556-48b0-9c37-b03db607bcff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm">
+      <UniqueIdentifier>{b6f1fca1-d429-4798-85df-68aa37242008}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include">
+      <UniqueIdentifier>{64316953-a7d2-4b77-8c4d-cf528eebcc07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm">
+      <UniqueIdentifier>{ac1b361c-d2c4-44f3-8ade-3f2060c79761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\call">
+      <UniqueIdentifier>{4f0bd749-0b37-484d-ba5d-74daa6897188}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\clipspace">
+      <UniqueIdentifier>{fa29c7b6-5a2f-4622-a0e6-7bf4c64414b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd">
+      <UniqueIdentifier>{e7a1c947-c4d8-49d9-8909-5c48297b659c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\struct">
+      <UniqueIdentifier>{9811614c-ef1e-43ff-a00a-1b2d30111311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\call\clipspace">
+      <UniqueIdentifier>{f4fc074b-9740-4217-bcb2-c89e9ca1f264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd\avx">
+      <UniqueIdentifier>{40ad0904-c7e3-4692-bf65-9e0f9b9705d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd\neon">
+      <UniqueIdentifier>{e0bd1244-0cc8-4c9a-90a7-d0d6d8017456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\simd\sse2">
+      <UniqueIdentifier>{2961812f-61d7-4349-839f-90f9ff046d18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\include\cglm\struct\clipspace">
+      <UniqueIdentifier>{22564f8a-62d7-4cfd-948f-50891af1996c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\src">
+      <UniqueIdentifier>{f8e319cb-8154-4edd-9b0d-a7f965fe12fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\src\clipspace">
+      <UniqueIdentifier>{2ec41008-7f77-4fcd-8698-aef0b2f7d626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="backend\cglm\src\swift">
+      <UniqueIdentifier>{faa9191c-c866-4d19-9a7d-45de98e7c701}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -1,0 +1,20 @@
+#include "common.txt"
+#include "utils.txt"
+
+macro 1
+{
+    Ceiling_MoveByHeight(35, 256);
+    Ceiling_MoveByHeight(2, 192);
+    wait;
+
+    Delay(45);
+
+    loop(14)
+    {
+        Thing_SpawnTracer(1);
+        Delay(20);
+    }
+
+    Ceiling_MoveByHeight(35, 384);
+    Ceiling_MoveByHeight(2, 320);
+}

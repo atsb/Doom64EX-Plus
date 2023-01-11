@@ -1,0 +1,36 @@
+Node builder for DOOM levels (c) 1998 Colin Reed, Lee Killough
+                             (c) 2001 Simon Howard
+                             (c) 2000,2001,2002 Colin Phipps
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version. See the file COPYING for details.
+
+BSP was originally written by Colin Reed. It was based on ideas from the Doom
+specs, by Matt Fell <msfell@aol.com>, and objects.c from the DEU v5 source
+code, by Raphael Quinet <Raphael.Quinet@eed.ericsson.se>.
+
+It was later maintained by Lee Killough, who added support for some special
+effects, worked a lot on the visplanes problem, and did various optimisations.
+
+Since v5, BSP is maintained by Colin Phipps (cph@cph.demon.co.uk).
+
+Also the following people have also contributed to the development of BSP:
+
+Mark Harrison <harrison@lclark.edu>  - for finding a bug in 1.1x
+Jan Van der Veken - finding the invisible barrier bug
+Simon "fraggle" Howard <sdh300@ecs.soton.ac.uk> - compressed blockmap code
+Oliver Kraus <olikraus@yahoo.com> - big endian support and bug fixes
+Jonathan Campbell <joncamp@tiac.net> - bug fixes
+Andre Majorel - original Linux port, and other stuff
+Udo Munk <um@compuserve.com> - portability improvements and testing
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place - Suite 330, Boston, MA 02111-1307, USA.
+

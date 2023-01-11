@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVorbisFileX", "libVorbisFileX.vcproj", "{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Profile = Profile
+		Profile_FastCap = Profile_FastCap
+		Release = Release
+		Release_LTCG = Release_LTCG
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Debug.ActiveCfg = Debug|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Debug.Build.0 = Debug|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Profile.ActiveCfg = Profile|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Profile.Build.0 = Profile|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Profile_FastCap.ActiveCfg = Profile_FastCap|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Profile_FastCap.Build.0 = Profile_FastCap|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Release.ActiveCfg = Release|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Release.Build.0 = Release|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Release_LTCG.ActiveCfg = Release_LTCG|Xbox
+		{F9DE3C5A-4FF8-43CC-84CB-2D32BF431266}.Release_LTCG.Build.0 = Release_LTCG|Xbox
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,80 @@
+ifeq ($(strip $(VITASDK)),)
+$(error "Please set VITASDK in your environment. export VITASDK=<path to>/vitasdk")
+endif
+
+PREFIX  = arm-vita-eabi
+
+TARGET  := fluidsynth
+VERSION := 1.1.6
+DESTDIR ?= $(VITASDK)/$(PREFIX)
+
+CFILES   := \
+  src/utils/fluid_conv.c \
+  src/utils/fluid_hash.c \
+  src/utils/fluid_list.c \
+  src/utils/fluid_ringbuffer.c \
+  src/utils/fluid_settings.c \
+  src/utils/fluid_sys.c \
+  src/sfloader/fluid_defsfont.c \
+  src/sfloader/fluid_ramsfont.c \
+  src/rvoice/fluid_adsr_env.c \
+  src/rvoice/fluid_chorus.c \
+  src/rvoice/fluid_iir_filter.c \
+  src/rvoice/fluid_lfo.c \
+  src/rvoice/fluid_rvoice.c \
+  src/rvoice/fluid_rvoice_dsp.c \
+  src/rvoice/fluid_rvoice_event.c \
+  src/rvoice/fluid_rvoice_mixer.c \
+  src/rvoice/fluid_rev.c \
+  src/synth/fluid_chan.c \
+  src/synth/fluid_event.c \
+  src/synth/fluid_gen.c \
+  src/synth/fluid_mod.c \
+  src/synth/fluid_synth.c \
+  src/synth/fluid_tuning.c \
+  src/synth/fluid_voice.c \
+  src/midi/fluid_midi.c \
+  src/midi/fluid_midi_router.c \
+  src/midi/fluid_seqbind.c \
+  src/midi/fluid_seq.c
+
+OBJS     := $(CFILES:.c=.o)
+
+CC      = $(PREFIX)-gcc
+AR      = $(PREFIX)-gcc-ar
+CFLAGS  = -g -Wl,-q -O3 -mtune=cortex-a9 -mfpu=neon -D__vita__ -DFLUIDSYNTH_NOT_A_DLL \
+          -iquote . -Iinclude -iquote src -iquote src/utils -iquote src/synth \
+          -iquote src/sfloader -iquote src/rvoice -iquote src/midi \
+          -fsigned-char
+ASFLAGS = $(CFLAGS)
+
+all: lib$(TARGET).a
+
+lib$(TARGET).a: $(OBJS)
+	$(AR) -rc $@ $^
+
+clean:
+	@rm -rf lib$(TARGET).a $(TARGET).elf $(TARGET).pc $(OBJS)
+
+$(TARGET).pc: $(TARGET).pc.in
+	sed \
+	-e "s|@prefix@|$(PORTLIBS)|g" \
+	-e 's|@exec_prefix@|$$\{prefix\}|g' \
+	-e 's|@libdir@|$$\{exec_prefix\}/lib|g' \
+	-e 's|@includedir@|$$\{prefix\}/include|g' \
+	-e "s|@PKG_CONFIG_REQUIRES@||g" \
+	-e "s|@PACKAGE_VERSION@|$(VERSION)|g" \
+	-e "s|@LIBNAME@|$(TARGET)|g" \
+	-e "s|@PKG_CONFIG_LIBS@||g" \
+	-e "s|@PKG_CONFIG_CFLAGS@||g" \
+	-e "s|@PKG_CONFIG_PRIVATE_LIBS@||g" \
+	$(TARGET).pc.in > $(TARGET).pc
+
+.PHONY: install
+install: $(TARGET).pc lib$(TARGET).a
+	install -d $(DESTDIR)/lib/
+	install -m 644 lib$(TARGET).a $(DESTDIR)/lib/
+	install -d $(DESTDIR)/include/fluidsynth/
+	install -m 644 include/fluidsynth/*.h include/fluidsynth.h $(DESTDIR)/include/fluidsynth/
+	install -d $(DESTDIR)/lib/pkgconfig
+	install -m 644 $(TARGET).pc $(DESTDIR)/lib/pkgconfig

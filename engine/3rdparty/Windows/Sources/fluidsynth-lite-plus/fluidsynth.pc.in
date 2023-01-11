@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: FluidSynth Lite
+Description: Software SoundFont synth
+Requires: @PKG_CONFIG_REQUIRES@
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -l@LIBNAME@ @PKG_CONFIG_LIBS@
+Libs.private:@PKG_CONFIG_PRIVATE_LIBS@
+Cflags: -I${includedir} @PKG_CONFIG_CFLAGS@
