@@ -167,12 +167,12 @@ void M_EncodePassword(void) {
 
 	encode[5] |= (player->artifacts << 2);
 
-	decodebit[0] = I_SwapBE16(*(short*)&encode[0]);
-	decodebit[1] = I_SwapBE16(*(short*)&encode[2]);
-	decodebit[2] = I_SwapBE16(*(short*)&encode[4]);
+	decodebit[0] = SDL_SwapBE16(*(short*)&encode[0]);
+	decodebit[1] = SDL_SwapBE16(*(short*)&encode[2]);
+	decodebit[2] = SDL_SwapBE16(*(short*)&encode[4]);
 
-	*(short*)&encode[6] = I_SwapBE16(~(decodebit[0] + decodebit[1] + decodebit[2]));
-	*(short*)&encode[8] = I_SwapBE16(~(decodebit[0] ^ decodebit[1] ^ decodebit[2]));
+	*(short*)&encode[6] = SDL_SwapBE16(~(decodebit[0] + decodebit[1] + decodebit[2]));
+	*(short*)&encode[8] = SDL_SwapBE16(~(decodebit[0] ^ decodebit[1] ^ decodebit[2]));
 
 	for (i = 0; i < 10; i++) {
 		bit = *(unsigned char*)(encode + passwordTable[i]);
@@ -285,19 +285,19 @@ boolean M_DecodePassword(boolean checkOnly) {
 	//
 	// verify decoded password
 	//
-	xbit1 = I_SwapBE16(*(short*)&decode[0]);
-	xbit2 = I_SwapBE16(*(short*)&decode[2]);
-	xbit3 = I_SwapBE16(*(short*)&decode[4]);
+	xbit1 = SDL_SwapBE16(*(short*)&decode[0]);
+	xbit2 = SDL_SwapBE16(*(short*)&decode[2]);
+	xbit3 = SDL_SwapBE16(*(short*)&decode[4]);
 
 	x = ((~((xbit1 + xbit2) + xbit3) << 16) >> 16);
-	y = I_SwapBE16(*(short*)&decode[6]);
+	y = SDL_SwapBE16(*(short*)&decode[6]);
 
 	if (x != y) {
 		return false;
 	}
 
 	x = ((~(xbit1 ^ (xbit2 ^ xbit3)) << 16) >> 16);
-	y = I_SwapBE16(*(short*)&decode[8]);
+	y = SDL_SwapBE16(*(short*)&decode[8]);
 
 	if (x != y) {
 		return false;

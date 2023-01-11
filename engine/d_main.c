@@ -615,7 +615,11 @@ static int Credits_Ticker(void) {
 	switch (creditstage) {
 	case 0:
 		if (screenalpha < 0xff) {
+#ifdef USE_GLM
+			screenalpha = glm_min(screenalpha + 8, 0xff);
+#else
 			screenalpha = min(screenalpha + 8, 0xff);
+#endif
 		}
 		else {
 			creditstage = 1;
@@ -624,7 +628,11 @@ static int Credits_Ticker(void) {
 
 	case 1:
 		if (screenalphatext < 0xff) {
+#ifdef USE_GLM
+			screenalphatext = glm_min(screenalphatext + 8, 0xff);
+#else
 			screenalphatext = min(screenalphatext + 8, 0xff);
+#endif
 		}
 		else {
 			creditstage = 2;
@@ -633,9 +641,13 @@ static int Credits_Ticker(void) {
 
 	case 2:
 		if ((gametic - pagetic) >= (TICRATE * 6)) {
+#ifdef USE_GLM
+			screenalpha = glm_max(screenalpha - 8, 0);
+			screenalphatext = glm_max(screenalphatext - 8, 0);
+#else
 			screenalpha = max(screenalpha - 8, 0);
 			screenalphatext = max(screenalphatext - 8, 0);
-
+#endif
 			if (screenalpha <= 0) {
 				creditstage = 3;
 				creditscreenstage++;

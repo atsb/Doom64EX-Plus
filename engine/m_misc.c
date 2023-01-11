@@ -165,13 +165,8 @@ boolean M_WriteTextFile(const char* name, char* source, int length) {
 	if (handle == -1) {
 		return false;
 	}
-#ifdef _WIN32
-	count = _write(handle, source, length);
-	_close(handle);
-#else
-	count = write(handle, source, length);
-	close(handle);
-#endif
+	count = w3swrite(handle, source, length);
+	w3sclose(handle);
 
 	if (count < length) {
 		return false;
@@ -331,11 +326,7 @@ void M_ScreenShot(void) {
 
 	while (shotnum < 1000) {
 		sprintf(name, "sshot%03d.png", shotnum);
-#ifdef _WIN32
-		if (_access(name, 0) != 0)
-#else
-		if (access(name, 0) != 0)
-#endif
+		if (w3saccess(name, 0) != 0)
 		{
 			break;
 		}

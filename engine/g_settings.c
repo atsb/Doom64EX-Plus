@@ -42,7 +42,7 @@
 #include "con_console.h"
 #include "i_system.h"
 
-static int8_t* ConfigFileName =
+static char* ConfigFileName =
 #if defined(VITA)
 "ux0:data/DOOM64EX+/config.cfg"
 #else

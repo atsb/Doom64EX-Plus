@@ -140,11 +140,15 @@ int F_Ticker(void) {
 			castdying = true;
 		}
 	}
-
+#ifdef USE_GLM
+	finalePal.r = glm_min(finalePal.r += 2, 250);
+	finalePal.g = glm_min(finalePal.g += 2, 250);
+	finalePal.b = glm_min(finalePal.b += 2, 250);
+#else
 	finalePal.r = min(finalePal.r += 2, 250);
 	finalePal.g = min(finalePal.g += 2, 250);
 	finalePal.b = min(finalePal.b += 2, 250);
-
+#endif
 	if (!castdeath && castdying) {
 		S_StartSound(NULL, sfx_shotgun);
 		S_StartSound(NULL, mobjinfo[castorder[castnum].type].deathsound);

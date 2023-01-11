@@ -1004,7 +1004,7 @@ static boolean Song_RegisterTracks(song_t* song) {
 
         data = data + 8;
 
-        track->length   = I_SwapBE32(track->length);
+        track->length   = SDL_SwapBE32(track->length);
         track->data     = data;
 
         data = data + track->length;
@@ -1060,10 +1060,10 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
             continue;
         }
 
-        song->chunksize = I_SwapBE32(song->chunksize);
-        song->ntracks   = I_SwapBE16(song->ntracks);
-        song->delta     = I_SwapBE16(song->delta);
-        song->type      = I_SwapBE16(song->type);
+        song->chunksize = SDL_SwapBE32(song->chunksize);
+        song->ntracks   = SDL_SwapBE16(song->ntracks);
+        song->delta     = SDL_SwapBE16(song->delta);
+        song->type      = SDL_SwapBE16(song->type);
         song->timediv   = Song_GetTimeDivision(song);
         song->tempo     = 480000;
 

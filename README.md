@@ -62,6 +62,7 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * FluidSynth
 * OpenGL
 * GLFW(Optional)
+* CGLM(Optional)
 
 ## System Requirements - 32 or 64bit
 

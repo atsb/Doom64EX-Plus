@@ -2120,7 +2120,11 @@ void M_ChangeRatio(int choice) {
 		}
 	}
 	else {
+#ifdef USE_GLM
+		m_aspectRatio = glm_max(m_aspectRatio--, 0);
+#else
 		m_aspectRatio = max(m_aspectRatio--, 0);
+#endif
 	}
 
 	switch (m_aspectRatio) {
@@ -2140,7 +2144,11 @@ void M_ChangeRatio(int choice) {
 		dmax = MAX_RES21_09;
 		break;
 	}
+#ifdef USE_GLM
+	m_ScreenSize = glm_min(m_ScreenSize, dmax - 1);
+#else
 	m_ScreenSize = min(m_ScreenSize, dmax - 1);
+#endif
 	M_SetResolution();
 
 }
@@ -2177,9 +2185,12 @@ void M_ChangeResolution(int choice) {
 		}
 	}
 	else {
+#ifdef USE_GLM
+		m_ScreenSize = glm_max(m_ScreenSize--, 0);
+#else
 		m_ScreenSize = max(m_ScreenSize--, 0);
+#endif
 	}
-
 	M_SetResolution();
 }
 

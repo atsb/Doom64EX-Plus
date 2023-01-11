@@ -76,8 +76,8 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 
 	if (!strncmp((char*)chunk->name, "grAb", 4) && chunk->size >= 8) {
 		dat = (int*)png_get_user_chunk_ptr(png_ptr);
-		dat[0] = I_SwapBE32(*(int*)(chunk->data));
-		dat[1] = I_SwapBE32(*(int*)(chunk->data + 4));
+		dat[0] = SDL_SwapBE32(*(int*)(chunk->data));
+		dat[1] = SDL_SwapBE32(*(int*)(chunk->data + 4));
 		return 1;
 	}
 
@@ -89,7 +89,11 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 //
 
 static unsigned char I_GetRGBGamma(int c) {
+#ifdef USE_GLM
+	return (unsigned char)glm_min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
+#else
 	return (unsigned char)min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
+#endif
 }
 
 //
