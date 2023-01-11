@@ -318,7 +318,7 @@ char* I_FindDataFile(char* file) {
 #elif defined(VITA)
 	{
 		int i;
-		const int8_t* paths[] = {
+		const char* paths[] = {
 				"ux0:/data/DOOM64EX+/",
 		};
 

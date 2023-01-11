@@ -29,6 +29,7 @@
 #include "doomdef.h"
 #include <stdio.h>
 
+#if !defined(_XBOX) && !defined(VITA)
 GLuint ID;
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
@@ -114,3 +115,4 @@ boolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 	}
 	return success;
 }
+#endif
