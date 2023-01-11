@@ -103,11 +103,10 @@ CVAR(am_overlay, 0);
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
 
-#ifdef FUCKED_GAMECONTROLLER
-extern float i_rsticksensitivityy;
-extern float i_rsticksensitivityx;
-extern int i_xinputscheme;
-#endif
+CVAR_EXTERNAL(i_rsticksensitivityy);
+CVAR_EXTERNAL(i_rsticksensitivityx);
+CVAR_EXTERNAL(i_xinputscheme);
+
 
 //
 // CMD_Automap
@@ -341,7 +340,6 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
-#ifdef FUCKED_GAMECONTROLLER
 	else if (ev->type == ev_gamepad) {
 		//
 		// user has pan button held down and is
@@ -352,8 +350,8 @@ boolean AM_Responder(event_t* ev) {
 				float x;
 				float y;
 
-				x = (float)ev->data1 * i_rsticksensitivityx / (1500.0f / scale);
-				y = (float)ev->data2 * i_rsticksensitivityy / (1500.0f / scale);
+				x = (float)ev->data1 * i_rsticksensitivityx.value / (1500.0f / scale);
+				y = (float)ev->data2 * i_rsticksensitivityy.value / (1500.0f / scale);
 
 				mpanx = (int)x << 16;
 				mpany = (int)y << 16;
@@ -448,7 +446,6 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
-#endif
 	return rc;
 }
 

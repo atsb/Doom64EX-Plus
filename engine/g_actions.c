@@ -410,14 +410,10 @@ boolean G_ActionResponder(event_t* ev) {
 	case ev_mouse:
 		G_DoCmdMouseMove(ev->data2, ev->data3);
 		break;
-#ifdef FUCKED_GAMECONTROLLER
 	case ev_gamepad:
 		G_DoCmdGamepadMove(ev);
 		break;
 	}
-#else
-	}
-#endif
 	return false;
 }
 

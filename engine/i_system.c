@@ -387,10 +387,8 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
-#ifdef FUCKED_GAMECONTROLLER
 	I_InitEvent();
 	I_InitGameController();
-#endif
 	I_InitVideo();
 	I_InitClockRate();
 }

@@ -851,14 +851,13 @@ void G_ClearInput(void) {
 	}
 }
 
-#ifdef FUCKED_GAMECONTROLLER
 //
 // G_DoCmdGamepadMove
 //
 
-extern int i_xinputscheme;
-extern float i_rsticksensitivityy;
-extern float i_rsticksensitivityx;
+CVAR_EXTERNAL(i_xinputscheme);
+CVAR_EXTERNAL(i_rsticksensitivityy);
+CVAR_EXTERNAL(i_rsticksensitivityx);
 
 void G_DoCmdGamepadMove(event_t* ev)
 {
@@ -879,14 +878,13 @@ void G_DoCmdGamepadMove(event_t* ev)
 		// right analog stick
 		//
 		else if (ev->data3 == GAMEPAD_RSTICK) {
-			int x = (float)ev->data1 * i_rsticksensitivityx * 0.0015f;
-			int y = (float)ev->data2 * i_rsticksensitivityy * 0.0015f;
+			int x = (float)ev->data1 * i_rsticksensitivityx.value * 0.0015f;
+			int y = (float)ev->data2 * i_rsticksensitivityy.value * 0.0015f;
 			pc->mousex += x;
 			pc->mousey += y;
 		}
 	}
 }
-#endif
 //
 // G_SetGameFlags
 //

@@ -2628,13 +2628,12 @@ void M_DoFeature(int choice) {
 // GAMEPAD CONTROLLER MENU
 //
 //------------------------------------------------------------------------
-#ifdef FUCKED_GAMECONTROLLER
 void M_XGamePadChoice(int choice);
 void M_DrawXGamePad(void);
 
-extern float i_rsticksensitivityy;
-extern float i_rsticksensitivityx;
-extern int i_xinputscheme;
+CVAR_EXTERNAL(i_rsticksensitivityy);
+CVAR_EXTERNAL(i_rsticksensitivityx);
+CVAR_EXTERNAL(i_xinputscheme);
 enum {
 	xgp_sensitivityx,
 	xgp_empty1,
@@ -2696,16 +2695,16 @@ void M_XGamePadChoice(int choice) {
 	switch (itemOn) {
 	case xgp_sensitivityx:
 		if (choice) {
-			if (i_rsticksensitivityx < 0.0125f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityx + slope1);
+			if (i_rsticksensitivityx.value < 0.0125f) {
+				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityx.value + slope1);
 			}
 			else {
 				CON_CvarSetValue(&i_rsticksensitivityx, 0.0125f);
 			}
 		}
 		else {
-			if (i_rsticksensitivityy > 0.001f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityy - slope1);
+			if (i_rsticksensitivityy.value > 0.001f) {
+				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityy.value - slope1);
 			}
 			else {
 				CON_CvarSetValue(&i_rsticksensitivityx, 0.001f);
@@ -2715,16 +2714,16 @@ void M_XGamePadChoice(int choice) {
 
 	case xgp_sensitivityy:
 		if (choice) {
-			if (i_rsticksensitivityy < 10.0f) {
-				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy + slope2);
+			if (i_rsticksensitivityy.value < 10.0f) {
+				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value + slope2);
 			}
 			else {
 				CON_CvarSetValue(&i_rsticksensitivityy, 100);
 			}
 		}
 		else {
-			if (i_rsticksensitivityy > 1) {
-				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy - slope2);
+			if (i_rsticksensitivityy.value > 1) {
+				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value - slope2);
 			}
 			else {
 				CON_CvarSetValue(&i_rsticksensitivityy, 1);
@@ -2736,10 +2735,10 @@ void M_XGamePadChoice(int choice) {
 
 void M_DrawXGamePad(void) {
 	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivityx + 1),
-		100, i_rsticksensitivityx * 10.0f);
+		100, i_rsticksensitivityx.value * 10.0f);
 
 	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivityy + 1),
-		50, i_rsticksensitivityy * 0.5f);
+		50, i_rsticksensitivityy.value * 0.5f);
 
 	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_look, MENUCOLORRED,
 		msgNames[(int)v_mlook.value]);
@@ -2747,7 +2746,6 @@ void M_DrawXGamePad(void) {
 	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_invert, MENUCOLORRED,
 		msgNames[(int)v_mlookinvert.value]);
 }
-#endif
 //------------------------------------------------------------------------
 //
 // CONTROLS MENU
@@ -2906,9 +2904,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#ifdef FUCKED_GAMECONTROLLER
 	controls_gamepad,
-#endif
 	controls_return,
 	controls_end
 } controls_e;
@@ -2923,9 +2919,7 @@ menuitem_t ControlsMenu[] = {
 char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#ifdef FUCKED_GAMECONTROLLER
-	"configure gamepad functionality",
-#endif
+	"configure gamecontroller functionality",
 	NULL
 };
 
@@ -2956,14 +2950,10 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#ifdef FUCKED_GAMECONTROLLER
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
 	}
-#else
-	}
-#endif
 }
 
 void M_DrawControlMenu(void) {
@@ -4057,7 +4047,6 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 	GL_SetState(GLSTATE_BLEND, 0);
 }
 
-#ifdef FUCKED_GAMECONTROLLER
 //------------------------------------------------------------------------
 //
 // CONTROL PANEL
@@ -4126,43 +4115,43 @@ void M_DrawXInputButton(int x, int y, int button) {
 		index = 8;
 		break;
 	case GAMEPAD_LSHOULDER:
-		index = 5;
-		break;
-	case GAMEPAD_RSHOULDER:
-		index = 6;
-		break;
-	case GAMEPAD_DPAD_UP:
-		index = 7;
-		break;
-	case GAMEPAD_DPAD_DOWN:
-		index = 8;
-		break;
-	case GAMEPAD_DPAD_LEFT:
 		index = 9;
 		break;
-	case GAMEPAD_DPAD_RIGHT:
+	case GAMEPAD_RSHOULDER:
 		index = 10;
 		break;
-	case GAMEPAD_BUTTON_MISC1:
-		index = 11; /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+	case GAMEPAD_DPAD_UP:
+		index = 11;
 		break;
-	case GAMEPAD_BUTTON_PADDLE1:
-		index = 12; /* Xbox Elite paddle P1 */
+	case GAMEPAD_DPAD_DOWN:
+		index = 12;
 		break;
-	case GAMEPAD_BUTTON_PADDLE2:
-		index = 13; /* Xbox Elite paddle P3 */
+	case GAMEPAD_DPAD_LEFT:
+		index = 13;
 		break;
-	case GAMEPAD_BUTTON_PADDLE3:  /* Xbox Elite paddle P2 */
+	case GAMEPAD_DPAD_RIGHT:
 		index = 14;
 		break;
+	case GAMEPAD_BUTTON_MISC1:
+		index = 15; /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+		break;
+	case GAMEPAD_BUTTON_PADDLE1:
+		index = 16; /* Xbox Elite paddle P1 */
+		break;
+	case GAMEPAD_BUTTON_PADDLE2:
+		index = 17; /* Xbox Elite paddle P3 */
+		break;
+	case GAMEPAD_BUTTON_PADDLE3:  /* Xbox Elite paddle P2 */
+		index = 18;
+		break;
 	case GAMEPAD_BUTTON_PADDLE4: /* Xbox Elite paddle P4 */
-		index = 15;
+		index = 19;
 		break;
 	case GAMEPAD_BUTTON_TOUCHPAD: /* PS4/PS5 touchpad button */
-		index = 16;
+		index = 20;
 		break;
 	case GAMEPAD_LTRIGGER:
-		index = 17;
+		index = 21;
 		break;
 	case GAMEPAD_RTRIGGER:
 		index = 18;
@@ -4213,7 +4202,6 @@ void M_DrawXInputButton(int x, int y, int button) {
 	GL_ResetViewport();
 	glDisable(GL_BLEND);
 }
-#endif
 //
 // M_Responder
 //
@@ -4927,7 +4915,7 @@ void M_Drawer(void) {
 	if (currentMenu->scale != 1) {
 		GL_SetOrthoScale(1.0f);
 	}
-#ifdef FUCKED_GAMECONTROLLER
+
 	if (currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
@@ -4947,7 +4935,6 @@ void M_Drawer(void) {
 
 		GL_SetOrthoScale(1);
 	}
-#endif
 
 	M_DrawCursor(mouse_x, mouse_y);
 }

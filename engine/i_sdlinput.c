@@ -36,11 +36,10 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-#ifdef FUCKED_GAMECONTROLLER
-float i_rsticksensitivityy;
-float i_rsticksensitivityx;
-int i_xinputscheme;
-#endif
+
+CVAR(i_rsticksensitivityx, 0.0080);
+CVAR(i_rsticksensitivityy, 0.0080);
+CVAR(i_xinputscheme, 0);
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
 CVAR(v_macceleration, 0);
@@ -68,7 +67,6 @@ void s_clamp(signed int axis)
           axis = 0;
       }
 }
-#ifdef FUCKED_GAMECONTROLLER
 SDL_GameController *s_controller;
 
 
@@ -171,7 +169,7 @@ void I_InitGameController()
 		return;
 	}
 }
-#endif
+
 //
 // I_TranslateKey
 //
@@ -444,6 +442,8 @@ void I_GetEvent(SDL_Event* Event) {
 	event_t event;
 	unsigned int mwheeluptic = 0, mwheeldowntic = 0;
 	unsigned int tic = gametic;
+	int x, y;
+
 
 	switch (Event->type) {
 	case SDL_KEYDOWN:
@@ -459,7 +459,7 @@ void I_GetEvent(SDL_Event* Event) {
 		event.data1 = I_TranslateKey(Event->key.keysym.sym);
 		D_PostEvent(&event);
 		break;
-#ifdef FUCKED_GAMECONTROLLER
+
 	case SDL_CONTROLLERDEVICEADDED:
 		CON_Printf(GREEN,"SDL: Controller added: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
 		s_controller = SDL_GameControllerOpen(Event->cdevice.which);
@@ -468,21 +468,22 @@ void I_GetEvent(SDL_Event* Event) {
 
 	case SDL_CONTROLLERDEVICEREMOVED:
 		CON_Printf(RED, "SDL: Controller removed");
+		SDL_GameControllerClose(s_controller);
 		s_controller = NULL;
 		break;
 
 	case SDL_CONTROLLERBUTTONDOWN:
-		event.type = Event->type ? SDL_CONTROLLERBUTTONDOWN : ev_keydown;
+		event.type = (Event->type == SDL_CONTROLLERBUTTONDOWN) ? ev_keydown : ev_keyup;
 		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
 
 	case SDL_CONTROLLERBUTTONUP:
-		event.type = Event->type ? SDL_CONTROLLERBUTTONUP : ev_gamepad;
+		event.type = (Event->type == SDL_CONTROLLERBUTTONUP) ? ev_keyup : ev_keydown;
 		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
-#endif
+
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
 		if (!window_focused)
@@ -544,8 +545,7 @@ void I_GetEvent(SDL_Event* Event) {
 	default:
 		break;
 	}
-#ifdef FUCKED_GAMECONTROLLER
-	int x, y;
+
 	if (s_controller) 
 	{
 		event_t ev;
@@ -557,9 +557,10 @@ void I_GetEvent(SDL_Event* Event) {
 		s_clamp(y);
 
 		ev.type = ev_gamepad;
-		ev.data1 = x;
-		ev.data2 = -y;
-		ev.data3 = GAMEPAD_LSTICK;
+		ev.data1 = GAMEPAD_LSTICK;
+		ev.data2 = x;
+		ev.data3 = -y;
+
 		D_PostEvent(&ev);
 
 		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
@@ -569,9 +570,9 @@ void I_GetEvent(SDL_Event* Event) {
 		s_clamp(y);
 
 		ev.type = ev_gamepad;
-		ev.data1 = x;
-		ev.data2 = -y;
-		ev.data3 = GAMEPAD_RSTICK;
+		ev.data1 = GAMEPAD_RSTICK; //x;
+		ev.data2 = x;
+		ev.data3 = -y;
 		D_PostEvent(&ev);
 
 		static boolean old_ltrigger = false;
@@ -605,7 +606,7 @@ void I_GetEvent(SDL_Event* Event) {
 			D_PostEvent(&ev);
 		}
 	}
-#endif
+
 	if(mwheeluptic && mwheeluptic + 1 < tic) {
 		event.type = ev_keyup;
 		event.data1 = KEY_MWHEELUP;
