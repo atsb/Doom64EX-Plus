@@ -14,7 +14,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 * Port to the C Programming Language like the original game
 * Support for C89 and C99
 * Support for higher resolutions including 21:9 
-* Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have(atm it´s buggy).
+* Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
