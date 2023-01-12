@@ -733,7 +733,7 @@ P_PathTraverse
 
 	earlyout = flags & PT_EARLYOUT;
 
-	D_IncValidCount();
+	validcount++;
 	intercept_p = intercepts;
 
 	if (((x1 - bmaporgx) & (MAPBLOCKSIZE - 1)) == 0) {

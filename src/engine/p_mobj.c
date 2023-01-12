@@ -224,8 +224,8 @@ void P_XYMovement(mobj_t* mo) {
 
 	do {
 		// [d64] fixed bug with fast projectiles going through walls
-		if ((xmove > MAXMOVE || ymove > MAXMOVE)
-			|| (xmove < -MAXMOVE || ymove < -MAXMOVE)) {
+		if ((xmove > MAXMOVE || xmove < -MAXMOVE)
+			|| (ymove > MAXMOVE || ymove < -MAXMOVE)) {
 			ptryx = mo->x + xmove / 2;
 			ptryy = mo->y + ymove / 2;
 			xmove >>= 1;
@@ -276,18 +276,8 @@ void P_XYMovement(mobj_t* mo) {
 		return;    // no friction when airborne
 	}
 
-	if (mo->flags & MF_CORPSE) {
-		// do not stop sliding
-		//  if halfway off a step with some momentum
-		if (mo->momx > FRACUNIT / 4
-			|| mo->momx < -FRACUNIT / 4
-			|| mo->momy > FRACUNIT / 4
-			|| mo->momy < -FRACUNIT / 4) {
-			if (mo->floorz != mo->subsector->sector->floorheight) {
-				return;
-			}
-		}
-	}
+	if ((mo->flags & MF_CORPSE) && (mo->floorz != mo->subsector->sector->floorheight))
+		return;		// don't stop halfway off a step
 
 	if (mo->momx > -STOPSPEED && mo->momx < STOPSPEED
 		&& mo->momy > -STOPSPEED && mo->momy < STOPSPEED) {

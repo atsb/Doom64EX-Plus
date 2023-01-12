@@ -484,7 +484,7 @@ void R_SetupFrame(player_t* player) {
 	viewcos[0] = F2D3D(dcos(viewangle));
 	viewcos[1] = F2D3D(dcos(viewpitch - ANG90));
 
-	D_IncValidCount();
+	validcount++;
 }
 
 //

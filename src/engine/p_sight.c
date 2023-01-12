@@ -332,7 +332,7 @@ boolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
 	// Now look from eyes of t1 to any part of t2.
 	sightcounts[1]++;
 
-	D_IncValidCount();
+	validcount++;
 
 	sightzstart = t1->z + t1->height - (t1->height >> 2);
 	topslope = (t2->z + t2->height) - sightzstart;

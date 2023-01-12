@@ -46,7 +46,7 @@
 #include "deh_misc.h"
 
 fixed_t         tmbbox[4];
-mobj_t* tmthing;
+mobj_t*         tmthing;
 int             tmflags;
 fixed_t         tmx;
 fixed_t         tmy;
@@ -69,8 +69,8 @@ line_t* tmhitline;
 // keep track of special lines as they are hit,
 // but don't process them until the move is proven valid
 
-line_t* spechit[MAXSPECIALCROSS];
-int             numspechit = 0;
+line_t* thingspec[MAXTHINGSPEC];
+int numthingspec = 0;
 
 //
 // P_CheckThingCollision
@@ -119,17 +119,17 @@ extern byte forcecollision;
 
 d_inline
 static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
-    fixed_t extent = MAXRADIUS;
+    // [D64] does not use MAXRADIUS
 
     tmbbox[BOXTOP] = y + thing->radius;
     tmbbox[BOXBOTTOM] = y - thing->radius;
     tmbbox[BOXRIGHT] = x + thing->radius;
     tmbbox[BOXLEFT] = x - thing->radius;
 
-    bbox[BOXLEFT] = (tmbbox[BOXLEFT] - bmaporgx - extent) >> MAPBLOCKSHIFT;
-    bbox[BOXRIGHT] = (tmbbox[BOXRIGHT] - bmaporgx + extent) >> MAPBLOCKSHIFT;
-    bbox[BOXBOTTOM] = (tmbbox[BOXBOTTOM] - bmaporgy - extent) >> MAPBLOCKSHIFT;
-    bbox[BOXTOP] = (tmbbox[BOXTOP] - bmaporgy + extent) >> MAPBLOCKSHIFT;
+    bbox[BOXLEFT] = (tmbbox[BOXLEFT] - bmaporgx) >> MAPBLOCKSHIFT;
+    bbox[BOXRIGHT] = (tmbbox[BOXRIGHT] - bmaporgx) >> MAPBLOCKSHIFT;
+    bbox[BOXBOTTOM] = (tmbbox[BOXBOTTOM] - bmaporgy) >> MAPBLOCKSHIFT;
+    bbox[BOXTOP] = (tmbbox[BOXTOP] - bmaporgy) >> MAPBLOCKSHIFT;
 
     if (bbox[BOXLEFT] < 0) {
         bbox[BOXLEFT] = 0;
@@ -176,17 +176,17 @@ static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 // Adjusts tmfloorz and tmceilingz as lines are contacted
 //
 
-boolean PIT_CheckLine(line_t* ld) {
+boolean PIT_CheckLine(line_t* li) {
     sector_t* sector;
 
-    if (tmbbox[BOXRIGHT] <= ld->bbox[BOXLEFT]
-        || tmbbox[BOXLEFT] >= ld->bbox[BOXRIGHT]
-        || tmbbox[BOXTOP] <= ld->bbox[BOXBOTTOM]
-        || tmbbox[BOXBOTTOM] >= ld->bbox[BOXTOP]) {
+    if (tmbbox[BOXRIGHT] <= li->bbox[BOXLEFT]
+        || tmbbox[BOXLEFT] >= li->bbox[BOXRIGHT]
+        || tmbbox[BOXTOP] <= li->bbox[BOXBOTTOM]
+        || tmbbox[BOXBOTTOM] >= li->bbox[BOXTOP]) {
         return true;
     }
 
-    if (P_BoxOnLineSide(tmbbox, ld) != -1) {
+    if (P_BoxOnLineSide(tmbbox, li) != -1) {
         return true;
     }
 
@@ -201,60 +201,60 @@ boolean PIT_CheckLine(line_t* ld) {
     // so two special lines that are only 8 pixels apart
     // could be crossed in either order.
 
-    if (!ld->backsector) {
+    if (!li->backsector) {
         if (tmthing->flags & MF_MISSILE) {
-            tmhitline = ld;
+            tmhitline = li;
         }
 
         return false;           // one sided line
     }
 
     if (!(tmthing->flags & MF_MISSILE)) {
-        if (ld->flags & ML_BLOCKING) {
+        if (li->flags & ML_BLOCKING) {
             return false;    // explicitly blocking everything
         }
 
-        if (!tmthing->player && ld->flags & ML_BLOCKMONSTERS) {
+        if (!tmthing->player && li->flags & ML_BLOCKMONSTERS) {
             return false;    // block monsters only
         }
     }
 
     // [d64] don't cross mid-pegged lines
-    if (ld->flags & ML_DONTPEGMID) {
-        tmhitline = ld;
+    if (li->flags & ML_DONTPEGMID) {
+        tmhitline = li;
         return false;
     }
 
     // [kex] check if thing's midpoint is inside sector
-    if (tmthing->blockflag & BF_MIDPOINTONLY && ld->backsector) {
-        if (tmthing->subsector->sector != ld->backsector) {
+    if (tmthing->blockflag & BF_MIDPOINTONLY && li->backsector) {
+        if (tmthing->subsector->sector != li->backsector) {
             return true;
         }
     }
 
-    sector = ld->frontsector;
+    sector = li->frontsector;
 
     // [d64] check for valid sector heights
     if (sector->ceilingheight == sector->floorheight) {
-        tmhitline = ld;
+        tmhitline = li;
         return false;
     }
 
-    sector = ld->backsector;
+    sector = li->backsector;
 
     // [d64] check for valid sector heights
     if (sector->ceilingheight == sector->floorheight) {
-        tmhitline = ld;
+        tmhitline = li;
         return false;
     }
 
     // set openrange, opentop, openbottom
-    P_LineOpening(ld);
+    P_LineOpening(li);
 
     // adjust floor / ceiling heights
     if (opentop < tmceilingz) {
         tmceilingz = opentop;
-        tmhitline = ld;
+        tmhitline = li;
     }
 
     if (openbottom > tmfloorz) {
@@ -266,13 +266,13 @@ boolean PIT_CheckLine(line_t* ld) {
     }
 
     // if contacted a special line, add it to the list
-    if (ld->special & MLU_CROSS) {
-        if (numspechit >= MAXSPECIALCROSS) {
-            CON_Warnf("PIT_CheckLine: spechit overflow!\n");
-        }
-        else {
-            spechit[numspechit] = ld;
-            numspechit++;
+    if (li->special & MLU_CROSS)
+    {
+	    //New Psx Doom
+		if (numthingspec < MAXTHINGSPEC)
+		{
+			thingspec[numthingspec] = li;
+			numthingspec++;
         }
     }
 
@@ -424,8 +424,9 @@ boolean P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y) {
     tmfloorz = tmdropoffz = newsubsec->sector->floorheight;
     tmceilingz = newsubsec->sector->ceilingheight;
 
-    D_IncValidCount();
-    numspechit = 0;
+    validcount++;
+
+    numthingspec = 0; //PSX
 
     if (tmflags & MF_NOCLIP) {
         return true;
@@ -509,12 +510,12 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     // if any special lines were hit, do the effect
     if (!(thing->flags & (MF_NOCLIP | MF_TELEPORT)))
     {
-        while (numspechit > 0)
+        while (numthingspec > 0)
         {
-            numspechit--;
+            numthingspec--;
 
             // see if the line was crossed
-            ld = spechit[numspechit];
+            ld = thingspec[numthingspec];
 
             side = P_PointOnLineSide(thing->x, thing->y, ld);
             oldside = P_PointOnLineSide(oldx, oldy, ld);
@@ -595,8 +596,8 @@ boolean P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y) {
     tmfloorz = tmdropoffz = newsubsec->sector->floorheight;
     tmceilingz = newsubsec->sector->ceilingheight;
 
-    D_IncValidCount();
-    numspechit = 0;
+    validcount++;
+    numthingspec = 0;
 
     P_BlockMapBox(bbox, x, y, tmthing);
 
@@ -732,7 +733,7 @@ mobj_t* P_CheckOnMobj(mobj_t* thing) {
     tmceilingz = newsubsec->sector->ceilingheight;
 
     validcount++;
-    numspechit = 0;
+    numthingspec = 0;
 
     if (tmflags & MF_NOCLIP) {
         return NULL;
@@ -1435,37 +1436,34 @@ line_t* contextline = NULL;
 //
 
 static boolean P_CheckUseHeight(line_t* line, mobj_t* thing) {
-    fixed_t check = 0;
+    int flags;
+    fixed_t rowoffset;
+    fixed_t check;
 
-    if (!(line->flags & ML_SWITCHX02 ||
-        line->flags & ML_SWITCHX04 ||
-        line->flags & ML_SWITCHX08)) {
-        return true;    // ignore non-switches
-    }
+    rowoffset = sides[line->sidenum[0]].rowoffset;
+    flags = line->flags & (ML_CHECKFLOORHEIGHT | ML_SWITCHX08);
 
-    if (line->flags & ML_CHECKFLOORHEIGHT) {
-        if (line->flags & ML_TWOSIDED) {
-            check = (line->backsector->floorheight + sides[line->sidenum[0]].rowoffset) - (32 * FRACUNIT);
-        }
-        else {
-            check = (line->frontsector->floorheight + sides[line->sidenum[0]].rowoffset) + (32 * FRACUNIT);
-        }
+    if (flags == ML_SWITCHX08)
+    {
+        check = (line->backsector->ceilingheight + rowoffset) + (32 * FRACUNIT);
     }
-    else if (line->flags & ML_TWOSIDED) {
-        check = (line->backsector->ceilingheight + sides[line->sidenum[0]].rowoffset) + (32 * FRACUNIT);
+    else if (flags == ML_CHECKFLOORHEIGHT)
+    {
+        check = (line->backsector->floorheight + rowoffset) - (32 * FRACUNIT);
+    }
+    else if (flags == (ML_CHECKFLOORHEIGHT | ML_SWITCHX08))
+    {
+        check = (line->frontsector->floorheight + rowoffset) + (32 * FRACUNIT);
     }
     else {
         return true;
     }
 
-    if (!(check < thing->z)) {
-        if ((thing->z + thing->height) < check) {
-            return false;
-        }
-    }
-    else {
+    if ((check < players[0].mo->z))
         return false;
-    }
+
+    if ((players[0].mo->z + (64 * FRACUNIT)) < check)
+        return false;
 
     return true;
 }
