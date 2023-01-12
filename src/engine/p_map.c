@@ -471,39 +471,34 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     line_t* ld;
 
     floatok = false;
+    oldx = thing->x;
+    oldy = thing->y;
+
     if (!P_CheckPosition(thing, x, y)) {
         return false;    // solid wall or thing
     }
 
-    if (!(thing->flags & MF_NOCLIP)) {
-        if (tmceilingz - tmfloorz < thing->height) {
-            return false;    // doesn't fit
-        }
+    if (!(thing->flags & MF_NOCLIP))
+    {
+        floatok = false;
+
+        if (tmceilingz - thing->z < thing->height)
+            return false;			// doesn't fit
 
         floatok = true;
 
-        if (!(thing->flags & MF_TELEPORT)
-            && tmceilingz - thing->z < thing->height) {
-            return false;    // mobj must lower itself to fit
-        }
-
-        if (!(thing->flags & MF_TELEPORT)
-            && tmfloorz - thing->z > 24 * FRACUNIT) {
-            return false;    // too big a step up
-        }
-
-        if (!(thing->flags & (MF_DROPOFF | MF_FLOAT))
-            && tmfloorz - tmdropoffz > 24 * FRACUNIT) {
-            return false;    // don't stand over a dropoff
-        }
+        if (!(thing->flags & MF_TELEPORT) && tmceilingz - thing->z < thing->height)
+            return false;			// mobj must lower itself to fit
+        if (!(thing->flags & MF_TELEPORT) && tmfloorz - thing->z > 24 * FRACUNIT)
+            return false;			// too big a step up
+        if (!(thing->flags & (MF_DROPOFF | MF_FLOAT)) && tmfloorz - tmdropoffz > 24 * FRACUNIT)
+            return false;			// don't stand over a dropoff
     }
 
     // the move is ok,
     // so link the thing into its new position
     P_UnsetThingPosition(thing);
 
-    oldx = thing->x;
-    oldy = thing->y;
     thing->floorz = tmfloorz;
     thing->ceilingz = tmceilingz;
     thing->x = x;
@@ -512,7 +507,7 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     P_SetThingPosition(thing);
 
     // if any special lines were hit, do the effect
-    if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP)))
+    if (!(thing->flags & (MF_NOCLIP | MF_TELEPORT)))
     {
         while (numspechit > 0)
         {
@@ -533,6 +528,8 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
             }
         }
     }
+
+    floatok = true;
 
     return true;
 }
