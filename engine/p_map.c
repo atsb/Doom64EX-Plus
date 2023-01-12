@@ -1370,13 +1370,6 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
             aimlaser = true;
         }*/
 
-        // [kex] check for autoaim option. skip if bfg spray
-        if (distance != (ATTACKRANGE + 1)) {
-            if (!t1->player->autoaim &&
-                distance != MELEERANGE && distance != (MELEERANGE + 1)) {
-                flags &= ~PT_ADDTHINGS;
-            }
-        }
     }
 
     P_PathTraverse(t1->x, t1->y, x2, y2, flags, PTR_AimTraverse);

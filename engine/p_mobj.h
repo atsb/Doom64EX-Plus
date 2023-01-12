@@ -145,7 +145,6 @@ typedef enum {
 
 // Map Object definition
 
-struct mobj_s;
 typedef void (*mobjfunc_t)(struct mobj_s* mo);
 
 typedef struct mobj_s {
