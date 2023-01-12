@@ -1358,7 +1358,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
     flags = PT_ADDLINES | PT_ADDTHINGS;
 
     if (t1->player) {
-        pitch = cos(abs(t1->pitch - ANG90));
+        pitch = dcos(abs(t1->pitch - ANG90));
 
         // [kex] set aimslope for special purposes
         /*if(distance == LASERRANGE)
