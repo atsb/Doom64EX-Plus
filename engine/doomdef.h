@@ -104,6 +104,7 @@ typedef enum {
 	GS_SKIPPABLE
 } gamestate_t;
 
+
 //
 // Difficulty/skill settings/filters.
 //

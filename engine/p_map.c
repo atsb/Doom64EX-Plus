@@ -46,7 +46,7 @@
 #include "r_sky.h"
 #include "con_console.h"
 #include "deh_misc.h"
-
+#include "p_pspr.h"
 fixed_t         tmbbox[4];
 mobj_t* tmthing;
 int             tmflags;
@@ -1005,12 +1005,6 @@ fixed_t         aimpitch;
 // slopes to top and bottom of target
 extern fixed_t  topslope;
 extern fixed_t  bottomslope;
-
-// [kex]
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
 
 //
 // PTR_AimTraverse
