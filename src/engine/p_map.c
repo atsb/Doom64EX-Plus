@@ -1440,6 +1440,12 @@ static boolean P_CheckUseHeight(line_t* line, mobj_t* thing) {
     fixed_t rowoffset;
     fixed_t check;
 
+    if (!(line->flags & ML_SWITCHX02 ||
+        line->flags & ML_SWITCHX04 ||
+        line->flags & ML_SWITCHX08)) {
+        return true;    // ignore non-switches
+    }
+
     rowoffset = sides[line->sidenum[0]].rowoffset;
     flags = line->flags & (ML_CHECKFLOORHEIGHT | ML_SWITCHX08);
 
