@@ -1315,6 +1315,10 @@ boolean PTR_ShootTraverse(intercept_t* in) {
 
 }
 
+// [kex]
+fixed_t laserhit_x;
+fixed_t laserhit_y;
+fixed_t laserhit_z;
 
 //
 // P_AimLineAttack
@@ -1353,7 +1357,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
     flags = PT_ADDLINES | PT_ADDTHINGS;
 
     if (t1->player) {
-        pitch = dcos(abs(t1->pitch - ANG90));
+        pitch = cos(abs(t1->pitch - ANG90));
 
         // [kex] set aimslope for special purposes
         /*if(distance == LASERRANGE)

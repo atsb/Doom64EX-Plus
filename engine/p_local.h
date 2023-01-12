@@ -92,7 +92,6 @@ extern fixed_t frame_viewz;
 //
 // P_PSPR
 //
-struct laser_s;
 typedef struct laser_s {
 	fixed_t         x1;
 	fixed_t         y1;
@@ -243,12 +242,13 @@ mobj_t* P_CheckOnMobj(mobj_t* thing);
 void        P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t y);
 
 #define MAXSPECIALCROSS 128
+#define MAXTHINGSPEC 8
 
 extern mobj_t* linetarget;    // who got hit (or NULL)
 extern mobj_t* blockthing;
 extern fixed_t  aimfrac;
-extern line_t* spechit[MAXSPECIALCROSS];
-extern int      numspechit;
+extern line_t* thingspec[MAXTHINGSPEC];
+extern int      numthingspec;
 
 fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t distance);
 void    P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, int damage);
