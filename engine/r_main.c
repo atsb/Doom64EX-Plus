@@ -250,14 +250,14 @@ angle_t R_PointToPitch(fixed_t z1, fixed_t z2, fixed_t dist) {
 void R_Init(void) {
 	int i = 0;
 	int a = 0;
-	double an;
+	int an;
 
 	//
 	// [d64] build finesine table
 	//
 	for (i = 0; i < (5 * FINEANGLES / 4); i++) {
 		an = a * M_PI / (double)FINEANGLES;
-		finesine[i] = (fixed_t)(sin(an) * (double)FRACUNIT);
+		finesine[i] = (fixed_t)(dsin(an) * (double)FRACUNIT);
 		a += 2;
 	}
 

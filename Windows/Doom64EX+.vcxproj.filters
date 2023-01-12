@@ -218,7 +218,7 @@
       <Filter>backend\cglm\src\swift</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\m_fcvt.c" />
-    <ClCompile Include="..\engine\backend\glad 3.2\src\glad.c">
+    <ClCompile Include="..\engine\backend\glad_3.2\src\glad.c">
       <Filter>backend\glad</Filter>
     </ClCompile>
   </ItemGroup>
@@ -759,7 +759,7 @@
       <Filter>backend\cglm\src</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\m_fcvt.h" />
-    <ClInclude Include="..\engine\backend\glad 3.2\include\glad\glad.h">
+    <ClInclude Include="..\engine\backend\glad_3.2\include\glad\glad.h">
       <Filter>backend\glad</Filter>
     </ClInclude>
   </ItemGroup>

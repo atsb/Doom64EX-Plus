@@ -39,7 +39,7 @@
 #ifdef USE_FIXEDPTC 
 typedef fixedpt fixed_t;
 #else
-typedef long long fixed_t;
+typedef int fixed_t;
 #endif
 #define FRACBITS        16
 #define FRACUNIT        (1<<FRACBITS)

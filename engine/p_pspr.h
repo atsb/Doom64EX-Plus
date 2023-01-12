@@ -81,6 +81,10 @@ typedef struct {
 	int        flashstate;
 } weaponinfo_t;
 
+extern fixed_t laserhit_x;
+extern fixed_t laserhit_y;
+extern fixed_t laserhit_z;
+
 // Weapon info: sprite frames, ammunition use.
 extern  weaponinfo_t    weaponinfo[NUMWEAPONS];
 

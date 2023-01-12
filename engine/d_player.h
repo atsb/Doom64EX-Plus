@@ -143,10 +143,10 @@ typedef struct player_s {
     int             secretcount;
 
     // Hint messages.
-    int8_t*           message;
+    char*           message;
 	
 	// Secret messages.
-    int8_t*           secretmessage;
+    char*           secretmessage;
 
     // [d64] tic for how long message should stay on hud...not used in d64ex
     // int          messagetic;

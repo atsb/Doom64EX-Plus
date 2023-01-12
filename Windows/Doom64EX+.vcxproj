@@ -183,7 +183,7 @@
     <ClCompile Include="..\engine\backend\cglm\src\vec2.c" />
     <ClCompile Include="..\engine\backend\cglm\src\vec3.c" />
     <ClCompile Include="..\engine\backend\cglm\src\vec4.c" />
-    <ClCompile Include="..\engine\backend\glad 3.2\src\glad.c" />
+    <ClCompile Include="..\engine\backend\glad_3.2\src\glad.c" />
     <ClCompile Include="..\engine\con_console.c" />
     <ClCompile Include="..\engine\con_cvar.c" />
     <ClCompile Include="..\engine\deh_ammo.c" />
@@ -436,7 +436,7 @@
     <ClInclude Include="..\engine\backend\cglm\include\cglm\vec4.h" />
     <ClInclude Include="..\engine\backend\cglm\include\cglm\version.h" />
     <ClInclude Include="..\engine\backend\cglm\src\config.h" />
-    <ClInclude Include="..\engine\backend\glad 3.2\include\glad\glad.h" />
+    <ClInclude Include="..\engine\backend\glad_3.2\include\glad\glad.h" />
     <ClInclude Include="..\engine\con_console.h" />
     <ClInclude Include="..\engine\con_cvar.h" />
     <ClInclude Include="..\engine\deh_defs.h" />
@@ -651,7 +651,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\cglm;$(ProjectDir)..\engine\backend\cglm\include;$(ProjectDir)..\engine\backend\imgui;$(ProjectDir)..\engine\backend\glad 3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\cglm;$(ProjectDir)..\engine\backend\cglm\include;$(ProjectDir)..\engine\backend\imgui;$(ProjectDir)..\engine\backend\glad_3.2\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>

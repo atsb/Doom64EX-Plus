@@ -46,7 +46,7 @@
 #include "r_sky.h"
 #include "con_console.h"
 #include "deh_misc.h"
-
+#include "p_pspr.h"
 fixed_t         tmbbox[4];
 mobj_t* tmthing;
 int             tmflags;
@@ -1006,12 +1006,6 @@ fixed_t         aimpitch;
 extern fixed_t  topslope;
 extern fixed_t  bottomslope;
 
-// [kex]
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
-
 //
 // PTR_AimTraverse
 // Sets linetaget and aimslope when a target is aimed at.
@@ -1358,7 +1352,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
     flags = PT_ADDLINES | PT_ADDTHINGS;
 
     if (t1->player) {
-        pitch = cos(abs(t1->pitch - ANG90));
+        pitch = dcos(abs(t1->pitch - ANG90));
 
         // [kex] set aimslope for special purposes
         /*if(distance == LASERRANGE)
