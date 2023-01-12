@@ -25,17 +25,10 @@
 //    SDL Stuff
 //
 //-----------------------------------------------------------------------------
-
+#include <glad/glad.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-#ifdef __APPLE__
-#include <SDL2/SDL_opengl.h>
-#else
-#include <SDL_opengl.h>
-#endif
-
 #include "m_misc.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -43,7 +36,7 @@
 #include "i_video.h"
 #include "i_sdlinput.h"
 #include "d_main.h"
-#include "gl_main.h"
+
 const char version_date[] = __DATE__;
 
 SDL_Window* window;
@@ -140,13 +133,46 @@ void I_InitScreen(void) {
 	OGL_WINDOW_HINT(OGL_BUFFER, 24);
 	OGL_WINDOW_HINT(OGL_DEPTH, 24);
 	OGL_WINDOW_HINT(OGL_DOUBLEBUFFER, 1);
-#ifdef USE_GLFW	
-	glfwSwapInterval(v_vsync.value);
-#else	
+
+#ifdef USE_GLFW
+	if (glfwInit() < 0)
+	{
+		I_Error("I_InitScreen: Failed to create glfw");
+		glDestroyWindow(Window);
+		return;
+	}
+
+	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
+	Window = glfwCreateWindow(video_width, video_height, title, NULL, NULL);
+	if(!Window)
+	{
+		I_Error("Failed to create GLFW window");
+		glDestroyWindow(Window);
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, I_ResizeCallback);
+
+	if(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) < 0)
+	{
+		I_Error("Failed to load glad");
+	}
+
+	while(!glfwWindowShouldClose(window))
+	{
+		glfwSwapInterval(v_vsync.value);
+		glfwPollEvents();//Poll events.
+		glClearColor(0.2f, 0.3f, 0.3f, 0.5f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+		glfwSwapBuffers(window);
+		I_StartTic();
+	}
+
+#else
 	SDL_GL_SetSwapInterval(v_vsync.value);
-#endif
-	
-     flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {
 		flags |= SDL_WINDOW_ALLOW_HIGHDPI;
@@ -173,27 +199,14 @@ void I_InitScreen(void) {
 		return;
 	}
 
-#ifdef USE_GLFW
-	if (glfwInit() < 0)
-	{
-		I_Error("I_InitScreen: Failed to create glfw");
-		glDestroyWindow(Window);
-		return;
-	}
-	Window = glfwCreateWindow(video_width, video_height, "Doom64EX+", NULL, NULL);
-	if (Window == NULL)
-	{
-		I_Error("Failed to create GLFW window");
-		glDestroyWindow(Window);
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, I_ResizeCallback);
-
-#else
 	if ((Window = SDL_GL_CreateContext(window)) == NULL) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
+	}
+
+	if(gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
+	{
+		I_Error("Failed to load glad");
 	}
 #endif
 #ifdef USE_IMGUI

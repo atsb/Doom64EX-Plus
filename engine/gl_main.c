@@ -25,31 +25,8 @@
 //-----------------------------------------------------------------------------
 
 #include <math.h>
-
-#ifdef __APPLE__
-#ifdef USE_SDL3
-#include <SDL3/SDL.h>
-#include <SDL3/SDL.h>
-#else
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#endif
-#elif _XBOX
-#ifdef _USEFAKEGL09
-#include "fakeglx_ex+.h"
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
-#endif
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
-#endif
-
 #include "doomdef.h"
 #include "doomstat.h"
-#include "i_video.h"
-#include "gl_main.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "r_main.h"
@@ -497,9 +474,7 @@ static void CalcViewSize(void) {
 		ViewWindowY = (ViewHeight) / 2;
 	}
 }
-#ifndef GLEW
-PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
-#endif
+
 void GL_Init(void) {
 
 	gl_vendor = glGetString(GL_VENDOR);
@@ -534,9 +509,6 @@ void GL_Init(void) {
 
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
-#ifndef GLEW
-	_glActiveTextureARB = GL_RegisterProc("glActiveTextureARB");
-#endif
 
 	if (!GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");

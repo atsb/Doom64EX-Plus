@@ -22,6 +22,21 @@
 //		OpenGL Shader compiling code.
 // 
 //-----------------------------------------------------------------------------
+#if !defined(_XBOX) && !defined(VITA)
+#ifdef __APPLE__ 
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#elif defined SWITCH
+#include <GL/gl.h>
+#include <GL/glext.h>
+#else
+#ifdef _WIN32
+#include <glad/glad.h>
+#else
+#include <GL/glu.h>
+#include <GL/gl.h>
+#endif
+#endif
 
 #include "gl_shader.h"
 
@@ -46,12 +61,10 @@ void GL_LoadShader(const char* vertexShader, const char* fragmentShader)
 	glCompileShader(fragment);
 	GL_CheckShaderErrors(fragment, GL_FRAGMENT_SHADER);
 
-	GL_CreateProgram(ID, texture, fragment);
-
 	GL_DestroyShaders(texture, fragment);
 }
 
-void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment)
+void GL_CreateProgram(unsigned int Program_ID, unsigned int shader, unsigned int fragment)
 {
 	//Create The Program.
 	Program_ID = glCreateProgram();
@@ -67,7 +80,7 @@ void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
 	glDeleteShader(fragmentShader);
 }
 
-boolean GL_CheckShaderErrors(GLuint shader, GLenum type)
+boolean GL_CheckShaderErrors(unsigned int shader, unsigned int type)
 {
 	boolean success;
 	char log[1024];
@@ -115,4 +128,5 @@ boolean GL_CheckShaderErrors(GLuint shader, GLenum type)
 	}
 	return success;
 }
+#endif
 #endif

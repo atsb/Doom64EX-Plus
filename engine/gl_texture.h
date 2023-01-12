@@ -24,6 +24,8 @@
 #ifndef __GL_TEXTURE_H__
 #define __GL_TEXTURE_H__
 
+#include "gl_utils.h"
+
 extern int                  curtexture;
 extern int                  cursprite;
 extern int                    curtrans;

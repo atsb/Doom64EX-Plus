@@ -42,7 +42,6 @@
 #include "doomtype.h"
 #include "tables.h"
 #include "i_w3swrapper.h"
-#include "gl_utils.h"
 //
 // The packed attribute forces structures to be packed into the minimum
 // space necessary.  If this is not done, the compiler may align structure

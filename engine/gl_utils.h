@@ -29,9 +29,6 @@
 
 #include "doomtype.h" //Include all types neccessary.
 
-#ifdef USE_GLFW
-#include <GLFW/glfw3.h>
-#else
 #ifdef __APPLE__
 #ifdef USE_SDL3
 #include <SDL3/SDL.h>
@@ -40,6 +37,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #endif
+#else
+#ifdef USE_GLFW
+#include <GLFW/glfw3.h>
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -86,8 +86,9 @@ GLFWwindow *Window	\
 #if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 #define OGL_VERSION_2_1 GL_VERSION_2_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #define OGL_VERSION OGL_VERSION_2_1
+#define OGL_VERSION_DETECTION OGL_VERSION
 #else
-#define OGL_VERSION_3_1  GL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
+#define OGL_VERSION_3_1 GL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #define OGL_VERSION OGL_VERSION_3_1
 #endif
 #define OGL_VERSION_DETECTION OGL_VERSION
@@ -181,11 +182,11 @@ SDL_GLContext   Window
 #endif
 #define OGL_VERSION_DETECTION OGL_VERSION
 #else
-#define OGL_RED GL_RED
-#define OGL_GREEN GL_GREEN
-#define OGL_BLUE GL_BLUE
-#define OGL_ALPHA GL_ALPHA
-#define OGL_BUFFER GL_BUFFER
+#define OGL_RED SDL_GL_RED_SIZE
+#define OGL_GREEN SDL_GL_GREEN_SIZE
+#define OGL_BLUE SDL_GL_BLUE_SIZE
+#define OGL_ALPHA SDL_GL_ALPHA_SIZE
+#define OGL_BUFFER SDL_GL_BUFFER_SIZE
 #define OGL_DOUBLEBUFFER SDL_GL_DOUBLEBUFFER
 #define OGL_DEPTH SDL_GL_DEPTH_SIZE
 #define OGL_STENCIL SDL_GL_STENCIL_SIZE
@@ -250,13 +251,4 @@ void glDestroyWindow(OGL_DEFS);
 #define glGetProcAddress wglGetProcAddress
 #else
 #define glGetProcAddress SDL_GL_GetProcAddress
-#endif
-
-#ifndef GLEW
-//
-// GL_ARB_multitexture
-//
-extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
-
-#define glActiveTextureARB(texture) _glActiveTextureARB(texture)
 #endif

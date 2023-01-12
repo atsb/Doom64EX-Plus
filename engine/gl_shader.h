@@ -23,24 +23,6 @@
 #ifndef __GL_SHADER__H
 #define __GL_SHADER__H
 #include "doomtype.h"
-#if !defined(_XBOX) && !defined(VITA)
-#ifdef _WIN32
-#include <glew.h>
-#endif
-#ifdef __APPLE__ 
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#elif defined SWITCH
-#include <GL/gl.h>
-#include <GL/glext.h>
-#elif defined(VITA)
-
-#else
-#include <GL/glu.h>
-#include <GL/gl.h>
-#endif
-
-
 
 /*
 	Based on the following references:
@@ -50,7 +32,6 @@
 
 void GL_LoadShader(const char* textureShader, const char* fragmentShader);
 void GL_DestroyShaders(const char* textureShader, const char* fragmentShader);
-boolean GL_CheckShaderErrors(GLuint shader, GLenum type);
-void GL_CreateProgram(GLuint Program_ID, GLuint shader, GLuint fragment);
-#endif
+boolean GL_CheckShaderErrors(unsigned int shader, unsigned int type);
+void GL_CreateProgram(unsigned int Program_ID, unsigned int shader, unsigned int fragment);
 #endif //__GL_SHADER__H

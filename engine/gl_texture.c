@@ -24,9 +24,11 @@
 // DESCRIPTION: Texture handling
 //
 //-----------------------------------------------------------------------------
-#ifdef GLEW
-#include <glew.h>
-#endif 
+//Remove this later:
+#define GL_TEXTURE0_ARB				0x84C0
+#define GL_TEXTURE1_ARB				0x84C1
+#include <glad/glad.h>
+#include "gl_shader.h"
 #include "doomstat.h"
 #include "r_main.h"
 #include "r_things.h"
@@ -202,8 +204,8 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	// create a new texture
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
-
-	//GL_LoadShader("GLSL/D64EXPLUS.vert", "GLSL/D64EXPLUS.frag"); - crashes
+	
+	//GL_LoadShader("GLSL/D64EXPLUS.vert", "GLSL/D64EXPLUS.frag"); //Works however when it plays it crashes
 
 	glGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	glBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
@@ -592,15 +594,11 @@ void GL_UpdateEnvTexture(rcolor color) {
 	unsigned char* c;
 	int i;
 
-	if (!GL_ARB_multitexture) {
-		return;
-	}
-
 	if (lastenvcolor == color) {
 		return;
 	}
 
-	glActiveTextureARB(GL_TEXTURE1_ARB);
+	glActiveTexture(GL_TEXTURE1_ARB);
 
 	env = color;
 	lastenvcolor = color;
@@ -627,7 +625,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 		(unsigned char*)rgb
 	);
 
-	glActiveTextureARB(GL_TEXTURE0_ARB);
+	glActiveTexture(GL_TEXTURE0_ARB);
 }
 
 //
@@ -657,7 +655,7 @@ void GL_SetTextureUnit(int unit, boolean enable) {
 
 	curunit = unit;
 
-	glActiveTextureARB(GL_TEXTURE0_ARB + unit);
+	glActiveTexture(GL_TEXTURE0_ARB + unit);
 	GL_SetState(GLSTATE_TEXTURE0 + unit, enable);
 }
 
