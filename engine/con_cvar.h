@@ -27,12 +27,12 @@
 #include "doomtype.h"
 
 typedef struct cvar_s {
-    int8_t*           name;
-    int8_t*           string;
+    char*           name;
+    char*           string;
     boolean        nonclient;
     void (*callback)(struct cvar_s*);
     float           value;
-    int8_t*           defvalue;
+    char*           defvalue;
     struct cvar_s*  next;
 } cvar_t;
 
