@@ -175,14 +175,6 @@ void D_ProcessEvents(void) {
 }
 
 //
-// D_IncValidCount
-//
-
-void D_IncValidCount(void) {
-	validcount++;
-}
-
-//
 // D_MiniLoop
 //
 

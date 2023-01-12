@@ -147,7 +147,7 @@ void P_RecursiveSound(sector_t* sec, int soundblocks) {
 
 void P_NoiseAlert(mobj_t* target, mobj_t* emmiter) {
 	soundtarget = target;
-	D_IncValidCount();
+	validcount++;
 	P_RecursiveSound(emmiter->subsector->sector, 0);
 }
 
@@ -393,15 +393,15 @@ boolean P_Move(mobj_t* actor) {
 			return true;
 		}
 
-		if (!numspechit) {
+		if (!numthingspec) {
 			return false;
 		}
 
 		actor->movedir = DI_NODIR;
 		good = false;
 
-		while (numspechit--) {
-			ld = spechit[numspechit];
+		while (numthingspec--) {
+			ld = thingspec[numthingspec];
 			// if the special is not a door that can be opened,
 			// return false
 			if (ld->special & MLU_USE) {
@@ -410,7 +410,6 @@ boolean P_Move(mobj_t* actor) {
 				}
 			}
 		}
-		numspechit = 0;
 		return good;
 	}
 
