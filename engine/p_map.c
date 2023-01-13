@@ -1160,8 +1160,7 @@ boolean PTR_ShootTraverse(intercept_t* in) {
 
         sidesector = lineside ? li->backsector : li->frontsector;
         dist = FixedMul(attackrange, in->frac);
-        hitz = shootz + FixedMul(dcos(shootthing->pitch - ANG90), dist);
-
+        hitz = shootz + FixedMul(finecosine[(shootthing->pitch - ANG90) >> ANGLETOFINESHIFT], dist);
         if (li->flags & ML_TWOSIDED && li->backsector) {
             // crosses a two sided line
             P_LineOpening(li);
@@ -1405,14 +1404,14 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, in
     shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT; // [d64] changed from 8 to 12
     attackrange = distance;
     aimslope = slope;
-    aimpitch = dcos(shootthing->pitch);
+    aimpitch = finecosine[(shootthing->pitch) >> ANGLETOFINESHIFT];
 
     //
     // [kex] - stuff for plane hit detection
     //
-    shootdirx = FixedMul(aimpitch, dcos(shootthing->angle));
-    shootdiry = FixedMul(aimpitch, dsin(shootthing->angle));
-    shootdirz = dsin(shootthing->pitch);
+    shootdirx = FixedMul(aimpitch, finecosine[(shootthing->pitch) >> ANGLETOFINESHIFT]);
+    shootdiry = FixedMul(aimpitch, finesine[(shootthing->angle) >> ANGLETOFINESHIFT]);
+    shootdirz = finesine[(shootthing->pitch) >> ANGLETOFINESHIFT];
     laserhit_x = t1->x;
     laserhit_y = t1->y;
     laserhit_z = t1->z;

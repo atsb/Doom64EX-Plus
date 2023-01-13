@@ -460,8 +460,8 @@ static CMD(SpawnThing) {
 	}
 
 	player = &players[consoleplayer];
-	x = player->mo->x + FixedMul(INT2F(64) + mobjinfo[id].radius, dcos(player->mo->angle));
-	y = player->mo->y + FixedMul(INT2F(64) + mobjinfo[id].radius, dsin(player->mo->angle));
+	x = player->mo->x + FixedMul(INT2F(64) + mobjinfo[id].radius, finecosine[(player->mo->angle) >> ANGLETOFINESHIFT]);
+	y = player->mo->y + FixedMul(INT2F(64) + mobjinfo[id].radius, finesine[(player->mo->angle) >> ANGLETOFINESHIFT]);
 	z = player->mo->z;
 
 	thing = P_SpawnMobj(x, y, z, id);
@@ -1272,8 +1272,8 @@ boolean G_CheckSpot(int playernum, mapthing_t* mthing) {
 	an = ANG45 * (angle_t)(mthing->angle / 45);
 
 	mo = P_SpawnMobj(
-		x + 20 * dcos(an),
-		y + 20 * dsin(an),
+		x + 20 * finecosine[(an) >> ANGLETOFINESHIFT],
+		y + 20 * finesine[(an) >> ANGLETOFINESHIFT],
 		ss->sector->floorheight,
 		MT_TELEPORTFOG
 	);

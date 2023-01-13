@@ -113,8 +113,8 @@ static void R_CloudThunder(void) {
 //
 
 static void R_CloudTicker(void) {
-	CloudOffsetX -= (dcos(viewangle) >> 10);
-	CloudOffsetY += (dsin(viewangle) >> 9);
+	CloudOffsetX -= (finecosine[(viewangle) >> ANGLETOFINESHIFT] >> 10);
+	CloudOffsetY += (finesine[(viewangle) >> ANGLETOFINESHIFT] >> 9);
 
 	if (r_skybox.value) {
 		sky_cloudpan1 += 0.00225f;
@@ -210,8 +210,8 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     vtx++
 
 #define SKYDOME_RIGHT(v, h)                     \
-    x = lx + FixedMul(INT2F(r), dcos((angle))); \
-    y = ly + FixedMul(INT2F(r), dsin((angle))); \
+    x = lx + FixedMul(INT2F(r), finecosine[(angle) >> ANGLETOFINESHIFT]); \
+    y = ly + FixedMul(INT2F(r), finesine[(angle) >> ANGLETOFINESHIFT]); \
     z = INT2F(h);                               \
     SKYDOME_UV(-(tu2 * (i + 1)), v);            \
     SKYDOME_VERTEX();                           \
