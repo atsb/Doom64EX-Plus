@@ -36,7 +36,7 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-
+OGL_DEFS;
 CVAR(i_rsticksensitivityx, 0.0080);
 CVAR(i_rsticksensitivityy, 0.0080);
 CVAR(i_xinputscheme, 0);
@@ -467,19 +467,19 @@ void I_GetEvent(SDL_Event* Event) {
 		break;
 
 	case SDL_CONTROLLERDEVICEREMOVED:
-		CON_Printf(RED, "SDL: Controller removed");
 		SDL_GameControllerClose(s_controller);
 		s_controller = NULL;
+		CON_Printf(RED, "SDL: Controller removed: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
 		break;
 
 	case SDL_CONTROLLERBUTTONDOWN:
-		event.type = (Event->type == SDL_CONTROLLERBUTTONDOWN) ? ev_keydown : ev_keyup;
+		event.type = (Event->type == SDL_CONTROLLERBUTTONDOWN) == ev_keydown;
 		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
 
 	case SDL_CONTROLLERBUTTONUP:
-		event.type = (Event->type == SDL_CONTROLLERBUTTONUP) ? ev_keyup : ev_keydown;
+		event.type = (Event->type == SDL_CONTROLLERBUTTONUP) == ev_keyup;
 		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
@@ -570,7 +570,7 @@ void I_GetEvent(SDL_Event* Event) {
 		s_clamp(y);
 
 		ev.type = ev_gamepad;
-		ev.data1 = GAMEPAD_RSTICK; //x;
+		ev.data1 = GAMEPAD_RSTICK; 
 		ev.data2 = x;
 		ev.data3 = -y;
 		D_PostEvent(&ev);
@@ -633,6 +633,7 @@ int I_ShutdownWait(void) {
 #ifdef USE_IMGUI
 		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
 #endif
+		glfwPollEvents();
 		if (event.type == SDL_QUIT ||
 			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
@@ -655,6 +656,9 @@ void I_StartTic(void) {
 		ImGui_ImplSDL2_ProcessEvent(&Event);//Process the events.
 #endif
 		I_GetEvent(&Event);
+#ifdef USE_GLFW
+		glfwPollEvents();
+#endif
 	}
 
 	I_InitInputs();
@@ -667,7 +671,11 @@ void I_StartTic(void) {
 
 void I_FinishUpdate(void) {
 	I_UpdateGrab();
+#ifdef USE_GLFW
+	glfwSwapBuffers(Window);
+#else
 	SDL_GL_SwapWindow(window);
+#endif
 	BusyDisk = false;
 }
 

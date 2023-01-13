@@ -1413,7 +1413,7 @@ static void ST_DisplayName(int playernum) {
 	x = player->mo->x - viewx;
 	y = player->mo->y - viewy;
 	z = player->mo->z - (players[consoleplayer].viewz - (96 * FRACUNIT));
-
+	
 	// set relative viewpoint
 	xangle = (FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], x) - FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], y));
 	yangle = (FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], y) + FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], x));

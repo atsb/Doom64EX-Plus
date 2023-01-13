@@ -36,10 +36,11 @@
 #include "i_video.h"
 #include "i_sdlinput.h"
 #include "d_main.h"
-
+#include "con_console.h"
 const char version_date[] = __DATE__;
 
 SDL_Window* window;
+
 OGL_DEFS;
 
 CVAR(v_width, 640);
@@ -135,6 +136,14 @@ void I_InitScreen(void) {
 	OGL_WINDOW_HINT(OGL_DOUBLEBUFFER, 1);
 
 #ifdef USE_GLFW
+	//int monitor_count, video_mode_count;
+	//GLFWmonitor** monitors;
+	//monitors = glfwGetMonitors(&monitor_count);
+	//GLFWvidmode* modes = glfwGetVideoModes(monitors, &video_mode_count);
+	//modes->width = video_width;
+	//modes->height = video_height;
+	//modes->refreshRate = video_ratio;
+
 	if (glfwInit() < 0)
 	{
 		I_Error("I_InitScreen: Failed to create glfw");
@@ -162,11 +171,7 @@ void I_InitScreen(void) {
 	{
 		glfwSwapInterval(v_vsync.value);
 		glfwPollEvents();//Poll events.
-		glClearColor(0.2f, 0.3f, 0.3f, 0.5f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-		glfwSwapBuffers(window);
+
 		I_StartTic();
 	}
 
@@ -228,12 +233,12 @@ void I_InitScreen(void) {
 void I_ShutdownVideo(void) {
 
 	glDestroyWindow(Window);
-
+#ifndef USE_GLFW
 	if (window) {
 		SDL_DestroyWindow(window);
 		window = NULL;
 	}
-
+#endif
 	SDL_Quit();
 }
 
