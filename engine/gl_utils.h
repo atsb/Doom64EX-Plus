@@ -247,7 +247,10 @@ void glTexCombInterpolate(int t, float a);
 void glTexCombReplaceAlpha(int t);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
-#ifdef _WIN32
+
+#ifdef USE_GLFW
+#define glGetProcAddress glfwGetProcAddress
+#elif defined(WIN32_FUNCTIONS)
 #define glGetProcAddress wglGetProcAddress
 #else
 #define glGetProcAddress SDL_GL_GetProcAddress
