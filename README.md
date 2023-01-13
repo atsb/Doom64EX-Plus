@@ -14,7 +14,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 * Port to the C Programming Language like the original game
 * Support for C89 and C99
 * Support for higher resolutions including 21:9 
-* Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
+* Replaced xinput to SDL2_GameController API, which supports all the modern game controlls/gamepads/joysticks that we have avaliable.
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
@@ -63,6 +63,7 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * OpenGL
 * GLFW(Optional)
 * CGLM(Optional)
+* fixedptc(Optional)
 
 ## System Requirements - 32 or 64bit
 
@@ -156,8 +157,8 @@ Install the VITASDK and compile with `make all -f Makefile.vita` to build the vp
 Install the devkitpro and compile with `make all -f Makefile.ns` to build the nso and nro files.
 
 ## Microsoft Xbox
-Use the vcproj provided on the xbox folder to compile with vs2003 and you will need to have the latest Xbox XDK Installed + a Windows XP Machine
-to compile it.
+
+Use the solution provided into a folder called xbox to compile with Visual Studio 2003 + Xbox XDK with a Windows XP(x86) Machine.
 
 ## Usage
 
@@ -195,7 +196,9 @@ The asset data files need to be located in the same directory as `DOOM64EX+.exe`
 of the executable or you can start playing by launching `DOOM64EX+ Launcher.exe`.
 
 ## Playstation Vita
+
 The data files will be atm on: `ux0:/data/DOOM64EX+`
 
 ## Microsoft Xbox
+
 At the moment the assets will be on the d:\\.
