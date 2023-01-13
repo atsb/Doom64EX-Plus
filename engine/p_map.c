@@ -752,6 +752,7 @@ mobj_t* P_CheckOnMobj(mobj_t* thing) {
     // into mapblocks based on their origin point, and can overlap into adjacent
     // blocks by up to MAXRADIUS units
     //
+    // [d64]: intentionally removed MAXRADIUS?
     P_BlockMapBox(bbox, x, y, tmthing);
 
     for (bx = bbox[BOXLEFT]; bx <= bbox[BOXRIGHT]; bx++) {
@@ -1625,7 +1626,7 @@ void P_RadiusAttack(mobj_t* spot, mobj_t* source, int damage) {
 
     fixed_t     dist;
 
-    dist = INT2F(damage);
+    dist = (damage + MAXRADIUS) << FRACBITS;
     yh = (spot->y + dist - bmaporgy) >> MAPBLOCKSHIFT;
     yl = (spot->y - dist - bmaporgy) >> MAPBLOCKSHIFT;
     xh = (spot->x + dist - bmaporgx) >> MAPBLOCKSHIFT;
