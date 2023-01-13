@@ -221,6 +221,7 @@
     <ClCompile Include="..\engine\backend\glad_3.2\src\glad.c">
       <Filter>backend\glad</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\gl_pixmap.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
@@ -762,6 +763,7 @@
     <ClInclude Include="..\engine\backend\glad_3.2\include\glad\glad.h">
       <Filter>backend\glad</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\gl_pixmap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\defconfig.inc" />

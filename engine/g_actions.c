@@ -413,6 +413,8 @@ boolean G_ActionResponder(event_t* ev) {
 	case ev_gamepad:
 		G_DoCmdGamepadMove(ev);
 		break;
+	default: // ev_mousedown, ev_mouseup, ev_gamepad
+		break;
 	}
 	return false;
 }
@@ -629,6 +631,8 @@ boolean G_BindActionByEvent(event_t* ev, char* action) {
 		if ((button >= 0) && (button < MOUSE_BUTTONS)) {
 			plist = &MouseActions[button];
 		}
+	break;
+	default:
 		break;
 	}
 	if (plist) {

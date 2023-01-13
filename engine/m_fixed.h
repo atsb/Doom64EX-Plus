@@ -41,6 +41,7 @@ typedef fixedpt fixed_t;
 #else
 typedef int fixed_t;
 #endif
+#define M_FPI (205887) // floor(pi * 2^16)
 #define FRACBITS        16
 #define FRACUNIT        (1<<FRACBITS)
 

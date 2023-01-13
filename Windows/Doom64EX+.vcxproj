@@ -204,6 +204,7 @@
     <ClCompile Include="..\engine\f_finale.c" />
     <ClCompile Include="..\engine\gl_draw.c" />
     <ClCompile Include="..\engine\gl_main.c" />
+    <ClCompile Include="..\engine\gl_pixmap.c" />
     <ClCompile Include="..\engine\gl_shader.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -460,6 +461,7 @@
     <ClInclude Include="..\engine\f_finale.h" />
     <ClInclude Include="..\engine\gl_draw.h" />
     <ClInclude Include="..\engine\gl_main.h" />
+    <ClInclude Include="..\engine\gl_pixmap.h" />
     <ClInclude Include="..\engine\gl_shader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>

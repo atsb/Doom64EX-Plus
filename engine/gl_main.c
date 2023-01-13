@@ -45,9 +45,9 @@ int gl_max_texture_units;
 int gl_max_texture_size;
 boolean gl_has_combiner;
 
-const char* gl_vendor;
-const char* gl_renderer;
-const char* gl_version;
+const unsigned char* gl_vendor;
+const unsigned char* gl_renderer;
+const unsigned char* gl_version;
 
 static float glScaleFactor = 1.0f;
 
