@@ -1415,10 +1415,10 @@ static void ST_DisplayName(int playernum) {
 	z = player->mo->z - (players[consoleplayer].viewz - (96 * FRACUNIT));
 
 	// set relative viewpoint
-	xangle = (FixedMul(dsin(viewangle), x) - FixedMul(dcos(viewangle), y));
-	yangle = (FixedMul(dsin(viewangle), y) + FixedMul(dcos(viewangle), x));
-	xpitch = (FixedMul(dsin(viewpitch), yangle) - FixedMul(dcos(viewpitch), z));
-	ypitch = (FixedMul(dsin(viewpitch), z) + FixedMul(dcos(viewpitch), yangle));
+	xangle = (FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], x) - FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], y));
+	yangle = (FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], y) + FixedMul(finesine[(viewangle) >> ANGLETOFINESHIFT], x));
+	xpitch = (FixedMul(finesine[(viewpitch) >> ANGLETOFINESHIFT], yangle) - FixedMul(finesine[(viewpitch) >> ANGLETOFINESHIFT], z));
+	ypitch = (FixedMul(finesine[(viewpitch) >> ANGLETOFINESHIFT], z) + FixedMul(finesine[(viewpitch) >> ANGLETOFINESHIFT], yangle));
 
 	// check x offscreen
 	if (xangle < -yangle) {

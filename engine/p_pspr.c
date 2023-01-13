@@ -1010,8 +1010,8 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 		laser[i] = Z_Malloc(sizeof(*laser[i]), PU_LEVSPEC, 0);
 
 		// setup laser head point
-		laser[i]->x1 = mobj->x + FixedMul(LASERDISTANCE, dcos(mobj->angle));
-		laser[i]->y1 = mobj->y + FixedMul(LASERDISTANCE, dsin(mobj->angle));
+		laser[i]->x1 = mobj->x + FixedMul(LASERDISTANCE, finecosine[(mobj->angle) >> ANGLETOFINESHIFT]);
+		laser[i]->y1 = mobj->y + FixedMul(LASERDISTANCE, finesine[(mobj->angle) >> ANGLETOFINESHIFT]);
 		laser[i]->z1 = (mobj->z + LASERAIMHEIGHT);
 
 		// setup laser tail point
@@ -1020,8 +1020,9 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 		laser[i]->z2 = laserhit_z;
 
 		// setup movement slope
-		laser[i]->slopex = (dcos(angleoffs) << 5);
-		laser[i]->slopey = (dsin(angleoffs) << 5);
+		laser[i]->slopex = (finecosine[(angleoffs) >> ANGLETOFINESHIFT] << 5);
+		laser[i]->slopey = (finesine[(angleoffs) >> ANGLETOFINESHIFT] << 5);
+	
 		laser[i]->slopez = slope ? (slope << 5) : 0;
 
 		// setup distance info

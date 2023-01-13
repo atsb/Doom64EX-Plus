@@ -102,11 +102,11 @@ void P_SpectateMove(player_t* player, angle_t angle, angle_t pitch, fixed_t move
     player->mo->ceilingz = player->mo->subsector->sector->ceilingheight;
     player->mo->floorz = player->mo->subsector->sector->floorheight;
 
-    frac = FixedMul(move, dcos(pitch));
+    frac = FixedMul(move, finecosine[(pitch) >> ANGLETOFINESHIFT]);
 
-    player->mo->x += FixedMul(frac, dcos(angle));
-    player->mo->y += FixedMul(frac, dsin(angle));
-    player->mo->z += FixedMul(move, dcos(abs(pitch - ANG90)));
+    player->mo->x += FixedMul(frac, finecosine[(angle) >> ANGLETOFINESHIFT]);
+    player->mo->y += FixedMul(frac, finesine[(angle) >> ANGLETOFINESHIFT]);
+    player->mo->z += FixedMul(move, finecosine[(abs(pitch - ANG90)) >> ANGLETOFINESHIFT]);
 
     P_SetThingPosition(player->mo);
 }
@@ -162,8 +162,8 @@ void P_UpdateFollowCamera(player_t* player) {
     }
 
     height = (mo->z + mo->height) + INT2F(16);
-    x = mo->x + FixedMul(mo->radius + INT2F(96), dcos(mo->angle + ANG180));
-    y = mo->y + FixedMul(mo->radius + INT2F(96), dsin(mo->angle + ANG180));
+    x = mo->x + FixedMul(mo->radius + INT2F(96), finecosine[((mo->angle + ANG180)) >> ANGLETOFINESHIFT]);
+    y = mo->y + FixedMul(mo->radius + INT2F(96), finesine[(mo->angle + ANG180) >> ANGLETOFINESHIFT]);
 
     camstatic->z = height;
     camstatic->angle = mo->angle;
