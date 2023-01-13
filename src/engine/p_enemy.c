@@ -196,7 +196,6 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 		return false;    // do not attack yet
 	}
 
-	// OPTIMIZE: get this from a global checksight
 	dist = P_AproxDistance(actor->x - actor->target->x,
 		actor->y - actor->target->y) - 64 * FRACUNIT;
 
@@ -595,7 +594,7 @@ boolean P_LookForPlayers(mobj_t* actor, boolean allaround) {
 		}
 
 		else {  // special case for player bots
-			fixed_t dist2 = D_MAXINT;
+			fixed_t dist2 = MAXINT;
 			mobj_t* mobj;
 
 			for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {

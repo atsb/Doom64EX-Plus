@@ -38,6 +38,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "z_zone.h"
+#include "i_system.h"
 
 //
 // P_AproxDistance
@@ -505,7 +506,6 @@ intercept_t    intercepts[MAXINTERCEPTS];
 intercept_t* intercept_p;
 
 divline_t     trace;
-boolean     earlyout;
 int        ptflags;
 
 //
@@ -516,7 +516,7 @@ int        ptflags;
 //
 // A line is crossed if its endpoints
 // are on opposite sides of the trace.
-// Returns true if earlyout and a solid line hit.
+// Returns true if EARLYOUT and a solid line hit.
 //
 boolean
 PIT_AddLineIntercepts(line_t* ld) {
@@ -548,13 +548,6 @@ PIT_AddLineIntercepts(line_t* ld) {
 
 	if (frac < 0) {
 		return true;    // behind source
-	}
-
-	// try to early out the check
-	if (earlyout
-		&& frac < FRACUNIT
-		&& !ld->backsector) {
-		return false;    // stop checking
 	}
 
 	// [d64] exit out if max intercepts has been hit
@@ -731,8 +724,6 @@ P_PathTraverse
 	int        mapystep;
 	int        count;
 
-	earlyout = flags & PT_EARLYOUT;
-
 	validcount++;
 	intercept_p = intercepts;
 
@@ -813,16 +804,18 @@ P_PathTraverse
 			}
 		}
 
-		if (mapx == xt2
-			&& mapy == yt2) {
+		if (mapx == xt2 && mapy == yt2)
+		{
 			break;
 		}
 
-		if (F2INT(yintercept) == mapy) {
+		if (F2INT(yintercept) == mapy)
+		{
 			yintercept += ystep;
 			mapx += mapxstep;
 		}
-		else if (F2INT(xintercept) == mapx) {
+		else if (F2INT(xintercept) == mapx)
+		{
 			xintercept += xstep;
 			mapy += mapystep;
 		}
