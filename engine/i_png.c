@@ -264,6 +264,9 @@ unsigned char* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean 
 		}
 	}
 
+	// interlace handler
+	png_set_interlace_handling(png_ptr);
+
 	// refresh png information
 	png_read_update_info(png_ptr, info_ptr);
 

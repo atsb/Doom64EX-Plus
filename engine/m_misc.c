@@ -53,6 +53,7 @@
 #include "g_settings.h"
 #include "st_stuff.h"
 #include "i_png.h"
+#include "gl_pixmap.h"
 #include "gl_texture.h"
 #include "p_saveg.h"
 #include "i_system.h"
@@ -391,14 +392,16 @@ boolean M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 //
 
 int M_CacheThumbNail(unsigned char** data) {
+	dpixmap* pm;
 	unsigned char* buff;
 	unsigned char* tbn;
 
 	buff = GL_GetScreenBuffer(0, 0, video_width, video_height);
 	tbn = Z_Calloc(SAVEGAMETBSIZE, PU_STATIC, 0);
 
-	//gluScaleImage(GL_RGB, video_width, video_height,
-	//             GL_UNSIGNED_BYTE, buff, 128, 128, GL_UNSIGNED_BYTE, tbn);
+	pm = GL_PixmapCreate(video_width, video_height, DPM_PFRGB, buff);
+	GL_PixmapScaleTo(&pm, NULL, 128, 128);
+	memcpy(tbn, pm->map, SAVEGAMETBSIZE);
 
 	Z_Free(buff);
 
