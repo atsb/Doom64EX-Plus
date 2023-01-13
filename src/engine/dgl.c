@@ -138,15 +138,7 @@ void dglDrawGeometry(int count, vtx_t* vtx) {
 	I_Printf("dglDrawGeometry(count=0x%x, vtx=0x%p)\n", count, vtx);
 #endif
 
-	if (has_GL_EXT_compiled_vertex_array) {
-		dglLockArraysEXT(0, count);
-	}
-
 	dglDrawElements(GL_TRIANGLES, indicecnt, GL_UNSIGNED_SHORT, drawIndices);
-
-	if (has_GL_EXT_compiled_vertex_array) {
-		dglUnlockArraysEXT();
-	}
 
 	if (devparm) {
 		statindice += indicecnt;

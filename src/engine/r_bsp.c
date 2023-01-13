@@ -49,7 +49,6 @@ static void R_AddLine(seg_t* line);
 static void AddSegToDrawlist(drawlist_t* dl, seg_t* line, int texid, int sidetype);
 
 CVAR_EXTERNAL(i_interpolateframes);
-CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // R_AddClipLine

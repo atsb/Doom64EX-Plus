@@ -3885,20 +3885,13 @@ d_inline static void glMultiTexCoord4svARB_DEBUG(GLenum target, GLshort* v, cons
 //
 // GL_EXT_compiled_vertex_array
 //
-extern boolean has_GL_EXT_compiled_vertex_array;
 
 extern PFNGLLOCKARRAYSEXTPROC _glLockArraysEXT;
 extern PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT;
 
 #define GL_EXT_compiled_vertex_array_Define() \
-boolean has_GL_EXT_compiled_vertex_array = false; \
 PFNGLLOCKARRAYSEXTPROC _glLockArraysEXT = NULL; \
 PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT = NULL
-
-#define GL_EXT_compiled_vertex_array_Init() \
-has_GL_EXT_compiled_vertex_array = GL_CheckExtension("GL_EXT_compiled_vertex_array"); \
-_glLockArraysEXT = GL_RegisterProc("glLockArraysEXT"); \
-_glUnlockArraysEXT = GL_RegisterProc("glUnlockArraysEXT")
 
 #ifndef USE_DEBUG_GLFUNCS
 

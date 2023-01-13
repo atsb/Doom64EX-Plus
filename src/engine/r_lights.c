@@ -39,8 +39,6 @@ CVAR_CMD(i_brightness, 100) {
 	R_RefreshBrightness();
 }
 
-CVAR_EXTERNAL(r_texturecombiner);
-
 //
 // R_LightToVertex
 //

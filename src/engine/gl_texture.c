@@ -95,11 +95,6 @@ typedef struct {
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
-CVAR_CMD(r_texturecombiner, 0)
-{
-	//ATSB: Stubbed
-}
-
 //
 // CMD_DumpTextures
 //

@@ -64,7 +64,6 @@ static float sky_cloudpan2 = 0;
 #define FIRESKY_WIDTH   64
 #define FIRESKY_HEIGHT  64
 
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_skybox);
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
@@ -508,42 +507,23 @@ static void R_DrawClouds(void) {
 
 	dglSetVertex(v);
 
-	if (r_texturecombiner.value > 0 && gl_max_texture_units > 2) {
-		dglSetVertexColor(&v[0], sky->skycolor[0], 2);
-		dglSetVertexColor(&v[2], sky->skycolor[1], 2);
+	GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120, 0, 0, 0, 0, 0);
+	dglSetVertexColor(&v[0], sky->skycolor[0], 2);
+	dglSetVertexColor(&v[2], sky->skycolor[1], 2);
 
-		GL_UpdateEnvTexture(WHITE);
+	dglDisable(GL_TEXTURE_2D);
 
-		// pass 1: texture * skycolor
-		dglTexCombColor(GL_TEXTURE, sky->skycolor[2], GL_MODULATE);
+	GL_Draw2DQuad(v, true);
 
-		// pass 2: result * const (though the original game uses the texture's alpha)
-		GL_SetTextureUnit(1, true);
-		dglTexCombColor(GL_PREVIOUS, 0xFF909090, GL_MODULATE);
+	dglEnable(GL_TEXTURE_2D);
 
-		// pass 3: result + fragment color
-		GL_SetTextureUnit(2, true);
-		dglTexCombAdd(GL_PREVIOUS, GL_PRIMARY_COLOR);
-	}
-	else {
-		GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120, 0, 0, 0, 0, 0);
-		dglSetVertexColor(&v[0], sky->skycolor[0], 2);
-		dglSetVertexColor(&v[2], sky->skycolor[1], 2);
+	GL_SetTextureUnit(1, true);
+	GL_SetTextureMode(GL_ADD);
+	GL_UpdateEnvTexture(sky->skycolor[1]);
+	GL_SetTextureUnit(0, true);
 
-		dglDisable(GL_TEXTURE_2D);
-
-		GL_Draw2DQuad(v, true);
-
-		dglEnable(GL_TEXTURE_2D);
-
-		GL_SetTextureUnit(1, true);
-		GL_SetTextureMode(GL_ADD);
-		GL_UpdateEnvTexture(sky->skycolor[1]);
-		GL_SetTextureUnit(0, true);
-
-		dglSetVertexColor(&v[0], sky->skycolor[2], 4);
-		v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
-	}
+	dglSetVertexColor(&v[0], sky->skycolor[2], 4);
+	v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
 
 	v[3].x = v[1].x = 1.1025f;
 	v[0].x = v[2].x = -1.1025f;
