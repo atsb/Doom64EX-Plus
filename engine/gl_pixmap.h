@@ -54,7 +54,7 @@ typedef struct {
 typedef struct {
 	short w;
 	short h;
-	int fmt;
+	pixfmt_t fmt;
 	unsigned char *map;
 } dpixmap;
 
@@ -72,13 +72,8 @@ unsigned char *GL_PixmapScanline(const dpixmap *pm, short y);
 // Transformations
 //
 
-void _GL_PixmapFlipRotate(dpixmap **dst, const dpixmap *src, int flag);
-
-#define GL_PixmapFlip(dst, src, flag) _GL_PixmapFlipRotate(dst, src, flag)
-#define GL_PixmapRotate(dst, src, flag) _GL_PixmapFlipRotate(dst, src, flag)
-
+void GL_PixmapFlipRotate(dpixmap **dst, const dpixmap *src, int flag);
 void GL_PixmapScale(dpixmap **dst, const dpixmap *src, fixed_t scalex, fixed_t scaley);
-#define GL_PixmapScalef(dst, src, scalex, scaley) GL_PixmapScale(dst, src, FLOATTOFIXED(scalex), FLOATTOFIXED(scaley))
 void GL_PixmapScaleTo(dpixmap **dst, const dpixmap *src, short width, short height);
 
 unsigned int GL_PixmapUpload(const dpixmap *pm);
