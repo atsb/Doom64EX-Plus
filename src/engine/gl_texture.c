@@ -680,40 +680,6 @@ void GL_SetTextureMode(int mode) {
 }
 
 //
-// GL_SetCombineState
-//
-
-void GL_SetCombineState(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_rgb == combine) {
-		return;
-	}
-
-	state->combine_rgb = combine;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
-}
-
-//
-// GL_SetCombineStateAlpha
-//
-
-void GL_SetCombineStateAlpha(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_alpha == combine) {
-		return;
-	}
-
-	state->combine_alpha = combine;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
-}
-
-//
 // GL_SetEnvColor
 //
 
