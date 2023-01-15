@@ -594,7 +594,7 @@ boolean P_LookForPlayers(mobj_t* actor, boolean allaround) {
 		}
 
 		else {  // special case for player bots
-			fixed_t dist2 = MAXINT;
+			fixed_t dist2 = D_MAXINT;
 			mobj_t* mobj;
 
 			for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
