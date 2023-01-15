@@ -43,8 +43,9 @@ void w3ssleep(long long usecs)
 #define vsnprintf _vsnprintf
 #endif
 #endif
+#ifdef CHOCO_VSNPRITNTF
 // Safe, portable vsnprintf().
-int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
+int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
 {
     int result;
 
@@ -69,7 +70,7 @@ int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
     return result;
 }
 #endif
-
+#endif
 //
 // dhtoi
 //

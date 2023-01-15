@@ -18,7 +18,7 @@
 #ifndef DEH_DEFS_H
 #define DEH_DEFS_H
 
-#include <stdbool.h>
+#include "i_w3swrapper.h"
 #include "sha1.h"
 
 typedef enum
