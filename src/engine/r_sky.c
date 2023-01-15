@@ -542,14 +542,14 @@ static void R_DrawClouds(void) {
 	dglLoadIdentity();
 	dglViewFrustum(SCREENWIDTH, SCREENHEIGHT, 45.0f, 0.1f);
 	dglMatrixMode(GL_MODELVIEW);
-	dglEnable(GL_BLEND);
+	dglEnable(GL_ALPHA);
 	dglPushMatrix();
 	dglTranslated(0.0f, 0.0f, -1.0f);
 	dglTriangle(0, 1, 2);
 	dglTriangle(3, 2, 1);
 	dglDrawGeometry(4, v);
 	dglPopMatrix();
-	dglDisable(GL_BLEND);
+	dglDisable(GL_ALPHA);
 
 	GL_SetDefaultCombiner();
 }
