@@ -82,7 +82,7 @@ void GL_DestroyShaders(const char* textureShader, const char* fragmentShader)
 
 boolean GL_CheckShaderErrors(unsigned int shader, unsigned int type)
 {
-	boolean success;
+	boolean success = true;
 	char log[1024];
 
 	switch(type)
@@ -123,7 +123,7 @@ boolean GL_CheckShaderErrors(unsigned int shader, unsigned int type)
 		default:
 		{
 			CON_Printf(WHITE, "No errors found");
-			return success = true;
+			return success;
 		}
 	}
 	return success;

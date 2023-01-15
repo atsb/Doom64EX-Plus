@@ -224,19 +224,11 @@ void R_SetLightFactor(float lightfactor) {
 			int h, s, v;
 
 			R_LightGetHSV(light->r, light->g, light->b, &h, &s, &v);
-#ifdef USE_GLM
-			v = glm_min((int)((float)v * f), 255);
-#else
 			v = min((int)((float)v * f), 255);
-#endif
 			R_LightGetRGB(h, s, v, (int*)&light->base_r, (int*)&light->base_g, (int*)&light->base_b);
 		}
 		else {
-#ifdef USE_GLM
-			light->base_r = light->base_g = light->base_b = glm_min((int)((float)l * f), 255);
-#else
 			light->base_r = light->base_g = light->base_b = min((int)((float)l * f), 255);
-#endif
 		}
 
 		light->active_r = light->base_r;
@@ -307,11 +299,7 @@ rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
 	r2 = ((r2 / height) * sideheight2);
 	g2 = ((g2 / height) * sideheight2);
 	b2 = ((b2 / height) * sideheight2);
-#ifdef USE_GLM
-	return D_RGBA((unsigned char)glm_min((r1 + r2), 0xff), (unsigned char)glm_min((g1 + g2), 0xff), (unsigned char)glm_min((b1 + b2), 0xff), 0xff);
-#else
 	return D_RGBA((unsigned char)min((r1 + r2), 0xff), (unsigned char)min((g1 + g2), 0xff), (unsigned char)min((b1 + b2), 0xff), 0xff);
-#endif
 }
 
 //

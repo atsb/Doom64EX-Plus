@@ -25,7 +25,7 @@
 #define __DOOMTYPE__
 
 #ifdef _WIN32
-#include <SDL2/SDL_config.h>
+#include <SDL_config.h>
 #endif
 
 #ifndef C89

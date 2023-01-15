@@ -633,7 +633,9 @@ int I_ShutdownWait(void) {
 #ifdef USE_IMGUI
 		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
 #endif
+#ifdef USE_GLFW
 		glfwPollEvents();
+#endif
 		if (event.type == SDL_QUIT ||
 			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();

@@ -217,11 +217,7 @@ int IN_Ticker(void) {
 	}
 	else {
 		// fade in for finale
-#ifdef USE_GLM
-		f_alpha = glm_min(f_alpha + 8, 0xff);
-#else
 		f_alpha = min(f_alpha + 8, 0xff);
-#endif
 
 		// wait until fully opaque
 		if (f_alpha < 0xff) {

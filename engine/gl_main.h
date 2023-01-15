@@ -40,9 +40,7 @@
 #endif
 #endif
 
-#ifdef USE_GLM
-#include <cglm/cglm.h>
-#endif
+
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #endif

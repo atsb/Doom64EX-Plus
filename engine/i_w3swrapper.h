@@ -24,9 +24,6 @@
 
 #ifdef _WIN32
 #include <fcntl.h>
-#ifdef USE_GLM
-#include <cglm/io.h>
-#endif
 #include <io.h>
 #include <string.h>
 #include <Windows.h>
@@ -35,9 +32,13 @@
 #include <unistd.h>
 #include <strings.h>
 #include <string.h>
-#include <stdio.h>
 #endif
 #include <stdarg.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)
@@ -137,7 +138,7 @@ int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #elif defined(PSNPRINTF)
 #define w3svsnprintf(buf, size, format, arg) pvsnprintf(buf, size, format, arg)
 #else
-#if !(CHOCO_VSNPRINTF) && defined(PSNPRINTF)
+#if !defined(CHOCO_VSNPRINTF) || defined(PSNPRINTF)
 #ifdef _WIN32
 #define w3svsnprintf(buf, size, format, arg) _vsnprintf(buf, size, format, arg)
 #else
