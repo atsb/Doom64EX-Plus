@@ -516,6 +516,9 @@ void GL_Init(void) {
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
 	}
 
+	OGL_VERSION_DETECTION;
+	glScaleFactor = 1.0f;
+
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
