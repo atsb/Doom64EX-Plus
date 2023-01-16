@@ -91,15 +91,15 @@ void I_Sleep(unsigned long usecs) {
 #endif
 }
 
-static Uint32 basetime = 0;
+static unsigned int basetime = 0;
 
 //
 // I_GetTimeNormal
 //
 
 static int I_GetTimeNormal(void) {
-	Uint32 ticks;
-	Uint32 tic_division = 1000;
+	unsigned int ticks;
+	unsigned int tic_division = 1000;
 
 	ticks = SDL_GetTicks();
 
@@ -360,7 +360,7 @@ int (*I_GetTime)(void) = I_GetTime_Error;
 //
 
 int I_GetTimeMS(void) {
-	Uint32 ticks;
+	unsigned int ticks;
 
 	ticks = SDL_GetTicks();
 

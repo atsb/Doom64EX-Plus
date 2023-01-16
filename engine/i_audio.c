@@ -263,7 +263,7 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 // Callback for SDL
 //
-static void Audio_Play(void* userdata, Uint8* stream, int len)
+static void Audio_Play(void* userdata, unsigned char* stream, int len)
 {
     memset(stream, 0, len);
 #ifndef _XBOX
@@ -1088,7 +1088,6 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 
 static void Seq_Shutdown(doomseq_t* seq)
 {    
-#if !defined(__linux__)
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
     //
@@ -1111,7 +1110,6 @@ static void Seq_Shutdown(doomseq_t* seq)
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
-#endif
 }
 
 //
