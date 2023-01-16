@@ -333,9 +333,7 @@ void SC_Init(void) {
 	sc_parser.rewind = SC_Rewind;
 	sc_parser.getstring = SC_GetString;
 	sc_parser.getint = SC_GetInteger;
-#ifndef __linux__	
 	sc_parser.setdata = SC_SetData;
-#endif	
 	sc_parser.readtokens = SC_ReadTokens;
 	sc_parser.error = SC_Error;
 }

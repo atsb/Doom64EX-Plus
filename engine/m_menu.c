@@ -70,7 +70,7 @@
 #include "p_setup.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
-
+#include "i_w3swrapper.h"
 //
 // definitions
 //
@@ -3313,13 +3313,9 @@ void M_ReadSaveStrings(void) {
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
-#ifdef _WIN32
-		_read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		_close(handle);
-#else
-		read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		close(handle);
-#endif
+
+		w3sread(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		w3sclose(handle);
 		DoomLoadMenu[i].status = 1;
 	}
 }

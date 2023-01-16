@@ -32,7 +32,6 @@
 #endif
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #ifdef _WIN32
 #ifdef _XBOX
@@ -64,7 +63,7 @@
 #include "i_system.h"
 #include "i_audio.h"
 #include "gl_draw.h"
-#include "i_w3swrapper.h"
+
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
@@ -301,7 +300,7 @@ char* I_FindDataFile(char* file) {
 			return path;
 	}
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__)
 	{
 		int i;
 		const char* paths[] = {
@@ -387,13 +386,9 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
-	I_Printf("Initialize events");
 	I_InitEvent();
-	I_Printf("Initialize GameController");
 	I_InitGameController();
-	I_Printf("Initialize Video");
 	I_InitVideo();  //<-
-	I_Printf("Initialize Clockwork");
 	I_InitClockRate(); //<-
 }
 

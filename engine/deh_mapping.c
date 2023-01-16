@@ -71,9 +71,9 @@ static void *GetStructField(void *structptr,
 {
     unsigned int offset;
 
-    offset = (uint8_t *)entry->location - (uint8_t *)mapping->base;
+    offset = (char *)entry->location - (char *)mapping->base;
 
-    return (uint8_t *)structptr + offset;
+    return (char *)structptr + offset;
 }
 
 //
@@ -108,13 +108,13 @@ boolean DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
     switch (entry->size)
     {
         case 1:
-            * ((uint8_t *) location) = value;
+            * ((unsigned char *) location) = value;
             break;
         case 2:
-            * ((uint16_t *) location) = value;
+            * ((unsigned short *) location) = value;
             break;
         case 4:
-            * ((uint32_t *) location) = value;
+            * ((unsigned int *) location) = value;
             break;
         default:
             DEH_Error(context, "Unknown field type for '%s' (BUG)", name);

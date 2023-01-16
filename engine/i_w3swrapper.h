@@ -35,6 +35,7 @@
 #endif
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)

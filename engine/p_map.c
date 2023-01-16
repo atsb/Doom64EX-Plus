@@ -1315,11 +1315,6 @@ boolean PTR_ShootTraverse(intercept_t* in) {
 
 }
 
-// [kex]
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
 //
 // P_AimLineAttack
 //

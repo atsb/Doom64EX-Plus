@@ -958,7 +958,7 @@ void D_DoomMain(void) {
 	G_Init();
 
 	I_Printf("M_LoadDefaults: Loading game configuration\n");
-	M_LoadDefaults(); //TODO: <--
+	M_LoadDefaults();
 
 	I_Printf("I_Init: Setting up machine state.\n");
 	I_Init();
