@@ -120,8 +120,8 @@ void P_SetupPsprites(player_t* curplayer);
 void P_MovePsprites(player_t* curplayer);
 void P_DropWeapon(player_t* player);
 void T_LaserThinker(laserthinker_t* laser);
+void P_NewPspriteTick(void);
 void P_SetPsprite(player_t* player, int position, statenum_t stnum);
-
 //
 // P_USER
 //

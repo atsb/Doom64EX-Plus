@@ -96,12 +96,12 @@ static void R_CloudThunder(void) {
 	}
 
 	if ((lightningCounter & 1) == 0) {
-		sky->skycolor[0] += 0x001111;
-		sky->skycolor[1] += 0x001111;
+		sky->skycolor[0] += 0x111100;
+		sky->skycolor[1] += 0x111100;
 	}
 	else {
-		sky->skycolor[0] -= 0x001111;
-		sky->skycolor[1] -= 0x001111;
+		sky->skycolor[0] -= 0x111100;
+		sky->skycolor[1] -= 0x111100;
 	}
 
 	thunderCounter = (M_Random() & 7) + 1;    // Do short delay loops for lightning flickers
@@ -113,8 +113,8 @@ static void R_CloudThunder(void) {
 //
 
 static void R_CloudTicker(void) {
-	CloudOffsetX -= (dcos(viewangle) >> 10);
-	CloudOffsetY += (dsin(viewangle) >> 9);
+	CloudOffsetX -= (dcos(viewangle) >> 10) / 2;
+	CloudOffsetY += (dsin(viewangle) >> 9) / 2;
 
 	if (r_skybox.value) {
 		sky_cloudpan1 += 0.00225f;
@@ -421,15 +421,15 @@ static void R_DrawSkyboxCloud(void) {
 	// add more contrast to the top cloud layer
 	// just draw a non-textured plane and blend it
 	//
-	dglDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 	SKYBOX_SETALPHA(color, 0x1f);
 	dglSetVertexColor(&v[0], color, 4);
 	dglTriangle(0, 1, 3);
 	dglTriangle(2, 3, 1);
 	dglDrawGeometry(4, v);
-	dglEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
-	dglPopMatrix();
+	glPopMatrix();
 	GL_SetState(GLSTATE_BLEND, 0);
 
 #undef SKYBOX_SETALPHA
@@ -451,8 +451,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
 	height = gfxheight[gfxLmp];
 	lumpheight = gfxorigheight[gfxLmp];
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	SKYVIEWPOS(viewangle, 1, pos1);
 
@@ -472,10 +472,10 @@ static void R_DrawSimpleSky(int lump, int offset) {
 static void R_DrawVoidSky(void) {
 	GL_SetOrtho(1);
 
-	dglDisable(GL_TEXTURE_2D);
-	dglColor4ubv((byte*)&sky->skycolor[2]);
-	dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
-	dglEnable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
+	glColor4ubv((byte*)&sky->skycolor[2]);
+	glRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
+	glEnable(GL_TEXTURE_2D);
 
 	GL_ResetViewport();
 }
@@ -502,8 +502,8 @@ static void R_DrawClouds(void) {
 
 	pos = (TRUEANGLES(viewangle) / 360.0f) * 2.0f;
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	dglSetVertex(v);
 
@@ -511,11 +511,11 @@ static void R_DrawClouds(void) {
 	dglSetVertexColor(&v[0], sky->skycolor[0], 2);
 	dglSetVertexColor(&v[2], sky->skycolor[1], 2);
 
-	dglDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 
 	GL_Draw2DQuad(v, true);
 
-	dglEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
 	GL_SetTextureUnit(1, true);
 	GL_SetTextureMode(GL_ADD);
@@ -538,18 +538,18 @@ static void R_DrawClouds(void) {
 
 	GL_SetOrthoScale(1.0f); // force ortho mode to be set
 
-	dglMatrixMode(GL_PROJECTION);
-	dglLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	dglViewFrustum(SCREENWIDTH, SCREENHEIGHT, 45.0f, 0.1f);
-	dglMatrixMode(GL_MODELVIEW);
-	dglEnable(GL_ALPHA);
-	dglPushMatrix();
-	dglTranslated(0.0f, 0.0f, -1.0f);
+	glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_ALPHA);
+	glPushMatrix();
+	glTranslated(0.0f, 0.0f, -1.0f);
 	dglTriangle(0, 1, 2);
 	dglTriangle(3, 2, 1);
 	dglDrawGeometry(4, v);
-	dglPopMatrix();
-	dglDisable(GL_ALPHA);
+	glPopMatrix();
+	glDisable(GL_ALPHA);
 
 	GL_SetDefaultCombiner();
 }

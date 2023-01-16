@@ -74,6 +74,32 @@ static int laserCells = 1;
 
 void A_FadeAlpha(mobj_t* mobj);
 
+//ATSB: From GEC
+//---------------------------------------------------------------------------
+//
+// PROC P_NewPspriteTick
+//
+//---------------------------------------------------------------------------
+
+void P_NewPspriteTick(void)
+{
+	// This function should be called after the beginning of a tick, before any possible
+	// prprite-event, or near the end, after any possible psprite event.
+	// Because data is reset for every tick (which it must be) this has no impact on savegames.
+	for (int i = 0; i < MAXPLAYERS; i++)
+	{
+		if (playeringame[i])
+		{
+			pspdef_t* pspdef = players[i].psprites;
+			for (int j = 0; j < NUMPSPRITES; j++)
+			{
+				pspdef[j].processPending = true;
+			}
+		}
+	}
+}
+
+
 //
 // P_SetPsprite
 //
@@ -83,6 +109,7 @@ void P_SetPsprite (player_t* player, int position, statenum_t stnum)
 	state_t* state;
 
 	psp = &player->psprites[position];
+	psp->processPending = true; //ATSB: From GEC
 
 	do
 	{
