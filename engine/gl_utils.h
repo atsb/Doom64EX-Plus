@@ -216,7 +216,7 @@ SDL_GLContext   Window
 #define OGL_DEFS    \
 SDL_GLContext   Window
 #endif
-
+#ifdef LEGACY_DETECTION
 #if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 #define OGL_VERSION_2_1 GL_VERSION_2_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #define OGL_VERSION OGL_VERSION_2_1
@@ -225,10 +225,12 @@ SDL_GLContext   Window
 #else
 #define OGL_VERSION_3_1  GL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #define OGL_VERSION OGL_VERSION_3_1
-#endif
 #define OGL_VERSION_DETECTION OGL_VERSION
 #endif
-
+#else
+#define OGL_VERSION_DETECTION glGetString(GL_VERSION) ? GL_CLAMP_TO_EDGE : GL_CLAMP
+#endif
+#endif
 //
 // CUSTOM ROUTINES
 //
@@ -238,13 +240,6 @@ void glDrawGeometry(int count, vtx_t* vtx);
 void glViewFrustum(int width, int height, float fovy, float znear);
 void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count);
 void glGetColorf(rcolor color, float* argb);
-void glTexCombReplace(void);
-void glTexCombColor(int t, rcolor c, int func);
-void glTexCombColorf(int t, float* f, int func);
-void glTexCombModulate(int t, int s);
-void glTexCombAdd(int t, int s);
-void glTexCombInterpolate(int t, float a);
-void glTexCombReplaceAlpha(int t);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
 

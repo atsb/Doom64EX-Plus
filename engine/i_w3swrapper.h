@@ -97,9 +97,9 @@ typedef unsigned char boolean;
 #define w3sclose close
 #define w3sread read
 #define w3sstrdup strdup
-char* w3sstrupr(char *str);
+char* w3sstrupr(char* str);
 #define w3ssnprintf snprintf
-char* w3sstrlwr(char *str);
+char* w3sstrlwr(char* str);
 #define w3sstricmp stricmp
 #define w3sstrnicmp strnicmp
 #define w3sstrcasecmp strcasecmp

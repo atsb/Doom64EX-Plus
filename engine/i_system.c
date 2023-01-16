@@ -48,7 +48,6 @@
 #include <time.h>
 #endif
 
-#include <stdarg.h>
 #include <sys/stat.h>
 #include "doomstat.h"
 #include "doomdef.h"
@@ -388,8 +387,8 @@ void I_Init(void)
 {
 	I_InitEvent();
 	I_InitGameController();
-	I_InitVideo();  //<-
-	I_InitClockRate(); //<-
+	I_InitVideo(); 
+	I_InitClockRate();
 }
 
 //

@@ -115,11 +115,14 @@ void I_InitScreen(void) {
 	}
 
 	usingGL = false;
-
+#ifdef LEGACY_DETECTION
 #if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 	glGetVersion(2, 1);
 #else
 	glGetVersion(3, 1);
+#endif
+#else
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
 	OGL_WINDOW_HINT(OGL_RED, 0);
 	OGL_WINDOW_HINT(OGL_GREEN, 0);
@@ -170,7 +173,6 @@ void I_InitScreen(void) {
 	}
 
 #else
-	SDL_GL_SetSwapInterval(v_vsync.value);
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {

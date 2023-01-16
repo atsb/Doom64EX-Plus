@@ -546,7 +546,7 @@ static void R_DrawClouds(void) {
 	glTranslated(0.0f, 0.0f, -1.0f);
 	glTriangle(0, 1, 2);
 	glTriangle(3, 2, 1);
-	dglDrawGeometry(4, v);
+	glDrawGeometry(4, v);
 	glPopMatrix();
 	glDisable(GL_ALPHA);
 

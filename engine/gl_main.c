@@ -511,9 +511,7 @@ void GL_Init(void) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-
-	OGL_VERSION;
-
+	OGL_VERSION_DETECTION;
 	glScaleFactor = 1.0f;
 
 	if (GL_EXT_texture_filter_anisotropic) {
