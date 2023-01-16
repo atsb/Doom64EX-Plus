@@ -956,10 +956,6 @@ void T_LaserThinker(laserthinker_t* laserthinker) {
 //
 // A_FireLaser
 //
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
 
 void A_FireLaser(player_t* player, pspdef_t* psp) {
 	angle_t         angleoffs;

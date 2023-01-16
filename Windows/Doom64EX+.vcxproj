@@ -83,7 +83,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,7 +102,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -138,7 +138,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -414,7 +414,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;USE_FIXEDPTC;WINDOWS_TYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;PSNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\Windows\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
     </ClCompile>
@@ -422,7 +422,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -431,7 +431,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\Windows\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
     </ClCompile>
@@ -441,21 +441,21 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\cglm;$(ProjectDir)..\engine\backend\cglm\include;$(ProjectDir)..\engine\backend\imgui;$(ProjectDir)..\engine\backend\glad_3.2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -465,7 +465,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;WINDOWS_TYPES;USE_FIXEDPTC;HAVE_M_PI;_USE_MATH_DEFINES;PSNPRINTF;C89;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;PSNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\cglm;$(ProjectDir)..\engine\backend\cglm\include;$(ProjectDir)..\engine\backend\imgui;$(ProjectDir)..\engine\backend\glad_3.2\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -477,7 +477,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
