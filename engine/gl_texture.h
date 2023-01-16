@@ -63,8 +63,6 @@ void        GL_InitTextures(void);
 void        GL_UnloadTexture(dtexture* texture);
 void        GL_SetTextureUnit(int unit, boolean enable);
 void        GL_SetTextureMode(int mode);
-void        GL_SetCombineState(int combine);
-void        GL_SetCombineStateAlpha(int combine);
 void        GL_SetEnvColor(float* param);
 void        GL_SetCombineSourceRGB(int source, int target);
 void        GL_SetCombineSourceAlpha(int source, int target);

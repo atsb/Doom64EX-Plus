@@ -47,7 +47,6 @@ CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
-CVAR_EXTERNAL(v_vsync);
 
 SDL_Surface* screen;
 int video_width;
@@ -209,7 +208,7 @@ void I_InitScreen(void) {
 		I_Error("Failed to load glad");
 	}
 #ifdef USE_IMGUI
-	//André: Adding the context
+	//Andrï¿½: Adding the context
 	io = igGetIO();
 	ctx = igCreateContext(NULL);
 #ifdef __LEGACYGL__

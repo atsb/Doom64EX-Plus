@@ -56,6 +56,7 @@ void T_FireFlicker(fireflicker_t* flick) {
 
 	if (flick->sector->special != flick->special)
 	{
+		flick->sector->lightlevel = 0;
 		P_RemoveThinker(&flick->thinker);
 		return;
 	}
@@ -158,6 +159,7 @@ void T_StrobeFlash(strobe_t* flash) {
 
 		if (flash->sector->special != flash->special)
 		{
+			flash->sector->lightlevel = 0;
 			P_RemoveThinker(&flash->thinker);
 			return;
 		}
@@ -318,15 +320,13 @@ void P_SpawnGlowingLight(sector_t* sector, unsigned char type) {
 		g->thinker.function.acp1 = (actionf_p1)T_Glow;
 		g->minlight = 0;
 
-		switch (type)
+		if (type == PULSENORMAL)
 		{
-		case PULSENORMAL:
 			g->maxlight = 32;
-			break;
-		case PULSESLOW:
-		case PULSERANDOM:
+		}
+		else if (type == PULSERANDOM || type == PULSESLOW)
+		{
 			g->maxlight = 48;
-			break;
 		}
 	}
 }
@@ -355,6 +355,7 @@ void T_Sequence(sequenceGlow_t* seq) {
 
 	if (seq->sector->special != seq->special)
 	{
+		seq->sector->lightlevel = 0;
 		P_RemoveThinker(&seq->thinker);
 		return;
 	}

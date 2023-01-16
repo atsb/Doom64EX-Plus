@@ -98,11 +98,6 @@ typedef struct {
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
-CVAR_CMD(r_texturecombiner, 0)
-{
-	//ATSB: Stubbed
-}
-
 //
 // CMD_DumpTextures
 //
@@ -674,40 +669,6 @@ void GL_SetTextureMode(int mode) {
 
 	state->mode = mode;
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, state->mode);
-}
-
-//
-// GL_SetCombineState
-//
-
-void GL_SetCombineState(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_rgb == combine) {
-		return;
-	}
-
-	state->combine_rgb = combine;
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
-}
-
-//
-// GL_SetCombineStateAlpha
-//
-
-void GL_SetCombineStateAlpha(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_alpha == combine) {
-		return;
-	}
-
-	state->combine_alpha = combine;
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
 }
 
 //

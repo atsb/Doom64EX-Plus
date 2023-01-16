@@ -507,16 +507,18 @@ int P_FindSectorFromTag(int tag) {
 // P_ActivateLineByTag
 //
 
-boolean P_ActivateLineByTag(int tag, mobj_t* activator) {
-	int i;
+boolean P_ActivateLineByTag(int tag, mobj_t* activator)
+{
+	int	i;
+	line_t* li;
 
-	for (i = 0; i < numlines; i++) {
-		if (lines[i].tag == tag) {
-			return P_UseSpecialLine(activator, &lines[i], 0);
-		}
+	li = lines;
+	for (i = 0; i < numlines; i++, li++)
+	{
+		if (li->tag == tag)
+			return P_UseSpecialLine(activator, li, 0);
 	}
-
-	return 1;
+	return false;
 }
 
 //
