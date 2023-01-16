@@ -36,7 +36,7 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-OGL_DEFS;
+
 CVAR(i_rsticksensitivityx, 0.0080);
 CVAR(i_rsticksensitivityy, 0.0080);
 CVAR(i_xinputscheme, 0);
