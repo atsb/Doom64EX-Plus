@@ -151,3 +151,7 @@ boolean fcmp(float f1, float f2);
 #define max(num1, num2) ((num1)>(num2)?(num1):(num2))
 #define min(num1, num2) ((num1)<(num2)?(num1):(num2))
 #endif
+
+#ifdef C99
+#define M_PI 3.14159265358979323846
+#endif
