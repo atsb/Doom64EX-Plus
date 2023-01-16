@@ -63,7 +63,6 @@ static float sky_cloudpan2 = 0;
 #define FIRESKY_WIDTH   64
 #define FIRESKY_HEIGHT  64
 
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_skybox);
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
@@ -96,12 +95,12 @@ static void R_CloudThunder(void) {
 	}
 
 	if ((lightningCounter & 1) == 0) {
-		sky->skycolor[0] += 0x001111;
-		sky->skycolor[1] += 0x001111;
+		sky->skycolor[0] += 0x111100;
+		sky->skycolor[1] += 0x111100;
 	}
 	else {
-		sky->skycolor[0] -= 0x001111;
-		sky->skycolor[1] -= 0x001111;
+		sky->skycolor[0] -= 0x111100;
+		sky->skycolor[1] -= 0x111100;
 	}
 
 	thunderCounter = (M_Random() & 7) + 1;    // Do short delay loops for lightning flickers
@@ -507,42 +506,23 @@ static void R_DrawClouds(void) {
 
 	glSetVertex(v);
 
-	if (r_texturecombiner.value > 0 && gl_max_texture_units > 2) {
-		glSetVertexColor(&v[0], sky->skycolor[0], 2);
-		glSetVertexColor(&v[2], sky->skycolor[1], 2);
+	GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120, 0, 0, 0, 0, 0);
+	glSetVertexColor(&v[0], sky->skycolor[0], 2);
+	glSetVertexColor(&v[2], sky->skycolor[1], 2);
 
-		GL_UpdateEnvTexture(WHITE);
+	glDisable(GL_TEXTURE_2D);
 
-		// pass 1: texture * skycolor
-		glTexCombColor(GL_TEXTURE, sky->skycolor[2], GL_MODULATE);
+	GL_Draw2DQuad(v, true);
 
-		// pass 2: result * const (though the original game uses the texture's alpha)
-		GL_SetTextureUnit(1, true);
-		glTexCombColor(GL_PREVIOUS, 0xFF909090, GL_MODULATE);
+	glEnable(GL_TEXTURE_2D);
 
-		// pass 3: result + fragment color
-		GL_SetTextureUnit(2, true);
-		glTexCombAdd(GL_PREVIOUS, GL_PRIMARY_COLOR);
-	}
-	else {
-		GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120, 0, 0, 0, 0, 0);
-		glSetVertexColor(&v[0], sky->skycolor[0], 2);
-		glSetVertexColor(&v[2], sky->skycolor[1], 2);
+	GL_SetTextureUnit(1, true);
+	GL_SetTextureMode(GL_ADD);
+	GL_UpdateEnvTexture(sky->skycolor[1]);
+	GL_SetTextureUnit(0, true);
 
-		glDisable(GL_TEXTURE_2D);
-
-		GL_Draw2DQuad(v, true);
-
-		glEnable(GL_TEXTURE_2D);
-
-		GL_SetTextureUnit(1, true);
-		GL_SetTextureMode(GL_ADD);
-		GL_UpdateEnvTexture(sky->skycolor[1]);
-		GL_SetTextureUnit(0, true);
-
-		glSetVertexColor(&v[0], sky->skycolor[2], 4);
-		v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
-	}
+	glSetVertexColor(&v[0], sky->skycolor[2], 4);
+	v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
 
 	v[3].x = v[1].x = 1.1025f;
 	v[0].x = v[2].x = -1.1025f;
@@ -561,14 +541,14 @@ static void R_DrawClouds(void) {
 	glLoadIdentity();
 	glViewFrustum(SCREENWIDTH, SCREENHEIGHT, 45.0f, 0.1f);
 	glMatrixMode(GL_MODELVIEW);
-	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA);
 	glPushMatrix();
 	glTranslated(0.0f, 0.0f, -1.0f);
 	glTriangle(0, 1, 2);
 	glTriangle(3, 2, 1);
 	glDrawGeometry(4, v);
 	glPopMatrix();
-	glDisable(GL_BLEND);
+	glDisable(GL_ALPHA);
 
 	GL_SetDefaultCombiner();
 }

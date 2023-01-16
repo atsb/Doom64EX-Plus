@@ -55,8 +55,8 @@ boolean    usingGL = false;
 float       max_anisotropic = 0;
 boolean    widescreen = false;
 
+CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(r_filter);
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(st_flashoverlay);
 
@@ -315,13 +315,7 @@ void GL_SetDefaultCombiner(void) {
 	}
 
 	GL_CheckFillMode();
-
-	if (r_texturecombiner.value > 0) {
-		glTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
-	}
-	else {
-		GL_SetTextureMode(GL_MODULATE);
-	}
+	GL_SetTextureMode(GL_MODULATE);
 }
 
 //
@@ -514,25 +508,21 @@ void GL_Init(void) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");
 	}
 
-	gl_has_combiner = (GL_ARB_texture_env_combine | GL_EXT_texture_env_combine);
-
-	if (!gl_has_combiner) {
-		CON_Warnf("Texture combiners not supported...\n");
-		CON_Warnf("Setting r_texturecombiner to 0\n");
-		CON_CvarSetValue(r_texturecombiner.name, 0.0f);
-	}
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-	OGL_VERSION_DETECTION;
+
+	gl_version ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+
 	glScaleFactor = 1.0f;
 
 	if (GL_EXT_texture_filter_anisotropic) {
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
+		dglGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
 	}
 
 	usingGL = true;
 
 	G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
+
+	SDL_GL_SetSwapInterval((int)v_vsync.value);
 }
