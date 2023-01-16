@@ -47,7 +47,6 @@ static angle_t am_viewangle;
 
 CVAR_EXTERNAL(am_fulldraw);
 CVAR_EXTERNAL(am_ssect);
-CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // AM_BeginDraw
@@ -55,16 +54,6 @@ CVAR_EXTERNAL(r_texturecombiner);
 
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 	am_viewangle = view;
-
-	if (r_texturecombiner.value > 0 && am_overlay.value) {
-		GL_SetState(GLSTATE_BLEND, 1);
-
-		//
-		// increase the rgb scale so the automap can look good while transparent (overlay mode)
-		//
-		GL_SetTextureMode(GL_COMBINE);
-		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
-	}
 
 	dglDepthRange(0.0f, 0.0f);
 	dglMatrixMode(GL_PROJECTION);
@@ -90,11 +79,6 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 void AM_EndDraw(void) {
 	dglPopMatrix();
 	dglDepthRange(0.0f, 1.0f);
-
-	if (r_texturecombiner.value > 0 && am_overlay.value) {
-		GL_SetState(GLSTATE_BLEND, 0);
-		GL_SetTextureMode(GL_COMBINE);
-	}
 
 	GL_SetDefaultCombiner();
 }
@@ -251,21 +235,11 @@ void AM_DrawLeafs(float scale) {
 	//
 	DL_BeginDrawList(!am_ssect.value && 1);
 
-	if (r_texturecombiner.value > 0) {
-		if (!nolights) {
-			dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
-		}
-		else {
-			dglTexCombReplace();
-		}
+	if (!nolights) {
+		GL_SetTextureMode(GL_MODULATE);
 	}
 	else {
-		if (!nolights) {
-			GL_SetTextureMode(GL_MODULATE);
-		}
-		else {
-			GL_SetTextureMode(GL_REPLACE);
-		}
+		GL_SetTextureMode(GL_REPLACE);
 	}
 
 	DL_ProcessDrawList(DLT_AMAP, DL_ProcessAutomap);

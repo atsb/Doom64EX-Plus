@@ -49,7 +49,6 @@ static void R_AddLine(seg_t* line);
 static void AddSegToDrawlist(drawlist_t* dl, seg_t* line, int texid, int sidetype);
 
 CVAR_EXTERNAL(i_interpolateframes);
-CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // R_AddClipLine
@@ -83,7 +82,7 @@ void R_AddClipLine(seg_t* line) {
 		return;
 	}
 
-	if (!(line->linedef->flags & (ML_DRAWMIDTEXTURE | ML_DONTOCCLUDE))) {
+	if (!(line->linedef->flags & (ML_DRAWMASKED | ML_DONTOCCLUDE))) {
 		if (line->backsector) {
 			if ((line->frontsector->ceilingpic != skyflatnum &&
 				line->frontsector->floorpic != skyflatnum) &&
@@ -509,8 +508,8 @@ static boolean R_GenerateMiddleSegPlane(seg_t* line, vtx_t* v) {
 	v[1].tu = v[3].tu = length / width + coloffs;
 
 	if (!(line->linedef->flags & ML_SWITCHX02 && line->linedef->flags & ML_SWITCHX04)) {
-		// ML_DONTPEGMID is extremly hacky and it appears to be used only once in the entire game
-		if (linedef->flags & ML_DONTPEGMID && line->backsector) {
+		// ML_BLOCKPROJECTILES is extremly hacky and it appears to be used only once in the entire game
+		if (linedef->flags & ML_BLOCKPROJECTILES && line->backsector) {
 			v[0].tv = v[1].tv = 1 + rowoffs - ((top - btop) / height);
 			v[2].tv = v[3].tv = 1 + rowoffs + (((top + btop) - (bottom + bbottom)) / height) / 2;
 		}
@@ -668,7 +667,7 @@ static void R_AddLine(seg_t* line) {
 		}
 
 		if (line->backsector) {
-			if (!(line->linedef->flags & ML_DRAWMIDTEXTURE)) {
+			if (!(line->linedef->flags & ML_DRAWMASKED)) {
 				return;
 			}
 		}

@@ -74,6 +74,32 @@ static int laserCells = 1;
 
 void A_FadeAlpha(mobj_t* mobj);
 
+//ATSB: From GEC
+//---------------------------------------------------------------------------
+//
+// PROC P_NewPspriteTick
+//
+//---------------------------------------------------------------------------
+
+void P_NewPspriteTick(void)
+{
+	// This function should be called after the beginning of a tick, before any possible
+	// prprite-event, or near the end, after any possible psprite event.
+	// Because data is reset for every tick (which it must be) this has no impact on savegames.
+	for (int i = 0; i < MAXPLAYERS; i++)
+	{
+		if (playeringame[i])
+		{
+			pspdef_t* pspdef = players[i].psprites;
+			for (int j = 0; j < NUMPSPRITES; j++)
+			{
+				pspdef[j].processPending = true;
+			}
+		}
+	}
+}
+
+
 //
 // P_SetPsprite
 //
@@ -83,6 +109,7 @@ void P_SetPsprite (player_t* player, int position, statenum_t stnum)
 	state_t* state;
 
 	psp = &player->psprites[position];
+	psp->processPending = true; //ATSB: From GEC
 
 	do
 	{
@@ -928,10 +955,6 @@ void T_LaserThinker(laserthinker_t* laserthinker) {
 // A_FireLaser
 //
 
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
 void A_FireLaser(player_t* player, pspdef_t* psp) {
 	angle_t         angleoffs;
 	angle_t         spread;
@@ -945,7 +968,9 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 	byte            type;
 	laser_t* laser[3];
 	laserthinker_t* laserthinker[3];
-	//fixed_t         laserfrac;
+	fixed_t laserhit_x = 0;
+	fixed_t laserhit_y = 0;
+	fixed_t laserhit_z = 0;
 
 	mobj = player->mo;
 
@@ -998,13 +1023,30 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 
 		player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
+		//
+		// [kex] 1/2/12 the old code is just plain bad. the original behavior was
+		// to simply call P_AimLineAttack and use the intercept fraction to
+		// determine where the tail end of the laser will land. this is
+		// optimal for consoles but leads to a lot of issues when working with
+		// plane hit detection and auto aiming. P_LineAttack will be called normally
+		// and instead of spawning puffs or blood, the xyz values are stored so the
+		// tail end of the laser can be setup properly here
+		//
+
+		// (unused) adjust aim fraction which will be used to determine
+		// the endpoint of the laser
+		/*if(aimfrac)
+			laserfrac = (aimfrac << (FRACBITS - 4)) - (4 << FRACBITS);
+		else
+			laserfrac = 0x800;*/
+
 		hitdice = (P_Random() & 7);
-		damage = ((hitdice * 10) + 10);
+		damage = (((hitdice << 2) + hitdice) << 1) + 10;
 
 		P_LineAttack(mobj, angleoffs, LASERRANGE, slope, damage);
 
 		// setup laser
-		laser[i] = Z_Malloc(sizeof(*laser[i]), PU_LEVSPEC, 0);
+		laser[i] = (laser_t*)Z_Malloc(sizeof(*laser[i]), PU_LEVSPEC, 0);
 
 		// setup laser head point
 		laser[i]->x1 = mobj->x + FixedMul(LASERDISTANCE, dcos(mobj->angle));
@@ -1040,7 +1082,7 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 
 		P_LaserCrossBSP(numnodes - 1, laser[i]);
 
-		laserthinker[i] = Z_Malloc(sizeof(*laserthinker[i]), PU_LEVSPEC, 0);
+		laserthinker[i] = (laserthinker_t*)Z_Malloc(sizeof(*laserthinker[i]), PU_LEVSPEC, 0);
 		P_AddThinker(&laserthinker[i]->thinker);
 
 		laserthinker[i]->thinker.function.acp1 = (actionf_p1)T_LaserThinker;
@@ -1056,6 +1098,7 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 	P_SetPsprite(player, ps_flash, weaponinfo[player->readyweapon].flashstate);
 }
+
 
 //
 // P_SetupPsprites

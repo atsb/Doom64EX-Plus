@@ -40,9 +40,9 @@
 extern const char version_date[];
 
 void        _dprintf(const char* s, ...);
-void* dmemcpy(void* s1, const void* s2, unsigned int n);
-void* dmemset(void* s, int c, unsigned int n);
-char* dstrcpy(char* dest, const char* src);
+void*		dmemcpy(void* s1, const void* s2, unsigned int n);
+void*		dmemset(void* s, int c, unsigned int n);
+char*		dstrcpy(char* dest, const char* src);
 void        dstrncpy(char* dest, const char* src, int maxcount);
 int         dstrcmp(const char* s1, const char* s2);
 int         dstrncmp(const char* s1, const char* s2, int len);
@@ -51,13 +51,13 @@ int         dstrnicmp(const char* s1, const char* s2, int len);
 void        dstrupr(char* s);
 void        dstrlwr(char* s);
 int         dstrlen(const char* string);
-char* dstrrchr(char* s, char c);
+char*		dstrrchr(char* s, char c);
 void        dstrcat(char* dest, const char* src);
-char* dstrstr(char* s1, char* s2);
+char*		dstrstr(char* s1, char* s2);
 int         datoi(const char* str);
 float       datof(char* str);
 int         dhtoi(char* str);
-boolean    dfcmp(float f1, float f2);
+bool		dfcmp(float f1, float f2);
 int         dsprintf(char* buf, const char* format, ...);
 int         dsnprintf(char* src, unsigned int n, const char* str, ...);
 

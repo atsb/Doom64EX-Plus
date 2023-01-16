@@ -196,7 +196,6 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 		return false;    // do not attack yet
 	}
 
-	// OPTIMIZE: get this from a global checksight
 	dist = P_AproxDistance(actor->x - actor->target->x,
 		actor->y - actor->target->y) - 64 * FRACUNIT;
 

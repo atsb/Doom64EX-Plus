@@ -424,6 +424,8 @@ int P_Ticker(void) {
 		return 0;
 	}
 
+	P_NewPspriteTick();
+
 	for (i = 0; i < MAXPLAYERS; i++) {
 		if (playeringame[i]) {
 			// do player reborns if needed

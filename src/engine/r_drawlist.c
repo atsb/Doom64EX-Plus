@@ -41,8 +41,6 @@ static float envcolor[4] = { 0, 0, 0, 0 };
 
 drawlist_t drawlist[NUMDRAWLISTS];
 
-CVAR_EXTERNAL(r_texturecombiner);
-
 //
 // DL_AddVertexList
 //
@@ -189,16 +187,9 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
 
-			if (r_texturecombiner.value > 0) {
-				envcolor[0] = envcolor[1] = envcolor[2] = ((float)head->params / 255.0f);
-				GL_SetEnvColor(envcolor);
-			}
-			else {
-				int l = (head->params >> 1);
+			int l = (head->params >> 1);
 
-				GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-			}
-
+			GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
 			dglDrawGeometry(drawcount, drawVertex);
 
 			// count vertex size

@@ -120,8 +120,8 @@ void P_SetupPsprites(player_t* curplayer);
 void P_MovePsprites(player_t* curplayer);
 void P_DropWeapon(player_t* player);
 void T_LaserThinker(laserthinker_t* laser);
+void P_NewPspriteTick(void);
 void P_SetPsprite(player_t* player, int position, statenum_t stnum);
-
 //
 // P_USER
 //
@@ -209,9 +209,9 @@ void         P_LineOpening(line_t* linedef);
 boolean    P_BlockLinesIterator(int x, int y, boolean(*func)(line_t*));
 boolean    P_BlockThingsIterator(int x, int y, boolean(*func)(mobj_t*));
 
-#define PT_ADDLINES        1
-#define PT_ADDTHINGS    2
-#define PT_EARLYOUT        4
+#define PT_ADDLINES		1
+#define PT_ADDTHINGS	2
+#define PT_EARLYOUT		4
 
 extern divline_t    trace;
 
