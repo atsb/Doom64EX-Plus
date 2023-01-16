@@ -22,35 +22,16 @@
 
 #ifndef __GL_MAIN_H__
 #define __GL_MAIN_H__
-
-#ifdef _XBOX
-#ifdef _USEFAKEGL09
-#include "fakeglx_ex+.h"
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
-#endif
-#else
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <time.h>
-#endif
-#endif
-
-
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#endif
-
 #include "doomtype.h"
 
-typedef GLuint        dtexture;
-typedef GLuint        rcolor;
-typedef GLuint        rbuffer;
+typedef unsigned int        dtexture;
+typedef unsigned int       rcolor;
+typedef unsigned int        rbuffer;
+#ifdef __APPLE__
+typedef void* GLhandleARB;
+#else
+typedef unsigned int GLhandleARB;
+#endif
 typedef GLhandleARB    rhandle;
 
 extern int gl_max_texture_units;

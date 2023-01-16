@@ -45,6 +45,13 @@
 #include <SDL_opengl.h>
 #endif
 #endif
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#endif
+#ifdef _USEFAKEGL09
+#include "fakeglx_ex+.h"
+#endif
+
 
 //André: Use this as wrapper to all the functions.
 #ifdef USE_GLFW

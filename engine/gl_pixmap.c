@@ -148,7 +148,7 @@ void FilterBox(dpixmap *dst, const dpixmap *src)
 
 void PixmapResize(dpixmap *pm, short width, short height)
 {
-	size_t len;
+	int len;
 	len = width * formats[pm->fmt.pitch].pitch;
 
 	if (pm->w == width && pm->h == height) {
@@ -176,7 +176,7 @@ void PixmapResize(dpixmap *pm, short width, short height)
 
 dpixmap *GL_PixmapCreate(short width, short height, dpixfmt fmt, unsigned char *data)
 {
-	size_t len;
+	int len;
 	dpixmap *pm;
 
 	if (fmt < 0 || fmt >= DPM_PF_LAST)
