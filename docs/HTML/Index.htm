@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Doom64 EX Documentation</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+	</head>
+	<body text="#ccff99" link="#ff9999" bgColor="#000000" vLink="#cc0000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>TABLE OF CONTENTS</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			<BR>
+			* <A href="GameSpec.htm">Specifications</A> (Doom64&nbsp;Specific)<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;General<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Player<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Thing (Mobj)<BR>
+			&nbsp;&nbsp;&nbsp; * Level Interaction<BR>
+			<BR>
+			* Rendering Specifications<BR>
+			&nbsp;&nbsp;&nbsp; * Summary<BR>
+			&nbsp;&nbsp;&nbsp; * Lighting Model<BR>
+			&nbsp;&nbsp;&nbsp; * Texture<BR>
+			&nbsp;&nbsp;&nbsp; * Sprite<BR>
+			&nbsp;&nbsp;&nbsp; * GFX<BR>
+			&nbsp;&nbsp;&nbsp; * Symbols<BR>
+			&nbsp;&nbsp;&nbsp; * Skies<BR>
+			<BR>
+			* Usflib Specifications<BR>
+			&nbsp;&nbsp;&nbsp; * Summary<BR>
+			&nbsp;&nbsp;&nbsp; * Portability<BR>
+			&nbsp;&nbsp;&nbsp; * Known Issues<BR>
+			<BR>
+			* <A href="Level Editing.htm">Level Editing</A><BR>
+			&nbsp;&nbsp;&nbsp; * Introduction<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Level Contruction Workflow<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;Using Devparm<BR>
+			&nbsp;&nbsp;&nbsp; * Setting up Doom Builder (aka Builder64)<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Changes from&nbsp;regular Doom 
+			Builder<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Known Issues<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;Level Basics<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Compiling<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Testing<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Using the /MAPS Directory<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Future Plans<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Using Doom64 EX's internal Tools<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Sprite Editor<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Macro Peek<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Light Editor<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Future Plans<BR>
+			<BR>
+			* <A href="Linedef.htm">Linedef Specifications</A><BR>
+			&nbsp;&nbsp;&nbsp; * Linedef Format<BR>
+			&nbsp;&nbsp;&nbsp; * Linedef Flags<BR>
+			&nbsp;&nbsp;&nbsp; * Linedef Specials&nbsp;<BR>
+			<BR>
+			* <A href="Sector.htm">Sector Specifications</A><BR>
+			&nbsp;&nbsp;&nbsp; * Sector&nbsp;Format<BR>
+			&nbsp;&nbsp;&nbsp; * Sector Flags<BR>
+			&nbsp;&nbsp;&nbsp; * Sector Specials<BR>
+			<BR>
+			* <A href="Thing.htm">Thing Specifications</A><BR>
+			&nbsp;&nbsp;&nbsp; * Thing Format<BR>
+			&nbsp;&nbsp;&nbsp; * Thing Flags<BR>
+			&nbsp;&nbsp;&nbsp;
+			<BR>
+			* <A href="Tutorial.htm">Tutorials</A><BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Split Door<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Thing Spawning<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Item Triggering<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Fake Item Pickups<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Death Triggering<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* See-Through Ceilings/Floors<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Sequenced Lighting<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Creating Dart/Tracer&nbsp;Launchers<BR>
+			<BR>
+			* <A href="Macros.htm">Macros</a><BR>
+			&nbsp;&nbsp;&nbsp; * Introduction<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Technical Specs<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Limits<BR>
+			&nbsp;&nbsp;&nbsp; * Tutorials<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Basic Macro Scripting<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* General Specials<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Using the Delay Special<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Cameras<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Advanced Macro Scripting<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Randomization<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Repeater 
+			Special<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Macro Samples<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Map01 - 
+			Staging Area<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Map02 
+			- The Terraformer<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Map15 - 
+			Dark Entries<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Map23 - 
+			Unholy Temple<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Map33 - 
+			Titlemap<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Hectic 
+			Telefrag Example<BR>
+			<BR>
+			* Lump Formats<BR>
+			&nbsp;&nbsp;&nbsp; * N64<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Sprite<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * GFX/HudSprites<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Texture<BR>
+			&nbsp;&nbsp;&nbsp; * EX<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Sprite<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * GFX<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Texture<BR>
+			<BR>
+			* Map Format<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;Map Lumps<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Things<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Linedefs<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Sidedefs<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Vertexes<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Sectors<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Lights<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Macros<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * LvlInfo (WIP)<BR>
+			&nbsp;&nbsp;&nbsp; * BSP Lumps<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Segs<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * SSectors<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Reject<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Nodes<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Leafs<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Subverts<BR>
+			<BR>
+			* Compiling<BR>
+			&nbsp;&nbsp;&nbsp; * Doom64EX/Launcher<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Requirements<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Setup<BR>
+			&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; * Known Issues and Bugs<BR>
+			&nbsp;&nbsp;&nbsp; * WadGen<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Requirements<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Setup<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Known Issues and Bugs<BR>
+			&nbsp;&nbsp;&nbsp; * Usflib<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Requirements<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Setup<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Known Issues and Bugs<BR>
+			<BR>
+			* Mysteries<BR>
+			&nbsp;&nbsp;&nbsp; * Map20 - Breakdown and Linedef Type 251<BR>
+			&nbsp;&nbsp;&nbsp; * Thing # 24 (MT_024)<BR>
+			&nbsp;&nbsp;&nbsp; * Player Bots (Map33 - Titlemap)<BR>
+			&nbsp;&nbsp;&nbsp; * Lump Compression (N64)<BR>
+			&nbsp;&nbsp;&nbsp; * Music/Sound format (N64)<BR>
+		</P>
+	</body>
+</html>

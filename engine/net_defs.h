@@ -40,12 +40,6 @@ typedef struct _net_packet_s
 	unsigned int pos;
 }net_packet_t;
 
-typedef struct _net_addr_s
-{
-	struct net_module_s *module;
-	void* handle;
-}net_addr_t;
-
 typedef struct net_module_s
 {
 	// Initialise this module for use as a client
@@ -58,26 +52,33 @@ typedef struct net_module_s
 
 	// Send a packet
 
-	void (*SendPacket)(net_addr_t* addr, net_packet_t* packet);
+	void (*SendPacket)(struct net_addr_s* addr, net_packet_t* packet);
 
 	// Check for new packets to receive
 	//
 	// Returns true if packet received
 
-	boolean(*RecvPacket)(net_addr_t** addr, net_packet_t** packet);
+	boolean(*RecvPacket)(struct net_addr_s** addr, net_packet_t** packet);
 
 	// Converts an address to a string
 
-	void (*AddrToString)(net_addr_t* addr, char* buffer, int buffer_len);
+	void (*AddrToString)(struct net_addr_s* addr, char* buffer, int buffer_len);
 
 	// Free back an address when no longer in use
 
-	void (*FreeAddress)(net_addr_t* addr);
+	void (*FreeAddress)(struct net_addr_s* addr);
 
 	// Try to resolve a name to an address
 
-	net_addr_t* (*ResolveAddress)(char* addr);
+	struct net_addr_s* (*ResolveAddress)(char* addr);
 }net_module_t;
+
+typedef struct net_addr_s
+{
+	net_module_t* module;
+	void* handle;
+}net_addr_t;
+
 
 // net_addr_t
 typedef struct net_context_s

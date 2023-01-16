@@ -40,6 +40,7 @@
 // D_Main.C
 //
 #define D_DEVSTR    "Development mode ON.\n"
+#define STRPAUSED    "Paused"
 
 //
 //  M_Menu.C

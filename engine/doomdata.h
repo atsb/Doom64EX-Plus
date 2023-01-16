@@ -175,7 +175,7 @@ enum {
 #define MACROMASK(x)            (SPECIALMASK(x) - (x & MLU_MACRO))
 
 // Sector definition, from editing.
-typedef    struct {
+typedef struct {
 	short    floorheight;
 	short    ceilingheight;
 	unsigned short    floorpic;

@@ -37,6 +37,7 @@
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <time.h>
 #endif
 #endif
 

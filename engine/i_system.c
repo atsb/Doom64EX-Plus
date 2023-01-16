@@ -34,12 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef _WIN32
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
-#include <time.h>
-#else
+#ifdef _WIN32
 #ifdef _XBOX
 #include <xtl.h>
 #else
@@ -47,6 +42,11 @@
 #endif
 #include <direct.h>
 #include <io.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <time.h>
 #endif
 
 #include <stdarg.h>
@@ -256,7 +256,7 @@ char* I_GetUserFile(char* file) {
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
-        Free(userdir);
+    Free(userdir);
 
 	return path;
 }
@@ -387,10 +387,14 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
+	I_Printf("Initialize events");
 	I_InitEvent();
+	I_Printf("Initialize GameController");
 	I_InitGameController();
-	I_InitVideo();
-	I_InitClockRate();
+	I_Printf("Initialize Video");
+	I_InitVideo();  //<-
+	I_Printf("Initialize Clockwork");
+	I_InitClockRate(); //<-
 }
 
 //

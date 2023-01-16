@@ -41,7 +41,7 @@
 #include "m_misc.h"
 #include "con_console.h"
 #include "i_system.h"
-
+#include "i_w3swrapper.h"
 static char* ConfigFileName =
 #if defined(VITA)
 "ux0:data/DOOM64EX+/config.cfg"
@@ -98,28 +98,16 @@ void G_ExecuteFile(char* name) {
 	if (!name) {
 		I_Error("G_ExecuteFile: No config name specified");
 	}
-#ifdef USE_OPTMIZED_FFUNCTION
-	fopen_s(&fh, name, "rb");
-#else
 	fh = fopen(name, "rb");
-#endif
 	if (!fh) {
-#ifdef USE_OPTMIZED_FFUNCTION
-		fopen_s(&fh, name, "w");
-#else
 		fh = fopen(name, "w");
-#endif
 		if (!fh) {
 			I_Error("G_ExecuteFile: Unable to create %s", name);
 		}
 
 		fprintf(fh, "%s", DefaultConfig);
 		fclose(fh);
-#ifdef USE_OPTMIZED_FFUNCTION
-		fopen_s(&fh, name, "rb");
-#else
 		fh = fopen(name, "rb");
-#endif
 		if (!fh) {
 			I_Error("G_ExecuteFile: Failed to read %s", name);
 		}

@@ -33,12 +33,8 @@
 #include <strings.h>
 #include <string.h>
 #endif
-#include <stdarg.h>
 #include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include <time.h>
 
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)

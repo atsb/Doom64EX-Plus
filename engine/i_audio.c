@@ -31,9 +31,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef _WIN32
+
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef _WIN32
 #include <unistd.h>
 #endif
 
@@ -42,6 +43,7 @@
 #else
 #include <fluidlite.h>
 #endif
+
 #ifdef __APPLE__
 #ifdef USE_SDL3
 #include <SDL3/SDL.h>
@@ -1085,12 +1087,10 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 //
 
 static void Seq_Shutdown(doomseq_t* seq)
-{
-#ifndef __linux__    
-#ifndef _WIN32
+{    
+#if !defined(_WIN32) && defined(__linux__)
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
-#else
     //
     // signal the sequencer to shut down
     //
@@ -1101,22 +1101,16 @@ static void Seq_Shutdown(doomseq_t* seq)
     //
     SDL_WaitThread(seq->thread, NULL);
     
-    // Close SDL Audio Device
-    SDL_CloseAudioDevice(1);
-
-#if !defined(_WIN32)
     //
     // fluidsynth cleanup stuff
     //
     SDL_CloseAudioDevice(1);
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
-#endif
 
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
-#endif
 #endif
 }
 

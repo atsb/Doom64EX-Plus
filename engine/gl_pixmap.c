@@ -26,7 +26,9 @@
 #include "gl_pixmap.h"
 #include "m_fixed.h"
 #include "z_zone.h"
-
+#ifdef _MSC_VER
+#pragma warning(disable:4789) //Debbuger warning.
+#endif
 #define PADWIDTH(x) (((x+3)>>2)<<2)
 #define PADWIDTH2(x,a) (((x+a-1)/a)*a)
 

@@ -162,11 +162,6 @@ void I_InitScreen(void) {
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, I_ResizeCallback);
 
-	if(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) < 0)
-	{
-		I_Error("Failed to load glad");
-	}
-
 	while(!glfwWindowShouldClose(window))
 	{
 		glfwSwapInterval(v_vsync.value);
@@ -208,12 +203,11 @@ void I_InitScreen(void) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
-
-	if(gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
+#endif
+	if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
 	{
 		I_Error("Failed to load glad");
 	}
-#endif
 #ifdef USE_IMGUI
 	//André: Adding the context
 	io = igGetIO();
