@@ -123,7 +123,7 @@ int fluid_timer_stop(fluid_timer_t* timer);
 
 /* Muteces */
 
-#if HAVE_PTHREAD_H && !defined(_WIN32)
+#if HAVE_PTHREAD_H && !defined(_WIN32) || defined(PS2)
 
 static FLUID_INLINE void
 fluid_pthread_mutex_init(pthread_mutex_t *m, int kind)

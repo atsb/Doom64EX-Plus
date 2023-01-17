@@ -2061,7 +2061,7 @@ static const union fluid_idlist
 static unsigned int sdtachunk_size;
 
 /* sound font file load functions */
-static int chunkid(uint32_t id)
+static int chunkid(unsigned int id)
 {
     unsigned int i;
     const uint32_t *p = &idlist.i;
