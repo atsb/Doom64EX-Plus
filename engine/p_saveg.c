@@ -41,7 +41,6 @@
 #include "d_englsh.h"
 #include "m_misc.h"
 #include "doomdef.h" // added just so MSVC would shut up about warning C4761
-
 void G_DoLoadLevel(void);
 
 //

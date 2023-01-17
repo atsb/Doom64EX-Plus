@@ -38,8 +38,10 @@
 #include <unistd.h>
 #endif
 
-#if defined(USE_FLUIDSYNTH) //!defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
+#if defined(USE_FLUIDSYNTH)
 #include <fluidsynth.h>
+#elif defined(USE_FLUIDSYNTH_LITE)
+#include <fluidsynth-lite.h>
 #else
 #include <fluidlite.h>
 #endif
