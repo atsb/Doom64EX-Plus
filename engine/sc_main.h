@@ -49,7 +49,7 @@ extern scparser_t sc_parser;
 
 typedef struct {
 	const char* token;
-	int64_t   ptroffset;
+	long long   ptroffset;
 	char    type;
 } scdatatable_t;
 
