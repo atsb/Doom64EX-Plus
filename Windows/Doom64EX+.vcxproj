@@ -431,7 +431,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_FLUIDSYNTH;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_3.2\include</AdditionalIncludeDirectories>
     </ClCompile>
