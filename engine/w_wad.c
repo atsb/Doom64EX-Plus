@@ -334,7 +334,7 @@ void W_Init(void) {
 
 	Z_Free(fileinfo);
 
-	if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
+	if ((doom64expluswad = I_FindDataFile("DOOM64EX+.wad"))) {
 		W_MergeFile(doom64expluswad);
 		free(doom64expluswad);
 	}
