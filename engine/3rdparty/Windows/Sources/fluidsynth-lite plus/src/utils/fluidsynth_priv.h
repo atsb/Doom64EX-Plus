@@ -42,6 +42,10 @@
 #include "config_vita.h"
 #endif
 
+#if defined(PS2)
+#include "config_ps2.h"
+#endif
+
 #if HAVE_STRING_H
 #include <string.h>
 #endif
@@ -105,6 +109,10 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
+
+#ifdef PS2
+#include <tamtypes.h>
 #endif
 
 /* MinGW32 special defines */

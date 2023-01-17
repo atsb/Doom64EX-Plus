@@ -98,6 +98,8 @@ extern "C" {
 #include "fluidsynth-lite/version_switch.h"
 #elif defined(__vita__)
 #include "fluidsynth-lite/version_vita.h"
+#elif defined(PS2)
+#include "fluidsynth-lite/version_ps2.h"
 #else
 #include "fluidsynth-lite/version.h"
 #endif
