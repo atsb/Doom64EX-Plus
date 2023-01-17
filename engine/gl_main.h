@@ -24,9 +24,6 @@
 #define __GL_MAIN_H__
 #include "doomtype.h"
 
-typedef unsigned int        dtexture;
-typedef unsigned int       rcolor;
-typedef unsigned int        rbuffer;
 #ifdef __APPLE__
 typedef void* GLhandleARB;
 #else
@@ -82,7 +79,7 @@ extern boolean usingGL;
 boolean GL_CheckExtension(const char* ext);
 void* GL_RegisterProc(const char* address);
 void GL_Init(void);
-void GL_ClearView(rcolor clearcolor);
+void GL_ClearView(unsigned int clearcolor);
 void GL_CheckFillMode(void);
 void GL_SwapBuffers(void);
 unsigned char* GL_GetScreenBuffer(int x, int y, int width, int height);
@@ -94,9 +91,9 @@ float GL_GetOrthoScale(void);
 void GL_SetState(int bit, boolean enable);
 void GL_SetDefaultCombiner(void);
 void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c);
+	float u1, float u2, float v1, float v2, unsigned int c);
 void GL_Draw2DQuad(vtx_t* v, boolean stretch);
 void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c, boolean stretch);
+	float u1, float u2, float v1, float v2, unsigned int c, boolean stretch);
 
 #endif

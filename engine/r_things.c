@@ -587,7 +587,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	spriteframe_t* sprframe;
 	int             spritenum;
 	int             flip;
-	rcolor          color;
+	unsigned int    color;
 	unsigned char            alpha;
 	float           x;
 	float           y;

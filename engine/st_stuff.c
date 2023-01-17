@@ -137,7 +137,7 @@ char player_names[MAXPLAYERS][MAXPLAYERNAME] = {
 	HUSTR_PLR4
 };
 
-static const rcolor st_chatcolors[MAXPLAYERS] = {
+static const unsigned int st_chatcolors[MAXPLAYERS] = {
 	D_RGBA(192, 255, 192, 255),
 	D_RGBA(255, 192, 192, 255),
 	D_RGBA(128, 255, 192, 255),
@@ -153,7 +153,7 @@ static const rcolor st_chatcolors[MAXPLAYERS] = {
 typedef struct {
 	char msg[MAXCHATSIZE];
 	int tics;
-	rcolor color;
+	unsigned int color;
 } stchat_t;
 
 static stchat_t stchat[MAXCHATNODES];
@@ -317,7 +317,7 @@ static void ST_DrawPendingWeapon(void) {
 	GL_SetOrthoScale(0.5f);
 
 	for (i = 0; i < NUMWEAPONS; i++) {
-		rcolor color;
+		unsigned int color;
 
 		if (plyr->weaponowned[i]) {
 			color = D_RGBA(0xff, 0xff, 0x3f, st_wpndisplay_alpha);
@@ -471,7 +471,7 @@ void ST_Ticker(void) {
 void ST_FlashingScreen(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	if (v_accessibility.value < 1)
 	{
-		rcolor c = D_RGBA(r, g, b, a);
+		unsigned int c = D_RGBA(r, g, b, a);
 
 		GL_SetState(GLSTATE_BLEND, 1);
 		GL_SetOrtho(1);
@@ -489,7 +489,7 @@ void ST_FlashingScreen(unsigned char r, unsigned char g, unsigned char b, unsign
 // ST_DrawStatusItem
 //
 
-static void ST_DrawStatusItem(const float xy[4][2], const float uv[4][2], rcolor color) {
+static void ST_DrawStatusItem(const float xy[4][2], const float uv[4][2], unsigned int color) {
 	int i;
 
 	glTriangle(st_vtxcount + 0, st_vtxcount + 1, st_vtxcount + 2);
@@ -578,7 +578,7 @@ static void ST_DrawStatus(void) {
 	float   width;
 	float   height;
 	float   uv[4][2];
-	const rcolor color = D_RGBA(0x68, 0x68, 0x68, 0x90);
+	const unsigned int color = D_RGBA(0x68, 0x68, 0x68, 0x90);
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	lump = GL_BindGfxTexture("STATUS", true);
@@ -668,7 +668,7 @@ static void ST_DrawStatus(void) {
 // ST_DrawCrosshair
 //
 
-void ST_DrawCrosshair(int x, int y, int slot, unsigned char scalefactor, rcolor color) {
+void ST_DrawCrosshair(int x, int y, int slot, unsigned char scalefactor, unsigned int color) {
 	float u;
 	int index;
 	int scale;
@@ -1393,7 +1393,7 @@ static void ST_DisplayName(int playernum) {
 	fixed_t     screeny;
 	player_t* player;
 	char        name[MAXPLAYERNAME];
-	rcolor      color;
+	unsigned int      color;
 	fixed_t     distance;
 
 	// don't display self

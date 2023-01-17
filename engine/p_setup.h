@@ -57,8 +57,8 @@ typedef struct {
 	int         flags;
 	char        pic[9];
 	char        backdrop[9];
-	rcolor      fogcolor;
-	rcolor      skycolor[3];
+	unsigned int      fogcolor;
+	unsigned int      skycolor[3];
 	int         fognear;
 } skydef_t;
 

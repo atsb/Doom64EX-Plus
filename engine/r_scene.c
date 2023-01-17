@@ -215,7 +215,7 @@ static void SetupFog(void) {
 	}
 	else if (r_fog.value) {
 		float color[4] = { 0, 0, 0, 0 };
-		rcolor fogcolor = 0;
+		unsigned int fogcolor = 0;
 		int fognear = 0;
 		int fogfactor;
 

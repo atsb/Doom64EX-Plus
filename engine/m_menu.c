@@ -4067,7 +4067,7 @@ void M_DrawXInputButton(int x, int y, int button) {
 	float height;
 	int pic;
 	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
+	const unsigned int color = MENUCOLORWHITE;
 
 	switch (button) {
 	case GAMEPAD_A:
@@ -4598,7 +4598,7 @@ static void M_DrawMenuSkull(int x, int y) {
 	float smbheight;
 	int pic;
 	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
+	const unsigned int color = MENUCOLORWHITE;
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
@@ -4760,7 +4760,7 @@ void M_Drawer(void) {
 			}
 
 			if (!currentMenu->smallfont) {
-				rcolor fontcolor = MENUCOLORRED;
+			    unsigned int fontcolor = MENUCOLORRED;
 
 				if (itemSelected == i) {
 					fontcolor += D_RGBA(0, 128, 8, 0);
@@ -4769,7 +4769,7 @@ void M_Drawer(void) {
 				Draw_BigText(x, y, fontcolor, currentMenu->menuitems[i].name);
 			}
 			else {
-				rcolor color = MENUCOLORWHITE;
+				unsigned int color = MENUCOLORWHITE;
 
 				if (itemSelected == i) {
 					color = D_RGBA(255, 255, 0, menualphacolor);

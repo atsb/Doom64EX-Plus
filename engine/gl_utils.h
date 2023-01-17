@@ -245,8 +245,8 @@ void glSetVertex(vtx_t* vtx);
 void glTriangle(int v0, int v1, int v2);
 void glDrawGeometry(int count, vtx_t* vtx);
 void glViewFrustum(int width, int height, float fovy, float znear);
-void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count);
-void glGetColorf(rcolor color, float* argb);
+void glSetVertexColor(vtx_t* v, unsigned int c, unsigned short count);
+void glGetColorf(unsigned int color, float* argb);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
 

@@ -35,7 +35,7 @@
 
 #include "p_local.h"
 
-rcolor    bspColor[5];
+unsigned int   bspColor[5];
 
 CVAR_CMD(i_brightness, 100) {
 	R_RefreshBrightness();
@@ -251,7 +251,7 @@ void R_RefreshBrightness(void) {
 // R_GetSectorLight
 //
 
-rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
+unsigned int R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
 	return D_RGBA((unsigned char)lights[ptr].active_r,
 		(unsigned char)lights[ptr].active_g, (unsigned char)lights[ptr].active_b, alpha);
 }
@@ -259,15 +259,14 @@ rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
 //
 // R_SplitLineColor
 //
-
-rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
+unsigned int R_SplitLineColor(seg_t* line, unsigned char side) {
 	int height = 0;
 	int sideheight1 = 0;
 	int sideheight2 = 0;
 	float r1, g1, b1;
 	float r2, g2, b2;
-	rcolor d3dc1 = 0;
-	rcolor d3dc2 = 0;
+	unsigned int d3dc1 = 0;
+	unsigned int d3dc2 = 0;
 
 	height = (line->frontsector->ceilingheight - line->frontsector->floorheight) / FRACUNIT;
 	d3dc1 = bspColor[LIGHT_UPRWALL];
@@ -306,7 +305,7 @@ rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
 
 void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side) {
 	int i;
-	rcolor c[4];
+	unsigned int c[4];
 	unsigned char lwr = LIGHT_LWRWALL;
     unsigned char upr = LIGHT_UPRWALL;
 
@@ -369,6 +368,6 @@ void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side) {
 	}
 
 	for (i = 0; i < 4; i++) {
-		*(rcolor*)&v[i].r = c[i];
+		*(unsigned int*)&v[i].r = c[i];
 	}
 }

@@ -35,7 +35,7 @@ extern boolean console_initialized;
 
 void CON_Init(void);
 void CON_AddText(char *text);
-void CON_Printf(rcolor clr, const char *s, ...);
+void CON_Printf(unsigned int clr, const char *s, ...);
 void CON_Warnf(const char *s, ...);
 void CON_DPrintf(const char *s, ...);
 void CON_Draw(void);

@@ -145,7 +145,7 @@ static void R_TitleSkyTicker(void) {
 
 static void R_DrawSkyDome(int tiles, float rows, int height,
 	int radius, float offset, float topoffs,
-	rcolor c1, rcolor c2) {
+	unsigned int c1, unsigned int c2) {
 	fixed_t x, y, z;
 	fixed_t lx, ly;
 	int i;
@@ -268,7 +268,7 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 //
 
 static void R_DrawSkyboxCloud(void) {
-	rcolor color;
+	unsigned int color;
 	vtx_t v[4];
 
 #define SKYBOX_SETALPHA(c, x)           \
@@ -626,7 +626,7 @@ static void R_Fire(unsigned char* buffer) {
 // R_InitFire
 //
 
-static rcolor firetexture[FIRESKY_WIDTH * FIRESKY_HEIGHT];
+static unsigned int firetexture[FIRESKY_WIDTH * FIRESKY_HEIGHT];
 
 void R_InitFire(void) {
 	int i;
@@ -665,7 +665,7 @@ static void R_FireTicker(void) {
 static void R_DrawFire(void) {
 	float pos1;
 	vtx_t v[4];
-	dtexture t = gfxptr[fireLump];
+	unsigned int t = gfxptr[fireLump];
 	int i;
 
 	//

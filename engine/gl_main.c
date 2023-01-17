@@ -323,7 +323,7 @@ void GL_SetDefaultCombiner(void) {
 //
 
 void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c) {
+	float u1, float u2, float v1, float v2, unsigned int c) {
 	float left, right, top, bottom;
 
 	left = ViewWindowX + x * ViewWidth / video_width;
@@ -374,7 +374,7 @@ void GL_Draw2DQuad(vtx_t* v, boolean stretch) {
 //
 
 void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c, boolean stretch) {
+	float u1, float u2, float v1, float v2, unsigned int c, boolean stretch) {
 	vtx_t v[4];
 
 	GL_Set2DQuad(v, x, y, width, height, u1, u2, v1, v2, c);
@@ -439,7 +439,7 @@ void GL_CheckFillMode(void) {
 // GL_ClearView
 //
 
-void GL_ClearView(rcolor clearcolor) {
+void GL_ClearView(unsigned int clearcolor) {
 	float f[4];
 
 	glGetColorf(clearcolor, f);

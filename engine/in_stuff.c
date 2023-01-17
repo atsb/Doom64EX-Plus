@@ -128,7 +128,7 @@ void IN_Drawer(void) {
 	int i = 0;
 	unsigned char alpha = 0;
 	int y = 0;
-	rcolor color;
+	unsigned int color;
 
 	GL_ClearView(0xFF000000);
 
