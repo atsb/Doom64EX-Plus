@@ -477,7 +477,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libfluidsynth-lite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
