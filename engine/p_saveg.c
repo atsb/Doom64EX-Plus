@@ -125,7 +125,7 @@ static void saveg_write32(int value) {
 //------------------------------------------------------------------------
 
 static void saveg_read_pad(void) {
-    /*unsigned long pos;
+    unsigned long pos;
     int padding;
     int i;
 
@@ -137,11 +137,11 @@ static void saveg_read_pad(void) {
     padding = (4 - (pos & 3)) & 3;
 
     for(i = 0; i < padding; i++)
-        saveg_read8();*/
+        saveg_read8();
 }
 
 static void saveg_write_pad(void) {
-    /*unsigned long pos;
+    unsigned long pos;
     int padding;
     int i;
 
@@ -153,7 +153,7 @@ static void saveg_write_pad(void) {
     padding = (4 - (pos & 3)) & 3;
 
     for(i = 0; i < padding; i++)
-        saveg_write8(0);*/
+        saveg_write8(0);
 }
 
 //------------------------------------------------------------------------
