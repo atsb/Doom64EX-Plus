@@ -86,7 +86,6 @@ typedef unsigned char boolean;
 #define w3sstrnicmp _strnicmp
 #define w3sstrcasecmp _stricmp
 #define w3sstrncasecmp _strnicmp
-#define w3ssnprintf _snprintf
 #define w3sstrlwr _strlwr
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
@@ -98,12 +97,12 @@ typedef unsigned char boolean;
 #define w3sread read
 #define w3sstrdup strdup
 char* w3sstrupr(char* str);
-#define w3ssnprintf snprintf
 char* w3sstrlwr(char* str);
 #define w3sstricmp stricmp
 #define w3sstrnicmp strnicmp
 #define w3sstrcasecmp strcasecmp
 #define w3sstrncasecmp strncasecmp
+#define w3sstrlwr _strlwr
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif
@@ -133,13 +132,16 @@ void w3ssleep(long long usecs);
 #if defined(CHOCO_VSNPRITNTF)
 int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #elif defined(PSNPRINTF)
-#define w3svsnprintf(buf, size, format, arg) pvsnprintf(buf, size, format, arg)
+#define w3ssnprintf psnprintf
+#define w3svsnprintf pvsnprintf
 #else
 #if !defined(CHOCO_VSNPRINTF) || defined(PSNPRINTF)
 #ifdef _WIN32
-#define w3svsnprintf(buf, size, format, arg) _vsnprintf(buf, size, format, arg)
+#define w3svsnprintf _vsnprintf
+#define w3ssnprintf _snprintf
 #else
-#define w3svsnprintf(buf, size, format, arg) vsnprintf(buf, size, format, arg)
+#define w3svsnprintf vsnprintf
+#define w3ssnprintf snprintf
 #endif
 #endif
 #endif

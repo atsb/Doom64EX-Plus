@@ -308,7 +308,7 @@ char* I_FindDataFile(char* file) {
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-			snprintf(path, 511, "%s%s", paths[i], file);
+			w3ssnprintf(path, 511, "%s%s", paths[i], file);
 			if (I_FileExists(path))
 				return path;
 		}
