@@ -709,10 +709,14 @@ int fluid_rvoice_mixer_get_bufs(fluid_rvoice_mixer_t* mixer,
 static FLUID_INLINE fluid_rvoice_t*
 fluid_mixer_get_mt_rvoice(fluid_rvoice_mixer_t* mixer)
 {
+#ifndef WIP_PS2    
     int i = fluid_atomic_int_inc(&mixer->current_rvoice) - 1;
     if (i >= mixer->active_voices)
-        return NULL;
+        return NULL;      
     return mixer->rvoices[i];
+#else
+    return mixer->rvoices;
+#endif
 }
 
 #define THREAD_BUF_PROCESSING 0

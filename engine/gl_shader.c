@@ -22,7 +22,7 @@
 //		OpenGL Shader compiling code.
 // 
 //-----------------------------------------------------------------------------
-#if !defined(_XBOX) && !defined(VITA)
+#ifndef DONT_USE_SHADER
 #ifdef __APPLE__ 
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -42,8 +42,6 @@
 #include "con_console.h"
 #include "doomdef.h"
 #include <stdio.h>
-
-#if !defined(_XBOX) && !defined(VITA)
 
 void GL_LoadShader(const char* vertexShader, const char* fragmentShader) 
 {
@@ -124,5 +122,4 @@ boolean GL_CheckShaderErrors(unsigned int shader, unsigned int type)
 	}
 	return success;
 }
-#endif
 #endif

@@ -27,7 +27,8 @@
 //Remove this later:
 #define GL_TEXTURE0_ARB				0x84C0
 #define GL_TEXTURE1_ARB				0x84C1
-#include <glad/glad.h>
+
+#include "gl_utils.h"
 #include "gl_shader.h"
 #include "doomstat.h"
 #include "r_main.h"

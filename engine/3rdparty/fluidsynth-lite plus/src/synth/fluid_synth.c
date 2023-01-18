@@ -440,12 +440,16 @@ fluid_synth_init(void)
 
 static FLUID_INLINE unsigned int fluid_synth_get_ticks(fluid_synth_t* synth)
 {
+#ifndef WIP_PS2
     return fluid_atomic_int_get(&synth->ticks_since_start);
+#endif
 }
 
 static FLUID_INLINE void fluid_synth_add_ticks(fluid_synth_t* synth, int val)
 {
+#ifndef WIP_PS2     
     fluid_atomic_int_add(&synth->ticks_since_start, val);
+#endif
 }
 
 

@@ -26,6 +26,10 @@
 #include <switch.h>
 #elif defined(__vita__)
 #include <vitasdk.h>
+#elif defined(PS2)
+#include <kernel.h>
+#include <tamtypes.h>
+#include <timer.h>
 #endif
 
 #include "fluid_sys.h"
@@ -376,6 +380,12 @@ unsigned int fluid_curtime(void)
         initial_time = sceKernelGetProcessTimeWide();
     }
     return (unsigned int)((sceKernelGetProcessTimeWide() - initial_time) / 1000);
+#elif defined(PS2)
+    static uint64_t initial_time = 0;
+    if (initial_time == 0) {
+        initial_time = GetTimerSystemTime();
+    }
+    return (unsigned long)((GetTimerSystemTime() - initial_time) / 1000);
 #else
     static long initial_seconds = 0;
     struct timespec timeval;
@@ -412,6 +422,8 @@ fluid_utime (void)
     return time / 1000000.0;
 #elif defined(__vita__)
     return (double) sceKernelGetProcessTimeWide();
+#elif defined(PS2)
+    return (unsigned long)  GetTimerSystemTime();
 #else
     struct timespec timeval;
 

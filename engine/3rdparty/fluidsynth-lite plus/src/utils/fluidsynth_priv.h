@@ -112,7 +112,7 @@
 #endif
 
 #ifdef PS2
-#include <tamtypes.h>
+#include <alloca.h>
 #endif
 
 /* MinGW32 special defines */

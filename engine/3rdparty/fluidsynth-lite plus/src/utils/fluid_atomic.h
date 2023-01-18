@@ -12,7 +12,7 @@
 #endif
 #endif //STATIC_ASSERT
 
-#if defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) || defined(__riscos__) || defined(PS2)
+#if defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) || defined(__riscos__) || defined (PS2)
 
 typedef struct {
     volatile int value;

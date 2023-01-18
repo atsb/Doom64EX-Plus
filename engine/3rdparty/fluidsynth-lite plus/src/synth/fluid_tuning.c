@@ -100,8 +100,9 @@ void
 fluid_tuning_ref (fluid_tuning_t *tuning)
 {
     fluid_return_if_fail (tuning != NULL);
-
+#ifndef PS2    
     fluid_atomic_int_inc (&tuning->refcount);
+#endif
 }
 
 /* Unref a tuning object, when it reaches 0 it is deleted, returns TRUE if deleted */
@@ -113,14 +114,17 @@ fluid_tuning_unref (fluid_tuning_t *tuning, int count)
     /* Add and compare are separate, but that is OK, since refcount will only
      * reach 0 when there are no references and therefore no possibility of
      * another thread adding a reference in between */
-
+#ifndef WIP_PS2
     fluid_atomic_int_add (&tuning->refcount, -count);
 
     /* Delete when refcount reaches 0 */
     if (!fluid_atomic_int_get(&tuning->refcount)) {
         delete_fluid_tuning (tuning);
         return TRUE;
-    } else return FALSE;
+    }
+     else 
+ #endif    
+     return FALSE;
 }
 
 void fluid_tuning_set_name(fluid_tuning_t* tuning, char* name)

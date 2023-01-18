@@ -600,8 +600,9 @@ fluid_hashtable_ref (fluid_hashtable_t *hashtable)
 {
     fluid_return_val_if_fail (hashtable != NULL, NULL);
     fluid_return_val_if_fail (fluid_atomic_int_get(&hashtable->ref_count) > 0, hashtable);
-
+#ifndef WIP_PS2
     fluid_atomic_int_inc(&hashtable->ref_count);
+#endif
     return hashtable;
 }
 
@@ -621,12 +622,13 @@ fluid_hashtable_unref (fluid_hashtable_t *hashtable)
 {
     fluid_return_if_fail (hashtable != NULL);
     fluid_return_if_fail (fluid_atomic_int_get(&hashtable->ref_count) > 0);
-
+#ifndef WIP_PS2
     if (fluid_atomic_int_add(&hashtable->ref_count, -1) - 1 == 0) {
         fluid_hashtable_remove_all_nodes (hashtable, TRUE);
         FLUID_FREE (hashtable->nodes);
         FLUID_FREE (hashtable);
     }
+#endif
 }
 
 /**

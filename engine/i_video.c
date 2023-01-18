@@ -36,6 +36,7 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "con_console.h"
+#include "gl_utils.h"
 const char version_date[] = __DATE__;
 
 SDL_Window* window;
@@ -204,10 +205,12 @@ void I_InitScreen(void) {
 		return;
 	}
 #endif
+#ifndef DONT_USE_GLAD
 	if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
 	{
 		I_Error("Failed to load glad");
 	}
+#endif	
 #ifdef USE_IMGUI
 	//Andr�: Adding the context
 	io = igGetIO();

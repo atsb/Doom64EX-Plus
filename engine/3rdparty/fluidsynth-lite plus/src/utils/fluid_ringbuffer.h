@@ -72,8 +72,9 @@ fluid_ringbuffer_get_inptr (fluid_ringbuffer_t *queue, int offset)
 static FLUID_INLINE void
 fluid_ringbuffer_next_inptr (fluid_ringbuffer_t *queue, int count)
 {
+#ifndef WIP_PS2   
     fluid_atomic_int_add(&queue->count, count);
-
+#endif
     queue->in += count;
     if (queue->in >= queue->totalcount)
         queue->in -= queue->totalcount;
@@ -118,8 +119,9 @@ fluid_ringbuffer_get_outptr (fluid_ringbuffer_t *queue)
 static FLUID_INLINE void
 fluid_ringbuffer_next_outptr (fluid_ringbuffer_t *queue)
 {
+#ifndef WIP_PS2    
     fluid_atomic_int_add (&queue->count, -1);
-
+#endif
     if (++queue->out == queue->totalcount)
         queue->out = 0;
 }
