@@ -39,9 +39,12 @@
 #endif
 #else
 #ifdef USE_GLFW
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #else
+#ifndef DONT_USE_GLAD
 #include <glad/glad.h>
+#endif
 #include <SDL.h>
 #include <SDL_opengl.h>
 #endif

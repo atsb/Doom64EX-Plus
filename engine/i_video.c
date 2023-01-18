@@ -25,7 +25,6 @@
 //    SDL Stuff
 //
 //-----------------------------------------------------------------------------
-#include <glad/glad.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
