@@ -279,7 +279,11 @@ unsigned char* GL_GetScreenBuffer(int x, int y, int width, int height) {
 //
 // GL_SetTextureFilter
 //
-
+#define GL_TEXTURE_MAX_ANISOTROPY_EXT     0x84FE
+#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+#define GL_EXT_texture_filter_anisotropic 1
+#define GL_MAX_TEXTURE_UNITS_ARB		0x84E2
+#define GL_ARB_multitexture 1
 void GL_SetTextureFilter(void) {
 	if (!usingGL) {
 		return;
@@ -287,7 +291,6 @@ void GL_SetTextureFilter(void) {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
-
 	if (GL_EXT_texture_filter_anisotropic) {
 		if (r_anisotropic.value) {
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_anisotropic);
@@ -306,8 +309,9 @@ void GL_SetDefaultCombiner(void) {
 	    if (!usingGL) {
         return;
     }
-    
-	if (GL_ARB_multitexture) {
+
+	if (GL_ARB_multitexture) 
+	{
 		GL_SetTextureUnit(1, false);
 		GL_SetTextureUnit(2, false);
 		GL_SetTextureUnit(3, false);

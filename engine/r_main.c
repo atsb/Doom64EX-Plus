@@ -319,6 +319,7 @@ void R_SetupLevel(void) {
 	bRenderSky = true;
 }
 
+#define GL_ARB_multitexture 1
 //
 // R_PrecacheLevel
 // Loads and binds all world textures before level startup

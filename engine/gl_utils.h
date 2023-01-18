@@ -41,6 +41,7 @@
 #ifdef USE_GLFW
 #include <GLFW/glfw3.h>
 #else
+#include <glad/glad.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #endif

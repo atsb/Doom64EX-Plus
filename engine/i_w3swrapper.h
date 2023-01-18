@@ -23,20 +23,18 @@
 #include "doomtype.h"
 
 #ifdef _WIN32
-#include <fcntl.h>
 #include <io.h>
-#include <string.h>
 #include <Windows.h>
 #else
-#include <fcntl.h>
 #include <unistd.h>
 #include <strings.h>
-#include <string.h>
+
 #endif
+#include <fcntl.h>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-
+#include <string.h>
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)
 #else

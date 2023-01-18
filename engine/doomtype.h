@@ -31,7 +31,6 @@
 #ifndef C89
 #include <stdbool.h> //Oops
 #endif
-#include <limits.h>
 #include "i_w3swrapper.h"
 
 #ifndef BETWEEN
