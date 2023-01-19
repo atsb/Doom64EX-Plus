@@ -609,11 +609,50 @@ void M_DrawStartNewNotify(void) {
 
 //------------------------------------------------------------------------
 //
+// MAP SELECT MENU
+//
+//------------------------------------------------------------------------
+
+void M_ChooseMap(int choice);
+void M_ChooseMapLost(int choice);
+
+enum {
+	doom64,
+	lostlevels,
+	mapg_end
+} mapselect_e;
+
+menuitem_t MapMenu[] = {
+	{1,"DOOM 64",M_ChooseMap, 'd'},
+	{1,"Lost Levels",M_ChooseMapLost, 'l'},
+};
+
+menu_t MapSelectDef = {
+	mapg_end,
+	false,
+	&MainDef,
+	MapMenu,
+	NULL,
+	"Choose your game...",
+	112,80,
+	doom64,
+	false,
+	NULL,
+	-1,
+	0,
+	1.0f,
+	NULL,
+	NULL
+};
+
+//------------------------------------------------------------------------
+//
 // NEW GAME MENU
 //
 //------------------------------------------------------------------------
 
 void M_ChooseSkill(int choice);
+void M_ChooseSkillLost(int choice);
 
 enum {
 	killthings,
@@ -630,6 +669,14 @@ menuitem_t NewGameMenu[] = {
 	{1,"I Own Doom!",M_ChooseSkill, 'i'},
 	{1,"Watch Me Die!",M_ChooseSkill, 'w'},
 	{1,"Hardcore!",M_ChooseSkill, 'h'},
+};
+
+menuitem_t NewGameMenuLost[] = {
+	{1,"Be Gentle!",M_ChooseSkillLost, 'b'},
+	{1,"Bring It On!",M_ChooseSkillLost, 'r'},
+	{1,"I Own Doom!",M_ChooseSkillLost, 'i'},
+	{1,"Watch Me Die!",M_ChooseSkillLost, 'w'},
+	{1,"Hardcore!",M_ChooseSkillLost, 'h'},
 };
 
 menu_t NewDef = {
@@ -650,7 +697,35 @@ menu_t NewDef = {
 	NULL
 };
 
+menu_t NewDefLost = {
+	newg_end,
+	false,
+	&MainDef,
+	NewGameMenuLost,
+	NULL,
+	"Choose Your Skill...",
+	112,80,
+	toorough,
+	false,
+	NULL,
+	-1,
+	0,
+	1.0f,
+	NULL,
+	NULL
+};
+
 void M_NewGame(int choice) {
+	if (netgame && !demoplayback) {
+		M_StartControlPanel(true);
+		M_SetupNextMenu(&StartNewNotifyDef);
+		return;
+	}
+
+	M_SetupNextMenu(&MapSelectDef);
+}
+
+void M_ChooseMap(int choice) {
 	if (netgame && !demoplayback) {
 		M_StartControlPanel(true);
 		M_SetupNextMenu(&StartNewNotifyDef);
@@ -660,8 +735,25 @@ void M_NewGame(int choice) {
 	M_SetupNextMenu(&NewDef);
 }
 
+void M_ChooseMapLost(int choice) {
+	if (netgame && !demoplayback) {
+		M_StartControlPanel(true);
+		M_SetupNextMenu(&StartNewNotifyDef);
+		return;
+	}
+
+	M_SetupNextMenu(&NewDefLost);
+}
+
 void M_ChooseSkill(int choice) {
 	G_DeferedInitNew(choice, 1);
+	M_ClearMenus();
+	dmemset(passwordData, 0xff, 16);
+	allowmenu = false;
+}
+
+void M_ChooseSkillLost(int choice) {
+	G_DeferedInitNew(choice, 34);
 	M_ClearMenus();
 	dmemset(passwordData, 0xff, 16);
 	allowmenu = false;
