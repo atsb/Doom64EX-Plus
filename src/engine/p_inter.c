@@ -873,6 +873,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_UNDEAD:
 			sprintf(omsg, "you couldn't evade\nthe Revenant.");
 			break;
+		case MT_SPIDER:
+			sprintf(omsg, "you stood in awe\nof the Spider Demon.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
