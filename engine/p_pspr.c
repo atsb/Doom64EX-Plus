@@ -473,15 +473,19 @@ void A_Saw (player_t *player, pspdef_t *psp) // 8001BC1C
 {
 	angle_t	angle;
 	int		damage;
-	int         	rnd1, rnd2;
+	int     rnd1, rnd2;
+	int     slope = 0;
 
 	damage = ((P_Random()&7)+1)*3;
 	angle = player->mo->angle;
 	rnd1 = P_Random();
 	rnd2 = P_Random();
 	angle += (angle_t)(rnd2-rnd1)<<18;
+
 	/* use meleerange + 1 se the puff doesn't skip the flash */
-	P_LineAttack (player->mo, angle, MELEERANGE+1, INT_MAX, damage);
+	slope = P_AimLineAttack(player->mo, angle, 0, MELEERANGE + 1);
+	P_LineAttack(player->mo, angle, MELEERANGE + 1, slope, damage);
+
 	if (!linetarget)
 	{
 		S_StartSound (player->mo, sfx_saw1);
