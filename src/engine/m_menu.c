@@ -633,7 +633,7 @@ menu_t MapSelectDef = {
 	&MainDef,
 	MapMenu,
 	NULL,
-	"Choose your game...",
+	"Choose Campaign",
 	112,80,
 	doom64,
 	false,
