@@ -1266,8 +1266,8 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	th->momy = FixedMul(frac, dsin(an));
 	th->momz = FixedMul(th->info->speed, slope);
 
-	x = source->x + (offset * finecosine[an >> ANGLETOFINESHIFT]);
-	y = source->y + (offset * finesine[an >> ANGLETOFINESHIFT]);
+	x = source->x + (offset * F2INT(dcos(an)));
+	y = source->y + (offset * F2INT(dsin(an)));
 
 	// [d64]: checking against very close lines?
 	if (!P_TryMove(th, x, y))
