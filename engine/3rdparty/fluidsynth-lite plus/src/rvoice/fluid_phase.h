@@ -64,7 +64,7 @@ typedef unsigned long long fluid_phase_t;
  * the playing pointer will advance it by 0.9 samples. */
 #define fluid_phase_set_float(a, b) \
   (a) = (((unsigned long long)(b)) << 32) \
-  | (uint32) (((double)(b) - (int)(b)) * (double)FLUID_FRACT_MAX)
+  | (uint32_t) (((double)(b) - (int)(b)) * (double)FLUID_FRACT_MAX)
 
 /* create a fluid_phase_t from an index and a fraction value */
 #define fluid_phase_from_index_fract(index, fract) \
@@ -75,7 +75,7 @@ typedef unsigned long long fluid_phase_t;
 #define fluid_phase_index(_x) \
   ((unsigned int)((_x) >> 32))
 #define fluid_phase_fract(_x) \
-  ((uint32)((_x) & 0xFFFFFFFF))
+  ((uint32_t)((_x) & 0xFFFFFFFF))
 
 /* Get the phase index with fractional rounding */
 #define fluid_phase_index_round(_x) \

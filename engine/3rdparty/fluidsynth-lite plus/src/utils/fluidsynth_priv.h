@@ -158,17 +158,6 @@ typedef double fluid_real_t;
      _type* _name = _alloca(sizeof(_type) * (_len))
 #endif
 
-
-/** Integer types  */
-//typedef gint8              sint8;
-typedef uint8_t             uint8;
-//typedef gint16             sint16;
-//typedef guint16            uint16;
-typedef int32_t             sint32;
-typedef uint32_t            uint32;
-//typedef gint64             sint64;
-//typedef guint64            uint64;
-
 /** Boolean types  */
 #ifndef _WIN32
 #define TRUE true

@@ -52,7 +52,7 @@ typedef struct {
 
 /* Excerpt from glib gprimes.c */
 
-static const uint32 primes[] = {
+static const uint32_t primes[] = {
     11,
     19,
     37,
@@ -1202,7 +1202,7 @@ fluid_str_hash (const void *v)
 {
     /* 31 bit hash function */
     const signed char *p = v;
-    uint32 h = *p;
+    uint32_t h = *p;
 
     if (h)
         for (p += 1; *p != '\0'; p++)
