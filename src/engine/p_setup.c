@@ -86,6 +86,8 @@ int                 nummapdef;
 mapdef_t* mapdefs;
 int                 numclusterdef;
 clusterdef_t* clusterdefs;
+int					numepisodedef;
+episodedef_t* episodedefs;
 
 //
 // [kex] cvars
@@ -1120,14 +1122,22 @@ static scdatatable_t clusterdatatable[] = {
 	{   NULL,                   0,                                          0   }
 };
 
+static scdatatable_t episodedatatable[] = {
+	{ "NAME", (int64_t) & ((episodedef_t*)0)->name, 's'},
+	{ "KEY", (int64_t) & ((episodedef_t*)0)->key, 's'}
+};
+
 static void P_InitMapInfo(void) {
 	mapdef_t mapdef;
 	clusterdef_t cluster;
+	episodedef_t episode;
 
 	mapdefs = NULL;
 	clusterdefs = NULL;
+	episodedefs = NULL;
 	nummapdef = 0;
 	numclusterdef = 0;
+	numepisodedef = 0;
 
 	sc_parser.open("MAPINFO");
 
@@ -1293,6 +1303,24 @@ static void P_InitMapInfo(void) {
 				sizeof(clusterdef_t) * ++numclusterdef, PU_STATIC, 0);
 			dmemcpy(&clusterdefs[numclusterdef - 1], &cluster, sizeof(clusterdef_t));
 		}
+		else if (!dstricmp(sc_parser.token, "EPISODE")) {
+			dmemset(&episode, 0, sizeof(episodedef_t));	
+
+			sc_parser.find(false);
+			episode.mapid = datoi(sc_parser.token);
+
+			sc_parser.compare("{");
+			while (sc_parser.readtokens()) {
+				sc_parser.find(false);
+				if (sc_parser.token[0] == '}') {
+					break;
+				}
+				sc_parser.setdata(&episode, episodedatatable);
+			}
+
+			episodedefs = Z_Realloc(episodedefs, sizeof(episodedef_t) * ++numepisodedef, PU_STATIC, 0);
+			dmemcpy(&episodedefs[numepisodedef - 1], &episode, sizeof(episodedef_t));
+		}
 		else {
 			sc_parser.error("P_InitMapInfo");
 		}
@@ -1302,6 +1330,7 @@ static void P_InitMapInfo(void) {
 
 	CON_DPrintf("%i map definitions\n", nummapdef);
 	CON_DPrintf("%i cluster definitions\n", numclusterdef);
+	CON_DPrintf("%i episode definitions\n", numepisodedef);
 }
 
 //
@@ -1341,6 +1370,15 @@ clusterdef_t* P_GetCluster(int map) {
 	}
 
 	return NULL;
+}
+
+int P_GetNumEpisodes(void)
+{
+	return numepisodedef;
+}
+
+episodedef_t* P_GetEpisode(int episode) {
+	return &episodedefs[episode];
 }
 
 //
