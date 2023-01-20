@@ -35,7 +35,6 @@
 #include "r_drawlist.h"
 #include "gl_utils.h"
 CVAR_EXTERNAL(i_interpolateframes);
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fog);
 CVAR_EXTERNAL(st_flashoverlay);
 
@@ -216,7 +215,7 @@ static void SetupFog(void) {
 	}
 	else if (r_fog.value) {
 		float color[4] = { 0, 0, 0, 0 };
-		rcolor fogcolor = 0;
+		unsigned int fogcolor = 0;
 		int fognear = 0;
 		int fogfactor;
 
@@ -296,30 +295,14 @@ void R_RenderWorld(void) {
 	DL_BeginDrawList(1);
 
 	// setup texture environment for effects
-	if (r_texturecombiner.value) {
-		if (!nolights) {
-			GL_UpdateEnvTexture(WHITE);
-			GL_SetTextureUnit(1, true);
-			glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
-		}
 
-		if (st_flashoverlay.value <= 0) {
-			GL_SetTextureUnit(2, true);
-			glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
-		}
+	GL_SetTextureUnit(1, true);
+	GL_SetTextureMode(GL_ADD);
+	GL_SetTextureUnit(0, true);
 
-		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
-
-		GL_SetTextureUnit(0, true);
-	}
-	else {
-		GL_SetTextureUnit(1, true);
-		GL_SetTextureMode(GL_ADD);
-		GL_SetTextureUnit(0, true);
-
-		if (nolights) {
-			GL_SetTextureMode(GL_REPLACE);
-		}
+	if (nolights)
+	{
+		GL_SetTextureMode(GL_REPLACE);
 	}
 
 	glEnable(GL_ALPHA_TEST);

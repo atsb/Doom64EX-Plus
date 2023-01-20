@@ -84,7 +84,7 @@ void ST_DrawFPS(int offset) {
 //
 
 void D_DeveloperDisplay(void) {
-	rcolor  sevclr = WHITE;
+	unsigned int  sevclr = WHITE;
 	int p_nummobjthinkers = 0;
 	fixed_t px, py, pz, pa, pp;
 	int y = 8;

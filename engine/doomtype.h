@@ -25,13 +25,12 @@
 #define __DOOMTYPE__
 
 #ifdef _WIN32
-#include <SDL2/SDL_config.h>
+#include <SDL_config.h>
 #endif
 
 #ifndef C89
 #include <stdbool.h> //Oops
 #endif
-#include <limits.h>
 #include "i_w3swrapper.h"
 
 #ifndef BETWEEN

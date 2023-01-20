@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Doom64 Macros</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+	</head>
+	<body text="#ccff99" vLink="#cc0000" link="#ff9999" bgColor="#000000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>Macros</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Introduction---------</STRONG><BR>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>Macros are Doom64's own scripting system 
+			that behaves a lot like Doomsday's DED/XG linedef<BR>
+			&nbsp;&nbsp;&nbsp; system. Macros is very simplistic and does not contain 
+			programming syntax.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; Macros are linedef driven which means that it can create a 
+			chain of linedef specials that<BR>
+			&nbsp;&nbsp;&nbsp; can all be activated in unique orders. Each Macro contains 
+			sequences where once the first<BR>
+			&nbsp;&nbsp;&nbsp; sequence has fully finished activating all linedef specials, 
+			it then begins the next sequence.<BR>
+			&nbsp;&nbsp;&nbsp; Specials like Doors, moving sectors etc, will be concidered 
+			'done' when the sector has finished<BR>
+			&nbsp;&nbsp;&nbsp; moving, such as a&nbsp;door&nbsp;thats fully opened/closed, 
+			or a&nbsp;lowering floor&nbsp;that has fully lowered<BR>
+			&nbsp;&nbsp;&nbsp; to its destination and so forth, which 
+			afterwards&nbsp;the&nbsp;next sequence will begin.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; A given example would be&nbsp;the first sequence contains 
+			linedef special 38 (Floor lower) and<BR>
+			&nbsp;&nbsp;&nbsp; the second sequence&nbsp;containing linedef special 2 
+			(Door&nbsp;Open Stay). Once the floor has fully<BR>
+			&nbsp;&nbsp;&nbsp; lowered and is no longer moving, the door opens.&nbsp;Fully 
+			understanding sequences can lead the<BR>
+			&nbsp;&nbsp;&nbsp; way for very neat&nbsp;and clever scripting.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; Definitions:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Macro - A custom linedef that can 
+			execute a series of sequenced line specials<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sequence - A batch of line specials 
+			that are executed at once. Once all specials in the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			sequence are done, the next sequence in the Macro will then be executed.<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Technical Specs</STRONG>---------<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; Macros are stored in a new level lump called MACROS, which 
+			is the last lump in the level wad.<BR>
+			&nbsp;&nbsp;&nbsp; The structure format for Macro lumps is laid out like this:<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; |--Header:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;|----Number of Macros<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;|----Total Number of Linedef Specials<BR>
+			&nbsp;&nbsp;&nbsp; |<BR>
+			&nbsp;&nbsp;&nbsp; |--Macro Data:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;|----Number of Specials - How many specials are being 
+			used for this&nbsp;Macro set. (Note that<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; the sum of each number of specials 
+			for each&nbsp;Macro data must be equal to the total number<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; of linedef specials specified in 
+			the header. Otherwise an error will&nbsp;be reported).<BR>
+			&nbsp;&nbsp;&nbsp; |<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;|----Macro Info:<BR>
+			&nbsp;&nbsp;&nbsp; |--------Sequence ID - This is the&nbsp;value used to 
+			identify the sequence.&nbsp;Note that the lowest<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			value will be concidered the first&nbsp;sequence and so forth.&nbsp;These 
+			values<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are 
+			always in multiples of 10. So&nbsp;sequences are ordered in values of<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			10, 20, 30, 40, 50&nbsp;etc.<BR>
+			&nbsp;&nbsp;&nbsp; |--------Tag -&nbsp;Sector/TID/Misc tags for the line 
+			specials to use<BR>
+			&nbsp;&nbsp;&nbsp; |--------Special ID - Linedef special number, 38 - Lower 
+			Floor to Lowest, 117 - Open Door Fast<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;etc.<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Limits</STRONG>---------<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * Only 256 Macros are allowed per level<BR>
+			&nbsp;&nbsp;&nbsp; * Only 256 Sequences are allowed per Macro<BR>
+			&nbsp;&nbsp;&nbsp; * Sequence IDs cannot be mixed up in a macro. This will 
+			cause Macro scripts to not function<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;properly<BR>
+			<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Tutorials</STRONG>---------<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; <STRONG>Basic Macro Scripting<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;</STRONG>Fully understanding the concepts of Macros 
+			may take some getting used to, but the learning<BR>
+			&nbsp;&nbsp;&nbsp; curve is not&nbsp;as high as with most scripting languages 
+			like ACS.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; Macros are created in the linedef's properties in Doom 
+			Builder64. To start creating a line macro<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;go through the following steps:<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;Under Action Flags,&nbsp;check 'Macro 
+			Line'.&nbsp;(Note that&nbsp;the color of the linedef will change once<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			it is flagged as a Macro line).<BR>
+			&nbsp;&nbsp;&nbsp; * When the Macro flag is set, the 
+			linedef&nbsp;action&nbsp;property box will now be used as the Macro ID.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Since no macros are created yet, set the number 
+			to 0. (Later on if you decide to create<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; macro, set the number to 1, and so forth).<BR>
+			&nbsp;&nbsp;&nbsp; * Click on the&nbsp;'MACRO' tab.<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;The first sequence and a placeholder special has been 
+			set already.<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;The Macro properties window should look like this:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="IMG/Macros/Macro00.jpg"><IMG language="javascript" id="Img2" onclick="return IMG1_onclick()" height="192" src="IMG/Macros/Macro00.jpg"
+					width="192"></a><BR>
+			&nbsp;&nbsp;&nbsp; * Change the placeholder special by double clicking on '1 - 
+			Tag:0 DR Door Open Normal (Manual)'.<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;Locate and choose&nbsp;Floor-&gt;FL Floor Lower to 
+			Lowest Floor (38)<BR>
+			&nbsp;&nbsp;&nbsp; * A select sector tag window will open, choose 1 for the 
+			tag.<BR>
+			&nbsp;&nbsp;&nbsp; * The Macro should now be updated:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="IMG/Macros/Macro01.jpg"><IMG language="javascript" id="Img2" onclick="return IMG1_onclick()" height="192" src="IMG/Macros/Macro01.jpg"
+					width="192"></a><BR>
+			&nbsp;&nbsp;&nbsp; * Select 'Sequence 1' and then click on the 'Add Action' 
+			button<BR>
+			&nbsp;&nbsp;&nbsp; * Choose Door-&gt;DR Door Open (2)<BR>
+			&nbsp;&nbsp;&nbsp; * Enter&nbsp;2 for the tag<BR>
+			&nbsp;&nbsp;&nbsp; * Click on the 'New Sequence' button<BR>
+			&nbsp;&nbsp;&nbsp; * Under 'Sequence 2' double click on '1 - Tag:0 DR Door Open 
+			Normal (Manual)'<BR>
+			&nbsp;&nbsp;&nbsp; * Locate and choose&nbsp;Floor-&gt;FL Floor Lower to Lowest 
+			Floor (38)<BR>
+			&nbsp;&nbsp;&nbsp; * Enter&nbsp;3 for the tag<BR>
+			&nbsp;&nbsp;&nbsp; * Window should look like this now:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="IMG/Macros/Macro02.jpg"><IMG language="javascript" id="Img1" onclick="return IMG1_onclick()" height="192" src="IMG/Macros/Macro02.jpg"
+					width="192"></a><BR>
+			&nbsp;&nbsp;&nbsp; * Go back to the properties tab and under 'Action 
+			Flag',&nbsp;check 'SWITCH' so this linedef can be<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used by the player (by pressing use on the 
+			line).<BR>
+			&nbsp;&nbsp;&nbsp; * Press the OK button.<BR>
+			&nbsp;&nbsp;&nbsp; * In your level, create a room&nbsp;that is&nbsp;256 units 
+			tall.<BR>
+			&nbsp;&nbsp;&nbsp; * Create&nbsp;two sectors&nbsp;in the room&nbsp;and make the 
+			floor height 256 tall.&nbsp;Give them tags of 1 and&nbsp;3<BR>
+			&nbsp;&nbsp;&nbsp; * Create a door.&nbsp;Give it a tag of&nbsp;2<BR>
+			&nbsp;&nbsp;&nbsp; * Compile level and use -file or run the level from /Maps in 
+			Doom64ex.<BR>
+			&nbsp;&nbsp;&nbsp; * Press use on the macro line in your level.<BR>
+			&nbsp;&nbsp;&nbsp; * Sector tagged 1 will lower and the door tagged 3 will be 
+			triggered. Once both the door and<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the floor has fully stopped, the sector tagged 2 
+			will now lower.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; Hopfully now, you should understand how Macros and Sequences 
+			work. Next some of the more common<BR>
+			&nbsp;&nbsp;&nbsp; features and specials will be discussed.<BR>
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; <STRONG>General Specials<BR>
+				&nbsp;&nbsp;&nbsp; </STRONG>&lt;TODO&gt;<BR>
+			<BR>
+		</P>
+	</body>
+</html>

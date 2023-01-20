@@ -40,7 +40,7 @@
 
 void M_ClearMenus(void);    // from m_menu.c
 
-static dtexture wipeMeltTexture = 0;
+static unsigned int wipeMeltTexture = 0;
 static int wipeFadeAlpha = 0;
 
 //
@@ -106,7 +106,7 @@ void WIPE_FadeScreen(int fadetics) {
 	// begin fade out
 	//
 	while (wipeFadeAlpha > 0) {
-		rcolor color;
+		unsigned int color;
 
 		//
 		// clear frame

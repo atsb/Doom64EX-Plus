@@ -183,7 +183,7 @@ static int SC_SetData(unsigned char* data, const scdatatable_t* table) {
 				rgb[1] = htoi(sc_parser.token);
 				sc_parser.find(false);
 				rgb[2] = htoi(sc_parser.token);
-				*(rcolor*)pointer = D_RGBA(rgb[0], rgb[1], rgb[2], 0xFF);
+				*(unsigned int*)pointer = D_RGBA(rgb[0], rgb[1], rgb[2], 0xFF);
 				break;
 			}
 
@@ -333,9 +333,7 @@ void SC_Init(void) {
 	sc_parser.rewind = SC_Rewind;
 	sc_parser.getstring = SC_GetString;
 	sc_parser.getint = SC_GetInteger;
-#ifndef __linux__	
 	sc_parser.setdata = SC_SetData;
-#endif	
 	sc_parser.readtokens = SC_ReadTokens;
 	sc_parser.error = SC_Error;
 }

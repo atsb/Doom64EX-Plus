@@ -34,17 +34,17 @@
 #define MAX_IWAD_DIRS 128
 
 static boolean iwad_dirs_built = false;
-static int8_t* iwad_dirs[MAX_IWAD_DIRS];
+static char* iwad_dirs[MAX_IWAD_DIRS];
 static int num_iwad_dirs = 0;
 
 //
 // Searches WAD search paths for an WAD with a specific filename.
 // 
 
-int8_t* D_FindWADByName(int8_t* name)
+char* D_FindWADByName(char* name)
 {
-    int8_t* path;
-    int8_t* probe;
+    char* path;
+    char* probe;
     int i;
 
     // Absolute path?
@@ -94,9 +94,9 @@ int8_t* D_FindWADByName(int8_t* name)
 // if not found.
 //
 
-int8_t* D_TryFindWADByName(int8_t* filename)
+char* D_TryFindWADByName(char* filename)
 {
-    int8_t* result;
+    char* result;
 
     result = D_FindWADByName(filename);
 

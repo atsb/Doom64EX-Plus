@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Doom64 Game Specs</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+	</head>
+	<body text="#ccff99" link="#ff9999" bgColor="#000000" vLink="#cc0000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>GAME SPECIFICATIONS</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			This section is a rough summary that&nbsp;covers all existing Doom mechanics 
+			that were modified or removed in Doom64<BR>
+			<BR>
+			*&nbsp;---------<STRONG>General---------</STRONG><BR>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>* P_Move: actor-&gt;z = actor-&gt;floorz 
+			has been removed which enemies fall gradually to the floor 
+			when&nbsp;going&nbsp;down stairs.<BR>
+			&nbsp;&nbsp;&nbsp; * F_Finale:&nbsp;Sprites for each 'cast' can be rotated<BR>
+			&nbsp;&nbsp;&nbsp; * Redesigned Intermission screen/text<BR>
+			&nbsp;&nbsp;&nbsp; * Automap no longer has markers,&nbsp;and grid. 
+			Zooming/panning is much faster<BR>
+			&nbsp;&nbsp;&nbsp; * Player arrow in automap&nbsp;is replaced with a pulsating 
+			triangle.<BR>
+			&nbsp;&nbsp;&nbsp; * Secret exits no longer hardcoded. Uses linetag of line 
+			special 124 to indicate secret map.<BR>
+			&nbsp;&nbsp;&nbsp; * HU_Stuff: Simplified. Less widgets.<BR>
+			&nbsp;&nbsp;&nbsp; * HU Text fades out instead of dissapearing<BR>
+			&nbsp;&nbsp;&nbsp; * HU Text is limited to one text message on screen. EX 
+			changed the limit back to 4 messages (max) on screen.<BR>
+			&nbsp;&nbsp;&nbsp; * Menu system redesigned. Fade in/out effects<BR>
+			&nbsp;&nbsp;&nbsp; * Slower clock rate, which the game runs a lot slower than 
+			PC Doom. (EX retains the same speed as the PC game).<BR>
+			&nbsp;&nbsp;&nbsp; * Simplified player HUD system. Lots of code for it has been 
+			removed.<BR>
+			&nbsp;&nbsp;&nbsp; * Flashing key cards when attempting to open lock door 
+			without a key. (JaguarDoom code).<BR>
+			&nbsp;&nbsp;&nbsp; * Unpeg Top Linedef flag also aligns the y offset of all 
+			textures to the nearest 64 grid<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Player---------<BR>
+				<BR>
+			</STRONG>&nbsp;&nbsp;&nbsp; * Taller view height<BR>
+			&nbsp;&nbsp;&nbsp; * Wider radius and height<BR>
+			&nbsp;&nbsp;&nbsp; * Weapon sprites centers on the screen when firing<BR>
+			&nbsp;&nbsp;&nbsp; * Weapon flash code pointers (A_Light0, A_Light1, etc) no 
+			longer used<BR>
+			&nbsp;&nbsp;&nbsp; * Only one death sfx<BR>
+			&nbsp;&nbsp;&nbsp; * Random hud messages appears (mock messages) when dead for 
+			a certain amount of time<BR>
+			&nbsp;&nbsp;&nbsp; * Unable to wall run (EX retains this bug/feature).<BR>
+			&nbsp;&nbsp;&nbsp; * Hud flashes (damage, radioactive suit, invulnerable, etc) 
+			replaced with 3D overlay.<BR>
+			&nbsp;&nbsp;&nbsp; * View pitch recoil from certain weapons<BR>
+			&nbsp;&nbsp;&nbsp; * Super Shotgun, and Rocket Launcher pushes player back<BR>
+			&nbsp;&nbsp;&nbsp; * Green flash when firing BFG<BR>
+			&nbsp;&nbsp;&nbsp; * Health and Armor pickups boosts points by 2 instead of 1 
+			(Jaguardoom feature).<BR>
+			&nbsp;&nbsp;&nbsp; * Chaingun sprite shakes when firing<BR>
+			&nbsp;&nbsp;&nbsp; * Shake screen effects<BR>
+			&nbsp;&nbsp;&nbsp; * Hud message when finding secrets<BR>
+			&nbsp;&nbsp;&nbsp; * Plasma gun contains animation and sound loops<BR>
+			&nbsp;&nbsp;&nbsp; * Pistol, Chainsaw, Chaingun, Shotgun, Super Shotgun and 
+			Plasma Rifle has faster firing rates.<BR>
+			&nbsp;&nbsp;&nbsp; * Faster weapon scrolling (N64 only. EX is attempting to 
+			emulate this feature).<BR>
+			<BR>
+			*<STRONG>&nbsp;---------Thing---------<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp; </STRONG>* Alpha values (transclucent)<BR>
+			&nbsp;&nbsp;&nbsp; * New spawning mechanics<BR>
+			&nbsp;&nbsp;&nbsp; * Different projectiles for Hell Knight and Baron<BR>
+			&nbsp;&nbsp;&nbsp; * No Revenant, Arch-Vile, Spider Mastermind or Chaingun 
+			Zombie<BR>
+			&nbsp;&nbsp;&nbsp; * Shotgun Zombie moves faster than Pistol Zombie<BR>
+			&nbsp;&nbsp;&nbsp; * Specture has new fading effects<BR>
+			&nbsp;&nbsp;&nbsp; * Arachnotron's firing rate/behavior has been modified. 
+			Fires two projectiles<BR>
+			&nbsp;&nbsp;&nbsp; * Lost Souls more aggressive<BR>
+			&nbsp;&nbsp;&nbsp; * Pain Elemental fires two Lost Souls instead of one<BR>
+			&nbsp;&nbsp;&nbsp; * Imps now has melee frames<BR>
+			&nbsp;&nbsp;&nbsp; * NOGRAVITY flags has been changed to GRAVITY behavior. 
+			Things without this flag now floats.<BR>
+			&nbsp;&nbsp;&nbsp; * MF_SLIDE replaced with&nbsp;new flag that activates 
+			linedef specials upon death.<BR>
+			&nbsp;&nbsp;&nbsp; * Cyberdemon explodes during death<BR>
+			&nbsp;&nbsp;&nbsp; * RESURRECTOR boss<BR>
+			&nbsp;&nbsp;&nbsp; * More blood spawned when thing is shot<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Cacodemons more aggressive and stronger.<BR>
+			&nbsp;&nbsp;&nbsp; * Cyberdemon's rocket is more faster.&nbsp;Sprite 
+			is&nbsp;aligned to the Cyberdemon's cannon.<BR>
+			&nbsp;&nbsp;&nbsp; * Items can trigger linedef specials on pickup.<BR>
+			<BR>
+			*<STRONG>&nbsp;---------Level Interaction---------<BR>
+				<BR>
+			</STRONG>&nbsp;&nbsp;&nbsp; * Ceiling/Floor movement speed has been increased<BR>
+			&nbsp;&nbsp;&nbsp; * Crusher height from floor has been increased (to prevent 
+			clipping into player's view z).<BR>
+			&nbsp;&nbsp;&nbsp; * Non-Switch doors moves the floor sector as well as the 
+			ceiling. (Split Doors).<BR>
+			&nbsp;&nbsp;&nbsp; * Redesigned linedef activation system<BR>
+			&nbsp;&nbsp;&nbsp; * Completly customizable linedef triggering<BR>
+			&nbsp;&nbsp;&nbsp; * Switches redesigned. Linedef creates a subline which is 
+			used to render the&nbsp;switch<BR>
+			&nbsp;&nbsp;&nbsp; * Switch textures are no longer 'merged' with the actual 
+			texture, but instead are reserved in a unused sidedef texture (top, middle, 
+			lower).<BR>
+			&nbsp;&nbsp;&nbsp; * Macro scripting system<BR>
+			<STRONG>&nbsp;&nbsp; </STRONG>
+		</P>
+	</body>
+</html>

@@ -26,12 +26,8 @@
 
 #include "m_fixed.h"
 
-#ifdef USE_GLM
-#define M_PI GLM_PI
-#else
 #ifndef __APPLE__ //ATSB: macOS already defines M_PI
 #include <math.h>
-#endif
 #endif
 
 #define FINEANGLES			8192

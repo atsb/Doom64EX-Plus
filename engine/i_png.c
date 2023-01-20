@@ -89,11 +89,7 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 //
 
 static unsigned char I_GetRGBGamma(int c) {
-#ifdef USE_GLM
-	return (unsigned char)glm_min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
-#else
 	return (unsigned char)min(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
-#endif
 }
 
 //

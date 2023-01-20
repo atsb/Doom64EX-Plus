@@ -71,9 +71,9 @@ static void *GetStructField(void *structptr,
 {
     unsigned int offset;
 
-    offset = (uint8_t *)entry->location - (uint8_t *)mapping->base;
+    offset = (char *)entry->location - (char *)mapping->base;
 
-    return (uint8_t *)structptr + offset;
+    return (char *)structptr + offset;
 }
 
 //
@@ -108,13 +108,13 @@ boolean DEH_SetMapping(deh_context_t *context, deh_mapping_t *mapping,
     switch (entry->size)
     {
         case 1:
-            * ((uint8_t *) location) = value;
+            * ((unsigned char *) location) = value;
             break;
         case 2:
-            * ((uint16_t *) location) = value;
+            * ((unsigned short *) location) = value;
             break;
         case 4:
-            * ((uint32_t *) location) = value;
+            * ((unsigned int *) location) = value;
             break;
         default:
             DEH_Error(context, "Unknown field type for '%s' (BUG)", name);
@@ -179,18 +179,18 @@ void DEH_StructSHA1Sum(sha1_context_t *context, deh_mapping_t *mapping,
 
         // Add in data for this field
 
-        location = (uint8_t *)structptr + ((uint8_t *)entry->location - (uint8_t *)mapping->base);
+        location = (unsigned char *)structptr + ((unsigned char *)entry->location - (unsigned char *)mapping->base);
 
         switch (entry->size)
         {
             case 1:
-                SHA1_UpdateInt32(context, *((uint8_t *) location));
+                SHA1_UpdateInt32(context, *((unsigned char *) location));
                 break;
             case 2:
-                SHA1_UpdateInt32(context, *((uint16_t *) location));
+                SHA1_UpdateInt32(context, *((unsigned short *) location));
                 break;
             case 4:
-                SHA1_UpdateInt32(context, *((uint32_t *) location));
+                SHA1_UpdateInt32(context, *((unsigned int *) location));
                 break;
             default:
                 I_Error("Unknown dehacked mapping field type for '%s' (BUG)", 

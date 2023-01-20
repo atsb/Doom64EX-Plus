@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -184,7 +184,7 @@ static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 //
 
 boolean PIT_CheckLine(line_t* li) {
-    sector_t* sector;
+    sector_t *front, *back;
 
     if (tmbbox[BOXRIGHT] <= li->bbox[BOXLEFT]
         || tmbbox[BOXLEFT] >= li->bbox[BOXRIGHT]
@@ -226,31 +226,24 @@ boolean PIT_CheckLine(line_t* li) {
         }
     }
 
-    // [d64] don't cross mid-pegged lines
-    if (li->flags & ML_DONTPEGMID) {
+    // [d64] don't cross projectile blockers
+    if ((li->flags & ML_BLOCKPROJECTILES)) //psx doom / doom 64 new
+    {
         tmhitline = li;
         return false;
     }
 
-    // [kex] check if thing's midpoint is inside sector
-    if (tmthing->blockflag & BF_MIDPOINTONLY && li->backsector) {
-        if (tmthing->subsector->sector != li->backsector) {
-            return true;
-        }
-    }
-
-    sector = li->frontsector;
+    front = li->frontsector;
+    back = li->backsector;
 
     // [d64] check for valid sector heights
-    if (sector->ceilingheight == sector->floorheight) {
+    if (front->ceilingheight == front->floorheight) {
         tmhitline = li;
         return false;
     }
 
-    sector = li->backsector;
-
     // [d64] check for valid sector heights
-    if (sector->ceilingheight == sector->floorheight) {
+    if (back->ceilingheight == back->floorheight) {
         tmhitline = li;
         return false;
     }
@@ -1024,10 +1017,6 @@ boolean PTR_AimTraverse(intercept_t* in) {
     if (in->isaline) {
         li = in->d.line;
 
-        // [kex] if a line was already hit, then ignore
-        //if(!shotsideline)
-        //aimfrac = in->frac;
-
         if (!(li->flags & ML_TWOSIDED)) {
             return false;    // stop
         }
@@ -1056,30 +1045,6 @@ boolean PTR_AimTraverse(intercept_t* in) {
                 topslope = linetopslope;
             }
         }
-
-        // [kex] d64 bug fix in which lasers ignore side lines when getting aimfrac
-        /*if(aimlaser && !shotsideline)
-        {
-            // check floor heights
-            if(li->frontsector->floorheight != li->backsector->floorheight)
-            {
-                if(linebottomslope > aimslope)
-                {
-                    shotsideline = true;
-                    return true;    // shot continues
-                }
-            }
-
-            // check ceiling heights
-            if(li->frontsector->ceilingheight != li->backsector->ceilingheight)
-            {
-                if(linetopslope < aimslope)
-                {
-                    shotsideline = true;
-                    return true;    // shot continues
-                }
-            }
-        }*/
 
         if (topslope <= bottomslope) {
             return false;    // stop
@@ -1315,11 +1280,6 @@ boolean PTR_ShootTraverse(intercept_t* in) {
 
 }
 
-// [kex]
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
 //
 // P_AimLineAttack
 //
@@ -1329,20 +1289,15 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
     fixed_t x2;
     fixed_t y2;
     fixed_t pitch = 0;
+    fixed_t dist;
 
     angle >>= ANGLETOFINESHIFT;
+    dist = distance >> FRACBITS;
+
     shootthing = t1;
 
-    x2 = t1->x + F2INT(distance) * finecosine[angle];
-    y2 = t1->y + F2INT(distance) * finesine[angle];
-
-    // [d64] new argument for shoot height
-    if (!zheight) {
-        shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT;
-    }
-    else {
-        shootz = t1->z + zheight;
-    }
+    x2 = t1->x + dist * finecosine[angle];
+    y2 = t1->y + dist * finesine[angle];
 
     // can't shoot outside view angles
     // [d64] use 120 instead of 100
@@ -1351,20 +1306,20 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 
     attackrange = distance;
     linetarget = NULL;
-    //aimfrac            = 0;
-    //shotsideline    = false;
-    //aimlaser        = false;
-    flags = PT_ADDLINES | PT_ADDTHINGS;
+    flags = PT_ADDLINES | PT_ADDTHINGS | PT_EARLYOUT;
+
+    // [d64] new argument for shoot height
+    if (!zheight)
+    {
+        shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT;
+    }
+    else
+    {
+        shootz = t1->z + zheight;
+    }
 
     if (t1->player) {
         pitch = cos(abs(t1->pitch - ANG90));
-
-        // [kex] set aimslope for special purposes
-        /*if(distance == LASERRANGE)
-        {
-            aimslope = pitch;
-            aimlaser = true;
-        }*/
 
     }
 
@@ -1396,13 +1351,19 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, int damage) {
     fixed_t x2;
     fixed_t y2;
+    fixed_t dist;
 
     angle >>= ANGLETOFINESHIFT;
+    dist = distance >> FRACBITS;
+
     shootthing = t1;
     la_damage = damage;
-    x2 = t1->x + F2INT(distance) * finecosine[angle];
-    y2 = t1->y + F2INT(distance) * finesine[angle];
+
+    x2 = t1->x + dist * finecosine[angle];
+    y2 = t1->y + dist * finesine[angle];
+
     shootz = t1->z + (t1->height >> 1) + 12 * FRACUNIT; // [d64] changed from 8 to 12
+
     attackrange = distance;
     aimslope = slope;
     aimpitch = finecosine[(shootthing->pitch) >> ANGLETOFINESHIFT];
@@ -1417,7 +1378,7 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, in
     laserhit_y = t1->y;
     laserhit_z = t1->z;
 
-    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS, PTR_ShootTraverse);
+    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS | PT_EARLYOUT, PTR_ShootTraverse);
 }
 
 //
@@ -1542,11 +1503,10 @@ boolean P_UseLines(player_t* player, boolean showcontext) {
     contextline = NULL;
 
     angle = player->mo->angle >> ANGLETOFINESHIFT;
-
     x1 = player->mo->x;
     y1 = player->mo->y;
-    x2 = x1 + F2INT(USERANGE) * finecosine[angle];
-    y2 = y1 + F2INT(USERANGE) * finesine[angle];
+    x2 = x1 + (USERANGE >> FRACBITS) * finecosine[angle];
+    y2 = y1 + (USERANGE >> FRACBITS) * finesine[angle];
 
     P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse);
 
@@ -1602,8 +1562,8 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
         return true;    // out of range
     }
 
-    // must be in direct path
-    if (P_CheckSight(thing, bombspot)) {
+    if (P_CheckSight(thing, bombspot) != 0) // must be in direct path */
+    {
         P_DamageMobj(thing, bombspot, bombsource, bombdamage - dist);
     }
 
@@ -1767,7 +1727,7 @@ static boolean PTR_ChaseCamTraverse(intercept_t* in) {
         li = in->d.line;
 
         if (li->flags & ML_TWOSIDED) {
-            if (!(li->flags & (ML_DRAWMIDTEXTURE | ML_BLOCKING))) {
+            if (!(li->flags & (ML_DRAWMASKED | ML_BLOCKING))) {
                 sector_t* front;
                 sector_t* back;
 

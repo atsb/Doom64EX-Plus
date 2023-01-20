@@ -48,7 +48,7 @@ enum {
 typedef struct {
 	int pitch; // bytes per pixel
 	unsigned int gl;
-	unsigned char order[4];
+	unsigned char order[5];
 } pixfmt_t;
 
 typedef struct {

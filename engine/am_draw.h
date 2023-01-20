@@ -27,7 +27,7 @@
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y);
 void AM_EndDraw(void);
 void AM_DrawLeafs(float scale);
-void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c);
+void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, unsigned int c);
 void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, unsigned char r, unsigned char g, unsigned char b);
 void AM_DrawSprite(mobj_t* thing, float scale);
 

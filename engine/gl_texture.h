@@ -33,7 +33,7 @@ extern int                  curgfx;
 
 extern unsigned short* texturewidth;
 extern unsigned short* textureheight;
-extern dtexture** textureptr;
+extern unsigned int** textureptr;
 extern int                  t_start;
 extern int                  t_end;
 extern int                  swx_start;
@@ -44,7 +44,7 @@ extern unsigned short* palettetranslation;
 extern int                  g_start;
 extern int                  g_end;
 extern int                  numgfx;
-extern dtexture* gfxptr;
+extern unsigned int* gfxptr;
 extern unsigned short* gfxwidth;
 extern unsigned short* gfxorigwidth;
 extern unsigned short* gfxheight;
@@ -52,7 +52,7 @@ extern unsigned short* gfxorigheight;
 
 extern int                  s_start;
 extern int                  s_end;
-extern dtexture** spriteptr;
+extern unsigned int** spriteptr;
 extern int                  numsprtex;
 extern unsigned short* spritewidth;
 extern float* spriteoffset;
@@ -60,29 +60,18 @@ extern float* spritetopoffset;
 extern unsigned short* spriteheight;
 
 void        GL_InitTextures(void);
-void        GL_UnloadTexture(dtexture* texture);
+void        GL_UnloadTexture(unsigned int* texture);
 void        GL_SetTextureUnit(int unit, boolean enable);
 void        GL_SetTextureMode(int mode);
-void        GL_SetCombineState(int combine);
-void        GL_SetCombineStateAlpha(int combine);
 void        GL_SetEnvColor(float* param);
-void        GL_SetCombineSourceRGB(int source, int target);
-void        GL_SetCombineSourceAlpha(int source, int target);
-void        GL_SetCombineOperandRGB(int operand, int target);
-void        GL_SetCombineOperandAlpha(int operand, int target);
 void        GL_BindWorldTexture(int texnum, int* width, int* height);
 void        GL_BindSpriteTexture(int spritenum, int pal);
 int         GL_BindGfxTexture(const char* name, boolean alpha);
 int         GL_PadTextureDims(int size);
 void        GL_SetNewPalette(int id, unsigned char palID);
 void        GL_DumpTextures(void);
-void        GL_ResetTextures(void);
 void        GL_BindDummyTexture(void);
-void        GL_UpdateEnvTexture(rcolor color);
+void        GL_UpdateEnvTexture(unsigned int color);
 void        GL_BindEnvTexture(void);
-dtexture    GL_ScreenToTexture(void);
-void        GL_ResampleTexture(unsigned int* in, int inwidth, int inheight,
-	unsigned int* out, int outwidth, int outheight,
-	int type);
-
+unsigned int    GL_ScreenToTexture(void);
 #endif

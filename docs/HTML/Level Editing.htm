@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Level Editing</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+	</head>
+	<body text="#ccff99" link="#ff9999" bgColor="#000000" vLink="#cc0000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>Level Editing</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Introduction---------<BR>
+				<BR>
+			</STRONG>This article will assume that you're already&nbsp;familiar with Doom 
+			editing. This article will also use a lot of technical descriptions such as 
+			linedef, sector, subsectors, mobj&nbsp;etc. For more information on the Doom 
+			engine, check out <A href="http://doom.wikia.com/wiki/Entryway">http://doom.wikia.com/wiki/Entryway</A><BR>
+			<BR>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>* <STRONG>Level Contruction Workflow<BR>
+			</STRONG>
+			<BR>
+			&nbsp;&nbsp;&nbsp; Its really ideal to do a rough outline of your level in the 
+			editor. That way you can get a<BR>
+			&nbsp;&nbsp;&nbsp; clear idea of the flow, and length of the level. A rough 
+			outline is basically contructing<BR>
+			&nbsp;&nbsp;&nbsp; the level without focusing on texturing, detail, or sector 
+			heights. In Doom64, its also ideal<BR>
+			&nbsp;&nbsp;&nbsp; to wait until the level is in a fully playable state and 
+			detailed before working on the<BR>
+			&nbsp;&nbsp;&nbsp; lighting.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; This method is not necessary but it can speed up the 
+			workflow and prevent having to frequently<BR>
+			&nbsp;&nbsp;&nbsp; redo parts of the level.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Devparm<BR>
+				<BR>
+			</STRONG>&nbsp;&nbsp;&nbsp; Doom64 re-implemented the -devparm feature which is 
+			extremly beneficial to the mapper.<BR>
+			&nbsp;&nbsp;&nbsp; Devparm offers features for debugging gameplay, levels, and 
+			lighting.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; When enabling devparm, the following features are enabled:<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * <STRONG>Demo Mode</STRONG>: Press 
+			F1 to turn this mode on. This will allow you to take damage, but never<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; die (health stays above 
+			10). This is extremly useful to determining how difficult your<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level is without 
+			knowing when using regular god mode cheats.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * <STRONG>Spectator Mode</STRONG>: 
+			Press F2 to turn this mode on. The player will be able to quickly fly<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and clip throughout 
+			the entire level.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * <STRONG>Lock Monsters Mode</STRONG>: 
+			Press F3 to turn this mode on. This will freeze all monsters in<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the level. Useful for 
+			debugging a script or taking screenshots.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * <STRONG>Kill all monsters</STRONG>: 
+			Pressing F4 will kill all monsters in the level.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * <STRONG>Wireframe Mode</STRONG>: 
+			Pressing F7 will toggle wireframe mode.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <STRONG>No Lights</STRONG>: 
+			Pressing F8 will turn off all lighting.<BR>
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;<STRONG>Setting up Doom Builder (aka Builder64)</STRONG><BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Unzip Builder64 into directory of 
+			choice<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Edit Doom64.cfg and define the 
+			path for <STRONG>"texturedirectory"</STRONG> in order for the editor to<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;load up&nbsp;the 
+			.png textures.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Example: 
+			texturedirectory = <STRONG>"E:\\sources\\Doom Builder\\Dev\\Textures";</STRONG><BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Make sure to use 
+			double backslashes instead of using one backslash.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * For the IWAD, set "Builder.wad" as 
+			the main iwad which only contains the playpal data in<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; order to properly view 
+			the textures.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Sprite support is not 
+			yet implemented due to the large number of sprites to incorporate&nbsp;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;the 
+			editor.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Please use the included glbsp 
+			executable for node building only which has been customized<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to support the 
+			doom64 map format.<BR>
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;<STRONG>Changes from&nbsp;regular Doom Builder</STRONG><BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Colors for invisible lines and 
+			macros, etc.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Default color changed<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Texture directory parameter<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Slightly improved sector selection<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;* Textures no longer read from 
+			texture/pnames lump as they're no longer needed<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;* D64 format supported (other 
+			formats no longer supported).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * Thing dialog window simplified<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* <STRONG>Extracting Doom64's levels<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>* Open a lump editing 
+			program&nbsp;such as&nbsp;XWE or Slumped<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Open DOOM64.WAD<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Extract&nbsp;lumps Map01 through 
+			Map33.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Rename the extention from .lmp to 
+			.wad
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;<STRONG>Known Issues</STRONG><BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 3D mode not working due to 
+			using GLSEGS as default level segs.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * Handling lighting for multiple selected 
+			sectors needs improvment<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * Texture/sprite/internal palette 
+			handling needs improvment<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * Bug where after compiling level with 
+			node builder, user must save his level to save the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; compiled lumps into the 
+			wad.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Builder will not build the 
+			nodes correctly until level contains at least 100 linedefs<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and at least 20 sectors.<BR>
+			<BR>
+			<BR>
+			*&nbsp;---------<STRONG>Level Basics---------</STRONG><BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Compiling<BR>
+				<BR>
+			</STRONG>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * This version of GLBSP.exe 
+			no&nbsp;longer support the -normal option nor V2-V5 vertices. Simply<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; use the option glbsp.exe &lt;input 
+			wad&gt; -o &lt;output wad&gt;.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * For Doom Builder, everything 
+			should already be configured. Compiling the level in the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; editor should be the 
+			same as compiling in the original Doom Builder.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* After compiling in the 
+			editor, make sure the level is saved again.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Testing<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</STRONG>* Testing a 
+			custom&nbsp;level can be done through the classic way by using -file&nbsp;or by 
+			launching<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the level from the 
+			editor.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Using the /MAPS Directory<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>* Doom64 EX can be able 
+			to dynamically load custom wads in the /maps folder. This folder<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be located 
+			in the main Doom64EX directory (folder containing the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Doom64 executable).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * To load the custom wad, go the 
+			main menu and select Custom Levels.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The custom wad can 
+			now be selected in the menu.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* As of now, only single level 
+			wads are supported.<BR>
+			<BR>
+			<BR>
+			* ---------<STRONG>Future Plans---------<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp; </STRONG>* Custom Texture support<BR>
+			&nbsp;&nbsp;&nbsp; * Custom Sprite support<BR>
+			&nbsp;&nbsp;&nbsp; * Custom GFX support<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Loading multi-level wads in /Maps directory.<BR>
+			<BR>
+			<BR>
+			* ---------<STRONG>Using Doom64 EX's internal Tools---------<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp; </STRONG>* <STRONG>Sprite Editor<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>&lt;TODO&gt;<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;<STRONG>Macro Peek<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>&lt;TODO&gt;<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;<STRONG>Light Editor<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>&lt;TODO&gt;<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Future Plans<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>&lt;TODO&gt;</P>
+	</body>
+</html>

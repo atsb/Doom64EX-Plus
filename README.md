@@ -2,7 +2,6 @@
 
 [![Doom64EX-Plus! Icon](https://github.com/atsb/Doom64EX-Plus/blob/wolfy/engine/DOOM64EX+.png)](https://github.com/atsb/Doom64EX-Plus)
 
-
 DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
 ## Differences from Kaiser's C++ version of EX on GitHub:
@@ -61,9 +60,8 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * LibPNG
 * FluidSynth
 * OpenGL
+* GLAD(Optional)
 * GLFW(Optional)
-* CGLM(Optional)
-* fixedptc(Optional)
 
 ## System Requirements - 32 or 64bit
 
@@ -78,36 +76,33 @@ Linux / *BSD Desktop / Laptop
 - 1.8GHz Dual Core CPU
 - 2GB RAM
 - 80MB Disk Space
-- OpenGL 2.1+ Compliant Video Chip / Card
-Or OpenGL 3.1+ Compliant Video Chip / Card
+- OpenGL 2.1+ Or Later Compliant Video Chip / Card
 
 Windows
 
 - 1.8GHz Dual Core CPU
 - 4GB RAM
 - 80MB Disk Space
-- OpenGL 2.1+ Compliant Video Chip / Card
-Or OpenGL 3.1+ Compliant Video Chip / Card
+- OpenGL 2.1+ Or Later Compliant Video Chip / Card
 
 macOS
 
 - mid-2013 macbook air or better (also arm64 systems)
 - 4GB RAM
 - 80MB Disk Space
-- OpenGL 2.1+ Compliant Video Chip / Card
-Or OpenGL 3.1+ Compiling Video Chip / Card
+- OpenGL 2.1+ Or Later Compliant Video Chip / Card
 
 ## Installation
 
 Windows
 
 - Windows does not yet support installing the software, however you are able to manually put the software in any directory
-	of your choosing and it will work fine.
+  of your choosing and it will work fine.
 
 GNU/Linux / BSD
 
 - GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
-	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
+  this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
 
 Without the macro, it will look inside the current directory that the binary is in.
 
@@ -124,6 +119,7 @@ Clone this repo
 Use the `build.sh` script for a native build.
 
 ## macOS
+
 Install it from [MacSourcePorts](https://macsourceports.com/game/doom64)
 
 Or if you feel adventurous, read below:
@@ -185,14 +181,13 @@ Then, you can start playing:
 
 * `$ DOOM64EX+`
 
-**NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
+**NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in
 `~usr/.local/share/DOOM64EX+`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the `-DDOOM_UNIX_INSTALL`
 **NOTE for Linux and FreeBSD/OpenBSD users** As January 2 of 2023 The DOOM64EX+ by standard will be compiled with `-DDOOM_UNIX_INSTALL` due to SDL Path filesystem
-i need to replace this guy with opendir instead of the ~~shit~~ of SDL_GetPath.
 
 ## Windows
 
-The asset data files need to be located in the same directory as `DOOM64EX+.exe`, you can execute the game directly through 
+The asset data files need to be located in the same directory as `DOOM64EX+.exe`, you can execute the game directly through
 of the executable or you can start playing by launching `DOOM64EX+ Launcher.exe`.
 
 ## Playstation Vita

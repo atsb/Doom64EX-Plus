@@ -26,7 +26,9 @@
 #include "gl_pixmap.h"
 #include "m_fixed.h"
 #include "z_zone.h"
-
+#ifdef _MSC_VER
+#pragma warning(disable:4789) //Debbuger warning.
+#endif
 #define PADWIDTH(x) (((x+3)>>2)<<2)
 #define PADWIDTH2(x,a) (((x+a-1)/a)*a)
 
@@ -146,7 +148,7 @@ void FilterBox(dpixmap *dst, const dpixmap *src)
 
 void PixmapResize(dpixmap *pm, short width, short height)
 {
-	size_t len;
+	int len;
 	len = width * formats[pm->fmt.pitch].pitch;
 
 	if (pm->w == width && pm->h == height) {
@@ -174,7 +176,7 @@ void PixmapResize(dpixmap *pm, short width, short height)
 
 dpixmap *GL_PixmapCreate(short width, short height, dpixfmt fmt, unsigned char *data)
 {
-	size_t len;
+	int len;
 	dpixmap *pm;
 
 	if (fmt < 0 || fmt >= DPM_PF_LAST)

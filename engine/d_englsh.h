@@ -40,6 +40,7 @@
 // D_Main.C
 //
 #define D_DEVSTR    "Development mode ON.\n"
+#define STRPAUSED    "Paused"
 
 //
 //  M_Menu.C
@@ -82,7 +83,7 @@
 #define GOTHTHBONUS     "You pick up a health bonus."
 #define GOTARMBONUS     "You pick up an armor bonus."
 #define GOTSTIM         "You pick up a stimpack."
-#define GOTMEDINEED     "You pick up a medikit that you REALLY need!"
+#define GOTMEDINEED     "You pick up a medikit that you REALLY\nneed!"
 #define GOTMEDIKIT      "You pick up a medikit."
 #define GOTSUPER        "Supercharge!"
 

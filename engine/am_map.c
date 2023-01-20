@@ -754,7 +754,7 @@ void AM_DrawWalls(void) {
 		}
 
 		if ((l->flags & ML_MAPPED) || am_fulldraw.value || plr->powers[pw_allmap] || amCheating) {
-			rcolor color = D_RGBA(0x8A, 0x5C, 0x30, 0xFF);  // default color
+			unsigned int color = D_RGBA(0x8A, 0x5C, 0x30, 0xFF);  // default color
 
 			//
 			// check for cheats

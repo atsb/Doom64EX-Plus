@@ -46,7 +46,7 @@
 // Draw_GfxImage
 //
 
-void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) {
+void Draw_GfxImage(int x, int y, const char* name, unsigned int color, boolean alpha) {
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -64,7 +64,7 @@ void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) 
 //
 
 void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
-	float scale, int pal, rcolor c) {
+	float scale, int pal, unsigned int c) {
 	spritedef_t* sprdef;
 	spriteframe_t* sprframe;
 	float flip = 0.0f;
@@ -121,7 +121,7 @@ static vtx_t vtxstring[MAX_MESSAGE_SIZE];
 // Draw_Text
 //
 
-int Draw_Text(int x, int y, rcolor color, float scale,
+int Draw_Text(int x, int y, unsigned int color, float scale,
 	boolean wrap, const char* string, ...) {
 	int c;
 	int i;
@@ -390,7 +390,7 @@ int Center_Text(const char* string) {
 // Draw_BigText
 //
 
-int Draw_BigText(int x, int y, rcolor color, const char* string) {
+int Draw_BigText(int x, int y, unsigned int color, const char* string) {
 	int c = 0;
 	int i = 0;
 	int vi = 0;
@@ -562,7 +562,7 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
 //
 //
 
-void Draw_Number(int x, int y, int num, int type, rcolor c) {
+void Draw_Number(int x, int y, int num, int type, unsigned int c) {
 	int digits[16];
 	int nx = 0;
 	int count;
@@ -881,7 +881,7 @@ static const symboldata_t confontmap[256] = {
 // Draw_ConsoleText
 //
 
-float Draw_ConsoleText(float x, float y, rcolor color,
+float Draw_ConsoleText(float x, float y, unsigned int color,
 	float scale, const char* string, ...) {
 	int c = 0;
 	int i = 0;
