@@ -612,29 +612,18 @@ void M_DrawStartNewNotify(void) {
 //
 //------------------------------------------------------------------------
 
+int map = 1;
 void M_ChooseMap(int choice);
-void M_ChooseMapLost(int choice);
-
-enum {
-	doom64,
-	lostlevels,
-	mapg_end
-} mapselect_e;
-
-menuitem_t MapMenu[] = {
-	{1,"DOOM 64",M_ChooseMap, 'd'},
-	{1,"Lost Levels",M_ChooseMapLost, 'l'},
-};
 
 menu_t MapSelectDef = {
-	mapg_end,
+	0,
 	false,
 	&MainDef,
-	MapMenu,
+	NULL,
 	NULL,
 	"Choose Campaign",
 	112,80,
-	doom64,
+	0,
 	false,
 	NULL,
 	-1,
@@ -651,7 +640,6 @@ menu_t MapSelectDef = {
 //------------------------------------------------------------------------
 
 void M_ChooseSkill(int choice);
-void M_ChooseSkillLost(int choice);
 
 enum {
 	killthings,
@@ -668,14 +656,6 @@ menuitem_t NewGameMenu[] = {
 	{1,"I Own Doom!",M_ChooseSkill, 'i'},
 	{1,"Watch Me Die!",M_ChooseSkill, 'w'},
 	{1,"Hardcore!",M_ChooseSkill, 'h'},
-};
-
-menuitem_t NewGameMenuLost[] = {
-	{1,"Be Gentle!",M_ChooseSkillLost, 'b'},
-	{1,"Bring It On!",M_ChooseSkillLost, 'r'},
-	{1,"I Own Doom!",M_ChooseSkillLost, 'i'},
-	{1,"Watch Me Die!",M_ChooseSkillLost, 'w'},
-	{1,"Hardcore!",M_ChooseSkillLost, 'h'},
 };
 
 menu_t NewDef = {
@@ -696,24 +676,6 @@ menu_t NewDef = {
 	NULL
 };
 
-menu_t NewDefLost = {
-	newg_end,
-	false,
-	&MainDef,
-	NewGameMenuLost,
-	NULL,
-	"Choose Your Skill...",
-	112,80,
-	toorough,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
 void M_NewGame(int choice) {
 	if (netgame && !demoplayback) {
 		M_StartControlPanel(true);
@@ -721,7 +683,12 @@ void M_NewGame(int choice) {
 		return;
 	}
 
-	M_SetupNextMenu(&MapSelectDef);
+	if (MapSelectDef.numitems > 0) {
+		M_SetupNextMenu(&MapSelectDef);
+		return;
+	}
+	
+	M_SetupNextMenu(&NewDef);
 }
 
 void M_ChooseMap(int choice) {
@@ -730,31 +697,14 @@ void M_ChooseMap(int choice) {
 		M_SetupNextMenu(&StartNewNotifyDef);
 		return;
 	}
-
+	map = P_GetEpisode(choice)->mapid;
 	M_SetupNextMenu(&NewDef);
 }
 
-void M_ChooseMapLost(int choice) {
-	if (netgame && !demoplayback) {
-		M_StartControlPanel(true);
-		M_SetupNextMenu(&StartNewNotifyDef);
-		return;
-	}
-
-	M_SetupNextMenu(&NewDefLost);
-}
-
 void M_ChooseSkill(int choice) {
-	G_DeferedInitNew(choice, 1);
+	G_DeferedInitNew(choice, map);
 	M_ClearMenus();
 	memset(passwordData, 0xff, 16);
-	allowmenu = false;
-}
-
-void M_ChooseSkillLost(int choice) {
-	G_DeferedInitNew(choice, 34);
-	M_ClearMenus();
-	dmemset(passwordData, 0xff, 16);
 	allowmenu = false;
 }
 
@@ -5200,6 +5150,26 @@ void M_Ticker(void) {
 	}
 }
 
+void M_InitEpisodes() {
+	int episodes = P_GetNumEpisodes();
+	if (episodes <= 0) return;
+	menuitem_t* menus = NULL;
+	menus = Z_Realloc(menus, sizeof(menuitem_t) * episodes, PU_STATIC, 0);
+	for (int i = 0; i < episodes; i++)
+	{
+		episodedef_t* epi = P_GetEpisode(i);
+		menuitem_t menu;
+		menu.status = 1;
+		strcpy(menu.name, epi->name);
+		menu.routine = M_ChooseMap;
+		menu.alphaKey = epi->key;
+		dmemcpy(&menus[i], &menu, sizeof(menuitem_t));
+	}
+	MapSelectDef.menuitems = menus;
+	MapSelectDef.numitems = episodes;
+	NewDef.prevMenu = &MapSelectDef;
+}
+
 //
 // M_Init
 //
@@ -5239,6 +5209,7 @@ void M_Init(void) {
 	MainDef.y += 8;
 	NewDef.prevMenu = &MainDef;
 
+	M_InitEpisodes();
 	M_InitShiftXForm();
 }
 
