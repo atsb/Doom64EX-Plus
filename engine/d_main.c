@@ -977,14 +977,14 @@ void D_DoomMain(void) {
 	//  3. PWAD dehacked patches in DEHACKED lumps.
 	DEH_ParseCommandLine();
 
-	I_Printf("M_Init: Init miscellaneous info.\n");
-	M_Init();
-
 	I_Printf("R_Init: Init DOOM refresh daemon.\n");
 	R_Init();
 
 	I_Printf("P_Init: Init Playloop state.\n");
 	P_Init();
+
+	I_Printf("M_Init: Init miscellaneous info.\n");
+	M_Init();
 
 	I_Printf("NET_Init: Init network subsystem.\n");
 	NET_Init();
