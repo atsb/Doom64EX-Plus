@@ -35,7 +35,7 @@
 
 #include "p_local.h"
 
-rcolor    bspColor[5];
+unsigned int   bspColor[5];
 
 CVAR_CMD(i_brightness, 100) {
 	R_RefreshBrightness();
@@ -222,19 +222,11 @@ void R_SetLightFactor(float lightfactor) {
 			int h, s, v;
 
 			R_LightGetHSV(light->r, light->g, light->b, &h, &s, &v);
-#ifdef USE_GLM
-			v = glm_min((int)((float)v * f), 255);
-#else
 			v = min((int)((float)v * f), 255);
-#endif
 			R_LightGetRGB(h, s, v, (int*)&light->base_r, (int*)&light->base_g, (int*)&light->base_b);
 		}
 		else {
-#ifdef USE_GLM
-			light->base_r = light->base_g = light->base_b = glm_min((int)((float)l * f), 255);
-#else
 			light->base_r = light->base_g = light->base_b = min((int)((float)l * f), 255);
-#endif
 		}
 
 		light->active_r = light->base_r;
@@ -259,7 +251,7 @@ void R_RefreshBrightness(void) {
 // R_GetSectorLight
 //
 
-rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
+unsigned int R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
 	return D_RGBA((unsigned char)lights[ptr].active_r,
 		(unsigned char)lights[ptr].active_g, (unsigned char)lights[ptr].active_b, alpha);
 }
@@ -267,15 +259,14 @@ rcolor R_GetSectorLight(unsigned char alpha, unsigned short ptr) {
 //
 // R_SplitLineColor
 //
-
-rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
+unsigned int R_SplitLineColor(seg_t* line, unsigned char side) {
 	int height = 0;
 	int sideheight1 = 0;
 	int sideheight2 = 0;
 	float r1, g1, b1;
 	float r2, g2, b2;
-	rcolor d3dc1 = 0;
-	rcolor d3dc2 = 0;
+	unsigned int d3dc1 = 0;
+	unsigned int d3dc2 = 0;
 
 	height = (line->frontsector->ceilingheight - line->frontsector->floorheight) / FRACUNIT;
 	d3dc1 = bspColor[LIGHT_UPRWALL];
@@ -305,11 +296,7 @@ rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
 	r2 = ((r2 / height) * sideheight2);
 	g2 = ((g2 / height) * sideheight2);
 	b2 = ((b2 / height) * sideheight2);
-#ifdef USE_GLM
-	return D_RGBA((unsigned char)glm_min((r1 + r2), 0xff), (unsigned char)glm_min((g1 + g2), 0xff), (unsigned char)glm_min((b1 + b2), 0xff), 0xff);
-#else
 	return D_RGBA((unsigned char)min((r1 + r2), 0xff), (unsigned char)min((g1 + g2), 0xff), (unsigned char)min((b1 + b2), 0xff), 0xff);
-#endif
 }
 
 //
@@ -318,7 +305,7 @@ rcolor R_SplitLineColor(seg_t* line, unsigned char side) {
 
 void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side) {
 	int i;
-	rcolor c[4];
+	unsigned int c[4];
 	unsigned char lwr = LIGHT_LWRWALL;
     unsigned char upr = LIGHT_UPRWALL;
 
@@ -381,6 +368,6 @@ void R_SetSegLineColor(seg_t* line, vtx_t* v, unsigned char side) {
 	}
 
 	for (i = 0; i < 4; i++) {
-		*(rcolor*)&v[i].r = c[i];
+		*(unsigned int*)&v[i].r = c[i];
 	}
 }

@@ -192,6 +192,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
 			int l = (head->params >> 1);
 
+			GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
 			glDrawGeometry(drawcount, drawVertex);
 
 			// count vertex size

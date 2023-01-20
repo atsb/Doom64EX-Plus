@@ -61,10 +61,10 @@
 // Returns a pointer to a DIR structure appropriately filled in to begin
 // searching a directory.
 //
-DIR *opendir(const _TCHAR *szPath) {
+DIR *opendir(const char *szPath) {
     DIR *nd;
     unsigned int rc;
-    _TCHAR szFullPath[MAX_PATH];
+    char szFullPath[MAX_PATH];
 
     errno = 0;
 
@@ -180,7 +180,7 @@ struct dirent *readdir(DIR *dirp) {
             /* We are off the end or otherwise error.
                _findnext sets errno to ENOENT if no more file
                Undo this. */
-            DWORD winerr = GetLastError();
+            unsigned long winerr = GetLastError();
             if(winerr == ERROR_NO_MORE_FILES) {
                 errno = 0;
             }

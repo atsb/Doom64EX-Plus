@@ -70,7 +70,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 	drawlist[DLT_AMAP].index = 0;
 
 	R_FrustrumSetup();
-	GL_ResetTextures();
+	curtexture = cursprite = curgfx = -1;
 }
 
 //
@@ -91,7 +91,7 @@ void AM_EndDraw(void) {
 static float am_drawscale = 0.0f;
 static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	leaf_t* leaf;
-	rcolor color;
+	unsigned int color;
 	fixed_t tx;
 	fixed_t ty;
 	vtx_t* v;
@@ -250,7 +250,7 @@ void AM_DrawLeafs(float scale) {
 // AM_DrawLine
 //
 
-void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
+void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, unsigned int c) {
 	vtx_t v[2];
 
 	v[0].x = F2D3D(x1);
@@ -343,7 +343,7 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	float width;
 	float height;
 	int rot = 0;
-	rcolor c;
+	unsigned int c;
 	unsigned char alpha;
 	float scalefactor;
 	float fz;

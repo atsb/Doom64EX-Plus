@@ -22,10 +22,6 @@
  * it'll do.
  */
 
-#ifdef __FreeBSD__ // [Kate] Update as necessary
-#define NO_FCVT   // [André] Removed inside of NO_FCVT.
-#endif
-
 #ifndef NO_FCVT
 #ifdef _WIN32
 #ifndef CYGWIN

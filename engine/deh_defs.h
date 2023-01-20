@@ -87,8 +87,4 @@ typedef struct deh_section_s
     deh_sha1_hash_t sha1_hash;
 } deh_section_t;
 
-
-
 #endif /* #ifndef DEH_DEFS_H */
-
-

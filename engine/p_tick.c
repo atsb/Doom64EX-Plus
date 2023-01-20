@@ -40,6 +40,7 @@
 #include "r_wipe.h"
 #include "p_setup.h"
 #include "g_demo.h"
+#include "p_local.h"
 
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_damageindicator);

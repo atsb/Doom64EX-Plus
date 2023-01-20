@@ -162,11 +162,7 @@ void L_InitConfig(tDefTypes_t* config, HWND hWnd)
 	wchar_t* c[32];
 	tDefTypes_t* def;
 	int				size;
-#ifdef USE_OPTMIZED_FFUNCTION
-	fopen_s(f, DefaultConfigFile, "rb");
-#else
 	f = fopen(DefaultConfigFile, "rb");
-#endif
 	tk_ResetConfig(config);
 
 	if (f)
@@ -184,11 +180,7 @@ void L_InitConfig(tDefTypes_t* config, HWND hWnd)
 
 		parse = (byte*)malloc(sizeof(byte) * size);
 		lastByte = size;
-#ifdef USE_OPTMIZED_FFUNCTION
-		fread_s(parse, sizeof(parse), size, 1, f);
-#else
 		fread(parse, size, 1, f);
-#endif
 		fclose(f);
 
 		tkLine = 1;

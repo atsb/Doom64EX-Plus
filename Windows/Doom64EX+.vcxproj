@@ -144,46 +144,7 @@
   <ItemGroup>
     <ClCompile Include="..\engine\am_draw.c" />
     <ClCompile Include="..\engine\am_map.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\affine.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\affine2d.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\bezier.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\box.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\cam.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_lh_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_lh_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_rh_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\ortho_rh_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_lh_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_lh_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_rh_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\persp_rh_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\project_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\project_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_lh_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_lh_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_rh_no.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\clipspace\view_rh_zo.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\curve.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\ease.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\euler.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\frustum.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\io.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\ivec2.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\ivec3.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\ivec4.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\mat2.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\mat3.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\mat4.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\plane.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\project.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\quat.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\ray.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\sphere.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\swift\empty.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\vec2.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\vec3.c" />
-    <ClCompile Include="..\engine\backend\cglm\src\vec4.c" />
-    <ClCompile Include="..\engine\backend\glad_3.2\src\glad.c" />
+    <ClCompile Include="..\engine\backend\glad_4.6\src\glad.c" />
     <ClCompile Include="..\engine\con_console.c" />
     <ClCompile Include="..\engine\con_cvar.c" />
     <ClCompile Include="..\engine\deh_ammo.c" />
@@ -207,6 +168,7 @@
     <ClCompile Include="..\engine\gl_pixmap.c" />
     <ClCompile Include="..\engine\gl_shader.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\engine\gl_texture.c" />
     <ClCompile Include="..\engine\gl_utils.c" />
@@ -289,155 +251,7 @@
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
     <ClInclude Include="..\engine\am_map.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine-mat.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine-post.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine-pre.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\affine2d.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\applesimd.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\bezier.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\box.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\affine.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\affine2d.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\bezier.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\box.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\cam.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\ortho_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\persp_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\project_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\project_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\clipspace\view_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\curve.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ease.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\euler.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\frustum.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\io.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ivec2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ivec3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ivec4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\mat2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\mat3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\mat4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\plane.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\project.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\quat.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\ray.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\sphere.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\vec2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\vec3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\call\vec4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\cam.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\cglm.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\ortho_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\persp_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\project_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\project_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_lh.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_rh.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\clipspace\view_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\color.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\common.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\curve.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\ease.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\euler.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\frustum.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\io.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\ivec2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\ivec3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\ivec4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\mat2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\mat3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\mat4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\plane.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\project.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\quat.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\ray.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\arm.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\avx\affine.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\avx\mat4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\intrin.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\affine.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\mat2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\mat4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\neon\quat.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\affine.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\mat2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\mat3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\mat4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\sse2\quat.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\simd\x86.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\sphere.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine-post.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine-pre.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\affine2d.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\box.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\cam.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\ortho_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\persp_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\project_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\project_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_lh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_lh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_rh_no.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\clipspace\view_rh_zo.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\color.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\curve.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\euler.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\frustum.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\io.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\mat2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\mat3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\mat4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\plane.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\project.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\quat.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\sphere.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec2-ext.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec3-ext.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec4-ext.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\struct\vec4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\types-struct.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\types.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\util.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec2-ext.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec2.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec3-ext.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec3.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec4-ext.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\vec4.h" />
-    <ClInclude Include="..\engine\backend\cglm\include\cglm\version.h" />
-    <ClInclude Include="..\engine\backend\cglm\src\config.h" />
-    <ClInclude Include="..\engine\backend\glad_3.2\include\glad\glad.h" />
+    <ClInclude Include="..\engine\backend\glad_4.6\include\glad\glad.h" />
     <ClInclude Include="..\engine\con_console.h" />
     <ClInclude Include="..\engine\con_cvar.h" />
     <ClInclude Include="..\engine\deh_defs.h" />
@@ -617,16 +431,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_FLUIDSYNTH;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;USE_FLUIDSYNTH_LITE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\Windows\3rdparty\Includes\SDL2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_3.2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -651,9 +465,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_FLUIDSYNTH;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;PSNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\cglm;$(ProjectDir)..\engine\backend\cglm\include;$(ProjectDir)..\engine\backend\imgui;$(ProjectDir)..\engine\backend\glad_3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
@@ -663,7 +477,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;libfluidsynth-lite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

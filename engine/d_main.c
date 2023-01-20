@@ -33,6 +33,8 @@
 
 #ifdef _WIN32
 #include <io.h>
+#else
+#include <unistd.h>
 #endif
 
 #include <stdlib.h>
@@ -113,8 +115,6 @@ int             compatflags = 0;
 void D_CheckNetGame(void);
 void D_ProcessEvents(void);
 void G_BuildTiccmd(ticcmd_t* cmd);
-
-#define STRPAUSED    "Paused"
 
 CVAR_EXTERNAL(sv_nomonsters);
 CVAR_EXTERNAL(sv_fastmonsters);
@@ -607,11 +607,7 @@ static int Credits_Ticker(void) {
 	switch (creditstage) {
 	case 0:
 		if (screenalpha < 0xff) {
-#ifdef USE_GLM
-			screenalpha = glm_min(screenalpha + 8, 0xff);
-#else
 			screenalpha = min(screenalpha + 8, 0xff);
-#endif
 		}
 		else {
 			creditstage = 1;
@@ -620,11 +616,7 @@ static int Credits_Ticker(void) {
 
 	case 1:
 		if (screenalphatext < 0xff) {
-#ifdef USE_GLM
-			screenalphatext = glm_min(screenalphatext + 8, 0xff);
-#else
 			screenalphatext = min(screenalphatext + 8, 0xff);
-#endif
 		}
 		else {
 			creditstage = 2;
@@ -633,13 +625,8 @@ static int Credits_Ticker(void) {
 
 	case 2:
 		if ((gametic - pagetic) >= (TICRATE * 6)) {
-#ifdef USE_GLM
-			screenalpha = glm_max(screenalpha - 8, 0);
-			screenalphatext = glm_max(screenalphatext - 8, 0);
-#else
 			screenalpha = max(screenalpha - 8, 0);
 			screenalphatext = max(screenalphatext - 8, 0);
-#endif
 			if (screenalpha <= 0) {
 				creditstage = 3;
 				creditscreenstage++;
@@ -790,11 +777,7 @@ static void FindResponseFile(void) {
 			char* firstargv;
 
 			// READ THE RESPONSE FILE INTO MEMORY
-#ifdef USE_OPTMIZED_FFUNCTION
-			fopen_s(&handle, &myargv[i][1], "rb");
-#else
 			handle = fopen(&myargv[i][1], "rb");
-#endif
 			if (!handle) {
 				//                I_Warnf (IWARNMINOR, "\nNo such response file!");
 				exit(1);
@@ -804,11 +787,7 @@ static void FindResponseFile(void) {
 			size = ftell(handle);
 			fseek(handle, 0, SEEK_SET);
 			file = (char*)malloc(size);
-#ifdef USE_OPTMIZED_FFUNCTION
-			fread_s(file, sizeof(file), size, 1, handle);
-#else
 			fread(file, size, 1, handle);
-#endif
 			fclose(handle);
 
 			// KEEP ALL CMDLINE ARGS FOLLOWING @RESPONSEFILE ARG

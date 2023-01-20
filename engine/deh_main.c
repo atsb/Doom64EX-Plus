@@ -178,7 +178,7 @@ boolean DEH_ParseAssignment(char *line, char **variable_name, char **value)
 
 static boolean CheckSignatures(deh_context_t *context)
 {
-    size_t i;
+    unsigned int i;
     char *line;
     
     // Read the first line

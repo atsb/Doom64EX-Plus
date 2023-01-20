@@ -25,7 +25,6 @@
 //    SDL Stuff
 //
 //-----------------------------------------------------------------------------
-#include <glad/glad.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -37,6 +36,7 @@
 #include "i_sdlinput.h"
 #include "d_main.h"
 #include "con_console.h"
+#include "gl_utils.h"
 const char version_date[] = __DATE__;
 
 SDL_Window* window;
@@ -115,11 +115,14 @@ void I_InitScreen(void) {
 	}
 
 	usingGL = false;
-
+#ifdef LEGACY_DETECTION
 #if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 	glGetVersion(2, 1);
 #else
 	glGetVersion(3, 1);
+#endif
+#else
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
 	OGL_WINDOW_HINT(OGL_RED, 0);
 	OGL_WINDOW_HINT(OGL_GREEN, 0);
@@ -161,11 +164,6 @@ void I_InitScreen(void) {
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, I_ResizeCallback);
 
-	if(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) < 0)
-	{
-		I_Error("Failed to load glad");
-	}
-
 	while(!glfwWindowShouldClose(window))
 	{
 		glfwSwapInterval(v_vsync.value);
@@ -175,7 +173,6 @@ void I_InitScreen(void) {
 	}
 
 #else
-	SDL_GL_SetSwapInterval(v_vsync.value);
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (InWindow) {
@@ -207,12 +204,13 @@ void I_InitScreen(void) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
-
-	if(gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
+#endif
+#ifndef DONT_USE_GLAD
+	if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
 	{
 		I_Error("Failed to load glad");
 	}
-#endif
+#endif	
 #ifdef USE_IMGUI
 	//Andr�: Adding the context
 	io = igGetIO();

@@ -77,67 +77,67 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\kexlib.hpp" />
-    <ClInclude Include="..\..\framework\array.h">
+    <ClInclude Include="..\..\framework\array.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\binFile.h">
+    <ClInclude Include="..\..\framework\binFile.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\cachefilelist.h">
+    <ClInclude Include="..\..\framework\cachefilelist.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\cmd.h">
+    <ClInclude Include="..\..\framework\cmd.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\cvar.h">
+    <ClInclude Include="..\..\framework\cvar.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\defs.h">
+    <ClInclude Include="..\..\framework\defs.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\filesystem.h">
+    <ClInclude Include="..\..\framework\filesystem.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\getter.h">
+    <ClInclude Include="..\..\framework\getter.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\inputSystem.h">
+    <ClInclude Include="..\..\framework\inputSystem.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\external\tinyxml2.h">
+    <ClInclude Include="..\..\framework\external\tinyxml2.hpp">
       <Filter>framework\external</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\external\unzip.h">
+    <ClInclude Include="..\..\framework\external\unzip.hpp">
       <Filter>framework\external</Filter>
     </ClInclude>
     <ClInclude Include="..\..\framework\win32\opndir.h">
       <Filter>framework\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\keyinput.h">
+    <ClInclude Include="..\..\framework\keyinput.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\keymap.h">
+    <ClInclude Include="..\..\framework\keymap.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\kstring.h">
+    <ClInclude Include="..\..\framework\kstring.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\linkedlist.h">
+    <ClInclude Include="..\..\framework\linkedlist.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\memHeap.h">
+    <ClInclude Include="..\..\framework\memHeap.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\object.h">
+    <ClInclude Include="..\..\framework\object.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\parser.h">
+    <ClInclude Include="..\..\framework\parser.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\resourceManager.h">
+    <ClInclude Include="..\..\framework\resourceManager.hpp">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\framework\system.h">
+    <ClInclude Include="..\..\framework\system.hpp">
       <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\math\mathlib.hpp">

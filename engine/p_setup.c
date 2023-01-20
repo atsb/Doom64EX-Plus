@@ -1306,11 +1306,11 @@ static void P_InitMapInfo(void) {
 				sizeof(clusterdef_t) * ++numclusterdef, PU_STATIC, 0);
 			memcpy(&clusterdefs[numclusterdef - 1], &cluster, sizeof(clusterdef_t));
 		}
-		else if (!dstricmp(sc_parser.token, "EPISODE")) {
-			dmemset(&episode, 0, sizeof(episodedef_t));	
+		else if (!w3sstricmp(sc_parser.token, "EPISODE")) {
+			memset(&episode, 0, sizeof(episodedef_t));	
 
 			sc_parser.find(false);
-			episode.mapid = datoi(sc_parser.token);
+			episode.mapid = atoi(sc_parser.token);
 
 			sc_parser.compare("{");
 			while (sc_parser.readtokens()) {
@@ -1322,7 +1322,7 @@ static void P_InitMapInfo(void) {
 			}
 
 			episodedefs = Z_Realloc(episodedefs, sizeof(episodedef_t) * ++numepisodedef, PU_STATIC, 0);
-			dmemcpy(&episodedefs[numepisodedef - 1], &episode, sizeof(episodedef_t));
+			memcpy(&episodedefs[numepisodedef - 1], &episode, sizeof(episodedef_t));
 		}
 		else {
 			sc_parser.error("P_InitMapInfo");

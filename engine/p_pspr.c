@@ -950,6 +950,10 @@ void T_LaserThinker(laserthinker_t* laserthinker) {
 	}
 }
 
+fixed_t laserhit_x;
+fixed_t laserhit_y;
+fixed_t laserhit_z;
+
 //
 // A_FireLaser
 //

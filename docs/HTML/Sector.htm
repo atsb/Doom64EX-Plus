@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Doom64 Sectors</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+	</head>
+	<body text="#ccff99" link="#ff9999" bgColor="#000000" vLink="#cc0000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>Sector Specifications</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			Doom64's sectors are completly different than that of Doom, Zdoom/Hexen's 
+			format. This<BR>
+			Article will roughly go over the new format and all of its flags and specials.<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Sector</STRONG> <STRONG>Format---------</STRONG><BR>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>* short floorheight;<BR>
+			&nbsp;&nbsp;&nbsp; * short ceilingheight;<BR>
+			&nbsp;&nbsp;&nbsp; * unsigned short floorpic;<BR>
+			&nbsp;&nbsp;&nbsp; * unsigned short ceilingpic;<BR>
+			&nbsp;&nbsp;&nbsp; * unsigned short colors[5];<BR>
+			&nbsp;&nbsp;&nbsp; * short special;<BR>
+			&nbsp;&nbsp;&nbsp; * short tag;<BR>
+			&nbsp;&nbsp;&nbsp; * word flags;<BR>
+			<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Sector Flags---------<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp; </STRONG>* Sound Echo filter<BR>
+			&nbsp;&nbsp;&nbsp; * Unknown 0x2<BR>
+			&nbsp;&nbsp;&nbsp; * Water&nbsp;Effect<BR>
+			&nbsp;&nbsp;&nbsp; * Sync Specials - All sectors with this flag will sync all 
+			specials (example: multiple sectors<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			with the light flicker special will all flicker at the same time. For another<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			example, look at the staircase with the flickering light at the beginning<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			of Tech Center).<BR>
+			&nbsp;&nbsp;&nbsp; * Unknown 0x16<BR>
+			&nbsp;&nbsp;&nbsp; * Secret<BR>
+			&nbsp;&nbsp;&nbsp; * Damage x5<BR>
+			&nbsp;&nbsp;&nbsp; * Damage x10<BR>
+			&nbsp;&nbsp;&nbsp; * Damage x20<BR>
+			&nbsp;&nbsp;&nbsp; * Hide Subsectors In Automap (textured mode)<BR>
+			&nbsp;&nbsp;&nbsp; * Enable Ceiling Scroll<BR>
+			&nbsp;&nbsp;&nbsp; * Enable Floor Scroll<BR>
+			&nbsp;&nbsp;&nbsp; * Scroll&nbsp;West<BR>
+			&nbsp;&nbsp;&nbsp; * Scroll&nbsp;East<BR>
+			&nbsp;&nbsp;&nbsp; * Scroll&nbsp;North<BR>
+			&nbsp;&nbsp;&nbsp; * Scroll South<BR>
+			<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Sector Specials---------</STRONG><BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * 1: Flickering Lights<BR>
+			&nbsp;&nbsp;&nbsp; * 2: Strobe Fast<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* 3: Strobe Slow<BR>
+			&nbsp;&nbsp;&nbsp; * 4: Strobe Fast??<BR>
+			&nbsp;&nbsp;&nbsp; * 8: Glowing Light<BR>
+			&nbsp;&nbsp;&nbsp; * 9: Slow Glowing Light<BR>
+			&nbsp;&nbsp;&nbsp; * 11: Random Glowing Light<BR>
+			&nbsp;&nbsp;&nbsp; * 12: Sync Strobe Slow<BR>
+			&nbsp;&nbsp;&nbsp; * 13: Sync Strobe Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 17: Fire Flicker<BR>
+			&nbsp;&nbsp;&nbsp; * 208: Super Fast Strobe<BR>
+			&nbsp;&nbsp;&nbsp; * 205: Start Sequence Lighting<BR>
+			&nbsp;&nbsp;&nbsp; * 666: Demon Disposer -&nbsp;Sector with this 
+			flagged&nbsp;triggered by&nbsp;a linedef with special&nbsp;141 will<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			instantly&nbsp;kill everything that is inside it.<BR>
+			&nbsp;&nbsp;&nbsp; * 204 - 207: Fake special used to redirect a sequenced light 
+			back to the beginning.</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+	</body>
+</html>

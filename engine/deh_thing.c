@@ -127,4 +127,3 @@ deh_section_t deh_section_thing =
     NULL,
     DEH_ThingSHA1Sum,
 };
-

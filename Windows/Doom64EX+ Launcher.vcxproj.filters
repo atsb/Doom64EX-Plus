@@ -15,31 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\launcher\Launcher.h">
+    <ClInclude Include="..\launcher\Launcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\launcher\resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\launcher\resource.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\launcher\tk_lib.h">
+    <ClInclude Include="..\launcher\tk_lib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\launcher\tk_lib.c">
+    <ClCompile Include="..\launcher\Launcher.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\launcher\Launcher.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\launcher\tk_lib.c">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\src\launcher\Launcher.ico">
+    <Image Include="..\launcher\Launcher.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\src\launcher\Launcher.rc">
+    <ResourceCompile Include="..\launcher\Launcher.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

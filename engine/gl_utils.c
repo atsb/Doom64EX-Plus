@@ -32,6 +32,7 @@
 #ifdef __APPLE__
 #include <math.h>
 #endif
+
 #include "doomdef.h"
 #include "doomstat.h"
 #include "gl_main.h"
@@ -211,13 +212,13 @@ void glViewFrustum(int width, int height, float fovy, float znear) {
 // glSetVertexColor
 //
 
-void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count) {
+void glSetVertexColor(vtx_t* v, unsigned int color, unsigned short count) {
 	int i = 0;
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("glSetVertexColor(v=0x%p, c=0x%x, count=0x%x)\n", v, c, count);
 #endif
 	for (i = 0; i < count; i++) {
-		*(rcolor*)&v[i].r = c;
+		*(unsigned int*)&v[i].r = color;
 	}
 }
 
@@ -225,7 +226,7 @@ void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count) {
 // glGetColorf
 //
 
-void glGetColorf(rcolor color, float* argb) {
+void glGetColorf(unsigned int color, float* argb) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("glGetColorf(color=0x%x, argb=0x%p)\n", color, argb);
 #endif

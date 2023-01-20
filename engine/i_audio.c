@@ -31,17 +31,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef _WIN32
+
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef _WIN32
 #include <unistd.h>
 #endif
 
-#if defined(USE_FLUIDSYNTH) //!defined _WIN32 || __APPLE__ || __arm__ || __aarch64__ 
+#if defined(USE_FLUIDSYNTH)
 #include <fluidsynth.h>
+#elif defined(USE_FLUIDSYNTH_LITE)
+#include <fluidsynth-lite.h>
 #else
 #include <fluidlite.h>
 #endif
+
 #ifdef __APPLE__
 #ifdef USE_SDL3
 #include <SDL3/SDL.h>
@@ -261,7 +265,7 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 // Callback for SDL
 //
-static void Audio_Play(void* userdata, Uint8* stream, int len)
+static void Audio_Play(void* userdata, unsigned char* stream, int len)
 {
     memset(stream, 0, len);
 #ifndef _XBOX
@@ -1085,12 +1089,9 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 //
 
 static void Seq_Shutdown(doomseq_t* seq)
-{
-#ifndef __linux__    
-#ifndef _WIN32
+{    
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
-#else
     //
     // signal the sequencer to shut down
     //
@@ -1101,23 +1102,16 @@ static void Seq_Shutdown(doomseq_t* seq)
     //
     SDL_WaitThread(seq->thread, NULL);
     
-    // Close SDL Audio Device
-    SDL_CloseAudioDevice(1);
-
-#if !defined(_WIN32)
     //
     // fluidsynth cleanup stuff
     //
     SDL_CloseAudioDevice(1);
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
-#endif
 
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
-#endif
-#endif
 }
 
 //

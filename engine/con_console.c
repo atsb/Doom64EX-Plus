@@ -202,7 +202,7 @@ void CON_AddText(char* text) {
 // CON_Printf
 //
 
-void CON_Printf(rcolor clr, const char* s, ...) {
+void CON_Printf(unsigned int clr, const char* s, ...) {
 	static char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 

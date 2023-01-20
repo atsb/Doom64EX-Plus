@@ -15,15 +15,15 @@ APP_VERSION := 3.6.6(Dev)
 ICON := doom64ex-plus.png
 WINDRES   = windres.exe
 DEHACKED_OBJ = deh_ammo.o deh_doom.o deh_frame.o deh_io.o deh_main.o deh_mapping.o deh_misc.o deh_ptr.o deh_str.o deh_thing.o deh_weapon.o 
-OBJ       = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJ) f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_pixelmap.o gl_shader.o gl_texture.o gl_utils.o i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o p_user.o psnprntf.o r_bsp.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_sky.o r_things.o r_wipe.o s_sound.o sc_main.o sha1.o st_stuff.o tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o
-LINKOBJ   = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJ) f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_pixelmap.o gl_shader.o gl_texture.o gl_utils.o i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o p_user.o psnprntf.o r_bsp.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_sky.o r_things.o r_wipe.o s_sound.o sc_main.o sha1.o st_stuff.o tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o
+OBJ       = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJ) f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_pixmap.o gl_shader.o gl_texture.o gl_utils.o i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o p_user.o psnprntf.o r_bsp.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_sky.o r_things.o r_wipe.o s_sound.o sc_main.o sha1.o st_stuff.o tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o
+LINKOBJ   = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJ) f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_pixmap.o gl_shader.o gl_texture.o gl_utils.o i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o p_user.o psnprntf.o r_bsp.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_sky.o r_things.o r_wipe.o s_sound.o sc_main.o sha1.o st_stuff.o tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o
 LIBDIR    = -specs=$(DEVKITPRO)/libnx/switch.specs -L$(DEVKITPRO)/libnx/lib -L$(DEVKITPRO)/portlibs/switch/lib
 LIBS      = $(LIBDIR) -lSDL2 -lSDL2main -lSDL2_mixer -lmpg123 -lmodplug -lvorbisidec -logg -lopusfile -lopus `sdl2-config --libs` -lm -lnx -lEGL -lstdc++ -lglad -lglapi -lfluidsynth -lpng16 -lbz2 -ljpeg -lz 
 INCS      = -I$(DEVKITPRO)/portlibs/switch/include -I$(DEVKITPRO)/portlibs/switch/include/SDL2 -I$(DEVKITPRO)/libnx/include 
 BIN       = DOOM64EX+.elf
 BUILD	  =	build
 ARCH 	  = -march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIE -fPIC -O3 -funsafe-math-optimizations -O2
-DEFINES   = -DSWITCH -D__SWITCH__ -DUSE_FLUIDSYNTH
+DEFINES   = -DSWITCH -D__SWITCH__ -DUSE_FLUIDSYNTH-LITE -DDONT_USE_GLAD -DDONT_USE_SHADERS
 CFLAGS    = $(INCS) $(DEFINES) $(ARCH) -Wall -W -g -Wpointer-arith -Wwrite-strings -Wcast-align -std=gnu99  
 RM        = rm -f
 LINK      = aarch64-none-elf-gcc
@@ -141,8 +141,8 @@ gl_draw.o: $(GLOBALDEPS) gl_draw.h
 gl_main.o: $(GLOBALDEPS) gl_main.h
 	$(C) -c gl_main.c -o gl_main.o $(CFLAGS)	
 	
-gl_pixelmap.o: $(GLOBALDEPS) gl_pixelmap.h
-	$(C) -c gl_pixelmap.c -o gl_pixelmap.o $(CFLAGS)		
+gl_pixmap.o: $(GLOBALDEPS) gl_pixmap.h
+	$(C) -c gl_pixmap.c -o gl_pixmap.o $(CFLAGS)		
 	
 gl_shader.o: $(GLOBALDEPS) gl_shader.h
 	$(C) -c gl_shader.c -o gl_shader.o $(CFLAGS)	

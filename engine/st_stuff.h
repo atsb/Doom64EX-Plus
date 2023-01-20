@@ -53,7 +53,7 @@ void ST_Notification(char* msg);
 void ST_Drawer(void);
 void ST_FlashingScreen(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 char ST_DequeueChatChar(void);
-void ST_DrawCrosshair(int x, int y, int slot, unsigned char scalefactor, rcolor color);
+void ST_DrawCrosshair(int x, int y, int slot, unsigned char scalefactor, unsigned int color);
 void ST_UpdateFlash(void);
 void ST_AddDamageMarker(mobj_t* target, mobj_t* source);
 void ST_ClearDamageMarkers(void);

@@ -70,7 +70,7 @@
 #include "p_setup.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
-
+#include "i_w3swrapper.h"
 //
 // definitions
 //
@@ -2162,11 +2162,7 @@ void M_ChangeRatio(int choice) {
 		}
 	}
 	else {
-#ifdef USE_GLM
-		m_aspectRatio = glm_max(m_aspectRatio--, 0);
-#else
 		m_aspectRatio = max(m_aspectRatio--, 0);
-#endif
 	}
 
 	switch (m_aspectRatio) {
@@ -2186,13 +2182,8 @@ void M_ChangeRatio(int choice) {
 		dmax = MAX_RES21_09;
 		break;
 	}
-#ifdef USE_GLM
-	m_ScreenSize = glm_min(m_ScreenSize, dmax - 1);
-#else
 	m_ScreenSize = min(m_ScreenSize, dmax - 1);
-#endif
 	M_SetResolution();
-
 }
 
 void M_ChangeResolution(int choice) {
@@ -2227,11 +2218,7 @@ void M_ChangeResolution(int choice) {
 		}
 	}
 	else {
-#ifdef USE_GLM
-		m_ScreenSize = glm_max(m_ScreenSize--, 0);
-#else
 		m_ScreenSize = max(m_ScreenSize--, 0);
-#endif
 	}
 	M_SetResolution();
 }
@@ -3368,13 +3355,9 @@ void M_ReadSaveStrings(void) {
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
-#ifdef _WIN32
-		_read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		_close(handle);
-#else
-		read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		close(handle);
-#endif
+
+		w3sread(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		w3sclose(handle);
 		DoomLoadMenu[i].status = 1;
 	}
 }
@@ -4126,7 +4109,7 @@ void M_DrawXInputButton(int x, int y, int button) {
 	float height;
 	int pic;
 	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
+	const unsigned int color = MENUCOLORWHITE;
 
 	switch (button) {
 	case GAMEPAD_A:
@@ -4657,7 +4640,7 @@ static void M_DrawMenuSkull(int x, int y) {
 	float smbheight;
 	int pic;
 	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
+	const unsigned int color = MENUCOLORWHITE;
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
@@ -4819,7 +4802,7 @@ void M_Drawer(void) {
 			}
 
 			if (!currentMenu->smallfont) {
-				rcolor fontcolor = MENUCOLORRED;
+			    unsigned int fontcolor = MENUCOLORRED;
 
 				if (itemSelected == i) {
 					fontcolor += D_RGBA(0, 128, 8, 0);
@@ -4828,7 +4811,7 @@ void M_Drawer(void) {
 				Draw_BigText(x, y, fontcolor, currentMenu->menuitems[i].name);
 			}
 			else {
-				rcolor color = MENUCOLORWHITE;
+				unsigned int color = MENUCOLORWHITE;
 
 				if (itemSelected == i) {
 					color = D_RGBA(255, 255, 0, menualphacolor);
@@ -5163,7 +5146,7 @@ void M_InitEpisodes() {
 		strcpy(menu.name, epi->name);
 		menu.routine = M_ChooseMap;
 		menu.alphaKey = epi->key;
-		dmemcpy(&menus[i], &menu, sizeof(menuitem_t));
+		memcpy(&menus[i], &menu, sizeof(menuitem_t));
 	}
 	MapSelectDef.menuitems = menus;
 	MapSelectDef.numitems = episodes;

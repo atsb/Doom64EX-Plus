@@ -279,7 +279,11 @@ unsigned char* GL_GetScreenBuffer(int x, int y, int width, int height) {
 //
 // GL_SetTextureFilter
 //
-
+#define GL_TEXTURE_MAX_ANISOTROPY_EXT     0x84FE
+#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+#define GL_EXT_texture_filter_anisotropic 1
+#define GL_MAX_TEXTURE_UNITS_ARB		0x84E2
+#define GL_ARB_multitexture 1
 void GL_SetTextureFilter(void) {
 	if (!usingGL) {
 		return;
@@ -287,7 +291,6 @@ void GL_SetTextureFilter(void) {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_filter.value == 0 ? GL_LINEAR : GL_NEAREST);
-
 	if (GL_EXT_texture_filter_anisotropic) {
 		if (r_anisotropic.value) {
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_anisotropic);
@@ -306,8 +309,9 @@ void GL_SetDefaultCombiner(void) {
 	    if (!usingGL) {
         return;
     }
-    
-	if (GL_ARB_multitexture) {
+
+	if (GL_ARB_multitexture) 
+	{
 		GL_SetTextureUnit(1, false);
 		GL_SetTextureUnit(2, false);
 		GL_SetTextureUnit(3, false);
@@ -323,7 +327,7 @@ void GL_SetDefaultCombiner(void) {
 //
 
 void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c) {
+	float u1, float u2, float v1, float v2, unsigned int c) {
 	float left, right, top, bottom;
 
 	left = ViewWindowX + x * ViewWidth / video_width;
@@ -374,7 +378,7 @@ void GL_Draw2DQuad(vtx_t* v, boolean stretch) {
 //
 
 void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c, boolean stretch) {
+	float u1, float u2, float v1, float v2, unsigned int c, boolean stretch) {
 	vtx_t v[4];
 
 	GL_Set2DQuad(v, x, y, width, height, u1, u2, v1, v2, c);
@@ -439,7 +443,7 @@ void GL_CheckFillMode(void) {
 // GL_ClearView
 //
 
-void GL_ClearView(rcolor clearcolor) {
+void GL_ClearView(unsigned int clearcolor) {
 	float f[4];
 
 	glGetColorf(clearcolor, f);
@@ -512,13 +516,12 @@ void GL_Init(void) {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	gl_version ? GL_CLAMP_TO_EDGE : GL_CLAMP;
-
-	glScaleFactor = 1.0f;
-
 	if (GL_EXT_texture_filter_anisotropic) {
-		dglGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_anisotropic);
 	}
+
+	OGL_VERSION_DETECTION;
+	glScaleFactor = 1.0f;
 
 	usingGL = true;
 

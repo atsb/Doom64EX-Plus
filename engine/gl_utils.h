@@ -39,12 +39,23 @@
 #endif
 #else
 #ifdef USE_GLFW
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #else
+#ifndef DONT_USE_GLAD
+#include <glad/glad.h>
+#endif
 #include <SDL.h>
 #include <SDL_opengl.h>
 #endif
 #endif
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#endif
+#ifdef _USEFAKEGL09
+#include "fakeglx_ex+.h"
+#endif
+
 
 //André: Use this as wrapper to all the functions.
 #ifdef USE_GLFW
@@ -216,7 +227,7 @@ SDL_GLContext   Window
 #define OGL_DEFS    \
 SDL_GLContext   Window
 #endif
-
+#ifdef LEGACY_DETECTION
 #if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
 #define OGL_VERSION_2_1 GL_VERSION_2_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #define OGL_VERSION OGL_VERSION_2_1
@@ -225,10 +236,12 @@ SDL_GLContext   Window
 #else
 #define OGL_VERSION_3_1  GL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #define OGL_VERSION OGL_VERSION_3_1
-#endif
 #define OGL_VERSION_DETECTION OGL_VERSION
 #endif
-
+#else
+#define OGL_VERSION_DETECTION glGetString(GL_VERSION) ? GL_CLAMP_TO_EDGE : GL_CLAMP
+#endif
+#endif
 //
 // CUSTOM ROUTINES
 //
@@ -236,15 +249,8 @@ void glSetVertex(vtx_t* vtx);
 void glTriangle(int v0, int v1, int v2);
 void glDrawGeometry(int count, vtx_t* vtx);
 void glViewFrustum(int width, int height, float fovy, float znear);
-void glSetVertexColor(vtx_t* v, rcolor c, unsigned short count);
-void glGetColorf(rcolor color, float* argb);
-void glTexCombReplace(void);
-void glTexCombColor(int t, rcolor c, int func);
-void glTexCombColorf(int t, float* f, int func);
-void glTexCombModulate(int t, int s);
-void glTexCombAdd(int t, int s);
-void glTexCombInterpolate(int t, float a);
-void glTexCombReplaceAlpha(int t);
+void glSetVertexColor(vtx_t* v, unsigned int c, unsigned short count);
+void glGetColorf(unsigned int color, float* argb);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
 

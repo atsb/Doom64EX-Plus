@@ -36,7 +36,7 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-OGL_DEFS;
+
 CVAR(i_rsticksensitivityx, 0.0080);
 CVAR(i_rsticksensitivityy, 0.0080);
 CVAR(i_xinputscheme, 0);
@@ -337,7 +337,7 @@ static int I_TranslateKey(const int key) {
 // I_SDLtoDoomMouseState
 //
 
-static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
+static int I_SDLtoDoomMouseState(unsigned char buttonstate) {
 	return 0
 		| (buttonstate & SDL_BUTTON(SDL_BUTTON_LEFT) ? 1 : 0)
 		| (buttonstate & SDL_BUTTON(SDL_BUTTON_MIDDLE) ? 2 : 0)
@@ -350,9 +350,9 @@ static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 
 static void I_ReadMouse(void) {
 	int x, y;
-	Uint8 btn;
+	unsigned char btn;
 	event_t ev;
-	static Uint8 lastmbtn = 0;
+	static unsigned char lastmbtn = 0;
 
 	SDL_GetRelativeMouseState(&x, &y);
 	btn = SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -633,7 +633,9 @@ int I_ShutdownWait(void) {
 #ifdef USE_IMGUI
 		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
 #endif
+#ifdef USE_GLFW
 		glfwPollEvents();
+#endif
 		if (event.type == SDL_QUIT ||
 			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();

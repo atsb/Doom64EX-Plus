@@ -28,14 +28,14 @@
 #include "r_main.h"
 #include "r_things.h"
 #include "r_lights.h"
-
 #include "tables.h"
 #include "m_fixed.h"
 #include "z_zone.h"
+#include "gl_utils.h"
 #include <math.h>
 
-static GLdouble viewMatrix[16];
-static GLdouble projMatrix[16];
+static double viewMatrix[16];
+static double projMatrix[16];
 float frustum[6][4];
 
 typedef struct clipnode_s {

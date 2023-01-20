@@ -42,11 +42,7 @@
 static FILE* zonelog;
 
 static void Z_OpenLogFile(void) {
-#ifdef USE_OPTMIZED_FFUNCTION
-	fopen_s(&zonelog, "zonelog.txt", "w");
-#else
 	zonelog = fopen("zonelog.txt", "w");
-#endif
 }
 
 static void Z_CloseLogFile(void) {

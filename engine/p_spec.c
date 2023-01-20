@@ -187,8 +187,8 @@ void P_InitPicAnims(void) {
 		if (animdefs[i].palette) {
 			int lump = animinfo[i].texnum;
 
-			textureptr[lump] = (dtexture*)Z_Realloc(textureptr[lump],
-				animdefs[i].frames * sizeof(dtexture), PU_STATIC, 0);
+			textureptr[lump] = (unsigned int*)Z_Realloc(textureptr[lump],
+				animdefs[i].frames * sizeof(unsigned int), PU_STATIC, 0);
 		}
 	}
 }
