@@ -153,7 +153,6 @@ Install the VITASDK and compile with `make all -f Makefile.vita` to build the vp
 Install the devkitpro and compile with `make all -f Makefile.ns` to build the nso and nro files.
 
 ## Microsoft Xbox
-
 Use the solution provided into a folder called xbox to compile with Visual Studio 2003 + Xbox XDK with a Windows XP(x86) Machine.
 
 ## Usage
