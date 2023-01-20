@@ -191,6 +191,13 @@ typedef struct {
 	char        pic[9];
 } clusterdef_t;
 
+typedef struct
+{
+	int        mapid;
+	char       name[64];
+	char       key;
+} episodedef_t;
+
 //-----------------------------
 // Internal parameters, fixed.
 // These are set by the engine, and not changed

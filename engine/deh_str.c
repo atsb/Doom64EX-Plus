@@ -426,7 +426,7 @@ void DEH_snprintf(char *buffer, size_t len, const char *fmt, ...)
 
     va_start(args, fmt);
 
-    M_vsnprintf(buffer, len, repl, args);
+    w3svsnprintf(buffer, len, repl, args);
 
     va_end(args);
 }

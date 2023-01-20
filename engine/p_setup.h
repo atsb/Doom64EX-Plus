@@ -39,6 +39,8 @@ void P_RegisterCvars(void);
 //
 mapdef_t* P_GetMapInfo(int map);
 clusterdef_t* P_GetCluster(int map);
+episodedef_t* P_GetEpisode(int episode);
+int P_GetNumEpisodes(void);
 
 //
 // [kex] sky definitions
@@ -57,8 +59,8 @@ typedef struct {
 	int         flags;
 	char        pic[9];
 	char        backdrop[9];
-	rcolor      fogcolor;
-	rcolor      skycolor[3];
+	unsigned int      fogcolor;
+	unsigned int      skycolor[3];
 	int         fognear;
 } skydef_t;
 

@@ -23,22 +23,18 @@
 #include "doomtype.h"
 
 #ifdef _WIN32
-#include <fcntl.h>
-#ifdef USE_GLM
-#include <cglm/io.h>
-#endif
 #include <io.h>
-#include <string.h>
 #include <Windows.h>
 #else
-#include <fcntl.h>
 #include <unistd.h>
 #include <strings.h>
-#include <string.h>
-#include <stdio.h>
-#endif
-#include <stdarg.h>
 
+#endif
+#include <fcntl.h>
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <string.h>
 #ifdef OLD_MSVC
 #define W32GetVersionEX(lpVersionInformation) GetVersionEx(lpVersionInformation)
 #else
@@ -72,6 +68,10 @@ typedef unsigned char boolean;
 #endif
 #endif 
 
+#ifdef PSNPRINTF
+#include "psnprntf.h"
+#endif
+
 #ifdef _WIN32
 #define w3sopen _open
 #define w3swrite _write
@@ -84,8 +84,6 @@ typedef unsigned char boolean;
 #define w3sstrnicmp _strnicmp
 #define w3sstrcasecmp _stricmp
 #define w3sstrncasecmp _strnicmp
-#define w3ssnprintf _snprintf
-#define w3svsnprintf _vsnprintf
 #define w3sstrlwr _strlwr
 #define DIR_SEPARATOR '\\'
 #define PATH_SEPARATOR ';'
@@ -96,14 +94,13 @@ typedef unsigned char boolean;
 #define w3sclose close
 #define w3sread read
 #define w3sstrdup strdup
-char* w3sstrupr(char *str);
-#define w3ssnprintf snprintf
-#define w3svsnprintf vsnprintf
-char* w3sstrlwr(char *str);
+char* w3sstrupr(char* str);
+char* w3sstrlwr(char* str);
 #define w3sstricmp stricmp
 #define w3sstrnicmp strnicmp
 #define w3sstrcasecmp strcasecmp
 #define w3sstrncasecmp strncasecmp
+#define w3sstrlwr _strlwr
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif
@@ -128,16 +125,33 @@ char* w3sstrlwr(char *str);
 void w3ssleep(long long usecs);
 #endif
 
-#ifdef NO_VSNPRINTF
-#define w3svsnprintf(buf, format, arg) vsprintf(buf, format, arg)
+#define w3svsprintf(buf, format, arg) vsprintf(buf, format, arg)
+
+#if defined(CHOCO_VSNPRITNTF)
+int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
+#elif defined(PSNPRINTF)
+#define w3ssnprintf psnprintf
+#define w3svsnprintf pvsnprintf
 #else
-int M_vsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
+#if !defined(CHOCO_VSNPRINTF) || defined(PSNPRINTF)
+#ifdef _WIN32
+#define w3svsnprintf _vsnprintf
+#define w3ssnprintf _snprintf
+#else
+#define w3svsnprintf vsnprintf
+#define w3ssnprintf snprintf
+#endif
+#endif
 #endif
 
 int htoi(char* str);
 boolean fcmp(float f1, float f2);
 
-#if defined(__linux__) || defined(VITA) 
+#if defined __linux__ || defined VITA
 #define max(num1, num2) ((num1)>(num2)?(num1):(num2))
 #define min(num1, num2) ((num1)<(num2)?(num1):(num2))
+#endif
+
+#ifdef C99
+#define M_PI 3.14159265358979323846
 #endif

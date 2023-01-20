@@ -11,16 +11,6 @@
 #include <stdarg.h> /* for va_list */
 #include <stdlib.h> /* for fcvt */
 
-#ifdef __APPLE__
-#ifdef USE_SDL3
-#include <SDL3/SDL.h> // villsa
-#else
-#include <SDL2/SDL.h> // villsa
-#endif
-#else
-#include <SDL.h>
-#endif
-
 #include "psnprntf.h"
 
 /* Windows stdlib defines fcvt differently <sigh> */
@@ -33,9 +23,6 @@
  */
 
 #ifndef NO_FCVT
-#ifdef __FreeBSD__ // [Kate] Update as necessary
-#define NO_FCVT
-#endif
 #ifdef _WIN32
 #ifndef CYGWIN
 #define FCVT _fcvt
@@ -168,12 +155,12 @@ enum
         break; \
     case 'c': \
         GET_VARS \
-        ncount += pvsnfmt_char(&info, (int8_t)(va_arg(ap, int))); \
+        ncount += pvsnfmt_char(&info, (char)(va_arg(ap, int))); \
         state = STATE_NONE; \
         break; \
     case 's': \
         GET_VARS \
-        ncount += pvsnfmt_str(&info, (const int8_t *)(va_arg(ap, const int8_t *))); \
+        ncount += pvsnfmt_str(&info, (const char *)(va_arg(ap, const char *))); \
         state = STATE_NONE; \
         break; \
     case 'n': \
@@ -376,7 +363,7 @@ int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
 
     /* If right-aligned, print pad */
     if(!(flags & FLAG_LEFT_ALIGN)) {
-        int8_t padchar;
+        char padchar;
         if(flags & FLAG_ZERO_PAD) {
             padchar = '0';
         }
@@ -446,12 +433,12 @@ int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
 int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
     int number = 0;
     unsigned int unumber = 0;
-    int8_t numbersigned = 1;
-    int8_t iszero = 0; /* bool */
+    char numbersigned = 1;
+    char iszero = 0; /* bool */
     int base = 10;   /* haleyjd: default to something valid */
     int len = 0; /* length of number component (no sign or padding) */
-    int8_t char10 = 0;
-    int8_t sign = 0;
+    char char10 = 0;
+    char sign = 0;
     int widthpad = 0;
     int addprefix = 0; /* optional "0x" = 2 */
     int totallen;
@@ -460,15 +447,15 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
     /* Stack used to hold digits, which are generated backwards
      * and need to be popped off in the correct order
      */
-    int8_t numstack[22];    /* largest 64 bit number has 22 octal digits */
-    int8_t *stackpos = numstack;
+    char numstack[22];    /* largest 64 bit number has 22 octal digits */
+    char *stackpos = numstack;
 
-    int8_t fmt       = *info->fmt;
+    char fmt       = *info->fmt;
     int flags      = info->flags;
     int precision  = info->precision;
 
 #define PUSH(x) \
-    *stackpos++ = (int8_t)(x)
+    *stackpos++ = (char)(x)
 
 #define POP() \
     *(--stackpos)
@@ -711,7 +698,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
      */
     temp = len;
     for(; temp > 0; temp--) {
-        int8_t n = POP();
+        char n = POP();
         if(n <= 9) {
             *(info->pinsertion) = n + '0';
             info->pinsertion += 1;
@@ -746,8 +733,8 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
 typedef union DBLBITS_u {
     double D;
     struct word_s {
-        uint32_t W0;
-        uint32_t W1;
+        char W0;
+        unsigned int W1;
     } WORDS; /* haleyjd: this must be named */
 } DBLBITS;
 
@@ -787,7 +774,7 @@ typedef union DBLBITS_u {
  */
 
 int pvsnfmt_double(pvsnfmt_vars *info, double d) {
-    int8_t *digits;
+    char *digits;
     int sign = 0;
     int dec;
     double value = d;
@@ -796,18 +783,18 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
     int pad = 0;
     //int signwidth = 0;
     int totallen;
-    int8_t signchar = 0;
+    char signchar = 0;
     int leadingzeros = 0;
 
     int printdigits; /* temporary var used in different contexts */
 
     int flags = info->flags;
     int width = info->width;
-    const int8_t fmt = *(info->fmt);
+    const char fmt = *(info->fmt);
     int precision = info->precision;
 
     /* Check for special values first */
-    int8_t *special = 0;
+    char *special = 0;
     if(ISSNAN(value)) {
         special = "NaN";
     }

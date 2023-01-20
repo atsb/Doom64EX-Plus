@@ -27,7 +27,8 @@
 //Remove this later:
 #define GL_TEXTURE0_ARB				0x84C0
 #define GL_TEXTURE1_ARB				0x84C1
-#include <glad/glad.h>
+
+#include "gl_utils.h"
 #include "gl_shader.h"
 #include "doomstat.h"
 #include "r_main.h"
@@ -55,7 +56,7 @@ int         t_start;
 int         t_end;
 int         swx_start;
 int         numtextures;
-dtexture** textureptr;
+unsigned int** textureptr;
 unsigned short* texturewidth;
 unsigned short* textureheight;
 unsigned short* texturetranslation;
@@ -66,7 +67,7 @@ unsigned short* palettetranslation;
 int         g_start;
 int         g_end;
 int         numgfx;
-dtexture* gfxptr;
+unsigned int* gfxptr;
 unsigned short* gfxwidth;
 unsigned short* gfxorigwidth;
 unsigned short* gfxheight;
@@ -76,7 +77,7 @@ unsigned short* gfxorigheight;
 
 int         s_start;
 int         s_end;
-dtexture** spriteptr;
+unsigned int** spriteptr;
 int         numsprtex;
 unsigned short* spritewidth;
 float* spriteoffset;
@@ -98,11 +99,6 @@ typedef struct {
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
-CVAR_CMD(r_texturecombiner, 0)
-{
-	//ATSB: Stubbed
-}
-
 //
 // CMD_DumpTextures
 //
@@ -116,7 +112,7 @@ static CMD(DumpTextures) {
 //
 
 static CMD(ResetTextures) {
-	GL_ResetTextures();
+	curtexture = cursprite = curgfx = -1;
 }
 
 //
@@ -130,7 +126,7 @@ static void InitWorldTextures(void) {
 	t_end = W_GetNumForName("T_END") - 1;
 	swx_start = -1;
 	numtextures = (t_end - t_start) + 1;
-	textureptr = (dtexture**)Z_Calloc(sizeof(dtexture*) * numtextures, PU_STATIC, NULL);
+	textureptr = (unsigned int**)Z_Calloc(sizeof(unsigned int*) * numtextures, PU_STATIC, NULL);
 	texturetranslation = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
 	palettetranslation = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
 	texturewidth = Z_Calloc(numtextures * sizeof(unsigned short), PU_STATIC, NULL);
@@ -142,7 +138,7 @@ static void InitWorldTextures(void) {
 		int h;
 
 		// allocate at least one slot for each texture pointer
-		textureptr[i] = (dtexture*)Z_Malloc(1 * sizeof(dtexture), PU_STATIC, 0);
+		textureptr[i] = (unsigned int*)Z_Malloc(1 * sizeof(unsigned int), PU_STATIC, 0);
 
 		// get starting index for switch textures
 		if (!w3sstrncasecmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
@@ -274,7 +270,7 @@ static void InitGfxTextures(void) {
 	g_start = W_GetNumForName("SYMBOLS");
 	g_end = W_GetNumForName("MOUNTC");
 	numgfx = (g_end - g_start) + 1;
-	gfxptr = Z_Calloc(numgfx * sizeof(dtexture), PU_STATIC, NULL);
+	gfxptr = Z_Calloc(numgfx * sizeof(unsigned int), PU_STATIC, NULL);
 	gfxwidth = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
 	gfxorigwidth = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
 	gfxheight = Z_Calloc(numgfx * sizeof(short), PU_STATIC, NULL);
@@ -370,7 +366,7 @@ static void InitSpriteTextures(void) {
 	spriteoffset = (float*)Z_Malloc(numsprtex * sizeof(float), PU_STATIC, 0);
 	spritetopoffset = (float*)Z_Malloc(numsprtex * sizeof(float), PU_STATIC, 0);
 	spriteheight = (unsigned short*)Z_Malloc(numsprtex * sizeof(unsigned short), PU_STATIC, 0);
-	spriteptr = (dtexture**)Z_Malloc(sizeof(dtexture*) * numsprtex, PU_STATIC, 0);
+	spriteptr = (unsigned int**)Z_Malloc(sizeof(unsigned int*) * numsprtex, PU_STATIC, 0);
 	spritecount = (unsigned short*)Z_Calloc(numsprtex * sizeof(unsigned short), PU_STATIC, 0);
 
 	// gather # of sprites per texture pointer
@@ -408,7 +404,7 @@ static void InitSpriteTextures(void) {
 		unsigned int x;
 
 		// allocate # of sprites per pointer
-		spriteptr[i] = (dtexture*)Z_Malloc(spritecount[i] * sizeof(dtexture), PU_STATIC, 0);
+		spriteptr[i] = (unsigned int*)Z_Malloc(spritecount[i] * sizeof(unsigned int), PU_STATIC, 0);
 
 		// reset references
 		for (x = 0; x < spritecount[i]; x++) {
@@ -482,8 +478,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 // GL_ScreenToTexture
 //
 
-dtexture GL_ScreenToTexture(void) {
-	dtexture id;
+unsigned int GL_ScreenToTexture(void) {
+	unsigned int id;
 	int width;
 	int height;
 
@@ -530,7 +526,7 @@ dtexture GL_ScreenToTexture(void) {
 // GL_BindDummyTexture
 //
 
-static dtexture dummytexture = 0;
+static unsigned int dummytexture = 0;
 
 void GL_BindDummyTexture(void) {
 	if (dummytexture == 0) {
@@ -560,12 +556,12 @@ void GL_BindDummyTexture(void) {
 // GL_BindEnvTexture
 //
 
-static dtexture envtexture = 0;
+static unsigned int envtexture = 0;
 
 void GL_BindEnvTexture(void) {
-	rcolor rgb[16];
+	unsigned int rgb[16];
 
-	memset(rgb, 0xff, sizeof(rcolor) * 16);
+	memset(rgb, 0xff, sizeof(unsigned int) * 16);
 
 	if (envtexture == 0) {
 		glGenTextures(1, &envtexture);
@@ -586,11 +582,11 @@ void GL_BindEnvTexture(void) {
 // GL_UpdateEnvTexture
 //
 
-static rcolor lastenvcolor = 0;
+static unsigned int lastenvcolor = 0;
 
-void GL_UpdateEnvTexture(rcolor color) {
-	rcolor env;
-	rcolor rgb[16];
+void GL_UpdateEnvTexture(unsigned int color) {
+	unsigned int env;
+	unsigned int rgb[16];
 	unsigned char* c;
 	int i;
 
@@ -604,7 +600,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 	lastenvcolor = color;
 	c = (unsigned char*)rgb;
 
-	memset(rgb, 0, sizeof(rcolor) * 16);
+	memset(rgb, 0, sizeof(unsigned int) * 16);
 
 	for (i = 0; i < 16; i++) {
 		*c++ = (unsigned char)((env >> 0) & 0xff);
@@ -632,7 +628,7 @@ void GL_UpdateEnvTexture(rcolor color) {
 // GL_UnloadTexture
 //
 
-void GL_UnloadTexture(dtexture* texture) {
+void GL_UnloadTexture(unsigned int* texture) {
 	if (*texture != 0) {
 		glDeleteTextures(1, texture);
 		*texture = 0;
@@ -677,40 +673,6 @@ void GL_SetTextureMode(int mode) {
 }
 
 //
-// GL_SetCombineState
-//
-
-void GL_SetCombineState(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_rgb == combine) {
-		return;
-	}
-
-	state->combine_rgb = combine;
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
-}
-
-//
-// GL_SetCombineStateAlpha
-//
-
-void GL_SetCombineStateAlpha(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_alpha == combine) {
-		return;
-	}
-
-	state->combine_alpha = combine;
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
-}
-
-//
 // GL_SetEnvColor
 //
 
@@ -736,74 +698,6 @@ void GL_SetEnvColor(float* param) {
 	state->color[3] = f[3];
 
 	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, f);
-}
-
-//
-// GL_SetCombineSourceRGB
-//
-
-void GL_SetCombineSourceRGB(int source, int target) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->source_rgb[source] == target) {
-		return;
-	}
-
-	state->source_rgb[source] = target;
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB + source, state->source_rgb[source]);
-}
-
-//
-// GL_SetCombineSourceAlpha
-//
-
-void GL_SetCombineSourceAlpha(int source, int target) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->source_alpha[source] == target) {
-		return;
-	}
-
-	state->source_alpha[source] = target;
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA + source, state->source_alpha[source]);
-}
-
-//
-// GL_SetCombineOperandRGB
-//
-
-void GL_SetCombineOperandRGB(int operand, int target) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->operand_rgb[operand] == target) {
-		return;
-	}
-
-	state->operand_rgb[operand] = target;
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB + operand, state->operand_rgb[operand]);
-}
-
-//
-// GL_SetCombineOperandAlpha
-//
-
-void GL_SetCombineOperandAlpha(int operand, int target) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->operand_alpha[operand] == target) {
-		return;
-	}
-
-	state->operand_alpha[operand] = target;
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA + operand, state->operand_alpha[operand]);
 }
 
 //

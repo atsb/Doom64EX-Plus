@@ -18,7 +18,7 @@
 #ifndef DEH_DEFS_H
 #define DEH_DEFS_H
 
-#include <stdbool.h>
+#include "i_w3swrapper.h"
 #include "sha1.h"
 
 typedef enum
@@ -87,8 +87,4 @@ typedef struct deh_section_s
     deh_sha1_hash_t sha1_hash;
 } deh_section_t;
 
-
-
 #endif /* #ifndef DEH_DEFS_H */
-
-

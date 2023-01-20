@@ -63,7 +63,7 @@ angle_t         viewangle = 0;
 angle_t         viewpitch = 0;
 fixed_t         quakeviewx = 0;
 fixed_t         quakeviewy = 0;
-rcolor          flashcolor = 0;
+unsigned int    flashcolor = 0;
 angle_t         viewangleoffset = 0;
 float           viewoffset = 0;
 float           viewsin[2];
@@ -262,7 +262,7 @@ void R_Init(void) {
 	}
 
 	GL_InitTextures();
-	GL_ResetTextures();
+	curtexture = cursprite = curgfx = -1;
 }
 
 //
@@ -319,6 +319,7 @@ void R_SetupLevel(void) {
 	bRenderSky = true;
 }
 
+#define GL_ARB_multitexture 1
 //
 // R_PrecacheLevel
 // Loads and binds all world textures before level startup
@@ -456,7 +457,7 @@ void R_SetupFrame(player_t* player) {
 	//
 	// reset active textures
 	//
-	GL_ResetTextures();
+	curtexture = cursprite = curgfx = -1;
 
 	//
 	// setup view rotation/position

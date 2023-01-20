@@ -70,7 +70,7 @@
 #include "p_setup.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
-
+#include "i_w3swrapper.h"
 //
 // definitions
 //
@@ -608,6 +608,33 @@ void M_DrawStartNewNotify(void) {
 
 //------------------------------------------------------------------------
 //
+// MAP SELECT MENU
+//
+//------------------------------------------------------------------------
+
+int map = 1;
+void M_ChooseMap(int choice);
+
+menu_t MapSelectDef = {
+	0,
+	false,
+	&MainDef,
+	NULL,
+	NULL,
+	"Choose Campaign",
+	112,80,
+	0,
+	false,
+	NULL,
+	-1,
+	0,
+	1.0f,
+	NULL,
+	NULL
+};
+
+//------------------------------------------------------------------------
+//
 // NEW GAME MENU
 //
 //------------------------------------------------------------------------
@@ -656,11 +683,26 @@ void M_NewGame(int choice) {
 		return;
 	}
 
+	if (MapSelectDef.numitems > 0) {
+		M_SetupNextMenu(&MapSelectDef);
+		return;
+	}
+	
+	M_SetupNextMenu(&NewDef);
+}
+
+void M_ChooseMap(int choice) {
+	if (netgame && !demoplayback) {
+		M_StartControlPanel(true);
+		M_SetupNextMenu(&StartNewNotifyDef);
+		return;
+	}
+	map = P_GetEpisode(choice)->mapid;
 	M_SetupNextMenu(&NewDef);
 }
 
 void M_ChooseSkill(int choice) {
-	G_DeferedInitNew(choice, 1);
+	G_DeferedInitNew(choice, map);
 	M_ClearMenus();
 	memset(passwordData, 0xff, 16);
 	allowmenu = false;
@@ -2120,11 +2162,7 @@ void M_ChangeRatio(int choice) {
 		}
 	}
 	else {
-#ifdef USE_GLM
-		m_aspectRatio = glm_max(m_aspectRatio--, 0);
-#else
 		m_aspectRatio = max(m_aspectRatio--, 0);
-#endif
 	}
 
 	switch (m_aspectRatio) {
@@ -2144,13 +2182,8 @@ void M_ChangeRatio(int choice) {
 		dmax = MAX_RES21_09;
 		break;
 	}
-#ifdef USE_GLM
-	m_ScreenSize = glm_min(m_ScreenSize, dmax - 1);
-#else
 	m_ScreenSize = min(m_ScreenSize, dmax - 1);
-#endif
 	M_SetResolution();
-
 }
 
 void M_ChangeResolution(int choice) {
@@ -2185,11 +2218,7 @@ void M_ChangeResolution(int choice) {
 		}
 	}
 	else {
-#ifdef USE_GLM
-		m_ScreenSize = glm_max(m_ScreenSize--, 0);
-#else
 		m_ScreenSize = max(m_ScreenSize--, 0);
-#endif
 	}
 	M_SetResolution();
 }
@@ -3326,13 +3355,9 @@ void M_ReadSaveStrings(void) {
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
-#ifdef _WIN32
-		_read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		_close(handle);
-#else
-		read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		close(handle);
-#endif
+
+		w3sread(handle, &savegamestrings[i], MENUSTRINGSIZE);
+		w3sclose(handle);
 		DoomLoadMenu[i].status = 1;
 	}
 }
@@ -4084,7 +4109,7 @@ void M_DrawXInputButton(int x, int y, int button) {
 	float height;
 	int pic;
 	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
+	const unsigned int color = MENUCOLORWHITE;
 
 	switch (button) {
 	case GAMEPAD_A:
@@ -4615,7 +4640,7 @@ static void M_DrawMenuSkull(int x, int y) {
 	float smbheight;
 	int pic;
 	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
+	const unsigned int color = MENUCOLORWHITE;
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
@@ -4777,7 +4802,7 @@ void M_Drawer(void) {
 			}
 
 			if (!currentMenu->smallfont) {
-				rcolor fontcolor = MENUCOLORRED;
+			    unsigned int fontcolor = MENUCOLORRED;
 
 				if (itemSelected == i) {
 					fontcolor += D_RGBA(0, 128, 8, 0);
@@ -4786,7 +4811,7 @@ void M_Drawer(void) {
 				Draw_BigText(x, y, fontcolor, currentMenu->menuitems[i].name);
 			}
 			else {
-				rcolor color = MENUCOLORWHITE;
+				unsigned int color = MENUCOLORWHITE;
 
 				if (itemSelected == i) {
 					color = D_RGBA(255, 255, 0, menualphacolor);
@@ -5108,6 +5133,26 @@ void M_Ticker(void) {
 	}
 }
 
+void M_InitEpisodes() {
+	int episodes = P_GetNumEpisodes();
+	if (episodes <= 0) return;
+	menuitem_t* menus = NULL;
+	menus = Z_Realloc(menus, sizeof(menuitem_t) * episodes, PU_STATIC, 0);
+	for (int i = 0; i < episodes; i++)
+	{
+		episodedef_t* epi = P_GetEpisode(i);
+		menuitem_t menu;
+		menu.status = 1;
+		strcpy(menu.name, epi->name);
+		menu.routine = M_ChooseMap;
+		menu.alphaKey = epi->key;
+		memcpy(&menus[i], &menu, sizeof(menuitem_t));
+	}
+	MapSelectDef.menuitems = menus;
+	MapSelectDef.numitems = episodes;
+	NewDef.prevMenu = &MapSelectDef;
+}
+
 //
 // M_Init
 //
@@ -5147,6 +5192,7 @@ void M_Init(void) {
 	MainDef.y += 8;
 	NewDef.prevMenu = &MainDef;
 
+	M_InitEpisodes();
 	M_InitShiftXForm();
 }
 

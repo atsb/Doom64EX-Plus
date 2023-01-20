@@ -128,9 +128,9 @@ enum {
 	ML_SOUNDBLOCK = 64,              // Sound rendering: don't let sound cross two of these.
 	ML_DONTDRAW = 128,             // Don't draw on the automap at all.
 	ML_MAPPED = 256,             // Set if already seen, thus drawn in automap.
-	ML_DRAWMIDTEXTURE = 0x200,           // Draw middle texture on sidedef
+	ML_DRAWMASKED	=		0x200,           // Draw middle texture on sidedef
 	ML_DONTOCCLUDE = 0x400,           // Don't add to occlusion buffer
-	ML_DONTPEGMID = 0x800,           // middle texture unpegged
+	ML_BLOCKPROJECTILES =    0x800,			// blocks projectiles
 	ML_THINGTRIGGER = 0x1000,          // Line is triggered by dead thing (flagged as ondeathtrigger)
 	ML_SWITCHX02 = 0x2000,          // Switch flag 1
 	ML_SWITCHX04 = 0x4000,          // Switch flag 2
@@ -175,7 +175,7 @@ enum {
 #define MACROMASK(x)            (SPECIALMASK(x) - (x & MLU_MACRO))
 
 // Sector definition, from editing.
-typedef    struct {
+typedef struct {
 	short    floorheight;
 	short    ceilingheight;
 	unsigned short    floorpic;

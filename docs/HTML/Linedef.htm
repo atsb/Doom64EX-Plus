@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Doom64 Linedefs</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+	</head>
+	<body text="#ccff99" vLink="#cc0000" link="#ff9999" bgColor="#000000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>Linedef Specifications</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			Doom64's linedefs are completly different than that of Doom, Zdoom/Hexen's 
+			format. This<BR>
+			Article will roughly go over the new format and all of its flags and specials.<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Linedef Format---------</STRONG><BR>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>* short v1;<BR>
+			&nbsp;&nbsp;&nbsp; * short v2;<BR>
+			&nbsp;&nbsp;&nbsp; * unsigned short flags;<BR>
+			&nbsp;&nbsp;&nbsp; * byte renderflags;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* byte sidedefflags;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* byte special;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* byte usetype;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* short tag;<BR>
+			&nbsp;&nbsp;&nbsp; * short sidenum[2];<BR>
+			<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Linedef Flags---------<BR>
+			</STRONG>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>* <STRONG>Normal Flags<BR>
+			</STRONG>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Impassible<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Block Monsters<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Two Sided<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;Unpeg Top<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Unpeg Lower<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;Secret<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Block Sound<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Invisible<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;AutoMapped<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Mask Texture - For any texture 
+			with masking (fence, grate etc) this flag should be set.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;Trigger&nbsp;By&nbsp;Event - 
+			Linedef will be triggered by either&nbsp;thing pickups, or death.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Linedef's tag must&nbsp;match the&nbsp;thing's TID. If tag is 999, then the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linedef 
+			will trigger&nbsp;once the level loads.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Switch Mask 1 - Read below<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Switch Mask 2 - Read below<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Switch Mask 3&nbsp;- Read 
+			below<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * <STRONG>Switch Masks<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>Switch 
+			masks are special flags that control where the switch&nbsp;line should be 
+			displayed<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and on what sidedef slot 
+			(top, middle, low) it should be activated from. This means<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; that&nbsp;if&nbsp;a 
+			switch is&nbsp;activated on low sidedef, then the player will not be able to<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; use the switch if he is 
+			not able to 'reach' it.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A switch line is a 
+			generated 32x32&nbsp;plane that is used to display the switch. One of the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; three switch mask flags 
+			sets how the switch is displayed.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A switch texture&nbsp;is 
+			any one of the textures named <STRONG>SWXxxxxx</STRONG>. These&nbsp;textures 
+			must be placed<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in either top, 
+			middle or lower sidedef texture slot. All switches must be used on<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the <STRONG>front side</STRONG>
+			of a linedef.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <STRONG>Flag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				Sidedef Texture&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sidedef 
+				Activation<BR>
+			</STRONG>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			--------------------------------------------------------------<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Mask1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Low<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Mask2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Middle???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Top???<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Mask3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Low???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Middle???<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Mask1+Mask3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Middle<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Mask1+Mask2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Middle&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Low<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Mask2+Mask3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			Top<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ??? - Not confirmed. 
+			Doesn't appear&nbsp;to be even functional in the rom.<BR>
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;<STRONG>Usage Flags<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>Usage flags are flags 
+			based on how the linedef can be activated. This can range from<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; crossing, pressing use, shooting, 
+			key-based etc.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * 
+			Macro&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - If this linedef is triggered, it will 
+			trigger a&nbsp;Macro script<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Red Key&nbsp;&nbsp;&nbsp; - 
+			Requires&nbsp;red key to trigger the line<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Blue Key&nbsp;&nbsp;&nbsp;- 
+			Requires blue key to trigger the line<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Yellow Key - Requires yellow 
+			key to&nbsp;trigger the line<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 
+			Cross&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Player must walk over, or cross the line 
+			to trigger it<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Shootable&nbsp; - Player must 
+			shoot at the line to trigger it<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 
+			Use&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Player must press use on the 
+			line to trigger it<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Repeatable - Line can be 
+			reactivated<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; *&nbsp;<STRONG>Sidedef Flags<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>Sidedef flags are flags 
+			based on&nbsp;sidedef/texture behavior.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Trigger Front 
+			Side&nbsp;&nbsp;&nbsp;&nbsp; - Line can only be triggered&nbsp;on the front 
+			side of the line<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * No Check for Z Height&nbsp; - Line 
+			won't check for the player's Z height (by default it<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			checks the player's Z height and the coordinates of each sidedef<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;texture 
+			height (top, middle, lower).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Invert 
+			Blend&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 
+			Reverse color blending (Example:&nbsp;Red pillars in&nbsp;Dark Entries).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Mirror Texture 
+			H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Mirror&nbsp;textures horrizontally<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Mirror Texture 
+			V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Mirror textures vertically<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Rendering Flags<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>Rendering flags are 
+			flags based on how they're rendered (lighting, animation etc).<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * 
+			Switch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Unknown. 
+			Used on some switches, but not on (Mask2+Mask3)&nbsp;switches.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Scroll 
+			Right&nbsp;&nbsp;&nbsp;&nbsp; - Scroll texture to the right<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Scroll 
+			Left&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Scroll&nbsp;texture to the left<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Scroll 
+			Up&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Scroll texture&nbsp;upwards<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Scroll 
+			Down&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Scroll texture&nbsp;downwards<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;Limit Top Blend&nbsp; - Blend 
+			Top/Low color on top sidedef only<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Limit Low Blend&nbsp; - Blend 
+			Top/Low color on low sidedef only<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Sector Blending&nbsp; - Use 
+			standard color values for blending. (If not on, it will use thing<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			color on the entire sector without blending (psxdoom-ish lighting).<BR>
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Below are examples of how the 
+			blending works:<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example 1: Linedefs with sector 
+			blending enabled. The top and bottom seg colors are blended<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			together. (Ceiling = Green, Floor&nbsp;= Magneta, Upper wall= Red, Lower wall = 
+			Blue)<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<A href="IMG/blend_00.jpg"><IMG language="javascript" id="Img2" onclick="return IMG1_onclick()" height="192" src="IMG/blend_00.jpg"
+					width="192"></A>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example 2: Linedefs without sector 
+			blending enabled. The linedef instead uses the thing<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			color (cyan)&nbsp;to light the wall.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<A href="IMG/blend_02.jpg"><IMG language="javascript" id="Img1" onclick="return IMG1_onclick()" height="192" src="IMG/blend_02.jpg"
+					width="192"></A>&nbsp;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example 3: Linedef without Limit Top 
+			and Limit Bottom blending. The blending between the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			two colors are&nbsp;spreaded out between the top and bottom sidedefs (middle 
+			sidedef<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			remains uneffected).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<A href="IMG/blend_03.jpg"><IMG language="javascript" id="Img3" onclick="return IMG1_onclick()" height="192" src="IMG/blend_03.jpg"
+					width="192"></A>&nbsp;<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example 4: Linedef with both Top and 
+			Bottom Limit blending. The top and bottom colors are<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			being blended on each sidedef (including middle).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<A href="IMG/blend_04.jpg"><IMG language="javascript" id="Img4" onclick="return IMG1_onclick()" height="192" src="IMG/blend_04.jpg"
+					width="192"></A>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example 5: Linedef with Top Limit 
+			blending and No Bottom Limit Blending. Top Sidedef has<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			full blending&nbsp;between the two colors, while the bottom&nbsp;sidedef does 
+			not.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<A href="IMG/blend_05.jpg"><IMG language="javascript" id="Img5" onclick="return IMG1_onclick()" height="192" src="IMG/blend_05.jpg"
+					width="192"></A>
+		</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">*&nbsp;<STRONG>---------Linedef 
+				Specials---------<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;Note:</STRONG> Most of these unknowns aren't even 
+			used at all.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * 1: Door Open/Close<BR>
+			&nbsp;&nbsp;&nbsp; * 2: Door Open<BR>
+			&nbsp;&nbsp;&nbsp; * 3: Close Door<BR>
+			&nbsp;&nbsp;&nbsp; * 4: Classic Door Open<BR>
+			&nbsp;&nbsp;&nbsp; * 5: Floor Raise<BR>
+			&nbsp;&nbsp;&nbsp; * 6: Ceiling Crush/Raise Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 8: Stairs Raise 8<BR>
+			&nbsp;&nbsp;&nbsp; * 10: Platform Down/Up<BR>
+			&nbsp;&nbsp;&nbsp; * 18: Floor Raise/Nearest<BR>
+			&nbsp;&nbsp;&nbsp; * 19: Floor Lower<BR>
+			&nbsp;&nbsp;&nbsp; * 21: Platform Down/Up<BR>
+			&nbsp;&nbsp;&nbsp; * 23: Floor Lower/Lowest<BR>
+			&nbsp;&nbsp;&nbsp; * 25: Ceiling Crush/Raise<BR>
+			&nbsp;&nbsp;&nbsp; * 31: Classic Door Open/Close<BR>
+			&nbsp;&nbsp;&nbsp; * 36: Floor Lower/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 37: Floor Lower/Change<BR>
+			&nbsp;&nbsp;&nbsp; * 38: Floor Lower/Lowest<BR>
+			&nbsp;&nbsp;&nbsp; * 39: Teleport<BR>
+			&nbsp;&nbsp;&nbsp; * 52: Exit Level<BR>
+			&nbsp;&nbsp;&nbsp; * 53: Platform Perpetual/Raise<BR>
+			&nbsp;&nbsp;&nbsp; * 54: Platform Perpetual/Stop<BR>
+			&nbsp;&nbsp;&nbsp; * 57: Ceiling Crush/Stop<BR>
+			&nbsp;&nbsp;&nbsp; * 90: Artifact Switch 1<BR>
+			&nbsp;&nbsp;&nbsp; * 91: Artifact Switch 2<BR>
+			&nbsp;&nbsp;&nbsp; * 92: Artifact Switch 3<BR>
+			&nbsp;&nbsp;&nbsp; * 93: Unknown<BR>
+			&nbsp;&nbsp;&nbsp; * 94: Alert Enemies<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* 100: Stairs Raise/Fast 16<BR>
+			&nbsp;&nbsp;&nbsp; * 108: Door Open/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 109: Door Open/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 110: Door Close/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 117: Door Open/Close/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 118: Classic Door Open/Close/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 121: Platform Down/Up/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 122: Platform Up/Down<BR>
+			&nbsp;&nbsp;&nbsp; * 123: Platform Up/Down/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 124: Secret Exit<BR>
+			&nbsp;&nbsp;&nbsp; * 125: Teleport Non-Player<BR>
+			&nbsp;&nbsp;&nbsp; * 141: Kill Monsters in Sector Special 666<BR>
+			&nbsp;&nbsp;&nbsp; * 193: Custom Floor Move<BR>
+			&nbsp;&nbsp;&nbsp; * 200: Clear Camera<BR>
+			&nbsp;&nbsp;&nbsp; * 201: Set Camera<BR>
+			&nbsp;&nbsp;&nbsp; * 202: Invoke Dart<BR>
+			&nbsp;&nbsp;&nbsp; * 203: Delay<BR>
+			&nbsp;&nbsp;&nbsp; * 204: Set Level Integer<BR>
+			&nbsp;&nbsp;&nbsp; * 210: Custom Ceiling<BR>
+			&nbsp;&nbsp;&nbsp; * 211: Unknown 211<BR>
+			&nbsp;&nbsp;&nbsp; * 212: Custom Floor<BR>
+			&nbsp;&nbsp;&nbsp; * 213: Unknown 213<BR>
+			&nbsp;&nbsp;&nbsp; * 214: Floor/Ceiling Move<BR>
+			&nbsp;&nbsp;&nbsp; * 215: Unknown<BR>
+			&nbsp;&nbsp;&nbsp; * 216: Unknown<BR>
+			&nbsp;&nbsp;&nbsp; * 217: Unknown<BR>
+			&nbsp;&nbsp;&nbsp; * 218: Set Line Flag<BR>
+			&nbsp;&nbsp;&nbsp; * 219: Set Line Texture<BR>
+			&nbsp;&nbsp;&nbsp; * 220: Set Sector Flag<BR>
+			&nbsp;&nbsp;&nbsp; * 221: Set Sector Special<BR>
+			&nbsp;&nbsp;&nbsp; * 222: Set Sector Light<BR>
+			&nbsp;&nbsp;&nbsp; * 223: Set Sector Flats<BR>
+			&nbsp;&nbsp;&nbsp; * 224: Spawn Thing<BR>
+			&nbsp;&nbsp;&nbsp; * 225: Quake/Shake<BR>
+			&nbsp;&nbsp;&nbsp; * 226: Custom Ceiling/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 227: Set Ceiling Height<BR>
+			&nbsp;&nbsp;&nbsp; * 228: Custom Floor/Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 229: Set Floor Height<BR>
+			&nbsp;&nbsp;&nbsp; * 230: Set Line Special<BR>
+			&nbsp;&nbsp;&nbsp; * 231: Invoke Tracer<BR>
+			&nbsp;&nbsp;&nbsp; * 232: Ceiling Crush/Raise Once<BR>
+			&nbsp;&nbsp;&nbsp; * 233: Freeze Player<BR>
+			&nbsp;&nbsp;&nbsp; * 234: Unknown 234<BR>
+			&nbsp;&nbsp;&nbsp; * 235: Set Light Data<BR>
+			&nbsp;&nbsp;&nbsp; * 236: Custom Platform Down/Up<BR>
+			&nbsp;&nbsp;&nbsp; * 237: Custom Platform Down/Up Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 238: Custom Platform Up/Down<BR>
+			&nbsp;&nbsp;&nbsp; * 239: Custom Platform Up/Down Fast<BR>
+			&nbsp;&nbsp;&nbsp; * 240: Trigger Random Tagged Line<BR>
+			&nbsp;&nbsp;&nbsp; * 241: Ceiling/Floor Split<BR>
+			&nbsp;&nbsp;&nbsp; * 242: Remove Thing<BR>
+			&nbsp;&nbsp;&nbsp; * 243: Move Camera<BR>
+			&nbsp;&nbsp;&nbsp; * 244: Set Sector Floor Exact<BR>
+			&nbsp;&nbsp;&nbsp; * 245: Set Sector Ceiling Exact<BR>
+			&nbsp;&nbsp;&nbsp; * 246: Restart Macro<BR>
+			&nbsp;&nbsp;&nbsp; * 247: Custom Floor To Height<BR>
+			&nbsp;&nbsp;&nbsp; * 248: Unknown 248<BR>
+			&nbsp;&nbsp;&nbsp; * 249: Telefrag<BR>
+			&nbsp;&nbsp;&nbsp; * 250: Unknown 250<BR>
+			&nbsp;&nbsp;&nbsp; * 251:&nbsp;Easter Egg Special?? &lt;TODO&gt; Investigate 
+			this some more<BR>
+			&nbsp;&nbsp;&nbsp; * 252: Custom Ceiling To Height<BR>
+			&nbsp;&nbsp;&nbsp; * 253: Enable Features<BR>
+			&nbsp;&nbsp;&nbsp; * 254: Map33 Special<BR>
+			&nbsp;&nbsp;&nbsp; * 255: Unknown 255<BR>
+		</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+	</body>
+</html>

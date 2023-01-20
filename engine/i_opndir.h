@@ -41,6 +41,7 @@
 #include <direct.h>
 #include <io.h>
 #include "i_w3swrapper.h"
+#include <tchar.h>
 #endif
 #define F_OK 0
 #define W_OK 2
@@ -87,10 +88,10 @@ typedef struct {
 	int dd_stat;
 
 	/* given path for dir with search pattern (struct is extended) */
-	int8_t dd_name[1];
+	char dd_name[1];
 } DIR;
 
-DIR* opendir(const int8_t*);
+DIR* opendir(const char*);
 struct dirent* readdir(DIR*);
 int closedir(DIR*);
 void rewinddir(DIR*);

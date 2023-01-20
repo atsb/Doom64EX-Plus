@@ -163,7 +163,7 @@ static void DEH_MiscParseLine(deh_context_t *context, char *line, void *tag)
 {
     char *variable_name, *value;
     int ivalue;
-    size_t i;
+    unsigned int i;
 
     if (!DEH_ParseAssignment(line, &variable_name, &value))
     {

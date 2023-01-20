@@ -58,7 +58,6 @@ static visspritelist_t* vissprite = NULL;
 
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(i_interpolateframes);
-CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(v_accessibility);
 
 static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
@@ -588,7 +587,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	spriteframe_t* sprframe;
 	int             spritenum;
 	int             flip;
-	rcolor          color;
+	unsigned int    color;
 	unsigned char            alpha;
 	float           x;
 	float           y;
@@ -648,42 +647,16 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	//
 	// setup texture environment for effects
 	//
-	if (r_texturecombiner.value) {
-		float f[4];
+	int l = (sector->lightlevel >> 1);
 
-		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
+	GL_SetTextureUnit(1, true);
+	GL_SetTextureMode(GL_ADD);
+	GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+	GL_SetTextureUnit(0, true);
 
-		glTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
-
-		if (v_accessibility.value < 1)
-		{
-			if (!nolights) {
-				GL_UpdateEnvTexture(WHITE);
-				GL_SetTextureUnit(1, true);
-				glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
-			}
-
-			if (st_flashoverlay.value <= 0) {
-				GL_SetTextureUnit(2, true);
-				glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
-			}
-		}
-
-		glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
-
-		GL_SetTextureUnit(0, true);
-	}
-	else {
-		int l = (sector->lightlevel >> 1);
-
-		GL_SetTextureUnit(1, true);
-		GL_SetTextureMode(GL_ADD);
-		GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-		GL_SetTextureUnit(0, true);
-
-		if (nolights) {
-			GL_SetTextureMode(GL_REPLACE);
-		}
+	if (nolights)
+	{
+		GL_SetTextureMode(GL_REPLACE);
 	}
 
 	// render

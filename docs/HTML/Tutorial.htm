@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Doom64 Level Tutorials</title>
+		<meta content="True" name="vs_snapToGrid">
+		<meta content="True" name="vs_showGrid">
+		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<script language="javascript" id="clientEventHandlersJS">
+<!--
+
+function IMG1_onclick() {
+
+}
+
+//-->
+		</script>
+	</head>
+	<body text="#ccff99" vLink="#cc0000" link="#ff9999" bgColor="#000000">
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif"><STRONG>Doom64 EX</STRONG>
+			<BR>
+			<BR>
+			Original Doom source (C) 1993-1996 by id Software, Inc.<BR>
+			Original Doom64 game&nbsp;(C) 1997 by Midway, Inc<BR>
+			Enhancements and fixes (C) Team TNT, PRBoom Team,&nbsp;James "Quasar" Haley<BR>
+			Doom3D source port (C) 2001 Paul Brook<BR>
+			Doom64 EX (C) 2007-2008 Samuel "Kaiser" Villarreal<BR>
+			<BR>
+			Website: <A href="http://doom64ex.sourceforge.net/">http://doom64ex.sourceforge.net/</A><BR>
+			Email:&nbsp;&nbsp; <A href="mailto:svkaiser@gmail.com">svkaiser@gmail.com</A></P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">&nbsp;</P>
+		<P style="FONT-SIZE: 14px; FONT-FAMILY: 'Courier New', Sans-Serif">-----------------------------------------------------------------------<BR>
+			<STRONG>Tutorials</STRONG><BR>
+			-----------------------------------------------------------------------<BR>
+			This article will roughly explain some of the level design tutorials for 
+			Doom64.<BR>
+			As before, this article will assume that you are already familiar with Doom 
+			mapping.<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Split Door</STRONG> <STRONG>---------</STRONG><BR>
+			<BR>
+			<STRONG>&nbsp;&nbsp;&nbsp; </STRONG>* Create door sector<BR>
+			&nbsp;&nbsp;&nbsp; * Raise ceiling by 64 units, and raise floor by 64 units<BR>
+			&nbsp;&nbsp;&nbsp; * Texture lower sidedef<BR>
+			&nbsp;&nbsp;&nbsp; * Assign any manual door linedef special (1, 117, 118 etc)<BR>
+			&nbsp;&nbsp;&nbsp; * To keep the door tracks from moving, assign both Unpeg Top 
+			and Unpeg Lower flags<BR>
+			<BR>
+			*&nbsp;<STRONG>---------Thing Spawning---------<BR>
+				<BR>
+				&nbsp;&nbsp;&nbsp; </STRONG>* Add a thing<BR>
+			&nbsp;&nbsp;&nbsp; * Assign a TID. (For this example, assign 1 as the TID).<BR>
+			&nbsp;&nbsp;&nbsp; * Set 'Spawn' flag on thing.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Note that when this flag is set, 
+			the thing will not be present in the level.<BR>
+			&nbsp;&nbsp;&nbsp; * Setup&nbsp;a linedef to spawn the thing.<BR>
+			&nbsp;&nbsp;&nbsp; * Set special to 224 and set the tag to 1 (Thing TID).<BR>
+			&nbsp;&nbsp;&nbsp; * When triggered, the thing will spawn in. Spawning will 
+			work on all things in the game.<BR>
+			<BR>
+			* ---------<STRONG>Item Triggering</STRONG> ---------<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * Add an item<BR>
+			&nbsp;&nbsp;&nbsp; * Assign TID<BR>
+			&nbsp;&nbsp;&nbsp; * Set 'Trigger On Touch' flag<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Example:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <A href="IMG/tut_000.jpg">
+				<IMG language="javascript" id="IMG1" onclick="return IMG1_onclick()" height="192" src="IMG/tut_000.jpg"
+					width="192"></A>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * Setup a linedef to be triggered<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Make the tag match the thing TID<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Make sure the linedef cannot be 
+			activated by the player<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * The 
+			linedef can be placed anywhere in the level but keep in mind that it shouldn't 
+			be<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			accessed by the player other than by picking up the thing.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Example:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <A href="IMG/tut_001.jpg">
+				<IMG language="javascript" id="IMG1" onclick="return IMG1_onclick()" height="192" src="IMG/tut_001.jpg"
+					width="192"></A>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * This linedef is set to spawn in enemies once the player 
+			picks up the shotgun.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * <STRONG>Fake Item Pickups<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </STRONG>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fake Items can be found under editor 
+			ID: 89. Fake items are invisible objects that the<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the player can pickup. No flash, or 
+			message appears when this item is picked up. This<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is very useful for creating 
+			scripted events.<BR>
+			<BR>
+			&nbsp;* ---------<STRONG>Death Triggering</STRONG>---------&nbsp;&nbsp;
+			<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * Assign a TID to the enemy or enemies that need to trigger 
+			something when killed.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Set the 'Trigger On Death' flag.<BR>
+			&nbsp;&nbsp;&nbsp; * Setup a linedef to trigger the special.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Set the flag 'Activated By Dead 
+			Thing'<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Make sure the tag is the same as 
+			the thing TID<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Make sure that the line cannot be 
+			activated by the player, or make the line unreachable<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to the player.<BR>
+			&nbsp;&nbsp;&nbsp; * Note that if there are multiple enemies with the same TID, 
+			the linedef will not activate<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; until all enemies with the same TID are dead.<BR>
+			<BR>
+			* ---------<STRONG>See-Through Ceilings/Floors</STRONG>---------<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; In Doom64, its possible to use masked textures for the 
+			ceiling and floors, giving the room<BR>
+			&nbsp;&nbsp;&nbsp; a unique 3D appearence.<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * Create a room that is 128 units tall and 384x384 
+			units&nbsp;wide.<BR>
+			&nbsp;&nbsp;&nbsp; * Create another sector inside that is 128x128 
+			units&nbsp;wide.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;* Move the sector's ceiling height up by 64 units.<BR>
+			&nbsp;&nbsp;&nbsp; * Texture the ceiling flat with a sky texture. (Note: Only 
+			skies can create this effect).<BR>
+			&nbsp;&nbsp;&nbsp; * Within that sector, create another sector.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Make sure the boundaries of the 
+			new sector is very close to the borders of the other<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sector.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Move the ceiling down by 32 units.<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Texture the ceiling with a masked 
+			texture. (Grate, fence etc).<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Example:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <A href="IMG/tut_002.jpg">
+				<IMG language="javascript" id="Img2" onclick="return IMG1_onclick()" height="192" src="IMG/tut_002.jpg"
+					width="192"></A>
+			<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Result:<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <A href="IMG/tut_003.jpg">
+				<IMG language="javascript" id="Img3" onclick="return IMG1_onclick()" height="192" src="IMG/tut_003.jpg"
+					width="192"></A>
+			<BR>
+			<BR>
+			<BR>
+			* ---------<STRONG>Sequenced Lighting</STRONG>---------<BR>
+			&lt;TODO&gt;<BR>
+			<BR>
+			* ---------<STRONG>Creating Dart/Tracer&nbsp;Launchers</STRONG>---------<BR>
+			<BR>
+			&nbsp;&nbsp;&nbsp; * Add thing type 2050 (Projectile Spot)<BR>
+			&nbsp;&nbsp;&nbsp; * Assign a TID<BR>
+			&nbsp;&nbsp;&nbsp; * For launching Darts, use line special 202 and for Tracers, 
+			use line special&nbsp;231<BR>
+			&nbsp;&nbsp;&nbsp; * Line tag will be the TID of the projectile spot that the 
+			dart or tracer should launch from<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+			<BR>
+		</P>
+	</body>
+</html>

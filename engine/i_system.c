@@ -32,14 +32,8 @@
 #endif
 
 #include <stdlib.h>
-#include <stdio.h>
 
-#ifndef _WIN32
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
-#include <time.h>
-#else
+#ifdef _WIN32
 #ifdef _XBOX
 #include <xtl.h>
 #else
@@ -47,9 +41,13 @@
 #endif
 #include <direct.h>
 #include <io.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <time.h>
 #endif
 
-#include <stdarg.h>
 #include <sys/stat.h>
 #include "doomstat.h"
 #include "doomdef.h"
@@ -64,7 +62,7 @@
 #include "i_system.h"
 #include "i_audio.h"
 #include "gl_draw.h"
-#include "i_w3swrapper.h"
+
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
@@ -92,15 +90,15 @@ void I_Sleep(unsigned long usecs) {
 #endif
 }
 
-static Uint32 basetime = 0;
+static unsigned int basetime = 0;
 
 //
 // I_GetTimeNormal
 //
 
 static int I_GetTimeNormal(void) {
-	Uint32 ticks;
-	Uint32 tic_division = 1000;
+	unsigned int ticks;
+	unsigned int tic_division = 1000;
 
 	ticks = SDL_GetTicks();
 
@@ -256,7 +254,7 @@ char* I_GetUserFile(char* file) {
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
-        Free(userdir);
+    Free(userdir);
 
 	return path;
 }
@@ -301,7 +299,7 @@ char* I_FindDataFile(char* file) {
 			return path;
 	}
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__)
 	{
 		int i;
 		const char* paths[] = {
@@ -310,7 +308,7 @@ char* I_FindDataFile(char* file) {
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-			snprintf(path, 511, "%s%s", paths[i], file);
+			w3ssnprintf(path, 511, "%s%s", paths[i], file);
 			if (I_FileExists(path))
 				return path;
 		}
@@ -361,7 +359,7 @@ int (*I_GetTime)(void) = I_GetTime_Error;
 //
 
 int I_GetTimeMS(void) {
-	Uint32 ticks;
+	unsigned int ticks;
 
 	ticks = SDL_GetTicks();
 
@@ -389,7 +387,7 @@ void I_Init(void)
 {
 	I_InitEvent();
 	I_InitGameController();
-	I_InitVideo();
+	I_InitVideo(); 
 	I_InitClockRate();
 }
 

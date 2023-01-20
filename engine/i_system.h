@@ -29,7 +29,7 @@
 #include "d_ticcmd.h"
 #include "d_event.h"
 #include "m_fixed.h"
-
+#include "i_w3swrapper.h"
 // Called by DoomMain.
 void I_Init(void);
 

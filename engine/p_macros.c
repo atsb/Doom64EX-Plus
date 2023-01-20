@@ -51,7 +51,7 @@ static boolean bTriggerOnce = false;
 void P_QueueSpecial(mobj_t* mobj) {
 	if (!P_ActivateLineByTag(mobj->tid, mobj)) {
 		taglist[taglistidx] = mobj->tid;
-		taglistidx = (taglistidx + 1) & (MAXQUEUELIST - 1);
+		taglistidx = (taglistidx + 1) & 3;
 	}
 }
 
