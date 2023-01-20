@@ -5146,7 +5146,7 @@ void M_InitEpisodes() {
 		strcpy(menu.name, epi->name);
 		menu.routine = M_ChooseMap;
 		menu.alphaKey = epi->key;
-		dmemcpy(&menus[i], &menu, sizeof(menuitem_t));
+		memcpy(&menus[i], &menu, sizeof(menuitem_t));
 	}
 	MapSelectDef.menuitems = menus;
 	MapSelectDef.numitems = episodes;
