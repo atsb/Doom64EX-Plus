@@ -1446,7 +1446,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 	case 224:
 		// Spawn Thing
-		ok = EV_SpawnMobjTemplate(line);
+		ok = EV_SpawnMobjTemplate(line, false);
 		break;
 
 	case 225:
@@ -1588,6 +1588,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		// D64 Map33 Logo
 		skyfadeback = true;
 		ok = 1;
+		break;
+
+	case 211:
+		// Silent Spawn Thing
+		ok = EV_SpawnMobjTemplate(line, true);
 		break;
 
 	default:

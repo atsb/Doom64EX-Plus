@@ -875,7 +875,7 @@ void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line) {
 // EV_SpawnMobjTemplate
 //
 
-int EV_SpawnMobjTemplate(line_t* line) {
+int EV_SpawnMobjTemplate(line_t* line, boolean silent) {
 	mobj_t* mobj;
 	int i;
 	boolean ok = false;
@@ -902,7 +902,7 @@ int EV_SpawnMobjTemplate(line_t* line) {
 
 		mobj->reactiontime = 18;
 
-		if (m_nospawnsound.value != 1)
+		if (!silent && m_nospawnsound.value != 1)
 		{
 			S_StartSound(mobj, sfx_spawn);
 		}
