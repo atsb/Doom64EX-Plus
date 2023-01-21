@@ -53,6 +53,7 @@
 #include "con_console.h"
 #include "r_sky.h"
 #include "sc_main.h"
+#include "p_setup.h"
 
 short globalint = 0;
 static byte tryopentype[3];
@@ -1611,6 +1612,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = P_ChangeMusic(line->tag);
 		break;
 
+	case 217:
+		//Change sky
+		ok = P_ChangeSky(line->tag);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;
@@ -2155,5 +2161,17 @@ boolean P_ChangeMusic(int index)
 	}
 	S_StopMusic();
 	S_StartMusic(index);
+	return true;
+}
+
+boolean P_ChangeSky(int index)
+{
+	if (index <= 0) return false;
+	index -= 1;
+	if (index >= P_GetNumSkies()) return false;
+	int temp = skyflatnum;
+	skyflatnum = index;
+	P_SetupSky();
+	skyflatnum = temp;
 	return true;
 }
