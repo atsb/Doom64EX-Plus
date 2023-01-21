@@ -1606,6 +1606,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = 1;
 		break;
 
+	case 216:
+		//Change music
+		ok = P_ChangeMusic(line->tag);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;
@@ -2134,5 +2139,21 @@ boolean P_StartSound(int index)
 		if (index + dm_start >= dm_end - 1) return false;
 	}
 	S_StartSound(players[consoleplayer].mo, index);
+	return true;
+}
+
+boolean P_ChangeMusic(int index)
+{
+	if (index <= 0) return false;
+	index += mus_amb01 - 1;
+	if (index > mus_title)
+	{
+		index += NUMSFX - mus_title - 1;
+		int dm_start = W_GetNumForName("DM_START");
+		int dm_end = W_GetNumForName("DM_END");
+		if (index + dm_start >= dm_end - 1) return false;
+	}
+	S_StopMusic();
+	S_StartMusic(index);
 	return true;
 }
