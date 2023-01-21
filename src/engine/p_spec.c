@@ -1617,6 +1617,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = P_ChangeSky(line->tag);
 		break;
 
+	case 255:
+		//Spawn any projectile
+		ok = P_SpawnGenericMissile(line->tag, globalint, thing);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;
@@ -2173,5 +2178,13 @@ boolean P_ChangeSky(int index)
 	skyflatnum = index;
 	P_SetupSky();
 	skyflatnum = temp;
+	return true;
+}
+
+boolean P_SpawnGenericMissile(int tid, int type, mobj_t* target) {
+	if (type <= 0) return false;
+	type -= 1;
+	if (type > NUMMOBJTYPES) return false;
+	P_SpawnDartMissile(tid, type, target);
 	return true;
 }

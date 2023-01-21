@@ -1367,7 +1367,7 @@ void P_SpawnDartMissile(int tid, int type, mobj_t* target) {
 			continue;
 		}
 
-		if (type == MT_PROJ_TRACER) {
+		if (type == MT_PROJ_TRACER || type == MT_PROJ_UNDEAD) {
 			th = P_SpawnMissile(mo, target, type,
 				FixedMul(mo->radius, dcos(mo->angle)),
 				FixedMul(mo->radius, dsin(mo->angle)),
