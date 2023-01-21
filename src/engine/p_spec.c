@@ -1595,6 +1595,12 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = EV_SpawnMobjTemplate(line, true);
 		break;
 
+	case 213:
+		//Play sound
+		ok = P_StartSound(line->tag);
+		break;
+
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;
@@ -2105,4 +2111,23 @@ void P_SpawnSpecials(void) {
 	for (i = 0; i < MAXBUTTONS; i++) {
 		dmemset(&buttonlist[i], 0, sizeof(button_t));
 	}
+}
+
+boolean P_StartSound(int index)
+{
+	if (index <= 0) return false;
+	if (index >= mus_amb01)
+	{
+		//skip music ordinals
+		index += mus_title - mus_amb01 + 1;
+	}
+	if (index >= NUMSFX)
+	{
+		//play custom sounds defined in pwads
+		int dm_start = W_GetNumForName("DM_START");
+		int dm_end = W_GetNumForName("DM_END");
+		if (index + dm_start >= dm_end - 1) return false;
+	}
+	S_StartSound(players[consoleplayer].mo, index);
+	return true;
 }
