@@ -1600,6 +1600,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = P_StartSound(line->tag);
 		break;
 
+	case 215:
+		//Stop music
+		S_StopMusic();
+		ok = 1;
+		break;
 
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
