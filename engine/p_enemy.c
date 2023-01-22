@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-
+#include <limits.h>
 #include "m_random.h"
 #include "m_fixed.h"
 #include "i_system.h"

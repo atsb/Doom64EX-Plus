@@ -31,7 +31,7 @@
 #include "doomtype.h"
 #include "doomdef.h"
 #include "i_system.h"
-
+#include <limits.h>
 #include "m_fixed.h"
 
 /* ATSB 

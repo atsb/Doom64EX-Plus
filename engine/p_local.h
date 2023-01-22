@@ -155,7 +155,7 @@ void        P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z);
 void        P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage);
 void        P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type);
 void        P_FadeMobj(mobj_t* mobj, int amount, int alpha, int flags);
-int         EV_SpawnMobjTemplate(line_t* line);
+int         EV_SpawnMobjTemplate(line_t* line, boolean silent);
 int         EV_FadeOutMobj(line_t* line);
 void        P_SpawnDartMissile(int tid, int type, mobj_t* target);
 mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,

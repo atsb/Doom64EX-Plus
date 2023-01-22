@@ -45,7 +45,7 @@
 #include "m_misc.h"
 #include "con_console.h"
 #include "m_password.h"
-
+#include <limits.h>
 mapthing_t* spawnlist;
 int         numspawnlist;
 

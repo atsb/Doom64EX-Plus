@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-
+#include <limits.h>
 #include "m_misc.h"
 #include "m_fixed.h"
 #include "doomdef.h"

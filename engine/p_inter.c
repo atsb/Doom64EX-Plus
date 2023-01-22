@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <limits.h>
 #include "doomdef.h"
 #include "d_englsh.h"
 #include "sounds.h"

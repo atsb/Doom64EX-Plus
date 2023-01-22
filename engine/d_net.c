@@ -46,6 +46,7 @@
 #else
 #include <SDL.h>
 #endif
+#include <limits.h>
 
 #include "i_video.h"
 #include "i_sdlinput.h"

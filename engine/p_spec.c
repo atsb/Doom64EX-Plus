@@ -32,7 +32,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-
+#include <limits.h>
 #include "i_w3swrapper.h"
 #include "doomdef.h"
 #include "doomstat.h"
