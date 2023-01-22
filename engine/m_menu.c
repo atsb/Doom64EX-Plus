@@ -611,19 +611,30 @@ void M_DrawStartNewNotify(void) {
 // MAP SELECT MENU
 //
 //------------------------------------------------------------------------
-
 int map = 1;
 void M_ChooseMap(int choice);
+void M_ChooseMapLost(int choice);
+
+enum {
+	doom64,
+	lostlevels,
+	mapg_end
+} mapselect_e;
+
+menuitem_t MapMenu[] = {
+	{1,"DOOM 64",M_ChooseMap, 'd'},
+	{1,"Lost Levels",M_ChooseMapLost, 'l'},
+};
 
 menu_t MapSelectDef = {
-	0,
+	mapg_end,
 	false,
 	&MainDef,
+	MapMenu,
 	NULL,
-	NULL,
-	"Choose Campaign",
+	"Choose Campaign...",
 	112,80,
-	0,
+	doom64,
 	false,
 	NULL,
 	-1,
@@ -640,6 +651,7 @@ menu_t MapSelectDef = {
 //------------------------------------------------------------------------
 
 void M_ChooseSkill(int choice);
+void M_ChooseSkillLost(int choice);
 
 enum {
 	killthings,
@@ -658,11 +670,37 @@ menuitem_t NewGameMenu[] = {
 	{1,"Hardcore!",M_ChooseSkill, 'h'},
 };
 
+menuitem_t NewGameMenuLost[] = {
+	{1,"Be Gentle!",M_ChooseSkillLost, 'b'},
+	{1,"Bring It On!",M_ChooseSkillLost, 'r'},
+	{1,"I Own Doom!",M_ChooseSkillLost, 'i'},
+	{1,"Watch Me Die!",M_ChooseSkillLost, 'w'},
+	{1,"Hardcore!",M_ChooseSkillLost, 'h'},
+};
+
 menu_t NewDef = {
 	newg_end,
 	false,
 	&MainDef,
 	NewGameMenu,
+	NULL,
+	"Choose Your Skill...",
+	112,80,
+	toorough,
+	false,
+	NULL,
+	-1,
+	0,
+	1.0f,
+	NULL,
+	NULL
+};
+
+menu_t NewDefLost = {
+	newg_end,
+	false,
+	&MainDef,
+	NewGameMenuLost,
 	NULL,
 	"Choose Your Skill...",
 	112,80,
@@ -688,7 +726,7 @@ void M_NewGame(int choice) {
 		return;
 	}
 	
-	M_SetupNextMenu(&NewDef);
+	M_SetupNextMenu(&MapSelectDef);
 }
 
 void M_ChooseMap(int choice) {
@@ -697,12 +735,30 @@ void M_ChooseMap(int choice) {
 		M_SetupNextMenu(&StartNewNotifyDef);
 		return;
 	}
-	map = P_GetEpisode(choice)->mapid;
+    
+	P_GetEpisode(choice)->mapid;
 	M_SetupNextMenu(&NewDef);
+}
+
+void M_ChooseMapLost(int choice) {
+	if (netgame && !demoplayback) {
+		M_StartControlPanel(true);
+		M_SetupNextMenu(&StartNewNotifyDef);
+		return;
+	}
+
+	M_SetupNextMenu(&NewDefLost);
 }
 
 void M_ChooseSkill(int choice) {
 	G_DeferedInitNew(choice, map);
+	M_ClearMenus();
+	memset(passwordData, 0xff, 16);
+	allowmenu = false;
+}
+
+void M_ChooseSkillLost(int choice) {
+	G_DeferedInitNew(choice, 34);
 	M_ClearMenus();
 	memset(passwordData, 0xff, 16);
 	allowmenu = false;
