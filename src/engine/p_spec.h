@@ -174,6 +174,10 @@ void        T_Combine(combine_t* combine);
 boolean    P_ChangeLightByTag(int tag1, int tag2);
 int         P_DoSectorLightChange(line_t* line, short tag);
 void        P_FadeInBrightness(void);
+boolean		P_StartSound(int index);
+boolean		P_ChangeMusic(int index);
+boolean		P_ChangeSky(int index);
+boolean		P_SpawnGenericMissile(int tid, int type, mobj_t* target);
 
 typedef enum
 {
