@@ -64,4 +64,7 @@ typedef struct {
 	int         fognear;
 } skydef_t;
 
+void P_SetupSky(void);
+int P_GetNumSkies(void);
+
 #endif

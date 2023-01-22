@@ -876,7 +876,7 @@ void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line) {
 // EV_SpawnMobjTemplate
 //
 
-int EV_SpawnMobjTemplate(line_t* line) {
+int EV_SpawnMobjTemplate(line_t* line, boolean silent) {
 	mobj_t* mobj;
 	int i;
 	boolean ok = false;
@@ -903,7 +903,7 @@ int EV_SpawnMobjTemplate(line_t* line) {
 
 		mobj->reactiontime = 18;
 
-		if (m_nospawnsound.value != 1)
+		if (!silent && m_nospawnsound.value != 1)
 		{
 			S_StartSound(mobj, sfx_spawn);
 		}
@@ -1368,7 +1368,7 @@ void P_SpawnDartMissile(int tid, int type, mobj_t* target) {
 			continue;
 		}
 
-		if (type == MT_PROJ_TRACER) {
+		if (type == MT_PROJ_TRACER || type == MT_PROJ_RECT || type == MT_PROJ_UNDEAD) {
 			th = P_SpawnMissile(mo, target, type,
 				FixedMul(mo->radius, finecosine[(mo->angle) >> ANGLETOFINESHIFT]),
 				FixedMul(mo->radius, finesine[(mo->angle) >> ANGLETOFINESHIFT]),

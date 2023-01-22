@@ -1474,6 +1474,10 @@ static void P_InitSkyDef(void) {
 	CON_DPrintf("%i sky definitions\n", numskydef);
 }
 
+int P_GetNumSkies(void) {
+	return numskydef;
+}
+
 //
 // P_Init
 //

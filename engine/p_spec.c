@@ -56,6 +56,7 @@
 #include "con_console.h"
 #include "r_sky.h"
 #include "sc_main.h"
+#include "p_setup.h"
 
 short globalint = 0;
 static unsigned char tryopentype[3];
@@ -1449,7 +1450,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 	case 224:
 		// Spawn Thing
-		ok = EV_SpawnMobjTemplate(line);
+		ok = EV_SpawnMobjTemplate(line, false);
 		break;
 
 	case 225:
@@ -1591,6 +1592,37 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		// D64 Map33 Logo
 		skyfadeback = true;
 		ok = 1;
+		break;
+
+	case 211:
+		// Silent Spawn Thing
+		ok = EV_SpawnMobjTemplate(line, true);
+		break;
+
+	case 213:
+		//Play sound
+		ok = P_StartSound(line->tag);
+		break;
+
+	case 215:
+		//Stop music
+		S_StopMusic();
+		ok = 1;
+		break;
+
+	case 216:
+		//Change music
+		ok = P_ChangeMusic(line->tag);
+		break;
+
+	case 217:
+		//Change sky
+		ok = P_ChangeSky(line->tag);
+		break;
+
+	case 255:
+		//Spawn any projectile
+		ok = P_SpawnGenericMissile(line->tag, globalint, thing);
 		break;
 
 	default:
@@ -2104,4 +2136,59 @@ void P_SpawnSpecials(void) {
 	for (i = 0; i < MAXBUTTONS; i++) {
 		memset(&buttonlist[i], 0, sizeof(button_t));
 	}
+}
+
+boolean P_StartSound(int index)
+{
+	if (index <= 0) return false;
+	if (index >= mus_amb01)
+	{
+		//skip music ordinals
+		index += mus_title - mus_amb01 + 1;
+	}
+	if (index >= NUMSFX)
+	{
+		//play custom sounds defined in pwads
+		int dm_start = W_GetNumForName("DM_START");
+		int dm_end = W_GetNumForName("DM_END");
+		if (index + dm_start >= dm_end - 1) return false;
+	}
+	S_StartSound(players[consoleplayer].mo, index);
+	return true;
+}
+
+boolean P_ChangeMusic(int index)
+{
+	if (index <= 0) return false;
+	index += mus_amb01 - 1;
+	if (index > mus_title)
+	{
+		index += NUMSFX - mus_title - 1;
+		int dm_start = W_GetNumForName("DM_START");
+		int dm_end = W_GetNumForName("DM_END");
+		if (index + dm_start >= dm_end - 1) return false;
+	}
+	S_StopMusic();
+	S_StartMusic(index);
+	return true;
+}
+
+boolean P_ChangeSky(int index)
+{
+	if (index <= 0) return false;
+	index -= 1;
+	if (index >= P_GetNumSkies()) return false;
+	int temp = skyflatnum;
+	skyflatnum = index;
+	P_SetupSky();
+	skyflatnum = temp;
+	return true;
+}
+
+boolean P_SpawnGenericMissile(int tid, int type, mobj_t* target) {
+	if (type <= 0) return false;
+	type -= 1;
+	if (type > NUMMOBJTYPES) return false;
+	P_SpawnDartMissile(tid, type, target);
+	return true;
 }
