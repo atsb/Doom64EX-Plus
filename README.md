@@ -11,7 +11,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 * Support for the Alpha Version of the game
 * Support for loading PWADs
 * Port to the C Programming Language like the original game
-* Support for C89 and C99
+* Support for C89(for linux users: only -std=gnu89 flag will compile) and C99
 * Support for higher resolutions including 21:9
 * Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
