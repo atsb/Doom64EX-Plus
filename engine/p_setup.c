@@ -1306,7 +1306,7 @@ static void P_InitMapInfo(void) {
 				sizeof(clusterdef_t) * ++numclusterdef, PU_STATIC, 0);
 			memcpy(&clusterdefs[numclusterdef - 1], &cluster, sizeof(clusterdef_t));
 		}
-		else if (!w3sstricmp(sc_parser.token, "EPISODE")) {
+		else if (!w3sstrcasecmp(sc_parser.token, "EPISODE")) {
 			memset(&episode, 0, sizeof(episodedef_t));	
 
 			sc_parser.find(false);
