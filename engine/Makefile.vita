@@ -11,7 +11,7 @@ LIBS = -lfluidsynth -lSDL2 -lSDL_net -lvitaGL -lvitashark -lSceShaccCgExt -ltaih
 DEHACKED_OBJS = deh_ammo.o deh_doom.o deh_frame.o deh_io.o deh_main.o deh_mapping.o deh_misc.o deh_ptr.o deh_str.o deh_thing.o deh_weapon.o 
 
 COMMON_OBJS = am_draw.o am_map.o con_console.o con_cvar.o d_devstat.o d_iwad.o d_main.o d_net.o $(DEHACKED_OBJS) \
-f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_pixelmap.o gl_shader.o gl_texture.o gl_utils.o \
+f_finale.o g_actions.o g_demo.o g_game.o g_settings.o gl_draw.o gl_main.o gl_pixmap.o gl_shader.o gl_texture.o gl_utils.o \
 i_audio.o i_main.o i_png.o i_sdlinput.o i_system.o i_video.o i_w3swrapper.o in_stuff.o info.o m_cheat.o m_fixed.o m_keys.o \
 m_menu.o m_misc.o m_password.o m_random.o m_shift.o md5.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o \
 net_query.o net_server.o net_structure.o p_ceilng.o p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o \
@@ -22,8 +22,8 @@ tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o \
 
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
-CFLAGS  = -Wl,-q  -O3 -g -mtune=cortex-a9 -mfpu=neon -std=gnu89 \
--I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -DUSE_FLUIDSYNTH -fno-optimize-sibling-calls -Wall
+CFLAGS  = -Wl,-q  -O3 -g -mtune=cortex-a9 -mfpu=neon -std=gnu99 \
+-I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -DVITA -DUSE_FLUIDSYNTH -DDONT_USE_GLAD -DSDL_OPENGL -DDONT_USE_SHADER -fno-optimize-sibling-calls -Wall
 
 ASFLAGS = $(CFLAGS)
 

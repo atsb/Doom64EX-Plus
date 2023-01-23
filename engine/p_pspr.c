@@ -85,15 +85,17 @@ void A_FadeAlpha(mobj_t* mobj);
 
 void P_NewPspriteTick(void)
 {
+	int i;
+	int j;
 	// This function should be called after the beginning of a tick, before any possible
 	// prprite-event, or near the end, after any possible psprite event.
 	// Because data is reset for every tick (which it must be) this has no impact on savegames.
-	for (int i = 0; i < MAXPLAYERS; i++)
+	for (i = 0; i < MAXPLAYERS; i++)
 	{
 		if (playeringame[i])
 		{
 			pspdef_t* pspdef = players[i].psprites;
-			for (int j = 0; j < NUMPSPRITES; j++)
+			for (j = 0; j < NUMPSPRITES; j++)
 			{
 				pspdef[j].processPending = true;
 			}

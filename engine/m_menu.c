@@ -5191,10 +5191,11 @@ void M_Ticker(void) {
 
 void M_InitEpisodes() {
 	int episodes = P_GetNumEpisodes();
+	int i;
 	if (episodes <= 0) return;
 	menuitem_t* menus = NULL;
 	menus = Z_Realloc(menus, sizeof(menuitem_t) * episodes, PU_STATIC, 0);
-	for (int i = 0; i < episodes; i++)
+	for(i = 0; i < episodes; i++)
 	{
 		episodedef_t* epi = P_GetEpisode(i);
 		menuitem_t menu;
