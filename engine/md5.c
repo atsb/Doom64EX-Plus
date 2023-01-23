@@ -23,17 +23,8 @@
 #include "doomdef.h"
 
 #include <string.h>             /* for memcpy() */
-#include <sys/types.h>          /* for stupid systems */
 
 #include "md5.h"
-
-#ifdef SYS_LITTLE_ENDIAN
-
-// Little endian system - no byte swapping required
-
-#define ByteSwapBlock(x, y)
-
-#else
 
 void ByteSwapBlock(unsigned int *buf, unsigned words)
 {
@@ -45,8 +36,6 @@ void ByteSwapBlock(unsigned int *buf, unsigned words)
                 p += 4;
         } while (--words);
 }
-
-#endif /* #ifndef SYS_LITTLE_ENDIAN */
 
 /*
  * Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
