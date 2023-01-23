@@ -37,7 +37,11 @@
 #endif
 
 #ifdef _MSC_VER
+#ifdef _XBOX
+#include <wctype.h>
+#else
 #include <wtypes.h>
+#endif
 #include <direct.h>
 #include <io.h>
 #include "i_w3swrapper.h"

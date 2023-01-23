@@ -100,6 +100,8 @@ extern "C" {
 #include "fluidsynth-lite/version_vita.h"
 #elif defined(PS2)
 #include "fluidsynth-lite/version_ps2.h"
+#elif defined(_XBOX)
+#include "fluidsynth-lite/version_xbox.h"
 #else
 #include "fluidsynth-lite/version.h"
 #endif

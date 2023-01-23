@@ -128,7 +128,7 @@ static boolean NET_CL_RecvPacket(net_addr_t** addr, net_packet_t** packet)
 
 static void NET_CL_AddrToString(net_addr_t* addr, char* buffer, int buffer_len)
 {
-	snprintf(buffer, buffer_len, "local server");
+	w3ssnprintf(buffer, buffer_len, "local server");
 }
 
 static void NET_CL_FreeAddress(net_addr_t* addr)
@@ -197,7 +197,7 @@ static boolean NET_SV_RecvPacket(net_addr_t** addr, net_packet_t** packet)
 
 static void NET_SV_AddrToString(net_addr_t* addr, char* buffer, int buffer_len)
 {
-	snprintf(buffer, buffer_len, "local client");
+	w3ssnprintf(buffer, buffer_len, "local client");
 }
 
 static void NET_SV_FreeAddress(net_addr_t* addr)

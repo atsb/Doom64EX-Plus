@@ -174,7 +174,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="..\engine\3rdparty\Xbox\Includes\;..\engine\3rdparty\Includes\Xbox\fluidlite\;..\engine\3rdparty\Xbox\Includes\SDL2;..\engine\3rdparty\Includes;..\Xbox\"
-				PreprocessorDefinitions="NDEBUG;_XBOX;WIN32_LEAN_AND_MEAN;WINDOWS_TYPES;OLD_TYPE;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;C89"
+				PreprocessorDefinitions="NDEBUG;_XBOX;WIN32_LEAN_AND_MEAN;WINDOWS_TYPES;OLD_TYPE;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;C89;DONT_USE_SHADER;DONT_USE_GLAD;PSNPRINTF"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="0"
@@ -270,6 +270,16 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="xbox"
+			Filter="">
+			<File
+				RelativePath=".\fakeglx_ex+.c">
+			</File>
+			<File
+				RelativePath=".\fakeglx_ex+.h">
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\engine\am_draw.c">
 		</File>
@@ -308,9 +318,6 @@
 		</File>
 		<File
 			RelativePath="..\engine\d_iwad.c">
-		</File>
-		<File
-			RelativePath="..\engine\d_keywds.h">
 		</File>
 		<File
 			RelativePath="..\engine\d_main.c">
@@ -406,12 +413,6 @@
 			RelativePath="..\engine\f_finale.h">
 		</File>
 		<File
-			RelativePath=".\fakeglx_ex+.c">
-		</File>
-		<File
-			RelativePath=".\fakeglx_ex+.h">
-		</File>
-		<File
 			RelativePath="..\engine\g_actions.c">
 		</File>
 		<File
@@ -433,9 +434,6 @@
 			RelativePath="..\engine\g_game.h">
 		</File>
 		<File
-			RelativePath="..\engine\g_local.h">
-		</File>
-		<File
 			RelativePath="..\engine\g_settings.c">
 		</File>
 		<File
@@ -454,13 +452,13 @@
 			RelativePath="..\engine\gl_main.h">
 		</File>
 		<File
+			RelativePath="..\engine\gl_pixmap.c">
+		</File>
+		<File
+			RelativePath="..\engine\gl_pixmap.h">
+		</File>
+		<File
 			RelativePath="..\engine\gl_shader.c">
-			<FileConfiguration
-				Name="Release|Xbox"
-				ExcludedFromBuild="TRUE">
-				<Tool
-					Name="VCCLCompilerTool"/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\engine\gl_shader.h">
@@ -482,6 +480,9 @@
 		</File>
 		<File
 			RelativePath="..\engine\i_audio.h">
+		</File>
+		<File
+			RelativePath="..\engine\i_cpu.c">
 		</File>
 		<File
 			RelativePath="..\engine\i_exception.c">
@@ -548,6 +549,12 @@
 		</File>
 		<File
 			RelativePath="..\engine\m_cheat.h">
+		</File>
+		<File
+			RelativePath="..\engine\m_fcvt.c">
+		</File>
+		<File
+			RelativePath="..\engine\m_fcvt.h">
 		</File>
 		<File
 			RelativePath="..\engine\m_fixed.c">
@@ -722,9 +729,6 @@
 		</File>
 		<File
 			RelativePath="..\engine\p_spec.c">
-		</File>
-		<File
-			RelativePath="..\engine\p_spec.h">
 		</File>
 		<File
 			RelativePath="..\engine\p_switch.c">

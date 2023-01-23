@@ -34,7 +34,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <windows.h>
+#endif
 #include "doomtype.h"
 #include "con_cvar.h"
 #include "m_misc.h"

@@ -56,7 +56,11 @@ void fluid_time_config(void);
 
 #define fluid_return_val_if_fail(expr, val) if (!(expr)) return (val)
 #define fluid_return_if_fail(expr)          if (!(expr)) return
+#ifdef _XBOX
+#define FLUID_INLINE                        __inline
+#else
 #define FLUID_INLINE                        inline
+#endif
 #define FLUID_POINTER_TO_UINT(x)            ((size_t)(x))
 #define FLUID_POINTER_TO_INT(x)             ((intptr_t)(x))
 #define FLUID_N_ELEMENTS(struct)            (sizeof (struct) / sizeof (struct[0]))

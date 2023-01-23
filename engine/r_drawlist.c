@@ -107,6 +107,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 	vtxlist_t* head;
 	vtxlist_t* tail;
 	boolean checkNightmare = false;
+	int l;
 
 	if (tag < 0 && tag >= NUMDRAWLISTS) {
 		return;
@@ -190,7 +191,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
 
-			int l = (head->params >> 1);
+			l = (head->params >> 1);
 
 			GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
 			glDrawGeometry(drawcount, drawVertex);

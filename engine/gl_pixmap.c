@@ -98,9 +98,8 @@ void FilterBox(dpixmap *dst, const dpixmap *src)
 	int src_x, src_y;
 	int dst_x, dst_y;
 	int x, y;
-	pitch[5] = formats[src->fmt.pitch].pitch;
-
 	fixed_t ratio_x, ratio_y;
+	pitch[5] = formats[src->fmt.pitch].pitch;
 
 	ratio_x = INT2F(src->w) / dst->w;
 	ratio_y = INT2F(src->h) / dst->h;
@@ -231,14 +230,14 @@ dpixmap *GL_PixmapCopy(const dpixmap *pm)
 
 dpixmap *GL_PixmapConvert(const dpixmap *src, dpixfmt fmt)
 {
-	if (src->fmt.pitch == fmt)
-		return GL_PixmapCopy(src);
-
 	int x, y, i;
 	dpixmap *dst;
 	unsigned char *src_ptr, *dst_ptr;
 	int src_pitch, dst_pitch;
 	int src_order, dst_order;
+
+	if (src->fmt.pitch == fmt)
+		return GL_PixmapCopy(src);
 
 	src_pitch = formats[src->fmt.pitch].pitch;
 	dst_pitch = formats[fmt].pitch;
@@ -404,12 +403,13 @@ void GL_PixmapScale(dpixmap **dst, const dpixmap *src, fixed_t scalex, fixed_t s
 
 void GL_PixmapScaleTo(dpixmap** dst, const dpixmap* src, short width, short height)
 {
+	boolean free_src;
 	if (src && (src->w == width && src->h == height) ||
 		(*dst && (*dst)->w == width && (*dst)->h == height)) {
 		return;
 	}
 
-	boolean free_src = false;
+	free_src = false;
 	if (!*dst) {
 		*dst = GL_PixmapNull(src->fmt.pitch);
 	}

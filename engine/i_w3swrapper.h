@@ -24,7 +24,11 @@
 
 #ifdef _WIN32
 #include <io.h>
+#ifdef _XBOX
+#include <xtl.h>
+#else
 #include <Windows.h>
+#endif
 #else
 #include <unistd.h>
 #include <strings.h>

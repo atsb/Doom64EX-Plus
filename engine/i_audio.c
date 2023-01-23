@@ -1173,6 +1173,8 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 void I_InitSequencer(void) {
     boolean sffound;
     char *sfpath;
+	SDL_AudioDeviceID audio_device;
+    SDL_AudioSpec required_spec;
 
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
@@ -1289,10 +1291,7 @@ void I_InitSequencer(void) {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
-#ifndef _XBOX
-    SDL_AudioDeviceID audio_device;
-    SDL_AudioSpec required_spec;
-    SDL_memset(&required_spec, 0, sizeof(required_spec));
+	memset(&required_spec, 0, sizeof(required_spec));
     required_spec.format = AUDIO_S16;
     required_spec.freq = SAMPLE_RATE;
     required_spec.samples = SAMPLES;
@@ -1300,9 +1299,7 @@ void I_InitSequencer(void) {
     required_spec.callback = Audio_Play;
     required_spec.userdata = doomseq.synth;
     audio_device = SDL_OpenAudioDevice(NULL, 0, &required_spec, NULL, 0);
-    
     SDL_PauseAudioDevice(audio_device, SDL_FALSE);
-#endif
     // 20120205 villsa - sequencer is now ready
     seqready = true;
 }

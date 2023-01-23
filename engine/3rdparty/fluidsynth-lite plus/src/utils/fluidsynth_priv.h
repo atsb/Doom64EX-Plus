@@ -30,8 +30,14 @@
 #include "config_maxmsp43.h"
 #endif
 
+#ifndef _XBOX
 #if defined(WIN32) && !defined(MINGW32)
 #include "config_win32.h"
+#endif
+#endif
+
+#if defined(_XBOX)
+#include "config_xbox.h"
 #endif
 
 #if defined(__SWITCH__)
@@ -108,7 +114,12 @@
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
+#ifdef _XBOX
+#include <xtl.h>
+#define inline __inline
+#else
 #include <windows.h>
+#endif
 #endif
 
 #ifdef PS2

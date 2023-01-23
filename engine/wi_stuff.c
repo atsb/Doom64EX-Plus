@@ -41,6 +41,7 @@
 #include "st_stuff.h"
 #include "r_wipe.h"
 #include "gl_draw.h"
+#include "i_w3swrapper.h"
 
 #define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
@@ -100,7 +101,7 @@ void WI_Start(void) {
 		seconds = (leveltime / TICRATE) % 60;
 	}
 
-	snprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
+	w3ssnprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
 
 	// generate password
 	if (nextmap < 40) {

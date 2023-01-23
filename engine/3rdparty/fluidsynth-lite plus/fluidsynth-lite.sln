@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fluidsynth-lite", "fluidsynth-lite.vcproj", "{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Profile = Profile
+		Profile_FastCap = Profile_FastCap
+		Release = Release
+		Release_LTCG = Release_LTCG
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Debug.ActiveCfg = Debug|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Debug.Build.0 = Debug|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Profile.ActiveCfg = Profile|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Profile.Build.0 = Profile|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Profile_FastCap.ActiveCfg = Profile_FastCap|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Profile_FastCap.Build.0 = Profile_FastCap|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Release.ActiveCfg = Release|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Release.Build.0 = Release|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Release_LTCG.ActiveCfg = Release_LTCG|Xbox
+		{DE3FC75A-E9D3-4074-9AB2-512D116B7F54}.Release_LTCG.Build.0 = Release_LTCG|Xbox
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

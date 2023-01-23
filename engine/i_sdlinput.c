@@ -549,6 +549,9 @@ void I_GetEvent(SDL_Event* Event) {
 	if (s_controller) 
 	{
 		event_t ev;
+		int z;
+		static boolean old_ltrigger;
+		static boolean old_rtrigger;
 
 		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTX);
 		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTY);
@@ -575,10 +578,10 @@ void I_GetEvent(SDL_Event* Event) {
 		ev.data3 = -y;
 		D_PostEvent(&ev);
 
-		static boolean old_ltrigger = false;
-		static boolean old_rtrigger = false;
+		old_ltrigger = false;
+		old_rtrigger = false;
 
-		int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+		z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
 		if (z >= 0x4000 && !old_ltrigger) {
 			old_ltrigger = true;
 			ev.type = ev_keydown;

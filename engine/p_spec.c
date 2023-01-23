@@ -2159,13 +2159,15 @@ boolean P_StartSound(int index)
 
 boolean P_ChangeMusic(int index)
 {
+	int dm_start;
+	int dm_end;
 	if (index <= 0) return false;
 	index += mus_amb01 - 1;
 	if (index > mus_title)
 	{
 		index += NUMSFX - mus_title - 1;
-		int dm_start = W_GetNumForName("DM_START");
-		int dm_end = W_GetNumForName("DM_END");
+		dm_start = W_GetNumForName("DM_START");
+		dm_end = W_GetNumForName("DM_END");
 		if (index + dm_start >= dm_end - 1) return false;
 	}
 	S_StopMusic();
@@ -2175,10 +2177,11 @@ boolean P_ChangeMusic(int index)
 
 boolean P_ChangeSky(int index)
 {
+	int temp;
 	if (index <= 0) return false;
 	index -= 1;
 	if (index >= P_GetNumSkies()) return false;
-	int temp = skyflatnum;
+	temp = skyflatnum;
 	skyflatnum = index;
 	P_SetupSky();
 	skyflatnum = temp;

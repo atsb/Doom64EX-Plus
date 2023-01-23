@@ -2,8 +2,13 @@
 #ifndef _FLUID_ATOMIC_H
 #define _FLUID_ATOMIC_H
 
+#ifndef _XBOX
 #include <stdbool.h>
-
+#else
+typedef unsigned char bool;
+#define true 1
+#define false 0
+#endif
 #ifndef STATIC_ASSERT
 #if __STDC_VERSION__ >= 201112L
 #define STATIC_ASSERT _Static_assert

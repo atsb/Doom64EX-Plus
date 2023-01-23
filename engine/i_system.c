@@ -252,7 +252,7 @@ char* I_GetUserFile(char* file) {
 
 	path = malloc(512);
 
-	snprintf(path, 511, "%s%s", userdir, file);
+	w3ssnprintf(path, 511, "%s%s", userdir, file);
 
     Free(userdir);
 
@@ -271,7 +271,7 @@ char* I_FindDataFile(char* file) {
 	path = malloc(512);
 
 	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
+		w3ssnprintf(path, 511, "%s%s", dir, file);
 
          Free(dir);
 
@@ -281,7 +281,7 @@ char* I_FindDataFile(char* file) {
 
 #ifdef __APPLE__
 	if ((dir = GetBasePath())) {
-		snprintf(path, 511, "%s%s", dir, file);
+		w3ssnprintf(path, 511, "%s%s", dir, file);
 		
 		  Free(dir);
 
@@ -291,7 +291,7 @@ char* I_FindDataFile(char* file) {
 #endif
 
 	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
+		w3ssnprintf(path, 511, "%s%s", dir, file);
            
           Free(dir);
 
@@ -321,7 +321,7 @@ char* I_FindDataFile(char* file) {
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-			snprintf(path, 511, "%s%s", paths[i], file);
+			w3ssnprintf(path, 511, "%s%s", paths[i], file);
 			if (I_FileExists(path))
 				return path;
 		}
