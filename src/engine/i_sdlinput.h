@@ -3,7 +3,7 @@
 //
 // Copyright(C) 2005 Simon Howard
 // Copyright(C) 2007-2014 Samuel Villarreal
-// Copyright(C) 2022 André Guilherme 
+// Copyright(C) 2022-2023 André Guilherme 
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,8 +27,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef __OpenBSD__
-#include <SDL.h>
+#ifdef __APPLE__
+#ifdef USE_SDL3
+#include <SDL3/SDL.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 #else
 #include <SDL2/SDL.h>
 #endif
@@ -54,3 +58,5 @@ void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
 boolean I_UpdateGrab(void);
+void I_InitGameController();
+void I_InitEvent();

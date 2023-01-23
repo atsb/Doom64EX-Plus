@@ -69,9 +69,6 @@
 #include "gl_texture.h"
 #include "gl_draw.h"
 
-#ifdef _WIN32
-#include "i_xinput.h"
-#endif
 //
 // definitions
 //
@@ -2287,13 +2284,8 @@ void M_DrawPassword(void) {
 	byte* passData;
 	int i = 0;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	if (!xgamepad.connected)
-#endif
-	{
-		Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
-		Draw_BigText(-1, 240 - 32, MENUCOLORWHITE, "Press Escape To Return");
-	}
+	Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
+	Draw_BigText(-1, 240 - 32, MENUCOLORWHITE, "Press Escape To Return");
 
 	if (passInvalid) {
 		if (!passInvalidTic--) {
@@ -2654,8 +2646,6 @@ void M_DoFeature(int choice) {
 	S_StartSound(NULL, sfx_switch2);
 }
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
 #include "g_controls.h"
 
 //------------------------------------------------------------------------
@@ -2663,18 +2653,16 @@ void M_DoFeature(int choice) {
 // GAMEPAD CONTROLLER MENU
 //
 //------------------------------------------------------------------------
-
 void M_XGamePadChoice(int choice);
 void M_DrawXGamePad(void);
 
-CVAR_EXTERNAL(i_rsticksensitivity);
-CVAR_EXTERNAL(i_rstickthreshold);
+CVAR_EXTERNAL(i_rsticksensitivityy);
+CVAR_EXTERNAL(i_rsticksensitivityx);
 CVAR_EXTERNAL(i_xinputscheme);
-
 enum {
-	xgp_sensitivity,
+	xgp_sensitivityx,
 	xgp_empty1,
-	xgp_threshold,
+	xgp_sensitivityy,
 	xgp_empty2,
 	xgp_look,
 	xgp_invert,
@@ -2684,9 +2672,9 @@ enum {
 } xgp_e;
 
 menuitem_t XGamePadMenu[] = {
-	{3,"Stick Sensitivity",M_XGamePadChoice,'s'},
+	{3,"Look Sensitivity x",M_XGamePadChoice,'s'},
 	{-1,"",0},
-	{3,"Turn Threshold",M_XGamePadChoice,'t'},
+	{3,"Look Sensitivity y",M_XGamePadChoice,'t'},
 	{-1,"",0},
 	{2,"Y Axis Look:",M_ChangeMouseLook,'l'},
 	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
@@ -2695,8 +2683,8 @@ menuitem_t XGamePadMenu[] = {
 };
 
 menudefault_t XGamePadDefault[] = {
-	{ &i_rsticksensitivity, 0.0080f },
-	{ &i_rstickthreshold, 20 },
+	{ &i_rsticksensitivityx, 2.0f },
+	{ &i_rsticksensitivityy, 1.5f},
 	{ &v_mlook, 0 },
 	{ &v_mlookinvert, 0 },
 	{ NULL, -1 }
@@ -2721,44 +2709,49 @@ menu_t XGamePadDef = {
 };
 
 void M_XGamePadChoice(int choice) {
+#ifdef VITA
+	float slope1 = 10.0f / 100.0f;
+	float slope2 = 10.0f / 100.0f;
+#else
 	float slope1 = 0.0125f / 100.0f;
 	float slope2 = 100.0f / 50.0f;
+#endif
 
 	switch (itemOn) {
-	case xgp_sensitivity:
+	case xgp_sensitivityx:
 		if (choice) {
-			if (i_rsticksensitivity.value < 0.0125f) {
-				M_SetCvar(&i_rsticksensitivity, i_rsticksensitivity.value + slope1);
+			if (i_rsticksensitivityx.value < 0.0125f) {
+				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityx.value + slope1);
 			}
 			else {
-				CON_CvarSetValue(i_rsticksensitivity.name, 0.0125f);
+				CON_CvarSetValue(&i_rsticksensitivityx, 0.0125f);
 			}
 		}
 		else {
-			if (i_rsticksensitivity.value > 0.001f) {
-				M_SetCvar(&i_rsticksensitivity, i_rsticksensitivity.value - slope1);
+			if (i_rsticksensitivityy.value > 0.001f) {
+				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityy.value - slope1);
 			}
 			else {
-				CON_CvarSetValue(i_rsticksensitivity.name, 0.001f);
+				CON_CvarSetValue(&i_rsticksensitivityx, 0.001f);
 			}
 		}
 		break;
 
-	case xgp_threshold:
+	case xgp_sensitivityy:
 		if (choice) {
-			if (i_rstickthreshold.value < 100) {
-				M_SetCvar(&i_rstickthreshold, i_rstickthreshold.value + slope2);
+			if (i_rsticksensitivityy.value < 10.0f) {
+				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value + slope2);
 			}
 			else {
-				CON_CvarSetValue(i_rstickthreshold.name, 100);
+				CON_CvarSetValue(&i_rsticksensitivityy, 100);
 			}
 		}
 		else {
-			if (i_rstickthreshold.value > 1) {
-				M_SetCvar(&i_rstickthreshold, i_rstickthreshold.value - slope2);
+			if (i_rsticksensitivityy.value > 1) {
+				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value - slope2);
 			}
 			else {
-				CON_CvarSetValue(i_rstickthreshold.name, 1);
+				CON_CvarSetValue(&i_rsticksensitivityy, 1);
 			}
 		}
 		break;
@@ -2766,11 +2759,11 @@ void M_XGamePadChoice(int choice) {
 }
 
 void M_DrawXGamePad(void) {
-	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivity + 1),
-		100, i_rsticksensitivity.value * 8000.0f);
+	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivityx + 1),
+		100, i_rsticksensitivityx.value * 10.0f);
 
-	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_threshold + 1),
-		50, i_rstickthreshold.value * 0.5f);
+	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivityy + 1),
+		50, i_rsticksensitivityy.value * 0.5f);
 
 	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_look, MENUCOLORRED,
 		msgNames[(int)v_mlook.value]);
@@ -2778,8 +2771,6 @@ void M_DrawXGamePad(void) {
 	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_invert, MENUCOLORRED,
 		msgNames[(int)v_mlookinvert.value]);
 }
-
-#endif  // XINPUT
 
 //------------------------------------------------------------------------
 //
@@ -2939,9 +2930,7 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	controls_gamepad,
-#endif
 	controls_return,
 	controls_end
 } controls_e;
@@ -2949,18 +2938,14 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	{1,"Gamepad",M_ControlChoice, 'g'},
-#endif
 	{1,"/r Return",M_Return, 0x20}
 };
 
 char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	"configure gamepad functionality",
-#endif
 	NULL
 };
 
@@ -2991,11 +2976,9 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case controls_gamepad:
 		M_SetupNextMenu(&XGamePadDef);
 		break;
-#endif
 	}
 }
 
@@ -4095,8 +4078,6 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
 const symboldata_t xinputbutons[12] = {
 	{ 0, 0, 15, 16 },   // B
 	{ 15, 0, 15, 16 },  // A
@@ -4131,51 +4112,76 @@ void M_DrawXInputButton(int x, int y, int button) {
 	const rcolor color = MENUCOLORWHITE;
 
 	switch (button) {
-	case XINPUT_GAMEPAD_B:
+	case GAMEPAD_A:
 		index = 0;
 		break;
-	case XINPUT_GAMEPAD_A:
+	case GAMEPAD_B:
 		index = 1;
 		break;
-	case XINPUT_GAMEPAD_Y:
+	case GAMEPAD_X:
 		index = 2;
 		break;
-	case XINPUT_GAMEPAD_X:
+	case GAMEPAD_Y:
 		index = 3;
 		break;
-	case XINPUT_GAMEPAD_LEFT_SHOULDER:
+	case GAMEPAD_BACK:
 		index = 4;
 		break;
-	case XINPUT_GAMEPAD_RIGHT_SHOULDER:
+	case GAMEPAD_GUIDE:
 		index = 5;
 		break;
-	case XINPUT_GAMEPAD_DPAD_LEFT:
+	case GAMEPAD_START:
 		index = 6;
 		break;
-	case XINPUT_GAMEPAD_DPAD_RIGHT:
+	case GAMEPAD_LSTICK:
 		index = 7;
 		break;
-	case XINPUT_GAMEPAD_DPAD_UP:
+	case GAMEPAD_RSTICK:
 		index = 8;
 		break;
-	case XINPUT_GAMEPAD_DPAD_DOWN:
+	case GAMEPAD_LSHOULDER:
 		index = 9;
 		break;
-	case XINPUT_GAMEPAD_START:
+	case GAMEPAD_RSHOULDER:
 		index = 10;
 		break;
-	case XINPUT_GAMEPAD_BACK:
+	case GAMEPAD_DPAD_UP:
 		index = 11;
 		break;
-	case XINPUT_GAMEPAD_LEFT_TRIGGER:
-		index = 4;
+	case GAMEPAD_DPAD_DOWN:
+		index = 12;
 		break;
-	case XINPUT_GAMEPAD_RIGHT_TRIGGER:
-		index = 5;
+	case GAMEPAD_DPAD_LEFT:
+		index = 13;
 		break;
-		//
-		// [kex] TODO: finish adding remaining buttons?
-		//
+	case GAMEPAD_DPAD_RIGHT:
+		index = 14;
+		break;
+	case GAMEPAD_BUTTON_MISC1:
+		index = 15; /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+		break;
+	case GAMEPAD_BUTTON_PADDLE1:
+		index = 16; /* Xbox Elite paddle P1 */
+		break;
+	case GAMEPAD_BUTTON_PADDLE2:
+		index = 17; /* Xbox Elite paddle P3 */
+		break;
+	case GAMEPAD_BUTTON_PADDLE3:  /* Xbox Elite paddle P2 */
+		index = 18;
+		break;
+	case GAMEPAD_BUTTON_PADDLE4: /* Xbox Elite paddle P4 */
+		index = 19;
+		break;
+	case GAMEPAD_BUTTON_TOUCHPAD: /* PS4/PS5 touchpad button */
+		index = 20;
+		break;
+	case GAMEPAD_LTRIGGER:
+		index = 21;
+		break;
+	case GAMEPAD_RTRIGGER:
+		index = 18;
+		break;
+
 	default:
 		return;
 	}
@@ -4221,8 +4227,6 @@ void M_DrawXInputButton(int x, int y, int button) {
 	GL_ResetViewport();
 	dglDisable(GL_BLEND);
 }
-
-#endif
 
 //
 // M_Responder
@@ -4276,34 +4280,6 @@ boolean M_Responder(event_t* ev) {
 	if (ch == -1) {
 		return false;
 	}
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
-	switch (ch) {
-	case BUTTON_DPAD_UP:
-		ch = KEY_UPARROW;
-		break;
-	case BUTTON_DPAD_DOWN:
-		ch = KEY_DOWNARROW;
-		break;
-	case BUTTON_DPAD_LEFT:
-		ch = KEY_LEFTARROW;
-		break;
-	case BUTTON_DPAD_RIGHT:
-		ch = KEY_RIGHTARROW;
-		break;
-	case BUTTON_START:
-		ch = KEY_ESCAPE;
-		break;
-	case BUTTON_A:
-		ch = KEY_ENTER;
-		break;
-	case BUTTON_B:
-		ch = KEY_DEL;
-		break;
-	}
-
-#endif
 
 	if (MenuBindActive == true) { //key Bindings
 		if (ch == KEY_ESCAPE) {
@@ -4966,27 +4942,25 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	if (xgamepad.connected && currentMenu != &MainDef) {
+	if (currentMenu != &MainDef) {
 		GL_SetOrthoScale(0.75f);
 		if (currentMenu == &PasswordDef) {
-			M_DrawXInputButton(4, 271, XINPUT_GAMEPAD_B);
+			M_DrawXInputButton(4, 271, GAMEPAD_B);
 			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
 		}
 
 		GL_SetOrthoScale(0.75f);
-		M_DrawXInputButton(4, 287, XINPUT_GAMEPAD_A);
+		M_DrawXInputButton(4, 287, GAMEPAD_A);
 		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
 
 		if (currentMenu != &PauseDef) {
 			GL_SetOrthoScale(0.75f);
-			M_DrawXInputButton(5, 303, XINPUT_GAMEPAD_START);
+			M_DrawXInputButton(5, 303, GAMEPAD_START);
 			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
 		}
 
 		GL_SetOrthoScale(1);
 	}
-#endif
 
 	M_DrawCursor(mouse_x, mouse_y);
 }
@@ -5112,15 +5086,6 @@ void M_Ticker(void) {
 		LoadDef.prevMenu = &PauseDef;
 		SaveDef.prevMenu = &PauseDef;
 	}
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	//
-	// hide mouse menu if gamepad controller is plugged in
-	//
-	if (currentMenu == &ControlMenuDef) {
-		currentMenu->menuitems[controls_gamepad].status = xgamepad.connected ? 1 : -3;
-	}
-#endif
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&

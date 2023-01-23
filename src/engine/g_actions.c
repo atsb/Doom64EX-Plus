@@ -36,9 +36,6 @@
 #include "con_console.h"
 #include "z_zone.h"
 
-#ifdef _WIN32
-#include "i_xinput.h"
-#endif
 //do controls menu length properly
 //if list of actions for menu>=MAX_MENUACTION_LENGTH then won't display any more
 #define MAX_MENUACTION_LENGTH 25
@@ -415,13 +412,13 @@ boolean G_ActionResponder(event_t* ev) {
 		G_DoCmdMouseMove(ev->data2, ev->data3);
 		break;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 	case ev_gamepad:
-		I_XInputReadActions(ev);
+		G_DoCmdGamepadMove(ev);
 		break;
-#endif
-	}
 
+	default: // ev_mousedown, ev_mouseup, ev_gamepad
+		break;
+	}
 	return false;
 }
 
