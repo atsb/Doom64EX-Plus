@@ -177,7 +177,7 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 //
-boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, boolean dropped) {
+boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dropped) {
 	boolean gaveammo, gaveweapon;
 
 	if (netgame && (deathmatch != 2) && !dropped) {
@@ -206,28 +206,25 @@ boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, boolea
 	}
 
 	if (weaponinfo[weapon].ammo != am_noammo)
-	{
-		// give one clip with a dropped weapon,
-		// two clips with a found weapon
+	{	/* give one clip with a dropped weapon, two clips with a found weapon */
 		if (dropped)
 			gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, 1);
 		else
 			gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, 2);
 	}
-	else {
+	else
 		gaveammo = false;
-	}
 
-	if (player->weaponowned[weapon]) {
+	if (player->weaponowned[weapon])
 		gaveweapon = false;
-	}
-	else {
+	else
+	{
 		gaveweapon = true;
 		player->weaponowned[weapon] = true;
 		player->pendingweapon = weapon;
 	}
 
-	return (gaveweapon || gaveammo);
+	return gaveweapon || gaveammo;
 }
 
 //

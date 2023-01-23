@@ -25,6 +25,6 @@
 #define __P_INTER__
 
 boolean P_GivePower(player_t*, int);
-boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, boolean dropped);
+boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dropped);
 
 #endif
