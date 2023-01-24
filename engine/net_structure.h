@@ -20,8 +20,8 @@
 //
 //-------------------------------------------------------------------------------
 
-#ifndef NET_STRUCTRW_H
-#define NET_STRUCTRW_H
+#ifndef NET_STRUCTURE_H
+#define NET_STRUCTURE_H
 
 #include "md5.h"
 #include "net_defs.h"
@@ -44,4 +44,4 @@ void NET_WriteFullTiccmd(net_packet_t* packet, net_full_ticcmd_t* cmd, boolean l
 boolean NET_ReadMD5Sum(net_packet_t* packet, md5_digest_t digest);
 void NET_WriteMD5Sum(net_packet_t* packet, md5_digest_t digest);
 
-#endif /* #ifndef NET_STRUCTRW_H */
+#endif /* #ifndef NET_STRUCTURE_H */
