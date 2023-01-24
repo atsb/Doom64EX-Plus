@@ -163,7 +163,6 @@ void I_InitScreen(void) {
 	while(!glfwWindowShouldClose(window))
 	{
 		I_StartTic();
-		D_DoomMain();
 	}
 
 #else
