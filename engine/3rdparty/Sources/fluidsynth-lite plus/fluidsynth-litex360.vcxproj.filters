@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{b3139db8-0210-4544-aee8-27f487ee5d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\fluidsynth-lite">
+      <UniqueIdentifier>{c21ede49-f9f6-4389-8d95-57c641d72cb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{1648e923-6d0d-45ea-a00f-7837cfd19a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\midi">
+      <UniqueIdentifier>{5c78f1b9-8634-4f01-b4f9-f833bafdc231}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rvoice">
+      <UniqueIdentifier>{4a7f840d-0a3b-401b-9cef-b21921beaf87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sfloader">
+      <UniqueIdentifier>{8c2eed5b-a036-4514-a967-61f3183d5f5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\synth">
+      <UniqueIdentifier>{7dd07bbf-f805-4e2e-94cc-ca2545655f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{22c21853-8923-4377-80a9-b0472d3e1b5e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\fluidsynth-lite.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\voice.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\audio.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\event.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\gen.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\log.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\midi.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\misc.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\mod.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\ramsfont.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\seq.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\seqbind.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\settings.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\sfont.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\shell.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\synth.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\types.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\version_ps2.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\version_switch.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\version_vita.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\version_xbox360.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fluidsynth-lite\version_xbox.h">
+      <Filter>include\fluidsynth-lite</Filter>
+    </ClInclude>
+    <ClInclude Include="src\midi\fluid_midi.h">
+      <Filter>src\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="src\midi\fluid_midi_router.h">
+      <Filter>src\midi</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_rvoice_mixer.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_adsr_env.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_chorus.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_iir_filter.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_lfo.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_phase.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_rev.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_rvoice.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rvoice\fluid_rvoice_event.h">
+      <Filter>src\rvoice</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sfloader\fluid_sfont.h">
+      <Filter>src\sfloader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sfloader\fluid_defsfont.h">
+      <Filter>src\sfloader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sfloader\fluid_ramsfont.h">
+      <Filter>src\sfloader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_chan.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_event_priv.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_event_queue.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_gen.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_mod.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_synth.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_tuning.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\synth\fluid_voice.h">
+      <Filter>src\synth</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_atomic.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_sys.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_conv.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_hash.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_list.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_ringbuffer.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluid_settings.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\fluidsynth_priv.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\fluidsynth-lite\CMakeLists.txt">
+      <Filter>include\fluidsynth-lite</Filter>
+    </None>
+    <None Include="include\fluidsynth-lite\Makefile.am">
+      <Filter>include\fluidsynth-lite</Filter>
+    </None>
+    <None Include="include\fluidsynth-lite\meson.build">
+      <Filter>include\fluidsynth-lite</Filter>
+    </None>
+    <None Include="include\fluidsynth-lite\version.h.in">
+      <Filter>include\fluidsynth-lite</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\midi\fluid_midi.c">
+      <Filter>src\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midi\fluid_midi_router.c">
+      <Filter>src\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midi\fluid_seq.c">
+      <Filter>src\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midi\fluid_seqbind.c">
+      <Filter>src\midi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_adsr_env.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_chorus.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_iir_filter.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_lfo.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_rev.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_rvoice.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_rvoice_dsp.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_rvoice_event.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvoice\fluid_rvoice_mixer.c">
+      <Filter>src\rvoice</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sfloader\fluid_defsfont.c">
+      <Filter>src\sfloader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sfloader\fluid_ramsfont.c">
+      <Filter>src\sfloader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_chan.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_event.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_gen.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_mod.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_synth.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_tuning.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\synth\fluid_voice.c">
+      <Filter>src\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fluid_conv.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fluid_hash.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fluid_list.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fluid_ringbuffer.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fluid_settings.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\fluid_sys.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

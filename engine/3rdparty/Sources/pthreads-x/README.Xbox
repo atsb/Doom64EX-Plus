@@ -1,0 +1,29 @@
+!!!IMPORTANT!!!
+---------------
+Please remember to initialize the pthread library
+by calling ptw32_processInitialize() when your
+application starts. Only call it once.  This is 
+required. Should you forget to do it your Xbox 
+will become frozen and your debugger/IDE will crash 
+if it is attached when you attempt to use any pthread
+library function.
+---------------
+!!!IMPORTANT!!!
+
+pthreads-win32 ported by Michael "Hyper_Eye" Wood
+in support of the libAgar port and Odamex on behalf
+of the Odamex development team.
+Please visit: 
+http://www.odamex.net
+and
+http://www.xbox-scene.com
+
+Thanks to the pthreads-win32 developers who have
+made cross-platform thread code development a
+thousand times easier in the face of Microsofts
+refusal to support good POSIX API on their OS.
+
+I hope current and future Xbox homebrew developers
+will find this work useful and that I might
+benefit from its release by playing great new
+games and using great new software on my Xbox.
