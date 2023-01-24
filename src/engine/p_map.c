@@ -1403,9 +1403,7 @@ line_t* contextline = NULL;
 //
 
 static boolean P_CheckUseHeight(line_t* line, mobj_t* thing) {
-    int flags;
-    fixed_t rowoffset;
-    fixed_t check;
+    fixed_t check = 0;
 
     if (!(line->flags & ML_SWITCHX02 ||
         line->flags & ML_SWITCHX04 ||
@@ -1413,30 +1411,29 @@ static boolean P_CheckUseHeight(line_t* line, mobj_t* thing) {
         return true;    // ignore non-switches
     }
 
-    rowoffset = sides[line->sidenum[0]].rowoffset;
-    flags = line->flags & (ML_CHECKFLOORHEIGHT | ML_SWITCHX08);
-
-    if (flags == ML_SWITCHX08)
-    {
-        check = (line->backsector->ceilingheight + rowoffset) + (32 * FRACUNIT);
+    if (line->flags & ML_CHECKFLOORHEIGHT) {
+        if (line->flags & ML_TWOSIDED) {
+            check = (line->backsector->floorheight + sides[line->sidenum[0]].rowoffset) - (32 * FRACUNIT);
+        }
+        else {
+            check = (line->frontsector->floorheight + sides[line->sidenum[0]].rowoffset) + (32 * FRACUNIT);
+        }
     }
-    else if (flags == ML_CHECKFLOORHEIGHT)
-    {
-        check = (line->backsector->floorheight + rowoffset) - (32 * FRACUNIT);
-    }
-    else if (flags == (ML_CHECKFLOORHEIGHT | ML_SWITCHX08))
-    {
-        check = (line->frontsector->floorheight + rowoffset) + (32 * FRACUNIT);
+    else if (line->flags & ML_TWOSIDED) {
+        check = (line->backsector->ceilingheight + sides[line->sidenum[0]].rowoffset) + (32 * FRACUNIT);
     }
     else {
         return true;
     }
 
-    if ((check < players[0].mo->z))
+    if (!(check < thing->z)) {
+        if ((thing->z + thing->height) < check) {
+            return false;
+        }
+    }
+    else {
         return false;
-
-    if ((players[0].mo->z + (64 * FRACUNIT)) < check)
-        return false;
+    }
 
     return true;
 }

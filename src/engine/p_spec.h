@@ -186,12 +186,11 @@ typedef enum
 	bottom
 } bwhere_e;
 
-typedef struct
-{
-	side_t* side;  //old line_t		*line;
-	bwhere_e	where;
-	int			btexture;
-	int			btimer;
+typedef struct {
+	line_t* line;
+	bwhere_e    where;
+	int         btexture;
+	int         btimer;
 	mobj_t* soundorg;
 } button_t;
 
