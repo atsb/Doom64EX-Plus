@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -38,41 +38,29 @@
 #include "r_local.h"
 #include "z_zone.h"
 
-
 button_t buttonlist[MAXBUTTONS];
-
 
 //
 // P_StartButton
 // Start a button counting down till it turns off.
 //
 
-void P_StartButton(line_t* line, bwhere_e w, int texture, int time) {
-    int    i;
+void P_StartButton(line_t* line, bwhere_e w, int texture, int time)
+{
+	int    i;
 
-    // See if button is already pressed
-    for (i = 0; i < MAXBUTTONS; i++) {
-        if (buttonlist[i].btimer && buttonlist[i].line == line) {
-            return;
-        }
-    }
-
-    for (i = 0; i < MAXBUTTONS; i++) {
-        if (!buttonlist[i].btimer) {
-            buttonlist[i].line = line;
-            buttonlist[i].where = w;
-            buttonlist[i].btexture = texture;
-            buttonlist[i].btimer = time;
-
-            if (SWITCHMASK(line->flags)) {
-                buttonlist[i].soundorg = (mobj_t*)&line->frontsector->soundorg;
-            }
-
-            return;
-        }
-    }
-
-    I_Error("P_StartButton: no button slots left!");
+	for (i = 0; i < MAXBUTTONS; i++)
+	{
+		if (!buttonlist[i].btimer)
+		{
+			buttonlist[i].side = &sides[line->sidenum[0]];
+			buttonlist[i].where = w;
+			buttonlist[i].btexture = texture;
+			buttonlist[i].btimer = time;
+			buttonlist[i].soundorg = (mobj_t*)&line->frontsector->soundorg;
+			return;
+		}
+	}
 }
 
 //
@@ -82,54 +70,53 @@ void P_StartButton(line_t* line, bwhere_e w, int texture, int time) {
 //
 
 void P_ChangeSwitchTexture(line_t* line, int useAgain) {
-    int sound;
-    int swx;
+	int sound;
+	int swx;
 
-    if (SPECIALMASK(line->special) == 52 || SPECIALMASK(line->special) == 124) {
-        sound = sfx_switch2;
-    }
-    else {
-        sound = sfx_switch1;
-    }
+	if (SPECIALMASK(line->special) == 52 || SPECIALMASK(line->special) == 124) {
+		sound = sfx_switch2;
+	}
+	else {
+		sound = sfx_switch1;
+	}
 
-    if (!useAgain) {
-        line->special = 0;
-    }
+	if (SWITCHMASK(line->flags) == ML_SWITCHX04) {
 
-    if (SWITCHMASK(line->flags) == ML_SWITCHX04) {
-        swx = swx_start + (sides[line->sidenum[0]].bottomtexture - swx_start) ^ 1;
+		S_StartSound(buttonlist->soundorg, sound);
 
-        S_StartSound(buttonlist->soundorg, sound);
-        sides[line->sidenum[0]].bottomtexture = swx;
+		swx = sides[line->sidenum[0]].bottomtexture;
+		sides[line->sidenum[0]].bottomtexture = ((swx - swx_start) ^ 1) + swx_start;
 
-        if (useAgain) {
-            P_StartButton(line, bottom, swx, BUTTONTIME);
-        }
+		if (useAgain) {
+			P_StartButton(line, bottom, swx, BUTTONTIME);
+		}
 
-        return;
-    }
-    else if (SWITCHMASK(line->flags) == ML_SWITCHX02) {
-        swx = swx_start + (sides[line->sidenum[0]].toptexture - swx_start) ^ 1;
+		return;
+	}
+	else if (SWITCHMASK(line->flags) == ML_SWITCHX02) {
 
-        S_StartSound(buttonlist->soundorg, sound);
-        sides[line->sidenum[0]].toptexture = swx;
+		S_StartSound(buttonlist->soundorg, sound);
 
-        if (useAgain) {
-            P_StartButton(line, top, swx, BUTTONTIME);
-        }
+		swx = sides[line->sidenum[0]].toptexture;
+		sides[line->sidenum[0]].toptexture = ((swx - swx_start) ^ 1) + swx_start;
 
-        return;
-    }
-    else if (SWITCHMASK(line->flags) == (ML_SWITCHX02 | ML_SWITCHX04)) {
-        swx = swx_start + (sides[line->sidenum[0]].midtexture - swx_start) ^ 1;
+		if (useAgain) {
+			P_StartButton(line, top, swx, BUTTONTIME);
+		}
 
-        S_StartSound(buttonlist->soundorg, sound);
-        sides[line->sidenum[0]].midtexture = swx;
+		return;
+	}
+	else if (SWITCHMASK(line->flags) == (ML_SWITCHX02 | ML_SWITCHX04))
+	{
+		S_StartSound(buttonlist->soundorg, sound);
 
-        if (useAgain) {
-            P_StartButton(line, middle, swx, BUTTONTIME);
-        }
+		swx = sides[line->sidenum[0]].midtexture;
+		sides[line->sidenum[0]].midtexture = ((swx - swx_start) ^ 1) + swx_start;
 
-        return;
-    }
+		if (useAgain) {
+			P_StartButton(line, middle, swx, BUTTONTIME);
+		}
+
+		return;
+	}
 }
