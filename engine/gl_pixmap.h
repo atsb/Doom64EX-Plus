@@ -72,7 +72,7 @@ unsigned char *GL_PixmapScanline(const dpixmap *pm, short y);
 // Transformations
 //
 
-void GL_PixmapFlipRotate(dpixmap **dst, const dpixmap *src, int flag);
+void GL_PixmapFlipRotate(dpixmap *dst, const dpixmap *src, int flag);
 void GL_PixmapScale(dpixmap **dst, const dpixmap *src, fixed_t scalex, fixed_t scaley);
 void GL_PixmapScaleTo(dpixmap **dst, const dpixmap *src, short width, short height);
 

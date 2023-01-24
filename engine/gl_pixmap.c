@@ -2,7 +2,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2014 Zohar Malamant
-// Copyright(C) 2023 André Guilherme
+// Copyright(C) 2023 Andrï¿½ Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -310,10 +310,10 @@ unsigned char *GL_PixmapScanline(const dpixmap *pm, short y)
 }
 
 //
-// _GL_PixmapFlipRotate
+// GL_PixmapFlipRotate
 //
 
-void GL_PixmapFlipRotate(dpixmap **dst, const dpixmap *src, int flag)
+void GL_PixmapFlipRotate(dpixmap *dst, const dpixmap *src, int flag)
 {
 	int i;
 
@@ -326,15 +326,15 @@ void GL_PixmapFlipRotate(dpixmap **dst, const dpixmap *src, int flag)
 
 	boolean free_src = false;
 
-	if (!*dst) {
-		*dst = GL_PixmapNull(src->fmt.pitch);
+	if (!dst) {
+		dst = GL_PixmapNull(src->fmt.pitch);
 	} else if (!src || dst == src) {
-		src = *dst;
-		*dst = GL_PixmapNull(src->fmt.pitch);
+		src = dst;
+		dst = GL_PixmapNull(src->fmt.pitch);
 		free_src = true;
 	}
 
-	pitch = formats[(*dst)->fmt.pitch].pitch;
+	pitch = formats[(dst)->fmt.pitch].pitch;
 
 	if (flag == DPM_ROT90 || flag == DPM_ROT270) {
 		newwidth = src->h;
@@ -346,24 +346,24 @@ void GL_PixmapFlipRotate(dpixmap **dst, const dpixmap *src, int flag)
 
 	PixmapResize(dst, newwidth, newheight);
 
-	for (dst_y = 0; dst_y < (*dst)->h; dst_y++) {
+	for (dst_y = 0; dst_y < (dst)->h; dst_y++) {
 		dst_ptr = GL_PixmapScanline(dst, dst_y);
-		for (dst_x = 0; dst_x < (*dst)->w; dst_x++) {
+		for (dst_x = 0; dst_x < (dst)->w; dst_x++) {
 			if (flag == DPM_ROT90) {
 				src_x = dst_y;
-				src_y = (*dst)->w - dst_x - 1;
+				src_y = (dst)->w - dst_x - 1;
 			} else if (flag == DPM_ROT270) {
-				src_x = (*dst)->h - dst_y - 1;
+				src_x = (dst)->h - dst_y - 1;
 				src_y = dst_x;
 			} else if (flag == DPM_FLIPX) {
-				src_x = (*dst)->w - dst_x - 1;
+				src_x = (dst)->w - dst_x - 1;
 				src_y = dst_y;
 			} else if (flag == DPM_FLIPY) {
 				src_x = dst_x;
-				src_y = (*dst)->h - dst_y - 1;
+				src_y = (dst)->h - dst_y - 1;
 			} else if (flag == DPM_FLIPXY) {
-				src_x = (*dst)->w - dst_x - 1;
-				src_y = (*dst)->h - dst_y - 1;
+				src_x = (dst)->w - dst_x - 1;
+				src_y = (dst)->h - dst_y - 1;
 			}
 
 			src_ptr = PixmapByte(src, src_x, src_y);
