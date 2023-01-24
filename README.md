@@ -56,11 +56,12 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 ## Dependencies
 
 * SDL2
+* SDL2_OPENGL(Optional)
 * ZLib
 * LibPNG
 * FluidSynth
 * OpenGL
-* GLAD(Optional)
+* GLAD
 * GLFW(Optional)
 
 ## System Requirements - 32 or 64bit
