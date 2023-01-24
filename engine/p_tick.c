@@ -167,10 +167,6 @@ void P_RunMobjs(void) {
 
 				P_MobjThinker(currentmobj);
 			}
-
-			if (currentmobj->mobjfunc) {
-				currentmobj->mobjfunc = currentmobj;
-			}
 		}
 	}
 }
