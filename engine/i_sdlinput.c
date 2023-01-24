@@ -36,7 +36,9 @@
 #include "d_main.h"
 #include <assert.h>
 #include "con_console.h"
-
+#ifdef USE_GLFW
+OGL_DEFS;
+#endif
 CVAR(i_rsticksensitivityx, 0.0080);
 CVAR(i_rsticksensitivityy, 0.0080);
 CVAR(i_xinputscheme, 0);
@@ -633,9 +635,6 @@ int I_ShutdownWait(void) {
 	static SDL_Event event;
 
 	while (SDL_PollEvent(&event)) {
-#ifdef USE_IMGUI
-		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
-#endif
 #ifdef USE_GLFW
 		glfwPollEvents();
 #endif
@@ -657,9 +656,6 @@ void I_StartTic(void) {
 	SDL_Event Event;
 
 	while (SDL_PollEvent(&Event)) {
-#ifdef USE_IMGUI
-		ImGui_ImplSDL2_ProcessEvent(&Event);//Process the events.
-#endif
 		I_GetEvent(&Event);
 #ifdef USE_GLFW
 		glfwPollEvents();

@@ -64,10 +64,6 @@ void I_ResizeCallback(OGL_DEFS, int width, int height)
 }
 #endif
 
-#ifdef USE_IMGUI
-ImGuiIO* io;
-ImGuiContext* ctx;
-#endif
 //
 // I_InitScreen
 //
@@ -166,10 +162,8 @@ void I_InitScreen(void) {
 
 	while(!glfwWindowShouldClose(window))
 	{
-		glfwSwapInterval(v_vsync.value);
-		glfwPollEvents();//Poll events.
-
 		I_StartTic();
+		D_DoomMain();
 	}
 
 #else
@@ -211,16 +205,6 @@ void I_InitScreen(void) {
 		I_Error("Failed to load glad");
 	}
 #endif	
-#ifdef USE_IMGUI
-	//Andr�: Adding the context
-	io = igGetIO();
-	ctx = igCreateContext(NULL);
-#ifdef __LEGACYGL__
-	ImGuiImplGL();
-#else
-	ImGuiImplGL("#version 330 core"); 
-#endif
-#endif
 }
 
 //
