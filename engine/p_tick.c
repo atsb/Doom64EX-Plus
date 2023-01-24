@@ -169,7 +169,7 @@ void P_RunMobjs(void) {
 			}
 
 			if (currentmobj->mobjfunc) {
-				currentmobj->mobjfunc(currentmobj);
+				currentmobj->mobjfunc = currentmobj;
 			}
 		}
 	}

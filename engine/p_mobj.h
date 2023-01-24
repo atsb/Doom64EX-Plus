@@ -143,10 +143,6 @@ typedef enum {
 	BF_MIDPOINTONLY = 4     // Only check sector where mobj's midpoint is inside
 } mobjblockflag_t;
 
-// Map Object definition
-
-typedef void (*mobjfunc_t)(struct mobj_s* mo);
-
 typedef struct mobj_s {
     // Info for drawing: position.
     fixed_t             x;
@@ -234,7 +230,7 @@ typedef struct mobj_s {
     struct mobj_s*      next;
 
     // [d64] callback routine called at end of P_Tick
-    mobjfunc_t          mobjfunc;
+    struct mobj_s*          mobjfunc;
 
     // [d64] misc data for various actions
     void*               extradata;
