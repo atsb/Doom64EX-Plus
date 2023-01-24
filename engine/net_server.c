@@ -415,11 +415,7 @@ static void NET_SV_InitNewClient(net_client_t* client,
 	NET_Conn_InitServer(&client->connection, addr);
 	client->addr = addr;
 	client->last_send_time = -1;
-#ifdef _WIN32
-	client->name = _strdup(player_name);
-#else
-	client->name = strdup(player_name);
-#endif
+	client->name = w3sstrdup(player_name);
 
 	// init the ticcmd send queue
 

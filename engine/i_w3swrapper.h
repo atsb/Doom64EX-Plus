@@ -100,10 +100,10 @@ typedef unsigned char boolean;
 #define w3sstrdup strdup
 char* w3sstrupr(char* str);
 char* w3sstrlwr(char* str);
-#define w3sstricmp stricmp
-#define w3sstrnicmp strnicmp
 #define w3sstrcasecmp strcasecmp
 #define w3sstrncasecmp strncasecmp
+#define w3sstricmp w3sstrcasecmp
+#define w3sstrnicmp strncasecmp
 #define w3sstrlwr _strlwr
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'

@@ -172,11 +172,7 @@ void R_InitSprites(char** namelist) {
 		//  filling in the frames for whatever is found
 
 		for (l = start + 1; l < end; l++)
-#ifdef _WIN32
-			if (!_strnicmp(lumpinfo[l].name, spritename, 4))
-#else
-			if (!strncasecmp(lumpinfo[l].name, spritename, 4))
-#endif
+			if (!w3sstrnicmp(lumpinfo[l].name, spritename, 4))
 			{
 				frame = lumpinfo[l].name[4] - 'A';
 				rotation = lumpinfo[l].name[5] - '0';
