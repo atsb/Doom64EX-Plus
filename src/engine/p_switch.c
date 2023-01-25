@@ -80,7 +80,7 @@ void P_ChangeSwitchTexture(line_t* line, int useAgain) {
 		sound = sfx_switch1;
 	}
 
-	if (SWITCHMASK(line->special) == ML_SWITCHX02) {
+	if (SWITCHMASK(line->flags) == ML_SWITCHX04) {
 
 		S_StartSound(buttonlist->soundorg, sound);
 
@@ -93,7 +93,7 @@ void P_ChangeSwitchTexture(line_t* line, int useAgain) {
 
 		return;
 	}
-	else if (SWITCHMASK(line->special) == ML_SWITCHX04) {
+	else if (SWITCHMASK(line->flags) == ML_SWITCHX02) {
 
 		S_StartSound(buttonlist->soundorg, sound);
 
@@ -106,7 +106,7 @@ void P_ChangeSwitchTexture(line_t* line, int useAgain) {
 
 		return;
 	}
-	else if (SWITCHMASK(line->special) == (ML_SWITCHX02 | ML_SWITCHX04))
+	else if (SWITCHMASK(line->flags) == (ML_SWITCHX02 | ML_SWITCHX04))
 	{
 		S_StartSound(buttonlist->soundorg, sound);
 
