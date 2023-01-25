@@ -2721,18 +2721,18 @@ void M_XGamePadChoice(int choice) {
 	case xgp_sensitivityx:
 		if (choice) {
 			if (i_rsticksensitivityx.value < 0.0125f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityx.value + slope1);
+				M_SetCvar(i_rsticksensitivityx.name, i_rsticksensitivityx.value + slope1);
 			}
 			else {
-				CON_CvarSetValue(&i_rsticksensitivityx, 0.0125f);
+				CON_CvarSetValue(i_rsticksensitivityx.name, 0.0125f);
 			}
 		}
 		else {
 			if (i_rsticksensitivityy.value > 0.001f) {
-				M_SetCvar(&i_rsticksensitivityx, i_rsticksensitivityy.value - slope1);
+				M_SetCvar(i_rsticksensitivityx.name, i_rsticksensitivityy.value - slope1);
 			}
 			else {
-				CON_CvarSetValue(&i_rsticksensitivityx, 0.001f);
+				CON_CvarSetValue(i_rsticksensitivityx.name, 0.001f);
 			}
 		}
 		break;
@@ -2740,18 +2740,18 @@ void M_XGamePadChoice(int choice) {
 	case xgp_sensitivityy:
 		if (choice) {
 			if (i_rsticksensitivityy.value < 10.0f) {
-				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value + slope2);
+				M_SetCvar(i_rsticksensitivityy.name, i_rsticksensitivityy.value + slope2);
 			}
 			else {
-				CON_CvarSetValue(&i_rsticksensitivityy, 100);
+				CON_CvarSetValue(i_rsticksensitivityy.name, 100);
 			}
 		}
 		else {
 			if (i_rsticksensitivityy.value > 1) {
-				M_SetCvar(&i_rsticksensitivityy, i_rsticksensitivityy.value - slope2);
+				M_SetCvar(i_rsticksensitivityy.name, i_rsticksensitivityy.value - slope2);
 			}
 			else {
-				CON_CvarSetValue(&i_rsticksensitivityy, 1);
+				CON_CvarSetValue(i_rsticksensitivityy.name, 1);
 			}
 		}
 		break;
