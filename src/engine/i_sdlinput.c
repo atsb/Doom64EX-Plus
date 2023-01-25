@@ -120,7 +120,6 @@ int I_Translate_GameController(int state)
 	case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
 		return rc = GAMEPAD_DPAD_RIGHT;
 		break;
-#ifndef _XBOX
 	case SDL_CONTROLLER_BUTTON_MISC1:
 		return rc = GAMEPAD_BUTTON_MISC1;
 		break;
@@ -139,7 +138,6 @@ int I_Translate_GameController(int state)
 	case SDL_CONTROLLER_BUTTON_TOUCHPAD:
 		return rc = GAMEPAD_BUTTON_TOUCHPAD;
 		break;
-#endif
 	default:
 		rc = state;
 		break;
@@ -630,12 +628,6 @@ int I_ShutdownWait(void) {
 	static SDL_Event event;
 
 	while (SDL_PollEvent(&event)) {
-#ifdef USE_IMGUI
-		ImGui_ImplSDL2_ProcessEvent(&event);//Process the events.
-#endif
-#ifdef USE_GLFW
-		glfwPollEvents();
-#endif
 		if (event.type == SDL_QUIT ||
 			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
@@ -654,13 +646,6 @@ void I_StartTic(void) {
 	SDL_Event Event;
 
 	while (SDL_PollEvent(&Event)) {
-#ifdef USE_IMGUI
-		ImGui_ImplSDL2_ProcessEvent(&Event);//Process the events.
-#endif
-		I_GetEvent(&Event);
-#ifdef USE_GLFW
-		glfwPollEvents();
-#endif
 	}
 
 	I_InitInputs();
@@ -673,11 +658,7 @@ void I_StartTic(void) {
 
 void I_FinishUpdate(void) {
 	I_UpdateGrab();
-#ifdef USE_GLFW
-	glfwSwapBuffers(Window);
-#else
 	SDL_GL_SwapWindow(window);
-#endif
 	BusyDisk = false;
 }
 

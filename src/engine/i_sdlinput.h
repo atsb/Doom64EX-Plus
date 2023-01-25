@@ -27,15 +27,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef __APPLE__
-#ifdef USE_SDL3
-#include <SDL3/SDL.h>
+#ifdef __OpenBSD__
+#include <SDL.h>
 #else
 #include <SDL2/SDL.h>
 #endif
-#else
-#include <SDL2/SDL.h>
-#endif
+
 #include "doomtype.h"
 ////////////Input//////////////
 
