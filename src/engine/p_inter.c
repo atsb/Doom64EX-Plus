@@ -364,10 +364,10 @@ boolean P_GivePower(player_t* player, int power) {
 // P_TouchSpecialThing
 //
 void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
-	player_t* player;
+	player_t*	player;
 	fixed_t     delta;
 	int         sound;
-	int            i = 0;
+	int         i = 0;
 
 	delta = special->z - toucher->z;
 
