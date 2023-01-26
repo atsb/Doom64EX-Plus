@@ -3,7 +3,7 @@
 //
 // Copyright(C) 2005 Simon Howard
 // Copyright(C) 2007-2014 Samuel Villarreal
-// Copyright(C) 2022-2023 André Guilherme
+// Copyright(C) 2022 Andr� Guilherme
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,19 +27,18 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <assert.h>
 #include "i_sdlinput.h"
 #include "doomdef.h"
 #include "m_misc.h"
 #include "doomstat.h"
 #include "i_system.h"
+#include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
-#include "con_console.h"
+#if defined(_WIN32) && defined(USE_XINPUT)
+#include "i_xinput.h"
+#endif
 
-CVAR(i_rsticksensitivityx, 0.0080);
-CVAR(i_rsticksensitivityy, 0.0080);
-CVAR(i_xinputscheme, 0);
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
 CVAR(v_macceleration, 0);
@@ -57,120 +56,10 @@ int         DualMouse;
 
 boolean    MouseMode;//false=microsoft, true=mouse systems
 boolean window_mouse;
-
-signed int s_deadzone = 8000;
-
-void s_clamp(signed int axis)
-{
-	if (axis < s_deadzone && axis > -s_deadzone)
-	{
-		axis = 0;
-	}
-}
-SDL_GameController* s_controller;
-
-
-int I_Translate_GameController(int state)
-{
-	int rc = 0;
-	switch (state)
-	{
-	case SDL_CONTROLLER_BUTTON_A:
-		return rc = GAMEPAD_A;
-		break;
-	case SDL_CONTROLLER_BUTTON_B:
-		return rc = GAMEPAD_B;
-		break;
-	case SDL_CONTROLLER_BUTTON_X:
-		return rc = GAMEPAD_X;
-		break;
-	case SDL_CONTROLLER_BUTTON_Y:
-		return rc = GAMEPAD_Y;
-		break;
-	case SDL_CONTROLLER_BUTTON_BACK:
-		return rc = GAMEPAD_BACK;
-		break;
-	case SDL_CONTROLLER_BUTTON_GUIDE:
-		return rc = GAMEPAD_GUIDE;
-		break;
-	case SDL_CONTROLLER_BUTTON_START:
-		return rc = GAMEPAD_START;
-		break;
-	case SDL_CONTROLLER_BUTTON_LEFTSTICK:
-		return rc = GAMEPAD_LSTICK;
-		break;
-	case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
-		return rc = GAMEPAD_RSTICK;
-		break;
-	case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-		return rc = GAMEPAD_LSHOULDER;
-		break;
-	case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-		return rc = GAMEPAD_RSHOULDER;
-		break;
-	case SDL_CONTROLLER_BUTTON_DPAD_UP:
-		return rc = GAMEPAD_DPAD_UP;
-		break;
-	case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-		return rc = GAMEPAD_DPAD_DOWN;
-		break;
-	case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-		return rc = GAMEPAD_DPAD_LEFT;
-		break;
-	case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-		return rc = GAMEPAD_DPAD_RIGHT;
-		break;
-	case SDL_CONTROLLER_BUTTON_MISC1:
-		return rc = GAMEPAD_BUTTON_MISC1;
-		break;
-	case SDL_CONTROLLER_BUTTON_PADDLE1:
-		return rc = GAMEPAD_BUTTON_PADDLE1;
-		break;
-	case SDL_CONTROLLER_BUTTON_PADDLE2:
-		return rc = GAMEPAD_BUTTON_PADDLE2;
-		break;
-	case SDL_CONTROLLER_BUTTON_PADDLE3:
-		return rc = GAMEPAD_BUTTON_PADDLE3;
-		break;
-	case SDL_CONTROLLER_BUTTON_PADDLE4:
-		return rc = GAMEPAD_BUTTON_PADDLE4;
-		break;
-	case SDL_CONTROLLER_BUTTON_TOUCHPAD:
-		return rc = GAMEPAD_BUTTON_TOUCHPAD;
-		break;
-	default:
-		rc = state;
-		break;
-	}
-	return rc;
-}
-
-//
-//I_InitEvent
-//
-void I_InitEvent()
-{
-	if (SDL_Init(SDL_INIT_EVENTS) < 0)
-	{
-		CON_Printf(RED, "Failed to initialize the SDL2 Events SDL Error: %s", SDL_GetError());
-	}
-}
-
-//
-//	I_InitGameController
-//
-void I_InitGameController()
-{
-	if (SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
-	{
-		CON_Printf(RED, "Failed to initialize the SDL2 Game Controller API, SDL Error: %s", SDL_GetError());
-		return;
-	}
-}
-
 //
 // I_TranslateKey
 //
+
 static int I_TranslateKey(const int key) {
 	int rc = 0;
 
@@ -335,7 +224,7 @@ static int I_TranslateKey(const int key) {
 // I_SDLtoDoomMouseState
 //
 
-static int I_SDLtoDoomMouseState(unsigned char buttonstate) {
+static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 	return 0
 		| (buttonstate & SDL_BUTTON(SDL_BUTTON_LEFT) ? 1 : 0)
 		| (buttonstate & SDL_BUTTON(SDL_BUTTON_MIDDLE) ? 2 : 0)
@@ -348,9 +237,9 @@ static int I_SDLtoDoomMouseState(unsigned char buttonstate) {
 
 static void I_ReadMouse(void) {
 	int x, y;
-	unsigned char btn;
+	Uint8 btn;
 	event_t ev;
-	static unsigned char lastmbtn = 0;
+	static Uint8 lastmbtn = 0;
 
 	SDL_GetRelativeMouseState(&x, &y);
 	btn = SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -440,8 +329,6 @@ void I_GetEvent(SDL_Event* Event) {
 	event_t event;
 	unsigned int mwheeluptic = 0, mwheeldowntic = 0;
 	unsigned int tic = gametic;
-	int x, y;
-
 
 	switch (Event->type) {
 	case SDL_KEYDOWN:
@@ -455,30 +342,6 @@ void I_GetEvent(SDL_Event* Event) {
 	case SDL_KEYUP:
 		event.type = ev_keyup;
 		event.data1 = I_TranslateKey(Event->key.keysym.sym);
-		D_PostEvent(&event);
-		break;
-
-	case SDL_CONTROLLERDEVICEADDED:
-		CON_Printf(GREEN, "SDL: Controller added: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
-		s_controller = SDL_GameControllerOpen(Event->cdevice.which);
-		assert(s_controller);
-		break;
-
-	case SDL_CONTROLLERDEVICEREMOVED:
-		SDL_GameControllerClose(s_controller);
-		s_controller = NULL;
-		CON_Printf(RED, "SDL: Controller removed: %s", SDL_GameControllerNameForIndex(Event->cdevice.which));
-		break;
-
-	case SDL_CONTROLLERBUTTONDOWN:
-		event.type = (Event->type == SDL_CONTROLLERBUTTONDOWN) == ev_keydown;
-		event.data1 = I_Translate_GameController(Event->cbutton.button);
-		D_PostEvent(&event);
-		break;
-
-	case SDL_CONTROLLERBUTTONUP:
-		event.type = (Event->type == SDL_CONTROLLERBUTTONUP) == ev_keyup;
-		event.data1 = I_Translate_GameController(Event->cbutton.button);
 		D_PostEvent(&event);
 		break;
 
@@ -544,67 +407,6 @@ void I_GetEvent(SDL_Event* Event) {
 		break;
 	}
 
-	if (s_controller)
-	{
-		event_t ev;
-
-		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTX);
-		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_LEFTY);
-
-		s_clamp(x);
-		s_clamp(y);
-
-		ev.type = ev_gamepad;
-		ev.data1 = GAMEPAD_LSTICK;
-		ev.data2 = x;
-		ev.data3 = -y;
-
-		D_PostEvent(&ev);
-
-		x = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTX);
-		y = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_RIGHTY);
-
-		s_clamp(x);
-		s_clamp(y);
-
-		ev.type = ev_gamepad;
-		ev.data1 = GAMEPAD_RSTICK;
-		ev.data2 = x;
-		ev.data3 = -y;
-		D_PostEvent(&ev);
-
-		static boolean old_ltrigger = false;
-		static boolean old_rtrigger = false;
-
-		int z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-		if (z >= 0x4000 && !old_ltrigger) {
-			old_ltrigger = true;
-			ev.type = ev_keydown;
-			ev.data1 = GAMEPAD_LTRIGGER;
-			D_PostEvent(&ev);
-		}
-		else if (z < 0x4000 && old_ltrigger) {
-			old_ltrigger = false;
-			ev.type = ev_keyup;
-			ev.data1 = GAMEPAD_LTRIGGER;
-			D_PostEvent(&ev);
-		}
-
-		z = SDL_GameControllerGetAxis(s_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-		if (z >= 0x4000 && !old_rtrigger) {
-			old_rtrigger = true;
-			ev.type = ev_keydown;
-			ev.data1 = GAMEPAD_RTRIGGER;
-			D_PostEvent(&ev);
-		}
-		else if (z < 0x4000 && old_rtrigger) {
-			old_rtrigger = false;
-			ev.type = ev_keyup;
-			ev.data1 = GAMEPAD_RTRIGGER;
-			D_PostEvent(&ev);
-		}
-	}
-
 	if (mwheeluptic && mwheeluptic + 1 < tic) {
 		event.type = ev_keyup;
 		event.data1 = KEY_MWHEELUP;
@@ -646,8 +448,12 @@ void I_StartTic(void) {
 	SDL_Event Event;
 
 	while (SDL_PollEvent(&Event)) {
+		I_GetEvent(&Event);
 	}
 
+#if defined(_WIN32) && defined(USE_XINPUT)
+	I_XInputPollEvent();
+#endif
 	I_InitInputs();
 	I_ReadMouse();
 }
@@ -659,6 +465,7 @@ void I_StartTic(void) {
 void I_FinishUpdate(void) {
 	I_UpdateGrab();
 	SDL_GL_SwapWindow(window);
+
 	BusyDisk = false;
 }
 
@@ -670,6 +477,10 @@ void I_InitInputs(void) {
 	SDL_PumpEvents();
 	SDL_ShowCursor(m_menumouse.value < 1);
 	I_MouseAccelChange();
+
+#if defined(_WIN32) && defined(USE_XINPUT)
+	I_XInputInit();
+#endif
 }
 
 //
@@ -685,3 +496,5 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_yaxismove);
 	CON_CvarRegister(&v_xaxismove);
 }
+
+

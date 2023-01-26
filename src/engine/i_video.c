@@ -50,6 +50,10 @@
 SDL_Window* window;
 SDL_GLContext   glContext;
 
+#if defined(_WIN32) && defined(USE_XINPUT)
+#include "i_xinput.h"
+#endif
+
 CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);

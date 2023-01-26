@@ -36,6 +36,7 @@
 
 #include "m_keys.h"
 #include "doomdef.h"
+#include "i_xinput.h"
 
 typedef struct {
 	int        code;
@@ -118,23 +119,25 @@ static keyinfo_t    Keys[] = {
 	{KEY_MWHEELDOWN,        "MouseWheelDown"},
 
 	// villsa 01052014
-	// André: Changed to SDL_GameController
-	{GAMEPAD_DPAD_UP,    "DPadUp"},
-	{GAMEPAD_DPAD_DOWN,  "DPadDown"},
-	{GAMEPAD_DPAD_LEFT,  "DPadLeft"},
-	{GAMEPAD_DPAD_RIGHT, "DPadRight"},
-	{GAMEPAD_START,      "StartButton"},
-	{GAMEPAD_BACK,       "BackButton"},
-	{GAMEPAD_LSTICK,     "LeftThumb"},
-	{GAMEPAD_RSTICK,     "RightThumb"},
-	{GAMEPAD_LSHOULDER,  "LeftShoulder"},
-	{GAMEPAD_RSHOULDER,  "RightShoulder"},
-	{GAMEPAD_A,          "ButtonA"},
-	{GAMEPAD_B,          "ButtonB"},
-	{GAMEPAD_X,          "ButtonX"},
-	{GAMEPAD_Y,          "ButtonY"},
-	{GAMEPAD_LTRIGGER,   "LeftTrigger"},
-	{GAMEPAD_RTRIGGER,   "RightTrigger"},
+#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
+	{BUTTON_DPAD_UP,        "DPadUp"},
+	{BUTTON_DPAD_DOWN,      "DPadDown"},
+	{BUTTON_DPAD_LEFT,      "DPadLeft"},
+	{BUTTON_DPAD_RIGHT,     "DPadRight"},
+	{BUTTON_START,          "StartButton"},
+	{BUTTON_BACK,           "BackButton"},
+	{BUTTON_LEFT_THUMB,     "LeftThumb"},
+	{BUTTON_RIGHT_THUMB,    "RightThumb"},
+	{BUTTON_LEFT_SHOULDER,  "LeftShoulder"},
+	{BUTTON_RIGHT_SHOULDER, "RightShoulder"},
+	{BUTTON_A,              "ButtonA"},
+	{BUTTON_B,              "ButtonB"},
+	{BUTTON_X,              "ButtonX"},
+	{BUTTON_Y,              "ButtonY"},
+	{BUTTON_LEFT_TRIGGER,   "LeftTrigger"},
+	{BUTTON_RIGHT_TRIGGER,  "RightTrigger"},
+#endif
+
 	{0,                 NULL}
 };
 
