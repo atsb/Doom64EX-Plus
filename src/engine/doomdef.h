@@ -262,72 +262,91 @@ extern boolean windowpause;
 // This is the stuff configured by Setup.Exe.
 // Most key data are simple ascii (uppercased).
 //
-#define KEY_RIGHTARROW          0xae
-#define KEY_LEFTARROW           0xac
-#define KEY_UPARROW             0xad
-#define KEY_DOWNARROW           0xaf
-#define KEY_ESCAPE              27
-#define KEY_ENTER               13
-#define KEY_TAB                 9
-#define KEY_F1                  (0x80+0x3b)
-#define KEY_F2                  (0x80+0x3c)
-#define KEY_F3                  (0x80+0x3d)
-#define KEY_F4                  (0x80+0x3e)
-#define KEY_F5                  (0x80+0x3f)
-#define KEY_F6                  (0x80+0x40)
-#define KEY_F7                  (0x80+0x41)
-#define KEY_F8                  (0x80+0x42)
-#define KEY_F9                  (0x80+0x43)
-#define KEY_F10                 (0x80+0x44)
-#define KEY_F11                 (0x80+0x57)
-#define KEY_F12                 (0x80+0x58)
-
-#define KEY_BACKSPACE           127
-#define KEY_PAUSE               0xff
-
-#define KEY_KPSTAR              298
-#define KEY_KPPLUS              299
-
-#define KEY_EQUALS              0x3d
-#define KEY_MINUS               0x2d
-
-#define KEY_SHIFT               (0x80+0x36)
-#define KEY_CTRL                (0x80+0x1d)
-#define KEY_ALT                 (0x80+0x38)
-
-#define KEY_RSHIFT              (0x80+0x36)
-#define KEY_RCTRL               (0x80+0x1d)
-#define KEY_RALT                (0x80+0x38)
-
-#define KEY_INSERT              0xd2
-#define KEY_HOME                0xc7
-#define KEY_PAGEUP              0xc9
-#define KEY_PAGEDOWN            0xd1
-#define KEY_DEL                 0xc8
-#define KEY_END                 0xcf
-#define KEY_SCROLLLOCK          0xc6
-#define KEY_SPACEBAR            0x20
-
-#define KEY_KEYPADENTER         269
-#define KEY_KEYPADMULTIPLY      298
-#define KEY_KEYPADPLUS          299
-#define KEY_NUMLOCK             300
-#define KEY_KEYPADMINUS         301
-#define KEY_KEYPADPERIOD        302
-#define KEY_KEYPADDIVIDE        303
-#define KEY_KEYPAD0             304
-#define KEY_KEYPAD1             305
-#define KEY_KEYPAD2             306
-#define KEY_KEYPAD3             307
-#define KEY_KEYPAD4             308
-#define KEY_KEYPAD5             309
-#define KEY_KEYPAD6             310
-#define KEY_KEYPAD7             311
-#define KEY_KEYPAD8             312
-#define KEY_KEYPAD9             313
-
-#define KEY_MWHEELUP            (0x80 + 0x6b)
-#define KEY_MWHEELDOWN          (0x80 + 0x6c)
+enum
+{
+	KEY_RIGHTARROW = 0xae,
+	KEY_LEFTARROW = 0xac,
+	KEY_UPARROW = 0xad,
+	KEY_DOWNARROW = 0xaf,
+	KEY_ESCAPE = 27,
+	KEY_ENTER = 13,
+	KEY_TAB = 9,
+	KEY_F1 = (0x80 + 0x3b),
+	KEY_F2 = (0x80 + 0x3c),
+	KEY_F3 = (0x80 + 0x3d),
+	KEY_F4 = (0x80 + 0x3e),
+	KEY_F5 = (0x80 + 0x3f),
+	KEY_F6 = (0x80 + 0x40),
+	KEY_F7 = (0x80 + 0x41),
+	KEY_F8 = (0x80 + 0x42),
+	KEY_F9 = (0x80 + 0x43),
+	KEY_F10 = (0x80 + 0x44),
+	KEY_F11 = (0x80 + 0x57),
+	KEY_F12 = (0x80 + 0x58),
+	KEY_BACKSPACE = 127,
+	KEY_PAUSE = 0xff,
+	KEY_KPSTAR = 298,
+	KEY_KPPLUS = 299,
+	KEY_EQUALS = 0x3d,
+	KEY_MINUS = 0x2d,
+	KEY_SHIFT = (0x80 + 0x36),
+	KEY_CTRL = (0x80 + 0x1d),
+	KEY_ALT = (0x80 + 0x38),
+	KEY_RSHIFT = (0x80 + 0x36),
+	KEY_RCTRL = (0x80 + 0x1d),
+	KEY_RALT = (0x80 + 0x38),
+	KEY_INSERT = 0xd2,
+	KEY_HOME = 0xc7,
+	KEY_PAGEUP = 0xc9,
+	KEY_PAGEDOWN = 0xd1,
+	KEY_DEL = 0xc8,
+	KEY_END = 0xcf,
+	KEY_SCROLLLOCK = 0xc6,
+	KEY_SPACEBAR = 0x20,
+	KEY_KEYPADENTER = 269,
+	KEY_KEYPADMULTIPLY = 298,
+	KEY_KEYPADPLUS = 299,
+	KEY_NUMLOCK = 300,
+	KEY_KEYPADMINUS = 301,
+	KEY_KEYPADPERIOD = 302,
+	KEY_KEYPADDIVIDE = 303,
+	KEY_KEYPAD0 = 304,
+	KEY_KEYPAD1 = 305,
+	KEY_KEYPAD2 = 306,
+	KEY_KEYPAD3 = 307,
+	KEY_KEYPAD4 = 308,
+	KEY_KEYPAD5 = 309,
+	KEY_KEYPAD6 = 310,
+	KEY_KEYPAD7 = 311,
+	KEY_KEYPAD8 = 312,
+	KEY_KEYPAD9 = 313,
+	KEY_MWHEELUP = (0x80 + 0x6b),
+	KEY_MWHEELDOWN = (0x80 + 0x6c),
+	GAMEPAD_INVALID = 0,
+	GAMEPAD_A = 400, // start after KEY_
+	GAMEPAD_B,
+	GAMEPAD_X,
+	GAMEPAD_Y,
+	GAMEPAD_BACK,
+	GAMEPAD_GUIDE,
+	GAMEPAD_START,
+	GAMEPAD_LSTICK,
+	GAMEPAD_RSTICK,
+	GAMEPAD_LSHOULDER,
+	GAMEPAD_RSHOULDER,
+	GAMEPAD_DPAD_UP,
+	GAMEPAD_DPAD_DOWN,
+	GAMEPAD_DPAD_LEFT,
+	GAMEPAD_DPAD_RIGHT,
+	GAMEPAD_BUTTON_MISC1,    /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+	GAMEPAD_BUTTON_PADDLE1,  /* Xbox Elite paddle P1 */
+	GAMEPAD_BUTTON_PADDLE2,  /* Xbox Elite paddle P3 */
+	GAMEPAD_BUTTON_PADDLE3,  /* Xbox Elite paddle P2 */
+	GAMEPAD_BUTTON_PADDLE4,  /* Xbox Elite paddle P4 */
+	GAMEPAD_BUTTON_TOUCHPAD, /* PS4/PS5 touchpad button */
+	GAMEPAD_LTRIGGER,
+	GAMEPAD_RTRIGGER,
+};
 
 // DOOM basic types (boolean),
 //  and max/min values.

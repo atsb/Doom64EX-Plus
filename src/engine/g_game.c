@@ -847,6 +847,41 @@ void G_ClearInput(void) {
 }
 
 //
+// G_DoCmdGamepadMove
+//
+
+CVAR_EXTERNAL(i_xinputscheme);
+CVAR_EXTERNAL(i_rsticksensitivityy);
+CVAR_EXTERNAL(i_rsticksensitivityx);
+
+void G_DoCmdGamepadMove(event_t* ev)
+{
+	// Most of this is taken from kaiser's xinput.c
+	playercontrols_t* pc = &Controls;
+
+	if (ev->type == ev_gamepad) {
+		pc->flags |= PCF_GAMEPAD;
+
+		//
+		// left analog stick
+		//
+		if (ev->data3 == GAMEPAD_LSTICK) {
+			pc->joyx += (float)ev->data1 * 0.0015f;
+			pc->joyy += (float)ev->data2 * 0.0015f;
+		}
+		//
+		// right analog stick
+		//
+		else if (ev->data3 == GAMEPAD_RSTICK) {
+			int x = (float)ev->data1 * i_rsticksensitivityx.value * 0.0015f;
+			int y = (float)ev->data2 * i_rsticksensitivityy.value * 0.0015f;
+			pc->mousex += x;
+			pc->mousey += y;
+		}
+	}
+}
+
+//
 // G_SetGameFlags
 //
 

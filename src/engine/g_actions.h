@@ -43,7 +43,7 @@ void        G_UnbindAction(char* action);
 int         G_ListCommands(void);
 void        G_OutputBindings(FILE* fh);
 void        G_DoCmdMouseMove(int x, int y);
-
+void		G_DoCmdGamepadMove(event_t* ev);
 extern boolean    ButtonAction;
 
 #endif

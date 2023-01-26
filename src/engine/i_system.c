@@ -61,10 +61,6 @@
 #include "i_audio.h"
 #include "gl_draw.h"
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
-#endif
-
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
 CVAR(v_accessibility, 0);
@@ -495,11 +491,9 @@ void I_BeginRead(void) {
 // I_RegisterCvars
 //
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-CVAR_EXTERNAL(i_rsticksensitivity);
-CVAR_EXTERNAL(i_rstickthreshold);
+CVAR_EXTERNAL(i_rsticksensitivityy);
+CVAR_EXTERNAL(i_rsticksensitivityx);
 CVAR_EXTERNAL(i_xinputscheme);
-#endif
 
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
@@ -507,11 +501,9 @@ CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
-#if defined(_WIN32) && defined(USE_XINPUT)
-	CON_CvarRegister(&i_rsticksensitivity);
-	CON_CvarRegister(&i_rstickthreshold);
+	CON_CvarRegister(&i_rsticksensitivityy);
+	CON_CvarRegister(&i_rsticksensitivityx);
 	CON_CvarRegister(&i_xinputscheme);
-#endif
 	CON_CvarRegister(&i_gamma);
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_interpolateframes);
