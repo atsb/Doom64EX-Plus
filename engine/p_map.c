@@ -543,8 +543,8 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
 // item grabbing behavior
 //
 
-boolean P_PlayerMove(mobj_t* thing, fixed_t x, fixed_t y) {
-    boolean moveok;
+int P_PlayerMove(mobj_t* thing, fixed_t x, fixed_t y) {
+    int moveok;
 
     moveok = P_TryMove(thing, x, y);
 
