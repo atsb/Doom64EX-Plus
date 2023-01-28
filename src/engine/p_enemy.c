@@ -1963,3 +1963,24 @@ void A_SpidAttack(mobj_t* actor)
 		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 	}
 }
+
+//
+// A_SpidDeathEvent
+//
+void A_SpidDeathEvent(mobj_t* actor)
+{
+	mobjexp_t* exp;
+
+	exp = Z_Calloc(sizeof(*exp), PU_LEVSPEC, 0);
+	P_AddThinker(&exp->thinker);
+
+	exp->thinker.function.acp1 = (actionf_p1)T_MobjExplode;
+	exp->delaymax = 2;
+	exp->delay = 0;
+	exp->lifetime = 14;
+	P_SetTarget(&exp->mobj, actor);
+
+	if (actor->info->deathsound) {
+		S_StartSound(NULL, actor->info->deathsound);
+	}
+}
