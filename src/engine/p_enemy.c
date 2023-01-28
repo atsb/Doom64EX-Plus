@@ -689,7 +689,7 @@ void A_Look(mobj_t* actor) {
 			break;
 		}
 
-		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG) {
+		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG || actor->type == MT_SPIDER) {
 			// full volume
 			S_StartSound(NULL, sound);
 		}
