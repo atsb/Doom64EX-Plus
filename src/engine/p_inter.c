@@ -979,6 +979,10 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 		item = MT_WEAP_SHOTGUN;
 		break;
 
+	case MT_CHAINGUY:
+		item = MT_WEAP_CHAINGUN;
+		break;
+
 	default:
 		return;
 	}
