@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2014 Night Dive Studios, Inc.
-// Copyright(C) 2023 André Guilherme 
+// Copyright(C) 2023 AndrÃ© Guilherme 
 // 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,10 +17,9 @@
 //      Author: Samuel Villarreal
 //
 
-#ifdef NIGHTDIVE
-#if !defined(LIBTHEORA)
+#if defined(NIGHTDIVE)
 
-#include "SDL.h"
+#include <SDL.h>
 
 #include "i_ffmpeg.h"
 #include "i_video.h"
@@ -197,7 +196,6 @@ static avQueuePacketData_t* I_AVAllocQueuePacketData(AVPacket* packet)
     }
 
     packetItem->next = NULL;
-
     return packetItem;
 }
 
@@ -401,7 +399,6 @@ static void I_AVPushAudioToQueue(uint8_t* buffer, const int size)
 
         ptr = &(*ptr)->next;
     }
-
     SDL_UnlockMutex(audioQueue.mutex);
 }
 
@@ -895,7 +892,6 @@ static boolean I_AVLoadVideo(const char* filename)
     // setup audio queue
     audioQueue.mutex = SDL_CreateMutex();
     audioQueue.first = NULL;
-
     userExit = false;
     videoFinished = false;
     audioFinished = false;
@@ -1043,12 +1039,10 @@ static void I_AVShutdown(void)
     av_free(videoBuffer);
     av_free(audioBuffer);
     av_free(videoFrame);
-
     avcodec_close(videoCodecCtx);
     avcodec_close(audioCodecCtx);
     avformat_close_input(&formatCtx);
     sws_freeContext(swsCtx);
-
     RB_DeleteTexture(&texture);
 }
 

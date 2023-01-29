@@ -180,10 +180,7 @@
     <ClCompile Include="..\engine\in_stuff.c" />
     <ClCompile Include="..\engine\i_audio.c" />
     <ClCompile Include="..\engine\i_cpu.c" />
-    <ClCompile Include="..\engine\i_exception.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\engine\i_exception.c" />
     <ClCompile Include="..\engine\i_ffmpeg.c" />
     <ClCompile Include="..\engine\i_main.c" />
     <ClCompile Include="..\engine\i_opndir.c" />

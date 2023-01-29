@@ -298,7 +298,6 @@ void RB_SetCull(int type);
 void RB_SetState(const int bits, boolean bEnable);
 void RB_SetTextureUnit(int unit);
 
-
 typedef float matrix[16];
 
 void MTX_Copy(matrix dst, matrix src);
