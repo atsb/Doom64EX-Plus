@@ -339,7 +339,7 @@ void W_Init(void) {
 		free(doom64expluswad);
 	}
 	else {
-		I_Error("W_Init: doom64ex-plus.wad not found");
+		I_Error("W_Init: DOOM64EX+.wad not found");
 	}
 
 	p = M_CheckParm("-file");

@@ -236,6 +236,11 @@ char* I_GetUserDir(void)
  *
  * @return Fully-qualified path or NULL if not found.
  * @note The returning value MUST be freed by the caller.
+ * ATSB: for some reason, these free() calls cause MSVC builds to bail out
+ * but are needed for Unix systems to even boot the game.
+ * whatever...  eventually we will clean up this mess and have
+ * portable fixed width types everywhere...  one day.
+ * WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
  */
 
  /* ATSB: for some reason, these free() calls cause MSVC builds to bail out
@@ -280,7 +285,7 @@ char* I_FindDataFile(char* file) {
 	}
 
 #ifdef __APPLE__
-	if ((dir = GetBasePath())) {
+	if ((dir = I_GetUserDir())) {
 		w3ssnprintf(path, 511, "%s%s", dir, file);
 		
 		  Free(dir);

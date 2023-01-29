@@ -38,7 +38,6 @@
 #endif
 
 #include <stdlib.h>
-
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_video.h"
@@ -71,7 +70,9 @@
 #include "gl_draw.h"
 #include "deh_main.h"
 #include "net_client.h"
-
+#ifdef NIGHTDIVE
+#include "i_ffmpeg.h"
+#endif
 //
 // D_DoomLoop()
 // Not a globally visible function,
@@ -969,12 +970,22 @@ void D_DoomMain(void) {
 	I_Printf("W_Init: Init WADfiles.\n");
 	W_Init();
 
+	//Init Video
+#ifdef NIGHTDIVE
+	I_AVStartVideoStream("movies/Bethesda.ogv");
+	I_AVStartVideoStream("movies/id.ogv");
+	I_AVStartVideoStream("movies/NightDive.ogv");
+	I_AVStartVideoStream("movies/Kex.ogv");
+	I_AVStartVideoStream("movies/fmod.ogv");
+#endif
+
 	// Load Dehacked patches specified on the command line with -deh.
 	// Note that there's a very careful and deliberate ordering to how
 	// Dehacked patches are loaded. The order we use is:
 	//  1. IWAD dehacked patches.
 	//  2. Command line dehacked patches specified with -deh.
 	//  3. PWAD dehacked patches in DEHACKED lumps.
+	I_Printf("DEH_ParseCommandLine: Init DEHACKED");
 	DEH_ParseCommandLine();
 
 	I_Printf("R_Init: Init DOOM refresh daemon.\n");
