@@ -25,20 +25,12 @@
 //    Main program
 //
 //-----------------------------------------------------------------------------
+#include "i_w3swrapper.h"
 
 #ifndef C89
 #include <stdbool.h>
 #endif
-#include "i_w3swrapper.h"
 
-#ifdef _MSC_VER
-#include "i_opndir.h"
-#else
-#include <dirent.h>
-#endif
-
-#include "doomdef.h"
-#include "doomstat.h"
 #include "d_main.h"
 
 #ifdef __APPLE__
@@ -51,10 +43,7 @@
 #include <SDL.h>
 #endif
 
-#include "i_video.h"
 #include "m_misc.h"
-#include "i_system.h"
-#include "con_console.h"
 
 #ifdef VITA
 #include <vitasdk.h>
