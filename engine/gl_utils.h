@@ -266,6 +266,8 @@ SDL_GLContext   Window
 #define OGL_VERSION_DETECTION glGetString(GL_VERSION) ? GL_CLAMP_TO_EDGE : GL_CLAMP
 #endif
 
+
+
 //
 // CUSTOM ROUTINES
 //
@@ -277,6 +279,57 @@ void glSetVertexColor(vtx_t* v, unsigned int c, unsigned short count);
 void glGetColorf(unsigned int color, float* argb);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
+#ifdef NIGHTDIVE
+//borrowed from: https://github.com/wolfysdl/strife-ve-plus/blob/master/src/rb_texture.h
+int RB_RoundPowerOfTwo(int x);
+void RB_UploadTexture(rbTexture_t* rbTexture, byte* data, texClampMode_t clamp, texFilterMode_t filter);
+void RB_SetTexParameters(rbTexture_t* rbTexture);
+void RB_ChangeTexParameters(rbTexture_t* rbTexture, const texClampMode_t clamp, const texFilterMode_t filter);
+void RB_BindTexture(rbTexture_t* rbTexture);
+void RB_UnbindTexture(void);
+void RB_DeleteTexture(rbTexture_t* rbTexture);
+void RB_UpdateTexture(rbTexture_t* rbTexture, byte* data);
+void RB_BindFrameBuffer(rbTexture_t* rbTexture);
+void RB_BindDepthBuffer(rbTexture_t* rbTexture);
+void RB_SetReadBuffer(const GLenum state);
+void RB_ClearBuffer(const glClearBit_t bit);
+void RB_DrawScreenTexture(rbTexture_t* texture, const int width, const int height);
+void RB_SetCull(int type);
+void RB_SetState(const int bits, boolean bEnable);
+void RB_SetTextureUnit(int unit);
+
+typedef float matrix[16];
+
+void MTX_Copy(matrix dst, matrix src);
+boolean MTX_IsUninitialized(matrix m);
+void MTX_Identity(matrix m);
+void MTX_IdentityX(matrix m, float angle);
+void MTX_IdentityY(matrix m, float angle);
+void MTX_IdentityZ(matrix m, float angle);
+void MTX_IdentityTranspose(matrix dst, matrix src);
+void MTX_RotateX(matrix m, float angle);
+void MTX_RotateY(matrix m, float angle);
+void MTX_RotateZ(matrix m, float angle);
+void MTX_SetTranslation(matrix m, float x, float y, float z);
+void MTX_Scale(matrix m, float x, float y, float z);
+void MTX_ViewFrustum(matrix m, int width, int height, float fovy, float znear);
+void MTX_SetOrtho(matrix m, float left, float right, float bottom, float top, float zNear, float zFar);
+void MTX_Multiply(matrix m, matrix m1, matrix m2);
+void MTX_MultiplyRotations(matrix m, matrix m1, matrix m2);
+void MTX_MultiplyVector(matrix m, float* xyz);
+void MTX_MultiplyVector4(matrix m, float* xyzw);
+void MTX_Invert(matrix out, matrix in);
+void MTX_ToQuaternion(matrix m, float* out);
+
+static float InvSqrt(float x);
+
+
+
+void RB_SetOrtho(void);
+void RB_SetMaxOrtho(int sw, int sh);
+
+#endif
+
 
 #ifdef USE_GLFW
 #define glGetProcAddress glfwGetProcAddress
@@ -285,3 +338,4 @@ void glDestroyWindow(OGL_DEFS);
 #else
 #define glGetProcAddress SDL_GL_GetProcAddress
 #endif
+

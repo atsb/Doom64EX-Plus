@@ -105,6 +105,7 @@
     <ClCompile Include="..\engine\backend\glad_4.6\src\glad.c">
       <Filter>backend\glad</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\i_ffmpeg.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="..\engine\backend\glad_4.6\include\glad\glad.h">
       <Filter>backend\glad</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\i_ffmpeg.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\defconfig.inc" />
