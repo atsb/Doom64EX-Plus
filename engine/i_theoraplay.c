@@ -17,10 +17,10 @@
 //      Author: Dimitris Giannakis
 //
 #if defined(LIBTHEORA)
-#include "SDL.h"
+#include <SDL.h>
 #include <stdio.h>
 #include <string.h>
-static Uint32 baseticks = 0;
+static unsigned int baseticks = 0;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,8 +58,8 @@ static Uint32 baseticks = 0;
 static rbTexture_t          texture;
 
 // global buffers
-static uint8_t              *videoBuffer;
-static uint8_t              *audioBuffer;
+static unsigned char              *videoBuffer;
+static unsigned char              *audioBuffer;
 
 #define THEORAPLAY_INTERNAL 1
 
@@ -574,7 +574,7 @@ static void WorkerThread(TheoraDecoder *ctx)
 				need_pages = 1;
 			else
 			{
-				ogg_int64_t granulepos = 0;
+				long long granulepos = 0;
 
 				// you have to guide the Theora decoder to get meaningful timestamps, apparently.  :/
 				if (packet.granulepos >= 0)
@@ -943,7 +943,7 @@ typedef struct AudioQueue {
 static volatile AudioQueue *audio_queue = NULL;
 static volatile AudioQueue *audio_queue_tail = NULL;
 
-static void SDLCALL audio_callback(void *userdata, Uint8 *stream, int len) {
+static void SDLCALL audio_callback(void *userdata, unsigned char *stream, int len) {
 	Sint16 *dst = (Sint16 *)stream;
 	int sfxVolume = 8;
 	while (audio_queue && (len > 0)) {
@@ -1015,21 +1015,27 @@ void I_AVStartVideoStream(const char *fname)
 	const THEORAPLAY_VideoFrame *video = NULL;
 	const THEORAPLAY_AudioPacket *audio = NULL;
 	SDL_Window *screen = NULL; 
-	 
 	SDL_AudioSpec spec;
     SDL_AudioSpec specobt;
 	SDL_Event event;
-	Uint32 framems = 0;
+	unsigned int framems = 0;
 	int initfailed = 0;
 	int quit = 0;
-
+	void* pixels = NULL;
+	int pitch = 0;
 	float tx;
 	int i;	 
 	int wi, hi, ws, hs;
 	float ri, rs;
 	int scalew, scaleh;
 	int xoffs = 0, yoffs = 0;
- 
+	int width;
+	int height;
+	vtx_t v[4];
+	int texwidth;
+	int texheight;
+	int tourchAudio = 0;
+
 	decoder = THEORAPLAY_startDecodeFile(fname, 30, THEORAPLAY_VIDFMT_RGB);
 	if (decoder == NULL) {
 		printf("I_AVStartVideoStream: Could not decode %s, skipping...\n", fname);
@@ -1042,11 +1048,11 @@ void I_AVStartVideoStream(const char *fname)
 		SDL_Delay(10);
 	}
 
-	int width = video->width;
-	int height = video->height;
+	width = video->width;
+	height = video->height;
 
-	framems = (video->fps == 0.0) ? 0 : ((Uint32)(1000.0 / video->fps));	 
-	videoBuffer = (uint8_t *)malloc(video->width * video->height * 4);
+	framems = (video->fps == 0.0) ? 0 : ((unsigned int)(1000.0 / video->fps));	 
+	videoBuffer = (unsigned char *)malloc(video->width * video->height * 4);
 	initfailed = quit = (!videoBuffer || !window);
 
 	// setup texture
@@ -1066,9 +1072,6 @@ void I_AVStartVideoStream(const char *fname)
 	spec.callback = audio_callback;
 	initfailed = quit = (initfailed || (SDL_OpenAudio(&spec, NULL) != 0));
 
-	void *pixels = NULL;
-	int pitch = 0;
-
 	while (audio) {
 		queue_audio(audio);
 		audio = THEORAPLAY_getAudio(decoder);
@@ -1080,7 +1083,7 @@ void I_AVStartVideoStream(const char *fname)
 		SDL_PauseAudio(0);
 
 	while (!quit && THEORAPLAY_isDecoding(decoder)) {
-		const Uint32 now = SDL_GetTicks() - baseticks;
+		const unsigned int now = SDL_GetTicks() - baseticks;
 
 		if (!video)
 			video = THEORAPLAY_getVideo(decoder);
@@ -1146,10 +1149,6 @@ void I_AVStartVideoStream(const char *fname)
 	 
 		glClearColor(0, 0, 0, 1);
 		RB_ClearBuffer(GLCB_COLOR);
- 
-		vtx_t v[4];
-		int texwidth;
-		int texheight;
 
 		v[0].tu = v[2].tu = 0;
 		v[0].tv = v[1].tv = 0;
@@ -1231,7 +1230,6 @@ void I_AVStartVideoStream(const char *fname)
 		RB_SwapBuffers();
 	}
 
-    int tourchAudio = 0;
 	while (!tourchAudio) {
 		SDL_LockAudio();
         tourchAudio = (audio_queue == NULL);
@@ -1268,99 +1266,6 @@ void I_AVStartVideoStream(const char *fname)
 	if (decoder) THEORAPLAY_stopDecode(decoder);
 	SDL_CloseAudio();
  
-}
-
-//
-// RB_SetBlend
-//
-
-void RB_SetBlend(int src, int dest)
-{
-	int pBlend = (rbState.blendSrc ^ src) | (rbState.blendDest ^ dest);
-	int glSrc = GL_ONE;
-	int glDst = GL_ONE;
-
-	if (pBlend == 0)
-		return; // already set
-
-	switch (src)
-	{
-	case GLSRC_ZERO:
-		glSrc = GL_ZERO;
-		break;
-
-	case GLSRC_ONE:
-		glSrc = GL_ONE;
-		break;
-
-	case GLSRC_DST_COLOR:
-		glSrc = GL_DST_COLOR;
-		break;
-
-	case GLSRC_ONE_MINUS_DST_COLOR:
-		glSrc = GL_ONE_MINUS_DST_COLOR;
-		break;
-
-	case GLSRC_SRC_ALPHA:
-		glSrc = GL_SRC_ALPHA;
-		break;
-
-	case GLSRC_ONE_MINUS_SRC_ALPHA:
-		glSrc = GL_ONE_MINUS_SRC_ALPHA;
-		break;
-
-	case GLSRC_DST_ALPHA:
-		glSrc = GL_DST_ALPHA;
-		break;
-
-	case GLSRC_ONE_MINUS_DST_ALPHA:
-		glSrc = GL_ONE_MINUS_DST_ALPHA;
-		break;
-
-	case GLSRC_ALPHA_SATURATE:
-		glSrc = GL_SRC_ALPHA_SATURATE;
-		break;
-	}
-
-	switch (dest) {
-	case GLDST_ZERO:
-		glDst = GL_ZERO;
-		break;
-
-	case GLDST_ONE:
-		glDst = GL_ONE;
-		break;
-
-	case GLDST_SRC_COLOR:
-		glDst = GL_SRC_COLOR;
-		break;
-
-	case GLDST_ONE_MINUS_SRC_COLOR:
-		glDst = GL_ONE_MINUS_SRC_COLOR;
-		break;
-
-	case GLDST_SRC_ALPHA:
-		glDst = GL_SRC_ALPHA;
-		break;
-
-	case GLDST_ONE_MINUS_SRC_ALPHA:
-		glDst = GL_ONE_MINUS_SRC_ALPHA;
-		break;
-
-	case GLDST_DST_ALPHA:
-		glDst = GL_DST_ALPHA;
-		break;
-
-	case GLDST_ONE_MINUS_DST_ALPHA:
-		glDst = GL_ONE_MINUS_DST_ALPHA;
-		break;
-	}
-
-	glBlendFunc(glSrc, glDst);
-
-	rbState.blendSrc = src;
-	rbState.blendDest = dest;
-	rbState.numStateChanges++;
 }
 
 #endif

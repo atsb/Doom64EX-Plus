@@ -1466,4 +1466,97 @@ static void RB_SetVertexColor(vtx_t* v, byte r, byte g, byte b, byte a, int coun
 }
 
 
+//
+// RB_SetBlend
+//
+
+void RB_SetBlend(int src, int dest)
+{
+    int pBlend = (rbState.blendSrc ^ src) | (rbState.blendDest ^ dest);
+    int glSrc = GL_ONE;
+    int glDst = GL_ONE;
+
+    if (pBlend == 0)
+        return; // already set
+
+    switch (src)
+    {
+    case GLSRC_ZERO:
+        glSrc = GL_ZERO;
+        break;
+
+    case GLSRC_ONE:
+        glSrc = GL_ONE;
+        break;
+
+    case GLSRC_DST_COLOR:
+        glSrc = GL_DST_COLOR;
+        break;
+
+    case GLSRC_ONE_MINUS_DST_COLOR:
+        glSrc = GL_ONE_MINUS_DST_COLOR;
+        break;
+
+    case GLSRC_SRC_ALPHA:
+        glSrc = GL_SRC_ALPHA;
+        break;
+
+    case GLSRC_ONE_MINUS_SRC_ALPHA:
+        glSrc = GL_ONE_MINUS_SRC_ALPHA;
+        break;
+
+    case GLSRC_DST_ALPHA:
+        glSrc = GL_DST_ALPHA;
+        break;
+
+    case GLSRC_ONE_MINUS_DST_ALPHA:
+        glSrc = GL_ONE_MINUS_DST_ALPHA;
+        break;
+
+    case GLSRC_ALPHA_SATURATE:
+        glSrc = GL_SRC_ALPHA_SATURATE;
+        break;
+    }
+
+    switch (dest) {
+    case GLDST_ZERO:
+        glDst = GL_ZERO;
+        break;
+
+    case GLDST_ONE:
+        glDst = GL_ONE;
+        break;
+
+    case GLDST_SRC_COLOR:
+        glDst = GL_SRC_COLOR;
+        break;
+
+    case GLDST_ONE_MINUS_SRC_COLOR:
+        glDst = GL_ONE_MINUS_SRC_COLOR;
+        break;
+
+    case GLDST_SRC_ALPHA:
+        glDst = GL_SRC_ALPHA;
+        break;
+
+    case GLDST_ONE_MINUS_SRC_ALPHA:
+        glDst = GL_ONE_MINUS_SRC_ALPHA;
+        break;
+
+    case GLDST_DST_ALPHA:
+        glDst = GL_DST_ALPHA;
+        break;
+
+    case GLDST_ONE_MINUS_DST_ALPHA:
+        glDst = GL_ONE_MINUS_DST_ALPHA;
+        break;
+    }
+
+    glBlendFunc(glSrc, glDst);
+
+    rbState.blendSrc = src;
+    rbState.blendDest = dest;
+    rbState.numStateChanges++;
+}
+
 #endif

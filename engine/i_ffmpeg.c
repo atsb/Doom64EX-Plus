@@ -336,11 +336,11 @@ static avAudioQueueData_t* I_AVAllocAudioQueueData(uint8_t* buffer, const int si
 // is called until it's full
 //
 
-static void I_AVPushAudioToQueue(uint8_t* buffer, const int size)
+static void I_AVPushAudioToQueue(unsigned char* buffer, const int size)
 {
     avAudioQueueData_t** ptr;
     int bufsize = size;
-    uint8_t* buf = buffer;
+    unsigned char* buf = buffer;
 
     SDL_LockMutex(audioQueue.mutex);
     ptr = &audioQueue.first;
@@ -413,10 +413,10 @@ static void I_AVPushAudioToQueue(uint8_t* buffer, const int size)
 // Called from the Post-Mix callback routine
 //
 
-static uint8_t* I_AVPopAudioFromQueue(const int size, double* timestamp, boolean* filled)
+static unsigned char* I_AVPopAudioFromQueue(const int size, double* timestamp, boolean* filled)
 {
-    static uint8_t buffer[SDL_AUDIO_BUFFER_SIZE];
-    uint8_t* result = NULL;
+    static unsigned char buffer[SDL_AUDIO_BUFFER_SIZE];
+    unsigned char* result = NULL;
 
     if (filled)
     {
@@ -519,7 +519,7 @@ static void I_AVFillAudioBuffer(AVPacket* packet)
     int dataSize;
     int lineSize;
     int frameDone = 0;
-    uint16_t* samples;
+    unsigned short* samples;
     int n;
     int size;
 
@@ -544,7 +544,7 @@ static void I_AVFillAudioBuffer(AVPacket* packet)
     n = 2 * audioCodecCtx->channels;
     audioPts += (double)dataSize / (double)(n * audioCodecCtx->sample_rate);
 
-    samples = (uint16_t*)audioBuffer;
+    samples = (unsigned short*)audioBuffer;
 
     if (frameDone)
     {
@@ -563,10 +563,10 @@ static void I_AVFillAudioBuffer(AVPacket* packet)
             }
         }
 
-        size = (ls) * sizeof(uint16_t) * audioCodecCtx->channels;
+        size = (ls) * sizeof(unsigned short) * audioCodecCtx->channels;
 
         // add the buffer (partial or not) to the queue
-        I_AVPushAudioToQueue((uint8_t*)samples, size);
+        I_AVPushAudioToQueue((unsigned char*)samples, size);
     }
 }
 
@@ -576,9 +576,9 @@ static void I_AVFillAudioBuffer(AVPacket* packet)
 // Called frequently by SDL_Mixer
 //
 
-static void I_AVPostMixCallback(void* udata, uint8_t* stream, int len)
+static void I_AVPostMixCallback(void* udata, unsigned char* stream, int len)
 {
-    uint8_t* buf;
+    unsigned char* buf;
     double timestamp;
     int sfxVolume = 8;
     boolean filled;
@@ -591,7 +591,7 @@ static void I_AVPostMixCallback(void* udata, uint8_t* stream, int len)
     if ((buf = I_AVPopAudioFromQueue(len, &timestamp, &filled)))
     {
         int i;
-        Sint16* samples = (Sint16*)buf;
+        short* samples = (short*)buf;
 
         // adjust volume
         for (i = 0; i < len / 2; i++)
@@ -607,7 +607,7 @@ static void I_AVPostMixCallback(void* udata, uint8_t* stream, int len)
                 scaled = 32767.0f;
             }
 
-            samples[i] = (Sint16)scaled;
+            samples[i] = (short)scaled;
         }
 
         memcpy(stream, buf, len);
@@ -643,9 +643,9 @@ static void I_AVYUVToBuffer(AVFrame* frame)
     int r, g, b;
     int px, py;
     int i;
-    byte* yptr = frame->data[0];
-    byte* uptr = frame->data[1];
-    byte* vptr = frame->data[2];
+    unsigned char* yptr = frame->data[0];
+    unsigned char* uptr = frame->data[1];
+    unsigned char* vptr = frame->data[2];
 
     i = 0;
 
@@ -1076,7 +1076,7 @@ static void I_AVDrawVideoStream(void)
 
 static boolean I_AVCapFrameRate(void)
 {
-    uint64_t curTics = av_gettime();
+    unsigned long long curTics = av_gettime();
     double elapsed = (double)(curTics - currentPts) / 1000.0;
 
     if (elapsed < frameTime)
