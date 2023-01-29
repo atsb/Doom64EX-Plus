@@ -106,6 +106,7 @@
       <Filter>backend\glad</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\i_ffmpeg.c" />
+    <ClCompile Include="..\engine\i_theoraplay.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
@@ -205,6 +206,7 @@
       <Filter>backend\glad</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\i_ffmpeg.h" />
+    <ClInclude Include="..\engine\i_theoraplay.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\defconfig.inc" />

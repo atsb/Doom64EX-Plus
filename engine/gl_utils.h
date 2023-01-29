@@ -293,9 +293,11 @@ void RB_BindDepthBuffer(rbTexture_t* rbTexture);
 void RB_SetReadBuffer(const GLenum state);
 void RB_ClearBuffer(const glClearBit_t bit);
 void RB_DrawScreenTexture(rbTexture_t* texture, const int width, const int height);
+void RB_SwapBuffers(void);
 void RB_SetCull(int type);
 void RB_SetState(const int bits, boolean bEnable);
 void RB_SetTextureUnit(int unit);
+
 
 typedef float matrix[16];
 
@@ -322,11 +324,11 @@ void MTX_ToQuaternion(matrix m, float* out);
 
 static float InvSqrt(float x);
 
-
-
 void RB_SetOrtho(void);
 void RB_SetMaxOrtho(int sw, int sh);
-
+void RB_SetVertexColor(vtx_t* v, byte r, byte g, byte b, byte a, int count);
+void RB_SetBlend(int src, int dest);
+void RB_DrawVtxQuadImmediate(vtx_t* v);
 #endif
 
 

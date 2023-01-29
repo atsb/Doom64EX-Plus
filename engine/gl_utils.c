@@ -734,7 +734,16 @@ void RB_SetState(const int bits, boolean bEnable)
     }
 }
 
-
+static void RB_DrawVtxQuadImmediate(vtx_t* v)
+{
+    glBegin(GL_QUADS);
+    glColor4ubv(&v[0].r);
+    glTexCoord2fv(&v[0].tu); glVertex3fv(&v[0].x);
+    glTexCoord2fv(&v[1].tu); glVertex3fv(&v[1].x);
+    glTexCoord2fv(&v[3].tu); glVertex3fv(&v[3].x);
+    glTexCoord2fv(&v[2].tu); glVertex3fv(&v[2].x);
+    glEnd();
+}
 //
 // RB_DrawScreenTexture
 //
@@ -808,13 +817,26 @@ void RB_DrawScreenTexture(rbTexture_t* texture, const int width, const int heigh
     RB_SetState(GLSTATE_DEPTHTEST, false);
 
     // render
-    glBegin(GL_QUADS);
-    glColor4ubv(&v[0].r);
-    glTexCoord2fv(&v[0].tu); glVertex3fv(&v[0].x);
-    glTexCoord2fv(&v[1].tu); glVertex3fv(&v[1].x);
-    glTexCoord2fv(&v[3].tu); glVertex3fv(&v[3].x);
-    glTexCoord2fv(&v[2].tu); glVertex3fv(&v[2].x);
-    glEnd();
+    RB_DrawVtxQuadImmediate(v);
+}
+
+//
+// RB_SwapBuffers
+//
+
+void RB_SwapBuffers(void)
+{
+    {
+        // force a gl sync
+        glFinish();
+    }
+
+    SDL_GL_SwapWindow(window);
+
+    // reset debugging info
+    rbState.numStateChanges = 0;
+    rbState.numTextureBinds = 0;
+    rbState.numDrawnVertices = 0;
 }
 
 //
@@ -1429,5 +1451,19 @@ void RB_SetMaxOrtho(int sw, int sh)
     MTX_SetOrtho(mtx, 0, (float)sw, (float)sh, 0, -1, 1);
     glLoadMatrixf(mtx);
 }
+
+static void RB_SetVertexColor(vtx_t* v, byte r, byte g, byte b, byte a, int count)
+{
+    int i;
+
+    for (i = 0; i < count; ++i)
+    {
+        v[i].r = r;
+        v[i].g = g;
+        v[i].b = b;
+        v[i].a = a;
+    }
+}
+
 
 #endif

@@ -71,7 +71,11 @@
 #include "deh_main.h"
 #include "net_client.h"
 #ifdef NIGHTDIVE
+#ifdef LIBTHEORA
+#include "i_theoraplay.h"
+#else
 #include "i_ffmpeg.h"
+#endif
 #endif
 //
 // D_DoomLoop()
@@ -947,6 +951,27 @@ static int D_CheckDemo(void) {
 void D_DoomMain(void) {
 	devparm = M_CheckParm("-devparm");
 
+	//Init Video
+#ifdef NIGHTDIVE
+#ifdef LIBTHEORA
+	I_AVStartVideoStream(I_FindDataFile("movies/Bethesda.ogv"));
+	I_AVStartVideoStream(I_FindDataFile("movies/id.ogv"));
+	I_AVStartVideoStream(I_FindDataFile("movies/NightDive.ogv"));
+	I_AVStartVideoStream(I_FindDataFile("movies/Kex.ogv"));
+#ifdef NOT_YET
+	I_AVStartVideoStream(I_FindDataFile("movies/fmod.ogv"));
+#endif
+#else
+	I_AVStartVideoStream("movies/Bethesda.ogv");
+	I_AVStartVideoStream("movies/id.ogv");
+	I_AVStartVideoStream("movies/NightDive.ogv");
+	I_AVStartVideoStream("movies/Kex.ogv");
+#ifdef NOT_YET
+	I_AVStartVideoStream("movies/fmod.ogv");
+#endif
+#endif
+#endif
+
 	// init subsystems
 
 	I_Printf("Z_Init: Init Zone Memory Allocator\n");
@@ -970,22 +995,12 @@ void D_DoomMain(void) {
 	I_Printf("W_Init: Init WADfiles.\n");
 	W_Init();
 
-	//Init Video
-#ifdef NIGHTDIVE
-	I_AVStartVideoStream("movies/Bethesda.ogv");
-	I_AVStartVideoStream("movies/id.ogv");
-	I_AVStartVideoStream("movies/NightDive.ogv");
-	I_AVStartVideoStream("movies/Kex.ogv");
-	I_AVStartVideoStream("movies/fmod.ogv");
-#endif
-
 	// Load Dehacked patches specified on the command line with -deh.
 	// Note that there's a very careful and deliberate ordering to how
 	// Dehacked patches are loaded. The order we use is:
 	//  1. IWAD dehacked patches.
 	//  2. Command line dehacked patches specified with -deh.
 	//  3. PWAD dehacked patches in DEHACKED lumps.
-	I_Printf("DEH_ParseCommandLine: Init DEHACKED");
 	DEH_ParseCommandLine();
 
 	I_Printf("R_Init: Init DOOM refresh daemon.\n");

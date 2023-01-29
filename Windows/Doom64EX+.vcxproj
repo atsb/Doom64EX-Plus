@@ -180,13 +180,17 @@
     <ClCompile Include="..\engine\in_stuff.c" />
     <ClCompile Include="..\engine\i_audio.c" />
     <ClCompile Include="..\engine\i_cpu.c" />
-    <ClCompile Include="..\engine\i_exception.c" />
+    <ClCompile Include="..\engine\i_exception.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\engine\i_ffmpeg.c" />
     <ClCompile Include="..\engine\i_main.c" />
     <ClCompile Include="..\engine\i_opndir.c" />
     <ClCompile Include="..\engine\i_png.c" />
     <ClCompile Include="..\engine\i_sdlinput.c" />
     <ClCompile Include="..\engine\i_system.c" />
+    <ClCompile Include="..\engine\i_theoraplay.c" />
     <ClCompile Include="..\engine\i_video.c" />
     <ClCompile Include="..\engine\i_w3swrapper.c" />
     <ClCompile Include="..\engine\md5.c" />
@@ -295,6 +299,7 @@
     <ClInclude Include="..\engine\i_sdlinput.h" />
     <ClInclude Include="..\engine\i_swap.h" />
     <ClInclude Include="..\engine\i_system.h" />
+    <ClInclude Include="..\engine\i_theoraplay.h" />
     <ClInclude Include="..\engine\i_video.h" />
     <ClInclude Include="..\engine\i_w3swrapper.h" />
     <ClInclude Include="..\engine\md5.h" />
@@ -450,7 +455,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_FLUIDSYNTH_LITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;NIGHTDIVE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH_LITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;NIGHTDIVE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavcodec;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libdevice;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavfilter;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavformat;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavutil</AdditionalIncludeDirectories>
     </ClCompile>
@@ -467,9 +472,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;C99;HAVE_M_PI;NIGHTDIVE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;HAVE_M_PI;_USE_MATH_DEFINES;NIGHTDIVE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavcodec;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libdevice;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavfilter;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavformat;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavutil</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include;$(ProjectDir);$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavcodec;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libdevice;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavfilter;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavformat;$(ProjectDir)..\engine\3rdparty\Windows\Includes\libavutil</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>

@@ -47,7 +47,7 @@ void            I_EndDisplay(void);
 fixed_t         I_GetTimeFrac(void);
 void            I_GetTime_SaveMS(void);
 unsigned long   I_GetRandomTimeSeed(void);
-
+int I_Translate_GameController(int state);
 // Asynchronous interrupt functions should maintain private queues
 // that are read by the synchronous functions
 // to be converted into events.
