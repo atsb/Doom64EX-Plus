@@ -333,15 +333,23 @@ void W_Init(void) {
 	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
 
 	Z_Free(fileinfo);
-
+#ifdef VITA
+	if ((doom64expluswad = I_FindDataFile("DOOM64PS.wad"))) {
+		W_MergeFile(doom64expluswad);
+		free(doom64expluswad);
+	}
+	else {
+		I_Error("W_Init: DOOM64PS.wad not found");
+	}
+#else
 	if ((doom64expluswad = I_FindDataFile("DOOM64EX+.wad"))) {
 		W_MergeFile(doom64expluswad);
 		free(doom64expluswad);
 	}
 	else {
-		I_Error("W_Init: doom64ex-plus.wad not found");
+		I_Error("W_Init: DOOM64EX+.wad not found");
 	}
-
+#endif
 	p = M_CheckParm("-file");
 	if (p)
 	{

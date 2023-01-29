@@ -317,7 +317,7 @@ char* I_FindDataFile(char* file) {
 	{
 		int i;
 		const char* paths[] = {
-				"ux0:/data/DOOM64EX+/",
+				"ux0:/data/DOOM64PS/",
 		};
 
 		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
@@ -327,7 +327,6 @@ char* I_FindDataFile(char* file) {
 		}
 	}
 #endif
-
 	Free(path);
 	
 	return NULL;

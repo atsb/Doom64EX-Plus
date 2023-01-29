@@ -32,7 +32,7 @@
 #endif
 
 #include "d_main.h"
-
+#ifndef VITA
 #ifdef __APPLE__
 #ifdef USE_SDL3
 #include <SDL3/SDL.h>
@@ -42,11 +42,13 @@
 #else
 #include <SDL.h>
 #endif
+#endif
 
 #include "m_misc.h"
 
 #ifdef VITA
 #include <vitasdk.h>
+#include <vitaGL.h>
 int _newlib_heap_size_user = 200 * 1024 * 1024;
 
 void early_fatal_error(const char *msg) {

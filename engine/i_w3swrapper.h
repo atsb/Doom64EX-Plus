@@ -113,6 +113,8 @@ char* w3sstrlwr(char* str);
 #define GetBasePath()	SDL_GetPrefPath("", "DOOM64EX+")
 #elif defined __ANDROID__
 #define GetBasePath   SDL_AndroidGetInternalStoragePath
+#elif defined VITA
+#define GetBasePath() (char *)"ux0:data/DOOM64PS/"
 #else
 #define GetBasePath	SDL_GetBasePath
 #endif

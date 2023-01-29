@@ -191,6 +191,9 @@ void GL_SetOrtho(boolean stretch) {
 	}
 	//GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near_val, GLdouble far_val
 	glOrtho(0, width, height, 0, -1, 1);
+#ifdef __vita__
+	glDepthMask(GL_FALSE);
+#endif
 	checkortho = (stretch && widescreen) ? 2 : 1;
 }
 
