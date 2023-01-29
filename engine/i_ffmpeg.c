@@ -1226,4 +1226,3 @@ void I_AVStartVideoStream(const char* filename)
     RB_UnbindTexture();
 }
 #endif
-#endif
