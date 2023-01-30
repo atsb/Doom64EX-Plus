@@ -225,7 +225,7 @@ void    P_SetThingPosition(mobj_t* thing);
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
-extern boolean     floatok;
+extern int     floatok;
 extern fixed_t      tmfloorz;
 extern fixed_t      tmceilingz;
 extern line_t* tmhitline;
