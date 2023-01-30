@@ -84,7 +84,7 @@ FixedDiv
 (fixed_t    a,
 	fixed_t    b) {
 	if ((D_abs(a) >> 14) >= D_abs(b)) {
-		return (a ^ b) < 0 ? D_MININT : D_MAXINT;
+		return (a ^ b) < 0 ? INT_MIN : INT_MAX;
 	}
 	return FixedDiv2(a, b);
 }

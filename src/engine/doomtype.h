@@ -37,8 +37,6 @@ typedef unsigned char		byte;
 typedef unsigned short		word;
 
 #include <limits.h>
-#define D_MININT INT_MIN
-#define D_MAXINT INT_MAX
 
 #ifndef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))

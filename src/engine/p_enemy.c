@@ -594,7 +594,7 @@ boolean P_LookForPlayers(mobj_t* actor, boolean allaround) {
 		}
 
 		else {  // special case for player bots
-			fixed_t dist2 = D_MAXINT;
+			fixed_t dist2 = INT_MAX;
 			mobj_t* mobj;
 
 			for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
@@ -802,18 +802,17 @@ nomissile:
 //
 // A_FaceTarget
 //
-void A_FaceTarget(mobj_t* actor) {
+void A_FaceTarget(mobj_t* actor) // 800116A8
+{
 	int rnd1, rnd2;
-
-	if (!actor->target) {
+	if (!actor->target)
 		return;
-	}
 
 	actor->flags &= ~MF_AMBUSH;
-
 	actor->angle = R_PointToAngle2(actor->x, actor->y, actor->target->x, actor->target->y);
 
-	if (actor->target->flags & MF_SHADOW) {
+	if (actor->target->flags & MF_SHADOW)
+	{
 		rnd1 = P_Random();
 		rnd2 = P_Random();
 		actor->angle += (rnd2 - rnd1) << 21;
@@ -1847,7 +1846,7 @@ void A_FadeAlpha(mobj_t* mobj) {
 void A_TargetCamera(mobj_t* actor) {
 	mobj_t* mo;
 
-	actor->threshold = D_MAXINT;
+	actor->threshold = INT_MAX;
 
 	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
 		if (actor->tid + 1 == mo->tid) {

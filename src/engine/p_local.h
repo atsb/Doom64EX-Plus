@@ -135,8 +135,8 @@ void    P_ClearUserCamera(player_t* player);
 //
 // P_MOBJ
 //
-#define ONFLOORZ        D_MININT
-#define ONCEILINGZ      D_MAXINT
+#define ONFLOORZ        INT_MIN
+#define ONCEILINGZ      INT_MAX
 
 extern mapthing_t* spawnlist;
 extern int          numspawnlist;
@@ -225,7 +225,7 @@ void    P_SetThingPosition(mobj_t* thing);
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
-extern boolean     floatok;
+extern int     floatok;
 extern fixed_t      tmfloorz;
 extern fixed_t      tmceilingz;
 extern line_t* tmhitline;
@@ -237,8 +237,8 @@ boolean    P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y);
 void        P_SlideMove(mobj_t* mo);
 boolean    P_CheckSight(mobj_t* t1, mobj_t* t2);
 void        P_ScanSights(void);
-boolean    P_UseLines(player_t* player, boolean showcontext);
-boolean    P_ChangeSector(sector_t* sector, boolean crunch);
+boolean    P_UseLines(player_t* player, int showcontext);
+boolean    P_ChangeSector(sector_t* sector, int crunch);
 mobj_t* P_CheckOnMobj(mobj_t* thing);
 void        P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t y);
 
