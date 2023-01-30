@@ -646,11 +646,11 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 			cmd->pitch -= angleturn[lookheld + (speed ? SLOWTURNTICS : 0)] << 2;
 		}
 
-		cmd->angleturn -= pc->mousex * 0x8;
+		cmd->angleturn -= pc->mousex * 0x4;
 
 		if (forcefreelook != 2) {
 			if ((int)v_mlook.value || forcefreelook) {
-				cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x8 : -(pc->mousey * 0x8);
+				cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x4 : -(pc->mousey * 0x4);
 			}
 		}
 	}
