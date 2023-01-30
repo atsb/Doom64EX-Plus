@@ -150,6 +150,7 @@ void A_SkelWhoosh();
 void A_SkelFist();
 void A_SkelAttack();
 void A_SpidAttack();
+void A_SpidDeathEvent();
 
 #pragma warning(push)
 #pragma warning(disable:4113)
@@ -1177,7 +1178,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SPID_ATK6*/			{ SPR_SPID, 32776, 2, {A_SpidRefire}, S_SPID_ATK2 },
 	/*S_SPID_PAIN*/			{ SPR_SPID, 9, 4, {NULL}, S_SPID_PAIN2 },
 	/*S_SPID_PAIN2*/		{ SPR_SPID, 9, 4, {A_Pain}, S_SPID_RUN1 },
-	/*S_SPID_DIE1*/			{ SPR_SPID, 10, 16, {A_Scream}, S_SPID_DIE2 },
+	/*S_SPID_DIE1*/			{ SPR_SPID, 10, 16, {A_SpidDeathEvent}, S_SPID_DIE2 },
 	/*S_SPID_DIE2*/			{ SPR_SPID, 11, 6, {A_Fall}, S_SPID_DIE3 },
 	/*S_SPID_DIE3*/			{ SPR_SPID, 12, 6, {NULL}, S_SPID_DIE4 },
 	/*S_SPID_DIE4*/			{ SPR_SPID, 13, 6, {NULL}, S_SPID_DIE5 },
