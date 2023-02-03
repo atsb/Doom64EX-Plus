@@ -40,8 +40,6 @@
 
 vtx_t drawVertex[MAXDLDRAWCOUNT];
 
-static float envcolor[4] = { 0, 0, 0, 0 };
-
 drawlist_t drawlist[NUMDRAWLISTS];
 
 //

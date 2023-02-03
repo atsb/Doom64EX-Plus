@@ -178,7 +178,7 @@ static void saveg_setup_mobjwrite(void) {
     // count mobjs
     for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
         // don't save if mobj is expected to be removed
-        if (mobj->mobjfunc == P_SafeRemoveMobj) {
+        if (mobj->mobjfunc == (struct mobj_s*)P_SafeRemoveMobj) {
             continue;
         }
 
@@ -1612,7 +1612,7 @@ struct {
     int     structsize;
 } saveg_specials[] = {
     {
-        T_MoveCeiling,
+        (actionf_p1)T_MoveCeiling,
         tc_ceiling,
         saveg_write_ceiling_t,
         saveg_read_ceiling_t,
@@ -1620,7 +1620,7 @@ struct {
     },
 
     {
-        T_VerticalDoor,
+        (actionf_p1)T_VerticalDoor,
         tc_door,
         saveg_write_vldoor_t,
         saveg_read_vldoor_t,
@@ -1628,7 +1628,7 @@ struct {
     },
 
     {
-        T_MoveFloor,
+        (actionf_p1)T_MoveFloor,
         tc_floor,
         saveg_write_floormove_t,
         saveg_read_floormove_t,
@@ -1636,7 +1636,7 @@ struct {
     },
 
     {
-        T_PlatRaise,
+        (actionf_p1)T_PlatRaise,
         tc_plat,
         saveg_write_plat_t,
         saveg_read_plat_t,
@@ -1644,7 +1644,7 @@ struct {
     },
 
     {
-        T_LightFlash,
+        (actionf_p1)T_LightFlash,
         tc_flash,
         saveg_write_lightflash_t,
         saveg_read_lightflash_t,
@@ -1652,7 +1652,7 @@ struct {
     },
 
     {
-        T_StrobeFlash,
+        (actionf_p1)T_StrobeFlash,
         tc_strobe,
         saveg_write_strobe_t,
         saveg_read_strobe_t,
@@ -1660,7 +1660,7 @@ struct {
     },
 
     {
-        T_Glow,
+        (actionf_p1)T_Glow,
         tc_glow,
         saveg_write_glow_t,
         saveg_read_glow_t,
@@ -1668,7 +1668,7 @@ struct {
     },
 
     {
-        T_FireFlicker,
+        (actionf_p1)T_FireFlicker,
         tc_flicker,
         saveg_write_fireflicker_t,
         saveg_read_fireflicker_t,
@@ -1676,7 +1676,7 @@ struct {
     },
 
     {
-        T_CountdownTimer,
+        (actionf_p1)T_CountdownTimer,
         tc_delay,
         saveg_write_delay_t,
         saveg_read_delay_t,
@@ -1684,7 +1684,7 @@ struct {
     },
 
     {
-        T_LookAtCamera,
+        (actionf_p1)T_LookAtCamera,
         tc_aimcam,
         saveg_write_aimcamera_t,
         saveg_read_aimcamera_t,
@@ -1692,7 +1692,7 @@ struct {
     },
 
     {
-        T_MovingCamera,
+        (actionf_p1)T_MovingCamera,
         tc_movecam,
         saveg_write_movecamera_t,
         saveg_read_movecamera_t,
@@ -1700,7 +1700,7 @@ struct {
     },
 
     {
-        T_MobjFadeThinker,
+        (actionf_p1)T_MobjFadeThinker,
         tc_fade,
         saveg_write_mobjfade_t,
         saveg_read_mobjfade_t,
@@ -1708,7 +1708,7 @@ struct {
     },
 
     {
-        T_Sequence,
+        (actionf_p1)T_Sequence,
         tc_sequence,
         saveg_write_sequenceGlow_t,
         saveg_read_sequenceGlow_t,
@@ -1716,7 +1716,7 @@ struct {
     },
 
     {
-        T_Quake,
+        (actionf_p1)T_Quake,
         tc_quake,
         saveg_write_quake_t,
         saveg_read_quake_t,
@@ -1724,7 +1724,7 @@ struct {
     },
 
     {
-        T_Combine,
+        (actionf_p1)T_Combine,
         tc_combine,
         saveg_write_combine_t,
         saveg_read_combine_t,
@@ -1732,7 +1732,7 @@ struct {
     },
 
     {
-        T_LaserThinker,
+        (actionf_p1)T_LaserThinker,
         tc_laser,
         saveg_write_laserthinker_t,
         saveg_read_laserthinker_t,
@@ -1740,7 +1740,7 @@ struct {
     },
 
     {
-        T_MoveSplitPlane,
+        (actionf_p1)T_MoveSplitPlane,
         tc_split,
         saveg_write_splitmove_t,
         saveg_read_splitmove_t,
@@ -1748,7 +1748,7 @@ struct {
     },
 
     {
-        T_LightMorph,
+        (actionf_p1)T_LightMorph,
         tc_morph,
         saveg_write_lightmorph_t,
         saveg_read_lightmorph_t,
@@ -1756,7 +1756,7 @@ struct {
     },
 
     {
-        T_MobjExplode,
+        (actionf_p1)T_MobjExplode,
         tc_exp,saveg_write_mobjexp_t,
         saveg_read_mobjexp_t,
         sizeof(mobjexp_t)

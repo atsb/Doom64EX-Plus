@@ -241,7 +241,7 @@ void P_XYMovement(mobj_t* mo) {
 		if (!P_TryMove(mo, ptryx, ptryy)) {
 			if (mo->flags & MF_SKULLFLY) {
 				mo->extradata = (mobj_t*)blockthing;
-				mo->mobjfunc = P_SkullBash;
+				mo->mobjfunc = (struct mobj_s*)P_SkullBash;
 			}
 
 			if (mo->flags & MF_MISSILE) {
@@ -253,12 +253,12 @@ void P_XYMovement(mobj_t* mo) {
 						// Hack to prevent missiles exploding
 						// against the sky.
 						// Does not handle sky floors.
-						mo->mobjfunc = P_RemoveMobj;
+						mo->mobjfunc = (struct mobj_s*)P_RemoveMobj;
 						return;
 					}
 				}
 
-				mo->mobjfunc = P_MissileHit;
+				mo->mobjfunc = (struct mobj_s*)P_MissileHit;
 				mo->extradata = (mobj_t*)blockthing;
 				return;
 			}
@@ -332,7 +332,7 @@ void P_ZMovement(mobj_t* mo) {
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)
 			&& !(mo->type == MT_PROJ_RECTFIRE)) {
-			mo->mobjfunc = P_ExplodeMissile;
+			mo->mobjfunc = (struct mobj_s*)P_ExplodeMissile;
 			return;
 		}
 	}
@@ -355,20 +355,20 @@ void P_ZMovement(mobj_t* mo) {
 
 		if (mo->flags & MF_MISSILE &&
 			mo->subsector->sector->ceilingpic == skyflatnum) {
-			mo->mobjfunc = P_RemoveMobj;
+			mo->mobjfunc = (struct mobj_s*)P_RemoveMobj;
 			return;
 		}
 
 		mo->z = mo->ceilingz - mo->height;
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)) {
-			mo->mobjfunc = P_ExplodeMissile;
+			mo->mobjfunc = (struct mobj_s*)P_ExplodeMissile;
 			return;
 		}
 		
 		if((mo->flags & MF_MISSILE)
 				&& !(mo->flags & MF_NOCLIP)) {
-            mo->mobjfunc = P_ExplodeMissile;
+            mo->mobjfunc = (struct mobj_s*)P_ExplodeMissile;
             return;
         }
 	}
@@ -529,7 +529,7 @@ void P_MobjThinker(mobj_t* mobj)
 		P_XYMovement(mobj);
 	}
 
-	if (mobj->mobjfunc && mobj->mobjfunc != P_RespawnSpecials) {
+	if (mobj->mobjfunc && mobj->mobjfunc != (struct mobj_s*)P_RespawnSpecials) {
 		return;
 	}
 
@@ -681,7 +681,7 @@ void P_RemoveMobj(mobj_t* mobj) {
 		mobj->reactiontime = leveltime;
 		mobj->flags &= ~MF_SPECIAL;
 		mobj->alpha = 80;
-		mobj->mobjfunc = P_RespawnSpecials;
+		mobj->mobjfunc = (struct mobj_s*)P_RespawnSpecials;
 		return;
 	}
 
@@ -693,7 +693,7 @@ void P_RemoveMobj(mobj_t* mobj) {
 	P_UnsetThingPosition(mobj); // unlink from sector and block lists
 
 	// [kex] set callback to remove mobj
-	mobj->mobjfunc = P_SafeRemoveMobj;
+	mobj->mobjfunc = (struct mobj_s*)P_SafeRemoveMobj;
 }
 
 //
@@ -952,7 +952,7 @@ int EV_FadeOutMobj(line_t* line) {
 		}
 
 		if (netgame && respawnspecials) {
-			if (mo->mobjfunc == P_RespawnSpecials) {
+			if (mo->mobjfunc == (struct mobj_s*)P_RespawnSpecials) {
 				mo->mobjfunc = NULL;
 				mo->alpha = 0xff;
 			}

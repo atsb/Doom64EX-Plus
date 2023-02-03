@@ -376,7 +376,7 @@ void GL_PixmapFlipRotate(dpixmap *dst, const dpixmap *src, int flag)
 	}
 
 	if (free_src) {
-		GL_PixmapFree(src);
+		GL_PixmapFree((dpixmap*)src);
 	}
 }
 
@@ -431,7 +431,7 @@ void GL_PixmapScaleTo(dpixmap** dst, const dpixmap* src, short width, short heig
 	}
 	
 	if (free_src) {
-		GL_PixmapFree(src);
+		GL_PixmapFree((dpixmap*)src);
 	}
 }
 

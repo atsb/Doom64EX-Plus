@@ -376,12 +376,12 @@ static void InitSpriteTextures(void) {
 		for (j = 0; j < NUMSPRITES; j++) {
 			// start looking for external palette lumps
 			if (!strncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
-				int8_t palname[9];
+				char palname[9];
 
 				// increase the count if a palette lump is found
 				for (p = 1; p < 10; p++) {
 					sprintf(palname, "PAL%s%i", sprnames[j], p);
-					if (W_CheckNumForName(palname) != -1) {
+					if (W_CheckNumForName((const char*)palname) != -1) {
 						palcnt++;
 						spritecount[i]++;
 					}

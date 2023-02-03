@@ -81,11 +81,11 @@ int         numanimdef;
 animdef_t* animdefs;
 
 static scdatatable_t animdatatable[] = {
-	{   "RESTARTDELAY", (int64_t) & ((animdef_t*)0)->delay,   'i' },
-	{   "FRAMES", (int64_t) & ((animdef_t*)0)->frames,  'i' },
-	{   "CYCLEPALETTES", (int64_t) & ((animdef_t*)0)->palette, 'b' },
-	{   "REWIND", (int64_t) & ((animdef_t*)0)->reverse, 'b' },
-	{   "SPEED", (int64_t) & ((animdef_t*)0)->speed,   'i' },
+	{   "RESTARTDELAY", (long) & ((animdef_t*)0)->delay,   'i' },
+	{   "FRAMES", (long) & ((animdef_t*)0)->frames,  'i' },
+	{   "CYCLEPALETTES", (long) & ((animdef_t*)0)->palette, 'b' },
+	{   "REWIND", (long) & ((animdef_t*)0)->reverse, 'b' },
+	{   "SPEED", (long) & ((animdef_t*)0)->speed,   'i' },
 	{   NULL,               0,                              0   }
 };
 

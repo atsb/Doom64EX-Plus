@@ -78,8 +78,8 @@ static void SC_Open(const char* name) {
 
 	CON_DPrintf("%s size: %ikb\n", name, sc_parser.buffsize >> 10);
 
-	sc_parser.pointer_start = sc_parser.buffer;
-	sc_parser.pointer_end = sc_parser.buffer + sc_parser.buffsize;
+	sc_parser.pointer_start = (char*)sc_parser.buffer;
+	sc_parser.pointer_end = (char*)sc_parser.buffer + sc_parser.buffsize;
 	sc_parser.linepos = 1;
 	sc_parser.rowpos = 1;
 	sc_parser.buffpos = 0;

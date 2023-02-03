@@ -829,7 +829,7 @@ static void NET_SV_ParseGameData(net_packet_t* packet, net_client_t* client)
 
 	// Read header
 
-	if (!NET_ReadInt8(packet, &ackseq)
+	if (!NET_ReadInt8(packet, (int*)&ackseq)
 		|| !NET_ReadInt8(packet, &seq)
 		|| !NET_ReadInt8(packet, &num_tics))
 	{
@@ -947,7 +947,7 @@ static void NET_SV_ParseGameDataACK(net_packet_t* packet, net_client_t* client)
 
 	// Read header
 
-	if (!NET_ReadInt8(packet, &ackseq))
+	if (!NET_ReadInt8(packet, (int*)&ackseq))
 	{
 		return;
 	}

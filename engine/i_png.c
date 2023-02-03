@@ -153,7 +153,7 @@ unsigned char* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean 
 	}
 
 	// setup callback function for reading data
-	png_set_read_fn(png_ptr, NULL, I_PNGReadFunc);
+	png_set_read_fn(png_ptr, NULL, (png_rw_ptr)I_PNGReadFunc);
 
 	// look for offset chunk if specified
 	if (offset) {
@@ -382,7 +382,7 @@ unsigned char* I_PNGCreate(int width, int height, unsigned char* data, int* size
 	}
 
 	// setup custom data writing procedure
-	png_set_write_fn(png_ptr, NULL, I_PNGWriteFunc, NULL);
+	png_set_write_fn(png_ptr, NULL, (png_rw_ptr)I_PNGWriteFunc, NULL);
 
 	// setup image
 	png_set_IHDR(

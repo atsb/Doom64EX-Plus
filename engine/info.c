@@ -150,8 +150,10 @@ void A_SkelAttack();
 void A_SpidAttack();
 void A_SpidDeathEvent();
 
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4113)
+#endif
 state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_NULL*/              { SPR_SPOT, 0, -1, {NULL}, S_NULL },
 
@@ -1211,9 +1213,9 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_HEAD_DIE5*/{ SPR_TEST, 11, 8, {A_OnDeathTrigger}, S_TEST_DIE6 },
 	/*S_HEAD_DIE6*/{ SPR_TEST, 12, -1, {NULL}, S_NULL },
 };
-
+#ifdef _MSC_VER
 #pragma warning(pop)
-
+#endif
 mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 	{
 		/*MT_PLAYER*/

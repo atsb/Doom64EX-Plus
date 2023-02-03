@@ -440,7 +440,7 @@ boolean I_UpdateGrab(void) {
 // I_GetEvent
 //
 
-void I_GetEvent(SDL_Event* Event) {
+static void I_GetEvent(SDL_Event* Event) {
 	event_t event;
 	unsigned int mwheeluptic = 0, mwheeldowntic = 0;
 	unsigned int tic = gametic;
@@ -684,7 +684,7 @@ void I_FinishUpdate(void) {
 // I_InitInputs
 //
 
-void I_InitInputs(void) {
+static void I_InitInputs(void) {
 	SDL_PumpEvents();
 	SDL_ShowCursor(m_menumouse.value < 1);
 	I_MouseAccelChange();

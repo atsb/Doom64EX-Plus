@@ -1941,7 +1941,7 @@ static const float ratioVal[5] = {
 	5.0f / 4.0f,
 	21.0f / 9.0f
 };
-static int8_t gammamsg[21][28] = {
+static char gammamsg[21][28] = {
 	GAMMALVL0,
 	GAMMALVL1,
 	GAMMALVL2,
@@ -2042,10 +2042,6 @@ void M_DrawVideo(void) {
 	static const char* constfilterType[2] = { "Linear", "Nearest" };
 	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09" };
 	static const char* frametype[2] = { "Off", "On" };
-#ifdef VITA	 
-    static const char* vsyncType[3] = { "Unlimited", "60 Fps", "30 Fps" }; //Add this later for debug
-	static char bitValue[8];
-#endif
 
 	char res[16];
 	int y;
@@ -2154,7 +2150,7 @@ void M_ChangeGammaLevel(int choice)
 			CON_CvarSetValue(i_gamma.name, i_gamma.value + 1);
 		}
 
-		players[consoleplayer].message = gammamsg[(int)i_gamma.value];
+		players[consoleplayer].message = (char*)gammamsg[(int)i_gamma.value];
 		break;
 	}
 }

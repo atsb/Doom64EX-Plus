@@ -1105,29 +1105,29 @@ void P_SetupLevel(int map, int playermask, skill_t skill) {
 //
 
 static scdatatable_t mapdatatable[] = {
-	{   "CLASSTYPE", (int64_t) & ((mapdef_t*)0)->type,                 'i' },
-	{   "LEVELNUM", (int64_t) & ((mapdef_t*)0)->mapid,                'i' },
-	{   "CLUSTER", (int64_t) & ((mapdef_t*)0)->cluster,              'i' },
-	{   "EXITDELAY", (int64_t) & ((mapdef_t*)0)->exitdelay,            'i' },
-	{   "NOINTERMISSION", (int64_t) & ((mapdef_t*)0)->nointermission,       'b' },
-	{   "CLEARCHEATS", (int64_t) & ((mapdef_t*)0)->clearchts,            'b' },
-	{   "CONTINUEMUSICONEXIT", (int64_t) & ((mapdef_t*)0)->contmusexit,          'b' },
-	{   "FORCEGODMODE", (int64_t) & ((mapdef_t*)0)->forcegodmode,         'b' },
+	{   "CLASSTYPE", (long) & ((mapdef_t*)0)->type,                 'i' },
+	{   "LEVELNUM", (long) & ((mapdef_t*)0)->mapid,                'i' },
+	{   "CLUSTER", (long) & ((mapdef_t*)0)->cluster,              'i' },
+	{   "EXITDELAY", (long) & ((mapdef_t*)0)->exitdelay,            'i' },
+	{   "NOINTERMISSION", (long) & ((mapdef_t*)0)->nointermission,       'b' },
+	{   "CLEARCHEATS", (long) & ((mapdef_t*)0)->clearchts,            'b' },
+	{   "CONTINUEMUSICONEXIT", (long) & ((mapdef_t*)0)->contmusexit,          'b' },
+	{   "FORCEGODMODE", (long) & ((mapdef_t*)0)->forcegodmode,         'b' },
 	{   NULL,                   0,                                          0   }
 };
 
 static scdatatable_t clusterdatatable[] = {
-	{   "PIC", (int64_t) & ((clusterdef_t*)0)->pic,              'S' },
-	{   "NOINTERMISSION", (int64_t) & ((clusterdef_t*)0)->nointermission,   'b' },
-	{   "SCROLLTEXTEND", (int64_t) & ((clusterdef_t*)0)->scrolltextend,    'b' },
-	{   "PIC_X", (int64_t) & ((clusterdef_t*)0)->pic_x,            'i' },
-	{   "PIC_Y", (int64_t) & ((clusterdef_t*)0)->pic_y,            'i' },
+	{   "PIC", (long) & ((clusterdef_t*)0)->pic,              'S' },
+	{   "NOINTERMISSION", (long) & ((clusterdef_t*)0)->nointermission,   'b' },
+	{   "SCROLLTEXTEND", (long) & ((clusterdef_t*)0)->scrolltextend,    'b' },
+	{   "PIC_X", (long) & ((clusterdef_t*)0)->pic_x,            'i' },
+	{   "PIC_Y", (long) & ((clusterdef_t*)0)->pic_y,            'i' },
 	{   NULL,                   0,                                          0   }
 };
 
 static scdatatable_t episodedatatable[] = {
-	{ "NAME", (int64_t) & ((episodedef_t*)0)->name, 's'},
-	{ "KEY", (int64_t) & ((episodedef_t*)0)->key, 's'}
+	{ "NAME", (long) & ((episodedef_t*)0)->name, 's'},
+	{ "KEY", (long) & ((episodedef_t*)0)->key, 's'}
 };
 
 static void P_InitMapInfo(void) {
@@ -1185,7 +1185,7 @@ static void P_InitMapInfo(void) {
 					// get music track ID
 					//
 					if (!w3sstrcasecmp(sc_parser.token, "MUSIC")) {
-						int8_t* text;
+						char* text;
 						int ds_start;
 						int ds_end;
 						int lump;
@@ -1196,7 +1196,7 @@ static void P_InitMapInfo(void) {
 						ds_start = W_GetNumForName("DM_START") + 1;
 						ds_end = W_GetNumForName("DM_END") - 1;
 
-						lump = W_GetNumForName(text);
+						lump = W_GetNumForName((const char*)text);
 
 						if (lump > ds_end && lump < ds_start) {
 							CON_Warnf("P_InitMapInfo: Invalid music name: %s\n", text);
