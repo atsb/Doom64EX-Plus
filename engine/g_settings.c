@@ -42,13 +42,7 @@
 #include "con_console.h"
 #include "i_system.h"
 
-static char* ConfigFileName =
-#if defined(VITA)
-"ux0:data/DOOM64EX+/config.cfg"
-#else
-"config.cfg"
-#endif
-;
+static char* ConfigFileName = "config.cfg";
 char    DefaultConfig[] = 
 #include "defconfig.inc"    
 ;

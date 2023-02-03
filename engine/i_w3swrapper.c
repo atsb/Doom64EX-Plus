@@ -72,7 +72,7 @@ int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args)
 #endif
 #endif
 //
-// dhtoi
+// htoi
 //
 
 int htoi(char* str) {
@@ -103,7 +103,7 @@ int htoi(char* str) {
 }
 
 //
-// dfcmp
+// fcmp
 //
 
 boolean fcmp(float f1, float f2) {
