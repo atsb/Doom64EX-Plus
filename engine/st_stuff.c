@@ -1264,7 +1264,7 @@ static void ST_FeedChatMsg(event_t* ev) {
 		ST_QueueChatChar((char)c);
 		break;
 	case KEY_ESCAPE:
-		len = strlen(st_chatstring[consoleplayer]);
+		len = (int)strlen(st_chatstring[consoleplayer]);
 		st_chatOn = false;
 		memset(st_chatstring[consoleplayer], 0, len);
 		break;
@@ -1336,7 +1336,7 @@ static void ST_EatChatMsg(void) {
 
 		c = players[i].cmd.chatchar;
 
-		len = strlen(st_chatstring[i]);
+		len = (int)strlen(st_chatstring[i]);
 
 		switch (c) {
 		case KEY_ENTER:

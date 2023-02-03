@@ -184,7 +184,7 @@ void DEH_AddStringReplacement(const char *from_text, const char *to_text)
         Z_Free(sub->to_text);
 
         len = strlen(to_text) + 1;
-        sub->to_text = Z_Malloc(len, PU_STATIC, NULL);
+        sub->to_text = Z_Malloc((int)len, PU_STATIC, NULL);
         memcpy(sub->to_text, to_text, len);
     }
     else
@@ -194,11 +194,11 @@ void DEH_AddStringReplacement(const char *from_text, const char *to_text)
 
         // We need to create our own duplicates of the provided strings.
         len = strlen(from_text) + 1;
-        sub->from_text = Z_Malloc(len, PU_STATIC, NULL);
+        sub->from_text = Z_Malloc((int)len, PU_STATIC, NULL);
         memcpy(sub->from_text, from_text, len);
 
         len = strlen(to_text) + 1;
-        sub->to_text = Z_Malloc(len, PU_STATIC, NULL);
+        sub->to_text = Z_Malloc((int)len, PU_STATIC, NULL);
         memcpy(sub->to_text, to_text, len);
 
         DEH_AddToHashtable(sub);
@@ -426,7 +426,7 @@ void DEH_snprintf(char *buffer, size_t len, const char *fmt, ...)
 
     va_start(args, fmt);
 
-    w3svsnprintf(buffer, len, repl, args);
+    w3svsnprintf(buffer, (unsigned int)len, repl, args);
 
     va_end(args);
 }

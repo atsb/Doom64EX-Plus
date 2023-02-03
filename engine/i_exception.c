@@ -266,8 +266,9 @@ static const TCHAR *PhraseForException(DWORD code) {
 //
 static void PrintHeader(void) {
     TCHAR *crashModuleFn = _T("Unknown");
+#ifdef _M_IX86
     MEMORY_BASIC_INFORMATION memoryInfo;
-
+#endif
     ZeroMemory(crashModulePath, sizeof(crashModulePath));
 
 #ifdef _M_IX86
@@ -375,7 +376,7 @@ static void PrintOSInfo(void) {
 
         wsprintf(mmb, _T("%u.%u.%u"), majorVersion, minorVersion, buildNumber);
 
-        LogPrintf("Operating system: %s\r\n", mmb);
+        LogPrintf((LPCTSTR)"Operating system: %s\r\n", mmb);
     }
     else {
         LogPrintf(_T("%s"), "Operating system unknown\r\n");

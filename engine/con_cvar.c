@@ -85,7 +85,7 @@ float CON_CvarValue(char* name) {
 		return 0;
 	}
 
-	return atof(var->string);
+	return (float)atof(var->string);
 }
 
 //
@@ -122,9 +122,9 @@ void CON_CvarSet(char* var_name, char* value) {
 
 	Z_Free(var->string);    // free the old value string
 
-	var->string = Z_Malloc(strlen(value) + 1, PU_STATIC, 0);
+	var->string = Z_Malloc((int)strlen(value) + 1, PU_STATIC, 0);
 	strcpy(var->string, value);
-	var->value = atof(var->string);
+	var->value = (float)atof(var->string);
 
 	if (var->callback) {
 		var->callback(var);
@@ -157,10 +157,10 @@ void CON_CvarRegister(cvar_t* variable) {
 
 	// copy the value off, because future sets will Z_Free it
 	oldstr = variable->string;
-	variable->string = Z_Malloc(strlen(variable->string) + 1, PU_STATIC, 0);
+	variable->string = Z_Malloc((int)strlen(variable->string) + 1, PU_STATIC, 0);
 	strcpy(variable->string, oldstr);
-	variable->value = atof(variable->string);
-	variable->defvalue = Z_Malloc(strlen(variable->string) + 1, PU_STATIC, 0);
+	variable->value = (float)atof(variable->string);
+	variable->defvalue = Z_Malloc((int)strlen(variable->string) + 1, PU_STATIC, 0);
 	strcpy(variable->defvalue, variable->string);
 
 	// link the variable in

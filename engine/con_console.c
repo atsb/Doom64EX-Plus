@@ -144,7 +144,7 @@ void CON_AddLine(char* line, int len) {
 	}
 
 	if (len == -1) {
-		len = strlen(line);
+		len = (int)strlen(line);
 	}
 
 	cline = (conline_t*)Z_Malloc(sizeof(conline_t) + len, PU_STATIC, NULL);

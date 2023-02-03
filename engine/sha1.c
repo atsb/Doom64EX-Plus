@@ -316,6 +316,6 @@ void SHA1_UpdateInt32(sha1_context_t *context, unsigned int val)
 
 void SHA1_UpdateString(sha1_context_t *context, char *str)
 {
-    SHA1_Update(context, (unsigned char*) str, strlen(str) + 1);
+    SHA1_Update(context, (unsigned char*) str, (unsigned int)strlen(str) + 1);
 }
 

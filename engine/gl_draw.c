@@ -333,7 +333,7 @@ int Center_Text(const char* string) {
 	int i = 0;
 	float scale;
 
-	len = strlen(string);
+	len = (int)strlen(string);
 
 	for (i = 0; i < len; i++) {
 		t = string[i];
@@ -448,8 +448,8 @@ int Draw_BigText(int x, int y, unsigned int color, const char* string) {
 			if (c >= 'a' && c <= 'z') {
 				index = (c - 'a') + SM_FONT2;
 			}
-			if (c >= 'Ȁ' && c <= 'Ñ') {
-				index = (c - 'Ȁ') + SM_FONT3;
+			if (c >= 'À' && c <= 'Ñ') {
+				index = (c - 'À') + SM_FONT3;
 			}
 			if (c == '-') {
 				index = SM_MISCFONT;

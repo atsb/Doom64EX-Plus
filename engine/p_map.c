@@ -1321,7 +1321,7 @@ fixed_t P_AimLineAttack(mobj_t* t1, angle_t angle, fixed_t zheight, fixed_t dist
 	}
 
     if (t1->player) {
-        pitch = cos(abs(t1->pitch - ANG90));
+        pitch = (fixed_t)cos(abs(t1->pitch - ANG90));
     }
 
 	P_PathTraverse(t1->x, t1->y, x2, y2, flags, PTR_AimTraverse);

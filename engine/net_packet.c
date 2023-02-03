@@ -291,5 +291,5 @@ void NET_WriteString(net_packet_t* packet, char* string)
 
 	strcpy((char*)p, string);
 
-	packet->len += strlen(string) + 1;
+	packet->len += (unsigned int)strlen(string) + 1;
 }

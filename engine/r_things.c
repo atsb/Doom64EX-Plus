@@ -153,7 +153,7 @@ void R_InitSprites(char** namelist) {
 		return;
 	}
 
-	spriteinfo = Z_Malloc(numsprites * sizeof(*spriteinfo), PU_STATIC, NULL);
+	spriteinfo = Z_Malloc((int)numsprites * sizeof(*spriteinfo), PU_STATIC, NULL);
 
 	start = s_start - 1;
 	end = s_end + 1;

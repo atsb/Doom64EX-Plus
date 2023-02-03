@@ -239,7 +239,7 @@ CVAR_CMD(m_menumouse, 1) {
 	SDL_ShowCursor(cvar->value < 1);
 	if (cvar->value <= 0) {
 		itemSelected = -1;
-		SDL_ShowCursor(cvar->value = 0);
+		SDL_ShowCursor((int)cvar->value = 0);
 	}
 }
 
@@ -2924,7 +2924,7 @@ void M_BuildControlMenu(void) {
 	for (item = 0; item < actions; item++) {
 		strcpy(menu->menuitems[item].name, PlayerActions[item].name);
 		if (PlayerActions[item].action) {
-			for (i = strlen(PlayerActions[item].name); i < 17; i++) {
+			for (i = (int)strlen(PlayerActions[item].name); i < 17; i++) {
 				menu->menuitems[item].name[i] = ' ';
 			}
 
@@ -3639,7 +3639,7 @@ static void M_SetInputString(char* string, int len) {
 #endif
 	}
 
-	inputCharIndex = strlen(inputString);
+	inputCharIndex = (int)strlen(inputString);
 	inputMax = len;
 }
 
@@ -3691,7 +3691,7 @@ static int M_BigStringWidth(const char* string) {
 	int len = 0;
 	int i = 0;
 
-	len = strlen(string);
+	len = (int)strlen(string);
 
 	for (i = 0; i < len; i++) {
 		t = string[i];

@@ -70,7 +70,7 @@ static CMD(DumpGLExtensions) {
 	int len = 0;
 
 	string = (char*)glGetString(GL_EXTENSIONS);
-	len = strlen(string);
+	len = (int)strlen(string);
 
 	for (i = 0; i < len; i++) {
 		if (string[i] == 0x20) {

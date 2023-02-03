@@ -49,7 +49,7 @@ char* D_FindWADByName(char* name)
 
     // Absolute path?
 
-    probe = M_FileExists(name);
+    probe = (char*)M_FileExists(name);
     if (probe != NULL)
     {
         return probe;
@@ -63,7 +63,7 @@ char* D_FindWADByName(char* name)
         // the "directory" may actually refer directly to an IWAD
         // file.
 
-        probe = M_FileExists(iwad_dirs[i]);
+        probe = (char*)M_FileExists(iwad_dirs[i]);
         //if (DirIsFile(iwad_dirs[i], name) && probe != NULL)
         {
             return probe;
@@ -73,7 +73,7 @@ char* D_FindWADByName(char* name)
 
         //path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR, name, NULL);
 
-        probe = M_FileExists(path);
+        probe = (char*)M_FileExists(path);
         if (probe != NULL)
         {
             return probe;

@@ -107,7 +107,7 @@ void MD5_UpdateInt32(md5_context_t *context, unsigned int val)
 
 void MD5_UpdateString(md5_context_t *context, char *str)
 {
-        MD5_Update(context, (unsigned char*) str, strlen(str) + 1);
+        MD5_Update(context, (unsigned char*) str, (unsigned int)strlen(str) + 1);
 }
 
 /*

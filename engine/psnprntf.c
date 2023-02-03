@@ -345,10 +345,10 @@ int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
 
     /* Truncate due to precision */
     if(info->precision < 0) {
-        len = strlen(str);
+        len = (int)strlen(str);
     }
     else {
-        len = pstrnlen(str, info->precision);
+        len = (int)pstrnlen(str, info->precision);
     }
 
     /* Determine padding length */
@@ -809,7 +809,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
     }
 
     if(special) {
-        totallen = len = strlen(special);
+        totallen = len = (int)strlen(special);
 
         /* Sign (this is silly for NaN but conforming to printf */
         if(flags & (FLAG_SIGNED | FLAG_SIGN_PAD) || sign) {
@@ -911,7 +911,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
         }
 
         digits = FCVT(value, precision, &dec, &sign);
-        len = strlen(digits);
+        len = (int)strlen(digits);
 
         if(dec > 0) {
             totallen = dec;
