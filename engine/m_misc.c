@@ -360,7 +360,7 @@ boolean M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 		return false;
 	}
 
-	len = strlen(dest);
+	len = (unsigned int)strlen(dest);
 	return src[len] == '\0';
 }
 

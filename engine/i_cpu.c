@@ -75,7 +75,7 @@ void I_SetAffinityMask(void)
 
 	// Find the kernel interface DLL.
 
-	kernel32_dll = LoadLibrary("kernel32.dll");
+	kernel32_dll = LoadLibrary((LPCWSTR)"kernel32.dll");
 
 	if (kernel32_dll == NULL) {
 		// This should never happen...

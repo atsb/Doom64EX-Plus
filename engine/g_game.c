@@ -870,15 +870,15 @@ void G_DoCmdGamepadMove(event_t* ev)
 		// left analog stick
 		//
 		if (ev->data3 == GAMEPAD_LSTICK) {
-			pc->joyx += (float) ev->data1 * 0.0015f;
-			pc->joyy += (float) ev->data2 * 0.0015f;
+			pc->joyx += ev->data1 * 0.0015f;
+			pc->joyy += ev->data2 * 0.0015f;
 		}
 		//
 		// right analog stick
 		//
 		else if (ev->data3 == GAMEPAD_RSTICK) {
-			int x = (float)ev->data1 * i_rsticksensitivityx.value * 0.0015f;
-			int y = (float)ev->data2 * i_rsticksensitivityy.value * 0.0015f;
+			int x = ev->data1 * (int)i_rsticksensitivityx.value * 0.0015f;
+			int y = ev->data2 * (int)i_rsticksensitivityy.value * 0.0015f;
 			pc->mousex += x;
 			pc->mousey += y;
 		}

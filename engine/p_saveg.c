@@ -178,7 +178,7 @@ static void saveg_setup_mobjwrite(void) {
     // count mobjs
     for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
         // don't save if mobj is expected to be removed
-        if (mobj->mobjfunc == P_SafeRemoveMobj) {
+        if (mobj->mobjfunc == (struct mobj_s*)P_SafeRemoveMobj) {
             continue;
         }
 
@@ -192,7 +192,7 @@ static void saveg_setup_mobjwrite(void) {
     // store index and mobj
     for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
         // don't save if mobj is expected to be removed
-        if (mobj->mobjfunc == P_SafeRemoveMobj) {
+        if (mobj->mobjfunc == (struct mobj_s*)P_SafeRemoveMobj) {
             continue;
         }
 
@@ -362,7 +362,7 @@ static void saveg_write_mobj_t(mobj_t* mo) {
     saveg_write32(mo->frame_x);
     saveg_write32(mo->frame_y);
     saveg_write32(mo->frame_z);
-    saveg_write32(mo->mobjfunc == P_RespawnSpecials ? 1 : 0);
+    saveg_write32(mo->mobjfunc == (struct mobj_s*)P_RespawnSpecials ? 1 : 0);
 }
 
 static void saveg_read_mobj_t(mobj_t* mo) {
@@ -412,7 +412,7 @@ static void saveg_read_mobj_t(mobj_t* mo) {
     mo->frame_x = saveg_read32();
     mo->frame_y = saveg_read32();
     mo->frame_z = saveg_read32();
-    mo->mobjfunc = saveg_read32() ? P_RespawnSpecials : NULL;
+    mo->mobjfunc = saveg_read32() ? (struct mobj_s*)P_RespawnSpecials : NULL;
 }
 
 //
@@ -1117,7 +1117,7 @@ static void saveg_write_header(char* description) {
     }
 
     sprintf(date, "%s", saveg_gettime());
-    size = strlen(date);
+    size = (int)strlen(date);
 
     for (i = 0; i < size; i++) {
         saveg_write8(date[i]);
@@ -1527,7 +1527,7 @@ void P_ArchiveMobjs(void) {
     // save off the current mobjs
     for (mobj = mobjhead.next; mobj != &mobjhead; mobj = mobj->next) {
         // don't save if mobj is expected to be removed
-        if (mobj->mobjfunc == P_SafeRemoveMobj) {
+        if (mobj->mobjfunc == (struct mobj_s*)P_SafeRemoveMobj) {
             continue;
         }
 

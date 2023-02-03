@@ -79,7 +79,7 @@ DIR *opendir(const char *szPath) {
     }
 
     /* Attempt to determine if the given path really is a directory. */
-    rc = GetFileAttributes(szPath);
+    rc = GetFileAttributes((LPCWSTR)szPath);
     if(rc == (unsigned int)-1) {
         /* call GetLastError for more error info */
         errno = ENOENT;
@@ -92,11 +92,11 @@ DIR *opendir(const char *szPath) {
     }
 
     /* Make an absolute pathname.  */
-    _tfullpath(szFullPath, szPath, MAX_PATH);
+    _tfullpath((wchar_t*)szFullPath, (const wchar_t*)szPath, MAX_PATH);
 
     /* Allocate enough space to store DIR structure and the complete
     * directory path given. */
-    nd = (DIR *) malloc(sizeof(DIR) + (_tcslen(szFullPath)
+    nd = (DIR *) malloc(sizeof(DIR) + (_tcslen((const wchar_t*)szFullPath)
                                        + _tcslen(SLASH)
                                        + _tcslen(SUFFIX) + 1)
                         * sizeof(_TCHAR));
@@ -108,19 +108,19 @@ DIR *opendir(const char *szPath) {
     }
 
     /* Create the search expression. */
-    _tcscpy(nd->dd_name, szFullPath);
+    _tcscpy((const wchar_t*)nd->dd_name, (const wchar_t*)szFullPath);
 
     /* Add on a slash if the path does not end with one. */
-    if(nd->dd_name[0] != _T('\0')
-            && _tcsrchr(nd->dd_name, _T('/'))  != nd->dd_name
-            + _tcslen(nd->dd_name) - 1
-            && _tcsrchr(nd->dd_name, _T('\\')) != nd->dd_name
-            + _tcslen(nd->dd_name) - 1) {
-        _tcscat(nd->dd_name, SLASH);
+    if((const wchar_t*)nd->dd_name[0] != _T('\0')
+            && _tcsrchr((const wchar_t*)nd->dd_name, _T('/'))  != (const wchar_t*)nd->dd_name
+            + _tcslen((const wchar_t*)nd->dd_name) - 1
+            && _tcsrchr((const wchar_t*)nd->dd_name, _T('\\')) != (const wchar_t*)nd->dd_name
+            + _tcslen((const wchar_t*)nd->dd_name) - 1) {
+        _tcscat((const wchar_t*)nd->dd_name, SLASH);
     }
 
     /* Add on the search pattern */
-    _tcscat(nd->dd_name, SUFFIX);
+    _tcscat((const wchar_t*)nd->dd_name, SUFFIX);
 
     /* Initialize handle to -1 so that a premature closedir doesn't try
     * to call _findclose on it. */
@@ -163,7 +163,7 @@ struct dirent *readdir(DIR *dirp) {
     else if(dirp->dd_stat == 0) {
         /* We haven't started the search yet. */
         /* Start the search */
-        dirp->dd_handle = _tfindfirst(dirp->dd_name, &(dirp->dd_dta));
+        dirp->dd_handle = (long)_tfindfirst((const wchar_t*)dirp->dd_name, &(dirp->dd_dta));
 
         if(dirp->dd_handle == -1) {
             /* Whoops! Seems there are no files in that
@@ -199,8 +199,8 @@ struct dirent *readdir(DIR *dirp) {
         /* Successfully got an entry. Everything about the file is
          * already appropriately filled in except the length of the
          * file name. */
-        dirp->dd_dir.d_namlen = _tcslen(dirp->dd_dta.name);
-        _tcscpy(dirp->dd_dir.d_name, dirp->dd_dta.name);
+        dirp->dd_dir.d_namlen = (unsigned short)_tcslen((const wchar_t*)dirp->dd_dta.name);
+        _tcscpy((const wchar_t*)dirp->dd_dir.d_name, (const wchar_t*)dirp->dd_dta.name);
         return &dirp->dd_dir;
     }
 

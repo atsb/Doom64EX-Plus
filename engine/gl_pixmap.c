@@ -92,7 +92,7 @@ void FilterNearest(dpixmap *dst, const dpixmap *src)
 
 void FilterBox(dpixmap *dst, const dpixmap *src)
 {
-	int i, j;
+	int i;
 	int pitch[5];
 	unsigned char *src_ptr, *dst_ptr;
 	int src_x, src_y;
@@ -118,14 +118,14 @@ void FilterBox(dpixmap *dst, const dpixmap *src)
 				src_x = F2INT(ratio_x * dst_x);
 				for (x = 0; x < F2INT(ratio_x); x++) {
 					src_ptr = PixmapByte(src, src_x, src_y);
-					for (i = 0; i < pitch; i++)
+					for (i = 0; i < (int)pitch; i++)
 						pitch[i] += src_ptr[i];
 					src_x++;
 				}
 				src_y++;
 			}
 
-			for (i = 0; i < pitch; i++)
+			for (i = 0; i < (int)pitch; i++)
 				dst_ptr[i] = pitch[i] / (F2INT(ratio_x) * F2INT(ratio_y));
 
 			dst_ptr += pitch[i];
@@ -164,8 +164,8 @@ void PixmapResize(dpixmap *pm, short width, short height)
 		pm->h = height;
 	} else {
 		pm->map = NULL;
-		pm->w = NULL;
-		pm->h = NULL;
+		pm->w = (short)NULL;
+		pm->h = (short)NULL;
 	}
 }
 
@@ -376,7 +376,7 @@ void GL_PixmapFlipRotate(dpixmap *dst, const dpixmap *src, int flag)
 	}
 
 	if (free_src) {
-		GL_PixmapFree(src);
+		GL_PixmapFree((dpixmap*)src);
 	}
 }
 
@@ -431,7 +431,7 @@ void GL_PixmapScaleTo(dpixmap** dst, const dpixmap* src, short width, short heig
 	}
 	
 	if (free_src) {
-		GL_PixmapFree(src);
+		GL_PixmapFree((dpixmap*)src);
 	}
 }
 

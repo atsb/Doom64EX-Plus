@@ -410,7 +410,7 @@ char* (Z_Strdup)(const char* s, int tag, void* user, const char* file, int line)
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Strdup(file=%s:%d)\n", file, line);
 #endif
-	return strcpy((Z_Malloc)(strlen(s) + 1, tag, user, file, line), s);
+	return strcpy((Z_Malloc)((int)strlen(s) + 1, tag, user, file, line), s);
 }
 
 //
@@ -423,7 +423,7 @@ char* (Z_Strdupa)(const char* s, const char* file, int line) {
 #ifdef ZONEFILE
 	Z_LogPrintf("* Z_Strdupa(file=%s:%d)\n", file, line);
 #endif
-	return strcpy((Z_Alloca)(strlen(s) + 1, file, line), s);
+	return strcpy((Z_Alloca)((int)strlen(s) + 1, file, line), s);
 }
 
 //

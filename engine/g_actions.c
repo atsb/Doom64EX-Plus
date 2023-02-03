@@ -254,7 +254,7 @@ alist_t* DoRunActions(alist_t* al, boolean free) {
 			if (!al->param[0]) {
 				char str[256];
 				sprintf(str, "%s: %s (%s)", cvar->name, cvar->string, cvar->defvalue);
-				CON_AddLine(str, strlen(str));
+				CON_AddLine(str, (int)strlen(str));
 			}
 			else {
 				CON_CvarSet(cvar->name, al->param[0]);

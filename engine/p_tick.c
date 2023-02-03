@@ -159,9 +159,9 @@ void P_RunMobjs(void) {
 
 		if (!currentmobj->player) {
 			// [kex] don't bother if about to be removed
-			if (currentmobj->mobjfunc != P_SafeRemoveMobj) {
+			if (currentmobj->mobjfunc != (struct mobj_s*)P_SafeRemoveMobj) {
 				// [kex] don't clear callback if mobj is going to be respawning
-				if (currentmobj->mobjfunc != P_RespawnSpecials) {
+				if (currentmobj->mobjfunc != (struct mobj_s*)P_RespawnSpecials) {
 					currentmobj->mobjfunc = NULL;
 				}
 

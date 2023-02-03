@@ -97,7 +97,7 @@ unsigned int W_StdC_Read(wad_file_t* wad, unsigned int offset,
 
 	// Read into the buffer.
 
-	result = fread(buffer, 1, buffer_len, stdc_wad->fstream);
+	result = (unsigned int)fread(buffer, 1, buffer_len, stdc_wad->fstream);
 
 	return result;
 }
