@@ -4214,8 +4214,8 @@ void M_DrawXInputButton(int x, int y, int button) {
 		color
 	);
 
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
+	RB_AddTriangle(0, 1, 2);
+	RB_AddTriangle(3, 2, 1);
 	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
@@ -4703,8 +4703,8 @@ static void M_DrawMenuSkull(int x, int y) {
 		color
 	);
 
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
+	RB_AddTriangle(0, 1, 2);
+	RB_AddTriangle(3, 2, 1);
 	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();

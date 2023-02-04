@@ -240,8 +240,8 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 		lx = x;
 		ly = y;
 
-		dglTriangle(0 + count, 1 + count, 2 + count);
-		dglTriangle(3 + count, 0 + count, 2 + count);
+		RB_AddTriangle(0 + count, 1 + count, 2 + count);
+		RB_AddTriangle(3 + count, 0 + count, 2 + count);
 		count += 4;
 
 		tu1 += tu2;
@@ -320,8 +320,8 @@ static void R_DrawSkyboxCloud(void) {
 
 	dglSetVertexColor(&v[0], sky->skycolor[0], 4);
 
-	dglTriangle(0, 1, 3);
-	dglTriangle(2, 3, 1);
+	RB_AddTriangle(0, 1, 3);
+	RB_AddTriangle(2, 3, 1);
 	dglDrawGeometry(4, v);
 
 	//
@@ -345,8 +345,8 @@ static void R_DrawSkyboxCloud(void) {
 	dglSetVertexColor(&v[2], sky->skycolor[0], 1);
 	dglSetVertexColor(&v[3], sky->skycolor[1], 1);
 
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 0, 2);
+	RB_AddTriangle(0, 1, 2);
+	RB_AddTriangle(3, 0, 2);
 	dglDrawGeometry(4, v);
 	dglEnable(GL_TEXTURE_2D);
 	dglPopMatrix();
@@ -393,8 +393,8 @@ static void R_DrawSkyboxCloud(void) {
 	SKYBOX_SETALPHA(color, 0x3f);
 	dglSetVertexColor(&v[0], color, 4);
 
-	dglTriangle(0, 1, 3);
-	dglTriangle(2, 3, 1);
+	RB_AddTriangle(0, 1, 3);
+	RB_AddTriangle(2, 3, 1);
 	dglDrawGeometry(4, v);
 
 	//
@@ -413,8 +413,8 @@ static void R_DrawSkyboxCloud(void) {
 	v[3].tv = 32 + sky_cloudpan2;
 	v[0].z = v[1].z = v[2].z = v[3].z = 1024;
 
-	dglTriangle(0, 1, 3);
-	dglTriangle(2, 3, 1);
+	RB_AddTriangle(0, 1, 3);
+	RB_AddTriangle(2, 3, 1);
 	dglDrawGeometry(4, v);
 
 	//
@@ -424,8 +424,8 @@ static void R_DrawSkyboxCloud(void) {
 	glDisable(GL_TEXTURE_2D);
 	SKYBOX_SETALPHA(color, 0x1f);
 	dglSetVertexColor(&v[0], color, 4);
-	dglTriangle(0, 1, 3);
-	dglTriangle(2, 3, 1);
+	RB_AddTriangle(0, 1, 3);
+	RB_AddTriangle(2, 3, 1);
 	dglDrawGeometry(4, v);
 	glEnable(GL_TEXTURE_2D);
 
@@ -545,8 +545,8 @@ static void R_DrawClouds(void) {
 	glEnable(GL_ALPHA);
 	glPushMatrix();
 	glTranslated(0.0f, 0.0f, -1.0f);
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
+	RB_AddTriangle(0, 1, 2);
+	RB_AddTriangle(3, 2, 1);
 	dglDrawGeometry(4, v);
 	glPopMatrix();
 	glDisable(GL_ALPHA);

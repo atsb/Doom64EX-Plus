@@ -54,8 +54,8 @@ static boolean ProcessWalls(vtxlist_t* vl, int* drawcount) {
 		return false;
 	}
 
-	dglTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
-	dglTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
+	RB_AddTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
+	RB_AddTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
 
 	*drawcount += 4;
 
@@ -81,7 +81,7 @@ static boolean ProcessFlats(vtxlist_t* vl, int* drawcount) {
 	count = *drawcount;
 
 	for (j = 0; j < ss->numleafs - 2; j++) {
-		dglTriangle(count, count + 1 + j, count + 2 + j);
+		RB_AddTriangle(count, count + 1 + j, count + 2 + j);
 	}
 
 	// need to keep texture coords small to avoid
@@ -188,8 +188,8 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 
 	GL_SetState(GLSTATE_CULL, !(mobj->flags & MF_RENDERLASER));
 
-	dglTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
-	dglTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
+	RB_AddTriangle(*drawcount + 0, *drawcount + 1, *drawcount + 2);
+	RB_AddTriangle(*drawcount + 3, *drawcount + 2, *drawcount + 1);
 
 	*drawcount += 4;
 

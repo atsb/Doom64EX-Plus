@@ -646,12 +646,12 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	//
 	// setup texture environment for effects
 	//
-	int l = (sector->lightlevel >> 1);
+	int lightlevel = (sector->lightlevel + 64); // haleyjd: slightly brighter
 
-	GL_SetTextureUnit(1, true);
-	GL_SetTextureMode(GL_ADD);
-	GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-	GL_SetTextureUnit(0, true);
+	if (lightlevel > 0xff)
+	{
+		lightlevel = 0xff;
+	}
 
 	if (nolights)
 	{
@@ -660,8 +660,8 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	// render
 	dglSetVertex(v);
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
+	RB_AddTriangle(0, 1, 2);
+	RB_AddTriangle(3, 2, 1);
 	dglDrawGeometry(4, v);
 
 	GL_ResetViewport();
