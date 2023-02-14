@@ -1855,8 +1855,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255,        // alpha
-		S_CPOS_RAISE1        //raisestate
+		255        // alpha
 	},
 
 	{
