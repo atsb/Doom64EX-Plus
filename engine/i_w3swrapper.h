@@ -62,11 +62,9 @@ typedef unsigned char boolean;
 
 #ifdef _WIN32
 #ifdef _XBOX
-#include <xtl.h>
 #include <XObjBase.h>
 #include <basetsd.h>
 #else
-#include <Windows.h>
 #include <rpc.h>
 #include <rpcndr.h>
 #endif

@@ -3666,7 +3666,7 @@ static int M_StringWidth(const char* string) {
 	int w = 0;
 	int c;
 
-	for (i = 0; i < strlen(string); i++) {
+	for (i = 0; i < (int)strlen(string); i++) {
 		c = toupper(string[i]) - ST_FONTSTART;
 		if (c < 0 || c >= ST_FONTSIZE) {
 			w += 4;

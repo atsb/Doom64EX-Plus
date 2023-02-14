@@ -237,8 +237,8 @@ boolean    P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y);
 void        P_SlideMove(mobj_t* mo);
 boolean    P_CheckSight(mobj_t* t1, mobj_t* t2);
 void        P_ScanSights(void);
-boolean    P_UseLines(player_t* player, boolean showcontext);
-boolean    P_ChangeSector(sector_t* sector, boolean crunch);
+boolean    P_UseLines(player_t* player, int showcontext);
+boolean    P_ChangeSector(sector_t* sector, int crunch);
 mobj_t* P_CheckOnMobj(mobj_t* thing);
 void        P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t y);
 

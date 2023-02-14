@@ -1516,9 +1516,12 @@ typedef enum {
 	MT_UNDEAD,			//172
 	MT_PROJ_UNDEAD,		//173
 	MT_SPIDER,			//174
-	MT_TESTA0,			//175
-	NUMMOBJTYPES		//176
+	MT_FIRE,            //175
+	MT_VILE,            //176
+	MT_TESTA0,			//177
+	NUMMOBJTYPES		//178
 } mobjtype_t;
+
 
 typedef struct {
 	int    doomednum;

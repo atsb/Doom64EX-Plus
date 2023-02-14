@@ -414,7 +414,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_FLUIDLITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;USE_GLM;PSNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDLITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -431,7 +431,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;USE_FLUIDSYNTH_LITE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;USE_FLUIDSYNTH_LITE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -448,7 +448,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USE_FLUIDSYNTH_LITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;CGLM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FLUIDSYNTH_LITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -465,7 +465,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;HAVE_M_PI;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;HAVE_M_PI;_USE_MATH_DEFINES;_STDCALL_SUPPORTED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>

@@ -86,7 +86,7 @@ void IN_Start(void) {
 	i = 0;
 
 	// setup intermission text
-	while (k < strlen(fcluster->text)) {
+	while (k < (int)strlen(fcluster->text)) {
 		char c = fcluster->text[k++];
 
 		if (c == '\n') {

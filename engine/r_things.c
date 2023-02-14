@@ -645,9 +645,9 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	//
 	l = (sector->lightlevel >> 1);
 
-	if (lightlevel > 0xff)
+	if (l > 0xff)
 	{
-		lightlevel = 0xff;
+		l = 0xff;
 	}
 
 	if (nolights)

@@ -108,7 +108,7 @@ DIR *opendir(const char *szPath) {
     }
 
     /* Create the search expression. */
-    _tcscpy((const wchar_t*)nd->dd_name, (const wchar_t*)szFullPath);
+    _tcscpy((wchar_t*)nd->dd_name, (const wchar_t*)szFullPath);
 
     /* Add on a slash if the path does not end with one. */
     if((const wchar_t*)nd->dd_name[0] != _T('\0')
@@ -116,11 +116,11 @@ DIR *opendir(const char *szPath) {
             + _tcslen((const wchar_t*)nd->dd_name) - 1
             && _tcsrchr((const wchar_t*)nd->dd_name, _T('\\')) != (const wchar_t*)nd->dd_name
             + _tcslen((const wchar_t*)nd->dd_name) - 1) {
-        _tcscat((const wchar_t*)nd->dd_name, SLASH);
+        _tcscat((wchar_t*)nd->dd_name, SLASH);
     }
 
     /* Add on the search pattern */
-    _tcscat((const wchar_t*)nd->dd_name, SUFFIX);
+    _tcscat((wchar_t*)nd->dd_name, SUFFIX);
 
     /* Initialize handle to -1 so that a premature closedir doesn't try
     * to call _findclose on it. */
@@ -163,7 +163,7 @@ struct dirent *readdir(DIR *dirp) {
     else if(dirp->dd_stat == 0) {
         /* We haven't started the search yet. */
         /* Start the search */
-        dirp->dd_handle = (long)_tfindfirst((const wchar_t*)dirp->dd_name, &(dirp->dd_dta));
+        dirp->dd_handle = (long)_tfindfirst((const wchar_t*)dirp->dd_name, (struct _wfinddata64i32_t*)&(dirp->dd_dta));
 
         if(dirp->dd_handle == -1) {
             /* Whoops! Seems there are no files in that
@@ -176,7 +176,7 @@ struct dirent *readdir(DIR *dirp) {
     }
     else {
         /* Get the next search entry. */
-        if(_tfindnext(dirp->dd_handle, &(dirp->dd_dta))) {
+        if(_tfindnext(dirp->dd_handle, (struct _wfinddata64i32_t*)&(dirp->dd_dta))) {
             /* We are off the end or otherwise error.
                _findnext sets errno to ENOENT if no more file
                Undo this. */
@@ -200,7 +200,7 @@ struct dirent *readdir(DIR *dirp) {
          * already appropriately filled in except the length of the
          * file name. */
         dirp->dd_dir.d_namlen = (unsigned short)_tcslen((const wchar_t*)dirp->dd_dta.name);
-        _tcscpy((const wchar_t*)dirp->dd_dir.d_name, (const wchar_t*)dirp->dd_dta.name);
+        _tcscpy((wchar_t*)dirp->dd_dir.d_name, (const wchar_t*)dirp->dd_dta.name);
         return &dirp->dd_dir;
     }
 
