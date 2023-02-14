@@ -67,6 +67,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"ARCR",
 	"POW1",
 	"SPID",
+	"VFIR",
+	"VILE",
 	"TEST",
 	NULL
 };
@@ -151,6 +153,13 @@ void A_SkelFist();
 void A_SkelAttack();
 void A_SpidAttack();
 void A_SpidDeathEvent();
+void A_Fire();
+void A_StartFire();
+void A_FireCrackle();
+void A_VileChase();
+void A_VileStart();
+void A_VileTarget();
+void A_VileAttack();
 
 #pragma warning(push)
 #pragma warning(disable:4113)
@@ -227,6 +236,13 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SARG_ATK0*/         { SPR_SARG, 4, 1, {A_FadeOut}, S_SARG_ATK1 },
 	/*S_SARG_PAIN0*/        { SPR_SARG, 7, 1, {A_FadeOut}, S_SARG_PAIN1 },
 	/*S_SARG_DIE0*/         { SPR_SARG, 8, 1, {A_FadeIn}, S_SARG_DIE1 },
+	/*S_SARG_RAISE0*/       { SPR_SARG, 13, 1, {A_FadeOut}, S_SARG_RAISE1 },
+	/*S_SARG_RAISE1*/       { SPR_SARG, 13, 5, {NULL}, S_SARG_RAISE2 },
+	/*S_SARG_RAISE2*/       { SPR_SARG, 12, 5, {NULL}, S_SARG_RAISE3 },
+	/*S_SARG_RAISE3*/       { SPR_SARG, 11, 5, {NULL}, S_SARG_RAISE4 },
+	/*S_SARG_RAISE4*/       { SPR_SARG, 10, 5, {NULL}, S_SARG_RAISE5 },
+	/*S_SARG_RAISE5*/       { SPR_SARG, 9, 5, {NULL}, S_SARG_RAISE6 },
+	/*S_SARG_RAISE6*/       { SPR_SARG, 8, 5, {NULL}, S_SARG_RUN1 },
 
 	/*S_FATT_STND*/         { SPR_FATT, 0, 15, {A_Look}, S_FATT_STND2 },
 	/*S_FATT_STND2*/        { SPR_FATT, 1, 15, {A_Look}, S_FATT_STND },
@@ -257,6 +273,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_FATT_DIE4*/         { SPR_FATT, 12, 6, {NULL}, S_FATT_DIE5 },
 	/*S_FATT_DIE5*/         { SPR_FATT, 13, 6, {A_OnDeathTrigger}, S_FATT_DIE6 },
 	/*S_FATT_DIE6*/         { SPR_FATT, 14, -1, {NULL}, S_NULL },
+	/*S_FATT_RAISE1*/		{ SPR_FATT, 14, 5, {NULL}, S_FATT_RAISE2 },
+	/*S_FATT_RAISE2*/		{ SPR_FATT, 13, 5, {NULL}, S_FATT_RAISE3 },
+	/*S_FATT_RAISE3*/		{ SPR_FATT, 12, 5, {NULL}, S_FATT_RAISE4 },
+	/*S_FATT_RAISE4*/		{ SPR_FATT, 11, 5, {NULL}, S_FATT_RAISE5 },
+	/*S_FATT_RAISE5*/		{ SPR_FATT, 10, 5, {NULL}, S_FATT_RAISE6 },
+	/*S_FATT_RAISE6*/		{ SPR_FATT, 9, 5, {NULL}, S_FATT_RUN1 },
 
 	/*S_POSS1_STND*/        { SPR_POSS, 0, 10, {A_Look}, S_POSS1_STND2 },
 	/*S_POSS1_STND2*/       { SPR_POSS, 1, 10, {A_Look}, S_POSS1_STND },
@@ -287,6 +309,11 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_POSS1_XDIE7*/       { SPR_POSS, 18, 5, {NULL}, S_POSS1_XDIE8 },
 	/*S_POSS1_XDIE8*/       { SPR_POSS, 19, 5, {A_OnDeathTrigger}, S_POSS1_XDIE9 },
 	/*S_POSS1_XDIE9*/       { SPR_POSS, 20, -1, {NULL}, S_NULL },
+	/*S_POSS1_RAISE1*/		{ SPR_POSS, 11, 5, {NULL}, S_POSS1_RAISE2 },
+	/*S_POSS1_RAISE2*/		{ SPR_POSS, 10, 5, {NULL}, S_POSS1_RAISE3 },
+	/*S_POSS1_RAISE3*/		{ SPR_POSS, 9, 5, {NULL}, S_POSS1_RAISE4 },
+	/*S_POSS1_RAISE4*/		{ SPR_POSS, 8, 5, {NULL}, S_POSS1_RAISE5 },
+	/*S_POSS1_RAISE5*/		{ SPR_POSS, 7, 5, {NULL}, S_POSS1_RUN1 },
 
 	/*S_POSS2_STND*/        { SPR_POSS, 0, 10, {A_Look}, S_POSS2_STND2 },
 	/*S_POSS2_STND2*/       { SPR_POSS, 1, 10, {A_Look}, S_POSS2_STND },
@@ -317,6 +344,11 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_POSS2_XDIE7*/       { SPR_POSS, 18, 5, {NULL}, S_POSS2_XDIE8 },
 	/*S_POSS2_XDIE8*/       { SPR_POSS, 19, 5, {A_OnDeathTrigger}, S_POSS2_XDIE9 },
 	/*S_POSS2_XDIE9*/       { SPR_POSS, 20, -1, {NULL}, S_NULL },
+	/*S_POSS2_RAISE1*/		{ SPR_POSS, 11, 5, {NULL}, S_POSS2_RAISE2 },
+	/*S_POSS2_RAISE2*/		{ SPR_POSS, 10, 5, {NULL}, S_POSS2_RAISE3 },
+	/*S_POSS2_RAISE3*/		{ SPR_POSS, 9, 5, {NULL}, S_POSS2_RAISE4 },
+	/*S_POSS2_RAISE4*/		{ SPR_POSS, 8, 5, {NULL}, S_POSS2_RAISE5 },
+	/*S_POSS2_RAISE5*/		{ SPR_POSS, 7, 5, {NULL}, S_POSS2_RUN1 },
 
 	/*S_TROO_STND*/         { SPR_TROO, 0, 10, {A_Look}, S_TROO_STND2 },
 	/*S_TROO_STND2*/        { SPR_TROO, 1, 10, {A_Look}, S_TROO_STND },
@@ -349,6 +381,11 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_TROO_XDIE6*/        { SPR_TROO, 21, 5, {NULL}, S_TROO_XDIE7 },
 	/*S_TROO_XDIE7*/        { SPR_TROO, 22, 5, {A_OnDeathTrigger}, S_TROO_XDIE8 },
 	/*S_TROO_XDIE8*/        { SPR_TROO, 23, -1, {NULL}, S_NULL },
+	/*S_TROO_RAISE1*/		{ SPR_TROO, 15, 6, {NULL}, S_TROO_RAISE2 },
+	/*S_TROO_RAISE2*/		{ SPR_TROO, 14, 6, {NULL}, S_TROO_RAISE3 },
+	/*S_TROO_RAISE3*/		{ SPR_TROO, 13, 6, {NULL}, S_TROO_RAISE4 },
+	/*S_TROO_RAISE4*/		{ SPR_TROO, 12, 8, {NULL}, S_TROO_RAISE5 },
+	/*S_TROO_RAISE5*/		{ SPR_TROO, 11, 8, {NULL}, S_TROO_RUN1 },
 
 	/*S_HEAD_STND*/         { SPR_HEAD, 0, 15, {A_Look}, S_HEAD_STND2 },
 	/*S_HEAD_STND2*/        { SPR_HEAD, 1, 15, {A_Look}, S_HEAD_STND3 },
@@ -375,6 +412,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_HEAD_DIE4*/         { SPR_HEAD, 10, 8, {A_Fall}, S_HEAD_DIE5 },
 	/*S_HEAD_DIE5*/         { SPR_HEAD, 11, 8, {A_OnDeathTrigger}, S_HEAD_DIE6 },
 	/*S_HEAD_DIE6*/         { SPR_HEAD, 12, -1, {NULL}, S_NULL },
+	/*S_HEAD_RAISE1*/		{ SPR_HEAD, 12, 8, {NULL}, S_HEAD_RAISE2 },
+	/*S_HEAD_RAISE2*/		{ SPR_HEAD, 11, 8, {NULL}, S_HEAD_RAISE3 },
+	/*S_HEAD_RAISE3*/		{ SPR_HEAD, 10, 8, {NULL}, S_HEAD_RAISE4 },
+	/*S_HEAD_RAISE4*/		{ SPR_HEAD, 9, 8, {NULL}, S_HEAD_RAISE5 },
+	/*S_HEAD_RAISE5*/		{ SPR_HEAD, 8, 8, {NULL}, S_HEAD_RAISE6 },
+	/*S_HEAD_RAISE6*/		{ SPR_HEAD, 7, 8, {NULL}, S_HEAD_RUN1 },
 
 	/*S_BOSS1_STND*/        { SPR_BOSS, 0, 10, {A_Look}, S_BOSS1_STND2 },
 	/*S_BOSS1_STND2*/       { SPR_BOSS, 1, 10, {A_Look}, S_BOSS1_STND },
@@ -397,6 +440,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BOSS1_DIE4*/        { SPR_BOSS, 11, 8, {A_Fall}, S_BOSS1_DIE5 },
 	/*S_BOSS1_DIE5*/        { SPR_BOSS, 12, 8, {A_OnDeathTrigger}, S_BOSS1_DIE6 },
 	/*S_BOSS1_DIE6*/        { SPR_BOSS, 13, -1, {NULL}, S_NULL },
+	/*S_BOSS1_RAISE1*/		{ SPR_BOSS, 13, 8, {NULL}, S_BOSS1_RAISE2 },
+	/*S_BOSS1_RAISE2*/		{ SPR_BOSS, 12, 8, {NULL}, S_BOSS1_RAISE3 },
+	/*S_BOSS1_RAISE3*/		{ SPR_BOSS, 11, 8, {NULL}, S_BOSS1_RAISE4 },
+	/*S_BOSS1_RAISE4*/		{ SPR_BOSS, 10, 8, {NULL}, S_BOSS1_RAISE5 },
+	/*S_BOSS1_RAISE5*/		{ SPR_BOSS, 9, 8, {NULL}, S_BOSS1_RAISE6 },
+	/*S_BOSS1_RAISE6*/		{ SPR_BOSS, 8, 8, {NULL}, S_BOSS1_RUN1 },
 
 	/*S_BOSS2_STND*/        { SPR_BOSS, 0, 10, {A_Look}, S_BOSS2_STND2 },
 	/*S_BOSS2_STND2*/       { SPR_BOSS, 1, 10, {A_Look}, S_BOSS2_STND },
@@ -419,6 +468,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BOSS2_DIE4*/        { SPR_BOSS, 11, 8, {A_Fall}, S_BOSS2_DIE5 },
 	/*S_BOSS2_DIE5*/        { SPR_BOSS, 12, 8, {A_OnDeathTrigger}, S_BOSS2_DIE6 },
 	/*S_BOSS2_DIE6*/        { SPR_BOSS, 13, -1, {NULL}, S_NULL },
+	/*S_BOSS2_RAISE1*/		{ SPR_BOSS, 13, 8, {NULL}, S_BOSS2_RAISE2 },
+	/*S_BOSS2_RAISE2*/		{ SPR_BOSS, 12, 8, {NULL}, S_BOSS2_RAISE3 },
+	/*S_BOSS2_RAISE3*/		{ SPR_BOSS, 11, 8, {NULL}, S_BOSS2_RAISE4 },
+	/*S_BOSS2_RAISE4*/		{ SPR_BOSS, 10, 8, {NULL}, S_BOSS2_RAISE5 },
+	/*S_BOSS2_RAISE5*/		{ SPR_BOSS, 9, 8, {NULL}, S_BOSS2_RAISE6 },
+	/*S_BOSS2_RAISE6*/		{ SPR_BOSS, 8, 8, {NULL}, S_BOSS2_RUN1 },
 
 	/*S_SKUL_STND*/         { SPR_SKUL, 0, 5, {A_Look}, S_SKUL_STND2 },
 	/*S_SKUL_STND2*/        { SPR_SKUL, 1, 5, {A_Look}, S_SKUL_STND3 },
@@ -465,6 +520,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BSPI_DIE4*/         { SPR_BSPI, 9, 7, {NULL}, S_BSPI_DIE5 },
 	/*S_BSPI_DIE5*/         { SPR_BSPI, 10, 7, {A_OnDeathTrigger}, S_BSPI_DIE6 },
 	/*S_BSPI_DIE6*/         { SPR_BSPI, 11, -1, {NULL}, S_NULL },
+	/*S_BSPI_RAISE1*/		{ SPR_BSPI, 11, 5, {NULL}, S_BSPI_RAISE2 },
+	/*S_BSPI_RAISE2*/		{ SPR_BSPI, 10, 5, {NULL}, S_BSPI_RAISE3 },
+	/*S_BSPI_RAISE3*/		{ SPR_BSPI, 9, 5, {NULL}, S_BSPI_RAISE4 },
+	/*S_BSPI_RAISE4*/		{ SPR_BSPI, 8, 5, {NULL}, S_BSPI_RAISE5 },
+	/*S_BSPI_RAISE5*/		{ SPR_BSPI, 7, 5, {NULL}, S_BSPI_RAISE6 },
+	/*S_BSPI_RAISE6*/		{ SPR_BSPI, 6, 5, {NULL}, S_BSPI_RUN1 },
 
 	/*S_CYBR_STND*/         { SPR_CYBR, 5, 10, {A_Look}, S_CYBR_STND },
 	/*S_CYBR_RUN1*/         { SPR_CYBR, 0, 4, {A_Hoof}, S_CYBR_RUN2 },
@@ -1116,6 +1177,13 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_CPOS_XDIE4*/		{ SPR_CPOS, 17, 5, {NULL}, S_CPOS_XDIE5 },
 	/*S_CPOS_XDIE5*/		{ SPR_CPOS, 18, 5, {A_OnDeathTrigger}, S_CPOS_XDIE6 },
 	/*S_CPOS_XDIE6*/		{ SPR_CPOS, 19, -1, {NULL}, S_NULL },
+	/*S_CPOS_RAISE1*/		{ SPR_CPOS, 13, 5, {NULL}, S_CPOS_RAISE2 },
+	/*S_CPOS_RAISE2*/		{ SPR_CPOS, 12, 5, {NULL}, S_CPOS_RAISE3 },
+	/*S_CPOS_RAISE3*/		{ SPR_CPOS, 11, 5, {NULL}, S_CPOS_RAISE4 },
+	/*S_CPOS_RAISE4*/		{ SPR_CPOS, 10, 5, {NULL}, S_CPOS_RAISE5 },
+	/*S_CPOS_RAISE5*/		{ SPR_CPOS, 9, 5, {NULL}, S_CPOS_RAISE6 },
+	/*S_CPOS_RAISE6*/		{ SPR_CPOS, 8, 5, {NULL}, S_CPOS_RAISE7 },
+	/*S_CPOS_RAISE7*/		{ SPR_CPOS, 7, 5, {NULL}, S_CPOS_RUN1 },
 
 	/*S_SKEL_STND*/			{ SPR_SKEL, 0, 10, {A_Look}, S_SKEL_STND2 },
 	/*S_SKEL_STND2*/		{ SPR_SKEL, 1, 10, {A_Look}, S_SKEL_STND },	
@@ -1147,6 +1215,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SKEL_DIE4*/			{ SPR_SKEL, 14, 6, {A_Fall}, S_SKEL_DIE5 },	
 	/*S_SKEL_DIE5*/			{ SPR_SKEL, 15, 6, {A_OnDeathTrigger}, S_SKEL_DIE6 },
 	/*S_SKEL_DIE6*/			{ SPR_SKEL, 16, -1, {NULL}, S_NULL },
+	/*S_SKEL_RAISE1*/		{ SPR_SKEL, 16, 6, {NULL}, S_SKEL_RAISE2 },
+	/*S_SKEL_RAISE2*/		{ SPR_SKEL, 15, 6, {NULL}, S_SKEL_RAISE3 },
+	/*S_SKEL_RAISE3*/		{ SPR_SKEL, 14, 6, {NULL}, S_SKEL_RAISE4 },
+	/*S_SKEL_RAISE4*/		{ SPR_SKEL, 13, 6, {NULL}, S_SKEL_RAISE5 },
+	/*S_SKEL_RAISE5*/		{ SPR_SKEL, 12, 6, {NULL}, S_SKEL_RAISE6 },
+	/*S_SKEL_RAISE6*/		{ SPR_SKEL, 11, 6, {NULL}, S_SKEL_RUN1 },
 
 	/*S_ARCR1*/				{ SPR_ARCR, 32768, 3, {A_Tracer}, S_ARCR2 },
 	/*S_ARCR2*/				{ SPR_ARCR, 32769, 3, {A_Tracer}, S_ARCR1 },
@@ -1185,6 +1259,77 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SPID_DIE5*/			{ SPR_SPID, 14, 6, {A_OnDeathTrigger}, S_SPID_DIE6 },
 	/*S_SPID_DIE6*/			{ SPR_SPID, 15, -1, {NULL}, S_NULL },
 
+	/*S_FIRE1*/				{ SPR_VFIR, 32768, 0, {NULL}, S_FIRE2 },
+	/*S_FIRE2*/				{ SPR_VFIR, 32768, 2, {A_StartFire}, S_FIRE3 },
+	/*S_FIRE3*/				{ SPR_VFIR, 32769, 2, {A_Fire}, S_FIRE4 },
+	/*S_FIRE4*/				{ SPR_VFIR, 32768, 2, {A_Fire}, S_FIRE5 },
+	/*S_FIRE5*/				{ SPR_VFIR, 32769, 2, {A_Fire}, S_FIRE6 },
+	/*S_FIRE6*/				{ SPR_VFIR, 32770, 2, {A_FireCrackle}, S_FIRE7 },
+	/*S_FIRE7*/				{ SPR_VFIR, 32769, 2, {A_Fire}, S_FIRE8 },
+	/*S_FIRE8*/				{ SPR_VFIR, 32770, 2, {A_Fire}, S_FIRE9 },
+	/*S_FIRE9*/				{ SPR_VFIR, 32769, 2, {A_Fire}, S_FIRE10 },
+	/*S_FIRE10*/			{ SPR_VFIR, 32770, 2, {A_Fire}, S_FIRE11 },
+	/*S_FIRE11*/			{ SPR_VFIR, 32771, 2, {A_Fire}, S_FIRE12 },
+	/*S_FIRE12*/			{ SPR_VFIR, 32770, 2, {A_Fire}, S_FIRE13 },
+	/*S_FIRE13*/			{ SPR_VFIR, 32771, 2, {A_Fire}, S_FIRE14 },
+	/*S_FIRE14*/			{ SPR_VFIR, 32770, 2, {A_Fire}, S_FIRE15 },
+	/*S_FIRE15*/			{ SPR_VFIR, 32771, 2, {A_Fire}, S_FIRE16 },
+	/*S_FIRE16*/			{ SPR_VFIR, 32772, 2, {A_Fire}, S_FIRE17 },
+	/*S_FIRE17*/			{ SPR_VFIR, 32771, 2, {A_Fire}, S_FIRE18 },
+	/*S_FIRE18*/			{ SPR_VFIR, 32772, 2, {A_Fire}, S_FIRE19 },
+	/*S_FIRE19*/			{ SPR_VFIR, 32771, 2, {A_Fire}, S_FIRE20 },
+	/*S_FIRE20*/			{ SPR_VFIR, 32772, 2, {A_FireCrackle}, S_FIRE21 },
+	/*S_FIRE21*/			{ SPR_VFIR, 32773, 2, {A_Fire}, S_FIRE22 },
+	/*S_FIRE22*/			{ SPR_VFIR, 32772, 2, {A_Fire}, S_FIRE23 },
+	/*S_FIRE23*/			{ SPR_VFIR, 32773, 2, {A_Fire}, S_FIRE24 },
+	/*S_FIRE24*/			{ SPR_VFIR, 32772, 2, {A_Fire}, S_FIRE25 },
+	/*S_FIRE25*/			{ SPR_VFIR, 32773, 2, {A_Fire}, S_FIRE26 },
+	/*S_FIRE26*/			{ SPR_VFIR, 32774, 2, {A_Fire}, S_FIRE27 },
+	/*S_FIRE27*/			{ SPR_VFIR, 32775, 2, {A_Fire}, S_FIRE28 },
+	/*S_FIRE28*/			{ SPR_VFIR, 32774, 2, {A_Fire}, S_FIRE29 },
+	/*S_FIRE29*/			{ SPR_VFIR, 32775, 2, {A_Fire}, S_FIRE30 },
+	/*S_FIRE30*/			{ SPR_VFIR, 32774, 2, {A_Fire}, S_FIRE31 },
+	/*S_FIRE31*/			{ SPR_VFIR, 32775, 2, {A_Fire}, S_NULL },
+
+	/*S_VILE_STND*/			{ SPR_VILE, 0, 10, {A_Look}, S_VILE_STND2 },
+	/*S_VILE_STND2*/		{ SPR_VILE, 1, 10, {A_Look}, S_VILE_STND },
+	/*S_VILE_RUN1*/			{ SPR_VILE, 0, 2, {A_VileChase}, S_VILE_RUN2 },
+	/*S_VILE_RUN2*/			{ SPR_VILE, 0, 2, {A_VileChase}, S_VILE_RUN3 },
+	/*S_VILE_RUN3*/			{ SPR_VILE, 1, 2, {A_VileChase}, S_VILE_RUN4 },
+	/*S_VILE_RUN4*/			{ SPR_VILE, 1, 2, {A_VileChase}, S_VILE_RUN5 },
+	/*S_VILE_RUN5*/			{ SPR_VILE, 2, 2, {A_VileChase}, S_VILE_RUN6 },
+	/*S_VILE_RUN6*/			{ SPR_VILE, 2, 2, {A_VileChase}, S_VILE_RUN7 },
+	/*S_VILE_RUN7*/			{ SPR_VILE, 3, 2, {A_VileChase}, S_VILE_RUN8 },
+	/*S_VILE_RUN8*/			{ SPR_VILE, 3, 2, {A_VileChase}, S_VILE_RUN9 },
+	/*S_VILE_RUN9*/			{ SPR_VILE, 4, 2, {A_VileChase}, S_VILE_RUN10 },
+	/*S_VILE_RUN10*/		{ SPR_VILE, 4, 2, {A_VileChase}, S_VILE_RUN11 },
+	/*S_VILE_RUN11*/		{ SPR_VILE, 5, 2, {A_VileChase}, S_VILE_RUN12 },
+	/*S_VILE_RUN12*/		{ SPR_VILE, 5, 2, {A_VileChase}, S_VILE_RUN1 },
+	/*S_VILE_ATK1*/			{ SPR_VILE, 32774, 0, {A_VileStart}, S_VILE_ATK2 },
+	/*S_VILE_ATK2*/			{ SPR_VILE, 32774, 10, {A_FaceTarget}, S_VILE_ATK3 },
+	/*S_VILE_ATK3*/			{ SPR_VILE, 32775, 8, {A_VileTarget}, S_VILE_ATK4 },
+	/*S_VILE_ATK4*/			{ SPR_VILE, 32776, 8, {A_FaceTarget}, S_VILE_ATK5 },
+	/*S_VILE_ATK5*/			{ SPR_VILE, 32777, 8, {A_FaceTarget}, S_VILE_ATK6 },
+	/*S_VILE_ATK6*/			{ SPR_VILE, 32778, 8, {A_FaceTarget}, S_VILE_ATK7 },
+	/*S_VILE_ATK7*/			{ SPR_VILE, 32779, 8, {A_FaceTarget}, S_VILE_ATK8 },
+	/*S_VILE_ATK8*/			{ SPR_VILE, 32780, 8, {A_FaceTarget}, S_VILE_ATK9 },
+	/*S_VILE_ATK9*/			{ SPR_VILE, 32781, 8, {A_FaceTarget}, S_VILE_ATK10 },
+	/*S_VILE_ATK10*/		{ SPR_VILE, 32782, 8, {A_VileAttack}, S_VILE_ATK11 },
+	/*S_VILE_ATK11*/		{ SPR_VILE, 32783, 8, {NULL}, S_VILE_ATK12 },
+	/*S_VILE_ATK12*/		{ SPR_VILE, 32784, 12, {NULL}, S_VILE_RUN1 },
+	/*S_VILE_HEAL1*/		{ SPR_VILE, 32793, 10, {NULL}, S_VILE_HEAL2 },
+	/*S_VILE_HEAL2*/		{ SPR_VILE, 32794, 10, {NULL}, S_VILE_HEAL3 },
+	/*S_VILE_HEAL3*/		{ SPR_VILE, 32795, 10, {NULL}, S_VILE_RUN1 },
+	/*S_VILE_PAIN*/			{ SPR_VILE, 17, 5, {NULL}, S_VILE_PAIN2 },
+	/*S_VILE_PAIN2*/		{ SPR_VILE, 17, 5, {A_Pain}, S_VILE_RUN1 },
+	/*S_VILE_DIE1*/			{ SPR_VILE, 18, 7, {NULL}, S_VILE_DIE2 },
+	/*S_VILE_DIE2*/			{ SPR_VILE, 19, 7, {A_Scream}, S_VILE_DIE3 },
+	/*S_VILE_DIE3*/			{ SPR_VILE, 20, 7, {A_Fall}, S_VILE_DIE4 },
+	/*S_VILE_DIE4*/			{ SPR_VILE, 21, 7, {NULL}, S_VILE_DIE5 },
+	/*S_VILE_DIE5*/			{ SPR_VILE, 22, 7, {NULL}, S_VILE_DIE6 },
+	/*S_VILE_DIE6*/			{ SPR_VILE, 23, 7, {A_OnDeathTrigger}, S_VILE_DIE7 },
+	/*S_VILE_DIE7*/			{ SPR_VILE, 24, -1, {NULL}, S_NULL },
+
 	//The one true TESTA0
 
 	/*S_HEAD_STND*/{ SPR_TEST, 0, 15, {A_Look}, S_TEST_STND2 },
@@ -1212,6 +1357,15 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_HEAD_DIE4*/{ SPR_TEST, 10, 8, {A_Fall}, S_TEST_DIE5 },
 	/*S_HEAD_DIE5*/{ SPR_TEST, 11, 8, {A_OnDeathTrigger}, S_TEST_DIE6 },
 	/*S_HEAD_DIE6*/{ SPR_TEST, 12, -1, {NULL}, S_NULL },
+	/*S_HEAD_RAISE6*/{ SPR_TEST, 12, 8, {NULL}, S_TEST_RAISE5 },
+	/*S_HEAD_RAISE5*/{ SPR_TEST, 11, 8, {A_OnDeathTrigger}, S_TEST_RAISE4 },
+	/*S_HEAD_RAISE4*/{ SPR_TEST, 10, 8, {A_Fall}, S_TEST_RAISE3 },
+	/*S_HEAD_RAISE3*/{ SPR_TEST, 9, 8, {NULL}, S_TEST_RAISE2 },
+	/*S_HEAD_RAISE2*/{ SPR_TEST, 8, 8, {A_Scream}, S_TEST_RAISE1 },
+	/*S_HEAD_RAISE1*/{ SPR_TEST, 7, 8, {NULL}, S_TEST_RUN1 },
+	
+	
+	
 };
 
 #pragma warning(pop)
@@ -1354,7 +1508,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_SARG_RAISE1        //raisestate
 	},
 
 	{
@@ -1382,7 +1537,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		1,        //palette
-		255        //alpha
+		255,        //alpha
+		S_SARG_RAISE0        //raisestate
 	},
 
 	{
@@ -1410,7 +1566,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_posact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_FATT_RAISE1        //raisestate
 	},
 
 	{
@@ -1438,7 +1595,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_posact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_POSS1_RAISE1        //raisestate
 	},
 
 	{
@@ -1466,7 +1624,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_posact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		1,        //palette
-		255        //alpha
+		255,        //alpha
+		S_POSS2_RAISE1        //raisestate
 	},
 
 	{
@@ -1494,7 +1653,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_impact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_TROO_RAISE1        //raisestate
 	},
 
 	{
@@ -1522,7 +1682,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_impact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL | MF_SHADOW,        //flags
 		1,        //palette
-		180        //alpha
+		180,        //alpha
+		S_TROO_RAISE1        //raisestate
 	},
 
 	{
@@ -1550,7 +1711,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_HEAD_RAISE1        //raisestate
 	},
 
 	{
@@ -1578,7 +1740,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		1,        //palette
-		255        //alpha
+		255,        //alpha
+		S_BOSS1_RAISE1        //raisestate
 	},
 
 	{
@@ -1606,7 +1769,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_BOSS2_RAISE1        //raisestate
 	},
 
 	{
@@ -1662,7 +1826,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_bspilift,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_BSPI_RAISE1        //raisestate
 	},
 
 	{
@@ -1690,7 +1855,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        // alpha
+		S_CPOS_RAISE1        //raisestate
 	},
 
 	{
@@ -5989,7 +6155,8 @@ MF_SOLID,// flags
 		sfx_posact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        // palette
-		255        // alpha
+		255,        // alpha,
+		S_CPOS_RAISE1        //raisestate
 	},
 
 	{
@@ -6017,7 +6184,8 @@ MF_SOLID,// flags
 		sfx_skelact,        // activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        // flags
 		0,        // palette
-		255        //alpha
+		255,        //alpha
+		S_SKEL_RAISE1        //raisestate
 	},
 
 	{
@@ -6076,6 +6244,60 @@ MF_SOLID,// flags
 		255        // alpha
 	},
 	{
+		/*MT_FIRE*/
+		-1,		// doomednum
+		S_FIRE1,		// spawnstate
+		1000,		// spawnhealth
+		S_NULL,		// seestate
+		sfx_None/*sfx_000*/,		// seesound
+		8,		// reactiontime
+		sfx_None/*sfx_000*/,		// attacksound
+		S_NULL,		// painstate
+		0,		// painchance
+		sfx_None/*sfx_000*/,		// painsound
+		S_NULL,		// meleestate
+		S_NULL,		// missilestate
+		S_NULL,		// deathstate
+		S_NULL,		// xdeathstate
+		sfx_None/*sfx_000*/,		// deathsound
+		0,		// speed
+		20 * FRACUNIT,		// radius
+		16 * FRACUNIT,		// height
+		100,		// mass
+		0,		// damage
+		sfx_None/*sfx_000*/,		// activesound
+		MF_NOBLOCKMAP,		// flags
+		0,		// palette
+		96		//alpha
+	},
+	{
+		/*MT_VILE*/
+		64,		// doomednum
+		S_VILE_STND,		// spawnstate
+		700,		// spawnhealth
+		S_VILE_RUN1,		// seestate
+		sfx_vilsit,		// seesound
+		8,		// reactiontime
+		0,		// attacksound
+		S_VILE_PAIN,		// painstate
+		10,		// painchance
+		sfx_vilpain,		// painsound
+		0,		// meleestate
+		S_VILE_ATK1,		// missilestate
+		S_VILE_DIE1,		// deathstate
+		S_NULL,		// xdeathstate
+		sfx_vildth,		// deathsound
+		15,		// speed
+		32 * FRACUNIT,		// radius
+		120 * FRACUNIT,		// height
+		500,		// mass
+		0,		// damage
+		sfx_vilact,		// activesound
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,		// flags
+		0,		// palette
+		255,		//alpha
+	},
+	{
 		/*MT_TESTA0*/
 		9005,        //doomednum
 		S_TEST_STND,        //spawnstate
@@ -6100,6 +6322,7 @@ MF_SOLID,// flags
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 		0,        //palette
-		255        //alpha
+		255,        //alpha
+		S_TEST_RAISE1        //raisestate
 },
 };
