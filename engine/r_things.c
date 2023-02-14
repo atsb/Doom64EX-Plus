@@ -645,10 +645,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	//
 	l = (sector->lightlevel >> 1);
 
-	GL_SetTextureUnit(1, true);
-	GL_SetTextureMode(GL_ADD);
-	GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-	GL_SetTextureUnit(0, true);
+	if (lightlevel > 0xff)
+	{
+		lightlevel = 0xff;
+	}
 
 	if (nolights)
 	{
