@@ -173,7 +173,7 @@
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\engine\3rdparty\Xbox\Includes\;..\engine\3rdparty\Includes\Xbox\fluidlite\;..\engine\3rdparty\Xbox\Includes\SDL2;..\engine\3rdparty\Includes;..\Xbox\"
+				AdditionalIncludeDirectories="..\engine\3rdparty\Xbox\Includes\;..\engine\3rdparty\Includes\Xbox\fluidlite\;..\engine\3rdparty\Xbox\Includes\SDL2;..\engine\3rdparty\Includes;..\engine\backend\FakeGLx\"
 				PreprocessorDefinitions="NDEBUG;_XBOX;WIN32_LEAN_AND_MEAN;WINDOWS_TYPES;OLD_TYPE;_CRT_SECURE_NO_WARNINGS;__ATTR_SAL;C89;DONT_USE_SHADER;DONT_USE_GLAD;PSNPRINTF"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -186,18 +186,19 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
-				CompileAs="1"
+				CompileAs="0"
 				ShowIncludes="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xapilib.lib d3d8.lib d3dx8.lib xgraphics.lib dsound.lib dmusic.lib xacteng.lib xsndtrk.lib xvoice.lib xonlines.lib xboxkrnl.lib libSDL2x.lib libpngX.lib xzlib.lib FluidLiteX.lib"
+				AdditionalDependencies="xapilib.lib d3d8.lib d3dx8.lib xgraphics.lib dsound.lib dmusic.lib xacteng.lib xsndtrk.lib xvoice.lib xonlines.lib xboxkrnl.lib libSDL2x.lib libpngX.lib xzlib.lib FluidLiteX.lib FakeGLx.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\engine\3rdparty\Xbox\Libs\"
+				AdditionalLibraryDirectories="..\engine\3rdparty\Xbox\Libs\;..\engine\backend\FakeGLx\Release"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
+				MapExports="FALSE"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -270,16 +271,6 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="xbox"
-			Filter="">
-			<File
-				RelativePath=".\fakeglx_ex+.c">
-			</File>
-			<File
-				RelativePath=".\fakeglx_ex+.h">
-			</File>
-		</Filter>
 		<File
 			RelativePath="..\engine\am_draw.c">
 		</File>

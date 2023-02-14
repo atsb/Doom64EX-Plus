@@ -18,8 +18,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef _USEFAKEGL09
-
 // TODO Fix this warning instead of disabling it
 #pragma warning (disable: 4273)
 
@@ -3201,7 +3199,7 @@ void D3D_ResetMode (int width, int height, int bpp, BOOL windowed)
 	Con_Printf ("Set %s mode %ix%ix%i\n", windowed ? "windowed" : "fullscreen", width, height, bpp);
    */
 }
-int glSwapBuffers(void);
+int glSwapBuffers(void)
 {
    /*
 	// if we lost the device (e.g. on a mode switch, alt-tab, etc) we must try to recover it
@@ -3769,5 +3767,3 @@ PROC WINAPI wglGetProcAddress (LPCSTR s)
 }
 
 #pragma warning (pop)
-
-#endif //_USEFAKEGL09

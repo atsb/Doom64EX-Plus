@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef __FAKEGLEXPLUS__WRAPPER__H
 #define __FAKEGLEXPLUS__WRAPPER__H
 
-#ifdef _USEFAKEGL09
 // inconsistent dll linkage warning
 #pragma warning (disable: 4273)
 
@@ -2366,5 +2365,4 @@ PROC WINAPI wglGetProcAddress (LPCSTR s);
 #define DISP_CHANGE_SUCCESSFUL 0
 
 
-#endif //_USEFAKEGL09
 #endif //__FAKEGLEXPLUS__WRAPPER__H

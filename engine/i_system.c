@@ -81,7 +81,7 @@ ticcmd_t        emptycmd;
 
 void I_Sleep(unsigned long usecs) {
 #ifdef _WIN32
-	Sleep((long long)usecs);
+	Sleep((DWORD)usecs);
 #else
 	struct timespec tc;
 	tc.tv_sec = usecs / 1000;

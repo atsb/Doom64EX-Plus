@@ -78,15 +78,14 @@ int numthingspec = 0;
 //
 static boolean P_CheckThingCollision(mobj_t* thing) {
 	fixed_t blockdist;
+	fixed_t x, y;
+	fixed_t rx, ry;
 
 	if (netgame && (tmthing->type == MT_PLAYER && thing->type == MT_PLAYER)) {
 		return true;    // 20120122 villsa - allow players to go through each other
 	}
 
 	blockdist = thing->radius + tmthing->radius;
-
-	fixed_t x, y;
-	fixed_t rx, ry;
 
 	x = abs(thing->x - tmx);
 	y = abs(thing->y - tmy);
