@@ -207,6 +207,12 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 
 	dist >>= 16;
 
+	if (actor->type == MT_VILE)
+	{
+		if (dist > 14 * 64)
+			return false;	// too far away
+	}
+
 	if (actor->type == MT_SKULL) {
 		dist >>= 1;
 	}
@@ -1986,4 +1992,219 @@ void A_SpidDeathEvent(mobj_t* actor)
 	if (actor->info->deathsound) {
 		S_StartSound(NULL, actor->info->deathsound);
 	}
+}
+
+//
+// A_Fire
+//
+void A_Fire(mobj_t* actor)
+{
+	mobj_t* dest;
+	unsigned	an;
+
+	dest = actor->tracer;
+	if (!dest)
+		return;
+
+	// don't move it if the vile lost sight
+	if (!P_CheckSight(actor->target, dest))
+		return;
+
+	an = dest->angle >> ANGLETOFINESHIFT;
+
+	P_UnsetThingPosition(actor);
+	actor->x = dest->x + FixedMul(24 * FRACUNIT, finecosine[an]);
+	actor->y = dest->y + FixedMul(24 * FRACUNIT, finesine[an]);
+	actor->z = dest->z;
+	P_SetThingPosition(actor);
+}
+
+//
+// A_StartFire
+//
+void A_StartFire(mobj_t* actor)
+{
+	S_StartSound(actor, sfx_flamst);
+	A_Fire(actor);
+}
+
+//
+// A_FireCrackle
+//
+void A_FireCrackle(mobj_t* actor)
+{
+	S_StartSound(actor, sfx_flame);
+	A_Fire(actor);
+}
+
+//
+// PIT_VileCheck
+// Detect a corpse that could be raised.
+//
+mobj_t* corpsehit;
+mobj_t* vileobj;
+fixed_t		viletryx;
+fixed_t		viletryy;
+
+boolean PIT_VileCheck(mobj_t* thing)
+{
+	int		maxdist;
+	boolean	check;
+
+	if (!(thing->flags & MF_CORPSE))
+		return true;	// not a monster
+
+	if (thing->tics != -1)
+		return true;	// not lying still yet
+
+	if (thing->info->raisestate == S_NULL)
+		return true;	// monster doesn't have a raise state
+
+	maxdist = thing->info->radius + mobjinfo[MT_VILE].radius;
+
+	if (abs(thing->x - viletryx) > maxdist
+		|| abs(thing->y - viletryy) > maxdist)
+		return true;		// not actually touching
+
+	corpsehit = thing;
+	corpsehit->momx = corpsehit->momy = 0;
+	corpsehit->height <<= 2;
+	check = P_CheckPosition(corpsehit, corpsehit->x, corpsehit->y);
+	corpsehit->height >>= 2;
+
+	if (!check)
+		return true;		// doesn't fit here
+
+	return false;		// got one, so stop checking
+}
+
+//
+// A_VileChase
+//
+
+void A_VileChase(mobj_t* actor)
+{
+	int			xl;
+	int			xh;
+	int			yl;
+	int			yh;
+
+	int			bx;
+	int			by;
+
+	mobjinfo_t* info;
+	mobj_t* temp;
+
+	if (actor->movedir != DI_NODIR)
+	{
+		// check for corpses to raise
+		viletryx =
+			actor->x + actor->info->speed * xspeed[actor->movedir];
+		viletryy =
+			actor->y + actor->info->speed * yspeed[actor->movedir];
+
+		xl = (viletryx - bmaporgx - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		xh = (viletryx - bmaporgx + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yl = (viletryy - bmaporgy - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yh = (viletryy - bmaporgy + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+
+		vileobj = actor;
+		for (bx = xl; bx <= xh; bx++)
+		{
+			for (by = yl; by <= yh; by++)
+			{
+				// Call PIT_VileCheck to check
+				// whether object is a corpse
+				// that can be raised.
+				if (!P_BlockThingsIterator(bx, by, PIT_VileCheck))
+				{
+					// got one!
+					temp = actor->target;
+					actor->target = corpsehit;
+					A_FaceTarget(actor);
+					actor->target = temp;
+
+					P_SetMobjState(actor, S_VILE_HEAL1);
+					S_StartSound(corpsehit, sfx_slop);
+					info = corpsehit->info;
+
+					P_SetMobjState(corpsehit, info->raisestate);
+					corpsehit->height <<= 2;
+					corpsehit->flags = info->flags;
+					corpsehit->health = info->spawnhealth;
+					corpsehit->target = NULL;
+
+					return;
+				}
+			}
+		}
+	}
+
+	// Return to normal attack.
+	A_Chase(actor);
+}
+
+//
+// A_VileStart
+//
+
+void A_VileStart(mobj_t* actor)
+{
+	S_StartSound(actor, sfx_vilatk);
+}
+
+//
+// A_VileTarget
+//
+
+void A_VileTarget(mobj_t* actor)
+{
+	mobj_t* fog;
+
+	if (!actor->target)
+		return;
+
+	A_FaceTarget(actor);
+
+	fog = P_SpawnMobj(actor->target->x,
+		actor->target->x,
+		actor->target->z, MT_FIRE);
+
+	actor->tracer = fog;
+	fog->target = actor;
+	fog->tracer = actor->target;
+	A_Fire(fog);
+}
+
+//
+// A_VileAttack
+//
+void A_VileAttack(mobj_t* actor)
+{
+	mobj_t* fire;
+	int		an;
+
+	if (!actor->target)
+		return;
+
+	A_FaceTarget(actor);
+
+	if (!P_CheckSight(actor, actor->target))
+		return;
+
+	S_StartSound(actor, sfx_explode);
+	P_DamageMobj(actor->target, actor, actor, 20);
+	actor->target->momz = 1000 * FRACUNIT / actor->target->info->mass;
+
+	an = actor->angle >> ANGLETOFINESHIFT;
+
+	fire = actor->tracer;
+
+	if (!fire)
+		return;
+
+	// move the fire between the vile and the player
+	fire->x = actor->target->x - FixedMul(24 * FRACUNIT, finecosine[an]);
+	fire->y = actor->target->y - FixedMul(24 * FRACUNIT, finesine[an]);
+	P_RadiusAttack(fire, actor, 70);
 }
