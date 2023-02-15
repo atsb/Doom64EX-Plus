@@ -1063,7 +1063,7 @@ menuitem_t MiscMenu[] = {
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
 	{-1,"Extras",0 },
-	{2,"No Spawn Sound:",M_MiscChoice },
+	{2,"Spawn Sound:",M_MiscChoice },
 	{2,"Obituaries:",M_MiscChoice },
 	{2,"Brutal Mode:",M_MiscChoice },
 	{2,"New Cast Roll:",M_MiscChoice },
