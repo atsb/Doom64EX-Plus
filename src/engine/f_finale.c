@@ -45,7 +45,7 @@
 
 static int          castrotation = 0;
 static int          castnum;
-static unsigned int     casttics;
+static int     casttics;
 static state_t* caststate;
 static boolean     castdeath;
 static boolean     castdying;
@@ -59,7 +59,7 @@ typedef struct {
 	mobjtype_t type;
 } castinfo_t;
 
-castinfo_t castorder[] = {
+castinfo_t originalorder[] = {
 	{   CC_ZOMBIE,  MT_POSSESSED1   },
 	{   CC_SHOTGUN, MT_POSSESSED2   },
 	{   CC_IMP,     MT_IMP1         },
@@ -78,11 +78,41 @@ castinfo_t castorder[] = {
 	{   NULL,       0               }
 };
 
+castinfo_t extendedorder[] = {
+	{   CC_ZOMBIE,  MT_POSSESSED1   },
+	{   CC_SHOTGUN, MT_POSSESSED2   },
+	{   CC_HEAVY,   MT_CHAINGUY     },
+	{   CC_IMP,     MT_IMP1         },
+	{   CC_IMP2,    MT_IMP2         },
+	{   CC_DEMON,   MT_DEMON1       },
+	{   CC_DEMON2,  MT_DEMON2       },
+	{   CC_LOST,    MT_SKULL        },
+	{   CC_CACO,    MT_CACODEMON    },
+	{   CC_HELL,    MT_BRUISER2     },
+	{   CC_BARON,   MT_BRUISER1     },
+	{   CC_ARACH,   MT_BABY         },
+	{   CC_PAIN,    MT_PAIN         },
+	{   CC_REVEN,   MT_UNDEAD       },
+	{   CC_MANCU,   MT_MANCUBUS     },
+	{   CC_ARCH,    MT_VILE         },
+	{   CC_SPIDER,  MT_SPIDER       },
+	{   CC_CYBER,   MT_CYBORG       },
+	{   CC_MOTH,    MT_RESURRECTOR  },
+	{   CC_HERO,    MT_PLAYER       },
+	{   NULL,       0               }
+};
+
+castinfo_t *castorder;
+
+CVAR(m_extendedcast, 0);
+
 //
 // F_Start
 //
 
 void F_Start(void) {
+	castorder = m_extendedcast.value > 0 ? extendedorder : originalorder;
+
 	gameaction = ga_nothing;
 	automapactive = false;
 
@@ -150,7 +180,7 @@ int F_Ticker(void) {
 		castdying = false;
 		castdeath = true;
 	}
-
+	
 	// advance state
 	if (--casttics > 0) {
 		return 0;    // not time to change state yet
@@ -213,6 +243,12 @@ int F_Ticker(void) {
 				sound = sfx_scratch;
 				break;
 			case S_POSS1_ATK2:                          // former human
+			case S_CPOS_ATK2:							// chaingun guy
+			case S_CPOS_ATK3:
+			case S_CPOS_ATK4:
+			case S_SPID_ATK2:							// spider demon
+			case S_SPID_ATK4:
+			case S_SPID_ATK6:
 				sound = sfx_pistol;
 				break;
 			case S_POSS2_ATK2:                          // shotgun guy
@@ -229,6 +265,19 @@ int F_Ticker(void) {
 			case S_CYBR_ATK4:
 			case S_CYBR_ATK6:
 				sound = sfx_missile;
+				break;
+			case S_SKEL_FIST2:
+				sound = sfx_dart;
+				break;
+			case S_SKEL_FIST4:
+				sound = sfx_dartshoot;
+				break;
+			case S_SKEL_MISS3:
+			case S_RECT_ATK3:
+				sound = sfx_tracer;
+				break;
+			case S_VILE_ATK2:
+				sound = sfx_vilatk;
 				break;
 			default:
 				sound = 0;
