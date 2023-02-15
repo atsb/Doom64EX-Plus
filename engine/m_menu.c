@@ -1062,6 +1062,7 @@ CVAR_EXTERNAL(hud_disablesecretmessages);
 CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
+CVAR_EXTERNAL(m_extendedcast);
 
 enum {
 	misc_header1,
@@ -1082,10 +1083,12 @@ enum {
 	misc_showlocks,
 	misc_amobjects,
 	misc_amoverlay,
+	misc_header5,
 	misc_nospawnsound,
 	misc_obituaries,
 	misc_brutal,
-	misc_header5,
+	misc_extendedcast,
+	misc_header6,
 	misc_comp_pass,
 	misc_disablesecretmessages,
 	misc_default,
@@ -1112,9 +1115,11 @@ menuitem_t MiscMenu[] = {
 	{2,"Locked Doors:",M_MiscChoice },
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
-	{2,"No Spawn Sound:",M_MiscChoice },
+	{-1,"Extras",0 },
+	{2,"Spawn Sound:",M_MiscChoice },
 	{2,"Obituaries:",M_MiscChoice },
 	{2,"Brutal Mode:",M_MiscChoice },
+	{2,"New Cast Roll:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
@@ -1141,9 +1146,11 @@ char* MiscHints[misc_end] = {
 	"colorize locked doors accordingly to the key in automap",
 	"set how objects are rendered in automap",
 	"render the automap into the player hud",
+	NULL,
 	"spawn sound toggle",
 	"death messages",
 	"get knee deep in the gibs",
+	"enable new monsters in the cast of characters sequence",
 	NULL,
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
@@ -1168,6 +1175,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_nospawnsound, 0 },
 	{ &m_obituaries, 0 },
 	{ &m_brutal, 0 },
+	{ &m_extendedcast, 0 },
 	{ &compat_mobjpass, 1 },
 	{ NULL, -1 }
 };
@@ -1296,6 +1304,10 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &m_brutal);
 		break;
 
+	case misc_extendedcast:
+		M_SetOptionValue(choice, 0, 1, 1, &m_extendedcast);
+		break;
+
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
@@ -1343,6 +1355,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_nospawnsound, m_nospawnsound.value, disablesecretmessages);
 	DRAWMISCITEM(misc_obituaries, m_obituaries.value, autoruntype);
 	DRAWMISCITEM(misc_brutal, m_brutal.value, autoruntype);
+	DRAWMISCITEM(misc_extendedcast, m_extendedcast.value, autoruntype);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 

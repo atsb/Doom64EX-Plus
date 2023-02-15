@@ -219,6 +219,7 @@
 
 #define CC_ZOMBIE   "Zombieman"
 #define CC_SHOTGUN  "Shotgun Guy"
+#define CC_HEAVY	"Heavy Weapon Dude"
 #define CC_IMP      "Imp"
 #define CC_IMP2     "Nightmare Imp"
 #define CC_DEMON    "Demon"
@@ -229,8 +230,12 @@
 #define CC_BARON    "Baron Of Hell"
 #define CC_ARACH    "Arachnotron"
 #define CC_PAIN     "Pain Elemental"
+#define CC_REVEN	"Revenant"
 #define CC_MANCU    "Mancubus"
+#define CC_ARCH		"Arch-Vile"
+#define CC_SPIDER	"The Spider Mastermind"
 #define CC_CYBER    "The Cyberdemon"
+#define CC_MOTH     "The Mother Demon"
 #define CC_HERO     "Our Hero"
 
 #endif
