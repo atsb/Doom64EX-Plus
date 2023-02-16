@@ -71,7 +71,7 @@ FixedMul
 		"BX		 LR"
 	);
 #else
-	return (fixed_t)(((long long)a * (long long)b) >> FRACBITS);
+	return (fixed_t)(((w3sint64_t)a * (w3sint64_t)b) >> FRACBITS);
 #endif
 }
 
@@ -93,7 +93,7 @@ fixed_t
 FixedDiv2
 (fixed_t    a,
 	fixed_t    b) {
-	return (fixed_t)((((long long)a) << FRACBITS) / b);
+	return (fixed_t)((((w3sint64_t)a) << FRACBITS) / b);
 }
 
 //

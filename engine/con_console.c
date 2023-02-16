@@ -36,16 +36,6 @@
 #include "i_system.h"
 #include "gl_texture.h"
 
-#ifdef __APPLE__
-#ifdef USE_SDL3
-#include <SDL2/SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
-#else
-#include <SDL.h>
-#endif
-
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2
 #define CONSOLETEXT_MASK        (MAX_CONSOLE_LINES-1)

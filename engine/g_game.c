@@ -196,7 +196,7 @@ void G_RegisterCvars(void) {
 
 static CMD(Button) {
 	playercontrols_t* pc;
-	long long key;
+	w3sint64_t key;
 
 	pc = &Controls;
 

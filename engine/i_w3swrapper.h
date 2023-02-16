@@ -126,7 +126,7 @@ char* w3sstrlwr(char* str);
 #ifdef _WIN32 //TBD: Sony Playstation 2 port
 #define w3ssleep Sleep
 #else
-void w3ssleep(long long usecs);
+void w3ssleep(w3sint64_t usecs);
 #endif
 
 #define w3svsprintf(buf, format, arg) vsprintf(buf, format, arg)
@@ -147,6 +147,13 @@ int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
 #endif
 #endif
+
+#ifdef OLD_MSVC
+typedef __int64 w3sint64_t;
+#else
+typedef long long w3sint64_t;
+#endif
+
 
 int htoi(char* str);
 boolean fcmp(float f1, float f2);

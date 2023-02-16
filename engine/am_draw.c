@@ -114,7 +114,7 @@ static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	// setup RGB data
 	//
 	if (am_ssect.value) {
-		int64_t num = sub - subsectors;
+		w3sint64_t num = sub - subsectors;
 		color = D_RGBA(
 			(num * 0x3f) & 0xff,
 			(num * 0xf) & 0xff,

@@ -27,7 +27,7 @@
 #include <time.h>
 #include <ctype.h>
 #ifndef _WIN32
-void w3ssleep(long long usecs)
+void w3ssleep(w3sint64_t usecs)
 {
 	struct timespec tc;
 	tc.tv_sec = usecs / 1000;

@@ -3646,7 +3646,7 @@ static void M_SetInputString(char* string, int len) {
 	if (!strcmp(string, EMPTYSTRING)) {
 #ifdef VITA
         // autoname the save
-        snprintf(inputString, SAVESTRINGSIZE-1, "SAVEGAME%d", saveSlot);
+        w3ssnprintf(inputString, SAVESTRINGSIZE-1, "SAVEGAME%d", saveSlot);
 #else
         inputString[0] = 0;
 #endif

@@ -50,7 +50,7 @@ typedef struct action_s {
 	actionproc_t    proc;
 	struct action_s* children[2];
 	struct action_s* parent;
-	long long           data;
+	w3sint64_t           data;
 }action_t;
 
 static action_t* Actions = NULL;
@@ -64,7 +64,7 @@ typedef struct alist_s {
 	char* param[MAX_ACTIONPARAM + 1];//NULL terminated list
 }alist_t;
 
-void G_RunAlias(long long data, char** param);
+void G_RunAlias(w3sint64_t data, char** param);
 void G_DoOptimizeActionTree(void);
 
 alist_t* CurrentActions[MAX_CURRENTACTIONS];
@@ -951,7 +951,7 @@ static void AddAction(action_t* action) {
 // Adds a new action to the list
 //
 
-void G_AddCommand(char* name, actionproc_t proc, long long data) {
+void G_AddCommand(char* name, actionproc_t proc, w3sint64_t data) {
 	action_t* action;
 
 	action = (action_t*)Z_Malloc(sizeof(action_t), PU_STATIC, NULL);
@@ -966,7 +966,7 @@ void G_AddCommand(char* name, actionproc_t proc, long long data) {
 // G_RunAlias
 //
 
-void G_RunAlias(long long data, char** param) {
+void G_RunAlias(w3sint64_t data, char** param) {
 	AddActions(DoRunActions((alist_t*)data, false));
 }
 
@@ -1049,7 +1049,7 @@ static CMD(Alias) {
 		G_UnregisterAction(param[0]);
 	}
 	else {
-		G_AddCommand(param[0], G_RunAlias, (long long)al);
+		G_AddCommand(param[0], G_RunAlias, (w3sint64_t)al);
 	}
 }
 

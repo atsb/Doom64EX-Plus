@@ -47,7 +47,7 @@
 #define MAX_SPRITES    1024
 
 spritedef_t* spriteinfo;
-long long       numsprites;
+w3sint64_t       numsprites;
 
 spriteframe_t   sprtemp[29];
 int             maxframe;

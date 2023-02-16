@@ -641,7 +641,7 @@ boolean
 P_TraverseIntercepts
 (traverser_t     func,
 	fixed_t      maxfrac) {
-	long long	 count;
+	w3sint64_t	 count;
 	fixed_t      dist;
 	intercept_t* scan;
 	intercept_t* in;
