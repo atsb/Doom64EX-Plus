@@ -15,6 +15,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 * Support for higher resolutions including 21:9
 * Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
 * More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
+* MSVC Compatible you can run on Visual c++ 6.0(Not recommended but usefull depending of the situation)
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
