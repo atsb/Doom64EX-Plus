@@ -29,6 +29,8 @@
 #elif defined SWITCH
 #include <GL/gl.h>
 #include <GL/glext.h>
+#elif defined __vita__
+#include <vitaGL.h>
 #else
 #include <glad/glad.h>
 #ifndef _WIN32

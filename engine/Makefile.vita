@@ -6,7 +6,7 @@ LIBS = -lfluidsynth -lSDL2 -lSDL_net -lvitaGL -lvitashark -lSceShaccCgExt -ltaih
 	-lpthread -lmathneon -lSceNet_stub -lSceNetCtl_stub -lpng -lSceDisplay_stub -lSceGxm_stub \
 	-lSceSysmodule_stub -lSceCtrl_stub -lSceTouch_stub -lSceMotion_stub -lm -lSceAppMgr_stub \
 	-lSceAppUtil_stub -lScePgf_stub -ljpeg -lSceRtc_stub -lScePower_stub -lcurl -lssl -lcrypto -lz \
-	-lSceKernelDmacMgr_stub -lSceHid_stub -lSceAudioIn_stub -lSceIme_stub 
+	-lSceKernelDmacMgr_stub -lSceHid_stub -lSceAudioIn_stub -lSceIme_stub
 
 DEHACKED_OBJS = deh_ammo.o deh_doom.o deh_frame.o deh_io.o deh_main.o deh_mapping.o deh_misc.o deh_ptr.o deh_str.o deh_thing.o deh_weapon.o 
 
@@ -23,7 +23,7 @@ tables.o w_file.o w_merge.o w_wad.o wi_stuff.o z_zone.o \
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
 CFLAGS  = -Wl,-q  -O3 -g -mtune=cortex-a9 -mfpu=neon -std=gnu99 \
--I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -D__vita__ -DVITA -DUSE_FLUIDSYNTH -DDONT_USE_GLAD -DDONT_USE_SHADER -fno-optimize-sibling-calls -Wall
+-I$(VITASDK)/$(PREFIX)/include/SDL2 -I$(VITASDK)/$(PREFIX)/include/fluidsynth -D__vita__ -DVITA -DUSE_FLUIDSYNTH -DDONT_USE_GLAD -fno-optimize-sibling-calls -Wall
 
 ASFLAGS = $(CFLAGS)
 
