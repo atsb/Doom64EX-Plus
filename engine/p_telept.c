@@ -163,9 +163,6 @@ int EV_SilentTeleport(line_t* line, mobj_t* thing) {
 
 	tag = line->tag;
 	for (m; m != &mobjhead; m = m->next) {
-		fixed_t     oldx;
-		fixed_t     oldy;
-		fixed_t     oldz;
 
 		// not a teleportman
 		if (m->type != MT_DEST_TELEPORT) {
@@ -176,10 +173,6 @@ int EV_SilentTeleport(line_t* line, mobj_t* thing) {
 		if (m->tid != tag) {
 			continue;
 		}
-
-		oldx = thing->x;
-		oldy = thing->y;
-		oldz = thing->z;
 
 		if (thing->player) {
 			P_Telefrag(thing, m->x, m->y);
