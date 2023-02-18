@@ -1083,7 +1083,6 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 	// player specific
 	if (player) {
-		int         temp;
 		// ignore damage in GOD mode, or with INVUL power.
 		if ((player->cheats & CF_GODMODE) || player->powers[pw_invulnerability]) {
 			return;
@@ -1117,7 +1116,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 			player->damagecount = 100;    // teleport stomp does 10k points...
 		}
 
-		temp = damage < 100 ? damage : 100;
+		
 	}
 
 	// do the damage
