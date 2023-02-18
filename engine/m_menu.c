@@ -239,7 +239,7 @@ CVAR_CMD(m_menumouse, 1) {
 	SDL_ShowCursor(cvar->value < 1);
 	if (cvar->value <= 0) {
 		itemSelected = -1;
-		SDL_ShowCursor((int)cvar->value = 0);
+		SDL_ShowCursor((int)cvar->value);
 	}
 }
 

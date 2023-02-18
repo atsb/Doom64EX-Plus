@@ -1007,7 +1007,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	int         saved;
 	player_t* player;
 	fixed_t     thrust;
-	int         temp;
+
 
 	if (!(target->flags & MF_SHOOTABLE)) {
 		return;    // shouldn't happen...
@@ -1083,6 +1083,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 	// player specific
 	if (player) {
+		int         temp;
 		// ignore damage in GOD mode, or with INVUL power.
 		if ((player->cheats & CF_GODMODE) || player->powers[pw_invulnerability]) {
 			return;

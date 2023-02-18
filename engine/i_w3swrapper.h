@@ -123,7 +123,13 @@ char* w3sstrlwr(char* str);
 #define Free	SDL_free
 #endif
 
-#ifdef _WIN32 //TBD: Sony Playstation 2 port
+#ifdef OLD_MSVC
+typedef __int64 w3sint64_t;
+#else
+typedef long long w3sint64_t;
+#endif
+
+#ifdef _WIN32 
 #define w3ssleep Sleep
 #else
 void w3ssleep(w3sint64_t usecs);
@@ -147,13 +153,6 @@ int w3svsnprintf(char* buf, size_t buf_len, const char* s, va_list args);
 #endif
 #endif
 #endif
-
-#ifdef OLD_MSVC
-typedef __int64 w3sint64_t;
-#else
-typedef long long w3sint64_t;
-#endif
-
 
 int htoi(char* str);
 boolean fcmp(float f1, float f2);

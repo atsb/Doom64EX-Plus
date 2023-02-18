@@ -213,7 +213,7 @@ static void M_CheatAllMap(player_t* player, char dat[4]) {
 }
 
 void M_CheatGiveWeapon(player_t* player, char dat[4]) {
-	int8_t c = dat[0];
+	char c = dat[0];
 	int w = atoi(&c);
 
 	static char* WeapGotNames[8] = {

@@ -77,9 +77,6 @@ int EV_Teleport(line_t* line, int side, mobj_t* thing) {
 	mobj_t* m;
 	mobj_t* fog;
 	angle_t     an;
-	fixed_t     oldx;
-	fixed_t     oldy;
-	fixed_t     oldz;
 
 	// don't teleport missiles
 	if (thing->flags & MF_MISSILE) {
@@ -93,6 +90,10 @@ int EV_Teleport(line_t* line, int side, mobj_t* thing) {
 
 	tag = line->tag;
 	for (m = mobjhead.next; m != &mobjhead; m = m->next) {
+		fixed_t     oldx;
+		fixed_t     oldy;
+		fixed_t     oldz;
+
 		// not a teleportman
 		if (m->type != MT_DEST_TELEPORT) {
 			continue;
