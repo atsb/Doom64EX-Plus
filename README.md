@@ -14,7 +14,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 * Support for C89(for linux users: only -std=gnu89 flag will compile) and C99
 * Support for higher resolutions including 21:9
 * Replaced xinput to SDL2_GameController API Which supports all the modern controlls/gamepads/joysticks we have.
-* More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(WIP).
+* More platforms support including Raspberry PI 3, FreeBSD, OpenBSD, Nintendo Switch(WIP), Playstation Vita(WIP) and Microsoft Xbox(At the moment it´s suspended due to the fakegl linking needed study more).
 * MSVC Compatible you can run on Visual c++ 6.0(Not recommended but usefull depending of the situation)
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
 * Messages for discovering secret areas
@@ -197,6 +197,5 @@ of the executable or you can start playing by launching `DOOM64EX+ Launcher.exe`
 
 The data files will be atm on: `ux0:/data/DOOM64EX+`
 
-## Microsoft Xbox
-
+## Microsoft Xbox(Suspended)
 At the moment the assets will be on the d:\\.
