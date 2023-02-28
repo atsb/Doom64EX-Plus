@@ -650,7 +650,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	if (lightlevel > 0xff)
 	{
-		lightlevel = 0xff;
+		GL_SetTextureMode(GL_BLEND);
 	}
 
 	if (nolights)
