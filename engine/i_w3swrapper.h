@@ -102,7 +102,7 @@ char* w3sstrlwr(char* str);
 #define w3sstrncasecmp strncasecmp
 #define w3sstricmp w3sstrcasecmp
 #define w3sstrnicmp strncasecmp
-#define w3sstrlwr _strlwr
+#define w3sstrlwr strlwr
 #define DIR_SEPARATOR '/'
 #define PATH_SEPARATOR ':'
 #endif

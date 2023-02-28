@@ -26,11 +26,6 @@
 
 #ifdef _WIN32
 #ifdef _XBOX
-#include <xtl.h>
-#else
-#include <windows.h>
-#endif
-#ifdef _XBOX
 #include <wctype.h>
 #else
 #include <wtypes.h>//only for GUID type

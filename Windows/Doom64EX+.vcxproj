@@ -75,9 +75,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\3rdparty\Source Files\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Includes;$(ProjectDir)..\3rdparty\Backend\glad\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,16 +92,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\3rdparty\Source Files\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Backend\glad\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -109,15 +109,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\3rdparty\Source Files\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Backend\glad\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth-lite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Includes;$(ProjectDir)..\engine\3rdparty\Source Files\glad\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Backend\glad\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
@@ -137,14 +137,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\Windows\3rdparty\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;libfluidsynth-lite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\am_draw.c" />
     <ClCompile Include="..\engine\am_map.c" />
-    <ClCompile Include="..\engine\backend\glad_4.6\src\glad.c" />
+    <ClCompile Include="..\3rdparty\Backend\glad_4.6\src\glad.c" />
     <ClCompile Include="..\engine\con_console.c" />
     <ClCompile Include="..\engine\con_cvar.c" />
     <ClCompile Include="..\engine\deh_ammo.c" />
@@ -251,7 +251,7 @@
   <ItemGroup>
     <ClInclude Include="..\engine\am_draw.h" />
     <ClInclude Include="..\engine\am_map.h" />
-    <ClInclude Include="..\engine\backend\glad_4.6\include\glad\glad.h" />
+    <ClInclude Include="..\3rdparty\Backend\glad_4.6\include\glad\glad.h" />
     <ClInclude Include="..\engine\con_console.h" />
     <ClInclude Include="..\engine\con_cvar.h" />
     <ClInclude Include="..\engine\deh_defs.h" />
@@ -416,12 +416,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>USE_FLUIDLITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_WIN32;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..3rdparty\Windows\Includes;$(ProjectDir)..3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\3rdparty\Backend\glad_4.6\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;fluidlite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -433,14 +433,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;USE_FLUIDSYNTH_LITE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\3rdparty\Backend\glad_4.6\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -450,13 +450,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>USE_FLUIDSYNTH_LITE;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\3rdparty\Backend\glad_4.6\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;libfluidsynth-lite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -467,7 +467,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;HAVE_M_PI;_USE_MATH_DEFINES;_STDCALL_SUPPORTED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Includes;$(ProjectDir)..\engine\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\engine\backend\;$(ProjectDir)..\engine\backend\glad_4.6\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\3rdparty\Backend\glad_4.6\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
@@ -476,7 +476,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\engine\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\3rdparty\Windows\Libs\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;libfluidsynth-lite.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
