@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -22,6 +22,16 @@
 
 #ifndef __I_AUDIO_H__
 #define __I_AUDIO_H__
+
+// 20120107 bkw: Linux users can change the default FluidSynth backend here:
+#ifndef _WIN32
+#define DEFAULT_FLUID_DRIVER "sndio"
+
+// 20120203 villsa: add default for windows
+#else
+#define DEFAULT_FLUID_DRIVER "dsound"
+
+#endif
 
 typedef struct {
     fixed_t x;
