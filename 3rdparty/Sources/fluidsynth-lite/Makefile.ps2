@@ -1,0 +1,52 @@
+TARGET = fluidsynth-lite
+
+DESTDIR ?= $(PS2SDK)/ports
+
+EE_OBJS = src/utils/fluid_conv.o src/utils/fluid_hash.o src/utils/fluid_list.o src/utils/fluid_ringbuffer.o src/utils/fluid_settings.o \
+src/utils/fluid_sys.o src/sfloader/fluid_defsfont.o src/sfloader/fluid_ramsfont.o src/rvoice/fluid_adsr_env.o src/rvoice/fluid_chorus.o src/rvoice/fluid_iir_filter.o \
+src/rvoice/fluid_lfo.o src/rvoice/fluid_rvoice.o src/rvoice/fluid_rvoice_dsp.o src/rvoice/fluid_rvoice_event.o src/rvoice/fluid_rvoice_mixer.o \
+src/rvoice/fluid_rev.o src/synth/fluid_chan.o src/synth/fluid_event.o src/synth/fluid_gen.o src/synth/fluid_mod.o src/synth/fluid_synth.o \
+src/synth/fluid_tuning.o src/synth/fluid_voice.o src/midi/fluid_midi.o src/midi/fluid_midi_router.o src/midi/fluid_seqbind.o src/midi/fluid_seq.o
+
+EE_INCS = -I$(PS2SDK)/ee/include
+EE_LDFLAGS = -L$(PS2SDK)/iop/lib/ -L$(PS2SDK)/ee/lib 
+EE_LIBS = -lcdvd -lm -lkernel -ldebug -lmc -lc -laudsrv
+EE_DEFINES = -DPS2 -DFLUIDSYNTH_NOT_A_DLL -DSUPPORTS_VLA -DWIP_PS2
+EE_CFLAGS = $(EE_DEFINES) -Wall -W -g -Wwrite-strings -Wcast-align -std=gnu99 -Wimplicit-int -Wsequence-point -iquote . -Iinclude -iquote src -iquote src/utils -iquote src/synth \
+-iquote src/sfloader -iquote src/rvoice -iquote src/midi -fsigned-char
+ 
+BIN2S = $(PS2SDK)/bin/bin2s
+
+all: lib$(TARGET).a
+
+lib$(TARGET).a: $(EE_OBJS)
+	$(AR) -rc $@ $^
+
+clean:
+	@rm -rf lib$(TARGET).a $(TARGET).elf $(EE_OBJS)
+
+$(TARGET).pc: $(TARGET).pc.in
+	sed \
+	-e "s|@prefix@|$(PORTLIBS)|g" \
+	-e 's|@exec_prefix@|$$\{prefix\}|g' \
+	-e 's|@libdir@|$$\{exec_prefix\}/lib|g' \
+	-e 's|@includedir@|$$\{prefix\}/include|g' \
+	-e "s|@PKG_CONFIG_REQUIRES@||g" \
+	-e "s|@PACKAGE_VERSION@|$(VERSION)|g" \
+	-e "s|@LIBNAME@|$(TARGET)|g" \
+	-e "s|@PKG_CONFIG_LIBS@||g" \
+	-e "s|@PKG_CONFIG_CFLAGS@||g" \
+	-e "s|@PKG_CONFIG_PRIVATE_LIBS@||g" \
+	$(TARGET).pc.in > $(TARGET).pc
+
+.PHONY: install
+install: $(TARGET).pc lib$(TARGET).a
+	install -d $(DESTDIR)/lib/
+	install -m 644 lib$(TARGET).a $(DESTDIR)/lib/
+	install -d $(DESTDIR)/include/fluidsynth-lite/
+	install -m 644 include/fluidsynth-lite/*.h include/fluidsynth-lite.h $(DESTDIR)/include/fluidsynth-lite/
+	install -d $(DESTDIR)/lib/pkgconfig
+	install -m 644 $(TARGET).pc $(DESTDIR)/lib/pkgconfig
+
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.eeglobal

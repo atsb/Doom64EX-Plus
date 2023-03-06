@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -69,6 +69,7 @@
 // 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
 
+#ifdef USE_OLD_FLUIDSYNTH
 // 20120203 villsa - cvar for audio driver
 #ifdef _WIN32
 CVAR_CMD(s_driver, dsound)
@@ -112,6 +113,7 @@ CVAR_CMD(s_driver, sndio)
     CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
     CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
 }
+#endif
 
 //
 // Mutex
@@ -129,18 +131,20 @@ static SDL_sem* semaphore = NULL;
 #define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
-static int seqready = 0;
+static boolean seqready = false;
 
 //
 // DEFINES
 //
-
+#ifdef USE_OLD_FLUIDSYNTH
 #define MIDI_CHANNELS   64
+#else
+#define MIDI_CHANNELS   128
+#endif
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
 #define MIDI_SEQUENCER  0x7f
-#ifndef FL_VANILLA
 #define SAMPLE_RATE 44100 
 #define SAMPLE_SIZE 2 //4: Float Buffer   2: Signed Int Buffer
 #define NUM_FRAMES SAMPLE_RATE
@@ -148,7 +152,7 @@ static int seqready = 0;
 #define NUM_CHANNELS 2
 #define NUM_SAMPLES (NUM_FRAMES * NUM_CHANNELS)
 #define TIME_INTERVAL 1000000 //1500000:duration us
-#endif
+
 //
 // MIDI DATA DEFINITIONS
 //
@@ -228,11 +232,11 @@ typedef struct {
     unsigned int      starttime;
     unsigned int      curtime;
     chanstate_e state;
-    int         paused;
+    boolean         paused;
 
     // read by audio thread but only
     // modified by game code
-    int         stop;
+    boolean         stop;
     float       basevol;
 } channel_t;
 
@@ -302,7 +306,7 @@ static doomseq_t doomseq = { 0 };   // doom sequencer
 
 typedef void(*eventhandler)(doomseq_t*, channel_t*);
 typedef int(*signalhandler)(doomseq_t*);
-#ifndef FL_VANILLA
+
 //
 // Audio_Play
 //
@@ -310,13 +314,26 @@ typedef int(*signalhandler)(doomseq_t*);
 //
 static void Audio_Play(void* userdata, unsigned char* stream, int len)
 {
-    memset(stream, 0, len);
-#ifndef _XBOX
     fluid_synth_t* synth = (fluid_synth_t*)userdata;
+    memset(stream, 0, len);
 	fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
-#endif
+}
+
+#ifndef USE_OLD_FLUIDSYNTH
+//
+// Seq_SetReverb
+//
+
+static void Seq_SetReverb(doomseq_t* seq,
+    float size,
+    float damp,
+    float width,
+    float level) {
+    fluid_synth_set_reverb(seq->synth, size, damp, width, level);
+    fluid_synth_set_reverb_on(seq->synth, 1);
 }
 #endif
+
 //
 // Seq_SetGain
 //
@@ -331,8 +348,11 @@ static void Seq_SetGain(doomseq_t* seq) {
 //
 // Seq_SetConfig
 //
-
+#ifdef USE_OLD_FLUIDSYNTH
 static void Seq_SetConfig(doomseq_t* seq, char* setting, int value) {
+#else
+static void Seq_SetConfig(doomseq_t* seq, const char* setting, int value) {
+#endif
     fluid_settings_setint(seq->settings, setting, value);
 }
 
@@ -357,15 +377,16 @@ static void Seq_SetStatus(doomseq_t* seq, int status) {
 //
 // Seq_WaitOnSignal
 //
-
-/*static void Seq_WaitOnSignal(doomseq_t* seq)
+#ifndef USE_OLD_FLUIDSYNTH
+static void Seq_WaitOnSignal(doomseq_t* seq)
 {
     while(1)
     {
         if(seq->signal == SEQ_SIGNAL_READY)
             break;
     }
-}*/
+}
+#endif
 
 //
 // Chan_SetMusicVolume
@@ -417,8 +438,7 @@ static unsigned char Chan_GetNextMidiByte(channel_t* chan) {
 //
 // Checks if the midi reader has reached the end
 //
-
-static int Chan_CheckTrackEnd(channel_t* chan) {
+static boolean Chan_CheckTrackEnd(channel_t* chan) {
     return ((int)(chan->pos - chan->song->data) >= chan->song->length);
 }
 
@@ -494,7 +514,7 @@ static void Song_ClearPlaylist(void) {
 // Chan_RemoveTrackFromPlaylist
 //
 
-static int Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
+static boolean Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
     if (!chan->song || !chan->track) {
         return false;
     }
@@ -869,7 +889,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 // Chan_CheckState
 //
 
-static int Chan_CheckState(doomseq_t* seq, channel_t* chan) {
+static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
     if (chan->state == CHAN_STATE_ENDED) {
         return true;
     }
@@ -1024,7 +1044,7 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
 // Allocate data for all tracks for a midi song
 //
 
-static int Song_RegisterTracks(song_t* song) {
+static boolean Song_RegisterTracks(song_t* song) {
     int i;
     unsigned char* data;
 
@@ -1138,7 +1158,11 @@ static void Seq_Shutdown(doomseq_t* seq)
     //
     // fluidsynth cleanup stuff
     //
+#ifdef USE_OLD_FLUISYNTH 
     delete_fluid_audio_driver(seq->driver);
+#else
+    SDL_CloseAudioDevice(1);
+#endif
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
 
@@ -1206,10 +1230,8 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 void I_InitSequencer(void) {
     boolean sffound;
     char *sfpath;
-#ifndef FL_VANILLA 
 	SDL_AudioDeviceID audio_device;
     SDL_AudioSpec required_spec;
-#endif
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
     //
@@ -1255,13 +1277,13 @@ void I_InitSequencer(void) {
     doomseq.settings = new_fluid_settings();
     Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
     Seq_SetConfig(&doomseq, "synth.polyphony", 256);
-
+#ifdef USE_OLD_FLUIDSYNTH
     // 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
     // JACK, if it's compiled in. We don't want to start jackd for a game).
     fluid_settings_setstr(doomseq.settings, "audio.driver", s_driver.string);
 
     CON_DPrintf("Audio driver: %s\n", s_driver.string);
-
+#endif
     //
     // init synth
     //
@@ -1270,7 +1292,7 @@ void I_InitSequencer(void) {
         CON_Warnf("I_InitSequencer: failed to create synthesizer");
         return;
     }
-
+#ifdef USE_OLD_FLUIDSYNTH
     //
     // init audio driver
     //
@@ -1279,7 +1301,7 @@ void I_InitSequencer(void) {
         CON_Warnf("I_InitSequencer: failed to create audio driver");
         return;
     }
-
+#endif
     //
     // load soundfont
     //
@@ -1316,7 +1338,9 @@ void I_InitSequencer(void) {
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
     Seq_SetGain(&doomseq);
-
+#ifndef USE_OLD_FLUIDSYNTH    
+    Seq_SetReverb(&doomseq, 0.65f, 0.0f, 2.0f, 1.0f);
+#endif
     //
     // if something went terribly wrong, then shutdown everything
     //
@@ -1438,7 +1462,9 @@ void I_ResetSound(void) {
     }
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESET);
-    //Seq_WaitOnSignal(&doomseq);
+#ifndef USE_OLD_FLUIDSYNTH    
+    Seq_WaitOnSignal(&doomseq);
+#endif
 }
 
 //
@@ -1451,7 +1477,9 @@ void I_PauseSound(void) {
     }
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_PAUSE);
-    //Seq_WaitOnSignal(&doomseq);
+#ifndef USE_OLD_FLUIDSYNTH    
+    Seq_WaitOnSignal(&doomseq);
+#endif
 }
 
 //
@@ -1464,7 +1492,9 @@ void I_ResumeSound(void) {
     }
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESUME);
-    //Seq_WaitOnSignal(&doomseq);
+#ifndef USE_OLD_FLUIDSYNTH    
+    Seq_WaitOnSignal(&doomseq);
+#endif
 }
 
 //
@@ -1479,7 +1509,9 @@ void I_SetGain(float db) {
     doomseq.gain = db;
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_SETGAIN);
-    //Seq_WaitOnSignal(&doomseq);
+#ifndef USE_OLD_FLUIDSYNTH    
+    Seq_WaitOnSignal(&doomseq);
+#endif
 }
 
 //

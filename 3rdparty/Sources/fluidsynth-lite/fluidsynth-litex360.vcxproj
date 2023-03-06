@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="CodeAnalysis|Xbox 360">
+      <Configuration>CodeAnalysis</Configuration>
+      <Platform>Xbox 360</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Xbox 360">
+      <Configuration>Debug</Configuration>
+      <Platform>Xbox 360</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profile|Xbox 360">
+      <Configuration>Profile</Configuration>
+      <Platform>Xbox 360</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profile_FastCap|Xbox 360">
+      <Configuration>Profile_FastCap</Configuration>
+      <Platform>Xbox 360</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Xbox 360">
+      <Configuration>Release</Configuration>
+      <Platform>Xbox 360</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_LTCG|Xbox 360">
+      <Configuration>Release_LTCG</Configuration>
+      <Platform>Xbox 360</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\fluidsynth-lite.h" />
+    <ClInclude Include="include\fluidsynth-lite\audio.h" />
+    <ClInclude Include="include\fluidsynth-lite\event.h" />
+    <ClInclude Include="include\fluidsynth-lite\gen.h" />
+    <ClInclude Include="include\fluidsynth-lite\log.h" />
+    <ClInclude Include="include\fluidsynth-lite\midi.h" />
+    <ClInclude Include="include\fluidsynth-lite\misc.h" />
+    <ClInclude Include="include\fluidsynth-lite\mod.h" />
+    <ClInclude Include="include\fluidsynth-lite\ramsfont.h" />
+    <ClInclude Include="include\fluidsynth-lite\seq.h" />
+    <ClInclude Include="include\fluidsynth-lite\seqbind.h" />
+    <ClInclude Include="include\fluidsynth-lite\settings.h" />
+    <ClInclude Include="include\fluidsynth-lite\sfont.h" />
+    <ClInclude Include="include\fluidsynth-lite\shell.h" />
+    <ClInclude Include="include\fluidsynth-lite\synth.h" />
+    <ClInclude Include="include\fluidsynth-lite\types.h" />
+    <ClInclude Include="include\fluidsynth-lite\version_ps2.h" />
+    <ClInclude Include="include\fluidsynth-lite\version_switch.h" />
+    <ClInclude Include="include\fluidsynth-lite\version_vita.h" />
+    <ClInclude Include="include\fluidsynth-lite\version_xbox.h" />
+    <ClInclude Include="include\fluidsynth-lite\version_xbox360.h" />
+    <ClInclude Include="include\fluidsynth-lite\voice.h" />
+    <ClInclude Include="src\midi\fluid_midi.h" />
+    <ClInclude Include="src\midi\fluid_midi_router.h" />
+    <ClInclude Include="src\rvoice\fluid_adsr_env.h" />
+    <ClInclude Include="src\rvoice\fluid_chorus.h" />
+    <ClInclude Include="src\rvoice\fluid_iir_filter.h" />
+    <ClInclude Include="src\rvoice\fluid_lfo.h" />
+    <ClInclude Include="src\rvoice\fluid_phase.h" />
+    <ClInclude Include="src\rvoice\fluid_rev.h" />
+    <ClInclude Include="src\rvoice\fluid_rvoice.h" />
+    <ClInclude Include="src\rvoice\fluid_rvoice_event.h" />
+    <ClInclude Include="src\rvoice\fluid_rvoice_mixer.h" />
+    <ClInclude Include="src\sfloader\fluid_defsfont.h" />
+    <ClInclude Include="src\sfloader\fluid_ramsfont.h" />
+    <ClInclude Include="src\sfloader\fluid_sfont.h" />
+    <ClInclude Include="src\synth\fluid_chan.h" />
+    <ClInclude Include="src\synth\fluid_event_priv.h" />
+    <ClInclude Include="src\synth\fluid_event_queue.h" />
+    <ClInclude Include="src\synth\fluid_gen.h" />
+    <ClInclude Include="src\synth\fluid_mod.h" />
+    <ClInclude Include="src\synth\fluid_synth.h" />
+    <ClInclude Include="src\synth\fluid_tuning.h" />
+    <ClInclude Include="src\synth\fluid_voice.h" />
+    <ClInclude Include="src\utils\fluidsynth_priv.h" />
+    <ClInclude Include="src\utils\fluid_atomic.h" />
+    <ClInclude Include="src\utils\fluid_conv.h" />
+    <ClInclude Include="src\utils\fluid_hash.h" />
+    <ClInclude Include="src\utils\fluid_list.h" />
+    <ClInclude Include="src\utils\fluid_ringbuffer.h" />
+    <ClInclude Include="src\utils\fluid_settings.h" />
+    <ClInclude Include="src\utils\fluid_sys.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\fluidsynth-lite\CMakeLists.txt" />
+    <None Include="include\fluidsynth-lite\Makefile.am" />
+    <None Include="include\fluidsynth-lite\meson.build" />
+    <None Include="include\fluidsynth-lite\version.h.in" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\midi\fluid_midi.c" />
+    <ClCompile Include="src\midi\fluid_midi_router.c" />
+    <ClCompile Include="src\midi\fluid_seq.c" />
+    <ClCompile Include="src\midi\fluid_seqbind.c" />
+    <ClCompile Include="src\rvoice\fluid_adsr_env.c" />
+    <ClCompile Include="src\rvoice\fluid_chorus.c" />
+    <ClCompile Include="src\rvoice\fluid_iir_filter.c" />
+    <ClCompile Include="src\rvoice\fluid_lfo.c" />
+    <ClCompile Include="src\rvoice\fluid_rev.c" />
+    <ClCompile Include="src\rvoice\fluid_rvoice.c" />
+    <ClCompile Include="src\rvoice\fluid_rvoice_dsp.c" />
+    <ClCompile Include="src\rvoice\fluid_rvoice_event.c" />
+    <ClCompile Include="src\rvoice\fluid_rvoice_mixer.c" />
+    <ClCompile Include="src\sfloader\fluid_defsfont.c" />
+    <ClCompile Include="src\sfloader\fluid_ramsfont.c" />
+    <ClCompile Include="src\synth\fluid_chan.c" />
+    <ClCompile Include="src\synth\fluid_event.c" />
+    <ClCompile Include="src\synth\fluid_gen.c" />
+    <ClCompile Include="src\synth\fluid_mod.c" />
+    <ClCompile Include="src\synth\fluid_synth.c" />
+    <ClCompile Include="src\synth\fluid_tuning.c" />
+    <ClCompile Include="src\synth\fluid_voice.c" />
+    <ClCompile Include="src\utils\fluid_conv.c" />
+    <ClCompile Include="src\utils\fluid_hash.c" />
+    <ClCompile Include="src\utils\fluid_list.c" />
+    <ClCompile Include="src\utils\fluid_ringbuffer.c" />
+    <ClCompile Include="src\utils\fluid_settings.c" />
+    <ClCompile Include="src\utils\fluid_sys.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{454F478D-33BB-4447-805A-19B610472BB1}</ProjectGuid>
+    <Keyword>Xbox360Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CodeAnalysis|Xbox 360'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Xbox 360'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Xbox 360'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_FastCap|Xbox 360'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Xbox 360'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_LTCG|Xbox 360'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='CodeAnalysis|Xbox 360'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Xbox 360'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Profile|Xbox 360'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Profile_FastCap|Xbox 360'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Xbox 360'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release_LTCG|Xbox 360'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Xbox 360'">
+    <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CodeAnalysis|Xbox 360'">
+    <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Xbox 360'">
+    <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile_FastCap|Xbox 360'">
+    <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Xbox 360'">
+    <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_LTCG|Xbox 360'">
+    <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Xbox 360'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;_XBOX;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CallAttributedProfiling>Callcap</CallAttributedProfiling>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='CodeAnalysis|Xbox 360'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <PREfast>AnalyzeOnly</PREfast>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_DEBUG;_XBOX;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CallAttributedProfiling>Callcap</CallAttributedProfiling>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Xbox 360'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <ExceptionHandling>false</ExceptionHandling>
+      <StringPooling>true</StringPooling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;_XBOX;PROFILE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CallAttributedProfiling>Callcap</CallAttributedProfiling>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <IgnoreSpecificDefaultLibraries>xapilib.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile_FastCap|Xbox 360'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <ExceptionHandling>false</ExceptionHandling>
+      <StringPooling>true</StringPooling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallAttributedProfiling>Fastcap</CallAttributedProfiling>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;_XBOX;PROFILE;FASTCAP;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Xbox 360'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <StringPooling>true</StringPooling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;_LIB;_XBOX;WIN32;_WINDOWS;libfluidsynth_EXPORTS;FLUIDSYNTH_DLL_EXPORTS;XBOX_360;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;"include/fluidsynth-lite";src/;src/midi;src/rvoice;src/sfloader;src/synth;src/utils;</AdditionalIncludeDirectories>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_LTCG|Xbox 360'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <StringPooling>true</StringPooling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;_XBOX;LTCG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
