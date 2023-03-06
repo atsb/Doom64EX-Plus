@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -69,10 +69,54 @@
 // 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
 
+// 20120203 villsa - cvar for audio driver
+#ifdef _WIN32
+CVAR_CMD(s_driver, dsound)
+#elif __linux__
+CVAR_CMD(s_driver, pulseaudio)
+#elif __APPLE__
+CVAR_CMD(s_driver, coreaudio)
+#else
+CVAR_CMD(s_driver, sndio)
+#endif
+{
+    char* driver = cvar->string;
+
+    // this is absolutely horrible
+    if (!dstrcmp(cvar->defvalue, "default")) {
+        cvar->defvalue = DEFAULT_FLUID_DRIVER;
+    }
+
+    // same as above
+    if (!dstrcmp(driver, "default")) {
+        CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
+        return;
+    }
+
+    if (!dstrcmp(driver, "jack") ||
+        !dstrcmp(driver, "alsa") ||
+        !dstrcmp(driver, "oss") ||
+        !dstrcmp(driver, "pulseaudio") ||
+        !dstrcmp(driver, "coreaudio") ||
+        !dstrcmp(driver, "dsound") ||
+        !dstrcmp(driver, "portaudio") ||
+        !dstrcmp(driver, "sndio") ||
+        !dstrcmp(driver, "sndman") ||
+        !dstrcmp(driver, "dart") ||
+        !dstrcmp(driver, "file")
+        ) {
+        return;
+    }
+
+    CON_Warnf("Invalid driver name\n");
+    CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
+    CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
+}
+
 //
 // Mutex
 //
-static SDL_mutex *lock = NULL;
+static SDL_mutex* lock = NULL;
 #define MUTEX_LOCK()    SDL_mutexP(lock);
 #define MUTEX_UNLOCK()  SDL_mutexV(lock);
 
@@ -80,23 +124,23 @@ static SDL_mutex *lock = NULL;
 // Semaphore stuff
 //
 
-static SDL_sem *semaphore = NULL;
+static SDL_sem* semaphore = NULL;
 #define SEMAPHORE_LOCK()    if(SDL_SemWait(semaphore) == 0) {
 #define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
-static boolean seqready = false;
+static int seqready = 0;
 
 //
 // DEFINES
 //
 
-#define MIDI_CHANNELS   128
+#define MIDI_CHANNELS   64
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
 #define MIDI_SEQUENCER  0x7f
-
+#ifndef FL_VANILLA
 #define SAMPLE_RATE 44100 
 #define SAMPLE_SIZE 2 //4: Float Buffer   2: Signed Int Buffer
 #define NUM_FRAMES SAMPLE_RATE
@@ -104,7 +148,7 @@ static boolean seqready = false;
 #define NUM_CHANNELS 2
 #define NUM_SAMPLES (NUM_FRAMES * NUM_CHANNELS)
 #define TIME_INTERVAL 1000000 //1500000:duration us
-
+#endif
 //
 // MIDI DATA DEFINITIONS
 //
@@ -128,7 +172,7 @@ typedef struct {
     unsigned char*       data;
     int       length;
     track_t*    tracks;
-    int       tempo;
+    int         tempo;
     double      timediv;
 } song_t;
 
@@ -146,17 +190,17 @@ typedef struct {
 //
 
 typedef enum {
-    CHAN_STATE_READY    = 0,
-    CHAN_STATE_PAUSED   = 1,
-    CHAN_STATE_ENDED    = 2,
+    CHAN_STATE_READY = 0,
+    CHAN_STATE_PAUSED = 1,
+    CHAN_STATE_ENDED = 2,
     MAXSTATETYPES
 } chanstate_e;
 
 typedef struct {
     // these should never be modified unless
     // they're initialized
-    song_t*     song;
-    track_t*    track;
+    song_t* song;
+    track_t* track;
 
     // channel id for identifying an active channel
     // used primarily by normal sounds
@@ -184,11 +228,11 @@ typedef struct {
     unsigned int      starttime;
     unsigned int      curtime;
     chanstate_e state;
-    boolean    paused;
+    int         paused;
 
     // read by audio thread but only
     // modified by game code
-    boolean    stop;
+    int         stop;
     float       basevol;
 } channel_t;
 
@@ -204,8 +248,7 @@ static channel_t playlist[MIDI_CHANNELS];   // channels active in sequencer
 // by the audio thread.
 //
 
-typedef int seqsignal_e;
-enum {
+typedef enum {
     SEQ_SIGNAL_IDLE = 0,    // idles. does nothing
     SEQ_SIGNAL_SHUTDOWN,        // signal the sequencer to shutdown, cleaning up anything in the process
     SEQ_SIGNAL_READY,           // sequencer will read and play any midi track fed to it
@@ -215,10 +258,10 @@ enum {
     SEQ_SIGNAL_STOPALL,
     SEQ_SIGNAL_SETGAIN,         // signal the sequencer to update output gain
     MAXSIGNALTYPES
-};
+} seqsignal_e;
 
 typedef union {
-    sndsrc_t*   valsrc;
+    sndsrc_t* valsrc;
     int         valint;
     float       valfloat;
 } seqmessage_t;
@@ -226,11 +269,11 @@ typedef union {
 typedef struct {
     // library specific stuff. should never
     // be modified after initialization
-    fluid_settings_t*       settings;
-    fluid_synth_t*          synth;
-    fluid_audio_driver_t*   driver;
+    fluid_settings_t* settings;
+    fluid_synth_t* synth;
+    fluid_audio_driver_t* driver;
     int                     sfont_id; // 20120112 bkw: needs to be signed
-    SDL_Thread*             thread;
+    SDL_Thread* thread;
     int                   playtime;
 
     int                   voices;
@@ -240,7 +283,7 @@ typedef struct {
     float                   soundvolume;
 
     // keep track of midi songs
-    song_t*                 songs;
+    song_t* songs;
     int                     nsongs;
 
     seqmessage_t            message[3];
@@ -255,11 +298,11 @@ typedef struct {
     float                   gain;
 } doomseq_t;
 
-static doomseq_t doomseq = {0};   // doom sequencer
+static doomseq_t doomseq = { 0 };   // doom sequencer
 
 typedef void(*eventhandler)(doomseq_t*, channel_t*);
 typedef int(*signalhandler)(doomseq_t*);
-
+#ifndef FL_VANILLA
 //
 // Audio_Play
 //
@@ -273,7 +316,7 @@ static void Audio_Play(void* userdata, unsigned char* stream, int len)
 	fluid_synth_write_s16(synth, len / (2 * sizeof(short)), stream, 0, NUM_CHANNELS, stream, 1, NUM_CHANNELS);
 #endif
 }
-
+#endif
 //
 // Seq_SetGain
 //
@@ -286,23 +329,10 @@ static void Seq_SetGain(doomseq_t* seq) {
 }
 
 //
-// Seq_SetReverb
-//
-
-static void Seq_SetReverb(doomseq_t* seq,
-    float size,
-    float damp,
-    float width,
-    float level) {
-    fluid_synth_set_reverb(seq->synth, size, damp, width, level);
-    fluid_synth_set_reverb_on(seq->synth, 1);
-}
-
-//
 // Seq_SetConfig
 //
 
-static void Seq_SetConfig(doomseq_t* seq, const char* setting, int value) {
+static void Seq_SetConfig(doomseq_t* seq, char* setting, int value) {
     fluid_settings_setint(seq->settings, setting, value);
 }
 
@@ -320,9 +350,22 @@ static double Song_GetTimeDivision(song_t* song) {
 
 static void Seq_SetStatus(doomseq_t* seq, int status) {
     MUTEX_LOCK()
-    seq->signal = status;
+        seq->signal = status;
     MUTEX_UNLOCK()
 }
+
+//
+// Seq_WaitOnSignal
+//
+
+/*static void Seq_WaitOnSignal(doomseq_t* seq)
+{
+    while(1)
+    {
+        if(seq->signal == SEQ_SIGNAL_READY)
+            break;
+    }
+}*/
 
 //
 // Chan_SetMusicVolume
@@ -375,7 +418,7 @@ static unsigned char Chan_GetNextMidiByte(channel_t* chan) {
 // Checks if the midi reader has reached the end
 //
 
-static boolean Chan_CheckTrackEnd(channel_t* chan) {
+static int Chan_CheckTrackEnd(channel_t* chan) {
     return ((int)(chan->pos - chan->song->data) >= chan->song->length);
 }
 
@@ -400,11 +443,11 @@ static int Chan_GetNextTick(channel_t* chan) {
         // delta time can only be four bytes long, just loop
         // for the remaining three bytes..
         //
-        for(i = 0; i < 3; i++) {
+        for (i = 0; i < 3; i++) {
             mb = Chan_GetNextMidiByte(chan);
             tic = (mb & 0x7f) + (tic << 7);
 
-            if(!(mb & 0x80)) {
+            if (!(mb & 0x80)) {
                 break;
             }
         }
@@ -422,7 +465,7 @@ static int Chan_GetNextTick(channel_t* chan) {
 static void Chan_StopTrack(doomseq_t* seq, channel_t* chan) {
     int c;
 
-    if(chan->song->type >= 1) {
+    if (chan->song->type >= 1) {
         c = chan->track->channel;
     }
     else {
@@ -442,8 +485,8 @@ static void Song_ClearPlaylist(void) {
     for(i = 0; i < MIDI_CHANNELS; i++) {
         memset(&playlist[i], 0, sizeof(song_t));
 
-        playlist[i].id      = i;
-        playlist[i].state   = CHAN_STATE_READY;
+        playlist[i].id = i;
+        playlist[i].state = CHAN_STATE_READY;
     }
 }
 
@@ -451,33 +494,33 @@ static void Song_ClearPlaylist(void) {
 // Chan_RemoveTrackFromPlaylist
 //
 
-static boolean Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
-    if(!chan->song || !chan->track) {
+static int Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
+    if (!chan->song || !chan->track) {
         return false;
     }
 
     Chan_StopTrack(seq, chan);
 
-    chan->song      = NULL;
-    chan->track     = NULL;
-    chan->jump      = NULL;
-    chan->tics      = 0;
-    chan->nexttic   = 0;
-    chan->lasttic   = 0;
-    chan->starttic  = 0;
-    chan->curtime   = 0;
+    chan->song = NULL;
+    chan->track = NULL;
+    chan->jump = NULL;
+    chan->tics = 0;
+    chan->nexttic = 0;
+    chan->lasttic = 0;
+    chan->starttic = 0;
+    chan->curtime = 0;
     chan->starttime = 0;
-    chan->pos       = 0;
-    chan->key       = 0;
-    chan->velocity  = 0;
-    chan->depth     = 0;
-    chan->state     = CHAN_STATE_ENDED;
-    chan->paused    = false;
-    chan->stop      = false;
-    chan->volume    = 0.0f;
-    chan->basevol   = 0.0f;
-    chan->pan       = 0;
-    chan->origin    = NULL;
+    chan->pos = 0;
+    chan->key = 0;
+    chan->velocity = 0;
+    chan->depth = 0;
+    chan->state = CHAN_STATE_ENDED;
+    chan->paused = false;
+    chan->stop = false;
+    chan->volume = 0.0f;
+    chan->basevol = 0.0f;
+    chan->pan = 0;
+    chan->origin = NULL;
 
     seq->voices--;
 
@@ -494,35 +537,35 @@ static boolean Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
 static channel_t* Song_AddTrackToPlaylist(doomseq_t* seq, song_t* song, track_t* track) {
     int i;
 
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        if(playlist[i].song == NULL) {
-            playlist[i].song        = song;
-            playlist[i].track       = track;
-            playlist[i].tics        = 0;
-            playlist[i].lasttic     = 0;
-            playlist[i].starttic    = 0;
-            playlist[i].pos         = track->data;
-            playlist[i].jump        = NULL;
-            playlist[i].state       = CHAN_STATE_READY;
-            playlist[i].paused      = false;
-            playlist[i].stop        = false;
-            playlist[i].key         = 0;
-            playlist[i].velocity    = 0;
+    for (i = 0; i < MIDI_CHANNELS; i++) {
+        if (playlist[i].song == NULL) {
+            playlist[i].song = song;
+            playlist[i].track = track;
+            playlist[i].tics = 0;
+            playlist[i].lasttic = 0;
+            playlist[i].starttic = 0;
+            playlist[i].pos = track->data;
+            playlist[i].jump = NULL;
+            playlist[i].state = CHAN_STATE_READY;
+            playlist[i].paused = false;
+            playlist[i].stop = false;
+            playlist[i].key = 0;
+            playlist[i].velocity = 0;
 
             // channels 0 through 15 are reserved for music only
             // channel ids should only be accessed by non-music sounds
-            playlist[i].id          = 0x0f + i;
+            playlist[i].id = 0x0f + i;
 
-            playlist[i].volume      = 127.0f;
-            playlist[i].basevol     = 127.0f;
-            playlist[i].pan         = 64;
-            playlist[i].origin      = NULL;
-            playlist[i].depth       = 0;
-            playlist[i].starttime   = 0;
-            playlist[i].curtime     = 0;
+            playlist[i].volume = 127.0f;
+            playlist[i].basevol = 127.0f;
+            playlist[i].pan = 64;
+            playlist[i].origin = NULL;
+            playlist[i].depth = 0;
+            playlist[i].starttime = 0;
+            playlist[i].curtime = 0;
 
             // immediately start reading the midi track
-            playlist[i].nexttic     = Chan_GetNextTick(&playlist[i]);
+            playlist[i].nexttic = Chan_GetNextTick(&playlist[i]);
 
             seq->voices++;
 
@@ -538,8 +581,8 @@ static channel_t* Song_AddTrackToPlaylist(doomseq_t* seq, song_t* song, track_t*
 //
 
 static void Event_NoteOff(doomseq_t* seq, channel_t* chan) {
-    chan->key       = Chan_GetNextMidiByte(chan);
-    chan->velocity  = 0;
+    chan->key = Chan_GetNextMidiByte(chan);
+    chan->velocity = 0;
 
     fluid_synth_noteoff(seq->synth, chan->track->channel, chan->key);
 }
@@ -549,8 +592,8 @@ static void Event_NoteOff(doomseq_t* seq, channel_t* chan) {
 //
 
 static void Event_NoteOn(doomseq_t* seq, channel_t* chan) {
-    chan->key       = Chan_GetNextMidiByte(chan);
-    chan->velocity  = Chan_GetNextMidiByte(chan);
+    chan->key = Chan_GetNextMidiByte(chan);
+    chan->velocity = Chan_GetNextMidiByte(chan);
 
     fluid_synth_cc(seq->synth, chan->id, 0x5B, chan->depth);
     fluid_synth_noteon(seq->synth, chan->track->channel, chan->key, chan->velocity);
@@ -567,8 +610,8 @@ static void Event_ControlChange(doomseq_t* seq, channel_t* chan) {
     ctrl = Chan_GetNextMidiByte(chan);
     val = Chan_GetNextMidiByte(chan);
 
-    if(ctrl == 0x07) {  // update volume
-        if(chan->song->type == 1) {
+    if (ctrl == 0x07) {  // update volume
+        if (chan->song->type == 1) {
             chan->volume = ((float)val * seq->musicvolume) / 127.0f;
             Chan_SetMusicVolume(seq, chan);
         }
@@ -632,13 +675,13 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
 
     meta = Chan_GetNextMidiByte(chan);
 
-    switch(meta) {
-    // mostly for debugging/logging
+    switch (meta) {
+        // mostly for debugging/logging
     case MIDI_MESSAGE:
         b = Chan_GetNextMidiByte(chan);
         memset(string, 0, 256);
 
-        for(i = 0; i < b; i++) {
+        for (i = 0; i < b; i++) {
             string[i] = Chan_GetNextMidiByte(chan);
         }
 
@@ -653,16 +696,16 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
     case MIDI_SET_TEMPO:
         b = Chan_GetNextMidiByte(chan);   // length
 
-        if(b != 3) {
+        if (b != 3) {
             return;
         }
 
         chan->song->tempo =
             (Chan_GetNextMidiByte(chan) << 16) |
-            (Chan_GetNextMidiByte(chan) << 8)  |
+            (Chan_GetNextMidiByte(chan) << 8) |
             (Chan_GetNextMidiByte(chan) & 0xff);
 
-        if(chan->song->tempo == 0) {
+        if (chan->song->tempo == 0) {
             return;
         }
 
@@ -670,22 +713,22 @@ static void Event_Meta(doomseq_t* seq, channel_t* chan) {
         chan->starttime = chan->curtime;
         break;
 
-    // game-specific midi event
+        // game-specific midi event
     case MIDI_SEQUENCER:
         b = Chan_GetNextMidiByte(chan);   // length
         b = Chan_GetNextMidiByte(chan);   // manufacturer (should be 0)
-        if(!b) {
+        if (!b) {
             b = Chan_GetNextMidiByte(chan);
-            if(b == 0x23) {
+            if (b == 0x23) {
                 // set jump position
                 chan->jump = chan->pos;
             }
-            else if(b == 0x20) {
+            else if (b == 0x20) {
                 b = Chan_GetNextMidiByte(chan);
                 b = Chan_GetNextMidiByte(chan);
 
                 // goto jump position
-                if(chan->jump) {
+                if (chan->jump) {
                     chan->pos = chan->jump;
                 }
             }
@@ -732,16 +775,16 @@ static int Signal_StopAll(doomseq_t* seq) {
     int i;
 
     SEMAPHORE_LOCK()
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
+        for (i = 0; i < MIDI_CHANNELS; i++) {
+            c = &playlist[i];
 
-        if(c->song) {
-            Chan_RemoveTrackFromPlaylist(seq, c);
+            if (c->song) {
+                Chan_RemoveTrackFromPlaylist(seq, c);
+            }
         }
-    }
     SEMAPHORE_UNLOCK()
 
-    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -769,11 +812,6 @@ static int Signal_Pause(doomseq_t* seq) {
     SEMAPHORE_LOCK()
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
-
-            if (c->song && !c->paused) {
-                c->paused = true;
-                Chan_StopTrack(seq, c);
-            }
         }
     SEMAPHORE_UNLOCK()
 
@@ -794,11 +832,6 @@ static int Signal_Resume(doomseq_t* seq) {
     SEMAPHORE_LOCK()
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
-
-            if (c->song && c->paused) {
-                c->paused = false;
-                fluid_synth_noteon(seq->synth, c->track->channel, c->key, c->velocity);
-            }
         }
     SEMAPHORE_UNLOCK()
 
@@ -813,11 +846,11 @@ static int Signal_Resume(doomseq_t* seq) {
 static int Signal_UpdateGain(doomseq_t* seq) {
     SEMAPHORE_LOCK()
 
-    Seq_SetGain(seq);
+        Seq_SetGain(seq);
 
     SEMAPHORE_UNLOCK()
 
-    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -836,17 +869,17 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
 // Chan_CheckState
 //
 
-static boolean Chan_CheckState(doomseq_t* seq, channel_t* chan) {
-    if(chan->state == CHAN_STATE_ENDED) {
+static int Chan_CheckState(doomseq_t* seq, channel_t* chan) {
+    if (chan->state == CHAN_STATE_ENDED) {
         return true;
     }
-    else if(chan->state == CHAN_STATE_READY && chan->paused) {
+    else if (chan->state == CHAN_STATE_READY && chan->paused) {
         chan->state = CHAN_STATE_PAUSED;
         chan->lasttic = chan->nexttic - chan->tics;
         return true;
     }
-    else if(chan->state == CHAN_STATE_PAUSED) {
-        if(!chan->paused) {
+    else if (chan->state == CHAN_STATE_PAUSED) {
+        if (!chan->paused) {
             chan->nexttic = chan->tics + chan->lasttic;
             chan->state = CHAN_STATE_READY;
         }
@@ -877,7 +910,7 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     //
     // get next tic
     //
-    if(chan->starttime == 0) {
+    if (chan->starttime == 0) {
         chan->starttime = msecs;
     }
 
@@ -885,7 +918,7 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     chan->curtime = msecs;
     chan->tics += ((chan->curtime - chan->starttime) - chan->tics);
 
-    if(Chan_CheckState(seq, chan)) {
+    if (Chan_CheckState(seq, chan)) {
         return;
     }
 
@@ -894,8 +927,8 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     // the end is reached or until it reaches next
     // delta time
     //
-    while(chan->state != CHAN_STATE_ENDED) {
-        if(chan->song->type == 0) {
+    while (chan->state != CHAN_STATE_ENDED) {
+        if (chan->song->type == 0) {
             chan->volume = chan->basevol;
             Chan_SetSoundVolume(seq, chan);
         }
@@ -906,14 +939,14 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
         //
         // not ready to execute events yet
         //
-        if(chan->tics < chan->nexttic) {
+        if (chan->tics < chan->nexttic) {
             return;
         }
 
         chan->starttic = chan->nexttic;
         c = Chan_GetNextMidiByte(chan);
 
-        if(c == 0xff) {
+        if (c == 0xff) {
             Event_Meta(seq, chan);
         }
         else {
@@ -922,12 +955,12 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
             event = (c >> 4) - 0x08;
             channel = c & 0x0f;
 
-            if(event >= 0 && event < 7) {
+            if (event >= 0 && event < 7) {
                 //
                 // for music, use the generic midi channel
                 // but for sounds, use the assigned id
                 //
-                if(song->type >= 1) {
+                if (song->type >= 1) {
                     track->channel = channel;
                 }
                 else {
@@ -936,7 +969,7 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
 
                 eventhandle = seqeventlist[event];
 
-                if(eventhandle != NULL) {
+                if (eventhandle != NULL) {
                     eventhandle(seq, chan);
                 }
             }
@@ -946,8 +979,8 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
         // check for end of the track, otherwise get
         // the next delta time
         //
-        if(chan->state != CHAN_STATE_ENDED) {
-            if(Chan_CheckTrackEnd(chan)) {
+        if (chan->state != CHAN_STATE_ENDED) {
+            if (Chan_CheckTrackEnd(chan)) {
                 chan->state = CHAN_STATE_ENDED;
             }
             else {
@@ -968,20 +1001,20 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
     seq->playtime = msecs;
 
     SEMAPHORE_LOCK()
-    for(i = 0; i < MIDI_CHANNELS; i++) {
-        chan = &playlist[i];
+        for (i = 0; i < MIDI_CHANNELS; i++) {
+            chan = &playlist[i];
 
-        if(!chan->song) {
-            continue;
-        }
+            if (!chan->song) {
+                continue;
+            }
 
-        if(chan->stop) {
-            Chan_RemoveTrackFromPlaylist(seq, chan);
+            if (chan->stop) {
+                Chan_RemoveTrackFromPlaylist(seq, chan);
+            }
+            else {
+                Chan_RunSong(seq, chan, msecs);
+            }
         }
-        else {
-            Chan_RunSong(seq, chan, msecs);
-        }
-    }
     SEMAPHORE_UNLOCK()
 }
 
@@ -991,14 +1024,14 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
 // Allocate data for all tracks for a midi song
 //
 
-static boolean Song_RegisterTracks(song_t* song) {
+static int Song_RegisterTracks(song_t* song) {
     int i;
     unsigned char* data;
 
     song->tracks = (track_t*)Z_Calloc(sizeof(track_t) * song->ntracks, PU_STATIC, 0);
     data = song->data + 0x0e;
 
-    for(i = 0; i < song->ntracks; i++) {
+    for (i = 0; i < song->ntracks; i++) {
         track_t* track = &song->tracks[i];
 
         memcpy(track, data, 8);
@@ -1023,7 +1056,7 @@ static boolean Song_RegisterTracks(song_t* song) {
 // Allocate data for all midi songs
 //
 
-static boolean Seq_RegisterSongs(doomseq_t* seq) {
+static int Seq_RegisterSongs(doomseq_t* seq) {
     int i;
     int start;
     int end;
@@ -1040,21 +1073,21 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
     //
     // no midi songs found in iwad?
     //
-    if(seq->nsongs <= 0) {
+    if (seq->nsongs <= 0) {
         return false;
     }
 
     seq->songs = (song_t*)Z_Calloc(seq->nsongs * sizeof(song_t), PU_STATIC, 0);
 
     fail = 0;
-    for(i = 0; i < seq->nsongs; i++) {
+    for (i = 0; i < seq->nsongs; i++) {
         song_t* song;
 
         song = &seq->songs[i];
         song->data = W_CacheLumpNum(start + i, PU_STATIC);
         song->length = W_LumpLength(start + i);
 
-        if(!song->length) {
+        if (!song->length) {
             continue;
         }
 
@@ -1071,7 +1104,7 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
         song->timediv   = Song_GetTimeDivision(song);
         song->tempo     = 480000;
 
-        if(!Song_RegisterTracks(song)) {
+        if (!Song_RegisterTracks(song)) {
             fail++;
             continue;
         }
@@ -1105,7 +1138,7 @@ static void Seq_Shutdown(doomseq_t* seq)
     //
     // fluidsynth cleanup stuff
     //
-    SDL_CloseAudioDevice(1);
+    delete_fluid_audio_driver(seq->driver);
     delete_fluid_synth(seq->synth);
     delete_fluid_settings(seq->settings);
 
@@ -1120,7 +1153,7 @@ static void Seq_Shutdown(doomseq_t* seq)
 // Main routine of the audio thread
 //
 
-static int SDLCALL Thread_PlayerHandler(void *param) {
+static int SDLCALL Thread_PlayerHandler(void* param) {
     doomseq_t* seq = (doomseq_t*)param;
     long start = SDL_GetTicks();
     long delay = 0;
@@ -1128,23 +1161,23 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
     int count = 0;
     signalhandler signal;
 
-    while(1) {
+    while (1) {
         //
         // check status of the sequencer
         //
         signal = seqsignallist[seq->signal];
 
-        if(signal) {
+        if (signal) {
             status = signal(seq);
 
-            if(status == 0) {
+            if (status == 0) {
                 // villsa 12292013 - add a delay here so we don't
                 // thrash the loop while idling
                 SDL_Delay(1);
                 continue;
             }
 
-            if(status == -1) {
+            if (status == -1) {
                 return 1;
             }
         }
@@ -1158,7 +1191,7 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
         // try to avoid incremental time de-syncs
         delay = count - (SDL_GetTicks() - start);
 
-        if(delay > 0) {
+        if (delay > 0) {
             SDL_Delay(delay);
         }
     }
@@ -1173,16 +1206,17 @@ static int SDLCALL Thread_PlayerHandler(void *param) {
 void I_InitSequencer(void) {
     boolean sffound;
     char *sfpath;
+#ifndef FL_VANILLA 
 	SDL_AudioDeviceID audio_device;
     SDL_AudioSpec required_spec;
-
+#endif
     CON_DPrintf("--------Initializing Software Synthesizer--------\n");
 
     //
     // init mutex
     //
     lock = SDL_CreateMutex();
-    if(lock == NULL) {
+    if (lock == NULL) {
         CON_Warnf("I_InitSequencer: failed to create mutex");
         return;
     }
@@ -1191,7 +1225,7 @@ void I_InitSequencer(void) {
     // init semaphore
     //
     semaphore = SDL_CreateSemaphore(1);
-    if(semaphore == NULL) {
+    if (semaphore == NULL) {
         CON_Warnf("I_InitSequencer: failed to create semaphore");
         return;
     }
@@ -1210,7 +1244,7 @@ void I_InitSequencer(void) {
     SDL_GetTicks();
 
     doomseq.thread = SDL_CreateThread(Thread_PlayerHandler, "SynthPlayer", &doomseq);
-    if(doomseq.thread == NULL) {
+    if (doomseq.thread == NULL) {
         CON_Warnf("I_InitSequencer: failed to create audio thread");
         return;
     }
@@ -1222,12 +1256,27 @@ void I_InitSequencer(void) {
     Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
     Seq_SetConfig(&doomseq, "synth.polyphony", 256);
 
+    // 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
+    // JACK, if it's compiled in. We don't want to start jackd for a game).
+    fluid_settings_setstr(doomseq.settings, "audio.driver", s_driver.string);
+
+    CON_DPrintf("Audio driver: %s\n", s_driver.string);
+
     //
     // init synth
     //
     doomseq.synth = new_fluid_synth(doomseq.settings);
-    if(doomseq.synth == NULL) {
+    if (doomseq.synth == NULL) {
         CON_Warnf("I_InitSequencer: failed to create synthesizer");
+        return;
+    }
+
+    //
+    // init audio driver
+    //
+    doomseq.driver = new_fluid_audio_driver(doomseq.settings, doomseq.synth);
+    if (doomseq.driver == NULL) {
+        CON_Warnf("I_InitSequencer: failed to create audio driver");
         return;
     }
 
@@ -1244,7 +1293,8 @@ void I_InitSequencer(void) {
             CON_DPrintf("Loading %s\n", s_soundfont.string);
 
             sffound = true;
-        } else {
+        }
+        else {
             CON_Warnf("CVar s_soundfont doesn't point to a file.", s_soundfont.string);
         }
     }
@@ -1266,12 +1316,11 @@ void I_InitSequencer(void) {
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
     Seq_SetGain(&doomseq);
-    Seq_SetReverb(&doomseq, 0.65f, 0.0f, 2.0f, 1.0f);
 
     //
     // if something went terribly wrong, then shutdown everything
     //
-    if(!Seq_RegisterSongs(&doomseq)) {
+    if (!Seq_RegisterSongs(&doomseq)) {
         CON_Warnf("I_InitSequencer: Failed to register songs\n");
         Seq_Shutdown(&doomseq);
         return;
@@ -1280,14 +1329,14 @@ void I_InitSequencer(void) {
     //
     // where's the soundfont file? not found then shutdown everything
     //
-    if(doomseq.sfont_id == -1) {
+    if (doomseq.sfont_id == -1) {
         CON_Warnf("I_InitSequencer: Failed to find soundfont file\n");
         Seq_Shutdown(&doomseq);
         return;
     }
 
     Song_ClearPlaylist();
-
+#ifndef FL_VANILLA
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
     }
@@ -1302,6 +1351,7 @@ void I_InitSequencer(void) {
     SDL_PauseAudioDevice(audio_device, SDL_FALSE);
     // 20120205 villsa - sequencer is now ready
     seqready = true;
+#endif
 }
 
 //
@@ -1325,7 +1375,7 @@ int I_GetVoiceCount(void) {
 //
 
 sndsrc_t* I_GetSoundSource(int c) {
-    if(playlist[c].song == NULL) {
+    if (playlist[c].song == NULL) {
         return NULL;
     }
 
@@ -1357,7 +1407,7 @@ void I_UpdateChannel(int c, int volume, int pan) {
 //
 
 void I_ShutdownSound(void) {
-    if(doomseq.synth) {
+    if (doomseq.synth) {
         Seq_Shutdown(&doomseq);
     }
 }
@@ -1383,7 +1433,7 @@ void I_SetSoundVolume(float volume) {
 //
 
 void I_ResetSound(void) {
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
@@ -1396,7 +1446,7 @@ void I_ResetSound(void) {
 //
 
 void I_PauseSound(void) {
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
@@ -1409,7 +1459,7 @@ void I_PauseSound(void) {
 //
 
 void I_ResumeSound(void) {
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
@@ -1422,7 +1472,7 @@ void I_ResumeSound(void) {
 //
 
 void I_SetGain(float db) {
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
@@ -1441,16 +1491,16 @@ void I_StartMusic(int mus_id) {
     channel_t* chan;
     int i;
 
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
     SEMAPHORE_LOCK()
-    song = &doomseq.songs[mus_id];
-    for(i = 0; i < song->ntracks; i++) {
+        song = &doomseq.songs[mus_id];
+    for (i = 0; i < song->ntracks; i++) {
         chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
 
-        if(chan == NULL) {
+        if (chan == NULL) {
             break;
         }
 
@@ -1468,16 +1518,16 @@ void I_StopSound(sndsrc_t* origin, int sfx_id) {
     channel_t* c;
     int i;
 
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
     SEMAPHORE_LOCK()
-    song = &doomseq.songs[sfx_id];
-    for(i = 0; i < MIDI_CHANNELS; i++) {
+        song = &doomseq.songs[sfx_id];
+    for (i = 0; i < MIDI_CHANNELS; i++) {
         c = &playlist[i];
 
-        if(song == c->song || (origin && c->origin == origin)) {
+        if (song == c->song || (origin && c->origin == origin)) {
             c->stop = true;
         }
     }
@@ -1493,20 +1543,20 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
     channel_t* chan;
     int i;
 
-    if(!seqready) {
+    if (!seqready) {
         return;
     }
 
-    if(doomseq.nsongs <= 0) {
+    if (doomseq.nsongs <= 0) {
         return;
     }
 
     SEMAPHORE_LOCK()
-    song = &doomseq.songs[sfx_id];
-    for(i = 0; i < song->ntracks; i++) {
+        song = &doomseq.songs[sfx_id];
+    for (i = 0; i < song->ntracks; i++) {
         chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
 
-        if(chan == NULL) {
+        if (chan == NULL) {
             break;
         }
 
