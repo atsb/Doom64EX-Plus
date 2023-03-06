@@ -38,7 +38,7 @@
 //
 
 byte passwordData[16];
-boolean doPassword = false;
+dboolean doPassword = false;
 const char* passwordChar = "bcdfghjklmnpqrstvwxyz0123456789?";
 static const int passwordTable[10] = { 1, 8, 9, 5, 6, 2, 7, 0, 4, 3 };
 
@@ -59,7 +59,7 @@ static void M_EncodePassItem(int* bit, int value, int maxvalue) {
 // M_CheckPassCode
 //
 
-static boolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
+static dboolean M_CheckPassCode(int* bit1, int* bit2, int* bit3, byte* encode) {
 	byte checkByte = 0;
 	if (*bit1 < 0) {
 		*bit2 = (*bit1 + 7) >> 3;
@@ -226,7 +226,7 @@ static int M_DecodePassItem(int bytecode, int maxvalue) {
 // M_DecodePassword
 //
 
-boolean M_DecodePassword(boolean checkOnly) {
+dboolean M_DecodePassword(dboolean checkOnly) {
 	byte data[16];
 	byte decode[10];
 	int bit = 0;

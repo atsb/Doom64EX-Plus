@@ -97,13 +97,13 @@ static int SortSprites(const vtxlist_t* a, const vtxlist_t* b) {
 // DL_ProcessDrawList
 //
 
-void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
+void DL_ProcessDrawList(int tag, dboolean(*procfunc)(vtxlist_t*, int*)) {
 	drawlist_t* dl;
 	int i;
 	int drawcount = 0;
 	vtxlist_t* head;
 	vtxlist_t* tail;
-	boolean checkNightmare = false;
+	dboolean checkNightmare = false;
 
 	if (tag < 0 && tag >= NUMDRAWLISTS) {
 		return;
@@ -228,7 +228,7 @@ int DL_GetDrawListSize(int tag) {
 // DL_BeginDrawList
 //
 
-void DL_BeginDrawList(boolean t) {
+void DL_BeginDrawList(dboolean t) {
 	dglSetVertex(drawVertex);
 	GL_SetTextureUnit(0, t);
 }

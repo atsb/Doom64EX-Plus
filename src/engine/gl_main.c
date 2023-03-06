@@ -54,7 +54,7 @@ int ViewHeight = 0;
 
 int gl_max_texture_units;
 int gl_max_texture_size;
-boolean gl_has_combiner;
+dboolean gl_has_combiner;
 
 const char* gl_vendor;
 const char* gl_renderer;
@@ -62,10 +62,10 @@ const char* gl_version;
 
 static float glScaleFactor = 1.0f;
 
-boolean    usingGL = false;
+dboolean    usingGL = false;
 int         DGL_CLAMP = GL_CLAMP;
 float       max_anisotropic = 0;
-boolean    widescreen = false;
+dboolean    widescreen = false;
 
 CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(r_filter);
@@ -103,7 +103,7 @@ GL_EXT_texture_filter_anisotropic_Define();
 // FindExtension
 //
 
-static boolean FindExtension(const char* ext) {
+static dboolean FindExtension(const char* ext) {
 	const char* extensions = NULL;
 	const char* start;
 	const char* where, * terminator;
@@ -137,7 +137,7 @@ static boolean FindExtension(const char* ext) {
 // GL_CheckExtension
 //
 
-boolean GL_CheckExtension(const char* ext) {
+dboolean GL_CheckExtension(const char* ext) {
 	if (FindExtension(ext)) {
 		CON_Printf(WHITE, "GL Extension: %s = true\n", ext);
 		return true;
@@ -170,7 +170,7 @@ void* GL_RegisterProc(const char* address) {
 
 static byte checkortho = 0;
 
-void GL_SetOrtho(boolean stretch) {
+void GL_SetOrtho(dboolean stretch) {
 	float width;
 	float height;
 
@@ -371,7 +371,7 @@ void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
 // GL_Draw2DQuad
 //
 
-void GL_Draw2DQuad(vtx_t* v, boolean stretch) {
+void GL_Draw2DQuad(vtx_t* v, dboolean stretch) {
 	GL_SetOrtho(stretch);
 
 	dglSetVertex(v);
@@ -391,7 +391,7 @@ void GL_Draw2DQuad(vtx_t* v, boolean stretch) {
 //
 
 void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
-	float u1, float u2, float v1, float v2, rcolor c, boolean stretch) {
+	float u1, float u2, float v1, float v2, rcolor c, dboolean stretch) {
 	vtx_t v[4];
 
 	GL_Set2DQuad(v, x, y, width, height, u1, u2, v1, v2, c);
@@ -404,7 +404,7 @@ void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
 
 static int glstate_flag = 0;
 
-void GL_SetState(int bit, boolean enable) {
+void GL_SetState(int bit, dboolean enable) {
 #define TOGGLEGLBIT(flag, bit)                          \
     if(enable && !(glstate_flag & (1 << flag)))         \
     {                                                   \
@@ -470,11 +470,11 @@ void GL_ClearView(rcolor clearcolor) {
 // GL_GetBool
 //
 
-boolean GL_GetBool(int x) {
-	byte b;
+dboolean GL_GetBool(int x) {
+	dboolean b;
 	dglGetBooleanv(x, &b);
 
-	return (boolean)b;
+	return (dboolean)b;
 }
 
 //

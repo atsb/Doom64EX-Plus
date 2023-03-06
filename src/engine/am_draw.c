@@ -88,7 +88,7 @@ void AM_EndDraw(void) {
 //
 
 static float am_drawscale = 0.0f;
-static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
+static dboolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	leaf_t* leaf;
 	rcolor color;
 	fixed_t tx;
@@ -275,7 +275,7 @@ void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
 // AM_DrawTriangle
 //
 
-void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, byte b) {
+void AM_DrawTriangle(mobj_t* mobj, float scale, dboolean solid, byte r, byte g, byte b) {
 	vtx_t tri[3];
 	fixed_t x;
 	fixed_t y;

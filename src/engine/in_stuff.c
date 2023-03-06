@@ -40,12 +40,12 @@
 static int              f_alpha = 0;
 static int              fInterFadeOut = false;
 static char             fInterString[16][32];
-static boolean         fInterDone = false;
+static dboolean         fInterDone = false;
 static int              fInterAlpha = 0;
 static int              fInterSlot = 0;
 static int              fTextOffset = 0;
 static clusterdef_t* fcluster = NULL;
-static boolean         fstopmusic = false;
+static dboolean         fstopmusic = false;
 
 //
 // IN_Start

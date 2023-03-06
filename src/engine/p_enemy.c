@@ -153,7 +153,7 @@ void P_NoiseAlert(mobj_t* target, mobj_t* emmiter) {
 // P_CheckMeleeRange
 //
 
-boolean P_CheckMeleeRange(mobj_t* actor) {
+dboolean P_CheckMeleeRange(mobj_t* actor) {
 	mobj_t* pl;
 	fixed_t    dist;
 
@@ -179,7 +179,7 @@ boolean P_CheckMeleeRange(mobj_t* actor) {
 // P_CheckMissileRange
 //
 
-boolean P_CheckMissileRange(mobj_t* actor) {
+dboolean P_CheckMissileRange(mobj_t* actor) {
 	fixed_t    dist;
 
 	if (!(actor->flags & MF_SEETARGET)) {
@@ -243,7 +243,7 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 	fixed_t deltaz = 0;
 	fixed_t offs = 0;
 	int type = 0;
-	boolean aim = false;
+	dboolean aim = false;
 	mobj_t* mo;
 
 	if (direction == DP_LEFT) {
@@ -362,11 +362,11 @@ void T_MobjExplode(mobjexp_t* mexp) {
 fixed_t	xspeed[8] = { FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000 };
 fixed_t yspeed[8] = { 0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000 };
 
-boolean P_Move(mobj_t* actor) {
+dboolean P_Move(mobj_t* actor) {
 	fixed_t    tryx;
 	fixed_t    tryy;
 	line_t*		ld;
-	boolean   good;
+	dboolean   good;
 
 	if (actor->movedir == DI_NODIR) {
 		return false;
@@ -431,7 +431,7 @@ boolean P_Move(mobj_t* actor) {
 // an OpenDoor call is made to start it opening.
 //
 
-boolean P_TryWalk(mobj_t* actor) {
+dboolean P_TryWalk(mobj_t* actor) {
 	if (!P_Move(actor))
 		return false;
 
@@ -564,7 +564,7 @@ void P_NewChaseDir(mobj_t* actor) {
 // Returns true if a player is targeted.
 //
 
-boolean P_LookForPlayers(mobj_t* actor, boolean allaround) {
+dboolean P_LookForPlayers(mobj_t* actor, dboolean allaround) {
 	angle_t     an;
 	fixed_t     dist;
 
@@ -1578,7 +1578,7 @@ void A_SkullSetAlpha(mobj_t* actor) {
 // PIT_PainCheckLine
 //
 
-static boolean PIT_PainCheckLine(intercept_t* in) {
+static dboolean PIT_PainCheckLine(intercept_t* in) {
 	if (!in->d.line->backsector) {
 		return false;
 	}
@@ -2042,10 +2042,10 @@ mobj_t* vileobj;
 fixed_t		viletryx;
 fixed_t		viletryy;
 
-boolean PIT_VileCheck(mobj_t* thing)
+dboolean PIT_VileCheck(mobj_t* thing)
 {
 	int		maxdist;
-	boolean	check;
+	dboolean	check;
 
 	if (!(thing->flags & MF_CORPSE))
 		return true;	// not a monster

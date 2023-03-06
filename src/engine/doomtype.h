@@ -30,12 +30,26 @@
 
 #include <stdint.h>
 #include <limits.h>
+#if defined(C99)
 #include <stdbool.h>
+typedef bool dboolean;
+#elif defined(CHAR_BOOL)
+#define false 0
+#define true 1
+typedef unsigned char		dboolean;
+#else
+#define false 0
+#define true 1
+typedef int dboolean;
+#endif
 
-typedef unsigned char		boolean;
+#ifndef _MSC_VER
 typedef unsigned char		byte;
+#else
+#include <rpc.h>
+#include <rpcndr.h>
+#endif
 typedef unsigned short		word;
-
 #include <limits.h>
 
 #ifndef MAX

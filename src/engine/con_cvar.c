@@ -109,7 +109,7 @@ char* CON_CvarString(char* name) {
 
 void CON_CvarSet(char* var_name, char* value) {
 	cvar_t* var;
-	boolean changed;
+	dboolean changed;
 
 	var = CON_CvarGet(var_name);
 	if (!var) {

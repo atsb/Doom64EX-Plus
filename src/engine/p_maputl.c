@@ -432,11 +432,11 @@ P_SetThingPosition(mobj_t* thing) {
 // to P_BlockLinesIterator, then make one or more calls
 // to it.
 //
-boolean
+dboolean
 P_BlockLinesIterator
 (int            x,
 	int            y,
-	boolean(*func)(line_t*)) {
+	dboolean(*func)(line_t*)) {
 	int            offset;
 	short* list;
 	line_t* ld;
@@ -475,11 +475,11 @@ P_BlockLinesIterator
 //
 // P_BlockThingsIterator
 //
-boolean
+dboolean
 P_BlockThingsIterator
 (int            x,
 	int            y,
-	boolean(*func)(mobj_t*)) {
+	dboolean(*func)(mobj_t*)) {
 	mobj_t* mobj;
 
 	if (x < 0
@@ -518,7 +518,7 @@ int        ptflags;
 // are on opposite sides of the trace.
 // Returns true if EARLYOUT and a solid line hit.
 //
-boolean
+dboolean
 PIT_AddLineIntercepts(line_t* ld) {
 	int            s1;
 	int            s2;
@@ -566,7 +566,7 @@ PIT_AddLineIntercepts(line_t* ld) {
 //
 // PIT_AddThingIntercepts
 //
-boolean PIT_AddThingIntercepts(mobj_t* thing) {
+dboolean PIT_AddThingIntercepts(mobj_t* thing) {
 	fixed_t        x1;
 	fixed_t        y1;
 	fixed_t        x2;
@@ -575,7 +575,7 @@ boolean PIT_AddThingIntercepts(mobj_t* thing) {
 	int            s1;
 	int            s2;
 
-	boolean        tracepositive;
+	dboolean        tracepositive;
 
 	divline_t        dl;
 
@@ -635,7 +635,7 @@ boolean PIT_AddThingIntercepts(mobj_t* thing) {
 // Returns true if the traverser function returns true
 // for all lines.
 //
-boolean
+dboolean
 P_TraverseIntercepts
 (traverser_t     func,
 	fixed_t      maxfrac) {
@@ -701,14 +701,14 @@ void T_TraceDrawer(tracedrawer_t* tdrawer) {
 // Returns true if the traverser function returns true
 // for all lines.
 //
-boolean
+dboolean
 P_PathTraverse
 (fixed_t        x1,
 	fixed_t        y1,
 	fixed_t        x2,
 	fixed_t        y2,
 	int            flags,
-	boolean(*trav)(intercept_t*)) {
+	dboolean(*trav)(intercept_t*)) {
 	fixed_t    xt1;
 	fixed_t    yt1;
 	fixed_t    xt2;

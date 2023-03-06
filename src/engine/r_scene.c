@@ -40,7 +40,7 @@ CVAR_EXTERNAL(st_flashoverlay);
 // ProcessWalls
 //
 
-static boolean ProcessWalls(vtxlist_t* vl, int* drawcount) {
+static dboolean ProcessWalls(vtxlist_t* vl, int* drawcount) {
 	seg_t* seg = (seg_t*)vl->data;
 	sector_t* sec = seg->frontsector;
 
@@ -66,7 +66,7 @@ static boolean ProcessWalls(vtxlist_t* vl, int* drawcount) {
 // ProcessFlats
 //
 
-static boolean ProcessFlats(vtxlist_t* vl, int* drawcount) {
+static dboolean ProcessFlats(vtxlist_t* vl, int* drawcount) {
 	int j;
 	fixed_t tx;
 	fixed_t ty;
@@ -171,7 +171,7 @@ static boolean ProcessFlats(vtxlist_t* vl, int* drawcount) {
 // ProcessSprites
 //
 
-static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
+static dboolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 	visspritelist_t* vis;
 	mobj_t* mobj;
 

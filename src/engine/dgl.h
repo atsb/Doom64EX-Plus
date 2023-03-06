@@ -3423,7 +3423,7 @@ d_inline static void glViewport_DEBUG(GLint x, GLint y, GLsizei width, GLsizei h
 //
 // GL_ARB_multitexture
 //
-extern boolean has_GL_ARB_multitexture;
+extern dboolean has_GL_ARB_multitexture;
 
 extern PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB;
 extern PFNGLCLIENTACTIVETEXTUREARBPROC _glClientActiveTextureARB;
@@ -3461,7 +3461,7 @@ extern PFNGLMULTITEXCOORD4SARBPROC _glMultiTexCoord4sARB;
 extern PFNGLMULTITEXCOORD4SVARBPROC _glMultiTexCoord4svARB;
 
 #define GL_ARB_multitexture_Define() \
-boolean has_GL_ARB_multitexture = false; \
+dboolean has_GL_ARB_multitexture = false; \
 PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL; \
 PFNGLCLIENTACTIVETEXTUREARBPROC _glClientActiveTextureARB = NULL; \
 PFNGLMULTITEXCOORD1DARBPROC _glMultiTexCoord1dARB = NULL; \
@@ -3924,13 +3924,13 @@ d_inline static void glUnlockArraysEXT_DEBUG(const char* file, int line) {
 //
 // GL_EXT_multi_draw_arrays
 //
-extern boolean has_GL_EXT_multi_draw_arrays;
+extern dboolean has_GL_EXT_multi_draw_arrays;
 
 extern PFNGLMULTIDRAWARRAYSEXTPROC _glMultiDrawArraysEXT;
 extern PFNGLMULTIDRAWELEMENTSEXTPROC _glMultiDrawElementsEXT;
 
 #define GL_EXT_multi_draw_arrays_Define() \
-boolean has_GL_EXT_multi_draw_arrays = false; \
+dboolean has_GL_EXT_multi_draw_arrays = false; \
 PFNGLMULTIDRAWARRAYSEXTPROC _glMultiDrawArraysEXT = NULL; \
 PFNGLMULTIDRAWELEMENTSEXTPROC _glMultiDrawElementsEXT = NULL
 
@@ -3970,7 +3970,7 @@ d_inline static void glMultiDrawElementsEXT_DEBUG(GLenum mode, GLsizei* count, G
 //
 // GL_EXT_fog_coord
 //
-extern boolean has_GL_EXT_fog_coord;
+extern dboolean has_GL_EXT_fog_coord;
 
 extern PFNGLFOGCOORDFEXTPROC _glFogCoordfEXT;
 extern PFNGLFOGCOORDFVEXTPROC _glFogCoordfvEXT;
@@ -3979,7 +3979,7 @@ extern PFNGLFOGCOORDDVEXTPROC _glFogCoorddvEXT;
 extern PFNGLFOGCOORDPOINTEREXTPROC _glFogCoordPointerEXT;
 
 #define GL_EXT_fog_coord_Define() \
-boolean has_GL_EXT_fog_coord = false; \
+dboolean has_GL_EXT_fog_coord = false; \
 PFNGLFOGCOORDFEXTPROC _glFogCoordfEXT = NULL; \
 PFNGLFOGCOORDFVEXTPROC _glFogCoordfvEXT = NULL; \
 PFNGLFOGCOORDDEXTPROC _glFogCoorddEXT = NULL; \
@@ -4055,7 +4055,7 @@ d_inline static void glFogCoordPointerEXT_DEBUG(GLenum type, GLsizei stride, GLv
 //
 // GL_ARB_vertex_buffer_object
 //
-extern boolean has_GL_ARB_vertex_buffer_object;
+extern dboolean has_GL_ARB_vertex_buffer_object;
 
 extern PFNGLBINDBUFFERARBPROC _glBindBufferARB;
 extern PFNGLDELETEBUFFERSARBPROC _glDeleteBuffersARB;
@@ -4070,7 +4070,7 @@ extern PFNGLGETBUFFERPARAMETERIVARBPROC _glGetBufferParameterivARB;
 extern PFNGLGETBUFFERPOINTERVARBPROC _glGetBufferPointervARB;
 
 #define GL_ARB_vertex_buffer_object_Define() \
-boolean has_GL_ARB_vertex_buffer_object = false; \
+dboolean has_GL_ARB_vertex_buffer_object = false; \
 PFNGLBINDBUFFERARBPROC _glBindBufferARB = NULL; \
 PFNGLDELETEBUFFERSARBPROC _glDeleteBuffersARB = NULL; \
 PFNGLGENBUFFERSARBPROC _glGenBuffersARB = NULL; \
@@ -4218,10 +4218,10 @@ d_inline static void glGetBufferPointervARB_DEBUG(GLenum target, GLenum pname, v
 //
 // GL_ARB_texture_env_combine
 //
-extern boolean has_GL_ARB_texture_env_combine;
+extern dboolean has_GL_ARB_texture_env_combine;
 
 #define GL_ARB_texture_env_combine_Define() \
-boolean has_GL_ARB_texture_env_combine = false;
+dboolean has_GL_ARB_texture_env_combine = false;
 
 #define GL_ARB_texture_env_combine_Init() \
 has_GL_ARB_texture_env_combine = GL_CheckExtension("GL_ARB_texture_env_combine");
@@ -4229,10 +4229,10 @@ has_GL_ARB_texture_env_combine = GL_CheckExtension("GL_ARB_texture_env_combine")
 //
 // GL_EXT_texture_env_combine
 //
-extern boolean has_GL_EXT_texture_env_combine;
+extern dboolean has_GL_EXT_texture_env_combine;
 
 #define GL_EXT_texture_env_combine_Define() \
-boolean has_GL_EXT_texture_env_combine = false;
+dboolean has_GL_EXT_texture_env_combine = false;
 
 #define GL_EXT_texture_env_combine_Init() \
 has_GL_EXT_texture_env_combine = GL_CheckExtension("GL_EXT_texture_env_combine");
@@ -4240,10 +4240,10 @@ has_GL_EXT_texture_env_combine = GL_CheckExtension("GL_EXT_texture_env_combine")
 //
 // GL_EXT_texture_filter_anisotropic
 //
-extern boolean has_GL_EXT_texture_filter_anisotropic;
+extern dboolean has_GL_EXT_texture_filter_anisotropic;
 
 #define GL_EXT_texture_filter_anisotropic_Define() \
-boolean has_GL_EXT_texture_filter_anisotropic = false;
+dboolean has_GL_EXT_texture_filter_anisotropic = false;
 
 #define GL_EXT_texture_filter_anisotropic_Init() \
 has_GL_EXT_texture_filter_anisotropic = GL_CheckExtension("GL_EXT_texture_filter_anisotropic");

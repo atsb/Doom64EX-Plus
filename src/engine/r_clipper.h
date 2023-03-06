@@ -24,7 +24,7 @@
 #ifndef R_CLIPPER_H
 #define R_CLIPPER_H
 
-boolean    R_Clipper_SafeCheckRange(angle_t startAngle, angle_t endAngle);
+dboolean    R_Clipper_SafeCheckRange(angle_t startAngle, angle_t endAngle);
 void        R_Clipper_SafeAddClipRange(angle_t startangle, angle_t endangle);
 void        R_Clipper_Clear(void);
 
@@ -32,6 +32,6 @@ extern float frustum[6][4];
 
 angle_t     R_FrustumAngle(void);
 void        R_FrustrumSetup(void);
-boolean    R_FrustrumTestVertex(vtx_t* vertex, int count);
+dboolean    R_FrustrumTestVertex(vtx_t* vertex, int count);
 
 #endif

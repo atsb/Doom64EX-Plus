@@ -147,7 +147,7 @@ static char *CleanString(char *s)
 //
 // Returns true if read correctly
 
-bool DEH_ParseAssignment(char *line, char **variable_name, char **value)
+dboolean DEH_ParseAssignment(char *line, char **variable_name, char **value)
 {
     char *p;
 
@@ -318,7 +318,7 @@ int DEH_LoadFile(char *filename)
 // Load dehacked file from WAD lump.
 // If allow_long is set, allow long strings and cheats just for this lump.
 
-int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error)
+int DEH_LoadLump(int lumpnum, dboolean allow_long, dboolean allow_error)
 {
     deh_context_t *context;
 
@@ -349,7 +349,7 @@ int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error)
     return 1;
 }
 
-int DEH_LoadLumpByName(char *name, bool allow_long, bool allow_error)
+int DEH_LoadLumpByName(char *name, dboolean allow_long, dboolean allow_error)
 {
     int lumpnum;
 

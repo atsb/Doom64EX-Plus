@@ -44,8 +44,8 @@
 //
 
 result_e T_MovePlane(sector_t* sector, fixed_t speed, fixed_t dest,
-	boolean crush, int floorOrCeiling, int direction) {
-	boolean flag;
+	dboolean crush, int floorOrCeiling, int direction) {
+	dboolean flag;
 	fixed_t lastpos;
 
 	switch (floorOrCeiling) {
@@ -457,8 +457,8 @@ void T_MoveSplitPlane(splitmove_t* split) {
 	sector_t* sector = split->sector;
 	fixed_t lastceilpos = 0;
 	fixed_t lastflrpos = 0;
-	boolean cdone = false;
-	boolean fdone = false;
+	dboolean cdone = false;
+	dboolean fdone = false;
 
 	if (split->ceildir == -1) {
 		lastceilpos = sector->ceilingheight;
@@ -518,7 +518,7 @@ void T_MoveSplitPlane(splitmove_t* split) {
 // EV_SplitSector
 //
 
-int EV_SplitSector(line_t* line, boolean sync) {
+int EV_SplitSector(line_t* line, dboolean sync) {
 	int             secnum;
 	int             rtn;
 	sector_t* sec;

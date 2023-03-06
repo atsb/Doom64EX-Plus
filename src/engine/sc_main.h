@@ -35,7 +35,7 @@ typedef struct {
 	void (*open)(const char*);
 	void (*close)(void);
 	void (*compare)(const char*);
-	int (*find)(boolean);
+	int (*find)(dboolean);
 	char(*fgetchar)(void);
 	void (*rewind)(void);
 	char* (*getstring)(void);

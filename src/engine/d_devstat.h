@@ -25,6 +25,6 @@
 
 void D_DeveloperDisplay(void);
 void D_BoyISuck(void);
-boolean D_DevKeyResponder(event_t* ev);
+dboolean D_DevKeyResponder(event_t* ev);
 
 #endif

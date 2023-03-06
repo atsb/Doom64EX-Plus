@@ -47,11 +47,11 @@ static int          castrotation = 0;
 static int          castnum;
 static int     casttics;
 static state_t* caststate;
-static boolean     castdeath;
-static boolean     castdying;
+static dboolean     castdeath;
+static dboolean     castdying;
 static int          castframes;
 static int          castonmelee;
-static boolean     castattacking;
+static dboolean     castattacking;
 static dPalette_t   finalePal;
 
 typedef struct {

@@ -31,12 +31,12 @@ typedef void (*actionproc_t)(int64_t data, char** param);
 #define CMD(name) void CMD_ ## name(int64_t data, char** param)
 
 void        G_InitActions(void);
-boolean    G_ActionResponder(event_t* ev);
+dboolean    G_ActionResponder(event_t* ev);
 void        G_AddCommand(char* name, actionproc_t proc, int64_t data);
 void        G_ActionTicker(void);
 void        G_ExecuteCommand(char* action);
 void        G_BindActionByName(char* key, char* action);
-boolean    G_BindActionByEvent(event_t* ev, char* action);
+dboolean    G_BindActionByEvent(event_t* ev, char* action);
 void        G_ShowBinding(char* key);
 void        G_GetActionBindings(char* buff, char* action);
 void        G_UnbindAction(char* action);
@@ -44,6 +44,6 @@ int         G_ListCommands(void);
 void        G_OutputBindings(FILE* fh);
 void        G_DoCmdMouseMove(int x, int y);
 
-extern boolean    ButtonAction;
+extern dboolean    ButtonAction;
 
 #endif

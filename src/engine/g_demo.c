@@ -44,21 +44,21 @@
 #endif
 
 void        G_DoLoadLevel(void);
-boolean    G_CheckDemoStatus(void);
+dboolean    G_CheckDemoStatus(void);
 void        G_ReadDemoTiccmd(ticcmd_t* cmd);
 void        G_WriteDemoTiccmd(ticcmd_t* cmd);
 
 FILE* demofp;
 byte* demo_p;
 char            demoname[256];
-boolean        demorecording = false;
-boolean        demoplayback = false;
-boolean        netdemo = false;
+dboolean        demorecording = false;
+dboolean        demoplayback = false;
+dboolean        netdemo = false;
 byte* demobuffer;
 byte* demoend;
-boolean        singledemo = false;    // quit after playing a demo from cmdline
-boolean        endDemo;
-boolean        iwadDemo = false;
+dboolean        singledemo = false;    // quit after playing a demo from cmdline
+dboolean        endDemo;
+dboolean        iwadDemo = false;
 
 extern int      starttime;
 
@@ -299,7 +299,7 @@ void G_PlayDemo(const char* name) {
 // Returns true if a new demo loop action will take place
 //
 
-boolean G_CheckDemoStatus(void) {
+dboolean G_CheckDemoStatus(void) {
 	if (endDemo) {
 		demorecording = false;
 		fputc(DEMOMARKER, demofp);

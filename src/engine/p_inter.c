@@ -80,7 +80,7 @@ int infraredFactor = 0;
 // Returns false if the ammo can't be picked up at all
 //
 
-boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
+dboolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 	int         oldammo;
 
 	if (ammo == am_noammo) {
@@ -178,8 +178,8 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 //
-boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dropped) {
-	boolean gaveammo, gaveweapon;
+dboolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dropped) {
+	dboolean gaveammo, gaveweapon;
 
 	if (netgame && (deathmatch != 2) && !dropped) {
 		if (item && item->flags & MF_TRIGTOUCH) {
@@ -232,7 +232,7 @@ boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dr
 // P_GiveBody
 // Returns false if the body isn't needed at all
 //
-boolean P_GiveBody(player_t* player, int num) {
+dboolean P_GiveBody(player_t* player, int num) {
 	if (player->health >= MAXHEALTH) {
 		return false;
 	}
@@ -251,7 +251,7 @@ boolean P_GiveBody(player_t* player, int num) {
 // Returns false if the armor is worse
 // than the current armor.
 //
-boolean P_GiveArmor(player_t* player, int armortype) {
+dboolean P_GiveArmor(player_t* player, int armortype) {
 	int         hits;
 
 	hits = armortype * 100;
@@ -268,7 +268,7 @@ boolean P_GiveArmor(player_t* player, int armortype) {
 //
 // P_GiveCard
 //
-static boolean P_GiveCard(player_t* player, mobj_t* item, card_t card) {
+static dboolean P_GiveCard(player_t* player, mobj_t* item, card_t card) {
 	if (netgame && (item && item->flags & MF_TRIGTOUCH)) {
 		P_SpawnMobj(item->x, item->y, item->z, item->type);
 		return true;
@@ -318,7 +318,7 @@ static boolean P_GiveCard(player_t* player, mobj_t* item, card_t card) {
 //
 // P_GivePower
 //
-boolean P_GivePower(player_t* player, int power) {
+dboolean P_GivePower(player_t* player, int power) {
 	if (power == pw_invulnerability) {
 		player->powers[power] = INVULNTICS;
 		return true;

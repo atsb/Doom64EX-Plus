@@ -57,7 +57,7 @@ char*		dstrstr(char* s1, char* s2);
 int         datoi(const char* str);
 float       datof(char* str);
 int         dhtoi(char* str);
-bool		dfcmp(float f1, float f2);
+dboolean		dfcmp(float f1, float f2);
 int         dsprintf(char* buf, const char* format, ...);
 int         dsnprintf(char* src, unsigned int n, const char* str, ...);
 
@@ -255,7 +255,7 @@ enum {
 	COMPATF_MOBJPASS = (1 << 1)     // allow mobjs to stand on top one another
 };
 
-extern boolean windowpause;
+extern dboolean windowpause;
 
 //
 // DOOM keyboard definition.

@@ -106,15 +106,15 @@ typedef struct player_s {
 
     // Power ups. invinc and invis are tic counters.
     int             powers[NUMPOWERS];
-    boolean        cards[NUMCARDS];
+    dboolean        cards[NUMCARDS];
 
     // [kex] for hud when trying to open a locked door
-    boolean        tryopen[NUMCARDS];
+    dboolean        tryopen[NUMCARDS];
 
     // [d64] laser artifact flags
     int             artifacts;
 
-    boolean        backpack;
+    dboolean        backpack;
 
     // Frags, kills of other players.
     int             frags[MAXPLAYERS];
@@ -123,7 +123,7 @@ typedef struct player_s {
     // Is wp_nochange if not changing.
     weapontype_t    pendingweapon;
 
-    boolean        weaponowned[NUMWEAPONS];
+    dboolean        weaponowned[NUMWEAPONS];
     int             ammo[NUMAMMO];
     int             maxammo[NUMAMMO];
 
@@ -173,10 +173,10 @@ typedef struct player_s {
     int             palette;
 
     // [d64] Track if player is on the ground or not
-    boolean        onground;
+    dboolean        onground;
 
     // [kex] allow autoaim?
-    boolean        autoaim;
+    dboolean        autoaim;
     
     // [kex] display pic as message instead of text
     int             messagepic;

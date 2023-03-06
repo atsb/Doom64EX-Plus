@@ -150,9 +150,9 @@ void I_InitClockRate(void) {
 
 static unsigned int start_displaytime;
 static unsigned int displaytime;
-static boolean InDisplay = false;
+static dboolean InDisplay = false;
 
-boolean realframe = false;
+dboolean realframe = false;
 
 fixed_t         rendertic_frac = 0;
 unsigned int    rendertic_start;
@@ -164,7 +164,7 @@ const float     rendertic_msec = 100 * TICRATE / 100000.0f;
 // I_StartDisplay
 //
 
-boolean I_StartDisplay(void) {
+dboolean I_StartDisplay(void) {
 	rendertic_frac = I_GetTimeFrac();
 
 	if (InDisplay) {
@@ -347,7 +347,7 @@ char* I_FindDataFile(char* file) {
  * @param path Absolute path to check.
  */
 
-boolean I_FileExists(const char* path)
+dboolean I_FileExists(const char* path)
 {
 	struct stat st;
 	return !stat(path, &st) && S_ISREG(st.st_mode);
@@ -476,7 +476,7 @@ void I_Printf(const char* string, ...) {
 // I_BeginRead
 //
 
-boolean    inshowbusy = false;
+dboolean    inshowbusy = false;
 
 void I_BeginRead(void) {
 	if (!devparm) {

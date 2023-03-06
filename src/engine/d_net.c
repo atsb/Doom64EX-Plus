@@ -48,9 +48,9 @@
 
 #define FEATURE_MULTIPLAYER 1
 
-boolean    ShowGun = true;
-boolean    drone = false;
-boolean    net_cl_new_sync = true;    // Use new client syncronisation code
+dboolean    ShowGun = true;
+dboolean    drone = false;
+dboolean    net_cl_new_sync = true;    // Use new client syncronisation code
 fixed_t     offsetms;
 
 //
@@ -64,8 +64,8 @@ fixed_t     offsetms;
 
 ticcmd_t    netcmds[MAXPLAYERS][BACKUPTICS];
 int         nettics[MAXNETNODES];
-boolean    nodeingame[MAXNETNODES];        // set false as nodes leave game
-boolean    remoteresend[MAXNETNODES];      // set when local needs tics
+dboolean    nodeingame[MAXNETNODES];        // set false as nodes leave game
+dboolean    remoteresend[MAXNETNODES];      // set when local needs tics
 int         resendto[MAXNETNODES];          // set when remote needs tics
 int         resendcount[MAXNETNODES];
 
@@ -209,7 +209,7 @@ void D_StartGameLoop(void) {
 // PrintMD5Digest
 //
 
-static boolean had_warning = false;
+static dboolean had_warning = false;
 static void PrintMD5Digest(char* s, byte* digest) {
 	unsigned int i;
 
@@ -227,7 +227,7 @@ static void PrintMD5Digest(char* s, byte* digest) {
 //
 
 static void CheckMD5Sums(void) {
-	boolean correct_wad;
+	dboolean correct_wad;
 
 	if (!net_client_received_wait_data || had_warning) {
 		return;
@@ -435,7 +435,7 @@ void D_QuitNetGame(void) {
 // Returns true if there are currently any players in the game.
 //
 
-boolean PlayersInGame(void) {
+dboolean PlayersInGame(void) {
 	int i;
 
 	for (i = 0; i < MAXPLAYERS; ++i) {

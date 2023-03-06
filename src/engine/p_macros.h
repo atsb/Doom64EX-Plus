@@ -42,7 +42,7 @@ extern short        macrocounter;
 extern short        macroid;
 
 void P_InitMacroVars(void);
-void P_ToggleMacros(int tag, boolean toggleon);
+void P_ToggleMacros(int tag, dboolean toggleon);
 void P_MacroDetachThinker(thinker_t* thinker);
 void P_RunMacros(void);
 

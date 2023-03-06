@@ -63,7 +63,7 @@ static byte tryopentype[3];
 //
 
 typedef struct {
-	boolean isreverse;
+	dboolean isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -505,7 +505,7 @@ int P_FindSectorFromTag(int tag) {
 // P_ActivateLineByTag
 //
 
-boolean P_ActivateLineByTag(int tag, mobj_t* activator)
+dboolean P_ActivateLineByTag(int tag, mobj_t* activator)
 {
 	int	i;
 	line_t* li;
@@ -867,7 +867,7 @@ void T_LookAtCamera(aimcamera_t* camera) {
 // P_SetAimCamera
 //
 
-int P_SetAimCamera(player_t* player, line_t* line, boolean aim) {
+int P_SetAimCamera(player_t* player, line_t* line, dboolean aim) {
 	mobj_t* mo;
 	aimcamera_t* camera;
 
@@ -1049,7 +1049,7 @@ void P_SetMovingCamera(player_t* player, line_t* line) {
 // This doesn't appear to be used at all
 //
 
-static boolean P_ModifyMobjFlags(int tid, int flags) {
+static dboolean P_ModifyMobjFlags(int tid, int flags) {
 	mobj_t* mo;
 	bool ok = false;
 
@@ -1634,7 +1634,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 // P_InitSpecialLine
 //
 
-boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
+dboolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 	int ok = 0;
 	int use = line->special & MLU_REPEAT;
 
@@ -1666,7 +1666,7 @@ boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 // Only the front sides of lines are usable.
 //
 
-boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
+dboolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side) {
 	player_t*	player;
 	int         actionType;
 
@@ -1820,7 +1820,7 @@ void P_PlayerInSpecialSector(player_t* player) {
 // Animate planes, scroll walls, etc.
 //
 
-boolean        levelTimer;
+dboolean        levelTimer;
 int             levelTimeCount;
 extern line_t** linespeciallist;
 extern short    numlinespecials;
@@ -2134,7 +2134,7 @@ void P_SpawnSpecials(void) {
 	}
 }
 
-boolean P_StartSound(int index)
+dboolean P_StartSound(int index)
 {
 	if (index <= 0) return false;
 	if (index >= mus_amb01)
@@ -2153,7 +2153,7 @@ boolean P_StartSound(int index)
 	return true;
 }
 
-boolean P_ChangeMusic(int index)
+dboolean P_ChangeMusic(int index)
 {
 	if (index <= 0) return false;
 	index += mus_amb01 - 1;
@@ -2169,7 +2169,7 @@ boolean P_ChangeMusic(int index)
 	return true;
 }
 
-boolean P_ChangeSky(int index)
+dboolean P_ChangeSky(int index)
 {
 	if (index <= 0) return false;
 	index -= 1;
@@ -2181,7 +2181,7 @@ boolean P_ChangeSky(int index)
 	return true;
 }
 
-boolean P_SpawnGenericMissile(int tid, int type, mobj_t* target) {
+dboolean P_SpawnGenericMissile(int tid, int type, mobj_t* target) {
 	if (type <= 0) return false;
 	type -= 1;
 	if (type > NUMMOBJTYPES) return false;

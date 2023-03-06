@@ -26,7 +26,7 @@
 
 #define DEMOMARKER      0x80
 
-boolean G_CheckDemoStatus(void);
+dboolean G_CheckDemoStatus(void);
 
 void G_RecordDemo(const char* name);
 void G_PlayDemo(const char* name);
@@ -34,15 +34,15 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd);
 void G_WriteDemoTiccmd(ticcmd_t* cmd);
 
 extern char             demoname[256];  // name of demo lump
-extern boolean         demorecording;  // currently recording a demo
-extern boolean         demoplayback;   // currently playing a demo
-extern boolean         netdemo;
+extern dboolean         demorecording;  // currently recording a demo
+extern dboolean         demoplayback;   // currently playing a demo
+extern dboolean         netdemo;
 extern byte* demobuffer;
 extern byte* demo_p;
 extern byte* demoend;
-extern boolean         singledemo;
-extern boolean         endDemo;        // signal recorder to stop on next tick
-extern boolean         iwadDemo;       // hide hud, end playback after one level
+extern dboolean         singledemo;
+extern dboolean         endDemo;        // signal recorder to stop on next tick
+extern dboolean         iwadDemo;       // hide hud, end playback after one level
 
 /* VANILLA */
 int G_PlayDemoPtr(int skill, int map); // 800049D0

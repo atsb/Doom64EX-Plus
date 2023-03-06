@@ -61,12 +61,12 @@ M_AddToBox
 	fixed_t    x,
 	fixed_t    y);
 
-boolean M_WriteFile(char const* name, void* source, int length);
+dboolean M_WriteFile(char const* name, void* source, int length);
 int M_ReadFile(char const* name, byte** buffer);
 void M_NormalizeSlashes(char* str);
 int M_FileExists(char* filename);
 long M_FileLength(FILE* handle);
-boolean M_WriteTextFile(char const* name, char* source, int length);
+dboolean M_WriteTextFile(char const* name, char* source, int length);
 void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);

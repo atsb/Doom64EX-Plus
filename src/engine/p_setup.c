@@ -545,9 +545,9 @@ void P_LoadThings(int lump) {
 	int             j;
 	mapthing_t* mt;
 	int             numthings;
-	boolean        p2start = false;
-	boolean        p3start = false;
-	boolean        p4start = false;
+	dboolean        p2start = false;
+	dboolean        p3start = false;
+	dboolean        p4start = false;
 
 	bodyqueslot = 0;
 	dmemset(playerstarts, 0, sizeof(playerstarts));
@@ -758,8 +758,8 @@ static const char* bmaperrormsg;
 //
 // haleyjd 03/04/10: do verification on validity of blockmap.
 //
-static boolean P_VerifyBlockMap(int count) {
-	boolean isvalid = true;
+static dboolean P_VerifyBlockMap(int count) {
+	dboolean isvalid = true;
 	int x, y;
 	short* maxoffs = blockmaplump + count;
 
@@ -1176,7 +1176,7 @@ static void P_InitMapInfo(void) {
 				}
 
 				if (!sc_parser.setdata(&mapdef, mapdatatable)) {
-					boolean ok = false;
+					dboolean ok = false;
 
 					//
 					// get music track ID

@@ -24,10 +24,10 @@
 
 void DEH_ParseCommandLine(void);
 int DEH_LoadFile(char *filename);
-int DEH_LoadLump(int lumpnum, bool allow_long, bool allow_error);
-int DEH_LoadLumpByName(char *name, bool allow_long, bool allow_error);
+int DEH_LoadLump(int lumpnum, dboolean allow_long, dboolean allow_error);
+int DEH_LoadLumpByName(char *name, dboolean allow_long, dboolean allow_error);
 
-bool DEH_ParseAssignment(char *line, char **variable_name, char **value);
+dboolean DEH_ParseAssignment(char *line, char **variable_name, char **value);
 
 void DEH_Checksum(sha1_digest_t digest);
 

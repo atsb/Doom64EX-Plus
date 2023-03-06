@@ -67,8 +67,8 @@
 // percent attenuation from front to back
 #define S_IFRACVOL              30
 
-static boolean nosound = false;
-static boolean nomusic = false;
+static dboolean nosound = false;
+static dboolean nomusic = false;
 static int lastmusic = 0;
 
 CVAR_CMD(s_sfxvol, 80)  {

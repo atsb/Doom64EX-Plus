@@ -131,7 +131,7 @@ unsigned int W_Read(wad_file_t* wad, unsigned int offset,
 char* W_FindWADByName(char* name) {
 	char* buf;
 	int i;
-	boolean exists;
+	dboolean exists;
 
 	// Absolute path?
 	if (M_FileExists(name)) {

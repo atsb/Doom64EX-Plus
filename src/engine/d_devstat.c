@@ -38,7 +38,7 @@
 #include "r_drawlist.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
-static boolean showstats = true;
+static dboolean showstats = true;
 
 extern word statindice;
 
@@ -222,8 +222,8 @@ void D_BoyISuck(void) {
 // Special debug actions when pressing the F## keys
 //
 
-static boolean freelook = false;
-boolean D_DevKeyResponder(event_t* ev) {
+static dboolean freelook = false;
+dboolean D_DevKeyResponder(event_t* ev) {
 	if (ev->type == ev_keydown) {
 		switch (ev->data1) {
 		case KEY_F9:    // toggle display stats

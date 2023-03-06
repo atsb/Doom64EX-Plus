@@ -176,7 +176,7 @@ static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 // Adjusts tmfloorz and tmceilingz as lines are contacted
 //
 
-boolean PIT_CheckLine(line_t* ld) {
+dboolean PIT_CheckLine(line_t* ld) {
     sector_t* sector;
 
     if (tmbbox[BOXRIGHT] <= ld->bbox[BOXLEFT]
@@ -283,7 +283,7 @@ boolean PIT_CheckLine(line_t* ld) {
 // PIT_CheckThing
 //
 
-boolean PIT_CheckThing(mobj_t* thing) {
+dboolean PIT_CheckThing(mobj_t* thing) {
     int    solid;
 
     if (!(thing->flags & (MF_SOLID | MF_SPECIAL | MF_SHOOTABLE))) {
@@ -400,7 +400,7 @@ boolean PIT_CheckThing(mobj_t* thing) {
 //  speciallines[]
 //  numspeciallines
 //
-boolean P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y) {
+dboolean P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y) {
     int             bx;
     int             by;
     subsector_t* newsubsec;
@@ -463,7 +463,7 @@ boolean P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y) {
 // crossing special lines unless MF_TELEPORT is set.
 //
 
-boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
+dboolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     fixed_t     oldx;
     fixed_t     oldy;
     int         side;
@@ -569,7 +569,7 @@ int P_PlayerMove(mobj_t* thing, fixed_t x, fixed_t y) {
 // P_TeleportMove
 //
 
-boolean P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y) {
+dboolean P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y) {
     int             bx;
     int             by;
     subsector_t* newsubsec;
@@ -665,7 +665,7 @@ static int P_ThingHeightClip(mobj_t* thing) {
 
 mobj_t* onmobj;
 
-static boolean PIT_CheckMobjZ(mobj_t* thing) {
+static dboolean PIT_CheckMobjZ(mobj_t* thing) {
     if (!(thing->flags & (MF_SOLID | MF_SPECIAL | MF_SHOOTABLE))) {
         return true;    // Can't hit thing
     }
@@ -776,7 +776,7 @@ fixed_t         tmymove;
 // PTR_SlideTraverse
 //
 
-boolean PTR_SlideTraverse(intercept_t* in) {
+dboolean PTR_SlideTraverse(intercept_t* in) {
     line_t* li = in->d.line;
 
     if (!(li->flags & ML_TWOSIDED)) {
@@ -1006,7 +1006,7 @@ fixed_t laserhit_z;
 // PTR_AimTraverse
 // Sets linetaget and aimslope when a target is aimed at.
 //
-boolean PTR_AimTraverse(intercept_t* in) {
+dboolean PTR_AimTraverse(intercept_t* in) {
     line_t* li;
     mobj_t* th;
     fixed_t linebottomslope;
@@ -1097,7 +1097,7 @@ boolean PTR_AimTraverse(intercept_t* in) {
 //
 // PTR_ShootTraverse
 //
-boolean PTR_ShootTraverse(intercept_t* in) {
+dboolean PTR_ShootTraverse(intercept_t* in) {
     fixed_t     x;
     fixed_t     y;
     fixed_t     z;
@@ -1444,7 +1444,7 @@ static int P_CheckUseHeight(line_t* line, mobj_t* thing) {
 // PTR_UseTraverse
 //
 
-boolean PTR_UseTraverse(intercept_t* in) {
+dboolean PTR_UseTraverse(intercept_t* in) {
     if (!in->d.line->special) {
         P_LineOpening(in->d.line);
 
@@ -1493,7 +1493,7 @@ boolean PTR_UseTraverse(intercept_t* in) {
 // Looks for special lines in front of the player to activate.
 //
 
-boolean P_UseLines(player_t* player, int showcontext) {
+dboolean P_UseLines(player_t* player, int showcontext) {
     int        angle;
     fixed_t    x1;
     fixed_t    y1;
@@ -1535,7 +1535,7 @@ int             bombdamage;
 // "bombsource" is the creature that caused the explosion at "bombspot"
 //
 
-boolean PIT_RadiusAttack(mobj_t* thing) {
+dboolean PIT_RadiusAttack(mobj_t* thing) {
     fixed_t     dx;
     fixed_t     dy;
     fixed_t     dist;
@@ -1630,7 +1630,7 @@ static int nofit;
 //
 // PIT_ChangeSector
 //
-boolean PIT_ChangeSector(mobj_t* thing) {
+dboolean PIT_ChangeSector(mobj_t* thing) {
     mobj_t* mo;
 
     if (P_ThingHeightClip(thing)) {
@@ -1691,7 +1691,7 @@ boolean PIT_ChangeSector(mobj_t* thing) {
 //
 // P_ChangeSector
 //
-boolean P_ChangeSector(sector_t* sector, int crunch) {
+dboolean P_ChangeSector(sector_t* sector, int crunch) {
     int         x;
     int         y;
 
@@ -1722,7 +1722,7 @@ mobj_t* tmcamera;
 // PTR_ChaseCamTraverse
 //
 
-static boolean PTR_ChaseCamTraverse(intercept_t* in) {
+static dboolean PTR_ChaseCamTraverse(intercept_t* in) {
     fixed_t x;
     fixed_t y;
     fixed_t frac;

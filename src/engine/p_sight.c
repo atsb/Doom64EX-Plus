@@ -129,7 +129,7 @@ fixed_t P_InterceptVector2(divline_t* v2, divline_t* v1) {
 // Returns true if strace crosses the given subsector successfully.
 //
 
-boolean P_CrossSubsector(int num) {
+dboolean P_CrossSubsector(int num) {
 	seg_t* seg;
 	line_t* line;
 	int             s1;
@@ -262,7 +262,7 @@ boolean P_CrossSubsector(int num) {
 // Returns true if strace crosses the given node successfully.
 //
 
-boolean P_CrossBSPNode(int bspnum) {
+dboolean P_CrossBSPNode(int bspnum) {
 	node_t* bsp;
 	int     side;
 
@@ -304,7 +304,7 @@ boolean P_CrossBSPNode(int bspnum) {
 // Uses REJECT.
 //
 
-boolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
+dboolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
 	int     s1;
 	int     s2;
 	int     pnum;

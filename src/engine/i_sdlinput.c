@@ -51,11 +51,11 @@ CVAR_EXTERNAL(m_menumouse);
 float mouse_accelfactor;
 
 int         UseJoystick;
-boolean    DigiJoy;
+dboolean    DigiJoy;
 int         DualMouse;
 
-boolean    MouseMode;//false=microsoft, true=mouse systems
-boolean window_mouse;
+dboolean    MouseMode;//false=microsoft, true=mouse systems
+dboolean window_mouse;
 //
 // I_TranslateKey
 //
@@ -293,9 +293,9 @@ int I_MouseAccel(int val) {
 // I_UpdateGrab
 //
 
-boolean I_UpdateGrab(void) {
-	static boolean currently_grabbed = false;
-	boolean grab;
+dboolean I_UpdateGrab(void) {
+	static dboolean currently_grabbed = false;
+	dboolean grab;
 
 	grab = /*window_mouse &&*/ !menuactive
 		&& (gamestate == GS_LEVEL)

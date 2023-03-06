@@ -153,9 +153,9 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-boolean M_WriteFile(char const* name, void* source, int length) {
+dboolean M_WriteFile(char const* name, void* source, int length) {
 	FILE* fp;
-	boolean result;
+	dboolean result;
 
 	errno = 0;
 
@@ -178,7 +178,7 @@ boolean M_WriteFile(char const* name, void* source, int length) {
 // M_WriteTextFile
 //
 
-boolean M_WriteTextFile(char const* name, char* source, int length) {
+dboolean M_WriteTextFile(char const* name, char* source, int length) {
 	int handle;
 	int count;
 #ifdef _WIN32

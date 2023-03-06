@@ -230,7 +230,7 @@ typedef struct {
 	// If false use 0 for any position.
 	// Note: as eight entries are available,
 	//  we might as well insert the same name eight times.
-	boolean    rotate;
+	dboolean    rotate;
 
 	// Lump to use for view angles 0-7.
 	short    lump[8];

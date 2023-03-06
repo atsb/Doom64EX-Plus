@@ -32,13 +32,13 @@ net_packet_t* NET_NewPacket(int initial_size);
 net_packet_t* NET_PacketDup(net_packet_t* packet);
 void NET_FreePacket(net_packet_t* packet);
 
-boolean NET_ReadInt8(net_packet_t* packet, int* data);
-boolean NET_ReadInt16(net_packet_t* packet, unsigned int* data);
-boolean NET_ReadInt32(net_packet_t* packet, unsigned int* data);
+dboolean NET_ReadInt8(net_packet_t* packet, int* data);
+dboolean NET_ReadInt16(net_packet_t* packet, unsigned int* data);
+dboolean NET_ReadInt32(net_packet_t* packet, unsigned int* data);
 
-boolean NET_ReadSInt8(net_packet_t* packet, int* data);
-boolean NET_ReadSInt16(net_packet_t* packet, int* data);
-boolean NET_ReadSInt32(net_packet_t* packet, int* data);
+dboolean NET_ReadSInt8(net_packet_t* packet, int* data);
+dboolean NET_ReadSInt16(net_packet_t* packet, int* data);
+dboolean NET_ReadSInt32(net_packet_t* packet, int* data);
 
 char* NET_ReadString(net_packet_t* packet);
 

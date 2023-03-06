@@ -73,7 +73,7 @@ typedef struct {
 	// [kex] stuff that happens in between tics
 	fixed_t     frame_x;
 	fixed_t     frame_y;
-	bool		processPending; // true: waiting for periodic processing on this tick
+	dboolean		processPending; // true: waiting for periodic processing on this tick
 
 } pspdef_t;
 

@@ -46,7 +46,7 @@ extern int (*I_GetTime)(void);
 void            I_InitClockRate(void);
 int             I_GetTimeMS(void);
 void            I_Sleep(unsigned long usecs);
-boolean        I_StartDisplay(void);
+dboolean        I_StartDisplay(void);
 void            I_EndDisplay(void);
 fixed_t         I_GetTimeFrac(void);
 void            I_GetTime_SaveMS(void);
@@ -74,11 +74,11 @@ char* I_GetUserDir(void);
 char* I_GetUserFile(char* file);
 char* I_FindDataFile(char* file);
 
-boolean I_FileExists(const char* path);
+dboolean I_FileExists(const char* path);
 
 void I_RegisterCvars(void);
 
 extern FILE* DebugFile;
-extern boolean    DigiJoy;
+extern dboolean    DigiJoy;
 
 #endif
