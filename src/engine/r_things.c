@@ -66,8 +66,7 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
-	boolean flipped)
+static void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, int flipped)
 {
 	int r;
 
@@ -163,7 +162,7 @@ void R_InitSprites(char** namelist) {
 
 	for (i = 0; i < numsprites; i++) {
 		spritename = namelist[i];
-		memset(sprtemp, -1, sizeof(sprtemp));
+		dmemset(sprtemp, -1, sizeof(sprtemp));
 
 		maxframe = -1;
 
@@ -171,11 +170,7 @@ void R_InitSprites(char** namelist) {
 		//  filling in the frames for whatever is found
 
 		for (l = start + 1; l < end; l++)
-#ifdef _WIN32
-			if (!_strnicmp(lumpinfo[l].name, spritename, 4))
-#else
 			if (!strncasecmp(lumpinfo[l].name, spritename, 4))
-#endif
 			{
 				frame = lumpinfo[l].name[4] - 'A';
 				rotation = lumpinfo[l].name[5] - '0';
@@ -221,7 +216,7 @@ void R_InitSprites(char** namelist) {
 		spriteinfo[i].numframes = maxframe;
 		spriteinfo[i].spriteframes =
 			Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-		memcpy(spriteinfo[i].spriteframes, sprtemp,
+		dmemcpy(spriteinfo[i].spriteframes, sprtemp,
 			maxframe * sizeof(spriteframe_t));
 	}
 }

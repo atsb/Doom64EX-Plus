@@ -81,4 +81,15 @@ void I_RegisterCvars(void);
 extern FILE* DebugFile;
 extern boolean    DigiJoy;
 
+#ifdef _MSC_VER
+#include <direct.h>
+#include <io.h>
+#define F_OK 0
+#define W_OK 2
+#define R_OK 4
+#define S_ISDIR(x) (((sbuf.st_mode & S_IFDIR)==S_IFDIR)?1:0)
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#endif
+
 #endif

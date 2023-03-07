@@ -63,7 +63,7 @@ static byte tryopentype[3];
 //
 
 typedef struct {
-	boolean isreverse;
+	int isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -75,7 +75,7 @@ typedef struct {
 //
 
 int         numanimdef;
-animdef_t* animdefs;
+animdef_t*	animdefs;
 
 static scdatatable_t animdatatable[] = {
 	{   "RESTARTDELAY", (int64_t) & ((animdef_t*)0)->delay,   'i' },
@@ -169,7 +169,7 @@ void P_InitPicAnims(void) {
 
 	P_InitAnimdef();
 
-	animinfo = (animinfo_t*)Z_Malloc(sizeof(animinfo_t) * numanimdef, PU_STATIC, 0);
+	animinfo = Z_Malloc(sizeof(animinfo_t) * numanimdef, PU_STATIC, 0);
 
 	//    Init animation
 	for (i = 0; i < numanimdef; i++) {

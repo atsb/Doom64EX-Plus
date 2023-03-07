@@ -1152,7 +1152,7 @@ void ST_AddChatMsg(char* msg, int player) {
 
 	sprintf(str, "%s: %s", player_names[player], msg);
 	dmemset(stchat[st_chatcount].msg, 0, MAXCHATSIZE);
-	memcpy(stchat[st_chatcount].msg, str, dstrlen(str));
+	dmemcpy(stchat[st_chatcount].msg, str, dstrlen(str));
 	stchat[st_chatcount].tics = MAXCHATTIME;
 	stchat[st_chatcount].color = st_chatcolors[player];
 	st_chatcount = (st_chatcount + 1) % MAXCHATNODES;
