@@ -52,6 +52,7 @@
 #include "i_png.h"
 #include "gl_texture.h"
 #include "p_saveg.h"
+#include "i_system.h"
 
 int      myargc;
 char**   myargv;

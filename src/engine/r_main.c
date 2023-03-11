@@ -418,17 +418,6 @@ void R_PrecacheLevel(void) {
 
 	CON_DPrintf("%i sprites cached\n", num);
 
-	if (has_GL_ARB_multitexture) {
-		GL_SetTextureUnit(1, true);
-		GL_BindEnvTexture();
-
-		GL_SetTextureUnit(2, true);
-		GL_BindDummyTexture();
-
-		GL_SetTextureUnit(3, true);
-		GL_BindDummyTexture();
-	}
-
 	GL_SetDefaultCombiner();
 }
 
