@@ -31,7 +31,6 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_drawlist.h"
-#include "i_system.h"
 
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_fog);

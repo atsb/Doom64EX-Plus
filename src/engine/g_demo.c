@@ -34,7 +34,6 @@
 #include "m_misc.h"
 #include "m_random.h"
 #include "con_console.h"
-#include "i_system.h"
 
 #ifdef _WIN32
 #include "i_opndir.h"

@@ -23,6 +23,8 @@
 #ifndef __DGL_H__
 #define __DGL_H__
 
+#include <math.h>
+
 #ifdef __OpenBSD__
 #include <SDL_opengl.h>
 #else
@@ -30,6 +32,7 @@
 #endif
 
 #include "gl_main.h"
+#include "i_system.h"
 
 //#define LOG_GLFUNC_CALLS
 //#define USE_DEBUG_GLFUNCS

@@ -23,8 +23,6 @@
 #ifndef __D_DEVSTAT_H
 #define __D_DEVSTAT_H
 
-#include "d_event.h"
-
 void D_DeveloperDisplay(void);
 void D_BoyISuck(void);
 boolean D_DevKeyResponder(event_t* ev);

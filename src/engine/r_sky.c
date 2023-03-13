@@ -27,7 +27,6 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-#include <math.h>
 
 #include "doomstat.h"
 #include "r_lights.h"

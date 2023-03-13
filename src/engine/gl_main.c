@@ -103,57 +103,50 @@ GL_EXT_texture_filter_anisotropic_Define();
 // FindExtension
 //
 
-static boolean FindExtension(const char *ext)
-{
-    const byte *extensions = NULL;
-    const byte *start;
-    byte *where, *terminator;
+static boolean FindExtension(const char* ext) {
+	const char* extensions = NULL;
+	const char* start;
+	const char* where, * terminator;
 
-    // Extension names should not have spaces.
-    where = (byte *) strrchr((char*)ext, ' ');
-    if(where || *ext == '\0')
-        return 0;
+	// Extension names should not have spaces.
+	where = strrchr(ext, ' ');
+	if (where || *ext == '\0') {
+		return 0;
+	}
 
-    extensions = dglGetString(GL_EXTENSIONS);
+	extensions = dglGetString(GL_EXTENSIONS);
 
-    if(!extensions)
-    {
-        return false;
-    }
-
-    start = extensions;
-    for(;;)
-    {
-        where = (byte *)strstr((const char *)start, ext);
-        if(!where)
-            break;
-
-        terminator = where + strlen(ext);
-        if(where == start || *(where - 1) == ' ')
-        {
-            if(*terminator == ' ' || *terminator == '\0')
-                return true;
-            start = terminator;
-        }
-    }
-    return false;
+	start = extensions;
+	for (;;) {
+		where = strstr(start, ext);
+		if (!where) {
+			break;
+		}
+		terminator = where + dstrlen(ext);
+		if (where == start || *(where - 1) == ' ') {
+			if (*terminator == ' ' || *terminator == '\0') {
+				return true;
+			}
+			start = terminator;
+		}
+	}
+	return false;
 }
 
 //
 // GL_CheckExtension
 //
 
-boolean GL_CheckExtension(const char *ext)
-{
-    if(FindExtension(ext))
-    {
-        fprintf(stdout, "GL Extension: %s = true\n", ext);
-        return true;
-    }
-    else
-        fprintf(stdout, "GL Extension: %s = false\n", ext);
+boolean GL_CheckExtension(const char* ext) {
+	if (FindExtension(ext)) {
+		CON_Printf(WHITE, "GL Extension: %s = true\n", ext);
+		return true;
+	}
+	else {
+		CON_Printf(YELLOW, "GL Extension: %s = false\n", ext);
+	}
 
-    return false;
+	return false;
 }
 
 //

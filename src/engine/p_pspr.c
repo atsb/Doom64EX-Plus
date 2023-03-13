@@ -952,11 +952,9 @@ void T_LaserThinker(laserthinker_t* laserthinker) {
 // A_FireLaser
 //
 
-#ifndef __APPLE__
 fixed_t laserhit_x = 0;
 fixed_t laserhit_y = 0;
 fixed_t laserhit_z = 0;
-#endif
 
 void A_FireLaser(player_t* player, pspdef_t* psp) {
 	angle_t         angleoffs;
@@ -972,12 +970,6 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 	laser_t* laser[3];
 	laserthinker_t* laserthinker[3];
 	//fixed_t         laserfrac;
-    
-#ifdef __APPLE__
-    fixed_t laserhit_x = 0;
-    fixed_t laserhit_y = 0;
-    fixed_t laserhit_z = 0;
-#endif
 
 	mobj = player->mo;
 
