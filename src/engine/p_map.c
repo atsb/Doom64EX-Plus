@@ -996,11 +996,9 @@ fixed_t         aimpitch;
 extern fixed_t  topslope;
 extern fixed_t  bottomslope;
 
-// [kex]
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
+extern fixed_t laserhit_x;
+extern fixed_t laserhit_y;
+extern fixed_t laserhit_z;
 
 //
 // PTR_AimTraverse
