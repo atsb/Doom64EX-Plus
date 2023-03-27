@@ -70,7 +70,9 @@ boolean    widescreen = false;
 CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
+CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(st_flashoverlay);
+CVAR_EXTERNAL(r_colorscale);
 
 //
 // CMD_DumpGLExtensions
@@ -98,6 +100,8 @@ static CMD(DumpGLExtensions) {
 
 GL_ARB_multitexture_Define();
 GL_EXT_texture_filter_anisotropic_Define();
+GL_ARB_texture_env_combine_Define();
+GL_EXT_texture_env_combine_Define();
 
 //
 // FindExtension
@@ -320,19 +324,41 @@ void GL_SetTextureFilter(void) {
 //
 
 void GL_SetDefaultCombiner(void) {
-	    if (!usingGL) {
-        return;
+    if(has_GL_ARB_multitexture) {
+        GL_SetTextureUnit(1, false);
+        GL_SetTextureUnit(2, false);
+        GL_SetTextureUnit(3, false);
+        GL_SetTextureUnit(0, true);
     }
-    
-	if (GL_ARB_multitexture) {
-		GL_SetTextureUnit(1, false);
-		GL_SetTextureUnit(2, false);
-		GL_SetTextureUnit(3, false);
-		GL_SetTextureUnit(0, true);
-	}
 
-	GL_CheckFillMode();
-	GL_SetTextureMode(GL_MODULATE);
+    GL_CheckFillMode();
+
+    if(r_texturecombiner.value > 0) {
+        dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
+    }
+    else {
+        GL_SetTextureMode(GL_MODULATE);
+    }
+}
+
+//
+// GL_SetColorScale
+//
+
+void GL_SetColorScale(void) {
+    int cs = (int)r_colorscale.value;
+
+    switch(cs) {
+        case 1:
+            dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
+            break;
+        case 2:
+            dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
+            break;
+        default:
+            dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
+            break;
+    }
 }
 
 //
@@ -449,7 +475,12 @@ void GL_SetState(int bit, boolean enable) {
 //
 
 void GL_CheckFillMode(void) {
-	GL_SetState(GLSTATE_TEXTURE0, 1);
+    if(r_fillmode.value <= 0) {
+        GL_SetState(GLSTATE_TEXTURE0, 0);
+    }
+    else if(r_fillmode.value > 0) {
+        GL_SetState(GLSTATE_TEXTURE0, 1);
+    }
 }
 
 //
@@ -533,12 +564,24 @@ void GL_Init(void) {
 	GL_SetTextureFilter();
 	GL_SetDefaultCombiner();
 
+	r_fillmode.value = 1.0f;
+
 	GL_ARB_multitexture_Init();
 	GL_EXT_texture_filter_anisotropic_Init();
+	GL_ARB_texture_env_combine_Init();
+    GL_EXT_texture_env_combine_Init();
 
 	if (!GL_ARB_multitexture) {
 		CON_Warnf("GL_ARB_multitexture not supported...\n");
 	}
+
+	gl_has_combiner = (has_GL_ARB_texture_env_combine | has_GL_EXT_texture_env_combine);
+
+    if (!gl_has_combiner) {
+        CON_Warnf("Texture combiners not supported...\n");
+        CON_Warnf("Setting r_texturecombiner to 0\n");
+        CON_CvarSetValue(r_texturecombiner.name, 0.0f);
+    }
 
 	dglEnableClientState(GL_VERTEX_ARRAY);
 	dglEnableClientState(GL_TEXTURE_COORD_ARRAY);

@@ -81,11 +81,17 @@ unsigned int    glBindCalls = 0;
 boolean        bRenderSky = false;
 
 CVAR(r_fov, 74.0);
+CVAR(r_fillmode, 1);
 CVAR(r_fog, 1);
 CVAR(r_wipe, 1);
 CVAR(r_drawmobjbox, 0);
+CVAR(r_rendersprites, 1);
 CVAR(r_skybox, 0);
 CVAR(hud_disablesecretmessages, 0);
+
+CVAR_CMD(r_colorscale, 0) {
+    GL_SetColorScale();
+}
 
 CVAR_CMD(r_filter, 0) {
 	GL_DumpTextures();
@@ -97,6 +103,7 @@ CVAR_CMD(r_anisotropic, 0) {
 	GL_SetTextureFilter();
 }
 
+CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_usecontext);
 
@@ -681,6 +688,10 @@ static void R_DrawContextWall(line_t* line) {
 
 void R_RenderPlayerView(player_t* player) {
 
+    if(!r_fillmode.value) {
+        dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
 	if (devparm) {
 		renderTic = I_GetTimeMS();
 	}
@@ -781,11 +792,15 @@ void R_RenderPlayerView(player_t* player) {
 
 void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_fov);
+    CON_CvarRegister(&r_fillmode);
 	CON_CvarRegister(&r_fog);
 	CON_CvarRegister(&r_filter);
 	CON_CvarRegister(&r_anisotropic);
 	CON_CvarRegister(&r_wipe);
 	CON_CvarRegister(&r_drawmobjbox);
+    CON_CvarRegister(&r_rendersprites);
 	CON_CvarRegister(&r_skybox);
+	CON_CvarRegister(&r_colorscale);
+	CON_CvarRegister(&r_texturecombiner);
 	CON_CvarRegister(&hud_disablesecretmessages);
 }
