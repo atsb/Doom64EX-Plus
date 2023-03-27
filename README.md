@@ -4,7 +4,7 @@ Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX
 
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
-* Support for the IWAD from Nightdive Studios' official remaster
+* Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for loading PWADs
 * Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
