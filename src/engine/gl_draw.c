@@ -133,12 +133,20 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	char msg[MAX_MESSAGE_SIZE];
 	va_list    va;
 	const int ix = x;
+	boolean fill = false;
 
 	va_start(va, string);
 	vsprintf(msg, string, va);
 	va_end(va);
 
 	GL_SetState(GLSTATE_BLEND, 1);
+
+	if(!r_fillmode.value) {
+        dglEnable(GL_TEXTURE_2D);
+        dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        r_fillmode.value = 1.0f;
+        fill = true;
+    }
 
 	GL_BindGfxTexture("SFONT", true);
 
@@ -213,6 +221,12 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	}
 
 	GL_ResetViewport();
+
+	if(fill) {
+        dglDisable(GL_TEXTURE_2D);
+        dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        r_fillmode.value = 0.0f;
+    }
 
 	GL_SetState(GLSTATE_BLEND, 0);
 	GL_SetOrthoScale(1.0f);

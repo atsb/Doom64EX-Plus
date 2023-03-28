@@ -59,6 +59,7 @@ extern unsigned int glBindCalls;
 extern boolean     bRenderSky;
 
 CVAR_EXTERNAL(r_fov);
+CVAR_EXTERNAL(r_fillmode);
 
 void R_Init(void);
 void R_RenderPlayerView(player_t* player);
