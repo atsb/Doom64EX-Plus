@@ -157,6 +157,16 @@ typedef enum {
 	mus_complete,
 	mus_intro,
 	mus_title,
+	mus_amb21,
+	mus_amb22,
+	mus_amb23,
+	mus_amb24,
+	mus_amb25,
+	mus_amb26,
+	mus_amb27,
+	mus_amb28,
+	mus_amb29,
+	mus_amb30,
 	NUMSFX
 } sfxenum_t;
 
