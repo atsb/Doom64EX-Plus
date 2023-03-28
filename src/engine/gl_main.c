@@ -34,6 +34,7 @@
 #include <SDL2/SDL_opengl.h>
 #endif
 
+#include "i_sdlinput.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_video.h"
@@ -139,6 +140,25 @@ static boolean FindExtension(const char *ext) {
         }
     }
     return false;
+}
+
+void GL_SetSwapInterval(void)
+{
+    typedef BOOL(APIENTRY* PFNWGLSWAPINTERVALPROC)(int);
+
+#ifdef _WIN32
+    PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress("wglSwapIntervalEXT");
+
+    if (v_vsync.value > 0 && wglSwapIntervalEXT)
+        wglSwapIntervalEXT(-1);
+#else
+    PFNWGLSWAPINTERVALPROC glXSwapIntervalEXT = 0;
+    glXSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)glXGetProcAddress("glXSwapIntervalEXT");
+
+    if (v_vsync.value > 0 && glXSwapIntervalEXT)
+        glXSwapIntervalEXT(-1);
+#endif
 }
 
 //
@@ -635,6 +655,8 @@ void GL_Init(void) {
     GL_SetTextureFilter();
     GL_SetDefaultCombiner();
 
+    GL_SetSwapInterval();
+
     r_fillmode.value = 1.0f;
 
     GL_ARB_multitexture_Init();
@@ -670,7 +692,6 @@ void GL_Init(void) {
 
     usingGL = true;
 
-    G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
 
-	SDL_GL_SetSwapInterval((int)v_vsync.value);
+    G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
 }

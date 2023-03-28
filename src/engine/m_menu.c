@@ -2003,6 +2003,7 @@ void M_DrawVideo(void) {
 	static const char* filterType[2] = { "Linear", "Nearest" };
 	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09"};
 	static const char* frametype[2] = { "Off", "On" };
+	static const char* vsynctype[2] = { "Off", "Adaptive" };
 	char res[16];
 	int y;
 
@@ -2036,7 +2037,7 @@ void M_DrawVideo(void) {
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
-	DRAWVIDEOITEM2(vsync, v_vsync.value, frametype);
+	DRAWVIDEOITEM2(vsync, v_vsync.value, vsynctype);
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, frametype);
 
 #undef DRAWVIDEOITEM
