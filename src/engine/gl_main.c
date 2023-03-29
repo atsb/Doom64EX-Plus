@@ -47,6 +47,10 @@
 #include "m_misc.h"
 #include "g_actions.h"
 
+#ifndef _WIN32
+typedef int BOOL;
+#endif
+
 int ViewWindowX = 0;
 int ViewWindowY = 0;
 int ViewWidth   = 0;
