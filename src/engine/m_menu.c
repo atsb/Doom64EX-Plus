@@ -2805,7 +2805,7 @@ void M_ChangeKeyBinding(int choice);
 void M_BuildControlMenu(void);
 void M_DrawControls(void);
 
-#define NUM_NONBINDABLE_ITEMS   9
+#define NUM_NONBINDABLE_ITEMS   8
 #define NUM_CONTROL_ACTIONS     42
 #define NUM_CONTROL_ITEMS        NUM_CONTROL_ACTIONS + NUM_NONBINDABLE_ITEMS
 
@@ -2917,14 +2917,13 @@ void M_BuildControlMenu(void) {
     menu->menuitems[actions + i].routine = NULL
 
 	ADD_NONBINDABLE_ITEM(0, "Non-Bindable Keys", -1);
-	ADD_NONBINDABLE_ITEM(1, "Save Game        F4", 1);
-	ADD_NONBINDABLE_ITEM(2, "Load Game        F5", 1);
-	ADD_NONBINDABLE_ITEM(3, "Screenshot       F12", 1);
-	ADD_NONBINDABLE_ITEM(4, "Quicksave        F8", 1);
-	ADD_NONBINDABLE_ITEM(5, "Quickload        F9", 1);
-	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F1", 1);
-	ADD_NONBINDABLE_ITEM(7, "Chat             F2", 1);
-	ADD_NONBINDABLE_ITEM(8, "Console          TILDE and BACKQUOTE", 1);
+	ADD_NONBINDABLE_ITEM(1, "Save Game        F2", 1);
+	ADD_NONBINDABLE_ITEM(2, "Load Game        F3", 1);
+	ADD_NONBINDABLE_ITEM(3, "Screenshot       F5", 1);
+	ADD_NONBINDABLE_ITEM(4, "Quicksave        F6", 1);
+	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
+	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
+	ADD_NONBINDABLE_ITEM(7, "Console          TILDE and BACKQUOTE", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {

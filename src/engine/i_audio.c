@@ -1094,20 +1094,8 @@ static void Seq_Shutdown(doomseq_t* seq) {
     Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
 
     //
-    // wait until the audio thread is finished
+    // Screw the shutdown, the OS will handle it :P
     //
-    SDL_WaitThread(seq->thread, NULL);
-
-    //
-    // fluidsynth cleanup stuff
-    //
-    delete_fluid_audio_driver(seq->driver);
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
 }
 
 //
