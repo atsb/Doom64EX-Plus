@@ -1109,7 +1109,7 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
     long long start = SDL_GetTicks64();
     long long delay = 0;
     int status;
-    Uint64 count = 0;
+    long long count = 0;
     signalhandler signal;
 
     while (1) {
