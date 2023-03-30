@@ -1106,10 +1106,10 @@ static void Seq_Shutdown(doomseq_t* seq) {
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
     doomseq_t* seq = (doomseq_t*)param;
-    Uint64 start = SDL_GetTicks64();
-    Uint64 delay = 0;
+    long start = SDL_GetTicks64();
+    long delay = 0;
     int status;
-    Uint64 count = 0;
+    int count = 0;
     signalhandler signal;
 
     while (1) {
