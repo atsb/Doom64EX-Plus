@@ -1622,6 +1622,14 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = P_SpawnGenericMissile(line->tag, globalint, thing);
 		break;
 
+	// New EX+ stuff
+
+	// Ceiling Crush and Raise Slow - for an Indiana Jones style trap.
+	// Feature request from AtomicFrog.
+	case 26:
+		ok = EV_DoCeiling(line, crushSlowTrapOnce, CEILSPEEDSLOW);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;

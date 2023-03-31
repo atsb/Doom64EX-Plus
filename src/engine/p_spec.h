@@ -314,7 +314,8 @@ typedef enum {
 	silentCrushAndRaise,
 	customCeiling,
 	crushAndRaiseOnce,
-	customCeilingToHeight
+	customCeilingToHeight,
+	crushSlowTrapOnce
 } ceiling_e;
 
 typedef struct {
@@ -331,9 +332,10 @@ typedef struct {
 	boolean     instant;
 } ceiling_t;
 
+#define CEILSPEEDSLOW   FRACUNIT*0.05
 #define CEILSPEED       FRACUNIT*2
 #define CEILWAIT        150
-#define MAXCEILINGS     30
+#define MAXCEILINGS     1024
 
 extern ceiling_t* activeceilings[MAXCEILINGS];
 
