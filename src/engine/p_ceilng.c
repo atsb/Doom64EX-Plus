@@ -198,6 +198,16 @@ int EV_DoCeiling(line_t* line, ceiling_e type, fixed_t speed) {
 			ceiling->speed = speed;
 			break;
 
+		case lowerToFloorSlow:
+			ceiling->crush = false;
+			ceiling->bottomheight = sec->floorheight;
+			if (type != lowerToFloor) {
+				ceiling->bottomheight += 4 * FRACUNIT;
+			}
+			ceiling->direction = -1;
+			ceiling->speed = speed;
+			break;
+
 		case raiseToHighest:
 			ceiling->topheight = P_FindHighestCeilingSurrounding(sec);
 			ceiling->direction = 1;

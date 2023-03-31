@@ -1630,6 +1630,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = EV_DoCeiling(line, crushSlowTrapOnce, CEILSPEEDSLOW);
 		break;
 
+	// Ceiling Lower to Floor Slow - No Crush
+	case 27:
+		ok = EV_DoCeiling(line, lowerToFloorSlow, CEILSPEEDSLOW);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;

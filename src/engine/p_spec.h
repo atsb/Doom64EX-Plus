@@ -315,7 +315,8 @@ typedef enum {
 	customCeiling,
 	crushAndRaiseOnce,
 	customCeilingToHeight,
-	crushSlowTrapOnce
+	crushSlowTrapOnce,
+	lowerToFloorSlow
 } ceiling_e;
 
 typedef struct {
