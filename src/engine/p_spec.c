@@ -1635,6 +1635,26 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = EV_DoCeiling(line, lowerToFloorSlow, CEILSPEEDSLOW);
 		break;
 
+	case 28:
+		// Lower Floor16Above (TURBO)
+		ok = EV_DoFloor(line, turboLower16Above, FLOORSPEED * 4);
+		break;
+
+	case 29:
+		// Lower Floor32Above (TURBO)
+		ok = EV_DoFloor(line, turboLower32Above, FLOORSPEED * 4);
+		break;
+
+	case 45:
+		// Lower Floor64Above (TURBO)
+		ok = EV_DoFloor(line, turboLower64Above, FLOORSPEED * 4);
+		break;
+
+	case 46:
+		// Lower Floor16Above (SLOW)
+		ok = EV_DoFloor(line, lower16AboveSlow, FLOORSPEED * 0.5);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;

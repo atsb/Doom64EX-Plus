@@ -361,7 +361,11 @@ typedef enum {
 	raiseFloor24AndChange,
 	raiseFloorCrush,
 	customFloor,
-	customFloorToHeight
+	customFloorToHeight,
+	turboLower16Above,
+	turboLower32Above,
+	turboLower64Above,
+	lower16AboveSlow
 } floor_e;
 
 typedef enum {
