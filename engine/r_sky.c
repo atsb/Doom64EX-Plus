@@ -502,10 +502,10 @@ static void R_DrawClouds(void) {
 
     pos = (TRUEANGLES(viewangle) / 360.0f) * 2.0f;
 
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    dglSetVertex(v);
+    glSetVertex(v);
 
     if(r_texturecombiner.value > 0 && gl_max_texture_units > 2) {
         glSetVertexColor(&v[0], sky->skycolor[0], 2);
@@ -557,18 +557,18 @@ static void R_DrawClouds(void) {
 
     GL_SetOrthoScale(1.0f); // force ortho mode to be set
 
-    dglMatrixMode(GL_PROJECTION);
-    dglLoadIdentity();
-    dglViewFrustum(SCREENWIDTH, SCREENHEIGHT, 45.0f, 0.1f);
-    dglMatrixMode(GL_MODELVIEW);
-    dglEnable(GL_BLEND);
-    dglPushMatrix();
-    dglTranslated(0.0f, 0.0f, -1.0f);
-    RB_AddTriangle(0, 1, 2);
-    RB_AddTriangle(3, 2, 1);
-    dglDrawGeometry(4, v);
-    dglPopMatrix();
-    dglDisable(GL_BLEND);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glViewFrustum(SCREENWIDTH, SCREENHEIGHT, 45.0f, 0.1f);
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_BLEND);
+    glPushMatrix();
+    glTranslated(0.0f, 0.0f, -1.0f);
+    glTriangle(0, 1, 2);
+    glTriangle(3, 2, 1);
+    glDrawGeometry(4, v);
+    glPopMatrix();
+    glDisable(GL_BLEND);
 
     GL_SetDefaultCombiner();
 }

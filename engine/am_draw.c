@@ -40,6 +40,8 @@
 #include "r_drawlist.h"
 #include "gl_utils.h"
 
+#define GL_TEXTURE0_ARB 0x84C0
+
 extern fixed_t automappanx;
 extern fixed_t automappany;
 extern unsigned char amModeCycle;
@@ -64,7 +66,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
         // increase the rgb scale so the automap can look good while transparent (overlay mode)
         //
         GL_SetTextureMode(GL_COMBINE);
-        dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
+        glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
     }
 	glDepthRange(0.0f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
@@ -254,10 +256,10 @@ void AM_DrawLeafs(float scale) {
 
     if(r_texturecombiner.value > 0) {
         if(!nolights) {
-            dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
+            glTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
         }
         else {
-            dglTexCombReplace();
+            glTexCombReplace();
         }
     }
     else {

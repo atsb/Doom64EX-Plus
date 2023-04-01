@@ -165,7 +165,7 @@ void R_InitSprites(char** namelist) {
 
 	for (i = 0; i < numsprites; i++) {
 		spritename = namelist[i];
-		dmemset(sprtemp, -1, sizeof(sprtemp));
+		memset(sprtemp, -1, sizeof(sprtemp));
 
 		maxframe = -1;
 
@@ -219,7 +219,7 @@ void R_InitSprites(char** namelist) {
 		spriteinfo[i].numframes = maxframe;
 		spriteinfo[i].spriteframes =
 			Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-		dmemcpy(spriteinfo[i].spriteframes, sprtemp,
+		memcpy(spriteinfo[i].spriteframes, sprtemp,
 			maxframe * sizeof(spriteframe_t));
 	}
 }
@@ -649,7 +649,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
         f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-        dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+        glTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
         if(!nolights) {
             GL_UpdateEnvTexture(WHITE);
@@ -659,10 +659,10 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
         if(st_flashoverlay.value <= 0) {
             GL_SetTextureUnit(2, true);
-            dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+            glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
         }
 
-        dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+        glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
         GL_SetTextureUnit(0, true);
     }

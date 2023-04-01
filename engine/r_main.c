@@ -692,7 +692,7 @@ static void R_DrawContextWall(line_t* line) {
 void R_RenderPlayerView(player_t* player) {
 
     if(!r_fillmode.value) {
-        dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
 	if (devparm) {

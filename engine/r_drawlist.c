@@ -38,6 +38,10 @@
 #include "z_zone.h"
 #include "gl_utils.h"
 
+#define GL_TEXTURE0_ARB 0x84C0
+
+static float envcolor[4] = { 0, 0, 0, 0 };
+
 vtx_t drawVertex[MAXDLDRAWCOUNT];
 
 drawlist_t drawlist[NUMDRAWLISTS];
@@ -196,7 +200,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
                 GL_SetEnvColor(envcolor);
             }
             else {
-                int l = (head->params >> 1);
+                l = (head->params >> 1);
 
                 GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
             }

@@ -106,7 +106,7 @@ CVAR_CMD(r_texturecombiner, 1) {
 	curunit = -1;
 
 	for (i = 0; i < GL_MAX_TEX_UNITS; i++) {
-		dmemset(&gl_env_state[i], 0, sizeof(gl_env_state_t));
+		memset(&gl_env_state[i], 0, sizeof(gl_env_state_t));
 	}
 }
 
@@ -603,6 +603,8 @@ void GL_BindEnvTexture(void) {
 
 static unsigned int lastenvcolor = 0;
 
+#define GL_ARB_multitexture 1
+
 void GL_UpdateEnvTexture(unsigned int color) {
 	unsigned int env;
 	unsigned int rgb[16];
@@ -717,7 +719,7 @@ void GL_SetCombineState(int combine) {
 	}
 
 	state->combine_rgb = combine;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
+	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
 }
 
 //
@@ -734,7 +736,7 @@ void GL_SetCombineStateAlpha(int combine) {
 	}
 
 	state->combine_alpha = combine;
-	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
+	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
 }
 
 //

@@ -306,15 +306,15 @@ void R_RenderWorld(void) {
         if(!nolights) {
             GL_UpdateEnvTexture(WHITE);
             GL_SetTextureUnit(1, true);
-            dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+            glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
         }
 
         if(st_flashoverlay.value <= 0) {
             GL_SetTextureUnit(2, true);
-            dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+            glTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
         }
 
-        dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+        glTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
         GL_SetTextureUnit(0, true);
     }
@@ -328,7 +328,7 @@ void R_RenderWorld(void) {
         }
     }
 
-    dglEnable(GL_ALPHA_TEST);
+    glEnable(GL_ALPHA_TEST);
 
     // begin draw list loop
 
