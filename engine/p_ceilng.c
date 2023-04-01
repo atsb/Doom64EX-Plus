@@ -176,6 +176,15 @@ int EV_DoCeiling(line_t* line, ceiling_e type, fixed_t speed) {
 			ceiling->direction = -1;
 			ceiling->speed = speed;
 			break;
+		case crushSlowTrapOnce:
+			ceiling->crush = true;
+			ceiling->bottomheight = sec->floorheight;
+			if (type != lowerToFloor) {
+				ceiling->bottomheight += 4 * FRACUNIT;
+			}
+			ceiling->direction = -1;
+			ceiling->speed = speed;
+			break;
 
 		case crushAndRaise:
 			ceiling->crush = true;
@@ -185,6 +194,16 @@ int EV_DoCeiling(line_t* line, ceiling_e type, fixed_t speed) {
 			ceiling->bottomheight = sec->floorheight;
 			if (type != lowerToFloor) {
 				ceiling->bottomheight += 8 * FRACUNIT;
+			}
+			ceiling->direction = -1;
+			ceiling->speed = speed;
+			break;
+
+		case lowerToFloorSlow:
+			ceiling->crush = false;
+			ceiling->bottomheight = sec->floorheight;
+			if (type != lowerToFloor) {
+				ceiling->bottomheight += 4 * FRACUNIT;
 			}
 			ceiling->direction = -1;
 			ceiling->speed = speed;

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007-2012 Samuel Villarreal
@@ -99,6 +99,17 @@ typedef struct {
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
 
+CVAR_EXTERNAL(r_fillmode);
+CVAR_CMD(r_texturecombiner, 1) {
+	int i;
+
+	curunit = -1;
+
+	for (i = 0; i < GL_MAX_TEX_UNITS; i++) {
+		dmemset(&gl_env_state[i], 0, sizeof(gl_env_state_t));
+	}
+}
+
 //
 // CMD_DumpTextures
 //
@@ -169,6 +180,10 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	unsigned char* png;
 	int w;
 	int h;
+
+	if (r_fillmode.value <= 0) {
+		return;
+	}
 
 	// get translation index
 	texnum = texturetranslation[texnum];
@@ -401,7 +416,7 @@ static void InitSpriteTextures(void) {
 		unsigned char* png;
 		int w;
 		int h;
-		unsigned int x;
+		size_t x;
 
 		// allocate # of sprites per pointer
 		spriteptr[i] = (unsigned int*)Z_Malloc(spritecount[i] * sizeof(unsigned int), PU_STATIC, 0);
@@ -431,6 +446,10 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	unsigned char* png;
 	int w;
 	int h;
+
+	if (r_fillmode.value <= 0) {
+		return;
+	}
 
 	if ((spritenum == cursprite) && (pal == curtrans)) {
 		return;
@@ -590,6 +609,14 @@ void GL_UpdateEnvTexture(unsigned int color) {
 	unsigned char* c;
 	int i;
 
+	if (!GL_ARB_multitexture) {
+		return;
+	}
+
+	if (r_fillmode.value <= 0) {
+		return;
+	}
+
 	if (lastenvcolor == color) {
 		return;
 	}
@@ -641,6 +668,10 @@ void GL_UnloadTexture(unsigned int* texture) {
 
 void GL_SetTextureUnit(int unit, boolean enable) {
 
+	if (r_fillmode.value <= 0) {
+		return;
+	}
+
 	if (unit > 3) {
 		return;
 	}
@@ -670,6 +701,40 @@ void GL_SetTextureMode(int mode) {
 
 	state->mode = mode;
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, state->mode);
+}
+
+//
+// GL_SetCombineState
+//
+
+void GL_SetCombineState(int combine) {
+	gl_env_state_t* state;
+
+	state = &gl_env_state[curunit];
+
+	if (state->combine_rgb == combine) {
+		return;
+	}
+
+	state->combine_rgb = combine;
+	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
+}
+
+//
+// GL_SetCombineStateAlpha
+//
+
+void GL_SetCombineStateAlpha(int combine) {
+	gl_env_state_t* state;
+
+	state = &gl_env_state[curunit];
+
+	if (state->combine_alpha == combine) {
+		return;
+	}
+
+	state->combine_alpha = combine;
+	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
 }
 
 //

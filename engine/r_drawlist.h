@@ -66,7 +66,7 @@ extern vtx_t drawVertex[MAXDLDRAWCOUNT];
 
 vtxlist_t* DL_AddVertexList(drawlist_t* dl);
 int DL_GetDrawListSize(int tag);
-void DL_BeginDrawList(boolean t);
+void DL_BeginDrawList(boolean t, boolean a);
 void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*));
 void DL_Init(void);
 

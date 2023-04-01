@@ -1151,24 +1151,8 @@ static void Seq_Shutdown(doomseq_t* seq)
     Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
 
     //
-    // wait until the audio thread is finished
+    // Screw the shutdown, the OS will handle it :P
     //
-    SDL_WaitThread(seq->thread, NULL);
-    
-    //
-    // fluidsynth cleanup stuff
-    //
-#ifdef USE_OLD_FLUISYNTH 
-    delete_fluid_audio_driver(seq->driver);
-#else
-    SDL_CloseAudioDevice(1);
-#endif
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
 }
 
 //
@@ -1179,10 +1163,10 @@ static void Seq_Shutdown(doomseq_t* seq)
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
     doomseq_t* seq = (doomseq_t*)param;
-    long start = SDL_GetTicks();
-    long delay = 0;
+    long long start = SDL_GetTicks64();
+    long long delay = 0;
     int status;
-    int count = 0;
+    long long count = 0;
     signalhandler signal;
 
     while (1) {
@@ -1209,11 +1193,11 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
         //
         // play some songs
         //
-        Seq_RunSong(seq, SDL_GetTicks() - start);
+        Seq_RunSong(seq, SDL_GetTicks64() - start);
         count++;
 
         // try to avoid incremental time de-syncs
-        delay = count - (SDL_GetTicks() - start);
+        delay = count - (SDL_GetTicks64() - start);
 
         if (delay > 0) {
             SDL_Delay(delay);
@@ -1263,7 +1247,7 @@ void I_InitSequencer(void) {
     // off-sync when uncapped framerates are enabled but for some
     // reason, calling SDL_GetTicks before initalizing the thread
     // will reduce the chances of it happening
-    SDL_GetTicks();
+    SDL_GetTicks64();
 
     doomseq.thread = SDL_CreateThread(Thread_PlayerHandler, "SynthPlayer", &doomseq);
     if (doomseq.thread == NULL) {

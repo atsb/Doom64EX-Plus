@@ -6,7 +6,7 @@ DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aim
 
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
-* Support for the IWAD from Nightdive Studios' official remaster
+* Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for the Alpha Version of the game
 * Support for loading PWADs

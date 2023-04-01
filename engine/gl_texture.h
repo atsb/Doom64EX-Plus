@@ -63,6 +63,8 @@ void        GL_InitTextures(void);
 void        GL_UnloadTexture(unsigned int* texture);
 void        GL_SetTextureUnit(int unit, boolean enable);
 void        GL_SetTextureMode(int mode);
+void        GL_SetCombineState(int combine);
+void        GL_SetCombineStateAlpha(int combine);
 void        GL_SetEnvColor(float* param);
 void        GL_BindWorldTexture(int texnum, int* width, int* height);
 void        GL_BindSpriteTexture(int spritenum, int pal);

@@ -48,6 +48,7 @@ static angle_t am_viewangle;
 
 CVAR_EXTERNAL(am_fulldraw);
 CVAR_EXTERNAL(am_ssect);
+CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // AM_BeginDraw
@@ -56,6 +57,15 @@ CVAR_EXTERNAL(am_ssect);
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 	am_viewangle = view;
 
+	    if(r_texturecombiner.value > 0 && am_overlay.value) {
+        GL_SetState(GLSTATE_BLEND, 1);
+
+        //
+        // increase the rgb scale so the automap can look good while transparent (overlay mode)
+        //
+        GL_SetTextureMode(GL_COMBINE);
+        dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
+    }
 	glDepthRange(0.0f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -65,7 +75,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 	glPushMatrix();
 	glTranslatef(-F2D3D(automappanx), -F2D3D(automappany), 0);
 	glRotatef(-(float)TRUEANGLES(am_viewangle), 0.0f, 0.0f, 1.0f);
-	glTranslatef(-F2D3D(x), -F2D3D(y), 0);
+    glTranslatef(-F2D3D(x), -F2D3D(y), 0);
 
 	drawlist[DLT_AMAP].index = 0;
 
@@ -81,7 +91,13 @@ void AM_EndDraw(void) {
 	glPopMatrix();
 	glDepthRange(0.0f, 1.0f);
 
-	GL_SetDefaultCombiner();
+    if(r_texturecombiner.value > 0 && am_overlay.value) {
+        GL_SetState(GLSTATE_BLEND, 0);
+        GL_SetTextureMode(GL_COMBINE);
+        GL_SetColorScale();
+    }
+
+    GL_SetDefaultCombiner();
 }
 
 //
@@ -234,14 +250,24 @@ void AM_DrawLeafs(float scale) {
 	//
 	// process draw list
 	//
-	DL_BeginDrawList(!am_ssect.value && 1);
+    DL_BeginDrawList(!am_ssect.value && r_fillmode.value, 0);
 
-	if (!nolights) {
-		GL_SetTextureMode(GL_MODULATE);
-	}
-	else {
-		GL_SetTextureMode(GL_REPLACE);
-	}
+    if(r_texturecombiner.value > 0) {
+        if(!nolights) {
+            dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
+        }
+        else {
+            dglTexCombReplace();
+        }
+    }
+    else {
+        if(!nolights) {
+            GL_SetTextureMode(GL_MODULATE);
+        }
+        else {
+            GL_SetTextureMode(GL_REPLACE);
+        }
+    }
 
 	DL_ProcessDrawList(DLT_AMAP, DL_ProcessAutomap);
 }
@@ -315,7 +341,9 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, unsigned char r, 
 		return;
 	}
 
-	glPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
+    if(r_fillmode.value) {
+        glPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
+    }
 
 	glSetVertex(tri);
 	glTriangle(0, 1, 2);
@@ -323,7 +351,9 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, unsigned char r, 
 	glDrawGeometry(3, tri);
 	glEnable(GL_TEXTURE_2D);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if(r_fillmode.value) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
 	if (devparm) {
 		vertCount += 3;

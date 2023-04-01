@@ -90,6 +90,7 @@ void GL_SetOrthoScale(float scale);
 float GL_GetOrthoScale(void);
 void GL_SetState(int bit, boolean enable);
 void GL_SetDefaultCombiner(void);
+void GL_SetColorScale(void);
 void GL_Set2DQuad(vtx_t* v, float x, float y, int width, int height,
 	float u1, float u2, float v1, float v2, unsigned int c);
 void GL_Draw2DQuad(vtx_t* v, boolean stretch);

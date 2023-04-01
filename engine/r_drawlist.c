@@ -42,6 +42,8 @@ vtx_t drawVertex[MAXDLDRAWCOUNT];
 
 drawlist_t drawlist[NUMDRAWLISTS];
 
+CVAR_EXTERNAL(r_texturecombiner);
+
 //
 // DL_AddVertexList
 //
@@ -188,11 +190,18 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
+			
+            if(r_texturecombiner.value > 0) {
+                envcolor[0] = envcolor[1] = envcolor[2] = ((float)head->params / 255.0f);
+                GL_SetEnvColor(envcolor);
+            }
+            else {
+                int l = (head->params >> 1);
 
-			l = (head->params >> 1);
+                GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+            }
 
-			GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-			glDrawGeometry(drawcount, drawVertex);
+            glDrawGeometry(drawcount, drawVertex);
 
 			// count vertex size
 			if (devparm) {
@@ -230,9 +239,14 @@ int DL_GetDrawListSize(int tag) {
 // DL_BeginDrawList
 //
 
-void DL_BeginDrawList(boolean t) {
-	glSetVertex(drawVertex);
-	GL_SetTextureUnit(0, t);
+void DL_BeginDrawList(boolean t, boolean a) {
+    glSetVertex(drawVertex);
+
+    GL_SetTextureUnit(0, t);
+
+    if(a) {
+        glTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
+    }
 }
 
 //

@@ -33,9 +33,11 @@
 #include "r_lights.h"
 #include "r_sky.h"
 #include "r_drawlist.h"
-#include "gl_utils.h"
+
+CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_fog);
+CVAR_EXTERNAL(r_rendersprites);
 CVAR_EXTERNAL(st_flashoverlay);
 
 //
@@ -210,6 +212,11 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 static void SetupFog(void) {
 	glFogi(GL_FOG_MODE, GL_LINEAR);
 
+    // don't render fog in wireframe mode
+    if(r_fillmode.value <= 0) {
+        return;
+    }
+
 	if (!skyflatnum) {
 		glDisable(GL_FOG);
 	}
@@ -288,59 +295,79 @@ void R_SetViewMatrix(void) {
 //
 
 void R_RenderWorld(void) {
-	SetupFog();
+    SetupFog();
 
 	glEnable(GL_DEPTH_TEST);
 
-	DL_BeginDrawList(1);
+    DL_BeginDrawList(r_fillmode.value >= 1, r_texturecombiner.value >= 1);
 
-	// setup texture environment for effects
+    // setup texture environment for effects
+    if(r_texturecombiner.value) {
+        if(!nolights) {
+            GL_UpdateEnvTexture(WHITE);
+            GL_SetTextureUnit(1, true);
+            dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+        }
 
-	GL_SetTextureUnit(1, true);
-	GL_SetTextureMode(GL_ADD);
-	GL_SetTextureUnit(0, true);
+        if(st_flashoverlay.value <= 0) {
+            GL_SetTextureUnit(2, true);
+            dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+        }
 
-	if (nolights)
-	{
-		GL_SetTextureMode(GL_REPLACE);
-	}
+        dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
-	glEnable(GL_ALPHA_TEST);
+        GL_SetTextureUnit(0, true);
+    }
+    else {
+        GL_SetTextureUnit(1, true);
+        GL_SetTextureMode(GL_ADD);
+        GL_SetTextureUnit(0, true);
 
-	// begin draw list loop
+        if(nolights) {
+            GL_SetTextureMode(GL_REPLACE);
+        }
+    }
 
-	// -------------- Draw walls (segs) --------------------------
+    dglEnable(GL_ALPHA_TEST);
 
-	DL_ProcessDrawList(DLT_WALL, ProcessWalls);
+    // begin draw list loop
 
-	// -------------- Draw floors/ceilings (leafs) ---------------
+    // -------------- Draw walls (segs) --------------------------
 
-	GL_SetState(GLSTATE_BLEND, 1);
-	DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
+    DL_ProcessDrawList(DLT_WALL, ProcessWalls);
 
-	// -------------- Draw things (sprites) ----------------------
+    // -------------- Draw floors/ceilings (leafs) ---------------
 
-	if (devparm) {
-		spriteRenderTic = I_GetTimeMS();
-	}
+    GL_SetState(GLSTATE_BLEND, 1);
+    DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
 
-	R_SetupSprites();
+    // -------------- Draw things (sprites) ----------------------
 
 	glDepthMask(GL_FALSE);
 	DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
+    if(devparm) {
+        spriteRenderTic = I_GetTimeMS();
+    }
 
-	// -------------- Restore states -----------------------------
+    if(r_rendersprites.value) {
+        R_SetupSprites();
+    }
+    
+	glDepthMask(GL_FALSE);
+    DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
 
-	glDisable(GL_ALPHA_TEST);
-	glDepthMask(GL_TRUE);
-	glDisable(GL_FOG);
-	glDisable(GL_DEPTH_TEST);
+    // -------------- Restore states -----------------------------
 
-	GL_SetOrthoScale(1.0f);
-	GL_SetState(GLSTATE_BLEND, 0);
-	GL_SetState(GLSTATE_CULL, 1);
-	GL_SetDefaultCombiner();
+    glDisable(GL_ALPHA_TEST);
+    glDepthMask(GL_TRUE);
+    glDisable(GL_FOG);
+    glDisable(GL_DEPTH_TEST);
 
-	// villsa 12152013 - make sure we're using the default blend function
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GL_SetOrthoScale(1.0f);
+    GL_SetState(GLSTATE_BLEND, 0);
+    GL_SetState(GLSTATE_CULL, 1);
+    GL_SetDefaultCombiner();
+
+    // villsa 12152013 - make sure we're using the default blend function
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

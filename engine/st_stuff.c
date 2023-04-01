@@ -68,6 +68,7 @@ CVAR(st_hud_color, 0);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // STATUS BAR DATA
@@ -741,11 +742,11 @@ void ST_Drawer(void) {
 	// flash overlay
 	//
 
-	if ((st_flashoverlay.value ||
-		gl_max_texture_units <= 2 ||
-		flashcolor)) {
-		ST_FlashingScreen(st_flash_r, st_flash_g, st_flash_b, st_flash_a);
-	}
+    if((st_flashoverlay.value ||
+            gl_max_texture_units <= 2 ||
+            r_texturecombiner.value <= 0) && flashcolor) {
+        ST_FlashingScreen(st_flash_r, st_flash_g, st_flash_b, st_flash_a);
+    }
 
 	if (iwadDemo) {
 		return;

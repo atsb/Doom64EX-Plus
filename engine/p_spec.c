@@ -66,7 +66,7 @@ static unsigned char tryopentype[3];
 //
 
 typedef struct {
-	boolean isreverse;
+	int isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -78,7 +78,7 @@ typedef struct {
 //
 
 int         numanimdef;
-animdef_t* animdefs;
+animdef_t*	animdefs;
 
 static scdatatable_t animdatatable[] = {
 	{   "RESTARTDELAY", (long) & ((animdef_t*)0)->delay,   'i' },
@@ -172,7 +172,7 @@ void P_InitPicAnims(void) {
 
 	P_InitAnimdef();
 
-	animinfo = (animinfo_t*)Z_Malloc(sizeof(animinfo_t) * numanimdef, PU_STATIC, 0);
+	animinfo = Z_Malloc(sizeof(animinfo_t) * numanimdef, PU_STATIC, 0);
 
 	//    Init animation
 	for (i = 0; i < numanimdef; i++) {
@@ -1623,6 +1623,39 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 	case 255:
 		//Spawn any projectile
 		ok = P_SpawnGenericMissile(line->tag, globalint, thing);
+		break;
+
+	// New EX+ stuff
+
+	// Ceiling Crush and Raise Slow - for an Indiana Jones style trap.
+	// Feature request from AtomicFrog.
+	case 26:
+		ok = EV_DoCeiling(line, crushSlowTrapOnce, CEILSPEEDSLOW);
+		break;
+
+	// Ceiling Lower to Floor Slow - No Crush
+	case 27:
+		ok = EV_DoCeiling(line, lowerToFloorSlow, CEILSPEEDSLOW);
+		break;
+
+	case 28:
+		// Lower Floor16Above (TURBO)
+		ok = EV_DoFloor(line, turboLower16Above, FLOORSPEED * 4);
+		break;
+
+	case 29:
+		// Lower Floor32Above (TURBO)
+		ok = EV_DoFloor(line, turboLower32Above, FLOORSPEED * 4);
+		break;
+
+	case 45:
+		// Lower Floor64Above (TURBO)
+		ok = EV_DoFloor(line, turboLower64Above, FLOORSPEED * 4);
+		break;
+
+	case 46:
+		// Lower Floor16Above (SLOW)
+		ok = EV_DoFloor(line, lower16AboveSlow, FLOORSPEED * 0.5);
 		break;
 
 	default:

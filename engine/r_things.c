@@ -56,9 +56,11 @@ char* spritename;
 static visspritelist_t visspritelist[MAX_SPRITES];
 static visspritelist_t* vissprite = NULL;
 
+CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(r_rendersprites);
 
 static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 
@@ -67,8 +69,7 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
-	boolean flipped)
+static void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, int flipped)
 {
 	int r;
 
@@ -164,7 +165,7 @@ void R_InitSprites(char** namelist) {
 
 	for (i = 0; i < numsprites; i++) {
 		spritename = namelist[i];
-		memset(sprtemp, -1, sizeof(sprtemp));
+		dmemset(sprtemp, -1, sizeof(sprtemp));
 
 		maxframe = -1;
 
@@ -218,7 +219,7 @@ void R_InitSprites(char** namelist) {
 		spriteinfo[i].numframes = maxframe;
 		spriteinfo[i].spriteframes =
 			Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-		memcpy(spriteinfo[i].spriteframes, sprtemp,
+		dmemcpy(spriteinfo[i].spriteframes, sprtemp,
 			maxframe * sizeof(spriteframe_t));
 	}
 }
@@ -640,20 +641,43 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	GL_SetTextureUnit(0, true);
 	GL_CheckFillMode();
 
-	//
-	// setup texture environment for effects
-	//
-	l = (sector->lightlevel >> 1);
+    //
+    // setup texture environment for effects
+    //
+    if(r_texturecombiner.value) {
+        float f[4];
 
-	if (l > 0xff)
-	{
-		l = 0xff;
-	}
+        f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-	if (nolights)
-	{
-		GL_SetTextureMode(GL_REPLACE);
-	}
+        dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+
+        if(!nolights) {
+            GL_UpdateEnvTexture(WHITE);
+            GL_SetTextureUnit(1, true);
+            dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+        }
+
+        if(st_flashoverlay.value <= 0) {
+            GL_SetTextureUnit(2, true);
+            dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+        }
+
+        dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+
+        GL_SetTextureUnit(0, true);
+    }
+    else {
+        int l = (sector->lightlevel >> 1);
+
+        GL_SetTextureUnit(1, true);
+        GL_SetTextureMode(GL_ADD);
+        GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+        GL_SetTextureUnit(0, true);
+
+        if(nolights) {
+            GL_SetTextureMode(GL_REPLACE);
+        }
+    }
 
 	// render
 	glSetVertex(v);
