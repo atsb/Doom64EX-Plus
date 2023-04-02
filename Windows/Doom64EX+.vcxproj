@@ -206,7 +206,6 @@
     <ClCompile Include="..\src\engine\net_query.c" />
     <ClCompile Include="..\src\engine\net_server.c" />
     <ClCompile Include="..\src\engine\net_structure.c" />
-    <ClCompile Include="..\src\engine\psnprntf.c" />
     <ClCompile Include="..\src\engine\p_ceilng.c" />
     <ClCompile Include="..\src\engine\p_doors.c" />
     <ClCompile Include="..\src\engine\p_enemy.c" />
@@ -294,7 +293,6 @@
     <ClInclude Include="..\src\engine\net_query.h" />
     <ClInclude Include="..\src\engine\net_server.h" />
     <ClInclude Include="..\src\engine\net_structure.h" />
-    <ClInclude Include="..\src\engine\psnprntf.h" />
     <ClInclude Include="..\src\engine\p_inter.h" />
     <ClInclude Include="..\src\engine\p_local.h" />
     <ClInclude Include="..\src\engine\p_macros.h" />
