@@ -330,7 +330,7 @@ size_t pstrnlen(const char *s, size_t count) {
 int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
     const char *str = s;
     int nprinted;
-    int len;
+    size_t len;
     int pad = 0;
     int width, flags;
 
@@ -733,7 +733,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
 typedef union DBLBITS_u {
     double D;
     struct word_s {
-        char W0;
+        unsigned int W0;
         unsigned int W1;
     } WORDS; /* haleyjd: this must be named */
 } DBLBITS;
