@@ -47,10 +47,6 @@
 #include "m_misc.h"
 #include "g_actions.h"
 
-#ifndef _WIN32
-typedef int BOOL;
-#endif
-
 int ViewWindowX = 0;
 int ViewWindowY = 0;
 int ViewWidth   = 0;
@@ -148,20 +144,16 @@ static boolean FindExtension(const char *ext) {
 
 void GL_SetSwapInterval(void)
 {
-    typedef BOOL(APIENTRY* PFNWGLSWAPINTERVALPROC)(int);
-
 #ifdef _WIN32
+    typedef BOOL(APIENTRY* PFNWGLSWAPINTERVALPROC)(int);
     PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
     wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress("wglSwapIntervalEXT");
 
     if (v_vsync.value > 0 && wglSwapIntervalEXT)
         wglSwapIntervalEXT(-1);
 #else
-    PFNWGLSWAPINTERVALPROC glXSwapIntervalEXT = 0;
-    glXSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)glXGetProcAddress("glXSwapIntervalEXT");
-
-    if (v_vsync.value > 0 && glXSwapIntervalEXT)
-        glXSwapIntervalEXT(-1);
+    if (v_vsync.value > 0)
+        SDL_GL_SetSwapInterval(-1);
 #endif
 }
 
