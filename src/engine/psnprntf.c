@@ -11,8 +11,6 @@
 #include <stdarg.h> /* for va_list */
 #include <stdlib.h> /* for fcvt */
 
-#include "SDL.h" // villsa
-
 #include "psnprntf.h"
 
 /* Windows stdlib defines fcvt differently <sigh> */
@@ -25,10 +23,7 @@
  */
 
 #ifndef NO_FCVT
-#ifdef __FreeBSD__ // [Kate] Update as necessary
-#define NO_FCVT
-#endif
-#ifdef WIN32
+#ifdef _WIN32
 #ifndef CYGWIN
 #define FCVT _fcvt
 #else
@@ -44,7 +39,7 @@
 #define FCVT M_Fcvt
 #endif
 
-int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
+int psnprintf(char *str, size_t n, const char *format, ...) {
     va_list args;
     int ret;
 
@@ -54,14 +49,16 @@ int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
     return ret;
 }
 
-#define STATE_NONE 0
-#define STATE_OPERATOR 1 /* Just received % */
-#define STATE_FLAG 2     /* Just received a flag or prefix or width */
-#define STATE_WIDTH 3
-#define STATE_BEFORE_PRECISION 4 /* just got dot */
-#define STATE_PRECISION 5 /* got at least one number after dot */
-#define STATE_PREFIX 6   /* just received prefix (h, l or L) */
-
+enum
+{
+    STATE_NONE = 0,
+    STATE_OPERATOR = 1, /* Just received % */
+    STATE_FLAG = 2,    /* Just received a flag or prefix or width */
+    STATE_WIDTH = 3,
+    STATE_BEFORE_PRECISION = 4, /* just got dot */
+    STATE_PRECISION = 5, /* got at least one number after dot */
+    STATE_PREFIX = 6   /* just received prefix (h, l or L) */
+};
 #define UNKNOWN_WIDTH 0
 #define VARIABLE_WIDTH -2
 #define UNKNOWN_PRECISION -1
@@ -158,12 +155,12 @@ int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
         break; \
     case 'c': \
         GET_VARS \
-        ncount += pvsnfmt_char(&info, (int8_t)(va_arg(ap, int))); \
+        ncount += pvsnfmt_char(&info, (char)(va_arg(ap, int))); \
         state = STATE_NONE; \
         break; \
     case 's': \
         GET_VARS \
-        ncount += pvsnfmt_str(&info, (const int8_t *)(va_arg(ap, const int8_t *))); \
+        ncount += pvsnfmt_str(&info, (const char *)(va_arg(ap, const char *))); \
         state = STATE_NONE; \
         break; \
     case 'n': \
@@ -172,14 +169,14 @@ int psnprintf(int8_t *str, size_t n, const int8_t *format, ...) {
         break;
 
 #define PUTCHAR(ch) \
-    if (nmax > 1) \
+    if (n > 1) \
     { \
         *info.pinsertion++ = ch;  \
-        nmax--; \
+        n--; \
     } \
     ncount++;
 
-int pvsnprintf(int8_t *str, size_t nmax, const int8_t *format, va_list ap) {
+int pvsnprintf(char *str, size_t n, const char *format, va_list ap) {
     /* nmax gives total size of buffer including null
      * null is ALWAYS added, even if buffer too small for format
      * (contrary to C99)
@@ -193,7 +190,7 @@ int pvsnprintf(int8_t *str, size_t nmax, const int8_t *format, va_list ap) {
     pvsnfmt_intparm_t ip;
 
     info.pinsertion = str;
-    info.nmax       = nmax;
+    info.nmax       = n;
     info.fmt        = format;
     info.flags      = 0;
     info.width      = 0;
@@ -294,14 +291,14 @@ int pvsnprintf(int8_t *str, size_t nmax, const int8_t *format, va_list ap) {
      * nmax initially passed in as 0.  fmt functions take care to
      * always leave at least one free byte at end.
      */
-    if(nmax > 0) {
+    if(n > 0) {
         *info.pinsertion = '\0';
     }
 
     return ncount;
 }
 
-int pvsnfmt_char(pvsnfmt_vars *info, int8_t c) {
+int pvsnfmt_char(pvsnfmt_vars *info, char c) {
     if(info->nmax > 1) {
         *(info->pinsertion) = c;
         info->pinsertion += 1;
@@ -311,8 +308,8 @@ int pvsnfmt_char(pvsnfmt_vars *info, int8_t c) {
 }
 
 /* strnlen not available on all platforms.. maybe autoconf it? */
-size_t pstrnlen(const int8_t *s, size_t count) {
-    const int8_t *p = s;
+size_t pstrnlen(const char *s, size_t count) {
+    const char *p = s;
     while(*p && count-- > 0) {
         p++;
     }
@@ -330,8 +327,8 @@ size_t pstrnlen(const int8_t *s, size_t count) {
  *   ap             Argument list
  */
 
-int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
-    const int8_t *str = s;
+int pvsnfmt_str(pvsnfmt_vars *info, const char *s) {
+    const char *str = s;
     int nprinted;
     int len;
     int pad = 0;
@@ -348,10 +345,10 @@ int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
 
     /* Truncate due to precision */
     if(info->precision < 0) {
-        len = strlen(str);
+        len = (int)strlen(str);
     }
     else {
-        len = pstrnlen(str, info->precision);
+        len = (int)pstrnlen(str, info->precision);
     }
 
     /* Determine padding length */
@@ -366,7 +363,7 @@ int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
 
     /* If right-aligned, print pad */
     if(!(flags & FLAG_LEFT_ALIGN)) {
-        int8_t padchar;
+        char padchar;
         if(flags & FLAG_ZERO_PAD) {
             padchar = '0';
         }
@@ -375,7 +372,7 @@ int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
         }
 
         if((int) info->nmax - 1 < pad) {
-            nprinted = info->nmax - 1;
+            nprinted = (int)info->nmax - 1;
         }
         else {
             nprinted = pad;
@@ -391,7 +388,7 @@ int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
         nprinted = 0;
     }
     else if((int) info->nmax - 1 < len) {
-        nprinted = info->nmax - 1;
+        nprinted = (int)info->nmax - 1;
     }
     else {
         nprinted = len;
@@ -407,7 +404,7 @@ int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
             nprinted = 0;
         }
         else if((int)info->nmax - 1 < pad) {
-            nprinted = info->nmax - 1;
+            nprinted = (int)info->nmax - 1;
         }
         else {
             nprinted = pad;
@@ -435,13 +432,13 @@ int pvsnfmt_str(pvsnfmt_vars *info, const int8_t *s) {
 
 int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
     int number = 0;
-    unsigned int unumber = 0;
-    int8_t numbersigned = 1;
-    int8_t iszero = 0; /* bool */
+    size_t unumber = 0;
+    char numbersigned = 1;
+    char iszero = 0; /* bool */
     int base = 10;   /* haleyjd: default to something valid */
     int len = 0; /* length of number component (no sign or padding) */
-    int8_t char10 = 0;
-    int8_t sign = 0;
+    char char10 = 0;
+    char sign = 0;
     int widthpad = 0;
     int addprefix = 0; /* optional "0x" = 2 */
     int totallen;
@@ -450,15 +447,15 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
     /* Stack used to hold digits, which are generated backwards
      * and need to be popped off in the correct order
      */
-    int8_t numstack[22];    /* largest 64 bit number has 22 octal digits */
-    int8_t *stackpos = numstack;
+    char numstack[22];    /* largest 64 bit number has 22 octal digits */
+    char *stackpos = numstack;
 
-    int8_t fmt       = *info->fmt;
+    char fmt       = *info->fmt;
     int flags      = info->flags;
     int precision  = info->precision;
 
 #define PUSH(x) \
-    *stackpos++ = (int8_t)(x)
+    *stackpos++ = (char)(x)
 
 #define POP() \
     *(--stackpos)
@@ -472,17 +469,17 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
         switch(fmt) {
         case 'd':
         case 'i':
-            number = (signed short int) ip->i;
+            number = (int)(ip->i);
             break;
         case 'u':
         case 'o':
         case 'x':
         case 'X':
-            unumber = (unsigned short int) ip->i;
+            unumber = (size_t)(ip->i);
             numbersigned = 0;
             break;
         case 'p':
-            unumber = (unsigned int)((size_t)ip->p); // FIXME: Not x64 friendly
+            unumber = (size_t)(ip->p); // FIXME: Not x64 friendly
             numbersigned = 0;
         }
         break;
@@ -496,11 +493,11 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
         case 'o':
         case 'x':
         case 'X':
-            unumber = (unsigned int) ip->i;
+            unumber = (size_t)(ip->i);
             numbersigned = 0;
             break;
         case 'p':
-            unumber = (unsigned int)((size_t)ip->p); // FIXME: Not x64 friendly
+            unumber = (size_t)(ip->p); // FIXME: Not x64 friendly
             numbersigned = numbersigned;
         }
         break;
@@ -514,11 +511,11 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
         case 'o':
         case 'x':
         case 'X':
-            unumber = (unsigned int) ip->i;
+            unumber = (size_t)(ip->i);
             numbersigned = 0;
             break;
         case 'p':
-            unumber = (unsigned int)((size_t)ip->p); // FIXME: Not x64 friendly
+            unumber = (size_t)(ip->p); // FIXME: Not x64 friendly
             numbersigned = 0;
         }
     } /* switch fmt to retrieve number */
@@ -648,7 +645,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
             widthpad = 0;
         }
         else if((int) info->nmax - 1 < widthpad) {
-            widthpad = info->nmax - 1;
+            widthpad = (int)info->nmax - 1;
         }
 
         if(flags & FLAG_ZERO_PAD) {
@@ -691,7 +688,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
         len = 0;
     }
     else if((int) info->nmax - 1 < len) {
-        len = info->nmax - 1;
+        len = (int)info->nmax - 1;
     }
 
     /* haleyjd 07/19/03: bug fix: Do NOT use len as the counter
@@ -701,7 +698,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
      */
     temp = len;
     for(; temp > 0; temp--) {
-        int8_t n = POP();
+        char n = POP();
         if(n <= 9) {
             *(info->pinsertion) = n + '0';
             info->pinsertion += 1;
@@ -719,7 +716,7 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
             widthpad = 0;
         }
         else if((int) info->nmax - 1 < widthpad) {
-            widthpad = info->nmax - 1;
+            widthpad = (int)info->nmax - 1;
         }
 
         memset(info->pinsertion, ' ', widthpad);
@@ -736,8 +733,8 @@ int pvsnfmt_int(pvsnfmt_vars *info, pvsnfmt_intparm_t *ip) {
 typedef union DBLBITS_u {
     double D;
     struct word_s {
-        uint32_t W0;
-        uint32_t W1;
+        char W0;
+        unsigned int W1;
     } WORDS; /* haleyjd: this must be named */
 } DBLBITS;
 
@@ -777,27 +774,26 @@ typedef union DBLBITS_u {
  */
 
 int pvsnfmt_double(pvsnfmt_vars *info, double d) {
-    int8_t *digits;
+    char *digits;
     int sign = 0;
     int dec;
     double value = d;
 
     int len;
     int pad = 0;
-    //int signwidth = 0;
     int totallen;
-    int8_t signchar = 0;
+    char signchar = 0;
     int leadingzeros = 0;
 
     int printdigits; /* temporary var used in different contexts */
 
     int flags = info->flags;
     int width = info->width;
-    const int8_t fmt = *(info->fmt);
+    const char fmt = *(info->fmt);
     int precision = info->precision;
 
     /* Check for special values first */
-    int8_t *special = 0;
+    char *special = 0;
     if(ISSNAN(value)) {
         special = "NaN";
     }
@@ -812,7 +808,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
     }
 
     if(special) {
-        totallen = len = strlen(special);
+        totallen = len = (int)strlen(special);
 
         /* Sign (this is silly for NaN but conforming to printf */
         if(flags & (FLAG_SIGNED | FLAG_SIGN_PAD) || sign) {
@@ -859,7 +855,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
                 pad  = 0;
             }
             else if((int) info->nmax - 1 < pad) {
-                pad  = info->nmax - 1;
+                pad  = (int)info->nmax - 1;
             }
 
             if(flags & FLAG_ZERO_PAD) {
@@ -885,7 +881,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
             len = 0;
         }
         else if((int) info->nmax - 1 < len) {
-            len = info->nmax - 1;
+            len = (int)info->nmax - 1;
         }
         memcpy(info->pinsertion, special, len);
         info->pinsertion += len;
@@ -897,7 +893,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
                 pad  = 0;
             }
             else if((int) info->nmax - 1 < pad) {
-                pad  = info->nmax - 1;
+                pad = (int)info->nmax - 1;
             }
 
             memset(info->pinsertion, ' ', pad);
@@ -914,7 +910,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
         }
 
         digits = FCVT(value, precision, &dec, &sign);
-        len = strlen(digits);
+        len = (int)strlen(digits);
 
         if(dec > 0) {
             totallen = dec;
@@ -990,7 +986,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
                 pad = 0;
             }
             else if((int) info->nmax - 1 < pad) {
-                pad = info->nmax - 1;
+                pad = (int)info->nmax - 1;
             }
 
             if(flags & FLAG_ZERO_PAD) {
@@ -1045,7 +1041,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
                 leadingzeros = 0;
             }
             else if((int) info->nmax /* - 1 */ < leadingzeros /* -1 */) {
-                leadingzeros = info->nmax;    /* -1 */
+                leadingzeros = (int)info->nmax;    /* -1 */
             }
 
             leadingzeros--;
@@ -1060,7 +1056,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
                 printdigits = 0;
             }
             else if((int) info->nmax - 1 < dec) {
-                printdigits = info->nmax - 1;
+                printdigits = (int)info->nmax - 1;
             }
             else {
                 printdigits = dec;
@@ -1100,7 +1096,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
             printdigits = 0;
         }
         else if((int) info->nmax - 1 < len) {
-            printdigits = info->nmax - 1;
+            printdigits = (int)info->nmax - 1;
         }
         else {
             printdigits = len;
@@ -1116,7 +1112,7 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
                 pad = 0;
             }
             else if((int) info->nmax - 1 < pad) {
-                pad = info->nmax - 1;
+                pad = (int)info->nmax - 1;
             }
 
             memset(info->pinsertion, ' ', pad);
@@ -1128,6 +1124,4 @@ int pvsnfmt_double(pvsnfmt_vars *info, double d) {
 
     return 0;
 }
-
-// EOF
 

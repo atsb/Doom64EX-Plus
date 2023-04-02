@@ -1,15 +1,13 @@
 #ifndef PSNPRINTF_H
 #define PSNPRINTF_H
 
-#include <stdint.h>
-
-int psnprintf(char* str, unsigned int n, const char* format, ...);
-int pvsnprintf(char* str, unsigned int n, const char* format, va_list ap);
+int psnprintf(char* str, size_t n, const char* format, ...);
+int pvsnprintf(char* str, size_t n, const char* format, va_list ap);
 
 /* haleyjd 08/01/09: rewritten to use a structure */
 typedef struct psvnfmt_vars_s {
 	char* pinsertion;
-	unsigned int      nmax;
+	size_t      nmax;
 	const char* fmt;
 	int         flags;
 	int         width;
@@ -37,14 +35,16 @@ int pvsnfmt_double(pvsnfmt_vars* info, double d);
 /* These are the flags you need (use logical OR) for the flags parameter of
  * fmt functions above.
  */
-#define FLAG_DEFAULT         0x00
-#define FLAG_LEFT_ALIGN      0x01 // -
-#define FLAG_SIGNED          0x02 // +
-#define FLAG_ZERO_PAD        0x04 // 0
-#define FLAG_SIGN_PAD        0x08 // ' '
-#define FLAG_HASH            0x10 // #
-
+enum
+{
+	FLAG_DEFAULT = 0x00,
+	FLAG_LEFT_ALIGN = 0x01, // -
+	FLAG_SIGNED = 0x02, // +
+	FLAG_ZERO_PAD = 0x04, // 0
+	FLAG_SIGN_PAD = 0x08, // ' '
+	FLAG_HASH = 0x10 // #
+};
  /* Portable strnlen function (doesn't exist on all systems!) */
-unsigned int pstrnlen(const char* s, unsigned int count);
+size_t pstrnlen(const char* s, size_t count);
 
 #endif /* ifdef PSNPRINTF_H */
