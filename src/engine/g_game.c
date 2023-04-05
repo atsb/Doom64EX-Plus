@@ -66,6 +66,12 @@
 
 #define DCLICK_TIME     20
 
+extern void M_QuickSave(void);
+extern void M_QuickLoad(void);
+extern void M_SaveGame(void);
+extern void M_LoadGame(void);
+extern void M_ChangeGammaLevel(int);
+
 void        G_PlayerReborn(int player);
 void        G_InitNew(skill_t skill, int map);
 void        G_DoReborn(int playernum);
@@ -214,6 +220,56 @@ static CMD(Button) {
 			pc->key[key] |= PCKF_DOUBLEUSE;
 		}
 	}
+}
+
+//
+// G_CmdQuickSave
+//
+
+static CMD(QuickSave) {
+	M_QuickSave();
+}
+
+//
+// G_CmdQuickLoad
+//
+
+static CMD(QuickLoad) {
+	M_QuickLoad();
+}
+
+//
+// G_CmdSave
+//
+
+static CMD(Save) {
+	M_StartControlPanel(true);
+	M_SaveGame(0);
+}
+
+//
+// G_CmdLoad
+//
+
+static CMD(Load) {
+	M_StartControlPanel(true);
+	M_LoadGame(0);
+}
+
+//
+// G_CmdScreenShot
+//
+
+static CMD(ScreenShot) {
+	G_ScreenShot();
+}
+
+//
+// G_CmdGamma
+//
+
+static CMD(Gamma) {
+	M_ChangeGammaLevel(2);
 }
 
 //
@@ -1578,6 +1634,12 @@ void G_Init(void) {
 	G_AddCommand("+straferight", CMD_Button, PCKEY_STRAFERIGHT);
 	G_AddCommand("-straferight", CMD_Button, PCKEY_STRAFERIGHT | PCKF_UP);
 	G_AddCommand("bind", CMD_Bind, 0);
+	G_AddCommand("quicksave", CMD_QuickSave, PCKEY_QUICKSAVE);
+	G_AddCommand("quickload", CMD_QuickLoad, PCKEY_QUICKLOAD);
+	G_AddCommand("save", CMD_Save, PCKEY_SAVE);
+	G_AddCommand("load", CMD_Load, PCKEY_LOAD);
+	G_AddCommand("screenshot", CMD_ScreenShot, PCKEY_SCREENSHOT);
+	G_AddCommand("gamma", CMD_Gamma, PCKEY_GAMMA);
 	G_AddCommand("seta", CMD_Seta, 0);
 	G_AddCommand("quit", CMD_Quit, 0);
 	G_AddCommand("exec", CMD_Exec, 0);

@@ -84,6 +84,8 @@
 #define MENUCOLORRED        D_RGBA(255, 0, 0, menualphacolor)
 #define MENUCOLORWHITE      D_RGBA(255, 255, 255, menualphacolor)
 #define MENUCOLORYELLOW     D_RGBA(194, 174, 28, menualphacolor)
+#define QUICKSAVESLOT		7
+#define QUICKSAVEFILE		"doomsav7.dsg"
 
 //
 // defaulted values
@@ -2805,9 +2807,8 @@ void M_ChangeKeyBinding(int choice);
 void M_BuildControlMenu(void);
 void M_DrawControls(void);
 
-#define NUM_NONBINDABLE_ITEMS   8
-#define NUM_CONTROL_ACTIONS     42
-#define NUM_CONTROL_ITEMS        NUM_CONTROL_ACTIONS + NUM_NONBINDABLE_ITEMS
+#define NUM_CONTROL_ACTIONS     48
+#define NUM_CONTROL_ITEMS       NUM_CONTROL_ACTIONS
 
 menuaction_t* PlayerActions;
 menu_t          ControlsDef;
@@ -2853,6 +2854,12 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Mouse Pan", "+automap_freepan"},
 	{"Follow Mode", "automap_follow"},
 	{"Other", NULL},
+	{"Quick Save", "quicksave"},
+	{"Quick Load", "quickload"},
+	{"Save", "save"},
+	{"Load", "load"},
+	{"Screen Shot", "screenshot"},
+	{"Gamma", "gamma"},
 	{"Detach Camera", "setcamerastatic"},
 	{"Chasecam", "setcamerachase"},
 	{NULL, NULL}
@@ -2877,7 +2884,7 @@ void M_BuildControlMenu(void) {
 
 	menu = &ControlsDef;
 	// add extra menu items for non-bindable items (display only)
-	menu->numitems = actions + NUM_NONBINDABLE_ITEMS;
+	menu->numitems = actions;
 	menu->textonly = false;
 	menu->numpageitems = 16;
 	menu->prevMenu = &ControlMenuDef;
@@ -2910,20 +2917,6 @@ void M_BuildControlMenu(void) {
 
 		menu->menuitems[item].alphaKey = 0;
 	}
-
-#define ADD_NONBINDABLE_ITEM(i, str, s)                 \
-    dstrcpy(menu->menuitems[actions + i].name, str);    \
-    menu->menuitems[actions + i].status = s;            \
-    menu->menuitems[actions + i].routine = NULL
-
-	ADD_NONBINDABLE_ITEM(0, "Non-Bindable Keys", -1);
-	ADD_NONBINDABLE_ITEM(1, "Save Game        F2", 1);
-	ADD_NONBINDABLE_ITEM(2, "Load Game        F3", 1);
-	ADD_NONBINDABLE_ITEM(3, "Screenshot       F5", 1);
-	ADD_NONBINDABLE_ITEM(4, "Quicksave        F6", 1);
-	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
-	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
-	ADD_NONBINDABLE_ITEM(7, "Console          TILDE and BACKQUOTE", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {
@@ -3018,47 +3011,6 @@ void M_DrawControlMenu(void) {
 		Draw_BigText(-1, 410, MENUCOLORWHITE, ControlMenuDef.hints[itemOn]);
 		GL_SetOrthoScale(ControlMenuDef.scale);
 	}
-}
-
-//------------------------------------------------------------------------
-//
-// QUICKSAVE CONFIRMATION
-//
-//------------------------------------------------------------------------
-
-void M_DrawQuickSaveConfirm(void);
-
-enum {
-	QS_Ok = 0,
-	QS_End
-};
-qsconfirm_e;
-
-menuitem_t QuickSaveConfirm[] = {
-	{1,"Ok",M_ReturnToOptions,'o'}
-};
-
-menu_t QuickSaveConfirmDef = {
-	QS_End,
-	false,
-	&PauseDef,
-	QuickSaveConfirm,
-	M_DrawQuickSaveConfirm,
-	" ",
-	144,112,
-	QS_Ok,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_DrawQuickSaveConfirm(void) {
-	Draw_BigText(-1, 16, MENUCOLORRED, "You Need To Pick");
-	Draw_BigText(-1, 32, MENUCOLORRED, "A Quicksave Slot!");
 }
 
 //------------------------------------------------------------------------
@@ -3395,90 +3347,6 @@ void M_ReadSaveStrings(void) {
 #endif
 		DoomLoadMenu[i].status = 1;
 	}
-}
-
-//------------------------------------------------------------------------
-//
-// QUICKSAVE PROMPT
-//
-//------------------------------------------------------------------------
-
-void M_QuickSaveResponse(int ch);
-
-enum {
-	QSP_Yes = 0,
-	QSP_No,
-	QSP_End
-};
-quicksaveprompt_e;
-
-menuitem_t QuickSavePrompt[] = {
-	{1,"Yes",M_QuickSaveResponse,'y'},
-	{1,"No",M_ReturnToOptions,'n'}
-};
-
-menu_t QuickSavePromptDef = {
-	QSP_End,
-	false,
-	&PauseDef,
-	QuickSavePrompt,
-	NULL,
-	"Overwrite Quicksave?",
-	144,112,
-	QSP_Yes,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_QuickSaveResponse(int ch) {
-	M_DoSave(quickSaveSlot);
-}
-
-//------------------------------------------------------------------------
-//
-// QUICKLOAD PROMPT
-//
-//------------------------------------------------------------------------
-
-void M_QuickLoadResponse(int ch);
-
-enum {
-	QLP_Yes = 0,
-	QLP_No,
-	QLP_End
-};
-quickloadprompt_e;
-
-menuitem_t QuickLoadPrompt[] = {
-	{1,"Yes",M_QuickLoadResponse,'y'},
-	{1,"No",M_ReturnToOptions,'n'}
-};
-
-menu_t QuickLoadPromptDef = {
-	QLP_End,
-	false,
-	&PauseDef,
-	QuickLoadPrompt,
-	NULL,
-	"Load Quicksave?",
-	144,112,
-	QLP_Yes,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_QuickLoadResponse(int ch) {
-	M_LoadSelect(quickSaveSlot);
 }
 
 //------------------------------------------------------------------------
@@ -3941,43 +3809,25 @@ static boolean M_CursorHighlightItem(menu_t* menu) {
 // M_QuickSave
 //
 
-void M_QuickSave(void) {
-	if (!usergame) {
-		S_StartSound(NULL, sfx_oof);
+void M_QuickSave(void)
+{
+	if (gamestate != GS_LEVEL)
 		return;
-	}
 
-	if (gamestate != GS_LEVEL) {
-		return;
-	}
-
-	if (quickSaveSlot < 0) {
-		M_StartControlPanel(true);
-		M_ReadSaveStrings();
-		M_SetupNextMenu(&SaveDef);
-		quickSaveSlot = -2;     // means to pick a slot now
-		return;
-	}
-
-	M_StartControlPanel(true);
-	M_SetupNextMenu(&QuickSavePromptDef);
+	G_SaveGame(QUICKSAVESLOT, "quicksave");
 }
 
-void M_QuickLoad(void) {
-	if (netgame) {
-		M_StartControlPanel(true);
-		M_SetupNextMenu(&NetLoadNotifyDef);
-		return;
-	}
+void M_QuickLoad(void)
+{
 
-	if (quickSaveSlot < 0) {
-		M_StartControlPanel(true);
-		M_SetupNextMenu(&QuickSaveConfirmDef);
-		return;
+	if (M_FileExists(QUICKSAVEFILE))
+	{
+		G_LoadGame(QUICKSAVEFILE);
 	}
-
-	M_StartControlPanel(true);
-	M_SetupNextMenu(&QuickLoadPromptDef);
+	else
+	{
+		printf("no save file");
+	}
 }
 
 //
@@ -4387,37 +4237,6 @@ boolean M_Responder(event_t* ev) {
 			break;
 		}
 		return true;
-	}
-
-	// F-Keys
-	if (!menuactive) {
-		switch (ch) {
-		case KEY_F2:            // Save
-			M_StartControlPanel(true);
-			M_SaveGame(0);
-			return true;
-
-		case KEY_F3:            // Load
-			M_StartControlPanel(true);
-			M_LoadGame(0);
-			return true;
-
-		case KEY_F5:
-			G_ScreenShot();
-			return true;
-
-		case KEY_F6:            // Quicksave
-			M_QuickSave();
-			return true;
-
-		case KEY_F7:            // Quickload
-			M_QuickLoad();
-			return true;
-
-		case KEY_F11:           // gamma toggle
-			M_ChangeGammaLevel(2);
-			return true;
-		}
 	}
 
 	// Pop-up menu?
@@ -4859,7 +4678,7 @@ void M_Drawer(void) {
 				// tint the non-bindable key items to a shade of red
 				//
 				if (currentMenu == &ControlsDef) {
-					if (i >= (NUM_CONTROL_ITEMS - NUM_NONBINDABLE_ITEMS)) {
+					if (i >= (NUM_CONTROL_ITEMS)) {
 						color = D_RGBA(255, 192, 192, menualphacolor);
 					}
 				}
