@@ -3811,6 +3811,11 @@ static boolean M_CursorHighlightItem(menu_t* menu) {
 
 void M_QuickSave(void)
 {
+	if (!usergame) {
+		S_StartSound(NULL, sfx_oof);
+		return;
+	}
+
 	if (gamestate != GS_LEVEL)
 		return;
 
@@ -3819,7 +3824,6 @@ void M_QuickSave(void)
 
 void M_QuickLoad(void)
 {
-
 	if (M_FileExists(QUICKSAVEFILE))
 	{
 		G_LoadGame(QUICKSAVEFILE);
