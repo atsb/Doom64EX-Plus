@@ -117,9 +117,9 @@ static skydef_t* skydefs;
 // Blockmap size.
 int                 bmapwidth;
 int                 bmapheight;     // size in mapblocks
-short* blockmap;       // int for larger maps
+uint16_t* blockmap;       // int for larger maps
 // offsets in blockmap are from here
-short* blockmaplump;
+uint16_t* blockmaplump;
 // origin of block map
 fixed_t             bmaporgx;
 fixed_t             bmaporgy;
@@ -756,23 +756,23 @@ void P_LoadReject(int lump) {
 //
 
 static void P_LoadBlockMap(void) {
-	int		count;
-	int		i;
-	int     length;
+	int32_t	count;
+	int32_t	i;
+	int32_t length;
 	byte*	src;
 
 	length = W_MapLumpLength(ML_BLOCKMAP);
 	count = length / 2 >= 0x10000;
 
-	blockmaplump = Z_Malloc(sizeof(*blockmaplump) * length * sizeof(int32_t), PU_LEVEL, 0);
+	blockmaplump = Z_Malloc(sizeof(*blockmaplump) * length, PU_LEVEL, 0);
 	blockmap = blockmaplump + 4;//skip blockmap header
 
 	src = W_GetMapLump(ML_BLOCKMAP);
 	memmove(blockmaplump, src, length);
 
-	for (i = 4; i < count; i++)
+	for (i = 0; i < count; i++)
 	{
-		short t = (int32_t)SHORT(blockmaplump[i]);
+		int32_t t = (int32_t)SHORT(blockmaplump[i]);
 		blockmaplump[i] = (t == -1) ? -1l : (int32_t)t & 0xffff;
 	}
 
