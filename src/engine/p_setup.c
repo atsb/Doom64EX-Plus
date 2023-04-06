@@ -751,77 +751,6 @@ void P_LoadReject(int lump) {
 	dmemcpy(rejectmatrix, (byte*)W_GetMapLump(lump), size);
 }
 
-static const char* bmaperrormsg;
-
-//
-// P_VerifyBlockMap
-//
-// haleyjd 03/04/10: do verification on validity of blockmap.
-//
-static boolean P_VerifyBlockMap(int count) {
-	boolean isvalid = true;
-	int x, y;
-	short* maxoffs = blockmaplump + count;
-
-	bmaperrormsg = NULL;
-
-	for (y = 0; y < bmapheight; ++y) {
-		for (x = 0; x < bmapwidth; ++x) {
-			int offset;
-			short* list, * tmplist;
-			short* blockoffset;
-
-			offset = y * bmapwidth + x;
-			blockoffset = blockmaplump + offset + 4;
-
-			// check that block offset is in bounds
-			if (blockoffset >= maxoffs) {
-				isvalid = false;
-				bmaperrormsg = "offset overflow";
-				break;
-			}
-
-			offset = *blockoffset;
-			list = blockmaplump + offset;
-
-			// scan forward for a -1 terminator before maxoffs
-			for (tmplist = list; ; ++tmplist) {
-				// we have overflowed the lump?
-				if (tmplist >= maxoffs) {
-					isvalid = false;
-					bmaperrormsg = "open blocklist";
-					break;
-				}
-				if (*tmplist == -1) { // found -1
-					break;
-				}
-			}
-			if (!isvalid) { // if the list is not terminated, break now
-				break;
-			}
-
-			// scan the list for out-of-range linedef indicies in list
-			for (tmplist = list; *tmplist != -1; ++tmplist) {
-				if (*tmplist < 0 || *tmplist >= numlines) {
-					isvalid = false;
-					bmaperrormsg = "index >= numlines";
-					break;
-				}
-			}
-			if (!isvalid) { // if a list has a bad linedef index, break now
-				break;
-			}
-		}
-
-		// break out early on any error
-		if (!isvalid) {
-			break;
-		}
-	}
-
-	return isvalid;
-}
-
 //
 // P_LoadBlockMap
 //
@@ -833,29 +762,29 @@ static void P_LoadBlockMap(void) {
 	byte*	src;
 
 	length = W_MapLumpLength(ML_BLOCKMAP);
-	
+	count = length / 2 >= 0x10000;
+
 	blockmaplump = Z_Malloc(sizeof(*blockmaplump) * length, PU_LEVEL, 0);
+	blockmap = blockmaplump + 4;//skip blockmap header
+
 	src = W_GetMapLump(ML_BLOCKMAP);
 	memmove(blockmaplump, src, length);
 
-	blockmap = blockmaplump + 4;//skip blockmap header
-	count = length / 2;
-	for (i = 0; i < count; i++)
-		blockmaplump[i] = SHORT(blockmaplump[i]);
+	for (i = 4; i < count; i++)
+	{
+		short t = (int32_t)SHORT(blockmaplump[i]);
+		blockmaplump[i] = (t == -1) ? -1l : (int32_t)t & 0xffff;
+	}
 
-	bmaporgx = INT2F(blockmaplump[0]);
-	bmaporgy = INT2F(blockmaplump[1]);
+	bmaporgx = blockmaplump[0] << FRACBITS;
+	bmaporgy = blockmaplump[1] << FRACBITS;
 	bmapwidth = blockmaplump[2];
 	bmapheight = blockmaplump[3];
-
-	if (!P_VerifyBlockMap(count)) {
-		I_Error("P_LoadBlockMap: Bad blockmap - %s", bmaperrormsg);
-	}
 
 	// clear out mobj chains
 	count = sizeof(*blocklinks) * bmapwidth * bmapheight;
 	blocklinks = Z_Malloc(count, PU_LEVEL, 0);
-	dmemset(blocklinks, 0, count);
+	memset(blocklinks, 0, count);
 }
 
 //
