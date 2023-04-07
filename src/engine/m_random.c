@@ -77,3 +77,15 @@ void M_ClearRandom(void) // 80002980
 {
 	rndindex = prndindex = 0;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+// Helper for PsyDoom which returns the expression 'P_Random() - P_Random()' with the leftmost call to 'P_Random()' GUARANTEED
+// to be evaluated first. Required because C/C++ is free to evaluate either side of the '-' operator first, which can change the result
+// depending on the compiler. Inspired by the function of the same name in the 'Calico' Jaguar DOOM source port.
+//------------------------------------------------------------------------------------------------------------------------------------------
+int32_t P_SubRandom(void)
+{
+	const int32_t r1 = P_Random();
+	const int32_t r2 = P_Random();
+	return r1 - r2;
+}

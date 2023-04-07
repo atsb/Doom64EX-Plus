@@ -31,5 +31,6 @@ extern unsigned char rndtable[256];
 int M_Random(void);
 int P_Random(void);
 void M_ClearRandom(void);
+int32_t P_SubRandom(void);
 
 #endif
