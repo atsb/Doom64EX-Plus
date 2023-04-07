@@ -14,6 +14,12 @@
 		2A1E0885293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		2A1E0886293263D200FB6EB8 /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		2A1E08912932869900FB6EB8 /* libfluidlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1E087F293263BF00FB6EB8 /* libfluidlite.a */; };
+		2A28028129E0652C00230288 /* deh_str.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027D29E0607E00230288 /* deh_str.c */; };
+		2A28028229E0652C00230288 /* deh_str.h in Sources */ = {isa = PBXBuildFile; fileRef = 2A28028029E0638800230288 /* deh_str.h */; };
+		2A28028329E0652C00230288 /* i_mac_audio.h in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027B29E05FAA00230288 /* i_mac_audio.h */; };
+		2A28028429E0652C00230288 /* i_mac_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027C29E05FAA00230288 /* i_mac_audio.c */; };
+		2A28028529E0652C00230288 /* net_structure.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027F29E0615900230288 /* net_structure.c */; };
+		2A28028629E0652C00230288 /* net_structure.h in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027E29E0615900230288 /* net_structure.h */; };
 		2A44CD3E2930B13E005B23CA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3D2930B13E005B23CA /* CoreAudio.framework */; };
 		2A44CD402930B145005B23CA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3F2930B145005B23CA /* OpenGL.framework */; };
 		2A44CE282930B570005B23CA /* doom64ex-plus.wad in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE212930B56F005B23CA /* doom64ex-plus.wad */; };
@@ -29,7 +35,6 @@
 		2A44CEF12930B717005B23CA /* i_main.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE3A2930B706005B23CA /* i_main.c */; };
 		2A44CEF22930B717005B23CA /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE3B2930B706005B23CA /* info.c */; };
 		2A44CEF32930B717005B23CA /* gl_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE3E2930B707005B23CA /* gl_draw.c */; };
-		2A44CEF42930B717005B23CA /* net_structrw.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE3F2930B707005B23CA /* net_structrw.c */; };
 		2A44CEF52930B717005B23CA /* r_wipe.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE402930B707005B23CA /* r_wipe.c */; };
 		2A44CEF62930B717005B23CA /* i_xinput.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE412930B707005B23CA /* i_xinput.c */; };
 		2A44CEF72930B717005B23CA /* am_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE442930B707005B23CA /* am_map.c */; };
@@ -48,7 +53,6 @@
 		2A44CF042930B717005B23CA /* m_password.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE5C2930B709005B23CA /* m_password.c */; };
 		2A44CF052930B717005B23CA /* g_actions.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE5D2930B709005B23CA /* g_actions.c */; };
 		2A44CF072930B717005B23CA /* in_stuff.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE5F2930B709005B23CA /* in_stuff.c */; };
-		2A44CF082930B717005B23CA /* i_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE612930B709005B23CA /* i_audio.c */; };
 		2A44CF092930B717005B23CA /* deh_misc.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE622930B709005B23CA /* deh_misc.c */; };
 		2A44CF0A2930B717005B23CA /* p_floor.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE632930B70A005B23CA /* p_floor.c */; };
 		2A44CF0B2930B717005B23CA /* p_mobj.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CE652930B70A005B23CA /* p_mobj.c */; };
@@ -147,6 +151,12 @@
 		2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "Libs/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "Libs/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
 		2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = Libs/libpng16.16.dylib; sourceTree = "<group>"; };
+		2A28027B29E05FAA00230288 /* i_mac_audio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_mac_audio.h; path = ../src/engine/i_mac_audio.h; sourceTree = "<group>"; };
+		2A28027C29E05FAA00230288 /* i_mac_audio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_mac_audio.c; path = ../src/engine/i_mac_audio.c; sourceTree = "<group>"; };
+		2A28027D29E0607E00230288 /* deh_str.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = deh_str.c; path = ../src/engine/deh_str.c; sourceTree = "<group>"; };
+		2A28027E29E0615900230288 /* net_structure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = net_structure.h; path = ../src/engine/net_structure.h; sourceTree = "<group>"; };
+		2A28027F29E0615900230288 /* net_structure.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = net_structure.c; path = ../src/engine/net_structure.c; sourceTree = "<group>"; };
+		2A28028029E0638800230288 /* deh_str.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = deh_str.h; path = ../src/engine/deh_str.h; sourceTree = "<group>"; };
 		2A44CD3D2930B13E005B23CA /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		2A44CD3F2930B145005B23CA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		2A44CD412930B1A9005B23CA /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = Libs/libvorbisfile.3.dylib; sourceTree = "<group>"; };
@@ -186,7 +196,6 @@
 		2A44CE3C2930B706005B23CA /* d_ticcmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = d_ticcmd.h; path = ../src/engine/d_ticcmd.h; sourceTree = "<group>"; };
 		2A44CE3D2930B707005B23CA /* g_settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = g_settings.h; path = ../src/engine/g_settings.h; sourceTree = "<group>"; };
 		2A44CE3E2930B707005B23CA /* gl_draw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gl_draw.c; path = ../src/engine/gl_draw.c; sourceTree = "<group>"; };
-		2A44CE3F2930B707005B23CA /* net_structrw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = net_structrw.c; path = ../src/engine/net_structrw.c; sourceTree = "<group>"; };
 		2A44CE402930B707005B23CA /* r_wipe.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = r_wipe.c; path = ../src/engine/r_wipe.c; sourceTree = "<group>"; };
 		2A44CE412930B707005B23CA /* i_xinput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = i_xinput.c; path = ../src/engine/i_xinput.c; sourceTree = "<group>"; };
 		2A44CE422930B707005B23CA /* g_actions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = g_actions.h; path = ../src/engine/g_actions.h; sourceTree = "<group>"; };
@@ -219,7 +228,6 @@
 		2A44CE5D2930B709005B23CA /* g_actions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = g_actions.c; path = ../src/engine/g_actions.c; sourceTree = "<group>"; };
 		2A44CE5F2930B709005B23CA /* in_stuff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = in_stuff.c; path = ../src/engine/in_stuff.c; sourceTree = "<group>"; };
 		2A44CE602930B709005B23CA /* doomdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = doomdata.h; path = ../src/engine/doomdata.h; sourceTree = "<group>"; };
-		2A44CE612930B709005B23CA /* i_audio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = i_audio.c; path = ../src/engine/i_audio.c; sourceTree = "<group>"; };
 		2A44CE622930B709005B23CA /* deh_misc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = deh_misc.c; path = ../src/engine/deh_misc.c; sourceTree = "<group>"; };
 		2A44CE632930B70A005B23CA /* p_floor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_floor.c; path = ../src/engine/p_floor.c; sourceTree = "<group>"; };
 		2A44CE642930B70A005B23CA /* m_misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = m_misc.h; path = ../src/engine/m_misc.h; sourceTree = "<group>"; };
@@ -324,7 +332,6 @@
 		2A44CEC92930B710005B23CA /* deh_mapping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = deh_mapping.c; path = ../src/engine/deh_mapping.c; sourceTree = "<group>"; };
 		2A44CECB2930B711005B23CA /* net_loop.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = net_loop.c; path = ../src/engine/net_loop.c; sourceTree = "<group>"; };
 		2A44CECC2930B711005B23CA /* sc_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sc_main.h; path = ../src/engine/sc_main.h; sourceTree = "<group>"; };
-		2A44CECD2930B711005B23CA /* i_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = i_audio.h; path = ../src/engine/i_audio.h; sourceTree = "<group>"; };
 		2A44CECE2930B711005B23CA /* i_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = i_system.h; path = ../src/engine/i_system.h; sourceTree = "<group>"; };
 		2A44CECF2930B711005B23CA /* con_console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = con_console.h; path = ../src/engine/con_console.h; sourceTree = "<group>"; };
 		2A44CED02930B711005B23CA /* g_game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = g_game.h; path = ../src/engine/g_game.h; sourceTree = "<group>"; };
@@ -332,7 +339,6 @@
 		2A44CED22930B711005B23CA /* gl_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gl_main.c; path = ../src/engine/gl_main.c; sourceTree = "<group>"; };
 		2A44CED32930B711005B23CA /* p_doors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_doors.c; path = ../src/engine/p_doors.c; sourceTree = "<group>"; };
 		2A44CED42930B711005B23CA /* deh_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deh_main.h; path = ../src/engine/deh_main.h; sourceTree = "<group>"; };
-		2A44CED52930B711005B23CA /* net_structrw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_structrw.h; path = ../src/engine/net_structrw.h; sourceTree = "<group>"; };
 		2A44CED62930B712005B23CA /* p_sight.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_sight.c; path = ../src/engine/p_sight.c; sourceTree = "<group>"; };
 		2A44CED72930B712005B23CA /* m_shift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = m_shift.h; path = ../src/engine/m_shift.h; sourceTree = "<group>"; };
 		2A44CED82930B712005B23CA /* net_query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net_query.h; path = ../src/engine/net_query.h; sourceTree = "<group>"; };
@@ -466,6 +472,8 @@
 				2A44CEDB2930B712005B23CA /* d_player.h */,
 				2A44CE972930B70D005B23CA /* d_think.h */,
 				2A44CE3C2930B706005B23CA /* d_ticcmd.h */,
+				2A28027D29E0607E00230288 /* deh_str.c */,
+				2A28028029E0638800230288 /* deh_str.h */,
 				2A44CE4C2930B708005B23CA /* deh_ammo.c */,
 				2A44CE9C2930B70D005B23CA /* deh_defs.h */,
 				2A44CE9D2930B70D005B23CA /* deh_doom.c */,
@@ -505,8 +513,8 @@
 				2A44CEC72930B710005B23CA /* gl_main.h */,
 				2A44CEDE2930B713005B23CA /* gl_texture.c */,
 				2A44CE9F2930B70E005B23CA /* gl_texture.h */,
-				2A44CE612930B709005B23CA /* i_audio.c */,
-				2A44CECD2930B711005B23CA /* i_audio.h */,
+				2A28027B29E05FAA00230288 /* i_mac_audio.h */,
+				2A28027C29E05FAA00230288 /* i_mac_audio.c */,
 				2A44CE3A2930B706005B23CA /* i_main.c */,
 				2A44CEAA2930B70E005B23CA /* i_opndir.c */,
 				2A44CE7B2930B70B005B23CA /* i_opndir.h */,
@@ -557,8 +565,8 @@
 				2A44CED82930B712005B23CA /* net_query.h */,
 				2A44CE882930B70C005B23CA /* net_server.c */,
 				2A44CEDF2930B714005B23CA /* net_server.h */,
-				2A44CE3F2930B707005B23CA /* net_structrw.c */,
-				2A44CED52930B711005B23CA /* net_structrw.h */,
+				2A28027F29E0615900230288 /* net_structure.c */,
+				2A28027E29E0615900230288 /* net_structure.h */,
 				2A44CE752930B70B005B23CA /* p_ceilng.c */,
 				2A44CED32930B711005B23CA /* p_doors.c */,
 				2A44CEA12930B70E005B23CA /* p_enemy.c */,
@@ -719,6 +727,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A28028129E0652C00230288 /* deh_str.c in Sources */,
+				2A28028229E0652C00230288 /* deh_str.h in Sources */,
+				2A28028329E0652C00230288 /* i_mac_audio.h in Sources */,
+				2A28028429E0652C00230288 /* i_mac_audio.c in Sources */,
+				2A28028529E0652C00230288 /* net_structure.c in Sources */,
+				2A28028629E0652C00230288 /* net_structure.h in Sources */,
 				2AB7DECE293BD848009A3CA3 /* i_sdlinput.c in Sources */,
 				2A44CF382930B717005B23CA /* p_switch.c in Sources */,
 				2A44CEFC2930B717005B23CA /* deh_thing.c in Sources */,
@@ -743,7 +757,6 @@
 				2A44CF0D2930B717005B23CA /* m_random.c in Sources */,
 				2A44CF212930B717005B23CA /* net_query.c in Sources */,
 				2A44CF3B2930B717005B23CA /* st_stuff.c in Sources */,
-				2A44CEF42930B717005B23CA /* net_structrw.c in Sources */,
 				2A44CEF32930B717005B23CA /* gl_draw.c in Sources */,
 				2A44CF222930B717005B23CA /* con_cvar.c in Sources */,
 				2A44CF402930B717005B23CA /* deh_ptr.c in Sources */,
@@ -775,7 +788,6 @@
 				2A44CEEF2930B717005B23CA /* i_system.c in Sources */,
 				2A44CF202930B717005B23CA /* net_packet.c in Sources */,
 				2A44CF3F2930B717005B23CA /* net_loop.c in Sources */,
-				2A44CF082930B717005B23CA /* i_audio.c in Sources */,
 				2A44CEFA2930B717005B23CA /* s_sound.c in Sources */,
 				2A44CF102930B717005B23CA /* r_lights.c in Sources */,
 				2A44CF0B2930B717005B23CA /* p_mobj.c in Sources */,

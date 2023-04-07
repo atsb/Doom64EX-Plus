@@ -570,6 +570,8 @@ typedef enum {
     OPENGL_VERSION_1_5,
     OPENGL_VERSION_2_0,
     OPENGL_VERSION_2_1,
+    OPENGL_VERSION_3_0,
+    OPENGL_VERSION_3_1,
 } glversion_t;
 
 static int GetVersionInt(const char* version) {
@@ -585,6 +587,13 @@ static int GetVersionInt(const char* version) {
 
             if(MinorVersion > 0) {
                 versionvar = OPENGL_VERSION_2_1;
+            }
+        }
+        if(MajorVersion > 2) {
+            versionvar = OPENGL_VERSION_3_0;
+
+            if(MinorVersion > 0) {
+                versionvar = OPENGL_VERSION_3_1;
             }
         }
         else {

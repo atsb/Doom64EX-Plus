@@ -58,8 +58,13 @@
 #include "con_console.h"
 #include "z_zone.h"
 #include "i_system.h"
-#include "i_audio.h"
 #include "gl_draw.h"
+
+#ifdef __APPLE__
+#include "i_mac_audio.h"
+#else
+#include "i_audio.h"
+#endif
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
