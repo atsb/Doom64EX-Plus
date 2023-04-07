@@ -770,7 +770,7 @@ static void P_LoadBlockMap(void) {
 	src = W_GetMapLump(ML_BLOCKMAP);
 	memmove(blockmaplump, src, length);
 
-	for (i = 0; i < count; i++)
+	for (i = 4; i < count; i++)
 	{
 		int32_t t = (int32_t)SHORT(blockmaplump[i]);
 		blockmaplump[i] = (t == -1) ? -1l : (int32_t)t & 0xffff;
