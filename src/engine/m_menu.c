@@ -4499,11 +4499,25 @@ static void M_DrawMenuSkull(int x, int y) {
 	float ty2 = 0.0f;
 	float smbwidth;
 	float smbheight;
-	int pic;
+	int pic, parama, paramr;
 	vtx_t vtx[4];
 	const rcolor color = MENUCOLORWHITE;
 
-	pic = GL_BindGfxTexture("SYMBOLS", true);
+	parama = M_CheckParm("-alpha");
+	paramr = M_CheckParm("-reloaded");
+
+	if (parama)
+	{
+		pic = GL_BindGfxTexture("SKULLM", true);
+	}
+	else if (paramr)
+	{
+		pic = GL_BindGfxTexture("SKULLM", true);
+	}
+	else
+	{
+		pic = GL_BindGfxTexture("SYMBOLS", true);
+	}
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
@@ -4539,8 +4553,8 @@ static void M_DrawMenuSkull(int x, int y) {
 		color
 	);
 
-	RB_AddTriangle(0, 1, 2);
-	RB_AddTriangle(3, 2, 1);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
 	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();

@@ -113,20 +113,20 @@ void dglSetVertex(vtx_t* vtx) {
 }
 
 //
-// RB_AddTriangle
+// dglTriangle
 //
 
-void RB_AddTriangle(int v0, int v1, int v2)
-{
-	if (indicecnt + 3 >= MAXINDICES)
-	{
-		fprintf(stderr, "RB_AddTriangle: Triangle indice overflow");
-		return;
-	}
+void dglTriangle(int v0, int v1, int v2) {
+#ifdef LOG_GLFUNC_CALLS
+    I_Printf("dglTriangle(v0=%i, v1=%i, v2=%i)\n", v0, v1, v2);
+#endif
+    if(indicecnt + 3 >= MAXINDICES) {
+        I_Error("Triangle indice overflow");
+    }
 
-	drawIndices[indicecnt++] = v0;
-	drawIndices[indicecnt++] = v1;
-	drawIndices[indicecnt++] = v2;
+    drawIndices[indicecnt++] = v0;
+    drawIndices[indicecnt++] = v1;
+    drawIndices[indicecnt++] = v2;
 }
 
 //

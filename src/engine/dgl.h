@@ -48,7 +48,7 @@ void dglLogError(const char* message, const char* file, int line);
 //
 
 void dglSetVertex(vtx_t* vtx);
-void RB_AddTriangle(int v0, int v1, int v2);
+void dglTriangle(int v0, int v1, int v2);
 void dglDrawGeometry(int count, vtx_t* vtx);
 void dglViewFrustum(int width, int height, rfloat fovy, rfloat znear);
 void dglSetVertexColor(vtx_t* v, rcolor c, word count);

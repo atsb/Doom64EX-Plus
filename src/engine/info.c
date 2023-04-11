@@ -5050,7 +5050,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		255        //alpha
 	},
 {// MT_MISC2
-1015,// doomednum
+10000,// doomednum
 S_LAMP1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5077,7 +5077,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC3
-1016,// doomednum
+10001,// doomednum
 S_LAMP2,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5104,7 +5104,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC4
-1003,// doomednum
+10002,// doomednum
 S_BWTORCH1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5131,7 +5131,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC5
-1039,// doomednum
+10003,// doomednum
 S_YWTORCH1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5158,7 +5158,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC6
-1025,// doomednum
+10004,// doomednum
 S_RWTORCH1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5185,7 +5185,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC7
-1033,// doomednum
+10005,// doomednum
 S_BFLM1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5212,7 +5212,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC8
-1034,// doomednum
+10006,// doomednum
 S_RFLM1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5239,7 +5239,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC9
-1035,// doomednum
+10007,// doomednum
 S_YFLM1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5266,7 +5266,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC10
-1005,// doomednum
+10008,// doomednum
 S_MISC5,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5293,7 +5293,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC11
-1006,// doomednum
+10009,// doomednum
 S_MISC6,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5320,7 +5320,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC12
-1007,// doomednum
+10010,// doomednum
 S_MISC7,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5347,7 +5347,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC13
-1008,// doomednum
+10011,// doomednum
 S_MISC8_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5374,7 +5374,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC14
-1009,// doomednum
+10012,// doomednum
 S_MISC9_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5401,7 +5401,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC15
-1010,// doomednum
+10013,// doomednum
 S_MISC10,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5428,7 +5428,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC16
-1011,// doomednum
+10014,// doomednum
 S_MISC11_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5455,7 +5455,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC17
-1012,// doomednum
+10015,// doomednum
 S_MISC12_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5482,7 +5482,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC18
-1013,// doomednum
+10016,// doomednum
 S_MISC13_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5509,7 +5509,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC19
-1014,// doomednum
+10017,// doomednum
 S_MISC14,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5536,7 +5536,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC20
-1017,// doomednum
+10018,// doomednum
 S_MISC17,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5563,7 +5563,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC21
-1018,// doomednum
+10019,// doomednum
 S_MISC18,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5590,7 +5590,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC22
-1019,// doomednum
+10020,// doomednum
 S_MISC19,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5617,7 +5617,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC23
-1020,// doomednum
+10021,// doomednum
 S_MISC20,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5644,7 +5644,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC24
-1021,// doomednum
+10022,// doomednum
 S_MISC21_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5671,7 +5671,7 @@ MF_SPAWNCEILING | MF_NOBLOCKMAP,// flags
 },
 
 {// MT_MISC25
-1022,// doomednum
+10023,// doomednum
 S_MISC22,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5698,7 +5698,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC26
-1023,// doomednum
+10024,// doomednum
 S_MISC23,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5725,7 +5725,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC27
-1024,// doomednum
+10025,// doomednum
 S_MISC24,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5752,7 +5752,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC28
-1028,// doomednum
+10026,// doomednum
 S_MISC28,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5779,7 +5779,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC29
-1029,// doomednum
+10027,// doomednum
 S_MISC29,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5806,7 +5806,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC30
-1031,// doomednum
+10028,// doomednum
 S_MISC31,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5833,7 +5833,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC31
-1032,// doomednum
+10029,// doomednum
 S_MISC32,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5860,7 +5860,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC32
-1027,// doomednum
+10030,// doomednum
 S_MISC27,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5887,7 +5887,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC33
-1036,// doomednum
+10031,// doomednum
 S_MISC36,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5914,7 +5914,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC34
-1037,// doomednum
+10032,// doomednum
 S_MISC37,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5941,7 +5941,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC35
-1038,// doomednum
+10033,// doomednum
 S_MISC38,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5968,7 +5968,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC36
-1040,// doomednum
+10034,// doomednum
 S_MISC45,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -5995,7 +5995,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC37
-1041,// doomednum
+10035,// doomednum
 S_MISC41,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -6022,7 +6022,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC38
-1026,// doomednum
+10036,// doomednum
 S_MISC26,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -6049,7 +6049,7 @@ sfx_None,// activesound
 },
 
 {// MT_MISC39
-45,// doomednum
+10037,// doomednum
 S_MISC46,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -6076,7 +6076,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC40
-70,// doomednum
+10038,// doomednum
 S_MISC47_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
@@ -6103,7 +6103,7 @@ MF_SOLID,// flags
 },
 
 {// MT_MISC41
-1030,// doomednum
+10039,// doomednum
 S_MISC30_1,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate

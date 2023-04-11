@@ -120,7 +120,7 @@ static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	count = *drawcount;
 
 	for (j = 0; j < sub->numleafs - 2; j++) {
-		RB_AddTriangle(count, count + 1 + j, count + 2 + j);
+		dglTriangle(count, count + 1 + j, count + 2 + j);
 	}
 
 	tx = (leaf->vertex->x >> 6) & ~(FRACUNIT - 1);
@@ -346,7 +346,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
     }
 
 	dglSetVertex(tri);
-	RB_AddTriangle(0, 1, 2);
+	dglTriangle(0, 1, 2);
 	dglDisable(GL_TEXTURE_2D);
 	dglDrawGeometry(3, tri);
 	dglEnable(GL_TEXTURE_2D);
@@ -494,8 +494,8 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	//
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
-	RB_AddTriangle(2, 1, 0);
-	RB_AddTriangle(2, 0, 3);
+	dglTriangle(2, 1, 0);
+	dglTriangle(2, 0, 3);
 	dglDrawGeometry(4, vtx);
 
 	GL_SetState(GLSTATE_BLEND, 0);

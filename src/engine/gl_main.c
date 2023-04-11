@@ -429,8 +429,8 @@ void GL_Draw2DQuad(vtx_t *v, boolean stretch) {
     GL_SetOrtho(stretch);
 
     dglSetVertex(v);
-    RB_AddTriangle(0, 1, 2);
-    RB_AddTriangle(3, 2, 1);
+    dglTriangle(0, 1, 2);
+    dglTriangle(3, 2, 1);
     dglDrawGeometry(4, v);
 
     GL_ResetViewport();

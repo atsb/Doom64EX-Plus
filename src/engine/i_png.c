@@ -112,7 +112,7 @@ static void I_TranslatePalette(png_colorp dest) {
 // I_PNGReadData
 //
 
-byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
+byte* I_PNGReadData(int lump, int palette, int nopack, int alpha,
 	int* w, int* h, int* offset, int palindex) {
 	png_structp png_ptr;
 	png_infop   info_ptr;

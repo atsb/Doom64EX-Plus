@@ -680,8 +680,8 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	// render
 	dglSetVertex(v);
-	RB_AddTriangle(0, 1, 2);
-	RB_AddTriangle(3, 2, 1);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
 	dglDrawGeometry(4, v);
 
 	GL_ResetViewport();

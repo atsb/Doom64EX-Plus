@@ -61,7 +61,7 @@ extern word* spriteheight;
 
 void        GL_InitTextures(void);
 void        GL_UnloadTexture(dtexture* texture);
-void        GL_SetTextureUnit(int unit, boolean enable);
+void        GL_SetTextureUnit(int unit, int enable);
 void        GL_SetTextureMode(int mode);
 void        GL_SetCombineState(int combine);
 void        GL_SetCombineStateAlpha(int combine);
@@ -72,7 +72,7 @@ void        GL_SetCombineOperandRGB(int operand, int target);
 void        GL_SetCombineOperandAlpha(int operand, int target);
 void        GL_BindWorldTexture(int texnum, int* width, int* height);
 void        GL_BindSpriteTexture(int spritenum, int pal);
-int         GL_BindGfxTexture(const char* name, boolean alpha);
+int         GL_BindGfxTexture(const char* name, int alpha);
 int         GL_PadTextureDims(int size);
 void        GL_SetNewPalette(int id, byte palID);
 void        GL_DumpTextures(void);

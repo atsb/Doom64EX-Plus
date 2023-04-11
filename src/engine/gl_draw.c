@@ -206,8 +206,8 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 
 			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			RB_AddTriangle(vi + 0, vi + 1, vi + 2);
-			RB_AddTriangle(vi + 0, vi + 2, vi + 3);
+			dglTriangle(vi + 0, vi + 1, vi + 2);
+			dglTriangle(vi + 0, vi + 2, vi + 3);
 
 			if (devparm) {
 				vertCount += 4;
@@ -547,8 +547,8 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
 
 			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			RB_AddTriangle(vi + 2, vi + 1, vi + 0);
-			RB_AddTriangle(vi + 3, vi + 2, vi + 0);
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
 
 			if (devparm) {
 				vertCount += 4;
@@ -967,8 +967,8 @@ float Draw_ConsoleText(float x, float y, rcolor color,
 
 			dglSetVertexColor(vtxstring + vi, color, 4);
 
-			RB_AddTriangle(vi + 2, vi + 1, vi + 0);
-			RB_AddTriangle(vi + 3, vi + 2, vi + 0);
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
 
 			if (devparm) {
 				vertCount += 4;

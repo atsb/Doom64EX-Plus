@@ -284,7 +284,7 @@ static void ST_DrawDamageMarkers(void) {
 		dglTranslatef(0, 16, 0);
 		dglDisable(GL_TEXTURE_2D);
 		dglSetVertex(v);
-		RB_AddTriangle(0, 1, 2);
+		dglTriangle(0, 1, 2);
 		dglDrawGeometry(3, v);
 		dglEnable(GL_TEXTURE_2D);
 		dglPopMatrix();
@@ -495,8 +495,8 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 static void ST_DrawStatusItem(const float xy[4][2], const float uv[4][2], rcolor color) {
 	int i;
 
-	RB_AddTriangle(st_vtxcount + 0, st_vtxcount + 1, st_vtxcount + 2);
-	RB_AddTriangle(st_vtxcount + 0, st_vtxcount + 2, st_vtxcount + 3);
+	dglTriangle(st_vtxcount + 0, st_vtxcount + 1, st_vtxcount + 2);
+	dglTriangle(st_vtxcount + 0, st_vtxcount + 2, st_vtxcount + 3);
 
 	dglSetVertexColor(st_vtx + st_vtxcount, color, 4);
 

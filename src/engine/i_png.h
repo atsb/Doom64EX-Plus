@@ -26,7 +26,7 @@
 #include <png.h>
 #include "doomtype.h"
 
-byte* I_PNGReadData(int lump, boolean palette, boolean nopack, boolean alpha,
+byte* I_PNGReadData(int lump, int palette, int nopack, int alpha,
 	int* w, int* h, int* offset, int palindex);
 
 byte* I_PNGCreate(int width, int height, byte* data, int* size);
