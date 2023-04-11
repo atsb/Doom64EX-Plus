@@ -1519,6 +1519,7 @@ void M_ToggleFlashOverlay(int choice);
 void M_ToggleDamageHud(int choice);
 void M_ToggleWpnDisplay(int choice);
 void M_ToggleShowStats(int choice);
+void M_ToggleShowStatsAlwaysOn(int choice);
 void M_ChangeCrosshair(int choice);
 void M_ChangeOpacity(int choice);
 void M_DrawDisplay(void);
@@ -1530,6 +1531,7 @@ CVAR_EXTERNAL(st_crosshairopacity);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(st_showpendingweapon);
 CVAR_EXTERNAL(st_showstats);
+CVAR_EXTERNAL(st_showstatsalwayson);
 CVAR_EXTERNAL(m_messages);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(st_hud_color);
@@ -1541,6 +1543,7 @@ enum {
 	display_damage,
 	display_weapon,
 	display_stats,
+	display_stats_always_on,
 	display_hud_color,
 	display_crosshair,
 	display_opacity,
@@ -1557,6 +1560,7 @@ menuitem_t DisplayMenu[] = {
 	{2,"Damage Hud:",M_ToggleDamageHud, 'd'},
 	{2,"Show Weapon:",M_ToggleWpnDisplay, 'w'},
 	{2,"Show Stats:",M_ToggleShowStats, 't'},
+	{2,"Show Stats Always:",M_ToggleShowStatsAlwaysOn, 'a'},
 	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
 	{2,"Crosshair:",M_ChangeCrosshair, 'c'},
 	{3,"Crosshair Opacity",M_ChangeOpacity, 'o'},
@@ -1586,6 +1590,7 @@ menudefault_t DisplayDefault[] = {
 	{ &p_damageindicator, 0 },
 	{ &st_showpendingweapon, 1 },
 	{ &st_showstats, 0 },
+	{ &st_showstatsalwayson, 0 },
 	{ &st_hud_color, 0 },
 	{ &st_crosshair, 0 },
 	{ &st_crosshairopacity, 80 },
@@ -1636,9 +1641,11 @@ void M_DrawDisplay(void) {
 		msgNames[(int)st_showpendingweapon.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_stats, MENUCOLORRED,
 		msgNames[(int)st_showstats.value]);
+	Draw_BigText(DisplayDef.x + 210, DisplayDef.y + LINEHEIGHT * display_stats_always_on, MENUCOLORRED,
+		msgNames[(int)st_showstatsalwayson.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
 		hud_color[(int)st_hud_color.value]);
-
+	
 	if (st_crosshair.value <= 0) {
 		Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_crosshair, MENUCOLORRED,
 			msgNames[0]);
@@ -1684,6 +1691,12 @@ void M_ToggleWpnDisplay(int choice) {
 
 void M_ToggleShowStats(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &st_showstats);
+	st_showstatsalwayson.value = 0;
+}
+
+void M_ToggleShowStatsAlwaysOn(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &st_showstatsalwayson);
+	st_showstats.value = 0;
 }
 
 void M_ToggleFlashOverlay(int choice) {
