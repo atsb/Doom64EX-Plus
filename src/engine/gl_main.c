@@ -687,7 +687,7 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_1_2 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
+    DGL_CLAMP = OPENGL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP;
 
     glScaleFactor = 1.0f;
 
