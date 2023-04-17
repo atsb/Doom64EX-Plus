@@ -578,6 +578,12 @@ void GL_Init(void) {
 
     CalcViewSize();
 
+    glEnable(GL_MULTISAMPLE);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POLYGON_SMOOTH);
+
     dglViewport(0, 0, video_width, video_height);
     dglClearDepth(1.0f);
     dglDisable(GL_TEXTURE_2D);
