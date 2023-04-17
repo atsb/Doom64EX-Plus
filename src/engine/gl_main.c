@@ -64,7 +64,7 @@ static float glScaleFactor = 1.0f;
 
 boolean    usingGL = false;
 int         DGL_CLAMP = GL_CLAMP;
-float       max_anisotropic = 0;
+float       max_anisotropic = 16.0;
 boolean    widescreen = false;
 
 CVAR_EXTERNAL(v_vsync);
@@ -557,70 +557,6 @@ static void CalcViewSize(void) {
 }
 
 //
-// GetVersionInt
-// Borrowed from prboom+
-//
-
-typedef enum {
-    OPENGL_VERSION_1_0,
-    OPENGL_VERSION_1_1,
-    OPENGL_VERSION_1_2,
-    OPENGL_VERSION_1_3,
-    OPENGL_VERSION_1_4,
-    OPENGL_VERSION_1_5,
-    OPENGL_VERSION_2_0,
-    OPENGL_VERSION_2_1,
-    OPENGL_VERSION_3_0,
-    OPENGL_VERSION_3_1,
-} glversion_t;
-
-static int GetVersionInt(const char* version) {
-    int MajorVersion;
-    int MinorVersion;
-    int versionvar;
-
-    versionvar = OPENGL_VERSION_1_0;
-
-    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 2) {
-        if(MajorVersion > 1) {
-            versionvar = OPENGL_VERSION_2_0;
-
-            if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_2_1;
-            }
-        }
-        if(MajorVersion > 2) {
-            versionvar = OPENGL_VERSION_3_0;
-
-            if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_3_1;
-            }
-        }
-        else {
-            versionvar = OPENGL_VERSION_1_0;
-
-            if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_1_1;
-            }
-            if(MinorVersion > 1) {
-                versionvar = OPENGL_VERSION_1_2;
-            }
-            if(MinorVersion > 2) {
-                versionvar = OPENGL_VERSION_1_3;
-            }
-            if(MinorVersion > 3) {
-                versionvar = OPENGL_VERSION_1_4;
-            }
-            if(MinorVersion > 4) {
-                versionvar = OPENGL_VERSION_1_5;
-            }
-        }
-    }
-
-    return versionvar;
-}
-
-//
 // GL_Init
 //
 
@@ -687,7 +623,7 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = OPENGL_VERSION_3_1 ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+    DGL_CLAMP = gl_version ? GL_CLAMP_TO_EDGE : GL_CLAMP;
 
     glScaleFactor = 1.0f;
 
