@@ -103,6 +103,7 @@ CVAR_CMD(r_anisotropic, 1) {
 	GL_SetTextureFilter();
 }
 
+CVAR(r_multisample, 1);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_usecontext);
@@ -796,6 +797,7 @@ void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_fog);
 	CON_CvarRegister(&r_filter);
 	CON_CvarRegister(&r_anisotropic);
+	CON_CvarRegister(&r_multisample);
 	CON_CvarRegister(&r_wipe);
 	CON_CvarRegister(&r_drawmobjbox);
     CON_CvarRegister(&r_rendersprites);
