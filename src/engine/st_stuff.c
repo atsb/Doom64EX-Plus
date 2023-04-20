@@ -870,7 +870,7 @@ void ST_Drawer(void) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
-		Draw_Text(80, 80, YELLOW, 1, false, st_msg);
+		Draw_Text(180, 180, YELLOW, 0.6f, false, st_msg);
 	}
 
 	// Standard messages
@@ -879,7 +879,7 @@ void ST_Drawer(void) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic != 40) {
-		Draw_Text(20, 20, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), 1, false, st_msg);
+		Draw_Text(0, 10, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), 0.6f, false, st_msg);
 	}
 	else if (automapactive) {
 		char str[128];
@@ -1001,14 +1001,14 @@ void ST_Drawer(void) {
 	//
 
 	if (st_showstatsalwayson.value && !automapactive) {
-		Draw_Text(0, 470, WHITE, 0.5f, false,
-			"Monsters:  %i / %i", plyr->killcount, totalkills);
-		Draw_Text(160, 470, WHITE, 0.5f, false,
-			"Items:     %i / %i", plyr->itemcount, totalitems);
-		Draw_Text(350, 470, WHITE, 0.5f, false,
-			"Secrets:   %i / %i", plyr->secretcount, totalsecret);
-		Draw_Text(500, 470, WHITE, 0.5f, false,
-			"Time:      %2.2d:%2.2d", (leveltime / TICRATE) / 60, (leveltime / TICRATE) % 60);
+		Draw_Text(520, 10, RED, 0.5f, false,
+			"M:%i/%i", plyr->killcount, totalkills);
+		Draw_Text(520, 20, RED, 0.5f, false,
+			"I:%i/%i", plyr->itemcount, totalitems);
+		Draw_Text(520, 30, RED, 0.5f, false,
+			"S:%i/%i", plyr->secretcount, totalsecret);
+		Draw_Text(520, 40, RED, 0.5f, false,
+			"T:%2.2d:%2.2d", (leveltime / TICRATE) / 60, (leveltime / TICRATE) % 60);
 	}
 }
 
