@@ -1576,6 +1576,7 @@ char* DisplayHints[display_end] = {
 	"toggle hud indicators when taking damage",
 	"shows the next or previous pending weapon",
 	"display level stats in automap",
+	"display level stats in-game",
 	"change the hud text colour",
 	"toggle crosshair",
 	"change opacity for crosshairs",
