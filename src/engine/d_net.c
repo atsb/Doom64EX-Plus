@@ -28,6 +28,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <string.h>
 #include "m_menu.h"
 #include "i_system.h"
 #include "g_game.h"
