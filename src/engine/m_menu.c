@@ -40,6 +40,7 @@
 #endif
 
 #include <fcntl.h>
+#include <ctype.h>
 #include "doomdef.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
