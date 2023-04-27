@@ -123,7 +123,7 @@ static int seqready = 0;
 // DEFINES
 //
 
-#define MIDI_CHANNELS   64
+#define MIDI_CHANNELS   240
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51
@@ -139,7 +139,7 @@ static int seqready = 0;
 typedef struct {
     char        header[4];
     int         length;
-    byte*       data;
+    byte* data;
     byte        channel;
 } track_t;
 
@@ -149,9 +149,9 @@ typedef struct {
     short       type;
     word        ntracks;
     word        delta;
-    byte*       data;
+    byte* data;
     int         length;
-    track_t*    tracks;
+    track_t* tracks;
     int         tempo;
     double      timediv;
 } song_t;
@@ -199,8 +199,8 @@ typedef struct {
     // accessed by the audio thread only
     byte        key;
     byte        velocity;
-    byte*       pos;
-    byte*       jump;
+    byte* pos;
+    byte* jump;
     int         tics;
     int         nexttic;
     int         lasttic;
@@ -498,12 +498,13 @@ static int Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
 //
 // Add a song to the playlist for the sequencer to play.
 // Sets any default values to the channel in the process
-//
+// Both start sound and start music refer to this
 
 static channel_t* Song_AddTrackToPlaylist(doomseq_t* seq, song_t* song, track_t* track) {
     int i;
 
     for (i = 0; i < MIDI_CHANNELS; i++) {
+
         if (playlist[i].song == NULL) {
             playlist[i].song = song;
             playlist[i].track = track;
@@ -1220,7 +1221,8 @@ void I_InitSequencer(void) {
     //
     doomseq.settings = new_fluid_settings();
     Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
-    Seq_SetConfig(&doomseq, "synth.polyphony", 256);
+    Seq_SetConfig(&doomseq, "synth.polyphony", 128); // [Immorpher] high polyphony slows down the game
+
 
     // 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
     // JACK, if it's compiled in. We don't want to start jackd for a game).
@@ -1357,7 +1359,7 @@ void I_UpdateChannel(int c, int volume, int pan) {
 
 //
 // I_ShutdownSound
-//
+// Shutdown sound when player exits the game / error occurs
 
 void I_ShutdownSound(void) {
     if (doomseq.synth) {
@@ -1386,12 +1388,14 @@ void I_SetSoundVolume(float volume) {
 //
 
 void I_ResetSound(void) {
+
     if (!seqready) {
         return;
     }
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESET);
     //Seq_WaitOnSignal(&doomseq);
+
 }
 
 //
@@ -1460,6 +1464,11 @@ void I_StartMusic(int mus_id) {
         chan->volume = doomseq.musicvolume;
     }
     SEMAPHORE_UNLOCK()
+
+        // [Immorpher] Re-establish linear sound interpolation
+        for (i = 0; i < 15; i++) {
+            fluid_synth_set_interp_method(doomseq.synth, i, FLUID_INTERP_LINEAR);
+        }
 }
 
 //
@@ -1519,4 +1528,9 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
         chan->depth = reverb;
     }
     SEMAPHORE_UNLOCK()
+
+        // [Immorpher] Re-establish linear sound interpolation
+        for (i = 16; i < MIDI_CHANNELS + 15; i++) {
+            fluid_synth_set_interp_method(doomseq.synth, i, FLUID_INTERP_LINEAR);
+        }
 }
