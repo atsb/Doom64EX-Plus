@@ -567,8 +567,5 @@ boolean NET_ValidGameSettings(net_gamesettings_t* settings)
 	//    if (settings->gameversion < exe_doom_1_9 || settings->gameversion > exe_chex)
 	//        return false;
 
-	if (settings->map < 1 || settings->map > 39)
-		return false;
-
 	return true;
 }

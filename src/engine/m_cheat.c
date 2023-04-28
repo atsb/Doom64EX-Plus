@@ -52,6 +52,7 @@ typedef struct {
 static void M_CheatFa(player_t* player, char dat[4]);
 static void M_CheatBerserk(player_t* player, char dat[4]);
 static void M_CheatWarp(player_t* player, char dat[4]);
+static void M_CheatWarpZero(player_t* player, char dat[4]);
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]);
 static void M_CheatMyPos(player_t* player, char dat[4]);
 static void M_CheatAllMap(player_t* player, char dat[4]);
@@ -62,6 +63,7 @@ cheatinfo_t cheat[] = {
 	{   "idkfa",    M_CheatKfa,         0   },
 	{   "idclip",   M_CheatClip,        0   },
 	{   "idclev",   M_CheatWarp,        -2  },
+	{   "idnull",   M_CheatWarpZero,    0  },
 	{   "exclev",   M_CheatWarpCarryOver, -2  },
 	{   "idpos",    M_CheatMyPos,       0   },
 	{   "exm",		M_CheatAllMap,      0   },
@@ -170,6 +172,16 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 		G_InitNew(gameskill, map);
 		dmemset(passwordData, 0xff, 16);
 	}
+}
+
+static void M_CheatWarpZero(player_t* player, char dat[4]) {
+	int map;
+	map = datoi(dat);
+	gameskill = (int)sv_skill.value;
+	gamemap = nextmap = map;
+
+	G_InitNew(gameskill, 00);
+	dmemset(passwordData, 0xff, 16);
 }
 
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
