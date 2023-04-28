@@ -61,7 +61,7 @@ CVAR(s_soundfont, doomsnd.sf2);
 #ifdef _WIN32
 CVAR_CMD(s_driver, dsound)
 #elif __linux__
-CVAR_CMD(s_driver, pulseaudio)
+CVAR_CMD(s_driver, alsa)
 #elif __APPLE__
 CVAR_CMD(s_driver, coreaudio)
 #else
@@ -84,7 +84,7 @@ CVAR_CMD(s_driver, sndio)
     if (!dstrcmp(driver, "jack") ||
         !dstrcmp(driver, "alsa") ||
         !dstrcmp(driver, "oss") ||
-        !dstrcmp(driver, "pulseaudio") ||
+        !dstrcmp(driver, "alsa") ||
         !dstrcmp(driver, "coreaudio") ||
         !dstrcmp(driver, "dsound") ||
         !dstrcmp(driver, "portaudio") ||
