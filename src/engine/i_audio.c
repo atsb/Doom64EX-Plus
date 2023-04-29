@@ -1125,7 +1125,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
     doomseq_t* seq = (doomseq_t*)param;
-    long long start = SDL_GetTicks64();
+    long long start = SDL_GetTicks();
     long long delay = 0;
     int status;
     long long count = 0;
@@ -1155,11 +1155,11 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
         //
         // play some songs
         //
-        Seq_RunSong(seq, SDL_GetTicks64() - start);
+        Seq_RunSong(seq, SDL_GetTicks() - start);
         count++;
 
         // try to avoid incremental time de-syncs
-        delay = count - (SDL_GetTicks64() - start);
+        delay = count - (SDL_GetTicks() - start);
 
         if (delay > 0) {
             SDL_Delay(delay);
@@ -1208,7 +1208,7 @@ void I_InitSequencer(void) {
     // off-sync when uncapped framerates are enabled but for some
     // reason, calling SDL_GetTicks before initalizing the thread
     // will reduce the chances of it happening
-    SDL_GetTicks64();
+    SDL_GetTicks();
 
     doomseq.thread = SDL_CreateThread(Thread_PlayerHandler, "SynthPlayer", &doomseq);
     if (doomseq.thread == NULL) {
