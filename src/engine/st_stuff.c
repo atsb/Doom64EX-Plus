@@ -866,11 +866,15 @@ void ST_Drawer(void) {
 
 	CVAR_EXTERNAL(hud_disablesecretmessages);
 
+	const bool stats_always_on = (st_showstatsalwayson.value && !automapactive);
+	const float scale = stats_always_on ? 0.6f : 1.0f;
+
 	if (st_hasjmsg && st_regionmsg.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
-		Draw_Text(180, 180, YELLOW, 0.6f, false, st_msg);
+		const int pos = stats_always_on ? 180 : 80;
+		Draw_Text(pos, pos, YELLOW, scale, false, st_msg);
 	}
 
 	// Standard messages
@@ -879,7 +883,9 @@ void ST_Drawer(void) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic != 40) {
-		Draw_Text(0, 10, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), 0.6f, false, st_msg);
+		const int x = stats_always_on ? 0 : 20;
+		const int y = stats_always_on ? 10 : 20;
+		Draw_Text(x, y, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), scale, false, st_msg);
 	}
 	else if (automapactive) {
 		char str[128];
@@ -1000,7 +1006,7 @@ void ST_Drawer(void) {
 	// display stats in game
 	//
 
-	if (st_showstatsalwayson.value && !automapactive) {
+	if (stats_always_on) {
 		Draw_Text(520, 10, RED, 0.5f, false,
 			"M:%i/%i", plyr->killcount, totalkills);
 		Draw_Text(520, 20, RED, 0.5f, false,
