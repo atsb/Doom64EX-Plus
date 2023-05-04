@@ -512,13 +512,20 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     P_SetThingPosition(thing);
 
     // if any special lines were hit, do the effect
-    if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP))) {
-        while (numthingspec--) {
+    if (!(thing->flags & (MF_NOCLIP | MF_TELEPORT)))
+    {
+        while (numthingspec > 0)
+        {
+            numthingspec--;
+
             // see if the line was crossed
             ld = thingspec[numthingspec];
+
             side = P_PointOnLineSide(thing->x, thing->y, ld);
             oldside = P_PointOnLineSide(oldx, oldy, ld);
-            if (side != oldside) {
+
+            if (side != oldside)
+            {
                 if (!(ld->flags & ML_TRIGGERFRONT) || (side))
                 {
                     P_UseSpecialLine(thing, ld, oldside);
@@ -527,8 +534,11 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
         }
     }
 
+    floatok = true;
+
     return true;
 }
+
 
 //
 // P_PlayerMove
