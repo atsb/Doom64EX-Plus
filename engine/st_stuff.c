@@ -63,6 +63,7 @@ CVAR(m_messages, 1);
 CVAR(m_playername, Player);
 CVAR(st_showpendingweapon, 1);
 CVAR(st_showstats, 0);
+CVAR(st_showstatsalwayson, 0);
 CVAR(st_hud_color, 0);
 
 CVAR_EXTERNAL(p_usecontext);
@@ -736,6 +737,8 @@ static void ST_DrawJMessage(int pic) {
 
 void ST_Drawer(void) {
 	boolean checkautomap;
+	const boolean stats_always_on = (st_showstatsalwayson.value && !automapactive);
+	const float scale = stats_always_on ? 0.6f : 1.0f;
 	CVAR_EXTERNAL(hud_disablesecretmessages);
 
 	//
@@ -862,11 +865,17 @@ void ST_Drawer(void) {
 
 	// Secret messages
 
+	CVAR_EXTERNAL(hud_disablesecretmessages);
+
+	
+	
+
 	if (st_hasjmsg && st_regionmsg.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
-		Draw_Text(80, 80, YELLOW, 1, false, st_msg);
+		const int pos = stats_always_on ? 180 : 80;
+		Draw_Text(pos, pos, YELLOW, scale, false, st_msg);
 	}
 	// Standard messages
 
@@ -874,7 +883,9 @@ void ST_Drawer(void) {
 		ST_DrawJMessage(plyr->messagepic);
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic != 40) {
-		Draw_Text(20, 20, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), 1, false, st_msg);
+		const int x = stats_always_on ? 0 : 20;
+		const int y = stats_always_on ? 10 : 20;
+		Draw_Text(x, y, ST_MSGCOLOR(automapactive ? 0xff : st_msgalpha), scale, false, st_msg);
 	}
 	else if (automapactive) {
 		char str[128];
@@ -980,6 +991,21 @@ void ST_Drawer(void) {
 			"Secrets:   %i / %i", plyr->secretcount, totalsecret);
 		Draw_Text(20, 460, WHITE, 0.5f, false,
 			"Time:      %2.2d:%2.2d", (leveltime / TICRATE) / 60, (leveltime / TICRATE) % 60);
+	}
+
+	//
+	// display stats in game
+	//
+
+	if (stats_always_on) {
+		Draw_Text(520, 10, RED, 0.5f, false,
+			"M:%i/%i", plyr->killcount, totalkills);
+		Draw_Text(520, 20, RED, 0.5f, false,
+			"I:%i/%i", plyr->itemcount, totalitems);
+		Draw_Text(520, 30, RED, 0.5f, false,
+			"S:%i/%i", plyr->secretcount, totalsecret);
+		Draw_Text(520, 40, RED, 0.5f, false,
+			"T:%2.2d:%2.2d", (leveltime / TICRATE) / 60, (leveltime / TICRATE) % 60);
 	}
 }
 
@@ -1501,6 +1527,7 @@ void ST_RegisterCvars(void) {
 	CON_CvarRegister(&st_regionmsg);
 	CON_CvarRegister(&st_showpendingweapon);
 	CON_CvarRegister(&st_showstats);
+	CON_CvarRegister(&st_showstatsalwayson);
 	CON_CvarRegister(&m_messages);
 	CON_CvarRegister(&m_playername);
 }

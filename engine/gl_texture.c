@@ -314,8 +314,8 @@ static void InitGfxTextures(void) {
 // GL_BindGfxTexture
 //
 
-int GL_BindGfxTexture(const char* name, boolean alpha) {
-	unsigned char* png;
+int GL_BindGfxTexture(const char* name, int alpha) {
+	byte* png;
 	int lump;
 	int width;
 	int height;
@@ -668,7 +668,10 @@ void GL_UnloadTexture(unsigned int* texture) {
 // GL_SetTextureUnit
 //
 
-void GL_SetTextureUnit(int unit, boolean enable) {
+void GL_SetTextureUnit(int unit, int enable) {
+	if (!has_GL_ARB_multitexture) {
+		return;
+	}
 
 	if (r_fillmode.value <= 0) {
 		return;

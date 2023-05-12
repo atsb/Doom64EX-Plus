@@ -291,7 +291,7 @@ int WI_Ticker(void) {
 		break;
 
 	case 4:
-		if (gamemap > 40 && nextmap > 40) {
+		if (gamemap > 80 && nextmap > 80) {
 			S_StartSound(NULL, sfx_explode);
 		}
 
@@ -324,11 +324,11 @@ void WI_Drawer(void) {
 
 	GL_ClearView(0xFF000000);
 
-	if (currentmap < 0) {
+	if (currentmap < 1) {
 		currentmap = 0;
 	}
 
-	if (currentmap > 40) {
+	if (currentmap > 80) {
 		currentmap = 33;
 	}
 

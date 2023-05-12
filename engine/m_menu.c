@@ -40,6 +40,7 @@
 #endif
 
 #include <fcntl.h>
+#include <ctype.h>
 #include "doomdef.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
@@ -83,6 +84,8 @@
 #define MENUCOLORRED        D_RGBA(255, 0, 0, menualphacolor)
 #define MENUCOLORWHITE      D_RGBA(255, 255, 255, menualphacolor)
 #define MENUCOLORYELLOW     D_RGBA(194, 174, 28, menualphacolor)
+#define QUICKSAVESLOT		7
+#define QUICKSAVEFILE		"doomsav7.dsg"
 
 //
 // defaulted values
@@ -1570,6 +1573,7 @@ void M_ToggleFlashOverlay(int choice);
 void M_ToggleDamageHud(int choice);
 void M_ToggleWpnDisplay(int choice);
 void M_ToggleShowStats(int choice);
+void M_ToggleShowStatsAlwaysOn(int choice);
 void M_ChangeCrosshair(int choice);
 void M_ChangeOpacity(int choice);
 void M_DrawDisplay(void);
@@ -1581,6 +1585,7 @@ CVAR_EXTERNAL(st_crosshairopacity);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(st_showpendingweapon);
 CVAR_EXTERNAL(st_showstats);
+CVAR_EXTERNAL(st_showstatsalwayson);
 CVAR_EXTERNAL(m_messages);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(st_hud_color);
@@ -1592,6 +1597,7 @@ enum {
 	display_damage,
 	display_weapon,
 	display_stats,
+	display_stats_always_on,
 	display_hud_color,
 	display_crosshair,
 	display_opacity,
@@ -1608,6 +1614,7 @@ menuitem_t DisplayMenu[] = {
 	{2,"Damage Hud:",M_ToggleDamageHud, 'd'},
 	{2,"Show Weapon:",M_ToggleWpnDisplay, 'w'},
 	{2,"Show Stats:",M_ToggleShowStats, 't'},
+	{2,"Show Stats Always:",M_ToggleShowStatsAlwaysOn, 'a'},
 	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
 	{2,"Crosshair:",M_ChangeCrosshair, 'c'},
 	{3,"Crosshair Opacity",M_ChangeOpacity, 'o'},
@@ -1623,6 +1630,7 @@ char* DisplayHints[display_end] = {
 	"toggle hud indicators when taking damage",
 	"shows the next or previous pending weapon",
 	"display level stats in automap",
+	"display level stats in-game",
 	"change the hud text colour",
 	"toggle crosshair",
 	"change opacity for crosshairs",
@@ -1637,6 +1645,7 @@ menudefault_t DisplayDefault[] = {
 	{ &p_damageindicator, 0 },
 	{ &st_showpendingweapon, 1 },
 	{ &st_showstats, 0 },
+	{ &st_showstatsalwayson, 0 },
 	{ &st_hud_color, 0 },
 	{ &st_crosshair, 0 },
 	{ &st_crosshairopacity, 80 },
@@ -1687,9 +1696,11 @@ void M_DrawDisplay(void) {
 		msgNames[(int)st_showpendingweapon.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_stats, MENUCOLORRED,
 		msgNames[(int)st_showstats.value]);
+	Draw_BigText(DisplayDef.x + 210, DisplayDef.y + LINEHEIGHT * display_stats_always_on, MENUCOLORRED,
+		msgNames[(int)st_showstatsalwayson.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
 		hud_color[(int)st_hud_color.value]);
-
+	
 	if (st_crosshair.value <= 0) {
 		Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_crosshair, MENUCOLORRED,
 			msgNames[0]);
@@ -1735,6 +1746,12 @@ void M_ToggleWpnDisplay(int choice) {
 
 void M_ToggleShowStats(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &st_showstats);
+	st_showstatsalwayson.value = 0;
+}
+
+void M_ToggleShowStatsAlwaysOn(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &st_showstatsalwayson);
+	st_showstats.value = 0;
 }
 
 void M_ToggleFlashOverlay(int choice) {
@@ -1782,6 +1799,7 @@ void M_ChangeWindowed(int choice);
 void M_ChangeRatio(int choice);
 void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
+void M_ChangeAntiAliasing(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeVerticalSynchronisation(int choice);
 void M_ChangeAccessibility(int choice);
@@ -1795,6 +1813,7 @@ CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
+CVAR_EXTERNAL(r_multisample);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
@@ -1806,6 +1825,7 @@ enum {
 	video_empty2,
 	filter,
 	anisotropic,
+	multisample,
 	windowed,
 	ratio,
 	resolution,
@@ -1825,6 +1845,7 @@ menuitem_t VideoMenu[] = {
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
+	{2,"Antialiasing:",M_ChangeAntiAliasing, 't'},
 	{2,"Windowed:",M_ChangeWindowed, 'w'},
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
 	{2,"Resolution:",M_ChangeResolution, 'r'},
@@ -1842,6 +1863,7 @@ char* VideoHints[video_end] = {
 	"adjust screen gamma",
 	NULL,
 	"toggle texture filtering",
+	"toggle antialiasing",
 	"toggle blur reduction on textures",
 	"toggle windowed mode",
 	"select aspect ratio",
@@ -1857,6 +1879,7 @@ menudefault_t VideoDefault[] = {
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
 	{ &r_anisotropic, 1 },
+	{ &r_multisample, 1 },
 	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
 	{ &v_vsync, 1 },
@@ -2056,6 +2079,7 @@ void M_DrawVideo(void) {
 	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09" };
 	static const char* frametype[2] = { "Off", "On" };
 	static const char* vsynctype[2] = { "Off", "Adaptive" };
+	static const char* multisampletype[2] = { "4", "Off"};
 	char res[16];
 	int y;
 
@@ -2083,6 +2107,7 @@ void M_DrawVideo(void) {
 
 	DRAWVIDEOITEM2(filter, r_filter.value, constfilterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
+	DRAWVIDEOITEM2(multisample, r_multisample.value, multisampletype);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
 	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
 
@@ -2174,6 +2199,10 @@ void M_ChangeFilter(int choice) {
 
 void M_ChangeAnisotropic(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_anisotropic);
+}
+
+void M_ChangeAntiAliasing(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &r_multisample);
 }
 
 void M_ChangeWindowed(int choice) {
@@ -2848,9 +2877,8 @@ void M_ChangeKeyBinding(int choice);
 void M_BuildControlMenu(void);
 void M_DrawControls(void);
 
-#define NUM_NONBINDABLE_ITEMS   8
-#define NUM_CONTROL_ACTIONS     42
-#define NUM_CONTROL_ITEMS        NUM_CONTROL_ACTIONS + NUM_NONBINDABLE_ITEMS
+#define NUM_CONTROL_ACTIONS     48
+#define NUM_CONTROL_ITEMS       NUM_CONTROL_ACTIONS
 
 menuaction_t* PlayerActions;
 menu_t          ControlsDef;
@@ -2896,6 +2924,12 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Mouse Pan", "+automap_freepan"},
 	{"Follow Mode", "automap_follow"},
 	{"Other", NULL},
+	{"Quick Save", "quicksave"},
+	{"Quick Load", "quickload"},
+	{"Save", "save"},
+	{"Load", "load"},
+	{"Screen Shot", "screenshot"},
+	{"Gamma", "gamma"},
 	{"Detach Camera", "setcamerastatic"},
 	{"Chasecam", "setcamerachase"},
 	{NULL, NULL}
@@ -2920,7 +2954,7 @@ void M_BuildControlMenu(void) {
 
 	menu = &ControlsDef;
 	// add extra menu items for non-bindable items (display only)
-	menu->numitems = actions + NUM_NONBINDABLE_ITEMS;
+	menu->numitems = actions;
 	menu->textonly = false;
 	menu->numpageitems = 16;
 	menu->prevMenu = &ControlMenuDef;
@@ -2953,20 +2987,6 @@ void M_BuildControlMenu(void) {
 
 		menu->menuitems[item].alphaKey = 0;
 	}
-
-#define ADD_NONBINDABLE_ITEM(i, str, s)                 \
-    strcpy(menu->menuitems[actions + i].name, str);    \
-    menu->menuitems[actions + i].status = s;            \
-    menu->menuitems[actions + i].routine = NULL
-
-	ADD_NONBINDABLE_ITEM(0, "Non-Bindable Keys", -1);
-	ADD_NONBINDABLE_ITEM(1, "Save Game        F2", 1);
-	ADD_NONBINDABLE_ITEM(2, "Load Game        F3", 1);
-	ADD_NONBINDABLE_ITEM(3, "Screenshot       F5", 1);
-	ADD_NONBINDABLE_ITEM(4, "Quicksave        F6", 1);
-	ADD_NONBINDABLE_ITEM(5, "Quickload        F7", 1);
-	ADD_NONBINDABLE_ITEM(6, "Change Gamma     F11", 1);
-	ADD_NONBINDABLE_ITEM(7, "Console          TILDE and BACKQUOTE", 1);
 }
 
 void M_ChangeKeyBinding(int choice) {
@@ -3053,47 +3073,6 @@ void M_DrawControlMenu(void) {
 		Draw_BigText(-1, 410, MENUCOLORWHITE, ControlMenuDef.hints[itemOn]);
 		GL_SetOrthoScale(ControlMenuDef.scale);
 	}
-}
-
-//------------------------------------------------------------------------
-//
-// QUICKSAVE CONFIRMATION
-//
-//------------------------------------------------------------------------
-
-void M_DrawQuickSaveConfirm(void);
-
-enum {
-	QS_Ok = 0,
-	QS_End
-}qsconfirm_e;
-
-
-menuitem_t QuickSaveConfirm[] = {
-	{1,"Ok",M_ReturnToOptions,'o'}
-};
-
-menu_t QuickSaveConfirmDef = {
-	QS_End,
-	false,
-	&PauseDef,
-	QuickSaveConfirm,
-	M_DrawQuickSaveConfirm,
-	" ",
-	144,112,
-	QS_Ok,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_DrawQuickSaveConfirm(void) {
-	Draw_BigText(-1, 16, MENUCOLORRED, "You Need To Pick");
-	Draw_BigText(-1, 32, MENUCOLORRED, "A Quicksave Slot!");
 }
 
 //------------------------------------------------------------------------
@@ -3422,90 +3401,6 @@ void M_ReadSaveStrings(void) {
 		w3sclose(handle);
 		DoomLoadMenu[i].status = 1;
 	}
-}
-
-//------------------------------------------------------------------------
-//
-// QUICKSAVE PROMPT
-//
-//------------------------------------------------------------------------
-
-void M_QuickSaveResponse(int ch);
-
-enum {
-	QSP_Yes = 0,
-	QSP_No,
-	QSP_End
-}quicksaveprompt_e;
-
-
-menuitem_t QuickSavePrompt[] = {
-	{1,"Yes",M_QuickSaveResponse,'y'},
-	{1,"No",M_ReturnToOptions,'n'}
-};
-
-menu_t QuickSavePromptDef = {
-	QSP_End,
-	false,
-	&PauseDef,
-	QuickSavePrompt,
-	NULL,
-	"Overwrite Quicksave?",
-	144,112,
-	QSP_Yes,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_QuickSaveResponse(int ch) {
-	M_DoSave(quickSaveSlot);
-}
-
-//------------------------------------------------------------------------
-//
-// QUICKLOAD PROMPT
-//
-//------------------------------------------------------------------------
-
-void M_QuickLoadResponse(int ch);
-
-enum {
-	QLP_Yes = 0,
-	QLP_No,
-	QLP_End
-}quickloadprompt_e;
-
-
-menuitem_t QuickLoadPrompt[] = {
-	{1,"Yes",M_QuickLoadResponse,'y'},
-	{1,"No",M_ReturnToOptions,'n'}
-};
-
-menu_t QuickLoadPromptDef = {
-	QLP_End,
-	false,
-	&PauseDef,
-	QuickLoadPrompt,
-	NULL,
-	"Load Quicksave?",
-	144,112,
-	QLP_Yes,
-	false,
-	NULL,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_QuickLoadResponse(int ch) {
-	M_LoadSelect(quickSaveSlot);
 }
 
 //------------------------------------------------------------------------
@@ -3973,43 +3868,29 @@ static boolean M_CursorHighlightItem(menu_t* menu) {
 // M_QuickSave
 //
 
-void M_QuickSave(void) {
+void M_QuickSave(void)
+{
 	if (!usergame) {
 		S_StartSound(NULL, sfx_oof);
 		return;
 	}
 
-	if (gamestate != GS_LEVEL) {
+	if (gamestate != GS_LEVEL)
 		return;
-	}
 
-	if (quickSaveSlot < 0) {
-		M_StartControlPanel(true);
-		M_ReadSaveStrings();
-		M_SetupNextMenu(&SaveDef);
-		quickSaveSlot = -2;     // means to pick a slot now
-		return;
-	}
-
-	M_StartControlPanel(true);
-	M_SetupNextMenu(&QuickSavePromptDef);
+	G_SaveGame(QUICKSAVESLOT, "quicksave");
 }
 
-void M_QuickLoad(void) {
-	if (netgame) {
-		M_StartControlPanel(true);
-		M_SetupNextMenu(&NetLoadNotifyDef);
-		return;
+void M_QuickLoad(void)
+{
+	if (M_FileExists(QUICKSAVEFILE))
+	{
+		G_LoadGame(QUICKSAVEFILE);
 	}
-
-	if (quickSaveSlot < 0) {
-		M_StartControlPanel(true);
-		M_SetupNextMenu(&QuickSaveConfirmDef);
-		return;
+	else
+	{
+		printf("no save file");
 	}
-
-	M_StartControlPanel(true);
-	M_SetupNextMenu(&QuickLoadPromptDef);
 }
 
 //
@@ -4413,37 +4294,6 @@ boolean M_Responder(event_t* ev) {
 		return true;
 	}
 
-	// F-Keys
-	if (!menuactive) {
-		switch (ch) {
-		case KEY_F2:            // Save
-			M_StartControlPanel(true);
-			M_SaveGame(0);
-			return true;
-
-		case KEY_F3:            // Load
-			M_StartControlPanel(true);
-			M_LoadGame(0);
-			return true;
-
-		case KEY_F5:
-			G_ScreenShot();
-			return true;
-
-		case KEY_F6:            // Quicksave
-			M_QuickSave();
-			return true;
-
-		case KEY_F7:            // Quickload
-			M_QuickLoad();
-			return true;
-
-		case KEY_F11:           // gamma toggle
-			M_ChangeGammaLevel(2);
-			return true;
-		}
-	}
-
 	// Pop-up menu?
 	if (!menuactive) {
 		if (ch == KEY_ESCAPE && !st_chatOn) {
@@ -4700,11 +4550,25 @@ static void M_DrawMenuSkull(int x, int y) {
 	float ty2 = 0.0f;
 	float smbwidth;
 	float smbheight;
-	int pic;
+	int pic, parama, paramr;
 	vtx_t vtx[4];
 	const unsigned int color = MENUCOLORWHITE;
 
-	pic = GL_BindGfxTexture("SYMBOLS", true);
+	parama = M_CheckParm("-alpha");
+	paramr = M_CheckParm("-reloaded");
+
+	if (parama)
+	{
+		pic = GL_BindGfxTexture("SKULLM", true);
+	}
+	else if (paramr)
+	{
+		pic = GL_BindGfxTexture("SKULLM", true);
+	}
+	else
+	{
+		pic = GL_BindGfxTexture("SYMBOLS", true);
+	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -4739,6 +4603,7 @@ static void M_DrawMenuSkull(int x, int y) {
 		ty2,
 		color
 	);
+
 
 	glTriangle(0, 1, 2);
 	glTriangle(3, 2, 1);
@@ -4821,15 +4686,9 @@ void M_Drawer(void) {
 	start = currentMenu->menupageoffset;
 	max = (currentMenu->numpageitems == -1) ? currentMenu->numitems : currentMenu->numpageitems;
 
-	if (currentMenu->textonly) {
 		height = TEXTLINEHEIGHT;
 	}
 	else {
-		height = LINEHEIGHT;
-	}
-
-	if (currentMenu->smallfont) {
-		height /= 2;
 	}
 
 	//
@@ -4883,7 +4742,7 @@ void M_Drawer(void) {
 				// tint the non-bindable key items to a shade of red
 				//
 				if (currentMenu == &ControlsDef) {
-					if (i >= (NUM_CONTROL_ITEMS - NUM_NONBINDABLE_ITEMS)) {
+					if (i >= (NUM_CONTROL_ITEMS)) {
 						color = D_RGBA(255, 192, 192, menualphacolor);
 					}
 				}

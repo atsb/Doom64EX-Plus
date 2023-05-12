@@ -37,6 +37,8 @@
 #include <strings.h>
 #endif
 
+#include <ctype.h>
+
 // ZONE MEMORY
 
 typedef struct memblock_s {

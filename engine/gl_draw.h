@@ -32,7 +32,6 @@ void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 
 #define SM_FONT1        16
 #define SM_FONT2        42
-#define SM_FONT3        46
 #define SM_MISCFONT        10
 #define SM_NUMBERS        0
 #define SM_SKULLS        70

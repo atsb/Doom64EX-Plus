@@ -44,8 +44,13 @@
 #include "r_lights.h"
 #include "m_misc.h"
 #include "p_setup.h"
-#include "i_audio.h"
 #include "con_console.h"
+
+#ifdef __APPLE__
+#include "i_mac_audio.h"
+#else
+#include "i_audio.h"
+#endif
 
 // Adjustable by menu.
 #define NORM_VOLUME     127

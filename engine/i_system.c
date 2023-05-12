@@ -60,9 +60,13 @@
 #include "con_console.h"
 #include "z_zone.h"
 #include "i_system.h"
-#include "i_audio.h"
 #include "gl_draw.h"
 
+#ifdef __APPLE__
+#include "i_mac_audio.h"
+#else
+#include "i_audio.h"
+#endif
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_vsync, 1);
@@ -100,7 +104,7 @@ static int I_GetTimeNormal(void) {
 	Uint64 ticks;
 	Uint64 tic_division = 1000;
 
-	ticks = SDL_GetTicks64();
+	ticks = SDL_GetTicks();
 
 	if (basetime == 0) {
 		basetime = ticks;
@@ -155,7 +159,7 @@ boolean I_StartDisplay(void) {
 		return false;
 	}
 
-	start_displaytime = SDL_GetTicks64();
+	start_displaytime = SDL_GetTicks();
 	InDisplay = true;
 
 	return true;
@@ -166,7 +170,7 @@ boolean I_StartDisplay(void) {
 //
 
 void I_EndDisplay(void) {
-	displaytime = SDL_GetTicks64() - start_displaytime;
+	displaytime = SDL_GetTicks() - start_displaytime;
 	InDisplay = false;
 }
 
@@ -178,7 +182,7 @@ fixed_t I_GetTimeFrac(void) {
 	Uint64 now;
 	fixed_t frac;
 
-	now = SDL_GetTicks64();
+	now = SDL_GetTicks();
 
 	if (rendertic_step == 0) {
 		return FRACUNIT;
@@ -196,11 +200,29 @@ fixed_t I_GetTimeFrac(void) {
 }
 
 //
+// I_GetTimeMS
+//
+// Same as I_GetTime, but returns time in milliseconds
+//
+
+int I_GetTimeMS(void) {
+	Uint64 ticks;
+
+	ticks = SDL_GetTicks();
+
+	if (basetime == 0) {
+		basetime = ticks;
+	}
+
+	return ticks - basetime;
+}
+
+//
 // I_GetTime_SaveMS
 //
 
 void I_GetTime_SaveMS(void) {
-	rendertic_start = SDL_GetTicks64();
+	rendertic_start = SDL_GetTicks();
 	rendertic_next = (unsigned int)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
 	rendertic_step = rendertic_next - rendertic_start;
 }
@@ -352,30 +374,12 @@ boolean I_FileExists(const char* path)
 int (*I_GetTime)(void) = I_GetTime_Error;
 
 //
-// I_GetTimeMS
-//
-// Same as I_GetTime, but returns time in milliseconds
-//
-
-int I_GetTimeMS(void) {
-	Uint64 ticks;
-
-	ticks = SDL_GetTicks64();
-
-	if (basetime == 0) {
-		basetime = ticks;
-	}
-
-	return ticks - basetime;
-}
-
-//
 // I_GetRandomTimeSeed
 //
 
 unsigned long I_GetRandomTimeSeed(void) {
 	// not exactly random....
-	return SDL_GetTicks64();
+	return SDL_GetTicks();
 }
 
 //
