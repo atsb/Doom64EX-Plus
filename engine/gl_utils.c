@@ -33,6 +33,8 @@
 #include <math.h>
 #endif
 
+#define GL_COMBINE_ARB                    0x8570
+
 #include "doomdef.h"
 #include "doomstat.h"
 #include "gl_main.h"
@@ -223,6 +225,88 @@ void glSetVertexColor(vtx_t* v, unsigned int color, unsigned short count) {
 }
 
 //
+// dglTexCombReplace
+//
+
+void glTexCombReplace(void) {
+#ifdef LOG_GLFUNC_CALLS
+	I_Printf("dglTexCombReplace\n");
+#endif
+	GL_SetTextureMode(GL_COMBINE_ARB);
+	GL_SetCombineState(GL_REPLACE);
+	GL_SetCombineSourceRGB(0, GL_TEXTURE);
+	GL_SetCombineOperandRGB(0, GL_SRC_COLOR);
+}
+
+//
+// dglTexCombColor
+//
+
+void glTexCombColor(int t, unsigned int c, int func) {
+	float f[4];
+#ifdef LOG_GLFUNC_CALLS
+	I_Printf("dglTexCombColor(t=0x%x, c=0x%x)\n", t, c);
+#endif
+	glGetColorf(c, f);
+	GL_SetTextureMode(GL_COMBINE_ARB);
+	GL_SetEnvColor(f);
+	GL_SetCombineState(func);
+	GL_SetCombineSourceRGB(0, t);
+	GL_SetCombineOperandRGB(0, GL_SRC_COLOR);
+	GL_SetCombineSourceRGB(1, GL_CONSTANT);
+	GL_SetCombineOperandRGB(1, GL_SRC_COLOR);
+}
+
+//
+// dglTexCombColorf
+//
+
+void glTexCombColorf(int t, float* f, int func) {
+#ifdef LOG_GLFUNC_CALLS
+	I_Printf("dglTexCombColorf(t=0x%x, f=%p)\n", t, f);
+#endif
+	GL_SetTextureMode(GL_COMBINE_ARB);
+	GL_SetEnvColor(f);
+	GL_SetCombineState(func);
+	GL_SetCombineSourceRGB(0, t);
+	GL_SetCombineOperandRGB(0, GL_SRC_COLOR);
+	GL_SetCombineSourceRGB(1, GL_CONSTANT);
+	GL_SetCombineOperandRGB(1, GL_SRC_COLOR);
+}
+
+//
+// dglTexCombModulate
+//
+
+void glTexCombModulate(int t, int s) {
+#ifdef LOG_GLFUNC_CALLS
+	I_Printf("dglTexCombFinalize(t=0x%x)\n", t);
+#endif
+	GL_SetTextureMode(GL_COMBINE_ARB);
+	GL_SetCombineState(GL_MODULATE);
+	GL_SetCombineSourceRGB(0, t);
+	GL_SetCombineOperandRGB(0, GL_SRC_COLOR);
+	GL_SetCombineSourceRGB(1, s);
+	GL_SetCombineOperandRGB(1, GL_SRC_COLOR);
+}
+
+//
+// dglTexCombAdd
+//
+
+void glTexCombAdd(int t, int s) {
+#ifdef LOG_GLFUNC_CALLS
+	I_Printf("dglTexCombFinalize(t=0x%x)\n", t);
+#endif
+	GL_SetTextureMode(GL_COMBINE_ARB);
+	GL_SetCombineState(GL_ADD);
+	GL_SetCombineSourceRGB(0, t);
+	GL_SetCombineOperandRGB(0, GL_SRC_COLOR);
+	GL_SetCombineSourceRGB(1, s);
+	GL_SetCombineOperandRGB(1, GL_SRC_COLOR);
+}
+
+//
 // glGetColorf
 //
 
@@ -234,4 +318,20 @@ void glGetColorf(unsigned int color, float* argb) {
 	argb[2] = (float)((color >> 16) & 0xff) / 255.0f;
 	argb[1] = (float)((color >> 8) & 0xff) / 255.0f;
 	argb[0] = (float)(color & 0xff) / 255.0f;
+}
+
+//
+// dglTexCombReplaceAlpha
+//
+
+void glTexCombReplaceAlpha(int t) {
+#ifdef LOG_GLFUNC_CALLS
+	I_Printf("dglTexCombReplaceAlpha(t=0x%x)\n", t);
+#endif
+	GL_SetTextureMode(GL_COMBINE_ARB);
+	GL_SetCombineStateAlpha(GL_MODULATE);
+	GL_SetCombineSourceAlpha(0, t);
+	GL_SetCombineOperandAlpha(0, GL_SRC_ALPHA);
+	GL_SetCombineSourceAlpha(1, GL_PRIMARY_COLOR);
+	GL_SetCombineOperandAlpha(1, GL_SRC_ALPHA);
 }

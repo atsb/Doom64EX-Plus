@@ -439,6 +439,75 @@ static void InitSpriteTextures(void) {
 }
 
 //
+// GL_SetCombineSourceRGB
+//
+
+void GL_SetCombineSourceRGB(int source, int target) {
+	gl_env_state_t* state;
+
+	state = &gl_env_state[curunit];
+
+	if (state->source_rgb[source] == target) {
+		return;
+	}
+
+	state->source_rgb[source] = target;
+	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB + source, state->source_rgb[source]);
+}
+
+//
+// GL_SetCombineSourceAlpha
+//
+
+void GL_SetCombineSourceAlpha(int source, int target) {
+	gl_env_state_t* state;
+
+	state = &gl_env_state[curunit];
+
+	if (state->source_alpha[source] == target) {
+		return;
+	}
+
+	state->source_alpha[source] = target;
+	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA + source, state->source_alpha[source]);
+}
+
+//
+// GL_SetCombineOperandRGB
+//
+
+void GL_SetCombineOperandRGB(int operand, int target) {
+	gl_env_state_t* state;
+
+	state = &gl_env_state[curunit];
+
+	if (state->operand_rgb[operand] == target) {
+		return;
+	}
+
+	state->operand_rgb[operand] = target;
+	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB + operand, state->operand_rgb[operand]);
+}
+
+//
+// GL_SetCombineOperandAlpha
+//
+
+void GL_SetCombineOperandAlpha(int operand, int target) {
+	gl_env_state_t* state;
+
+	state = &gl_env_state[curunit];
+
+	if (state->operand_alpha[operand] == target) {
+		return;
+	}
+
+	state->operand_alpha[operand] = target;
+	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA + operand, state->operand_alpha[operand]);
+}
+
+
+//
 // GL_BindSpriteTexture
 //
 
@@ -669,7 +738,7 @@ void GL_UnloadTexture(unsigned int* texture) {
 //
 
 void GL_SetTextureUnit(int unit, int enable) {
-	if (!has_GL_ARB_multitexture) {
+	if (!GL_ARB_multitexture) {
 		return;
 	}
 

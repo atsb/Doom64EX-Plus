@@ -43,7 +43,7 @@
 
 #include <stdlib.h>
 
-
+#define GL_TEXTURE0_ARB 0x84C0
 #define MAX_SPRITES    1024
 
 spritedef_t* spriteinfo;
@@ -654,7 +654,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
         if(!nolights) {
             GL_UpdateEnvTexture(WHITE);
             GL_SetTextureUnit(1, true);
-            dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+            glTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
         }
 
         if(st_flashoverlay.value <= 0) {

@@ -462,9 +462,6 @@ int Draw_BigText(int x, int y, unsigned int color, const char* string) {
 			if (c >= 'a' && c <= 'z') {
 				index = (c - 'a') + SM_FONT2;
 			}
-			if (c >= 'À' && c <= 'Ñ') {
-				index = (c - 'À') + SM_FONT3;
-			}
 			if (c == '-') {
 				index = SM_MISCFONT;
 			}

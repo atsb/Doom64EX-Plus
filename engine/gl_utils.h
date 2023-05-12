@@ -277,7 +277,12 @@ void glSetVertexColor(vtx_t* v, unsigned int c, unsigned short count);
 void glGetColorf(unsigned int color, float* argb);
 void glGetVersion(int major, int minor);
 void glDestroyWindow(OGL_DEFS);
-
+void glTexCombReplace(void);
+void glTexCombReplaceAlpha(int t);
+void glTexCombModulate(int t, int s);
+void glTexCombAdd(int t, int s);
+void glTexCombColor(int t, unsigned int c, int func);
+void glTexCombColorf(int t, float* f, int func);
 #ifdef USE_GLFW
 #define glGetProcAddress glfwGetProcAddress
 #elif defined(WIN32_FUNCTIONS)

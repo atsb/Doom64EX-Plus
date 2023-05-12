@@ -60,11 +60,15 @@ extern float* spritetopoffset;
 extern unsigned short* spriteheight;
 
 void        GL_InitTextures(void);
-void        GL_UnloadTexture(dtexture* texture);
+void        GL_UnloadTexture(unsigned int* texture);
 void        GL_SetTextureUnit(int unit, int enable);
 void        GL_SetTextureMode(int mode);
 void        GL_SetCombineState(int combine);
 void        GL_SetCombineStateAlpha(int combine);
+void        GL_SetCombineSourceRGB(int source, int target);
+void        GL_SetCombineSourceAlpha(int source, int target);
+void        GL_SetCombineOperandRGB(int operand, int target);
+void        GL_SetCombineOperandAlpha(int operand, int target);
 void        GL_SetEnvColor(float* param);
 void        GL_BindWorldTexture(int texnum, int* width, int* height);
 void        GL_BindSpriteTexture(int spritenum, int pal);

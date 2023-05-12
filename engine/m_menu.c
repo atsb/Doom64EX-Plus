@@ -4647,6 +4647,13 @@ static void M_DrawCursor(int x, int y) {
 // but before it has been blitted.
 //
 
+//
+// M_Drawer
+//
+// Called after the view has been rendered,
+// but before it has been blitted.
+//
+
 void M_Drawer(void) {
 	short x;
 	short y;
@@ -4686,9 +4693,15 @@ void M_Drawer(void) {
 	start = currentMenu->menupageoffset;
 	max = (currentMenu->numpageitems == -1) ? currentMenu->numitems : currentMenu->numpageitems;
 
+	if (currentMenu->textonly) {
 		height = TEXTLINEHEIGHT;
 	}
 	else {
+		height = LINEHEIGHT;
+	}
+
+	if (currentMenu->smallfont) {
+		height /= 2;
 	}
 
 	//
@@ -4723,7 +4736,7 @@ void M_Drawer(void) {
 			}
 
 			if (!currentMenu->smallfont) {
-			    unsigned int fontcolor = MENUCOLORRED;
+				unsigned int fontcolor = MENUCOLORRED;
 
 				if (itemSelected == i) {
 					fontcolor += D_RGBA(0, 128, 8, 0);
@@ -4862,28 +4875,9 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-	if (currentMenu != &MainDef) {
-		GL_SetOrthoScale(0.75f);
-		if (currentMenu == &PasswordDef) {
-			M_DrawXInputButton(4, 271, GAMEPAD_B);
-			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
-		}
-
-		GL_SetOrthoScale(0.75f);
-		M_DrawXInputButton(4, 287, GAMEPAD_A);
-		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
-
-		if (currentMenu != &PauseDef) {
-			GL_SetOrthoScale(0.75f);
-			M_DrawXInputButton(5, 303, GAMEPAD_START);
-			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
-		}
-
-		GL_SetOrthoScale(1);
-	}
-
 	M_DrawCursor(mouse_x, mouse_y);
 }
+
 
 //
 // M_ClearMenus

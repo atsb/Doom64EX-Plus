@@ -70,10 +70,6 @@ typedef unsigned char boolean;
 #endif
 #endif 
 
-#ifdef PSNPRINTF
-#include "psnprntf.h"
-#endif
-
 #ifdef _WIN32
 #define w3sopen _open
 #define w3swrite _write
@@ -162,6 +158,6 @@ boolean fcmp(float f1, float f2);
 #define min(num1, num2) ((num1)<(num2)?(num1):(num2))
 #endif
 
-#ifdef C99
+#ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif

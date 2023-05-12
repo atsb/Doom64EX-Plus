@@ -40,6 +40,7 @@ typedef int BOOL;
 #endif
 #define GL_TEXTURE0_ARB 0x84C0
 
+extern boolean has_GL_ARB_multitexture = false;
 
 #define GL_ARB_multitexture_Define() \
 boolean has_GL_ARB_multitexture = false; \
@@ -789,7 +790,7 @@ void GL_Init(void) {
         CON_Warnf("GL_ARB_multitexture not supported...\n");
     }
 
-    gl_has_combiner = (has_GL_ARB_texture_env_combine | has_GL_EXT_texture_env_combine);
+    gl_has_combiner = (GL_CheckExtension("GL_ARB_texture_env_combine") | GL_CheckExtension("GL_EXT_texture_env_combine"));
 
     if(!gl_has_combiner) {
         CON_Warnf("Texture combiners not supported...\n");

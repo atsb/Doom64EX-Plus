@@ -34,6 +34,8 @@
 #include "r_sky.h"
 #include "r_drawlist.h"
 
+#define GL_TEXTURE0_ARB 0x84C0
+
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_fog);

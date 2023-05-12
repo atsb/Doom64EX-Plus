@@ -176,12 +176,12 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 
 static void M_CheatWarpZero(player_t* player, char dat[4]) {
 	int map;
-	map = datoi(dat);
+	map = atoi(dat);
 	gameskill = (int)sv_skill.value;
 	gamemap = nextmap = map;
 
 	G_InitNew(gameskill, 00);
-	dmemset(passwordData, 0xff, 16);
+	memset(passwordData, 0xff, 16);
 }
 
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {

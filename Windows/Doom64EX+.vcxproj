@@ -211,7 +211,6 @@
     <ClCompile Include="..\engine\net_query.c" />
     <ClCompile Include="..\engine\net_server.c" />
     <ClCompile Include="..\engine\net_structure.c" />
-    <ClCompile Include="..\engine\psnprntf.c" />
     <ClCompile Include="..\engine\p_ceilng.c" />
     <ClCompile Include="..\engine\p_doors.c" />
     <ClCompile Include="..\engine\p_enemy.c" />
@@ -319,7 +318,6 @@
     <ClInclude Include="..\engine\net_query.h" />
     <ClInclude Include="..\engine\net_server.h" />
     <ClInclude Include="..\engine\net_structure.h" />
-    <ClInclude Include="..\engine\psnprntf.h" />
     <ClInclude Include="..\engine\p_inter.h" />
     <ClInclude Include="..\engine\p_local.h" />
     <ClInclude Include="..\engine\p_macros.h" />
@@ -469,7 +467,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;PSNPRINTF;USE_FLUIDSYNTH_LITE;WIN32;HAVE_M_PI;_USE_MATH_DEFINES;_STDCALL_SUPPORTED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;USE_FIXEDPTC;WINDOWS_TYPES;USE_FLUIDSYNTH_LITE;WIN32;HAVE_M_PI;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\3rdparty\Windows\Includes;$(ProjectDir)..\3rdparty\Windows\Includes\SDL2;$(ProjectDir)..\3rdparty\Backend\glad_4.6\include</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
