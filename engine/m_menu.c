@@ -4875,6 +4875,26 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
+	if (currentMenu != &MainDef) {
+		GL_SetOrthoScale(0.75f);
+		if (currentMenu == &PasswordDef) {
+			M_DrawXInputButton(4, 271, GAMEPAD_B);
+			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
+		}
+
+		GL_SetOrthoScale(0.75f);
+		M_DrawXInputButton(4, 287, GAMEPAD_A);
+		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
+
+		if (currentMenu != &PauseDef) {
+			GL_SetOrthoScale(0.75f);
+			M_DrawXInputButton(5, 303, GAMEPAD_START);
+			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
+		}
+
+		GL_SetOrthoScale(1);
+	}
+
 	M_DrawCursor(mouse_x, mouse_y);
 }
 
