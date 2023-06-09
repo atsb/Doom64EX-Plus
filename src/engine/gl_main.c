@@ -585,7 +585,17 @@ void GL_Init(void) {
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
 
-    dglViewport(0, 0, video_width, video_height);
+    float scalingForDPI = GetDPIDisplayScale();
+
+    glViewport(0, 0, video_width * scalingForDPI, video_height * scalingForDPI);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, video_width * scalingForDPI, video_height * scalingForDPI, 0, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     dglClearDepth(1.0f);
     dglDisable(GL_TEXTURE_2D);
     dglEnable(GL_CULL_FACE);

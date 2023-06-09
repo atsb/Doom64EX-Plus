@@ -70,6 +70,15 @@ boolean window_focused;
 int mouse_x = 0;
 int mouse_y = 0;
 
+/* Get the Current DPI Scaling */
+
+float GetDPIDisplayScale(void)
+{
+	float diag, hori, vert;
+	SDL_GetDisplayDPI(0, &diag, &hori, &vert);
+	return hori / 96.0f;
+}
+
 //
 // I_InitScreen
 //
@@ -150,12 +159,16 @@ void I_InitScreen(void) {
 		flags |= SDL_WINDOW_BORDERLESS;
 	}
 
+	/* DPI Scale */
+	float scalingForDPI = GetDPIDisplayScale();
+	I_Printf("DPI Factor: %f\n", scalingForDPI);
+
 	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		video_width,
-		video_height,
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		video_width * scalingForDPI,
+		video_height * scalingForDPI,
 		flags);
 
 	if (window == NULL) {
