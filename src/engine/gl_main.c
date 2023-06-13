@@ -607,7 +607,7 @@ static void SetVsyncActive(void)
 {
   if (v_vsync.value > 0)
   {
-    SDL_GL_SetSwapInterval(-1);
+    SDL_GL_SetSwapInterval(1);
   }
 #if defined(__APPLE__)
 		if (v_vsync.value > 0)
