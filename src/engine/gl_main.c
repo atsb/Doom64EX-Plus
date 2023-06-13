@@ -26,6 +26,11 @@
 
 #include <math.h>
 
+
+#ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
+#endif
+
 #ifdef __OpenBSD__
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -100,11 +105,11 @@ static CMD(DumpGLExtensions) {
 // ======================== OGL Extensions ===================================
 
 GL_ARB_multitexture_Define();
-//GL_EXT_compiled_vertex_array_Define();
+GL_EXT_compiled_vertex_array_Define();
 //GL_EXT_multi_draw_arrays_Define();
 //GL_EXT_fog_coord_Define();
 //GL_ARB_vertex_buffer_object_Define();
-//GL_ARB_texture_non_power_of_two_Define();
+GL_ARB_texture_non_power_of_two_Define();
 GL_ARB_texture_env_combine_Define();
 GL_EXT_texture_env_combine_Define();
 GL_EXT_texture_filter_anisotropic_Define();
@@ -113,7 +118,7 @@ GL_EXT_texture_filter_anisotropic_Define();
 // FindExtension
 //
 
-static boolean FindExtension(const char *ext) {
+static bool FindExtension(const char *ext) {
     const char *extensions = NULL;
     const char *start;
     const char *where, *terminator;
@@ -141,21 +146,6 @@ static boolean FindExtension(const char *ext) {
         }
     }
     return false;
-}
-
-void GL_SetSwapInterval(void)
-{
-#ifdef _WIN32
-    typedef BOOL(APIENTRY* PFNWGLSWAPINTERVALPROC)(int);
-    PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)wglGetProcAddress("wglSwapIntervalEXT");
-
-    if (v_vsync.value > 0 && wglSwapIntervalEXT)
-        wglSwapIntervalEXT(-1);
-#else
-    if (v_vsync.value > 0)
-        SDL_GL_SetSwapInterval(-1);
-#endif
 }
 
 //
@@ -223,8 +213,8 @@ void GL_SetOrtho(boolean stretch) {
         dglViewport(ViewWindowX + (int)fitx, ViewWindowY, (int)fitwidth, ViewHeight);
     }
 
-	width = SCREENWIDTH & (int)~3;
-	height = SCREENHEIGHT;
+    width = SCREENWIDTH;
+    height = SCREENHEIGHT;
 
     if(glScaleFactor != 1.0f) {
         width /= glScaleFactor;
@@ -534,7 +524,7 @@ boolean GL_GetBool(int x) {
     byte b;
     dglGetBooleanv(x, &b);
 
-    return (boolean)b;
+    return (bool)b;
 }
 
 //
@@ -558,6 +548,78 @@ static void CalcViewSize(void) {
 }
 
 //
+// GetVersionInt
+// Borrowed from prboom+
+//
+
+typedef enum {
+    OPENGL_VERSION_2_0,
+    OPENGL_VERSION_2_1,
+    OPENGL_VERSION_2_2,
+    OPENGL_VERSION_2_3,
+    OPENGL_VERSION_2_4,
+    OPENGL_VERSION_2_5,
+    OPENGL_VERSION_3_0,
+    OPENGL_VERSION_3_1,
+    OPENGL_VERSION_3_3,
+} glversion_t;
+
+static int GetVersionInt(const char* version) {
+    int MajorVersion;
+    int MinorVersion;
+    int versionvar;
+
+    versionvar = OPENGL_VERSION_3_3;
+
+    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 3) {
+        if(MajorVersion > 2) {
+            versionvar = OPENGL_VERSION_3_0;
+
+            if(MinorVersion > 0) {
+                versionvar = OPENGL_VERSION_3_3;
+            }
+        }
+        else {
+            versionvar = OPENGL_VERSION_2_0;
+
+            if(MinorVersion > 0) {
+                versionvar = OPENGL_VERSION_2_1;
+            }
+            if(MinorVersion > 1) {
+                versionvar = OPENGL_VERSION_2_2;
+            }
+            if(MinorVersion > 2) {
+                versionvar = OPENGL_VERSION_2_3;
+            }
+            if(MinorVersion > 3) {
+                versionvar = OPENGL_VERSION_2_4;
+            }
+            if(MinorVersion > 4) {
+                versionvar = OPENGL_VERSION_2_5;
+            }
+        }
+    }
+
+    return versionvar;
+}
+
+static void SetVsyncActive(void)
+{
+  if (v_vsync.value > 0)
+  {
+    SDL_GL_SetSwapInterval(-1);
+  }
+#if defined(__APPLE__)
+		if (v_vsync.value > 0)
+		{
+		  CGLContextObj ctx = CGLGetCurrentContext();
+		  GLint swap = 1; // macOS doesn't do adaptive vsync so we just use 1 (normal vsync)
+		  CGLSetParameter(ctx, kCGLCPSwapInterval, &swap);
+		}
+#endif
+	}
+
+//
 // GL_Init
 //
 
@@ -579,23 +641,7 @@ void GL_Init(void) {
 
     CalcViewSize();
 
-    glEnable(GL_MULTISAMPLE);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_POLYGON_SMOOTH);
-
-    float scalingForDPI = GetDPIDisplayScale();
-
-    glViewport(0, 0, video_width * scalingForDPI, video_height * scalingForDPI);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, video_width * scalingForDPI, video_height * scalingForDPI, 0, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
+    dglViewport(0, 0, video_width, video_height);
     dglClearDepth(1.0f);
     dglDisable(GL_TEXTURE_2D);
     dglEnable(GL_CULL_FACE);
@@ -612,14 +658,12 @@ void GL_Init(void) {
 
     GL_SetTextureFilter();
     GL_SetDefaultCombiner();
-
-    GL_SetSwapInterval();
+    
+    SetVsyncActive();
 
     r_fillmode.value = 1.0f;
 
     GL_ARB_multitexture_Init();
-    //GL_EXT_compiled_vertex_array_Init();
-    //GL_ARB_texture_non_power_of_two_Init();
     GL_ARB_texture_env_combine_Init();
     GL_EXT_texture_env_combine_Init();
     GL_EXT_texture_filter_anisotropic_Init();
@@ -640,7 +684,7 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = gl_version ? GL_CLAMP_TO_EDGE : GL_CLAMP;
+    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_3_3 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 
     glScaleFactor = 1.0f;
 
@@ -649,7 +693,6 @@ void GL_Init(void) {
     }
 
     usingGL = true;
-
 
     G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
 }
