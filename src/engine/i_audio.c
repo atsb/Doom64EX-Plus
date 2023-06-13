@@ -1078,10 +1078,9 @@ static boolean Seq_RegisterSongs(doomseq_t* seq) {
 
 static void Seq_Shutdown(doomseq_t* seq)
 {
-#ifndef _WIN32
     // Close SDL Audio Device
     SDL_CloseAudioDevice(1);
-#else
+
     //
     // signal the sequencer to shut down
     //
@@ -1102,7 +1101,6 @@ static void Seq_Shutdown(doomseq_t* seq)
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
-#endif
 }
 
 //
