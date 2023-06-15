@@ -138,7 +138,6 @@ void I_InitScreen(void) {
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	if (r_multisample.value > 0)
 	{
@@ -165,8 +164,8 @@ void I_InitScreen(void) {
 
 	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
-		SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
 		video_width * scalingForDPI,
 		video_height * scalingForDPI,
 		flags);
