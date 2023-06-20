@@ -72,7 +72,6 @@ int         DGL_CLAMP = GL_CLAMP;
 float       max_anisotropic = 16.0;
 boolean    widescreen = false;
 
-CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_anisotropic);
@@ -601,14 +600,6 @@ static int GetVersionInt(const char* version) {
     }
 
     return versionvar;
-}
-
-void SetVsyncActive(void)
-{
-    if (v_vsync.value > 0)
-    {
-        SDL_GL_SetSwapInterval(1);
-    }
 }
 
 //

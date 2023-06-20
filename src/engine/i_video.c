@@ -59,8 +59,6 @@ CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
 
-CVAR_EXTERNAL(r_multisample);
-
 SDL_Surface* screen;
 int video_width;
 int video_height;
@@ -69,8 +67,6 @@ boolean window_focused;
 
 int mouse_x = 0;
 int mouse_y = 0;
-
-/* Get the Current DPI Scaling */
 
 //
 // I_InitScreen
@@ -131,15 +127,7 @@ void I_InitScreen(void) {
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-	if (r_multisample.value > 0)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 4);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-	} else {
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
-	}
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_ALLOW_HIGHDPI;
 

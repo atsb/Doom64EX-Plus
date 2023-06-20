@@ -416,7 +416,6 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 		}
 
 	drawframe:
-		SetVsyncActive();
 		S_UpdateSounds();
 
 		// Update display, next frame, with current state.

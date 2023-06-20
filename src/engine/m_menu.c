@@ -1746,7 +1746,6 @@ void M_ChangeWindowed(int choice);
 void M_ChangeRatio(int choice);
 void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
-void M_ChangeAntiAliasing(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeVerticalSynchronisation(int choice);
 void M_ChangeAccessibility(int choice);
@@ -1760,9 +1759,7 @@ CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
-CVAR_EXTERNAL(r_multisample);
 CVAR_EXTERNAL(i_interpolateframes);
-CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 enum {
@@ -1772,12 +1769,10 @@ enum {
 	video_empty2,
 	filter,
 	anisotropic,
-	multisample,
 	windowed,
 	ratio,
 	resolution,
 	interpolate_frames,
-	vsync,
 	accessibility,
 	v_default,
 	v_videoreset,
@@ -1792,12 +1787,10 @@ menuitem_t VideoMenu[] = {
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
-	{2,"Antialiasing:",M_ChangeAntiAliasing, 't'},
 	{2,"Windowed:",M_ChangeWindowed, 'w'},
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
 	{2,"Resolution:",M_ChangeResolution, 'r'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
-	{2,"Vsync:",M_ChangeVerticalSynchronisation, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
 	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
@@ -1810,7 +1803,6 @@ char* VideoHints[video_end] = {
 	"adjust screen gamma",
 	NULL,
 	"toggle texture filtering",
-	"toggle antialiasing",
 	"toggle blur reduction on textures",
 	"toggle windowed mode",
 	"select aspect ratio",
@@ -1826,10 +1818,8 @@ menudefault_t VideoDefault[] = {
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
 	{ &r_anisotropic, 1 },
-	{ &r_multisample, 1 },
 	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
-	{ &v_vsync, 1 },
 	{ &v_accessibility, 0 },
 	{ NULL, -1 }
 };
@@ -2025,8 +2015,7 @@ void M_Video(int choice) {
 void M_DrawVideo(void) {
 	static const char* filterType[2] = { "Linear", "Nearest" };
 	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09"};
-	static const char* vsynctype[2] = { "Off", "On" };
-	static const char* multisampletype[2] = { "4", "Off"};
+	static const char* onofftype[2] = { "Off", "On" };
 	char res[16];
 	int y;
 
@@ -2054,15 +2043,13 @@ void M_DrawVideo(void) {
 
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
-	DRAWVIDEOITEM2(multisample, r_multisample.value, multisampletype);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
 	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
 
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
-	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, vsynctype);
-	DRAWVIDEOITEM2(vsync, v_vsync.value, vsynctype);
-	DRAWVIDEOITEM2(accessibility, v_accessibility.value, vsynctype);
+	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
+	DRAWVIDEOITEM2(accessibility, v_accessibility.value, onofftype);
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
@@ -2146,10 +2133,6 @@ void M_ChangeFilter(int choice) {
 
 void M_ChangeAnisotropic(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_anisotropic);
-}
-
-void M_ChangeAntiAliasing(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &r_multisample);
 }
 
 void M_ChangeWindowed(int choice) {
@@ -2268,11 +2251,6 @@ void M_ChangeResolution(int choice) {
 void M_ChangeInterpolateFrames(int choice)
 {
 	M_SetOptionValue(choice, 0, 1, 1, &i_interpolateframes);
-}
-
-void M_ChangeVerticalSynchronisation(int choice)
-{
-	M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
 }
 
 void M_ChangeAccessibility(int choice)
