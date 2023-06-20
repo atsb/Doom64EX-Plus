@@ -603,21 +603,13 @@ static int GetVersionInt(const char* version) {
     return versionvar;
 }
 
-static void SetVsyncActive(void)
+void SetVsyncActive(void)
 {
-  if (v_vsync.value > 0)
-  {
-    SDL_GL_SetSwapInterval(1);
-  }
-#if defined(__APPLE__)
-		if (v_vsync.value > 0)
-		{
-		  CGLContextObj ctx = CGLGetCurrentContext();
-		  GLint swap = 1; // macOS doesn't do adaptive vsync so we just use 1 (normal vsync)
-		  CGLSetParameter(ctx, kCGLCPSwapInterval, &swap);
-		}
-#endif
-	}
+    if (v_vsync.value > 0)
+    {
+        SDL_GL_SetSwapInterval(1);
+    }
+}
 
 //
 // GL_Init
@@ -658,8 +650,6 @@ void GL_Init(void) {
 
     GL_SetTextureFilter();
     GL_SetDefaultCombiner();
-    
-    SetVsyncActive();
 
     r_fillmode.value = 1.0f;
 

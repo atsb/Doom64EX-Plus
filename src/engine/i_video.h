@@ -37,7 +37,6 @@
 
 extern SDL_Surface* screen;
 extern SDL_Window* window;
-float GetDPIDisplayScale(void);
 void I_InitVideo(void);
 void I_InitScreen(void);
 void I_ShutdownVideo(void);
