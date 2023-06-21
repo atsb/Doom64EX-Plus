@@ -147,7 +147,7 @@ static void SetupLists(void) {
 
 	SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
 	SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
-	SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", "SYMBOLS", "MOUNTC");
+	SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", NULL, NULL);
 	SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", NULL, NULL);
 }
 
@@ -530,7 +530,7 @@ static void DoMerge(void) {
 				current_section = SECTION_SPRITES;
 			}
 			else if (!strncasecmp(lump->name, "SYMBOLS", 8)
-				|| !strncasecmp(lump->name, "MOUNTC", 8)) {
+				|| !strncasecmp(lump->name, "SYMBOLS", 8)) {
 				current_section = SECTION_GFX;
 			}
 			else if (!strncasecmp(lump->name, "DM_START", 8)) {
