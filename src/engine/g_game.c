@@ -1448,8 +1448,12 @@ void G_SecretExitLevel(int map) {
 //
 
 void G_RunTitleMap(void) {
+	int alpha_title_map = M_CheckParm("-alpha");
 	// villsa 12092013 - abort if map doesn't exist in mapfino
-	if (P_GetMapInfo(33) == NULL) {
+	if (!alpha_title_map && P_GetMapInfo(33) == NULL) {
+		return;
+	}
+	else if (alpha_title_map && P_GetMapInfo(30) == NULL) {
 		return;
 	}
 
@@ -1457,7 +1461,14 @@ void G_RunTitleMap(void) {
 	demo_p = demobuffer;
 	demobuffer[0x16000 - 1] = DEMOMARKER;
 
-	G_InitNew(sk_medium, 33);
+	if (!alpha_title_map)
+	{
+		G_InitNew(sk_medium, 33);
+	}
+	else if (alpha_title_map)
+	{
+		G_InitNew(sk_medium, 30);
+	}
 
 	precache = true;
 	usergame = false;

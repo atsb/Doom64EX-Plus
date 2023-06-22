@@ -41,6 +41,7 @@
 #include "st_stuff.h"
 #include "r_wipe.h"
 #include "gl_draw.h"
+#include "m_misc.h"
 
 #define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
@@ -320,6 +321,7 @@ int WI_Ticker(void) {
 
 void WI_Drawer(void) {
 	int currentmap = gamemap;
+	int alpha_title_map = M_CheckParm("-alpha");
 
 	GL_ClearView(0xFF000000);
 
@@ -327,8 +329,11 @@ void WI_Drawer(void) {
 		currentmap = 0;
 	}
 
-	if (currentmap > 80) {
+	if (currentmap > 80 && !alpha_title_map) {
 		currentmap = 33;
+	}
+	else {
+		currentmap = 30;
 	}
 
 	if (wi_advance >= 4) {
