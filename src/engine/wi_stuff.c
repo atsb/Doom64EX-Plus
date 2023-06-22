@@ -321,7 +321,6 @@ int WI_Ticker(void) {
 
 void WI_Drawer(void) {
 	int currentmap = gamemap;
-	int alpha_title_map = M_CheckParm("-alpha");
 
 	GL_ClearView(0xFF000000);
 
@@ -329,11 +328,8 @@ void WI_Drawer(void) {
 		currentmap = 0;
 	}
 
-	if (currentmap > 80 && !alpha_title_map) {
+	if (currentmap > 80) {
 		currentmap = 33;
-	}
-	else {
-		currentmap = 30;
 	}
 
 	if (wi_advance >= 4) {
