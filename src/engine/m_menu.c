@@ -1747,7 +1747,6 @@ void M_ChangeRatio(int choice);
 void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
-void M_ChangeVerticalSynchronisation(int choice);
 void M_ChangeAccessibility(int choice);
 void M_DrawVideo(void);
 
@@ -1808,7 +1807,6 @@ char* VideoHints[video_end] = {
 	"select aspect ratio",
 	"resolution changes will take effect\n after restarting",
 	"toggle frame interpolation to\n achieve smooth framerates",
-	"toggle vertical synchronisation to \n reduce screen tear",
 	"toggle accessibility to \n remove flashing lights",
 	"apply video settings"
 };
