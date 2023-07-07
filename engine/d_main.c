@@ -418,7 +418,6 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 		}
 
 	drawframe:
-
 		S_UpdateSounds();
 
 		// Update display, next frame, with current state.
@@ -718,34 +717,6 @@ void D_DoomLoop(void) {
 			D_MiniLoop(Credits_Start, NULL, Credits_Drawer, Credits_Ticker);
 
 			if (gameaction == ga_title) {
-				continue;
-			}
-			if (exit != ga_exitdemo)
-			{
-				iwadDemo = true;
-				exit = D_RunDemo("DEMO1LMP", sk_medium, 3);
-			}
-
-			iwadDemo = true;
-			if (exit != ga_exitdemo)
-			{
-				exit = D_RunDemo("DEMO2LMP", sk_medium, 9);
-			}
-
-			iwadDemo = true;
-			if (exit != ga_exitdemo)
-			{
-				exit = D_RunDemo("DEMO3LMP", sk_medium, 17);
-			}
-
-			if (rundemo4) {
-				iwadDemo = true;
-				if (exit != ga_exitdemo)
-				{
-					exit = D_RunDemo("DEMO4LMP", sk_medium, 32);
-				}
-
-				G_RunTitleMap();
 				continue;
 			}
 		}

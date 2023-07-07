@@ -48,8 +48,6 @@ CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
 
-CVAR_EXTERNAL(r_multisample);
-
 SDL_Surface* screen;
 int video_width;
 int video_height;
@@ -210,8 +208,8 @@ void I_InitScreen(void) {
 	window = SDL_CreateWindow(title,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		video_width * scalingForDPI,
-		video_height * scalingForDPI,
+		video_width,
+		video_height,
 		flags);
 
 	if (window == NULL) {

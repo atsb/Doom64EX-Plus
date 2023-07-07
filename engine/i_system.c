@@ -69,7 +69,6 @@
 #endif
 
 CVAR(i_interpolateframes, 1);
-CVAR(v_vsync, 1);
 CVAR(v_accessibility, 0);
 
 // Gibbon - hack from curl to deal with some crap
@@ -104,7 +103,7 @@ static int I_GetTimeNormal(void) {
 	Uint64 ticks;
 	Uint64 tic_division = 1000;
 
-	ticks = SDL_GetTicks();
+	ticks = SDL_GetTicks64();
 
 	if (basetime == 0) {
 		basetime = ticks;
@@ -159,7 +158,7 @@ boolean I_StartDisplay(void) {
 		return false;
 	}
 
-	start_displaytime = SDL_GetTicks();
+	start_displaytime = SDL_GetTicks64();
 	InDisplay = true;
 
 	return true;
@@ -170,7 +169,7 @@ boolean I_StartDisplay(void) {
 //
 
 void I_EndDisplay(void) {
-	displaytime = SDL_GetTicks() - start_displaytime;
+	displaytime = SDL_GetTicks64() - start_displaytime;
 	InDisplay = false;
 }
 
@@ -182,7 +181,7 @@ fixed_t I_GetTimeFrac(void) {
 	Uint64 now;
 	fixed_t frac;
 
-	now = SDL_GetTicks();
+	now = SDL_GetTicks64();
 
 	if (rendertic_step == 0) {
 		return FRACUNIT;
@@ -208,7 +207,7 @@ fixed_t I_GetTimeFrac(void) {
 int I_GetTimeMS(void) {
 	Uint64 ticks;
 
-	ticks = SDL_GetTicks();
+	ticks = SDL_GetTicks64();
 
 	if (basetime == 0) {
 		basetime = ticks;
@@ -222,7 +221,7 @@ int I_GetTimeMS(void) {
 //
 
 void I_GetTime_SaveMS(void) {
-	rendertic_start = SDL_GetTicks();
+	rendertic_start = SDL_GetTicks64();
 	rendertic_next = (unsigned int)((rendertic_start * rendertic_msec + 1.0f) / rendertic_msec);
 	rendertic_step = rendertic_next - rendertic_start;
 }
@@ -379,7 +378,7 @@ int (*I_GetTime)(void) = I_GetTime_Error;
 
 unsigned long I_GetRandomTimeSeed(void) {
 	// not exactly random....
-	return SDL_GetTicks();
+	return SDL_GetTicks64();
 }
 
 //
@@ -494,13 +493,11 @@ void I_BeginRead(void) {
 
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
-CVAR_EXTERNAL(v_vsync);
 CVAR_EXTERNAL(v_accessibility);
 
 void I_RegisterCvars(void) {
 	CON_CvarRegister(&i_gamma);
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_interpolateframes);
-	CON_CvarRegister(&v_vsync);
 	CON_CvarRegister(&v_accessibility);
 }

@@ -42,6 +42,7 @@
 #include "r_wipe.h"
 #include "gl_draw.h"
 #include "i_w3swrapper.h"
+#include "m_misc.h"
 
 #define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
