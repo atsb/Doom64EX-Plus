@@ -58,6 +58,12 @@
 #include "sc_main.h"
 #include "p_setup.h"
 
+#ifdef __OpenBSD__
+#include <SDL.h>
+#else
+#include <SDL2/SDL.h>
+#endif
+
 short globalint = 0;
 static unsigned char tryopentype[3];
 
@@ -1671,15 +1677,32 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 // P_InitSpecialLine
 //
 
+// Constant for the minimum delay between triggering the same line (in ms)
+#define MIN_SPECIAL_LINE_DELAY 100
+
 boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
+	static unsigned int lastTriggerTime = 0;
+
 	int ok = 0;
 	int use = line->special & MLU_REPEAT;
 
-	if (line->special & MLU_MACRO) {
-		ok = P_StartMacro(thing, line);
-	}
-	else {
-		ok = P_DoSpecialLine(thing, line, side);
+	// Calculate the time difference since the last trigger
+	unsigned int currentTime = SDL_GetTicks();
+	unsigned int timeDifference = currentTime - lastTriggerTime;
+
+	// Check if enough time has passed since the last trigger
+	if (timeDifference >= MIN_SPECIAL_LINE_DELAY) {
+		if (line->special & MLU_MACRO) {
+			ok = P_StartMacro(thing, line);
+		}
+		else {
+			ok = P_DoSpecialLine(thing, line, side);
+		}
+
+		if (ok) {
+			// Update the last trigger time
+			lastTriggerTime = currentTime;
+		}
 	}
 
 	if (!ok) {

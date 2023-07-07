@@ -65,6 +65,14 @@ void I_ResizeCallback(OGL_DEFS, int width, int height)
 	glViewport(0, 0, width, height);
 }
 #endif
+/* Get the Current DPI Scaling */
+
+float GetDPIDisplayScale(void)
+{
+	float diag, hori, vert;
+	SDL_GetDisplayDPI(0, &diag, &hori, &vert);
+	return hori / 96.0f;
+}
 
 //
 // I_InitScreen
@@ -76,6 +84,7 @@ void I_InitScreen(void) {
 	int     p;
 	unsigned int  flags = 0;
 	char    title[256];
+	float scalingForDPI;
 
 	InWindow = (int)v_windowed.value;
 	InWindowBorderless = (int)v_windowborderless.value;
@@ -193,12 +202,16 @@ void I_InitScreen(void) {
 		flags |= SDL_WINDOW_BORDERLESS;
 	}
 
-	sprintf(title, "DOOM64EX+ - Version Date: %s", version_date);
+	/* DPI Scale */
+	scalingForDPI = GetDPIDisplayScale();
+	I_Printf("DPI Factor: %f\n", scalingForDPI);
+
+	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		video_width,
-		video_height,
+		video_width * scalingForDPI,
+		video_height * scalingForDPI,
 		flags);
 
 	if (window == NULL) {
