@@ -1,6 +1,6 @@
 ## DOOM64EX+
 
-[![Doom64EX-Plus! Icon](https://github.com/atsb/Doom64EX-Plus/blob/wolfy/engine/DOOM64EX+.png)](https://github.com/atsb/Doom64EX-Plus)
+[![Doom64EX-Plus! Icon](https://github.com/atsb/Doom64EX-Plus/blob/develop-wolfy/engine/DOOM64EX+.png)](https://github.com/atsb/Doom64EX-Plus)
 
 DOOM64EX+ is a continuation project of Samuel "Kaiser" Villarreal's DOOM64EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
