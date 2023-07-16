@@ -2,7 +2,7 @@
 
 Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
-Thank you to all the users of EX+ but due to a very small userbase and lack of interest due to the remaster being used by the majority of the D64 community, EX+ is ceasing deelopment effective immediately (July 16th 2023).
+Thank you to all the users of EX+ but due to a very small userbase and lack of interest due to the remaster being used by the majority of the D64 community, EX+ is ceasing development effective immediately (July 16th 2023).
 
 I have kept the current release and current 'stable' branch as bug-free and stable as possible with every single optimisation, fix etc..  that I could add to it.  For Linux and Windows users, this version will be stable and playable and will still give you exceptional usability over EX.  However, I cannot devote much time lately and the time I do spend developing outside of my job, I would like to spend on productive projects, rather then on projects that are not used much.
 
