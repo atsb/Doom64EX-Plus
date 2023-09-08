@@ -6,6 +6,8 @@ Thank you to all the users of EX+ but due to a very small userbase and lack of i
 
 I have kept the current release and current 'stable' branch as bug-free and stable as possible with every single optimisation, fix etc..  that I could add to it.  For Linux and Windows users, this version will be stable and playable and will still give you exceptional usability over EX.  However, I cannot devote much time lately and the time I do spend developing outside of my job, I would like to spend on productive projects, rather then on projects that are not used much.
 
+# Note: DOOM64 EX+ is in 'maintenance mode' which means from a functional, stability and performance perspective it is 'done'.  However, I will absolutely keep it maintained and updated with modern toolsets (including SDL3) when they become available.
+
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
