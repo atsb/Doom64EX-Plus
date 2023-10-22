@@ -46,6 +46,8 @@
 #include "info.h"
 #include "z_zone.h"
 
+CVAR(p_disable_monster_infighting, 0);
+
 typedef enum {
 	DI_EAST,
 	DI_NORTHEAST,
@@ -138,6 +140,24 @@ void P_RecursiveSound(sector_t* sec, int soundblocks) {
 }
 
 //
+// P_HitFriend()
+//
+// killough 12/98
+// This function tries to prevent shooting at friends
+
+static boolean P_HitFriend(mobj_t* actor)
+{
+	return actor->target &&
+		(P_AimLineAttack(actor,
+			R_PointToAngle2(actor->x, actor->y,
+				actor->target->x, actor->target->y),
+			P_AproxDistance(actor->x - actor->target->x,
+				actor->y - actor->target->y), 0),
+			linetarget) && linetarget != actor->target &&
+		!((linetarget->flags ^ actor->flags) & MF_FRIEND);
+}
+
+//
 // P_NoiseAlert
 // If a monster yells at a player,
 // it will alert other monsters to the player.
@@ -189,8 +209,23 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 	if (actor->flags & MF_JUSTHIT) {
 		/* the target just hit the enemy, so fight back! */
 		actor->flags &= ~MF_JUSTHIT;
-		return true;
+
+		// killough 7/18/98: no friendly fire at corpses
+		// killough 11/98: prevent too much infighting among friends
+
+		return
+			!(actor->flags & MF_FRIEND) ||
+			(actor->target->health > 0 &&
+				(!(actor->target->flags & MF_FRIEND) ||
+					(actor->target->player ?
+						p_disable_monster_infighting.value > 0 || P_Random() > 128 :
+		!(actor->target->flags & MF_JUSTHIT) && P_Random() > 128)));
 	}
+
+	// killough 7/18/98: friendly monsters don't attack other friendly
+	// monsters or players (except when attacked, and then only once)
+	if (actor->flags & actor->target->flags & MF_FRIEND || p_disable_monster_infighting.value > 0)
+		return false;
 
 	if (actor->reactiontime) {
 		return false;    // do not attack yet
@@ -222,6 +257,9 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 	if (P_Random() < dist) {
 		return false;
 	}
+
+	if (actor->flags & MF_FRIEND && P_HitFriend(actor))
+		return false;
 
 	return true;
 }

@@ -1013,6 +1013,7 @@ CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(m_extendedcast);
+CVAR_EXTERNAL(p_disable_monster_infighting);
 
 enum {
 	misc_header1,
@@ -1041,6 +1042,7 @@ enum {
 	misc_header6,
 	misc_comp_pass,
 	misc_disablesecretmessages,
+	misc_monster_infighting,
 	misc_default,
 	misc_return,
 	misc_end
@@ -1073,6 +1075,7 @@ menuitem_t MiscMenu[] = {
 	{-1,"N64 Compatibility",0 },
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
+	{2,"Infighting:",M_MiscChoice,'m'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1104,6 +1107,7 @@ char* MiscHints[misc_end] = {
 	NULL,
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
+	"monster infighting",
 	NULL,
 	//NULL
 };
@@ -1127,6 +1131,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_brutal, 0 },
 	{ &m_extendedcast, 0 },
 	{ &compat_mobjpass, 1 },
+	{ &p_disable_monster_infighting, 0 },
 	{ NULL, -1 }
 };
 
@@ -1261,6 +1266,10 @@ void M_MiscChoice(int choice) {
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
+
+	case misc_monster_infighting:
+		M_SetOptionValue(choice, 0, 1, 1, &p_disable_monster_infighting);
+		break;
 	}
 }
 
@@ -1308,6 +1317,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_extendedcast, m_extendedcast.value, autoruntype);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
+	DRAWMISCITEM(misc_monster_infighting, p_disable_monster_infighting.value, disablesecretmessages);
 
 #undef DRAWMISCITEM
 

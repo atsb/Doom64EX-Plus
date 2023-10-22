@@ -5,11 +5,6 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DOOM64EX+", "Doom64EX+.vcxproj", "{F7595469-0B54-4529-B8FD-B73F4C061494}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DOOM64EX+ Launcher", "Doom64EX+ Launcher.vcxproj", "{3699E72E-0323-43B5-8C8D-DCEA1D8494D9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F7595469-0B54-4529-B8FD-B73F4C061494} = {F7595469-0B54-4529-B8FD-B73F4C061494}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -20,10 +15,6 @@ Global
 		{F7595469-0B54-4529-B8FD-B73F4C061494}.Debug|x64.Build.0 = Debug|x64
 		{F7595469-0B54-4529-B8FD-B73F4C061494}.Release|x64.ActiveCfg = Release|x64
 		{F7595469-0B54-4529-B8FD-B73F4C061494}.Release|x64.Build.0 = Release|x64
-		{3699E72E-0323-43B5-8C8D-DCEA1D8494D9}.Debug|x64.ActiveCfg = Debug|x64
-		{3699E72E-0323-43B5-8C8D-DCEA1D8494D9}.Debug|x64.Build.0 = Debug|x64
-		{3699E72E-0323-43B5-8C8D-DCEA1D8494D9}.Release|x64.ActiveCfg = Release|x64
-		{3699E72E-0323-43B5-8C8D-DCEA1D8494D9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
