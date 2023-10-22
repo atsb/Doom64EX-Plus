@@ -67,8 +67,8 @@ FILETYPE VFT_APP
 		BLOCK "040904E4"
 		{
 			VALUE "CompanyName", ""
-				VALUE "FileVersion", "3.6.5.8"
-				VALUE "ProductVersion", "3.6.5.8"
+				VALUE "FileVersion", "3.6.5.9"
+				VALUE "ProductVersion", "3.6.5.9"
 		}
 	}
 }
