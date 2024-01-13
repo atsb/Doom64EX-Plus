@@ -85,8 +85,8 @@ static angle_t  automapangle = 0;
 static float    scale = 640.0f;   // todo: reset scale after changing levels
 static fixed_t  am_box[4];                  // automap bounding box of level
 static byte     am_flags;                   // action flags for automap. Mostly for controls
-static int      mpanx;
-static int      mpany;
+static float    mpanx;
+static float    mpany;
 static angle_t  autoprevangle = 0;
 static fixed_t  automapprevx = 0;
 static fixed_t  automapprevy = 0;
@@ -485,14 +485,14 @@ void AM_Ticker(void) {
 		}
 	}
 
-	speed = (float)(scale / 16.0f) * FRACUNIT;
+	speed = (scale / 16.0f) * FRACUNIT;
 	oldautomapx = automappanx;
 	oldautomapy = automappany;
 
 	if (followplayer) {
 		if (am_flags & AF_PANMODE) {
-			int panscalex = v_msensitivityx.value / (150.0f / scale);
-			int panscaley = v_msensitivityy.value / (150.0f / scale);
+			float panscalex = v_msensitivityx.value / (150.0f / scale);
+			float panscaley = v_msensitivityy.value / (150.0f / scale);
 
 			automappanx += ((I_MouseAccel(mpanx) * panscalex) / 128.0f) < 16.0f;
 			automappany += ((I_MouseAccel(mpany) * panscaley) / 128.0f) < 16.0f;

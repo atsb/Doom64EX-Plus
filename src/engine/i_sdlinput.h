@@ -40,7 +40,7 @@ extern int UseJoystick;
 extern float mouse_x;
 extern float mouse_y;
 
-int I_MouseAccel(int val);
+float I_MouseAccel(float val);
 void I_MouseAccelChange(void);
 
 void ISDL_RegisterKeyCvars(void);

@@ -277,7 +277,7 @@ void I_MouseAccelChange(void) {
 // I_MouseAccel
 //
 
-int I_MouseAccel(int val) {
+float I_MouseAccel(float val) {
 	if (!v_macceleration.value) {
 		return val;
 	}
@@ -286,7 +286,7 @@ int I_MouseAccel(int val) {
 		return -I_MouseAccel(-val);
 	}
 
-	return (int)(pow((double)val, (double)mouse_accelfactor));
+	return (float)(pow((double)val, (double)mouse_accelfactor));
 }
 
 //

@@ -3643,8 +3643,8 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 	menuthermobar_t* bar;
 	float startx;
 	float scrny;
-	int x;
-	int y;
+	float x;
+	float y;
 	int i;
 	float mx;
 	float my;
@@ -3660,7 +3660,7 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 	}
 
 	// mouse buttons must be held and moving
-	if (!(ev->data1 & 1) || (ev->data2 != 0.0 || ev->data3 != 0.0)) {
+	if (!(ev->data1 & 1)) {
 		return;
 	}
 
@@ -3673,16 +3673,16 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 		((float)SCREENHEIGHT * video_ratio)) * menu->scale;
 	scaley = ((float)video_height /
 		(float)SCREENHEIGHT) * menu->scale;
-	startx = (float)x * scalex;
+	startx = x * scalex;
 	width = startx + (100.0f * scalex);
 
 	// check if cursor is within range
 	for (i = 0; bar[i].item != -1; i++) {
 		lineheight = (float)(LINEHEIGHT * bar[i].item);
-		scrny = ((float)y + lineheight + 10) * scaley;
+		scrny = (y + lineheight + 10) * scaley;
 
 		if (my < scrny) {
-			scrny = ((float)y + lineheight + 2) * scaley;
+			scrny = (y + lineheight + 2) * scaley;
 			if (my >= scrny) {
 				// dragged all the way to the left?
 				if (mx < startx) {

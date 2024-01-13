@@ -882,12 +882,12 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 // G_DoCmdMouseMove
 //
 
-void G_DoCmdMouseMove(int x, int y) {
+void G_DoCmdMouseMove(float x, float y) {
 	playercontrols_t* pc;
 
 	pc = &Controls;
-	pc->mousex += ((I_MouseAccel(x) * (int)v_msensitivityx.value) / 128);
-	pc->mousey += ((I_MouseAccel(y) * (int)v_msensitivityy.value) / 128);
+	pc->mousex += ((I_MouseAccel(x) * (float)v_msensitivityx.value) / 128);
+	pc->mousey += ((I_MouseAccel(y) * (float)v_msensitivityy.value) / 128);
 }
 
 //
