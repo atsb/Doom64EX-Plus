@@ -34,8 +34,8 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #else
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 #endif
 
 #include "m_misc.h"
@@ -65,8 +65,8 @@ int video_height;
 float video_ratio;
 boolean window_focused;
 
-int mouse_x = 0;
-int mouse_y = 0;
+float mouse_x = 0.0f;
+float mouse_y = 0.0f;
 
 //
 // I_InitScreen
@@ -129,7 +129,7 @@ void I_InitScreen(void) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_ALLOW_HIGHDPI;
+	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
 	if (!InWindow) {
 		flags |= SDL_WINDOW_FULLSCREEN;
@@ -141,8 +141,6 @@ void I_InitScreen(void) {
 
 	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
 		video_width,
 		video_height,
 		flags);
@@ -156,6 +154,7 @@ void I_InitScreen(void) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
+	SDL_HideCursor();
 }
 
 //
@@ -183,16 +182,11 @@ void I_ShutdownVideo(void) {
 void I_InitVideo(void) {
 	unsigned int f = SDL_INIT_VIDEO;
 
-#ifdef _DEBUG
-	f |= SDL_INIT_NOPARACHUTE;
-#endif
-
 	if (SDL_Init(f) < 0) {
 		I_Error("ERROR - Failed to initialize SDL");
 		return;
 	}
 
-	SDL_ShowCursor(SDL_DISABLE);
 	I_StartTic();
 	I_InitScreen();
 }

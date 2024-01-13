@@ -35,8 +35,8 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #else
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 #endif
 
 #include "i_sdlinput.h"

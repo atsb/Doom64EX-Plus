@@ -30,15 +30,15 @@
 #ifdef __OpenBSD__
 #include <SDL.h>
 #else
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #endif
 #include "doomtype.h"
 ////////////Input//////////////
 
 extern int UseMouse[2];
 extern int UseJoystick;
-extern int mouse_x;
-extern int mouse_y;
+extern float mouse_x;
+extern float mouse_y;
 
 int I_MouseAccel(int val);
 void I_MouseAccelChange(void);

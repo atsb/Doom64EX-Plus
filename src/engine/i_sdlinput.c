@@ -236,7 +236,7 @@ static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 //
 
 static void I_ReadMouse(void) {
-	int x, y;
+	float x, y;
 	Uint8 btn;
 	event_t ev;
 	static Uint8 lastmbtn = 0;
@@ -247,8 +247,8 @@ static void I_ReadMouse(void) {
 	if (x != 0 || y != 0 || btn || (lastmbtn != btn)) {
 		ev.type = ev_mouse;
 		ev.data1 = I_SDLtoDoomMouseState(btn);
-		ev.data2 = x << 5;
-		ev.data3 = (-y) << 5;
+		ev.data2 = x * 32.0;
+		ev.data3 = -y * 32.0;
 		ev.data4 = 0;
 		D_PostEvent(&ev);
 	}
@@ -302,13 +302,8 @@ boolean I_UpdateGrab(void) {
 		&& !demoplayback;
 
 	if (grab && !currently_grabbed) {
-		SDL_ShowCursor(0);
 		SDL_SetRelativeMouseMode(1);
 		SDL_SetWindowGrab(window, 1);
-	}
-
-	if (!InWindow || !InWindowBorderless && m_menumouse.value <= 0) {
-		return true;
 	}
 
 	if (!grab && currently_grabbed) {
@@ -331,7 +326,7 @@ void I_GetEvent(SDL_Event* Event) {
 	unsigned int tic = gametic;
 
 	switch (Event->type) {
-	case SDL_KEYDOWN:
+	case SDL_EVENT_KEY_DOWN:
 		if (Event->key.repeat)
 			break;
 		event.type = ev_keydown;
@@ -339,18 +334,18 @@ void I_GetEvent(SDL_Event* Event) {
 		D_PostEvent(&event);
 		break;
 
-	case SDL_KEYUP:
+	case SDL_EVENT_KEY_UP:
 		event.type = ev_keyup;
 		event.data1 = I_TranslateKey(Event->key.keysym.sym);
 		D_PostEvent(&event);
 		break;
 
-	case SDL_MOUSEBUTTONDOWN:
-	case SDL_MOUSEBUTTONUP:
+	case SDL_EVENT_MOUSE_BUTTON_DOWN:
+	case SDL_EVENT_MOUSE_BUTTON_UP:
 		if (!window_focused)
 			break;
 
-		event.type = (Event->type == SDL_MOUSEBUTTONUP) ? ev_mouseup : ev_mousedown;
+		event.type = (Event->type == SDL_EVENT_MOUSE_BUTTON_UP) ? ev_mouseup : ev_mousedown;
 		event.data1 =
 			I_SDLtoDoomMouseState(SDL_GetMouseState(NULL, NULL));
 		event.data2 = event.data3 = 0;
@@ -358,7 +353,7 @@ void I_GetEvent(SDL_Event* Event) {
 		D_PostEvent(&event);
 		break;
 
-	case SDL_MOUSEWHEEL:
+	case SDL_EVENT_MOUSE_WHEEL:
 		if (Event->wheel.y > 0) {
 			event.type = ev_keydown;
 			event.data1 = KEY_MWHEELUP;
@@ -376,30 +371,23 @@ void I_GetEvent(SDL_Event* Event) {
 		D_PostEvent(&event);
 		break;
 
-	case SDL_WINDOWEVENT:
-		switch (Event->window.event) {
-		case SDL_WINDOWEVENT_FOCUS_GAINED:
-			window_focused = true;
-			break;
-
-		case SDL_WINDOWEVENT_FOCUS_LOST:
-			window_focused = false;
-			break;
-
-		case SDL_WINDOWEVENT_ENTER:
-			window_mouse = true;
-			break;
-
-		case SDL_WINDOWEVENT_LEAVE:
-			window_mouse = false;
-			break;
-
-		default:
-			break;
-		}
+	case SDL_EVENT_WINDOW_FOCUS_GAINED:
+		window_focused = true;
 		break;
 
-	case SDL_QUIT:
+	case SDL_EVENT_WINDOW_FOCUS_LOST:
+		window_focused = false;
+		break;
+
+	case SDL_EVENT_WINDOW_MOUSE_ENTER:
+		window_mouse = true;
+		break;
+
+	case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+		window_mouse = false;
+		break;
+
+	case SDL_EVENT_QUIT:
 		I_Quit();
 		break;
 
@@ -430,8 +418,8 @@ int I_ShutdownWait(void) {
 	static SDL_Event event;
 
 	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT ||
-			(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+		if (event.type == SDL_EVENT_QUIT ||
+			(event.type == SDL_EVENT_KEY_DOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
 			return 1;
 		}
@@ -475,7 +463,6 @@ void I_FinishUpdate(void) {
 
 void I_InitInputs(void) {
 	SDL_PumpEvents();
-	SDL_ShowCursor(m_menumouse.value < 1);
 	I_MouseAccelChange();
 
 #if defined(_WIN32) && defined(USE_XINPUT)

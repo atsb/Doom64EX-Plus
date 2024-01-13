@@ -327,12 +327,12 @@ boolean AM_Responder(event_t* ev) {
 		}
 		else {
 			if (ev->type == ev_mousedown && ev->data1) {
-				if (ev->data1 & 1) {
+				if (fmod(ev->data1, 2.0) != 0.0) {
 					am_flags &= ~AF_ZOOMOUT;
 					am_flags |= AF_ZOOMIN;
 					rc = true;
 				}
-				else if (ev->data1 & 4) {
+				else if (fmod(floor(ev->data1 / 4.0), 2.0) != 0.0) {
 					am_flags &= ~AF_ZOOMIN;
 					am_flags |= AF_ZOOMOUT;
 					rc = true;
@@ -485,17 +485,17 @@ void AM_Ticker(void) {
 		}
 	}
 
-	speed = (int)(scale / 16) * FRACUNIT;
+	speed = (float)(scale / 16.0f) * FRACUNIT;
 	oldautomapx = automappanx;
 	oldautomapy = automappany;
 
 	if (followplayer) {
 		if (am_flags & AF_PANMODE) {
-			int panscalex = (int)(v_msensitivityx.value / (1500.0f / scale));
-			int panscaley = (int)(v_msensitivityy.value / (1500.0f / scale));
+			int panscalex = v_msensitivityx.value / (150.0f / scale);
+			int panscaley = v_msensitivityy.value / (150.0f / scale);
 
-			automappanx += ((I_MouseAccel(mpanx) * panscalex) / 128) << 16;
-			automappany += ((I_MouseAccel(mpany) * panscaley) / 128) << 16;
+			automappanx += ((I_MouseAccel(mpanx) * panscalex) / 128.0f) < 16.0f;
+			automappany += ((I_MouseAccel(mpany) * panscaley) / 128.0f) < 16.0f;
 			mpanx = mpany = 0;
 		}
 		else {
