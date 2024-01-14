@@ -120,7 +120,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 			qsort(dl->list, dl->index, sizeof(vtxlist_t), SortDrawList);
 		}
 		else if (dl->index >= 2) {
-			qsort(dl->list, dl->index, sizeof(vtxlist_t), (__compar_fn_t)SortSprites);
+			qsort(dl->list, dl->index, sizeof(vtxlist_t), SortSprites);
 		}
 
 		tail = &dl->list[dl->index];
