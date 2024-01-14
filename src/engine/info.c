@@ -61,16 +61,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"S008", "S009", "S010", "S011", "S012", "S013", "S014", "S017",
 	"S018", "S019", "S020", "S021", "S022", "S023", "S024", "S028",
 	"S029", "S031", "S032", "S027", "S036", "S037", "S038", "S040",
-	"S041", "S026", "S002", "S030", 
-	"CPOS",
-	"SKEL",
-	"ARCR",
-	"POW1",
-	"SPID",
-	"VFIR",
-	"VILE",
-	"TEST",
-	NULL
+	"S041", "S026", "S002", "S030", "CPOS", "SKEL", "ARCR", "POW1",
+	"SPID", "VFIR", "VILE", "TEST", "BLUG", "BLUP", NULL
 };
 
 // Doesn't work with g++, needs actionf_p1
@@ -1364,7 +1356,17 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_HEAD_RAISE2*/{ SPR_TEST, 8, 8, {A_Scream}, S_TEST_RAISE1 },
 	/*S_HEAD_RAISE1*/{ SPR_TEST, 7, 8, {NULL}, S_TEST_RUN1 },
 	
-	
+	// GREEN BLOOD
+	/*S_BLOOD96*/{ SPR_BLUG, 0, 6, {NULL}, S_BLOOD97 },
+	/*S_BLOOD97*/{ SPR_BLUG, 1, 6, {NULL}, S_BLOOD98 },
+	/*S_BLOOD98*/{ SPR_BLUG, 2, 6, {NULL}, S_BLOOD99 },
+	/*S_BLOOD99*/{ SPR_BLUG, 3, 6, {NULL}, S_NULL },
+
+	// PURPLE BLOOD
+	/*S_BLOOD96*/{ SPR_BLUP, 0, 6, {NULL}, S_BLOOD107 },
+	/*S_BLOOD97*/{ SPR_BLUP, 1, 6, {NULL}, S_BLOOD108 },
+	/*S_BLOOD98*/{ SPR_BLUP, 2, 6, {NULL}, S_BLOOD109 },
+	/*S_BLOOD99*/{ SPR_BLUP, 3, 6, {NULL}, S_NULL },
 	
 };
 
@@ -6323,5 +6325,59 @@ MF_SOLID,// flags
 		0,        //palette
 		255,        //alpha
 		S_TEST_RAISE1        //raisestate
+	},
+	{
+		/*MT_BLOOD_GREEN*/
+		-1,        //doomednum
+		S_BLOOD96,        //spawnstate
+		1000,        //spawnhealth
+		S_NULL,        //seestate
+		sfx_None/*sfx_000*/,        //seesound
+		8,        //reactiontime
+		sfx_None/*sfx_000*/,        //attacksound
+		S_NULL,        //painstate
+		0,        //painchance
+		sfx_None/*sfx_000*/,        //painsound
+		S_NULL,        //meleestate
+		S_NULL,        //missilestate
+		S_NULL,        //deathstate
+		S_NULL,        //xdeathstate
+		sfx_None/*sfx_000*/,        //deathsound
+		0,        //speed
+		20 * FRACUNIT,        //radius
+		16 * FRACUNIT,        //height
+		100,        //mass
+		0,        //damage
+		sfx_None/*sfx_000*/,        //activesound
+		MF_NOBLOCKMAP | MF_GRAVITY,        //flags
+		0,        //palette
+		255        //alpha
+	},
+	{
+		/*MT_BLOOD_PURPLE*/
+		-1,        //doomednum
+		S_BLOOD106,        //spawnstate
+		1000,        //spawnhealth
+		S_NULL,        //seestate
+		sfx_None/*sfx_000*/,        //seesound
+		8,        //reactiontime
+		sfx_None/*sfx_000*/,        //attacksound
+		S_NULL,        //painstate
+		0,        //painchance
+		sfx_None/*sfx_000*/,        //painsound
+		S_NULL,        //meleestate
+		S_NULL,        //missilestate
+		S_NULL,        //deathstate
+		S_NULL,        //xdeathstate
+		sfx_None/*sfx_000*/,        //deathsound
+		0,        //speed
+		20 * FRACUNIT,        //radius
+		16 * FRACUNIT,        //height
+		100,        //mass
+		0,        //damage
+		sfx_None/*sfx_000*/,        //activesound
+		MF_NOBLOCKMAP | MF_GRAVITY | MF_SHADOW,       //flags
+		0,        //palette
+		255        //alpha
 },
 };

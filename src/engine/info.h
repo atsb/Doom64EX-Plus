@@ -203,6 +203,8 @@ typedef enum {
 	SPR_VFIR,
 	SPR_VILE,
 	SPR_TEST,
+	SPR_BLUG,
+	SPR_BLUP,
 	NUMSPRITES
 } spritenum_t;
 
@@ -1328,6 +1330,14 @@ typedef enum {
 	S_TEST_RAISE4,
 	S_TEST_RAISE5,
 	S_TEST_RAISE6,
+	S_BLOOD96,
+	S_BLOOD97,
+	S_BLOOD98,
+	S_BLOOD99,
+	S_BLOOD106,
+	S_BLOOD107,
+	S_BLOOD108,
+	S_BLOOD109,
 	NUMSTATES
 } statenum_t;
 
@@ -1521,6 +1531,8 @@ typedef enum {
 	MT_FIRE,
 	MT_VILE,
 	MT_TESTA0,
+	MT_BLOOD_GREEN,
+	MT_BLOOD_PURPLE,
 	NUMMOBJTYPES
 } mobjtype_t;
 
