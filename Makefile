@@ -1,7 +1,9 @@
 CC=gcc
 
-CFLAGS += $(shell pkg-config --cflags sdl3)
-LDFLAGS := -lm $(foreach lib,sdl3 libpng gl glu fluidsynth,$(shell pkg-config --libs $(lib)))
+libs := sdl3 libpng gl glu fluidsynth
+
+CFLAGS += $(foreach lib,$(libs),$(shell pkg-config --cflags $(lib)))
+LDFLAGS := -lm $(foreach lib,$(libs),$(shell pkg-config --libs $(lib)))
 
 OBJDIR=src/engine
 OUTPUT=DOOM64EX-Plus
