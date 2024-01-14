@@ -331,7 +331,7 @@ void SC_Init(void) {
 	sc_parser.rewind = SC_Rewind;
 	sc_parser.getstring = SC_GetString;
 	sc_parser.getint = SC_GetInteger;
-	sc_parser.setdata = SC_SetData;
+	sc_parser.setdata = (int (*)(void*, void*))SC_SetData;
 	sc_parser.readtokens = SC_ReadTokens;
 	sc_parser.error = SC_Error;
 }

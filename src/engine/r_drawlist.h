@@ -45,9 +45,11 @@ typedef enum {
 	NUMDRAWLISTS
 } drawlisttag_e;
 
+typedef boolean (*vtxlist_callback_t) (void*, vtx_t*);
+
 typedef struct {
 	void* data;
-	boolean(*callback)(void*, vtx_t*);
+	vtxlist_callback_t callback;
 	dtexture    texid;
 	int         flags;
 	int         params;

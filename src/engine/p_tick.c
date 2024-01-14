@@ -106,7 +106,7 @@ static void P_UnlinkThinker(thinker_t* thinker) {
 //
 
 void P_RemoveThinker(thinker_t* thinker) {
-	thinker->function.acp1 = P_UnlinkThinker;
+	thinker->function.acp1 = (actionf_p1)P_UnlinkThinker;
 	P_MacroDetachThinker(thinker);
 }
 
@@ -385,10 +385,10 @@ void P_Stop(void) {
 // P_Drawer
 //
 
-int P_Drawer(void) {
+void P_Drawer(void) {
 	// [kex] don't draw on first tic
 	if (!leveltime) {
-		return 0;
+		return ;
 	}
 
 	GL_ClearView(0xFF000000);
@@ -400,7 +400,6 @@ int P_Drawer(void) {
 	AM_Drawer();
 	ST_Drawer();
 
-	return 0;
 }
 
 //
