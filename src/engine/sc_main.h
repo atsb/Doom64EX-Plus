@@ -24,6 +24,12 @@
 #define __SC_MAIN__
 
 typedef struct {
+	const char* token;
+	int64_t   ptroffset;
+	char    type;
+} scdatatable_t;
+
+typedef struct {
 	char    token[512];
 	byte* buffer;
 	char* pointer_start;
@@ -40,18 +46,12 @@ typedef struct {
 	void (*rewind)(void);
 	char* (*getstring)(void);
 	int (*getint)(void);
-	int (*setdata)(void*, void*);
+	int (*setdata)(byte*, const scdatatable_t*);
 	int (*readtokens)(void);
 	void (*error)(const char*);
 } scparser_t;
 
 extern scparser_t sc_parser;
-
-typedef struct {
-	const char* token;
-	int64_t   ptroffset;
-	char    type;
-} scdatatable_t;
 
 void SC_Init(void);
 

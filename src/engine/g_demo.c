@@ -345,7 +345,7 @@ int G_PlayDemoPtr(int skill, int map) // 800049D0
 	G_InitNew(skill, map);
 	G_DoLoadLevel();
 	demoplayback = true;
-	exit = D_MiniLoop(P_Start, P_Stop, P_Ticker, P_Drawer);
+	exit = D_MiniLoop(P_Start, P_Stop, P_Drawer, P_Ticker);
 	demoplayback = false;
 
 	return exit;

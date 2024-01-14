@@ -497,7 +497,7 @@ void P_CombineLightSpecials(sector_t* sector) {
 
 	switch (sector->special) {
 	case 1:
-		func = T_LightFlash;
+		func = (actionf_p1)T_LightFlash;
 		break;
 	case 2:
 	case 3:
@@ -507,15 +507,15 @@ void P_CombineLightSpecials(sector_t* sector) {
 	case 205:
 	case 206:
 	case 208:
-		func = T_StrobeFlash;
+		func = (actionf_p1)T_StrobeFlash;
 		break;
 	case 8:
 	case 9:
 	case 11:
-		func = T_Glow;
+		func = (actionf_p1)T_Glow;
 		break;
 	case 17:
-		func = T_FireFlicker;
+		func = (actionf_p1)T_FireFlicker;
 		break;
 	default:
 		return;
