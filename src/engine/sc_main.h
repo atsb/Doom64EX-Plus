@@ -46,7 +46,7 @@ typedef struct {
 	void (*rewind)(void);
 	char* (*getstring)(void);
 	int (*getint)(void);
-	int (*setdata)(byte*, const scdatatable_t*);
+	int (*setdata)(void*, const scdatatable_t*);
 	int (*readtokens)(void);
 	void (*error)(const char*);
 } scparser_t;
