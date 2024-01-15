@@ -419,7 +419,7 @@ void ST_Ticker(void) {
 		st_msgtic++;
 
 		if (st_msgtic >= ST_MSGFADESTART) {
-			st_msgalpha = MAX((st_msgalpha -= ST_MSGFADETIME), 0);
+			st_msgalpha = MAX((st_msgalpha - ST_MSGFADETIME), 0);
 		}
 
 		if (st_msgtic >= ST_MSGTIMEOUT) {
