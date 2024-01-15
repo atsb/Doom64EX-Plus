@@ -1150,7 +1150,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 		&& source && (source->flags & MF_SHOOTABLE)
 		&& source->type != MT_VILE
 		&& !(target->flags & MF_NOINFIGHTING
-		|| (source->flags ^ target->flags) & p_disable_monster_infighting.value > 0))
+		|| ((source->flags ^ target->flags) & p_disable_monster_infighting.value) > 0))
 	{
 		// if not intent on another player,
 		// chase after this one
