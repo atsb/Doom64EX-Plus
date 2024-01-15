@@ -59,6 +59,7 @@ CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
 
+float display_scale = 1.0f;
 SDL_Surface* screen;
 int video_width;
 int video_height;
@@ -78,6 +79,7 @@ void I_InitScreen(void) {
 	int     p;
 	unsigned int  flags = 0;
 	char    title[256];
+	SDL_DisplayID displayid;
 
 	InWindow = (int)v_windowed.value;
 	InWindowBorderless = (int)v_windowborderless.value;
@@ -154,6 +156,19 @@ void I_InitScreen(void) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
+	
+	displayid = SDL_GetDisplayForWindow(window);
+	if(displayid) {
+		float f = SDL_GetDisplayContentScale(displayid);
+		if(f != 0) {
+			display_scale = f;	   
+		} else {
+			I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
+		}
+	} else {
+		I_Printf("SDL_GetDisplays failed (%s)", SDL_GetError());
+	}
+
 	SDL_HideCursor();
 }
 
