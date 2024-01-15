@@ -166,7 +166,7 @@ void I_InitScreen(void) {
 			I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
 		}
 	} else {
-		I_Printf("SDL_GetDisplays failed (%s)", SDL_GetError());
+		I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
 	}
 
 	SDL_HideCursor();
