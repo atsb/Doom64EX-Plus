@@ -67,11 +67,14 @@ void Draw_GfxImageTitle(int x, int y, const char* name, rcolor color, boolean al
 
 	float imgWidth = gfxwidth[gfxIdx];
 	float imgHeight = gfxheight[gfxIdx];
-	float targetSize = fmin(195.0f, fmin(imgWidth, imgHeight));
+	float targetSize = fmin(380.0f, fmin(imgWidth, imgHeight));
 	float scale = targetSize / fmax(imgWidth, imgHeight);
 
+	float offset_width = 90.0f;
+	float offset_height = 30.0f;
+
 	GL_SetState(GLSTATE_BLEND, 1);
-	GL_SetupAndDraw2DQuad((float)x, (float)y,
+	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
 		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
 
 	GL_SetState(GLSTATE_BLEND, 0);
