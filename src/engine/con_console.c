@@ -125,7 +125,7 @@ void CON_AddLine(char* line, int len) {
 	int         i;
 	boolean    recursed = false;
 
-	if (!console_linebuffer) {
+	if (!console_initialized) {
 		//not initialised yet
 		return;
 	}
@@ -177,7 +177,7 @@ void CON_AddText(char* text) {
 	char* src;
 	char    c;
 
-	if (!console_linebuffer) {
+	if (!console_initialized) {
 		return;
 	}
 
@@ -475,7 +475,7 @@ void CON_Draw(void) {
 	float   x = 0;
 	float   inputlen;
 
-	if (!console_linebuffer) {
+	if (!console_initialized) {
 		return;
 	}
 
