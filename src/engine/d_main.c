@@ -452,7 +452,7 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 
 static void Title_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImage(58, 50, "TITLE", WHITEALPHA(0x64), true);
+	Draw_GfxImageTitle(58, 50, "TITLE", WHITEALPHA(0x64), true);
 }
 
 //

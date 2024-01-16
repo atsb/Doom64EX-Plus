@@ -59,6 +59,24 @@ void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) 
 	GL_SetState(GLSTATE_BLEND, 0);
 }
 
+void Draw_GfxImageTitle(int x, int y, const char* name, rcolor color, boolean alpha) {
+	int gfxIdx = GL_BindGfxTexture(name, alpha);
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+
+	float imgWidth = gfxwidth[gfxIdx];
+	float imgHeight = gfxheight[gfxIdx];
+	float targetSize = fmin(195.0f, fmin(imgWidth, imgHeight));
+	float scale = targetSize / fmax(imgWidth, imgHeight);
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetupAndDraw2DQuad((float)x, (float)y,
+		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
+
+	GL_SetState(GLSTATE_BLEND, 0);
+}
+
 //
 // Draw_Sprite2D
 //

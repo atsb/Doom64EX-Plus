@@ -1647,7 +1647,7 @@ static int nofit;
 // PIT_ChangeSector
 //
 boolean PIT_ChangeSector(mobj_t* thing) {
-    mobj_t* mo;
+    mobj_t* mo = NULL;
 
     if (P_ThingHeightClip(thing)) {
         // keep checking

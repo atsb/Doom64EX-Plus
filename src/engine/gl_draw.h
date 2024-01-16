@@ -27,6 +27,8 @@
 
 void Draw_GfxImage(int x, int y, const char* name,
 	rcolor color, boolean alpha);
+void Draw_GfxImageTitle(int x, int y, const char* name,
+	rcolor color, boolean alpha);
 void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 	float scale, int pal, rcolor c);
 
