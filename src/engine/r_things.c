@@ -43,7 +43,7 @@
 #include <stdlib.h>
 
 
-#define MAX_SPRITES    1024
+#define MAX_SPRITES    999999
 
 spritedef_t* spriteinfo;
 intptr_t        numsprites;
