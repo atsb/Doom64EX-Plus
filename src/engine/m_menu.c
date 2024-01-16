@@ -364,7 +364,6 @@ enum {
 	quitno,
 	quitend
 };
-quitprompt_e;
 
 menuitem_t QuitGameMenu[] = {
 	{1,"Yes",M_QuitGame,'y'},
@@ -415,7 +414,6 @@ enum {
 	quit2no,
 	quit2end
 };
-quit2prompt_e;
 
 menuitem_t QuitGameMenu2[] = {
 	{1,"Yes",M_QuitGame2,'y'},
@@ -522,7 +520,6 @@ enum {
 	RMainNo,
 	RMain_end
 };
-rlprompt_e;
 
 menuitem_t RestartConfirmMain[] = {
 	{1,"Yes",M_RestartLevel,'y'},
@@ -575,7 +572,6 @@ enum {
 	SNN_Ok = 0,
 	SNN_End
 };
-startnewnotify_e;
 
 menuitem_t StartNewNotify[] = {
 	{1,"Ok",M_NewGameNotifyResponse,'o'}
@@ -3035,7 +3031,6 @@ enum {
 	NLN_Ok = 0,
 	NLN_End
 };
-netloadnotify_e;
 
 menuitem_t NetLoadNotify[] = {
 	{1,"Ok",M_ReturnToOptions,'o'}
@@ -3076,7 +3071,6 @@ enum {
 	SDN_Ok = 0,
 	SDN_End
 };
-savedeadnotify_e;
 
 menuitem_t SaveDeadNotify[] = {
 	{1,"Ok",M_ReturnToOptions,'o'}

@@ -78,7 +78,7 @@ static int          console_nextcmd;
 
 char        console_inputbuffer[MAX_CONSOLE_INPUT_LEN];
 int         console_inputlength;
-boolean    console_initialized = false;
+boolean     console_initialized = false;
 
 //
 // CON_Init
@@ -113,6 +113,7 @@ void CON_Init(void) {
 	console_cmdhead = 0;
 	console_nextcmd = 0;
 	console_initialized = true;
+
 }
 
 //
@@ -462,7 +463,10 @@ boolean CON_Responder(event_t* ev) {
 // CON_Draw
 //
 
-#define CONFONT_SCALE   ((float)(video_width * SCREENHEIGHT) / (float)(video_width * video_height))
+extern float display_scale; // set in i_video.c
+
+#define CONFONT_SCALE   ((display_scale * SCREENHEIGHT) / video_height)
+
 #define CONFONT_YPAD    (16 * CONFONT_SCALE)
 
 void CON_Draw(void) {

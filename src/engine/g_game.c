@@ -68,8 +68,8 @@
 
 extern void M_QuickSave(void);
 extern void M_QuickLoad(void);
-extern void M_SaveGame(void);
-extern void M_LoadGame(void);
+extern void M_SaveGame(int choice);
+extern void M_LoadGame(int choice);
 extern void M_ChangeGammaLevel(int);
 
 void        G_PlayerReborn(int player);
@@ -246,7 +246,7 @@ static CMD(QuickLoad) {
 
 static CMD(Save) {
 	M_StartControlPanel(true);
-	M_SaveGame();
+	M_SaveGame(0); // unused param
 }
 
 //
@@ -255,7 +255,7 @@ static CMD(Save) {
 
 static CMD(Load) {
 	M_StartControlPanel(true);
-	M_LoadGame();
+	M_LoadGame(0); // unused param
 }
 
 //

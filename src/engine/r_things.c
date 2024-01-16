@@ -508,10 +508,10 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid) {
 	list->data = (visspritelist_t*)vis;
 
 	if (vis->spr->flags & MF_RENDERLASER) {
-		list->callback = R_GenerateLaserPlane;
+		list->callback = (vtxlist_callback_t)R_GenerateLaserPlane;
 	}
 	else {
-		list->callback = R_GenerateSpritePlane;
+		list->callback = (vtxlist_callback_t)R_GenerateSpritePlane;
 	}
 
 	mobj = vis->spr;
