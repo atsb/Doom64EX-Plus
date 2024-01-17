@@ -549,7 +549,7 @@ static void Legal_Start(void) {
 
 static void Legal_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImage(legal_x, legal_y, legalpic, WHITE, true);
+	Draw_GfxImageLegal(legal_x, legal_y, legalpic, WHITE, true);
 }
 
 //
@@ -590,7 +590,7 @@ static void Credits_Drawer(void) {
 		break;
 
 	case 2:
-		Draw_GfxImage(64, 30, "EVIL",
+		Draw_GfxImageInter(64, 30, "EVIL",
 			D_RGBA(255, 255, 255, (byte)screenalpha), true);
 		break;
 	}
