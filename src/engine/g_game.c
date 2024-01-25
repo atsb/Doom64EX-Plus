@@ -108,7 +108,6 @@ static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
 // for intermission
-int             totalkills, totalitems, totalsecret;
 boolean        precache = true;     // if true, load all graphics at start
 
 byte            consistency[MAXPLAYERS][BACKUPTICS];
@@ -139,6 +138,13 @@ int         bodyqueslot;
 
 byte forcejump = 0;
 byte forcefreelook = 0;
+
+float killcount;
+float itemcount;
+float secretcount;
+float totalkills;
+float totalitems;
+float totalsecret;
 
 NETCVAR(sv_nomonsters, 0);
 NETCVAR(sv_fastmonsters, 0);
@@ -1192,15 +1198,12 @@ void G_PlayerFinishLevel(int player) {
 
 void G_PlayerReborn(int player) {
 	player_t* p;
-	int         i;
-	int         frags[MAXPLAYERS];
-	int         killcount;
-	int         itemcount;
-	int         secretcount;
+	int        i;
+	int        frags[MAXPLAYERS];
 	boolean    cards[NUMCARDS];
 	boolean    wpns[NUMWEAPONS];
-	int         pammo[NUMAMMO];
-	int         pmaxammo[NUMAMMO];
+	int        pammo[NUMAMMO];
+	int        pmaxammo[NUMAMMO];
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
