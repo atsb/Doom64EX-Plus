@@ -185,21 +185,8 @@ byte* I_PNGReadData(int lump, int palette, int nopack, int alpha,
 
 		png_get_tRNS(png_ptr, info_ptr, &trans_alpha, &num_trans, NULL);
 
-		if (num_trans > 0) {
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-			glEnable(GL_DITHER);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-			glEnable(GL_FRAMEBUFFER_SRGB);
-
-			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		if (num_trans && !alpha) {
+			I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
 		}
 	}
 
