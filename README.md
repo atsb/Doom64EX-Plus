@@ -20,6 +20,8 @@ I have kept the current release and current 'stable' branch as bug-free and stab
 * Many bugfixes
 * KEX - This is pretty much removed.  The only remnants are some comments with [kex] and the rendering stuff that is used in later versions. I wanted to keep Doom 64 EX+ very close in format to other source ports for familiarity purposes and for ease of porting code from Erick's DOOM64-RE project.
 
+* NOTE for NVIDIA users, disable vsync from the control panel to fix stuttering.  No idea why it only happens on NVidia cards, though I can't say I'm surprised.
+
 There are a few bugs still present, which I am slowly fixing.
 
 This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/ but if any contributors wish to help, then GitHub is a better place for it.
