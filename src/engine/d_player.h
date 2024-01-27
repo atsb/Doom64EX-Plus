@@ -142,9 +142,9 @@ typedef struct player_s {
     int             refire;
 
     // For intermission stats.
-    int             killcount;
-    int             itemcount;
-    int             secretcount;
+    float           killcount;
+    float           itemcount;
+    float           secretcount;
 
     // Hint messages.
     int8_t*           message;

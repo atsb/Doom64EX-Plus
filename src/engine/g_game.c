@@ -68,8 +68,8 @@
 
 extern void M_QuickSave(void);
 extern void M_QuickLoad(void);
-extern void M_SaveGame(void);
-extern void M_LoadGame(void);
+extern void M_SaveGame(int choice);
+extern void M_LoadGame(int choice);
 extern void M_ChangeGammaLevel(int);
 
 void        G_PlayerReborn(int player);
@@ -108,7 +108,6 @@ static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
 // for intermission
-int             totalkills, totalitems, totalsecret;
 boolean        precache = true;     // if true, load all graphics at start
 
 byte            consistency[MAXPLAYERS][BACKUPTICS];
@@ -139,6 +138,13 @@ int         bodyqueslot;
 
 byte forcejump = 0;
 byte forcefreelook = 0;
+
+float killcount;
+float itemcount;
+float secretcount;
+float totalkills;
+float totalitems;
+float totalsecret;
 
 NETCVAR(sv_nomonsters, 0);
 NETCVAR(sv_fastmonsters, 0);
@@ -246,7 +252,7 @@ static CMD(QuickLoad) {
 
 static CMD(Save) {
 	M_StartControlPanel(true);
-	M_SaveGame();
+	M_SaveGame(0); // unused param
 }
 
 //
@@ -255,7 +261,7 @@ static CMD(Save) {
 
 static CMD(Load) {
 	M_StartControlPanel(true);
-	M_LoadGame();
+	M_LoadGame(0); // unused param
 }
 
 //
@@ -882,12 +888,12 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 // G_DoCmdMouseMove
 //
 
-void G_DoCmdMouseMove(int x, int y) {
+void G_DoCmdMouseMove(float x, float y) {
 	playercontrols_t* pc;
 
 	pc = &Controls;
-	pc->mousex += ((I_MouseAccel(x) * (int)v_msensitivityx.value) / 128);
-	pc->mousey += ((I_MouseAccel(y) * (int)v_msensitivityy.value) / 128);
+	pc->mousex += ((I_MouseAccel(x) * (float)v_msensitivityx.value) / 128);
+	pc->mousey += ((I_MouseAccel(y) * (float)v_msensitivityy.value) / 128);
 }
 
 //
@@ -1192,15 +1198,12 @@ void G_PlayerFinishLevel(int player) {
 
 void G_PlayerReborn(int player) {
 	player_t* p;
-	int         i;
-	int         frags[MAXPLAYERS];
-	int         killcount;
-	int         itemcount;
-	int         secretcount;
+	int        i;
+	int        frags[MAXPLAYERS];
 	boolean    cards[NUMCARDS];
 	boolean    wpns[NUMWEAPONS];
-	int         pammo[NUMAMMO];
-	int         pmaxammo[NUMAMMO];
+	int        pammo[NUMAMMO];
+	int        pmaxammo[NUMAMMO];
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);

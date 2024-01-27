@@ -58,7 +58,7 @@
 #ifdef __OpenBSD__
 #include <SDL.h>
 #else
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #endif
 
 short globalint = 0;
@@ -1684,7 +1684,7 @@ boolean P_InitSpecialLine(mobj_t* thing, line_t* line, int side) {
 	int use = line->special & MLU_REPEAT;
 
 	// Calculate the time difference since the last trigger
-	unsigned int currentTime = SDL_GetTicks64();
+	unsigned int currentTime = SDL_GetTicks();
 	unsigned int timeDifference = currentTime - lastTriggerTime;
 
 	// Check if enough time has passed since the last trigger

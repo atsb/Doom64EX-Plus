@@ -138,7 +138,7 @@ void IN_Drawer(void) {
 	}
 
 	// Draw background
-	Draw_GfxImage(fcluster->pic_x, fcluster->pic_y, fcluster->pic, color, false);
+	Draw_GfxImageInter(fcluster->pic_x, fcluster->pic_y, fcluster->pic, color, false);
 
 	if (!fInterFadeOut) {
 		// don't draw anything else until background is fully opaque
@@ -163,7 +163,7 @@ void IN_Drawer(void) {
 			alpha = 0xff;
 		}
 
-		Draw_BigText(-1, y - fTextOffset, D_RGBA(255, 255, 255, alpha), fInterString[i]);
+		Draw_SmallText(-1, y - fTextOffset, D_RGBA(255, 255, 255, alpha), fInterString[i]);
 		y += 14;
 
 		if (i == fInterSlot || !fInterString[i][0]) {

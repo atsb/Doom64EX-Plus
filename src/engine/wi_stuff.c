@@ -337,7 +337,7 @@ void WI_Drawer(void) {
 	}
 
 	// draw background
-	Draw_GfxImage(63, 25, "EVIL", WHITE, false);
+	Draw_GfxImageInter(63, 25, "EVIL", WHITE, false);
 
 	// draw 'mapname' Finished text
 	Draw_BigText(-1, 20, WHITE, P_GetMapInfo(currentmap)->mapname);

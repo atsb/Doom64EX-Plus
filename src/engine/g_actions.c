@@ -243,7 +243,7 @@ alist_t* DoRunActions(alist_t* al, boolean free) {
 		if (action) {
 			action->proc(action->data, al->param);
 		}
-		else if (cvar = CON_CvarGet(al->cmd)) {
+		else if ((cvar = CON_CvarGet(al->cmd))) {
 			if (netgame) {
 				if (cvar->nonclient) {
 					// I'll just have to assume for now that

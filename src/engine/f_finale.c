@@ -335,7 +335,7 @@ int F_Ticker(void) {
 
 void F_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImage(64, 30, "EVIL", D_RGBA(255, 255, 255, 0xff), false);
+	Draw_GfxImageInter(64, 30, "EVIL", D_RGBA(255, 255, 255, 0xff), false);
 	Draw_BigText(-1, 240 - 32, D_RGBA(255, 0, 0, 0xff), castorder[castnum].name);
 	Draw_Sprite2D(
 		caststate->sprite,

@@ -549,16 +549,16 @@ static void AddSegToDrawlist(drawlist_t* dl, seg_t* line, int texid, int sidetyp
 
 	switch (sidetype) {
 	case 0:
-		list->callback = R_GenerateLowerSegPlane;
+		list->callback = (vtxlist_callback_t)R_GenerateLowerSegPlane;
 		break;
 	case 1:
-		list->callback = R_GenerateUpperSegPlane;
+		list->callback = (vtxlist_callback_t)R_GenerateUpperSegPlane;
 		break;
 	case 2:
-		list->callback = R_GenerateMiddleSegPlane;
+		list->callback = (vtxlist_callback_t)R_GenerateMiddleSegPlane;
 		break;
 	case 3:
-		list->callback = R_GenerateSwitchPlane;
+		list->callback = (vtxlist_callback_t)R_GenerateSwitchPlane;
 		break;
 	default:
 		return;

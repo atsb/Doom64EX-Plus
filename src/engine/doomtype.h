@@ -24,10 +24,6 @@
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
-#ifdef _WIN32
-#include <SDL2/SDL_config.h>
-#endif
-
 #include <stdint.h>
 #include <limits.h>
 #include <stdbool.h>

@@ -145,7 +145,7 @@ static int SC_GetInteger(void) {
 // SC_SetData
 //
 
-static int SC_SetData(byte* data, const scdatatable_t* table) {
+static int SC_SetData(void* data, const scdatatable_t* table) {
 	int i;
 	boolean ok = false;
 

@@ -41,7 +41,7 @@
 #ifdef __OpenBSD__
 #include <SDL.h>
 #else
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #endif
 
 #include "i_video.h"
@@ -283,7 +283,7 @@ static void D_NetWait(void) {
 		I_Sleep(100);
 
 		while (SDL_PollEvent(&Event))
-			if (Event.type == SDL_KEYDOWN) {
+			if (Event.type == SDL_EVENT_KEY_DOWN) {
 				NET_CL_StartGame();
 			}
 	}

@@ -30,7 +30,7 @@
 
 void P_Start(void);
 void P_Stop(void);
-int P_Drawer(void);
+void P_Drawer(void);
 
 // Called by C_Ticker,
 // can call G_PlayerExited.

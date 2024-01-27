@@ -240,10 +240,8 @@ CVAR_CMD(m_menufadetime, 0) {
 }
 
 CVAR_CMD(m_menumouse, 1) {
-	SDL_ShowCursor(cvar->value < 1);
 	if (cvar->value <= 0) {
 		itemSelected = -1;
-		SDL_ShowCursor(cvar->value = 0);
 	}
 }
 
@@ -366,7 +364,6 @@ enum {
 	quitno,
 	quitend
 };
-quitprompt_e;
 
 menuitem_t QuitGameMenu[] = {
 	{1,"Yes",M_QuitGame,'y'},
@@ -417,7 +414,6 @@ enum {
 	quit2no,
 	quit2end
 };
-quit2prompt_e;
 
 menuitem_t QuitGameMenu2[] = {
 	{1,"Yes",M_QuitGame2,'y'},
@@ -524,7 +520,6 @@ enum {
 	RMainNo,
 	RMain_end
 };
-rlprompt_e;
 
 menuitem_t RestartConfirmMain[] = {
 	{1,"Yes",M_RestartLevel,'y'},
@@ -577,7 +572,6 @@ enum {
 	SNN_Ok = 0,
 	SNN_End
 };
-startnewnotify_e;
 
 menuitem_t StartNewNotify[] = {
 	{1,"Ok",M_NewGameNotifyResponse,'o'}
@@ -1967,9 +1961,6 @@ void M_Video(int choice) {
 	else if (dfcmp(checkratio, ratioVal[4])) {
 		m_aspectRatio = 4;
 	}
-	else if (dfcmp(checkratio, ratioVal[5])) {
-		m_aspectRatio = 5;
-	}
 	else {
 		m_aspectRatio = 0;
 	}
@@ -2192,7 +2183,7 @@ void M_ChangeRatio(int choice) {
 		}
 	}
 	else {
-		m_aspectRatio = MAX(m_aspectRatio--, 0);
+		m_aspectRatio = MAX(m_aspectRatio - 1, 0);
 	}
 
 	switch (m_aspectRatio) {
@@ -2250,7 +2241,7 @@ void M_ChangeResolution(int choice) {
 		}
 	}
 	else {
-		m_ScreenSize = MAX(m_ScreenSize--, 0);
+		m_ScreenSize = MAX(m_ScreenSize - 1, 0);
 	}
 
 	M_SetResolution();
@@ -3037,7 +3028,6 @@ enum {
 	NLN_Ok = 0,
 	NLN_End
 };
-netloadnotify_e;
 
 menuitem_t NetLoadNotify[] = {
 	{1,"Ok",M_ReturnToOptions,'o'}
@@ -3078,7 +3068,6 @@ enum {
 	SDN_Ok = 0,
 	SDN_End
 };
-savedeadnotify_e;
 
 menuitem_t SaveDeadNotify[] = {
 	{1,"Ok",M_ReturnToOptions,'o'}
@@ -3645,8 +3634,8 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 	menuthermobar_t* bar;
 	float startx;
 	float scrny;
-	int x;
-	int y;
+	float x;
+	float y;
 	int i;
 	float mx;
 	float my;
@@ -3662,29 +3651,29 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 	}
 
 	// mouse buttons must be held and moving
-	if (!(ev->data1 & 1) || !(ev->data2 | ev->data3)) {
+	if (!(ev->data1 & 1)) {
 		return;
 	}
 
 	bar = menu->thermobars;
 	x = menu->x;
 	y = menu->y;
-	mx = (float)mouse_x;
-	my = (float)mouse_y;
+	mx = mouse_x;
+	my = mouse_y;
 	scalex = ((float)video_width /
 		((float)SCREENHEIGHT * video_ratio)) * menu->scale;
 	scaley = ((float)video_height /
 		(float)SCREENHEIGHT) * menu->scale;
-	startx = (float)x * scalex;
+	startx = x * scalex;
 	width = startx + (100.0f * scalex);
 
 	// check if cursor is within range
 	for (i = 0; bar[i].item != -1; i++) {
 		lineheight = (float)(LINEHEIGHT * bar[i].item);
-		scrny = ((float)y + lineheight + 10) * scaley;
+		scrny = (y + lineheight + 10) * scaley;
 
 		if (my < scrny) {
-			scrny = ((float)y + lineheight + 2) * scaley;
+			scrny = (y + lineheight + 2) * scaley;
 			if (my >= scrny) {
 				// dragged all the way to the left?
 				if (mx < startx) {
@@ -4142,7 +4131,7 @@ boolean M_Responder(event_t* ev) {
 			shiftdown = false;
 		}
 	}
-	else if (ev->type == ev_mouse && (ev->data2 | ev->data3)) {
+	else if (ev->type == ev_mouse && (ev->data2 != 0.0 || ev->data3 != 0.0)) {
 		// handle mouse-over selection
 		if (m_menumouse.value) {
 			M_CheckDragThermoBar(ev, currentMenu);
@@ -4577,7 +4566,7 @@ static void M_DrawMenuSkull(int x, int y) {
 // M_DrawCursor
 //
 
-static void M_DrawCursor(int x, int y) {
+static void M_DrawCursor(float x, float y) {
 	if (m_menumouse.value) {
 		int gfxIdx;
 		float factor;
@@ -4734,7 +4723,7 @@ void M_Drawer(void) {
 		// if menu item is static but has text, then display it as gray text
 		// used for subcategories
 		//
-		else if (currentMenu->menuitems[i].name != NULL) {
+		else if (currentMenu->menuitems[i].name[0] != 0) {
 			if (!currentMenu->smallfont) {
 				Draw_BigText(
 					-1,
@@ -4986,7 +4975,7 @@ void M_Ticker(void) {
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&
-		currentMenu->menuitems[0].name != NULL) {
+		currentMenu->menuitems[0].name[0] != 0) {
 		// bump page offset up
 		if (itemOn == 1) {
 			currentMenu->menupageoffset = 0;

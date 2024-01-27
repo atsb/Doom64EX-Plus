@@ -35,8 +35,8 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #else
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 #endif
 
 #include "i_sdlinput.h"
@@ -108,7 +108,7 @@ GL_EXT_compiled_vertex_array_Define();
 //GL_EXT_multi_draw_arrays_Define();
 //GL_EXT_fog_coord_Define();
 //GL_ARB_vertex_buffer_object_Define();
-GL_ARB_texture_non_power_of_two_Define();
+//GL_ARB_texture_non_power_of_two_Define();
 GL_ARB_texture_env_combine_Define();
 GL_EXT_texture_env_combine_Define();
 GL_EXT_texture_filter_anisotropic_Define();

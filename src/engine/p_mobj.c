@@ -1179,6 +1179,64 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	}
 }
 
+//
+// P_SpawnBloodGreen
+//
+void P_SpawnBloodGreen(fixed_t x, fixed_t y, fixed_t z, int damage) {
+	mobj_t* th;
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		x += ((P_Random() - P_Random()) << 12);
+		y += ((P_Random() - P_Random()) << 12);
+		z += ((P_Random() - P_Random()) << 11);
+
+		th = P_SpawnMobj(x, y, z, MT_BLOOD_GREEN);
+		th->momz = FRACUNIT * 2;
+		th->tics -= (P_Random() & 1);
+
+		if (th->tics < 1) {
+			th->tics = 1;
+		}
+
+		if (damage <= 12 && (damage >= 9)) {
+			P_SetMobjState(th, S_BLOOD97);
+		}
+		else if (damage < 9) {
+			P_SetMobjState(th, S_BLOOD98);
+		}
+	}
+}
+
+//
+// P_SpawnBloodPurple
+//
+void P_SpawnBloodPurple(fixed_t x, fixed_t y, fixed_t z, int damage) {
+	mobj_t* th;
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		x += ((P_Random() - P_Random()) << 12);
+		y += ((P_Random() - P_Random()) << 12);
+		z += ((P_Random() - P_Random()) << 11);
+
+		th = P_SpawnMobj(x, y, z, MT_BLOOD_PURPLE);
+		th->momz = FRACUNIT * 2;
+		th->tics -= (P_Random() & 1);
+
+		if (th->tics < 1) {
+			th->tics = 1;
+		}
+
+		if (damage <= 12 && (damage >= 9)) {
+			P_SetMobjState(th, S_BLOOD107);
+		}
+		else if (damage < 9) {
+			P_SetMobjState(th, S_BLOOD108);
+		}
+	}
+}
+
 /*
 ================
 =
