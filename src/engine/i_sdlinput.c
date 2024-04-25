@@ -303,12 +303,14 @@ boolean I_UpdateGrab(void) {
 
 	if (grab && !currently_grabbed) {
 		SDL_SetRelativeMouseMode(1);
-		SDL_SetWindowGrab(window, 1);
+		SDL_SetWindowMouseGrab(window, 1);
+		SDL_SetWindowKeyboardGrab(window, 1);
 	}
 
 	if (!grab && currently_grabbed) {
 		SDL_SetRelativeMouseMode(0);
-		SDL_SetWindowGrab(window, 0);
+		SDL_SetWindowMouseGrab(window, 0);
+		SDL_SetWindowKeyboardGrab(window, 0);
 	}
 
 	currently_grabbed = grab;
