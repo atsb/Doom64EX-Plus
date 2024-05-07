@@ -137,7 +137,7 @@ int                eventtail = 0;
 
 void D_PostEvent(event_t* ev) {
 	events[eventhead] = *ev;
-	eventhead = (++eventhead) & (MAXEVENTS - 1);
+	eventhead = (eventhead + 1) & (MAXEVENTS - 1);
 }
 
 //
@@ -148,7 +148,7 @@ void D_PostEvent(event_t* ev) {
 void D_ProcessEvents(void) {
 	event_t* ev;
 
-	for (; eventtail != eventhead; eventtail = (++eventtail) & (MAXEVENTS - 1)) {
+	for (; eventtail != eventhead; eventtail = (eventtail + 1) & (MAXEVENTS - 1)) {
 		ev = &events[eventtail];
 
 		// 20120404 villsa - don't do console inputs for demo playbacks
@@ -452,7 +452,7 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 
 static void Title_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImage(58, 50, "TITLE", WHITEALPHA(0x64), true);
+	Draw_GfxImageTitle(58, 50, "TITLE", WHITEALPHA(0x64), true);
 }
 
 //
@@ -549,7 +549,7 @@ static void Legal_Start(void) {
 
 static void Legal_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImage(legal_x, legal_y, legalpic, WHITE, true);
+	Draw_GfxImageLegal(legal_x, legal_y, legalpic, WHITE, true);
 }
 
 //
@@ -590,7 +590,7 @@ static void Credits_Drawer(void) {
 		break;
 
 	case 2:
-		Draw_GfxImage(64, 30, "EVIL",
+		Draw_GfxImageInter(64, 30, "EVIL",
 			D_RGBA(255, 255, 255, (byte)screenalpha), true);
 		break;
 	}

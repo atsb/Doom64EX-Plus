@@ -26,7 +26,7 @@
 #ifdef __OpenBSD__
 #include <SDL_endian.h>
 #else
-#include <SDL2/SDL_endian.h>
+#include <SDL3/SDL_endian.h>
 #endif
 
 #include "doomtype.h"

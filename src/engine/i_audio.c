@@ -40,7 +40,7 @@
 #ifdef __OpenBSD__
 #include <SDL.h>
 #else
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #endif
 
 #include <fluidsynth.h>
@@ -104,17 +104,17 @@ CVAR_CMD(s_driver, sndio)
 //
 // Mutex
 //
-static SDL_mutex* lock = NULL;
-#define MUTEX_LOCK()    SDL_mutexP(lock);
-#define MUTEX_UNLOCK()  SDL_mutexV(lock);
+static SDL_Mutex* lock = NULL;
+#define MUTEX_LOCK()    SDL_LockMutex(lock);
+#define MUTEX_UNLOCK()  SDL_UnlockMutex(lock);
 
 //
 // Semaphore stuff
 //
 
-static SDL_sem* semaphore = NULL;
-#define SEMAPHORE_LOCK()    if(SDL_SemWait(semaphore) == 0) {
-#define SEMAPHORE_UNLOCK()  SDL_SemPost(semaphore); }
+static SDL_Semaphore* semaphore = NULL;
+#define SEMAPHORE_LOCK()    if(SDL_WaitSemaphore(semaphore) == 0) {
+#define SEMAPHORE_UNLOCK()  SDL_PostSemaphore(semaphore); }
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
 static int seqready = 0;
@@ -1118,7 +1118,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
 
 static int SDLCALL Thread_PlayerHandler(void* param) {
     doomseq_t* seq = (doomseq_t*)param;
-    long long start = SDL_GetTicks64();
+    long long start = SDL_GetTicks();
     long long delay = 0;
     int status;
     long long count = 0;
@@ -1148,11 +1148,11 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
         //
         // play some songs
         //
-        Seq_RunSong(seq, SDL_GetTicks64() - start);
+        Seq_RunSong(seq, SDL_GetTicks() - start);
         count++;
 
         // try to avoid incremental time de-syncs
-        delay = count - (SDL_GetTicks64() - start);
+        delay = count - (SDL_GetTicks() - start);
 
         if (delay > 0) {
             SDL_Delay(delay);
@@ -1201,7 +1201,7 @@ void I_InitSequencer(void) {
     // off-sync when uncapped framerates are enabled but for some
     // reason, calling SDL_GetTicks before initalizing the thread
     // will reduce the chances of it happening
-    SDL_GetTicks64();
+    SDL_GetTicks();
 
     doomseq.thread = SDL_CreateThread(Thread_PlayerHandler, "SynthPlayer", &doomseq);
     if (doomseq.thread == NULL) {

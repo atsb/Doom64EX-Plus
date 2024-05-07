@@ -42,7 +42,7 @@ void        G_GetActionBindings(char* buff, char* action);
 void        G_UnbindAction(char* action);
 int         G_ListCommands(void);
 void        G_OutputBindings(FILE* fh);
-void        G_DoCmdMouseMove(int x, int y);
+void        G_DoCmdMouseMove(float x, float y);
 
 extern boolean    ButtonAction;
 

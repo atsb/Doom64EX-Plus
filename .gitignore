@@ -65,3 +65,4 @@ Windows/Doom64EXPlus.vcxproj.user
 .DS_Store
 src/engine/.DS_Store
 *.user
+*.bak

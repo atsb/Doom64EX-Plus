@@ -1,38 +1,25 @@
-################################################################
-#
-# $Id:$
-#
-# $Log:$
-#
-
-ifeq ($(V),1)
-	VB=''
-else
-	VB=@
-endif
-
 CC=gcc
-CFLAGS+= -Isrc/engine/3rdparty/Includes `sdl2-config --cflags`
-LDFLAGS+=
-LIBS+= `pkg-config --libs sdl2` `pkg-config --libs libpng` `pkg-config --libs gl` `pkg-config --libs glu` `pkg-config --libs SDL2_net` `pkg-config --libs fluidsynth` -lm
+
+libs := sdl3 libpng gl glu fluidsynth
+
+CFLAGS += $(foreach lib,$(libs),$(shell pkg-config --cflags $(lib)))
+LDFLAGS := -lm $(foreach lib,$(libs),$(shell pkg-config --libs $(lib)))
+
 OBJDIR=src/engine
 OUTPUT=DOOM64EX-Plus
 
-SRC_DOOM64 = i_system.c am_draw.c am_map.c info.c md5.c tables.c con_console.c con_cvar.c d_devstat.c d_main.c d_net.c f_finale.c in_stuff.c g_actions.c g_demo.c g_game.c g_settings.c wi_stuff.c m_cheat.c m_menu.c m_misc.c m_fixed.c m_keys.c m_password.c m_random.c m_shift.c net_client.c net_common.c net_dedicated.c net_io.c net_loop.c net_packet.c net_query.c net_server.c net_structure.c dgl.c gl_draw.c gl_main.c gl_texture.c sc_main.c p_ceilng.c p_doors.c p_enemy.c p_user.c p_floor.c p_inter.c p_lights.c p_macros.c p_map.c p_maputl.c p_mobj.c p_plats.c p_pspr.c p_saveg.c p_setup.c p_sight.c p_spec.c p_switch.c p_telept.c p_tick.c r_clipper.c r_drawlist.c r_lights.c r_main.c r_scene.c r_bsp.c r_sky.c r_things.c r_wipe.c s_sound.c st_stuff.c i_audio.c i_main.c i_png.c i_video.c w_file.c w_merge.c w_wad.c z_zone.c i_sdlinput.c deh_io.c deh_ptr.c deh_ammo.c deh_doom.c deh_main.c deh_misc.c deh_frame.c deh_thing.c deh_weapon.c deh_mapping.c deh_str.c sha1.c
-OBJS += $(addprefix $(OBJDIR)/, $(SRC_DOOM64))
+OBJS_SRC = i_system.o am_draw.o am_map.o info.o md5.o tables.o con_console.o con_cvar.o d_devstat.o d_main.o d_net.o f_finale.o in_stuff.o g_actions.o g_demo.o g_game.o g_settings.o wi_stuff.o m_cheat.o m_menu.o m_misc.o m_fixed.o m_keys.o m_password.o m_random.o m_shift.o net_client.o net_common.o net_dedicated.o net_io.o net_loop.o net_packet.o net_query.o net_server.o net_structure.o dgl.o gl_draw.o gl_main.o gl_texture.o sc_main.o p_ceilng.o p_doors.o p_enemy.o p_user.o p_floor.o p_inter.o p_lights.o p_macros.o p_map.o p_maputl.o p_mobj.o p_plats.o p_pspr.o p_saveg.o p_setup.o p_sight.o p_spec.o p_switch.o p_telept.o p_tick.o r_clipper.o r_drawlist.o r_lights.o r_main.o r_scene.o r_bsp.o r_sky.o r_things.o r_wipe.o s_sound.o st_stuff.o i_audio.o i_main.o i_png.o i_video.o w_file.o w_merge.o w_wad.o z_zone.o i_sdlinput.o deh_io.o deh_ptr.o deh_ammo.o deh_doom.o deh_main.o deh_misc.o deh_frame.o deh_thing.o deh_weapon.o deh_mapping.o deh_str.o sha1.o
 
-all:	 $(OUTPUT)
+OBJS := $(addprefix $(OBJDIR)/, $(OBJS_SRC))
+
+all: $(OUTPUT)
+
+$(OUTPUT): $(OBJS)
+	$(CC) $^ $(LDFLAGS) -o $@
 
 clean:
-	rm -f $(OUTPUT)
-	rm -f $(OUTPUT).gdb
-	rm -f $(OUTPUT).map
+	rm -f $(OUTPUT) $(OUTPUT).gdb $(OUTPUT).map $(OBJS)
 
-$(OUTPUT):	$(OBJDIR)
-	$(VB)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) \
-	-o $(OUTPUT) $(LIBS)
 
-$(OBJDIR)/%.o:	%.c
-	$(VB)$(CC) $(CFLAGS) -c $< -o $@
 
 

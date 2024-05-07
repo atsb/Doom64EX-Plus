@@ -59,6 +59,69 @@ void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) 
 	GL_SetState(GLSTATE_BLEND, 0);
 }
 
+void Draw_GfxImageInter(int x, int y, const char* name, rcolor color, boolean alpha) {
+	int gfxIdx = GL_BindGfxTexture(name, alpha);
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+
+	float imgWidth = gfxwidth[gfxIdx];
+	float imgHeight = gfxheight[gfxIdx];
+	float targetSize = fmin(250.0f, fmin(imgWidth, imgHeight));
+	float scale = targetSize / fmax(imgWidth, imgHeight);
+
+	float offset_width = 5.0f;
+	float offset_height = 5.0f;
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
+		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
+
+	GL_SetState(GLSTATE_BLEND, 0);
+}
+
+void Draw_GfxImageLegal(int x, int y, const char* name, rcolor color, boolean alpha) {
+	int gfxIdx = GL_BindGfxTexture(name, alpha);
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+
+	float imgWidth = gfxwidth[gfxIdx];
+	float imgHeight = gfxheight[gfxIdx];
+	float targetSize = fmin(320.0f, fmin(imgWidth, imgHeight));
+	float scale = targetSize / fmax(imgWidth, imgHeight);
+
+	float offset_width = 30.0f;
+	float offset_height = 40.0f;
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
+		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
+
+	GL_SetState(GLSTATE_BLEND, 0);
+}
+
+void Draw_GfxImageTitle(int x, int y, const char* name, rcolor color, boolean alpha) {
+	int gfxIdx = GL_BindGfxTexture(name, alpha);
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+
+	float imgWidth = gfxwidth[gfxIdx];
+	float imgHeight = gfxheight[gfxIdx];
+	float targetSize = fmin(320.0f, fmin(imgWidth, imgHeight));
+	float scale = targetSize / fmax(imgWidth, imgHeight);
+
+	float offset_width = 60.0f;
+	float offset_height = 30.0f;
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
+		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
+
+	GL_SetState(GLSTATE_BLEND, 0);
+}
+
 //
 // Draw_Sprite2D
 //
@@ -400,6 +463,7 @@ int Center_Text(const char* string) {
 	return (160 - (width / 2));
 }
 
+
 //
 // Draw_BigText
 //
@@ -567,6 +631,180 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
 
 	return x;
 }
+
+//
+// Draw_SmallText
+//
+
+int Draw_SmallText(int x, int y, rcolor color, const char* string) {
+	int c = 0;
+	int i = 0;
+	int vi = 0;
+	int index = 0;
+	float vx1 = 0.0f;
+	float vy1 = 0.0f;
+	float vx2 = 0.0f;
+	float vy2 = 0.0f;
+	float tx1 = 0.0f;
+	float tx2 = 0.0f;
+	float ty1 = 0.0f;
+	float ty2 = 0.0f;
+	float smbwidth;
+	float smbheight;
+	int pic;
+
+	// Scale factor for symbols
+	float scale_factor = 0.7f;
+
+	if (x <= -1) {
+		x = Center_Text(string);
+	}
+
+	y += 14; // Adjust for smaller text
+
+	pic = GL_BindGfxTexture("SYMBOLS", true);
+
+	smbwidth = (float)gfxwidth[pic];
+	smbheight = (float)gfxheight[pic];
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+
+	dglSetVertex(vtxstring);
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetOrtho(0);
+
+	for (i = 0, vi = 0; i < dstrlen(string); i++, vi += 4) {
+		vx1 = (float)x + 30;
+		vy1 = (float)y;
+
+		c = string[i];
+		if (c == '\n' || c == '\t') {
+			continue; // villsa: safety check
+		}
+		else if (c == 0x20) {
+			x += 4; // Adjust for smaller spacing
+			continue;
+		}
+		else {
+			if (c >= '0' && c <= '9') {
+				index = (c - '0') + SM_NUMBERS;
+			}
+			if (c >= 'A' && c <= 'Z') {
+				index = (c - 'A') + SM_FONT1;
+			}
+			if (c >= 'a' && c <= 'z') {
+				index = (c - 'a') + SM_FONT2;
+			}
+			if (c == '-') {
+				index = SM_MISCFONT;
+			}
+			if (c == '%') {
+				index = SM_MISCFONT + 1;
+			}
+			if (c == '!') {
+				index = SM_MISCFONT + 2;
+			}
+			if (c == '.') {
+				index = SM_MISCFONT + 3;
+			}
+			if (c == '?') {
+				index = SM_MISCFONT + 4;
+			}
+			if (c == ':') {
+				index = SM_MISCFONT + 5;
+			}
+
+			// [kex] use 'printf' style formatting for special symbols
+			if (c == '/') {
+				c = string[++i];
+
+				switch (c) {
+					// up arrow
+				case 'u':
+					index = SM_MICONS + 17;
+					break;
+					// down arrow
+				case 'd':
+					index = SM_MICONS + 16;
+					break;
+					// right arrow
+				case 'r':
+					index = SM_MICONS + 18;
+					break;
+					// left arrow
+				case 'l':
+					index = SM_MICONS;
+					break;
+					// cursor box
+				case 'b':
+					index = SM_MICONS + 1;
+					break;
+					// thermbar
+				case 't':
+					index = SM_THERMO;
+					break;
+					// thermcursor
+				case 's':
+					index = SM_THERMO + 1;
+					break;
+				default:
+					return 0;
+				}
+			}
+
+			// Scale the symbol dimensions
+			vx2 = vx1 + symboldata[index].w * scale_factor;
+			vy2 = vy1 - symboldata[index].h * scale_factor;
+
+			// Adjust texture coordinates for scaling
+			tx1 = (float)symboldata[index].x / smbwidth;
+			tx2 = (float)(symboldata[index].x + symboldata[index].w) / smbwidth;
+			ty1 = (float)symboldata[index].y / smbheight;
+			ty2 = (float)(symboldata[index].y + symboldata[index].h) / smbheight;
+
+			vtxstring[vi + 0].x = vx1;
+			vtxstring[vi + 0].y = vy1;
+			vtxstring[vi + 0].tu = tx1;
+			vtxstring[vi + 0].tv = ty2;
+			vtxstring[vi + 1].x = vx2;
+			vtxstring[vi + 1].y = vy1;
+			vtxstring[vi + 1].tu = tx2;
+			vtxstring[vi + 1].tv = ty2;
+			vtxstring[vi + 2].x = vx2;
+			vtxstring[vi + 2].y = vy2;
+			vtxstring[vi + 2].tu = tx2;
+			vtxstring[vi + 2].tv = ty1;
+			vtxstring[vi + 3].x = vx1;
+			vtxstring[vi + 3].y = vy2;
+			vtxstring[vi + 3].tu = tx1;
+			vtxstring[vi + 3].tv = ty1;
+
+			dglSetVertexColor(vtxstring + vi, color, 4);
+
+			dglTriangle(vi + 2, vi + 1, vi + 0);
+			dglTriangle(vi + 3, vi + 2, vi + 0);
+
+			if (devparm) {
+				vertCount += 4;
+			}
+
+			x += symboldata[index].w * scale_factor;
+		}
+	}
+
+	if (vi) {
+		dglDrawGeometry(vi, vtxstring);
+	}
+
+	GL_ResetViewport();
+	GL_SetState(GLSTATE_BLEND, 0);
+
+	return x;
+}
+
+
 
 //
 // Draw_Number

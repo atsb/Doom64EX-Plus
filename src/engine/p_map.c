@@ -707,7 +707,7 @@ static boolean PIT_CheckMobjZ(mobj_t* thing) {
 // P_CheckOnMobj
 //
 
-void P_ZMovement(mobj_t* mo, int checkmissile);
+extern void P_ZMovement(mobj_t* mo);
 
 mobj_t* P_CheckOnMobj(mobj_t* thing) {
     int    bx, by;
@@ -722,7 +722,7 @@ mobj_t* P_CheckOnMobj(mobj_t* thing) {
     tmthing = thing;
     tmflags = thing->flags;
     oldmo = *thing; // save the old mobj before the fake zmovement
-    P_ZMovement(tmthing, false);
+    P_ZMovement(tmthing);
 
     tmx = x;
     tmy = y;
@@ -1277,9 +1277,17 @@ boolean PTR_ShootTraverse(intercept_t* in) {
     else if (in->d.thing->flags & MF_NOBLOOD) {
         P_SpawnPuff(x, y, z);
     }
-    else {
-        P_SpawnBlood(x, y, z, la_damage);
+    else if (th->type == MT_BRUISER2) {
+        P_SpawnBloodGreen(x, y, z, la_damage);
     }
+    else if (th->type == MT_IMP2) {
+        P_SpawnBloodPurple(x, y, z, la_damage);
+    }
+    else if (th->type == MT_SKULL) {
+        P_SpawnPuff(x, y, z);
+    }
+    else
+        P_SpawnBlood(x, y, z, la_damage);
 
     if (la_damage) {
         P_DamageMobj(th, shootthing, shootthing, la_damage);
@@ -1639,7 +1647,7 @@ static int nofit;
 // PIT_ChangeSector
 //
 boolean PIT_ChangeSector(mobj_t* thing) {
-    mobj_t* mo;
+    mobj_t* mo = NULL;
 
     if (P_ThingHeightClip(thing)) {
         // keep checking
@@ -1684,7 +1692,18 @@ boolean PIT_ChangeSector(mobj_t* thing) {
             P_DamageMobj(thing, NULL, NULL, 10);
 
             // spray blood in a random direction
-            mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD);
+            if (mo->type == MT_BRUISER2) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD_GREEN);
+            }
+            else if (mo->type == MT_IMP2) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD_PURPLE);
+            }
+            else if (mo->type == MT_SKULL) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_SMOKE_GRAY);
+            }
+            else {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD);
+            }
             mo->momx = (P_Random() - P_Random()) << 12;
             mo->momy = (P_Random() - P_Random()) << 12;
         }

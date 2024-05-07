@@ -164,7 +164,13 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 	else {
 		DEH_snprintf(lumpname, 9, "MAP%i", map);
 	}
-	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
+	if (map > 40) {
+		G_InitNew(gameskill, 33);
+		dmemset(passwordData, 0xff, 16);
+	}
+	else {
+		lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
+	}
 
 	if (lumpnum)
 	{

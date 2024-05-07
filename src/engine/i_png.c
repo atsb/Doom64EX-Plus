@@ -63,7 +63,7 @@ d_inline static unsigned int I_PNGRowSize(int width, byte bits) {
 // I_PNGReadFunc
 //
 
-static void I_PNGReadFunc(png_structp ctx, byte* area, unsigned int size) {
+static void I_PNGReadFunc(png_structp ctx, byte* area, png_size_t size) {
 	dmemcpy(area, pngReadData, size);
 	pngReadData += size;
 }
@@ -179,12 +179,13 @@ byte* I_PNGReadData(int lump, int palette, int nopack, int alpha,
 		NULL,
 		NULL);
 
-	if (usingGL && !alpha) {
+	if (usingGL) {
 		int num_trans = 0;
-		png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
-		if (num_trans)
-			//if(usingGL && !alpha && info_ptr->num_trans)
-		{
+		png_bytep trans_alpha = NULL;
+
+		png_get_tRNS(png_ptr, info_ptr, &trans_alpha, &num_trans, NULL);
+
+		if (num_trans && !alpha) {
 			I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
 		}
 	}
@@ -337,7 +338,7 @@ byte* I_PNGReadData(int lump, int palette, int nopack, int alpha,
 // I_PNGWriteFunc
 //
 
-static void I_PNGWriteFunc(png_structp png_ptr, byte* data, unsigned int length) {
+static void I_PNGWriteFunc(png_structp png_ptr, byte* data, png_size_t length) {
 	pngWriteData = (byte*)Z_Realloc(pngWriteData, pngWritePos + length, PU_STATIC, 0);
 	dmemcpy(pngWriteData + pngWritePos, data, length);
 	pngWritePos += length;

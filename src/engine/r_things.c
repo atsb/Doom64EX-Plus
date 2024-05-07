@@ -43,7 +43,7 @@
 #include <stdlib.h>
 
 
-#define MAX_SPRITES    1024
+#define MAX_SPRITES    999999
 
 spritedef_t* spriteinfo;
 intptr_t        numsprites;
@@ -508,10 +508,10 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid) {
 	list->data = (visspritelist_t*)vis;
 
 	if (vis->spr->flags & MF_RENDERLASER) {
-		list->callback = R_GenerateLaserPlane;
+		list->callback = (vtxlist_callback_t)R_GenerateLaserPlane;
 	}
 	else {
-		list->callback = R_GenerateSpritePlane;
+		list->callback = (vtxlist_callback_t)R_GenerateSpritePlane;
 	}
 
 	mobj = vis->spr;
