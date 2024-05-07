@@ -942,12 +942,6 @@ void M_DrawNetwork(void) {
 		"10 Minutes"
 	};
 
-	static const char* networkscalestrings[3] = {
-		"x 1",
-		"x 2",
-		"x 3"
-	};
-
 #define DRAWNETWORKITEM(a, b, c) \
     if(currentMenu->menupageoffset <= a && \
         a - currentMenu->menupageoffset < currentMenu->numpageitems) \
@@ -2572,7 +2566,7 @@ void M_Features(int choice) {
 }
 
 void M_DrawFeaturesMenu(void) {
-	mapdef_t* map = P_GetMapInfo(levelwarp + 1);
+	P_GetMapInfo(levelwarp + 1);
 
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);

@@ -431,6 +431,19 @@ int I_ShutdownWait(void) {
 }
 
 //
+// I_InitInputs
+//
+
+void I_InitInputs(void) {
+	SDL_PumpEvents();
+	I_MouseAccelChange();
+
+#if defined(_WIN32) && defined(USE_XINPUT)
+	I_XInputInit();
+#endif
+}
+
+//
 // I_StartTic
 //
 
@@ -457,19 +470,6 @@ void I_FinishUpdate(void) {
 	SDL_GL_SwapWindow(window);
 
 	BusyDisk = false;
-}
-
-//
-// I_InitInputs
-//
-
-void I_InitInputs(void) {
-	SDL_PumpEvents();
-	I_MouseAccelChange();
-
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputInit();
-#endif
 }
 
 //

@@ -251,7 +251,7 @@ void CON_DPrintf(const char* s, ...) {
 
 static boolean shiftdown = false;
 
-void CON_ParseKey(char c) {
+void CON_ParseKey(int c) {
 	if (c < ' ') {
 		return;
 	}

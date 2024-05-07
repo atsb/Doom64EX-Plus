@@ -317,7 +317,7 @@ void A_WeaponReady(player_t* player, pspdef_t* psp) {
 	}
 
 	// bob the weapon based on movement speed
-	angle = (128 * leveltime) & FINEANGLES - 1;
+	angle = ((128 * leveltime) & FINEANGLES) - 1;
 	psp->sx = FRACUNIT + FixedMul(player->bob, finecosine[angle]);
 	angle &= FINEANGLES / 2 - 1;
 	psp->sy = WEAPONTOP + FixedMul(player->bob, finesine[angle]);
@@ -599,7 +599,6 @@ void P_BulletSlope(mobj_t* mo) {
 void P_GunShot(mobj_t* mo, boolean accurate) {
 	angle_t     angle;
 	int         damage;
-	int         rnd1, rnd2;
 
 	damage = ((P_Random() & 3) * 4) + 4;
 	angle = mo->angle;

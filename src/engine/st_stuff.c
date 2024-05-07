@@ -820,6 +820,7 @@ void ST_Drawer(void) {
 			case am_cell:
 				Draw_Sprite2D(SPR_CELL, 0, 0, 524, 464, 0.5f, 0, WHITEALPHA(0xC0));
 				break;
+			default:
 			}
 
 			// display artifact sprites
@@ -1233,7 +1234,7 @@ static void ST_DrawChatText(void) {
 	}
 
 	if (st_chatOn) {
-		char tmp[MAXCHATSIZE];
+		char tmp[MAXCHATSIZE+2];
 
 		sprintf(tmp, "%s_", st_chatstring[consoleplayer]);
 		Draw_Text(STCHATX, STCHATY + 8, WHITE, 0.5f, false, tmp);

@@ -420,6 +420,7 @@ boolean G_ActionResponder(event_t* ev) {
 		I_XInputReadActions(ev);
 		break;
 #endif
+	default:
 	}
 
 	return false;
@@ -638,6 +639,7 @@ boolean G_BindActionByEvent(event_t* ev, char* action) {
 			plist = &MouseActions[button];
 		}
 		break;
+	default:
 	}
 	if (plist) {
 		G_BindAction(plist, action);

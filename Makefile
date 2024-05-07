@@ -2,7 +2,7 @@ CC=gcc
 
 libs := sdl3 libpng gl glu fluidsynth
 
-CFLAGS += $(foreach lib,$(libs),$(shell pkg-config --cflags $(lib)))
+CFLAGS += $(foreach lib,$(libs),$(shell pkg-config --cflags $(lib))) -Wall -Wno-pointer-sign -Wno-unknown-pragmas -Wno-missing-braces
 LDFLAGS := -lm $(foreach lib,$(libs),$(shell pkg-config --libs $(lib)))
 
 OBJDIR=src/engine

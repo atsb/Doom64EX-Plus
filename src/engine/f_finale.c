@@ -154,11 +154,11 @@ int F_Ticker(void) {
 
 	if (!castdeath) {
 		if (pc->key[PCKEY_LEFT]) {
-			castrotation = castrotation + 1 & 7;
+			castrotation = (castrotation + 1) & 7;
 			pc->key[PCKEY_LEFT] = 0;
 		}
 		else if (pc->key[PCKEY_RIGHT]) {
-			castrotation = castrotation - 1 & 7;
+			castrotation = (castrotation - 1) & 7;
 			pc->key[PCKEY_RIGHT] = 0;
 		}
 		else if (players[consoleplayer].cmd.buttons) {
@@ -166,9 +166,9 @@ int F_Ticker(void) {
 		}
 	}
 
-	finalePal.r = MIN(finalePal.r += 2, 250);
-	finalePal.g = MIN(finalePal.g += 2, 250);
-	finalePal.b = MIN(finalePal.b += 2, 250);
+	finalePal.r = MIN(finalePal.r + 2, 250);
+	finalePal.g = MIN(finalePal.g + 2, 250);
+	finalePal.b = MIN(finalePal.b + 2, 250);
 
 	if (!castdeath && castdying) {
 		S_StartSound(NULL, sfx_shotgun);
