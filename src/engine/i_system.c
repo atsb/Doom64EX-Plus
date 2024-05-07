@@ -86,7 +86,7 @@ CVAR(v_accessibility, 0);
 #define GetBasePath()   SDL_AndroidGetInternalStoragePath();
 #endif
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__)
 #define Free(userdir)	free(userdir);
 #else
 #define Free(userdir)	SDL_free(userdir);
@@ -337,7 +337,7 @@ char* I_FindDataFile(char* file) {
 			return path;
 	}
 
-#if defined(__LINUX__) || defined(__OpenBSD__)
+#if defined(__linux__) || defined(__OpenBSD__)
 	{
 		int i;
 		const char* paths[] = {
