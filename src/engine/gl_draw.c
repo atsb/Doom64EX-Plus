@@ -70,8 +70,8 @@ void Draw_GfxImageInter(int x, int y, const char* name, rcolor color, boolean al
 	float targetSize = fmin(250.0f, fmin(imgWidth, imgHeight));
 	float scale = targetSize / fmax(imgWidth, imgHeight);
 
-	float offset_width = 30.0f;
-	float offset_height = 30.0f;
+	float offset_width = 5.0f;
+	float offset_height = 5.0f;
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,

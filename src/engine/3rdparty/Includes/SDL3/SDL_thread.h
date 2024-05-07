@@ -35,7 +35,7 @@
 #include <SDL3/SDL_atomic.h>
 #include <SDL3/SDL_mutex.h>
 
-#if (defined(__WIN32__) || defined(__GDK__)) && !defined(__WINRT__)
+#if (defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_GDK)) && !defined(SDL_PLATFORM_WINRT)
 #include <process.h> /* _beginthreadex() and _endthreadex() */
 #endif
 
@@ -50,22 +50,23 @@ struct SDL_Thread;
 typedef struct SDL_Thread SDL_Thread;
 
 /* The SDL thread ID */
-typedef unsigned long SDL_threadID;
+typedef Uint64 SDL_ThreadID;
 
 /* Thread local storage ID, 0 is the invalid ID */
-typedef unsigned int SDL_TLSID;
+typedef Uint32 SDL_TLSID;
 
 /**
- *  The SDL thread priority.
+ * The SDL thread priority.
  *
- *  SDL will make system changes as necessary in order to apply the thread priority.
- *  Code which attempts to control thread state related to priority should be aware
- *  that calling SDL_SetThreadPriority may alter such state.
- *  SDL_HINT_THREAD_PRIORITY_POLICY can be used to control aspects of this behavior.
+ * SDL will make system changes as necessary in order to apply the thread
+ * priority. Code which attempts to control thread state related to priority
+ * should be aware that calling SDL_SetThreadPriority may alter such state.
+ * SDL_HINT_THREAD_PRIORITY_POLICY can be used to control aspects of this
+ * behavior.
  *
- *  \note On many systems you require special privileges to set high or time critical priority.
+ * \since This enum is available since SDL 3.0.0.
  */
-typedef enum {
+typedef enum SDL_ThreadPriority {
     SDL_THREAD_PRIORITY_LOW,
     SDL_THREAD_PRIORITY_NORMAL,
     SDL_THREAD_PRIORITY_HIGH,
@@ -77,14 +78,12 @@ typedef enum {
  *
  * \param data what was passed as `data` to SDL_CreateThread()
  * \returns a value that can be reported through SDL_WaitThread().
+ *
+ * \since This datatype is available since SDL 3.0.0.
  */
 typedef int (SDLCALL * SDL_ThreadFunction) (void *data);
 
-
-#if (defined(__WIN32__) || defined(__GDK__)) && !defined(__WINRT__)
-/**
- *  \file SDL_thread.h
- *
+/*
  *  We compile SDL into a DLL. This means, that it's the DLL which
  *  creates a new thread for the calling process with the SDL_CreateThread()
  *  API. There is a problem with this, that only the RTL of the SDL3.DLL will
@@ -102,6 +101,7 @@ typedef int (SDLCALL * SDL_ThreadFunction) (void *data);
  *  Always use the _beginthread() and _endthread() of the calling runtime
  *  library!
  */
+#if (defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_GDK)) && !defined(SDL_PLATFORM_WINRT)
 #define SDL_PASSED_BEGINTHREAD_ENDTHREAD
 
 typedef uintptr_t (__cdecl * pfnSDL_CurrentBeginThread)
@@ -190,8 +190,7 @@ SDL_CreateThreadWithStackSize(SDL_ThreadFunction fn,
  * \sa SDL_CreateThreadWithStackSize
  * \sa SDL_WaitThread
  */
-extern DECLSPEC SDL_Thread *SDLCALL
-SDL_CreateThread(SDL_ThreadFunction fn, const char *name, void *data);
+extern DECLSPEC SDL_Thread * SDLCALL SDL_CreateThread(SDL_ThreadFunction fn, const char *name, void *data);
 
 /**
  * Create a new thread with a specific stack size.
@@ -220,10 +219,6 @@ SDL_CreateThread(SDL_ThreadFunction fn, const char *name, void *data);
  * multiple of the system's page size (in many cases, this is 4 kilobytes, but
  * check your system documentation).
  *
- * In SDL 2.1, stack size will be folded into the original SDL_CreateThread
- * function, but for backwards compatibility, this is currently a separate
- * function.
- *
  * \param fn the SDL_ThreadFunction function to call in the new thread
  * \param name the name of the thread
  * \param stacksize the size, in bytes, to allocate for the new thread stack.
@@ -234,10 +229,10 @@ SDL_CreateThread(SDL_ThreadFunction fn, const char *name, void *data);
  *
  * \since This function is available since SDL 3.0.0.
  *
+ * \sa SDL_CreateThread
  * \sa SDL_WaitThread
  */
-extern DECLSPEC SDL_Thread *SDLCALL
-SDL_CreateThreadWithStackSize(SDL_ThreadFunction fn, const char *name, const size_t stacksize, void *data);
+extern DECLSPEC SDL_Thread * SDLCALL SDL_CreateThreadWithStackSize(SDL_ThreadFunction fn, const char *name, const size_t stacksize, void *data);
 
 #endif
 
@@ -252,8 +247,6 @@ SDL_CreateThreadWithStackSize(SDL_ThreadFunction fn, const char *name, const siz
  *          NULL if it doesn't have a name.
  *
  * \since This function is available since SDL 3.0.0.
- *
- * \sa SDL_CreateThread
  */
 extern DECLSPEC const char *SDLCALL SDL_GetThreadName(SDL_Thread *thread);
 
@@ -273,7 +266,7 @@ extern DECLSPEC const char *SDLCALL SDL_GetThreadName(SDL_Thread *thread);
  *
  * \sa SDL_GetThreadID
  */
-extern DECLSPEC SDL_threadID SDLCALL SDL_ThreadID(void);
+extern DECLSPEC SDL_ThreadID SDLCALL SDL_GetCurrentThreadID(void);
 
 /**
  * Get the thread identifier for the specified thread.
@@ -288,9 +281,9 @@ extern DECLSPEC SDL_threadID SDLCALL SDL_ThreadID(void);
  *
  * \since This function is available since SDL 3.0.0.
  *
- * \sa SDL_ThreadID
+ * \sa SDL_GetCurrentThreadID
  */
-extern DECLSPEC SDL_threadID SDLCALL SDL_GetThreadID(SDL_Thread * thread);
+extern DECLSPEC SDL_ThreadID SDLCALL SDL_GetThreadID(SDL_Thread * thread);
 
 /**
  * Set the priority for the current thread.
@@ -402,7 +395,6 @@ extern DECLSPEC SDL_TLSID SDLCALL SDL_CreateTLS(void);
  *
  * \since This function is available since SDL 3.0.0.
  *
- * \sa SDL_CreateTLS
  * \sa SDL_SetTLS
  */
 extern DECLSPEC void * SDLCALL SDL_GetTLS(SDL_TLSID id);
@@ -427,7 +419,6 @@ extern DECLSPEC void * SDLCALL SDL_GetTLS(SDL_TLSID id);
  *
  * \since This function is available since SDL 3.0.0.
  *
- * \sa SDL_CreateTLS
  * \sa SDL_GetTLS
  */
 extern DECLSPEC int SDLCALL SDL_SetTLS(SDL_TLSID id, const void *value, void (SDLCALL *destructor)(void*));
