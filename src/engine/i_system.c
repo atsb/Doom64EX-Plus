@@ -328,37 +328,22 @@ char* I_FindDataFile(char* file) {
 	}
 #endif
 
-	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
-           
-          Free(dir);
-
-		if (I_FileExists(path))
-			return path;
-	}
-
 #if defined(__linux__) || defined(__OpenBSD__)
-	{
-		int i;
-		const char* paths[] = {
-			//André: Removed all useless directories, Only The dir usr/local is fine to use.
-				//"/usr/local/share/games/doom64ex-plus/",
-				"/usr/local/share/doom64ex-plus/",
-				//"/usr/local/share/doom/",
-				//"/usr/share/games/doom64ex-plus/",
-				//"/usr/share/doom64ex-plus/",
-				//"/usr/share/doom/",
-				//"/opt/doom64ex-plus/",
-		};
 
-		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-			snprintf(path, 511, "%s%s", paths[i], file);
-			if (I_FileExists(path))
-				return path;
-		}
-	}
+#ifndef DOOM_UNIX_SYSTEM_DATADIR
+#define DOOM_UNIX_SYSTEM_DATADIR "/usr/local/share/doom64ex-plus"
 #endif
+	// system directory
+	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
+	if (I_FileExists(path))
+		return path;
 
+	// current directory
+	snprintf(path, 511, "%s", file);
+	if (I_FileExists(path))
+		return path;
+#endif
+	
 	Free(path);
 	
 	return NULL;

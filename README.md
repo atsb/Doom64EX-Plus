@@ -99,8 +99,11 @@ GNU/Linux / BSD
 
 - GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
 	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
+- compile-time macro *-DDOOM_UNIX_SYSTEM_DATADIR=\"<path>\"* allows to specify the system folder where the software will look
+for all IWAD and supporting files. if not specified, it defaults to `/usr/local/share/doom64ex-plus`.
+Packagers should set `DOOM_UNIX_SYSTEM_DATADIR` to a proper folder for the distro and package files `doom64ex-plus.wad` and `doomsnd.sf2` into that folder.
 
-Without the macro, it will look inside the current directory that the binary is in.
+Finally, if a data file cannot be found in one of the two folders above, it will look inside the current directory that the binary is in.
 
 Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux or macOS.
 
@@ -150,10 +153,13 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 
 ## Linux, FreeBSD/OpenBSD and Raspberry pi3
 
-You can place the asset data described above to any of the following directories:
+You can place the asset data described above into any of the following directories,
+searched in that order:
 
-* The directory in which `doom64ex-plus` resides
-* `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
+* `~/.local/share/doom64ex-plus` if compiled with the `DOOM_UNIX_INSTALL` macro
+* the folder specified by the `DOOM_UNIX_SYSTEM_DATADIR` compile macro, or `/usr/local/share/doom64ex-plus` if not specified
+
+If data files are not found in these directories, it will search in the current directory.
 
 ## macOS
 
