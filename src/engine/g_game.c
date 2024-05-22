@@ -139,12 +139,12 @@ int         bodyqueslot;
 byte forcejump = 0;
 byte forcefreelook = 0;
 
-float killcount;
-float itemcount;
-float secretcount;
-float totalkills;
-float totalitems;
-float totalsecret;
+int killcount;
+int itemcount;
+int secretcount;
+int totalkills;
+int totalitems;
+int totalsecret;
 
 NETCVAR(sv_nomonsters, 0);
 NETCVAR(sv_fastmonsters, 0);
