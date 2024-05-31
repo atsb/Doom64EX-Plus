@@ -1692,13 +1692,13 @@ boolean PIT_ChangeSector(mobj_t* thing) {
             P_DamageMobj(thing, NULL, NULL, 10);
 
             // spray blood in a random direction
-            if (mo->type == MT_BRUISER2) {
+            if (thing->type == MT_BRUISER2) {
                 mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD_GREEN);
             }
-            else if (mo->type == MT_IMP2) {
+            else if (thing->type == MT_IMP2) {
                 mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD_PURPLE);
             }
-            else if (mo->type == MT_SKULL) {
+            else if (thing->type == MT_SKULL) {
                 mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_SMOKE_GRAY);
             }
             else {
