@@ -3435,6 +3435,8 @@ static void M_DoDefaults(int choice) {
 // M_DoVideoReset
 //
 static void M_DoVideoReset(int choice) {
+	I_Init();
+	R_Init();
 	GL_Init();
 }
 
