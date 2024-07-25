@@ -9,12 +9,13 @@ I have kept the current release and current 'stable' branch as bug-free and stab
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for loading PWADs
-* Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
+* Better performance (especially when compared to Nightdive Studios' official version
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
 * The "medkit you REALLY need!" message fix
 * Many bugfixes
 * KEX - This is pretty much removed.  The only remnants are some comments with [kex] and the rendering stuff that is used in later versions. I wanted to keep Doom 64 EX+ very close in format to other source ports for familiarity purposes and for ease of porting code from Erick's DOOM64-RE project.
+* SDL3 - I believe DOOM64 EX+ is the first Doom source port to officially move to SDL3 as standard.
 
 * NOTE for NVIDIA users, disable vsync from the control panel to fix stuttering.  No idea why it only happens on NVidia cards, though I can't say I'm surprised.
 * NOTE - for the launcher, you MUST have .NET 6 or higher installed as the launcher was programmed using .NET 6.0 and anything below won't work.
