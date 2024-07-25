@@ -217,10 +217,16 @@ boolean PIT_CheckLine(line_t* ld) {
         if (!tmthing->player && ld->flags & ML_BLOCKMONSTERS) {
             return false;    // block monsters only
         }
+
+        // styd: add new flag block player
+        if (!(tmthing->flags & MF_COUNTKILL) && ld->flags & ML_BLOCKPLAYER) {
+            return false;    // block player only
+        }
     }
 
     // [d64] don't cross mid-pegged lines
-    if (ld->flags & ML_BLOCKPROJECTILES) {
+    // styd: fixies block projectile to not block things and only blocks projectiles
+    if (!(tmthing->flags & MF_SOLID) && ld->flags & ML_BLOCKPROJECTILES) {
         tmhitline = ld;
         return false;
     }

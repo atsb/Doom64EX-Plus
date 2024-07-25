@@ -144,6 +144,7 @@ typedef struct {
 #define ML_TRIGGERFRONT         0x1000000       // can only trigger from the front of the line
 #define ML_HIDEAUTOMAPTRIGGER   0x2000000       // don't display as yellow line special in automap
 #define ML_INVERSEBLEND         0x4000000       // reverse the blending of the sector colors
+#define ML_BLOCKPLAYER          0x8000000       // Blocks player only.
 #define ML_UNKNOWN8000000       0x8000000       // reserved
 #define ML_UNKNOWN10000000      0x10000000      // reserved
 #define ML_UNKNOWN20000000      0x20000000      // reserved
