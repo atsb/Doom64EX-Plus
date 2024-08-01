@@ -1138,7 +1138,7 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 
 	case 6:
 		// Fast Ceiling Crush & Raise
-		ok = EV_DoCeiling(line, fastCrushAndRaise, CEILSPEED);
+		ok = EV_DoCeiling(line, fastCrushAndRaise, CEILSPEED*2);
 		break;
 
 	case 8:
