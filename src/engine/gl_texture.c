@@ -281,7 +281,7 @@ static void InitGfxTextures(void) {
 
 	g_start = W_GetNumForName("SYMBOLS");
 	g_end = W_GetNumForName("MOUNTC");
-	numgfx = (g_end - g_start);
+	numgfx = (g_end - g_start) + 1;
 	gfxptr = Z_Calloc(numgfx * sizeof(dtexture), PU_STATIC, NULL);
 	gfxwidth = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
 	gfxorigwidth = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
