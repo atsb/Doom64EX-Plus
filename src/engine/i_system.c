@@ -86,13 +86,6 @@ CVAR(v_accessibility, 0);
 #define GetBasePath()   SDL_AndroidGetInternalStoragePath();
 #endif
 
-#if defined(__linux__) || defined(__OpenBSD__)
-#define Free(userdir)	free(userdir);
-#else
-#define Free(userdir)	SDL_free(userdir);
-#endif
-
-
 ticcmd_t        emptycmd;
 
 //
@@ -257,7 +250,6 @@ ticcmd_t* I_BaseTiccmd(void) {
  * Assume this is the only user-writeable directory on the system.
  *
  * @return Fully-qualified path that ends with a separator or NULL if not found.
- * @note The returning value MUST be freed by the caller.
  */
 
 char* I_GetUserDir(void) 
@@ -273,15 +265,8 @@ char* I_GetUserDir(void)
  * @brief Find a regular file in the user-writeable directory.
  *
  * @return Fully-qualified path or NULL if not found.
- * @note The returning value MUST be freed by the caller.
  */
 
- /* ATSB: for some reason, these free() calls cause MSVC builds to bail out
- *  but are needed for Unix systems to even boot the game.
- *  whatever...  eventually we will clean up this mess and have
- *  portable fixed width types everywhere...  one day.
- *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
- */
 char* I_GetUserFile(char* file) {
 	char* path, * userdir;
 
@@ -292,8 +277,6 @@ char* I_GetUserFile(char* file) {
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
-        Free(userdir);
-
 	return path;
 }
 
@@ -301,32 +284,18 @@ char* I_GetUserFile(char* file) {
  * @brief Find a regular read-only data file.
  *
  * @return Fully-qualified path or NULL if not found.
- * @note The returning value MUST be freed by the caller.
  */
 char* I_FindDataFile(char* file) {
 	char *path, *dir;
 
 	path = malloc(512);
 
-	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
-
-         Free(dir);
-
-		if (I_FileExists(path))
-			return path;
-	}
-
-#ifdef __APPLE__
 	if ((dir = SDL_GetBasePath())) {
 		snprintf(path, 511, "%s%s", dir, file);
-		
-		  Free(dir);
 
 		if (I_FileExists(path))
 			return path;
 	}
-#endif
 
 #if defined(__linux__) || defined(__OpenBSD__)
 
@@ -344,9 +313,7 @@ char* I_FindDataFile(char* file) {
 		return path;
 #endif
 	
-	Free(path);
-	
-	return NULL;
+	return path;
 }
 
 /**
