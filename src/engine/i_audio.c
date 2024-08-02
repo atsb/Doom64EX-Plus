@@ -114,7 +114,7 @@ static SDL_Mutex* lock = NULL;
 
 static SDL_Semaphore* semaphore = NULL;
 #define SEMAPHORE_LOCK()    if(SDL_WaitSemaphore(semaphore) == 0) {
-#define SEMAPHORE_UNLOCK()  SDL_PostSemaphore(semaphore); }
+#define SEMAPHORE_UNLOCK()  SDL_SignalSemaphore(semaphore); }
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
 static int seqready = 0;

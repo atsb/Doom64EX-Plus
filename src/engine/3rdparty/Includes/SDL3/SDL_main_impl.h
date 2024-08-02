@@ -19,6 +19,8 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
+/* WIKI CATEGORY: Main */
+
 #ifndef SDL_main_impl_h_
 #define SDL_main_impl_h_
 
@@ -73,8 +75,8 @@
             #endif
 
             typedef struct HINSTANCE__ * HINSTANCE;
-            typedef char* LPSTR;
-            typedef wchar_t* PWSTR;
+            typedef char *LPSTR;
+            typedef wchar_t *PWSTR;
 
             /* The VC++ compiler needs main/wmain defined, but not for GDK */
             #if defined(_MSC_VER) && !defined(SDL_PLATFORM_GDK)

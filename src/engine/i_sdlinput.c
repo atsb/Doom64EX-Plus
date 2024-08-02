@@ -332,13 +332,13 @@ void I_GetEvent(SDL_Event* Event) {
 		if (Event->key.repeat)
 			break;
 		event.type = ev_keydown;
-		event.data1 = I_TranslateKey(Event->key.keysym.sym);
+		event.data1 = I_TranslateKey(Event->key.key);
 		D_PostEvent(&event);
 		break;
 
 	case SDL_EVENT_KEY_UP:
 		event.type = ev_keyup;
-		event.data1 = I_TranslateKey(Event->key.keysym.sym);
+		event.data1 = I_TranslateKey(Event->key.key);
 		D_PostEvent(&event);
 		break;
 
@@ -421,7 +421,7 @@ int I_ShutdownWait(void) {
 
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_EVENT_QUIT ||
-			(event.type == SDL_EVENT_KEY_DOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+			(event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
 			return 1;
 		}

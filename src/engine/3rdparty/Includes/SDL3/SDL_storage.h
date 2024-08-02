@@ -20,9 +20,9 @@
 */
 
 /**
- *  \file SDL_storage.h
+ * # CategoryStorage
  *
- *  Include file for storage container SDL API functions
+ * SDL storage container management.
  */
 
 #ifndef SDL_storage_h_
@@ -42,6 +42,18 @@ extern "C" {
 
 /* !!! FIXME: Don't let this ship without async R/W support!!! */
 
+/**
+ * Function interface for SDL_Storage.
+ *
+ * Apps that want to supply a custom implementation of SDL_Storage will fill
+ * in all the functions in this struct, and then pass it to SDL_OpenStorage to
+ * create a custom SDL_Storage object.
+ *
+ * It is not usually necessary to do this; SDL provides standard
+ * implementations for many things you might expect to do with an SDL_Storage.
+ *
+ * \since This struct is available since SDL 3.0.0.
+ */
 typedef struct SDL_StorageInterface
 {
     /* Called when the storage is closed */
@@ -71,18 +83,29 @@ typedef struct SDL_StorageInterface
     /* Rename a path, optional for read-only storage */
     int (SDLCALL *rename)(void *userdata, const char *oldpath, const char *newpath);
 
+    /* Copy a file, optional for read-only storage */
+    int (SDLCALL *copy)(void *userdata, const char *oldpath, const char *newpath);
+
     /* Get the space remaining, optional for read-only storage */
     Uint64 (SDLCALL *space_remaining)(void *userdata);
-
 } SDL_StorageInterface;
 
+/**
+ * An abstract interface for filesystem access.
+ *
+ * This is an opaque datatype. One can create this object using standard SDL
+ * functions like SDL_OpenTitleStorage or SDL_OpenUserStorage, etc, or create
+ * an object with a custom implementation using SDL_OpenStorage.
+ *
+ * \since This struct is available since SDL 3.0.0.
+ */
 typedef struct SDL_Storage SDL_Storage;
 
 /**
  * Opens up a read-only container for the application's filesystem.
  *
- * \param override a path to override the backend's default title root
- * \param props a property list that may contain backend-specific information
+ * \param override a path to override the backend's default title root.
+ * \param props a property list that may contain backend-specific information.
  * \returns a title storage container on success or NULL on failure; call
  *          SDL_GetError() for more information.
  *
@@ -93,7 +116,7 @@ typedef struct SDL_Storage SDL_Storage;
  * \sa SDL_OpenUserStorage
  * \sa SDL_ReadStorageFile
  */
-extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenTitleStorage(const char *override, SDL_PropertiesID props);
+extern SDL_DECLSPEC SDL_Storage * SDLCALL SDL_OpenTitleStorage(const char *override, SDL_PropertiesID props);
 
 /**
  * Opens up a container for a user's unique read/write filesystem.
@@ -103,9 +126,9 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenTitleStorage(const char *override, 
  * This allows the backend to properly batch file operations and flush them
  * when the container has been closed; ensuring safe and optimal save I/O.
  *
- * \param org the name of your organization
- * \param app the name of your application
- * \param props a property list that may contain backend-specific information
+ * \param org the name of your organization.
+ * \param app the name of your application.
+ * \param props a property list that may contain backend-specific information.
  * \returns a user storage container on success or NULL on failure; call
  *          SDL_GetError() for more information.
  *
@@ -119,7 +142,7 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenTitleStorage(const char *override, 
  * \sa SDL_StorageReady
  * \sa SDL_WriteStorageFile
  */
-extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenUserStorage(const char *org, const char *app, SDL_PropertiesID props);
+extern SDL_DECLSPEC SDL_Storage * SDLCALL SDL_OpenUserStorage(const char *org, const char *app, SDL_PropertiesID props);
 
 /**
  * Opens up a container for local filesystem storage.
@@ -129,7 +152,7 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenUserStorage(const char *org, const 
  * SDL_OpenUserStorage() for access to user data.
  *
  * \param path the base path prepended to all storage paths, or NULL for no
- *             base path
+ *             base path.
  * \returns a filesystem storage container on success or NULL on failure; call
  *          SDL_GetError() for more information.
  *
@@ -143,7 +166,7 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenUserStorage(const char *org, const 
  * \sa SDL_ReadStorageFile
  * \sa SDL_WriteStorageFile
  */
-extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenFileStorage(const char *path);
+extern SDL_DECLSPEC SDL_Storage * SDLCALL SDL_OpenFileStorage(const char *path);
 
 /**
  * Opens up a container using a client-provided storage interface.
@@ -153,8 +176,8 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenFileStorage(const char *path);
  * should use the built-in implementations in SDL, like SDL_OpenTitleStorage()
  * or SDL_OpenUserStorage().
  *
- * \param iface the function table to be used by this container
- * \param userdata the pointer that will be passed to the store interface
+ * \param iface the function table to be used by this container.
+ * \param userdata the pointer that will be passed to the store interface.
  * \returns a storage container on success or NULL on failure; call
  *          SDL_GetError() for more information.
  *
@@ -167,12 +190,12 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenFileStorage(const char *path);
  * \sa SDL_StorageReady
  * \sa SDL_WriteStorageFile
  */
-extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenStorage(const SDL_StorageInterface *iface, void *userdata);
+extern SDL_DECLSPEC SDL_Storage * SDLCALL SDL_OpenStorage(const SDL_StorageInterface *iface, void *userdata);
 
 /**
  * Closes and frees a storage container.
  *
- * \param storage a storage container to close
+ * \param storage a storage container to close.
  * \returns 0 if the container was freed with no errors, a negative value
  *          otherwise; call SDL_GetError() for more information. Even if the
  *          function returns an error, the container data will be freed; the
@@ -185,7 +208,7 @@ extern DECLSPEC SDL_Storage *SDLCALL SDL_OpenStorage(const SDL_StorageInterface 
  * \sa SDL_OpenTitleStorage
  * \sa SDL_OpenUserStorage
  */
-extern DECLSPEC int SDLCALL SDL_CloseStorage(SDL_Storage *storage);
+extern SDL_DECLSPEC int SDLCALL SDL_CloseStorage(SDL_Storage *storage);
 
 /**
  * Checks if the storage container is ready to use.
@@ -194,38 +217,38 @@ extern DECLSPEC int SDLCALL SDL_CloseStorage(SDL_Storage *storage);
  * SDL_TRUE - however, it is not recommended to spinwait on this call, as the
  * backend may depend on a synchronous message loop.
  *
- * \param storage a storage container to query
- * \returns SDL_TRUE if the container is ready, SDL_FALSE otherwise
+ * \param storage a storage container to query.
+ * \returns SDL_TRUE if the container is ready, SDL_FALSE otherwise.
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_StorageReady(SDL_Storage *storage);
+extern SDL_DECLSPEC SDL_bool SDLCALL SDL_StorageReady(SDL_Storage *storage);
 
 /**
  * Query the size of a file within a storage container.
  *
- * \param storage a storage container to query
- * \param path the relative path of the file to query
- * \param length a pointer to be filled with the file's length
- * \returns 0 if the file could be queried, a negative value otherwise; call
- *          SDL_GetError() for more information.
+ * \param storage a storage container to query.
+ * \param path the relative path of the file to query.
+ * \param length a pointer to be filled with the file's length.
+ * \returns 0 if the file could be queried or a negative error code on
+ *          failure; call SDL_GetError() for more information.
  *
  * \since This function is available since SDL 3.0.0.
  *
  * \sa SDL_ReadStorageFile
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_GetStorageFileSize(SDL_Storage *storage, const char *path, Uint64 *length);
+extern SDL_DECLSPEC int SDLCALL SDL_GetStorageFileSize(SDL_Storage *storage, const char *path, Uint64 *length);
 
 /**
  * Synchronously read a file from a storage container into a client-provided
  * buffer.
  *
- * \param storage a storage container to read from
- * \param path the relative path of the file to read
- * \param destination a client-provided buffer to read the file into
- * \param length the length of the destination buffer
- * \returns 0 if the file was read, a negative value otherwise; call
+ * \param storage a storage container to read from.
+ * \param path the relative path of the file to read.
+ * \param destination a client-provided buffer to read the file into.
+ * \param length the length of the destination buffer.
+ * \returns 0 if the file was read or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
  * \since This function is available since SDL 3.0.0.
@@ -234,17 +257,17 @@ extern DECLSPEC int SDLCALL SDL_GetStorageFileSize(SDL_Storage *storage, const c
  * \sa SDL_StorageReady
  * \sa SDL_WriteStorageFile
  */
-extern DECLSPEC int SDLCALL SDL_ReadStorageFile(SDL_Storage *storage, const char *path, void *destination, Uint64 length);
+extern SDL_DECLSPEC int SDLCALL SDL_ReadStorageFile(SDL_Storage *storage, const char *path, void *destination, Uint64 length);
 
 /**
  * Synchronously write a file from client memory into a storage container.
  *
- * \param storage a storage container to write to
- * \param path the relative path of the file to write
- * \param source a client-provided buffer to write from
- * \param length the length of the source buffer
- * \returns 0 if the file was written, a negative value otherwise; call
- *          SDL_GetError() for more information.
+ * \param storage a storage container to write to.
+ * \param path the relative path of the file to write.
+ * \param source a client-provided buffer to write from.
+ * \param length the length of the source buffer.
+ * \returns 0 if the file was written or a negative error code on failure;
+ *          call SDL_GetError() for more information.
  *
  * \since This function is available since SDL 3.0.0.
  *
@@ -252,13 +275,13 @@ extern DECLSPEC int SDLCALL SDL_ReadStorageFile(SDL_Storage *storage, const char
  * \sa SDL_ReadStorageFile
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_WriteStorageFile(SDL_Storage *storage, const char *path, const void *source, Uint64 length);
+extern SDL_DECLSPEC int SDLCALL SDL_WriteStorageFile(SDL_Storage *storage, const char *path, const void *source, Uint64 length);
 
 /**
  * Create a directory in a writable storage container.
  *
- * \param storage a storage container
- * \param path the path of the directory to create
+ * \param storage a storage container.
+ * \param path the path of the directory to create.
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
@@ -266,7 +289,7 @@ extern DECLSPEC int SDLCALL SDL_WriteStorageFile(SDL_Storage *storage, const cha
  *
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_CreateStorageDirectory(SDL_Storage *storage, const char *path);
+extern SDL_DECLSPEC int SDLCALL SDL_CreateStorageDirectory(SDL_Storage *storage, const char *path);
 
 /**
  * Enumerate a directory in a storage container through a callback function.
@@ -275,10 +298,10 @@ extern DECLSPEC int SDLCALL SDL_CreateStorageDirectory(SDL_Storage *storage, con
  * callback, called once for each directory entry, until all results have been
  * provided or the callback returns <= 0.
  *
- * \param storage a storage container
- * \param path the path of the directory to enumerate
- * \param callback a function that is called for each entry in the directory
- * \param userdata a pointer that is passed to `callback`
+ * \param storage a storage container.
+ * \param path the path of the directory to enumerate.
+ * \param callback a function that is called for each entry in the directory.
+ * \param userdata a pointer that is passed to `callback`.
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
@@ -286,13 +309,13 @@ extern DECLSPEC int SDLCALL SDL_CreateStorageDirectory(SDL_Storage *storage, con
  *
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_EnumerateStorageDirectory(SDL_Storage *storage, const char *path, SDL_EnumerateDirectoryCallback callback, void *userdata);
+extern SDL_DECLSPEC int SDLCALL SDL_EnumerateStorageDirectory(SDL_Storage *storage, const char *path, SDL_EnumerateDirectoryCallback callback, void *userdata);
 
 /**
  * Remove a file or an empty directory in a writable storage container.
  *
- * \param storage a storage container
- * \param path the path of the directory to enumerate
+ * \param storage a storage container.
+ * \param path the path of the directory to enumerate.
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
@@ -300,14 +323,14 @@ extern DECLSPEC int SDLCALL SDL_EnumerateStorageDirectory(SDL_Storage *storage, 
  *
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_RemoveStoragePath(SDL_Storage *storage, const char *path);
+extern SDL_DECLSPEC int SDLCALL SDL_RemoveStoragePath(SDL_Storage *storage, const char *path);
 
 /**
  * Rename a file or directory in a writable storage container.
  *
- * \param storage a storage container
- * \param oldpath the old path
- * \param newpath the new path
+ * \param storage a storage container.
+ * \param oldpath the old path.
+ * \param newpath the new path.
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *
@@ -315,15 +338,30 @@ extern DECLSPEC int SDLCALL SDL_RemoveStoragePath(SDL_Storage *storage, const ch
  *
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_RenameStoragePath(SDL_Storage *storage, const char *oldpath, const char *newpath);
+extern SDL_DECLSPEC int SDLCALL SDL_RenameStoragePath(SDL_Storage *storage, const char *oldpath, const char *newpath);
+
+/**
+ * Copy a file in a writable storage container.
+ *
+ * \param storage a storage container.
+ * \param oldpath the old path.
+ * \param newpath the new path.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
+ *
+ * \since This function is available since SDL 3.0.0.
+ *
+ * \sa SDL_StorageReady
+ */
+extern SDL_DECLSPEC int SDLCALL SDL_CopyStorageFile(SDL_Storage *storage, const char *oldpath, const char *newpath);
 
 /**
  * Get information about a filesystem path in a storage container.
  *
- * \param storage a storage container
- * \param path the path to query
+ * \param storage a storage container.
+ * \param path the path to query.
  * \param info a pointer filled in with information about the path, or NULL to
- *             check for the existence of a file
+ *             check for the existence of a file.
  * \returns 0 on success or a negative error code if the file doesn't exist,
  *          or another failure; call SDL_GetError() for more information.
  *
@@ -331,20 +369,20 @@ extern DECLSPEC int SDLCALL SDL_RenameStoragePath(SDL_Storage *storage, const ch
  *
  * \sa SDL_StorageReady
  */
-extern DECLSPEC int SDLCALL SDL_GetStoragePathInfo(SDL_Storage *storage, const char *path, SDL_PathInfo *info);
+extern SDL_DECLSPEC int SDLCALL SDL_GetStoragePathInfo(SDL_Storage *storage, const char *path, SDL_PathInfo *info);
 
 /**
  * Queries the remaining space in a storage container.
  *
- * \param storage a storage container to query
- * \returns the amount of remaining space, in bytes
+ * \param storage a storage container to query.
+ * \returns the amount of remaining space, in bytes.
  *
  * \since This function is available since SDL 3.0.0.
  *
  * \sa SDL_StorageReady
  * \sa SDL_WriteStorageFile
  */
-extern DECLSPEC Uint64 SDLCALL SDL_GetStorageSpaceRemaining(SDL_Storage *storage);
+extern SDL_DECLSPEC Uint64 SDLCALL SDL_GetStorageSpaceRemaining(SDL_Storage *storage);
 
 /**
  * Enumerate a directory tree, filtered by pattern, and return a list.
@@ -363,10 +401,8 @@ extern DECLSPEC Uint64 SDLCALL SDL_GetStorageSpaceRemaining(SDL_Storage *storage
  * convenience, but if `count` is non-NULL, on return it will contain the
  * number of items in the array, not counting the NULL terminator.
  *
- * You must free the returned pointer with SDL_free() when done with it.
- *
- * \param storage a storage container
- * \param path the path of the directory to enumerate
+ * \param storage a storage container.
+ * \param path the path of the directory to enumerate.
  * \param pattern the pattern that files in the directory must match. Can be
  *                NULL.
  * \param flags `SDL_GLOB_*` bitflags that affect this search.
@@ -374,14 +410,16 @@ extern DECLSPEC Uint64 SDLCALL SDL_GetStorageSpaceRemaining(SDL_Storage *storage
  *              array. Can be NULL.
  * \returns an array of strings on success or NULL on failure; call
  *          SDL_GetError() for more information. The caller should pass the
- *          returned pointer to SDL_free when done with it.
+ *          returned pointer to SDL_free when done with it. This is a single
+ *          allocation that should be freed with SDL_free() when it is no
+ *          longer needed.
  *
  * \threadsafety It is safe to call this function from any thread, assuming
  *               the `storage` object is thread-safe.
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern DECLSPEC char **SDLCALL SDL_GlobStorageDirectory(SDL_Storage *storage, const char *path, const char *pattern, Uint32 flags, int *count);
+extern SDL_DECLSPEC char ** SDLCALL SDL_GlobStorageDirectory(SDL_Storage *storage, const char *path, const char *pattern, SDL_GlobFlags flags, int *count);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

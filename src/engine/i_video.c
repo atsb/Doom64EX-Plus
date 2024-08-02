@@ -178,7 +178,7 @@ void I_InitScreen(void) {
 
 void I_ShutdownVideo(void) {
 	if (glContext) {
-		SDL_GL_DeleteContext(glContext);
+		SDL_GL_DestroyContext(glContext);
 		glContext = NULL;
 	}
 
