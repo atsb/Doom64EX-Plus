@@ -407,7 +407,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 		// bonus items
 	case SPR_BON1:
-		player->health+=2;		// can go over 100%
+		player->health += 2;		// can go over 100%
 		if (player->health > deh_max_health)
 			player->health = deh_max_health;
 		player->mo->health = player->health;
@@ -416,7 +416,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_BON2:
-		player->armorpoints+=2;		// can go over 100%
+		player->armorpoints += 2;		// can go over 100%
 		if (player->armorpoints > deh_max_armor)
 			player->armorpoints = deh_max_armor;
 		if (!player->armortype) {
@@ -773,7 +773,6 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 	if (special->type != MT_FAKEITEM) {
 		if (special->flags & MF_COUNTITEM) {
 			player->itemcount++;
-		}
 	}
 
 	if (special->flags & MF_COUNTSECRET) {
@@ -787,9 +786,9 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	if (player == &players[consoleplayer]) {
 		S_StartSound(NULL, sound);
+		}
 	}
 }
-
 //
 // P_Obituary
 //
