@@ -268,7 +268,7 @@ char* I_GetUserDir(void)
  */
 
 char* I_GetUserFile(char* file) {
-	char* path, * userdir;
+	const char* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
@@ -286,7 +286,7 @@ char* I_GetUserFile(char* file) {
  * @return Fully-qualified path or NULL if not found.
  */
 char* I_FindDataFile(char* file) {
-	char *path, *dir;
+	const char *path, *dir;
 
 	path = malloc(512);
 
