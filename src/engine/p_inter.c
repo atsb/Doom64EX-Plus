@@ -61,7 +61,6 @@
 CVAR_EXTERNAL(p_damageindicator);
 CVAR(m_obituaries, 0);
 CVAR_EXTERNAL(m_brutal);
-CVAR_EXTERNAL(p_disable_monster_infighting);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -1139,21 +1138,15 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 	if ((P_Random() < target->info->painchance) && !(target->flags & MF_SKULLFLY))
 	{
-		target->flags |= MF_JUSTHIT;    // fight back!
+		target->flags |= MF_JUSTHIT; /* fight back! */
 		if (target->info->painstate)
 			P_SetMobjState(target, target->info->painstate);
 	}
 
-	target->reactiontime = 0;           // we're awake now...
-	if ((!target->threshold || target->type == MT_VILE)
-		&& source && (source->flags & MF_SHOOTABLE)
-		&& source->type != MT_VILE
-		&& !(target->flags & MF_NOINFIGHTING
-		     || ((source->flags ^ target->flags) && p_disable_monster_infighting.value) > 0))
-	{
-		// if not intent on another player,
-		// chase after this one
-		P_SetTarget(&target->target, source);
+	target->reactiontime = 0; /* we're awake now...	 */
+	if (!target->threshold && source && (source->flags & MF_SHOOTABLE) && !(target->flags & MF_NOINFIGHTING))
+	{	/* if not intent on another player, chase after this one */
+		target->target = source;
 		target->threshold = BASETHRESHOLD;
 		if (target->state == &states[target->info->spawnstate] && target->info->seestate != S_NULL)
 		{

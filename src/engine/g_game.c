@@ -173,7 +173,6 @@ CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_extendedcast);
-CVAR_EXTERNAL(p_disable_monster_infighting);
 
 //
 // G_RegisterCvars
@@ -197,7 +196,6 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
 	CON_CvarRegister(&m_extendedcast);
-	CON_CvarRegister(&p_disable_monster_infighting);
 }
 
 //
