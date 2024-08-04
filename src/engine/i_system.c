@@ -397,8 +397,6 @@ void I_Warning(const char* string, ...) {
 	char buff[1024];
 	va_list    va;
 
-	I_ShutdownSound();
-
 	va_start(va, string);
 	vsprintf(buff, string, va);
 	va_end(va);
@@ -414,10 +412,6 @@ void I_Warning(const char* string, ...) {
 			GL_ClearView(0xFF000000);
 			Draw_Text(0, 0, WHITE, 1, 1, "Warning - %s\n", buff);
 			GL_SwapBuffers();
-
-			if (I_ShutdownWait()) {
-				break;
-			}
 
 			I_Sleep(1);
 		}
