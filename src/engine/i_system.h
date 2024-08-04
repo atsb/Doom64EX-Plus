@@ -68,6 +68,7 @@ void I_Quit(void);
 
 void I_BeginRead(void);
 void I_Error(const char* error, ...);
+void I_Warning(const char* string, ...);
 void I_Printf(const char* msg, ...);
 
 char* I_GetUserDir(void);

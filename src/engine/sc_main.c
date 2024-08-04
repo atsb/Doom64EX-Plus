@@ -304,7 +304,7 @@ static void SC_Error(const char* function) {
 		return;
 	}
 
-	I_Printf("%s: Unknown token: '%s' (line = %i, pos = %i)",
+	I_Warning("%s: Unknown token: '%s' (line = %i, pos = %i)",
 		function, sc_parser.token, sc_parser.linepos, sc_parser.rowpos);
 }
 

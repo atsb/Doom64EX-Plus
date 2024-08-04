@@ -393,6 +393,37 @@ void I_Error(const char* string, ...) {
 	exit(0);    // just in case...
 }
 
+void I_Warning(const char* string, ...) {
+	char buff[1024];
+	va_list    va;
+
+	I_ShutdownSound();
+
+	va_start(va, string);
+	vsprintf(buff, string, va);
+	va_end(va);
+
+	fprintf(stderr, "Warning - %s\n", buff);
+	fflush(stderr);
+
+	I_Printf("\n********* WARNING *********\n");
+	I_Printf("%s", buff);
+
+	if (usingGL) {
+		while (1) {
+			GL_ClearView(0xFF000000);
+			Draw_Text(0, 0, WHITE, 1, 1, "Error - %s\n", buff);
+			GL_SwapBuffers();
+
+			if (I_ShutdownWait()) {
+				break;
+			}
+
+			I_Sleep(1);
+		}
+	}
+}
+
 //
 // I_Quit
 //
