@@ -412,7 +412,7 @@ void I_Warning(const char* string, ...) {
 	if (usingGL) {
 		while (1) {
 			GL_ClearView(0xFF000000);
-			Draw_Text(0, 0, WHITE, 1, 1, "Error - %s\n", buff);
+			Draw_Text(0, 0, WHITE, 1, 1, "Warning - %s\n", buff);
 			GL_SwapBuffers();
 
 			if (I_ShutdownWait()) {
