@@ -70,21 +70,10 @@ CVAR_CMD(s_driver, sndio)
 {
     char* driver = cvar->string;
 
-    // this is absolutely horrible
-    if (!dstrcmp(cvar->defvalue, "default")) {
-        cvar->defvalue = DEFAULT_FLUID_DRIVER;
-    }
-
-    // same as above
-    if (!dstrcmp(driver, "default")) {
-        CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
-        return;
-    }
-
     if (!dstrcmp(driver, "jack") ||
         !dstrcmp(driver, "alsa") ||
         !dstrcmp(driver, "oss") ||
-        !dstrcmp(driver, "alsa") ||
+        !dstrcmp(driver, "pulseaudio") ||
         !dstrcmp(driver, "coreaudio") ||
         !dstrcmp(driver, "dsound") ||
         !dstrcmp(driver, "portaudio") ||
