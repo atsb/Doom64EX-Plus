@@ -413,6 +413,7 @@ void S_RegisterCvars(void) {
     CON_CvarRegister(&s_musvol);
     CON_CvarRegister(&s_gain);
     CON_CvarRegister(&s_soundfont);
+    CON_CvarRegister(&s_driver);
 }
 
 
