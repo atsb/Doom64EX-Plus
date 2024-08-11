@@ -821,7 +821,7 @@ extern SDL_DECLSPEC void SDLCALL SDL_CloseAudioDevice(SDL_AudioDeviceID devid);
  * stream's format at any time.
  *
  * \param devid an audio device to bind a stream to.
- * \param streams an array of audio streams to unbind.
+ * \param streams an array of audio streams to bind.
  * \param num_streams number streams listed in the `streams` array.
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
@@ -1309,7 +1309,8 @@ extern SDL_DECLSPEC int SDLCALL SDL_GetAudioStreamData(SDL_AudioStream *stream, 
  * clamped.
  *
  * \param stream the audio stream to query.
- * \returns the number of converted/resampled bytes available.
+ * \returns the number of converted/resampled bytes available or a negative
+ *          error code on failure; call SDL_GetError() for more information.
  *
  * \threadsafety It is safe to call this function from any thread.
  *
@@ -1341,7 +1342,8 @@ extern SDL_DECLSPEC int SDLCALL SDL_GetAudioStreamAvailable(SDL_AudioStream *str
  * clamped.
  *
  * \param stream the audio stream to query.
- * \returns the number of bytes queued.
+ * \returns the number of bytes queued or a negative error code on failure;
+ *          call SDL_GetError() for more information.
  *
  * \threadsafety It is safe to call this function from any thread.
  *
@@ -1994,6 +1996,18 @@ extern SDL_DECLSPEC int SDLCALL SDL_ConvertAudioSamples(const SDL_AudioSpec *src
                                                     Uint8 **dst_data,
                                                     int *dst_len);
 
+/**
+ * Get the human readable name of an audio format.
+ *
+ * \param format the audio format to query.
+ * \returns the human readable name of the specified audio format or
+ *          "SDL_AUDIO_UNKNOWN" if the format isn't recognized.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.0.0.
+ */
+extern SDL_DECLSPEC const char * SDLCALL SDL_GetAudioFormatName(SDL_AudioFormat format);
 
 /**
  * Get the appropriate memset value for silencing an audio format.
