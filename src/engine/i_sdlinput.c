@@ -302,13 +302,13 @@ boolean I_UpdateGrab(void) {
 		&& !demoplayback;
 
 	if (grab && !currently_grabbed) {
-		SDL_SetRelativeMouseMode(1);
+		SDL_SetWindowRelativeMouseMode(window, 1);
 		SDL_SetWindowMouseGrab(window, 1);
 		SDL_SetWindowKeyboardGrab(window, 1);
 	}
 
 	if (!grab && currently_grabbed) {
-		SDL_SetRelativeMouseMode(0);
+		SDL_SetWindowRelativeMouseMode(window, 0);
 		SDL_SetWindowMouseGrab(window, 0);
 		SDL_SetWindowKeyboardGrab(window, 0);
 	}
@@ -485,5 +485,4 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_yaxismove);
 	CON_CvarRegister(&v_xaxismove);
 }
-
 
