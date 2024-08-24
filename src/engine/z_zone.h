@@ -82,6 +82,7 @@ void* (Z_Alloca)(int n, const char* file, int line);
 void (Z_FreeAlloca)(const char* file, int line);
 void (Z_CheckHeap)(const char*, int);      // killough 3/22/98: add file/line info
 int (Z_CheckTag)(void*, const char*, int);
+int Z_PointerValidation(void* ptr);
 void (Z_Touch)(void* ptr, const char*, int);
 
 #define Z_Free(a)           (Z_Free)        (a,      __FILE__,__LINE__)
