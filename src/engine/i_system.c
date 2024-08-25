@@ -285,35 +285,72 @@ char* I_GetUserFile(char* file) {
  *
  * @return Fully-qualified path or NULL if not found.
  */
-char* I_FindDataFile(char* file) {
-	const char *path, *dir;
 
-	path = malloc(512);
+char* I_FindDataFile(const char* file) {
+	char* path = malloc(512);
+	const char* dir;
+
+	if (path == NULL) {
+		return NULL;
+	}
 
 	if ((dir = SDL_GetBasePath())) {
 		snprintf(path, 511, "%s%s", dir, file);
-
-		if (I_FileExists(path))
+		if (I_FileExists(path)) {
 			return path;
+		}
 	}
 
-#if defined(__linux__) || defined(__OpenBSD__)
-
-#ifndef DOOM_UNIX_SYSTEM_DATADIR
-#define DOOM_UNIX_SYSTEM_DATADIR "/usr/local/share/doom64ex-plus"
-#endif
-	// system directory
+#if !defined(_WIN32)
 	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
-	if (I_FileExists(path))
+	if (I_FileExists(path)) {
 		return path;
+	}
 
-	// current directory
 	snprintf(path, 511, "%s", file);
-	if (I_FileExists(path))
+	if (I_FileExists(path)) {
 		return path;
+	}
+
+	const char* homeDir = getenv("HOME");
+	if (homeDir) {
+		snprintf(path, 511, "%s/.steam/steam/steamapps/common/DOOM 64/%s", homeDir, file);
+		if (I_FileExists(path)) {
+			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
+			return path;
+		}
+
+		snprintf(path, 511, "%s/.local/share/Steam/steamapps/common/DOOM 64/%s", homeDir, file);
+		if (I_FileExists(path)) {
+			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
+			return path;
+		}
+	}
+
+	snprintf(path, 511, "%s/GOG Games/DOOM 64/%s", homeDir, file);
+	if (I_FileExists(path)) {
+		I_Printf("I_FindDataFile: Adding GOG Path %s\n", path);
+		return path;
+	}
+
+#elif defined(_WIN32)
+	const char* steamPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DOOM 64";
+	snprintf(path, 511, "%s\\%s", steamPath, file);
+	if (I_FileExists(path)) {
+		I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
+		return path;
+	}
+
+	const char* gogPath = "C:\\Program Files (x86)\\GOG Galaxy\\Games\\DOOM 64";
+	snprintf(path, 511, "%s\\%s", gogPath, file);
+	if (I_FileExists(path)) {
+		I_Printf("I_FindDataFile: Adding GOG Path %s\n", path);
+		return path;
+	}
 #endif
-	
-	return path;
+
+	free(path);
+	return NULL;
 }
 
 /**
