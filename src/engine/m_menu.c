@@ -1893,9 +1893,10 @@ static const int Resolution16_10[MAX_RES16_10][2] = {
 	{   7680,   4800    }
 };
 
-#define MAX_RES21_09  2
-static const int Resolution21_09[MAX_RES21_09][2] = {
+#define MAX_RES21_09  3
+static const int Resolution21_09[MAX_RES21_09][3] = {
 	{   2560,    1080     },
+	{   3440,    1440     },
 	{   3840,    2160     }
 };
 
