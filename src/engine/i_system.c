@@ -286,7 +286,7 @@ char* I_GetUserFile(char* file) {
  * @return Fully-qualified path or NULL if not found.
  */
 
-char* I_FindDataFile(const char* file) {
+char* I_FindDataFile(char* file) {
 	char* path = malloc(512);
 	const char* dir;
 
@@ -302,10 +302,12 @@ char* I_FindDataFile(const char* file) {
 	}
 
 #if !defined(_WIN32)
+#ifdef DOOM_UNIX_SYSTEM_DATADIR
 	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
 	if (I_FileExists(path)) {
 		return path;
 	}
+#endif
 
 	snprintf(path, 511, "%s", file);
 	if (I_FileExists(path)) {
