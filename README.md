@@ -101,7 +101,7 @@ GNU/Linux / BSD
 - GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
 	this will force the software to look for all IWAD and supporting files inside `~/.local/share/doom64ex-plus`
 - compile-time macro *-DDOOM_UNIX_SYSTEM_DATADIR=\\"/some/system/path\\"* allows to specify the system folder where the software will look
-for all IWAD and supporting files. if not specified, it defaults to `/usr/local/share/doom64ex-plus`.
+for all IWAD and supporting files.
 Packagers should set *DOOM_UNIX_SYSTEM_DATADIR* to a proper folder for the distro and package files `doom64ex-plus.wad` and `doomsnd.sf2` into that folder.
 
 Finally, if a data file cannot be found in one of the two folders above, it will look inside the current directory.
