@@ -4124,47 +4124,21 @@ boolean M_Responder(event_t* ev) {
 			shiftdown = false;
 		}
 	}
+	else if (ev->type == ev_gamepaddown) {
+		ch = I_JoystickToKey(ev->data1);
+	}
 	else if (ev->type == ev_mouse && (ev->data2 != 0.0 || ev->data3 != 0.0)) {
 		// handle mouse-over selection
 		if (m_menumouse.value) {
 			M_CheckDragThermoBar(ev, currentMenu);
-			if (M_CursorHighlightItem(currentMenu)) {
+			if (M_CursorHighlightItem(currentMenu))
 				itemOn = itemSelected;
-			}
 		}
 	}
 
 	if (ch == -1) {
 		return false;
 	}
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
-	switch (ch) {
-	case BUTTON_DPAD_UP:
-		ch = KEY_UPARROW;
-		break;
-	case BUTTON_DPAD_DOWN:
-		ch = KEY_DOWNARROW;
-		break;
-	case BUTTON_DPAD_LEFT:
-		ch = KEY_LEFTARROW;
-		break;
-	case BUTTON_DPAD_RIGHT:
-		ch = KEY_RIGHTARROW;
-		break;
-	case BUTTON_START:
-		ch = KEY_ESCAPE;
-		break;
-	case BUTTON_A:
-		ch = KEY_ENTER;
-		break;
-	case BUTTON_B:
-		ch = KEY_DEL;
-		break;
-	}
-
-#endif
 
 	if (MenuBindActive == true) { //key Bindings
 		if (ch == KEY_ESCAPE) {

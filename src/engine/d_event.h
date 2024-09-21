@@ -40,7 +40,9 @@ typedef enum {
     ev_mouse,
     ev_mousedown,
     ev_mouseup,
-    ev_gamepad
+    ev_gamepad,
+    ev_gamepaddown,
+    ev_gamepadup,
 } evtype_t;
 
 // Event structure.

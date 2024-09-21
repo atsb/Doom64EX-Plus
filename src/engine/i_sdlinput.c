@@ -35,9 +35,7 @@
 #include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
-#if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
-#endif
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -439,12 +437,14 @@ void I_StartTic(void) {
 
 	while (SDL_PollEvent(&Event)) {
 		I_GetEvent(&Event);
+		I_JoystickEvent(&Event);
 	}
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 	I_XInputPollEvent();
 #endif
 	I_InitInputs();
+	I_ReadJoystick();
 	I_ReadMouse();
 }
 

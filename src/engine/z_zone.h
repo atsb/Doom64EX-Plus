@@ -99,6 +99,8 @@ void (Z_Touch)(void* ptr, const char*, int);
 #define Z_Touch(a)          (Z_Touch)       (a,      __FILE__,__LINE__)
 #define Z_FreeAlloca()      (Z_FreeAlloca)  (        __FILE__,__LINE__)
 
+#define Z_ReallocV(a,b,c,d)	(a = Z_Realloc	(a,sizeof(*a)*b,c,d))
+
 #define strdup(s)           (Z_Strdup) (s, PU_STATIC,0,__FILE__,__LINE__)
 
 int Z_TagUsage(int tag);

@@ -59,6 +59,7 @@
 #include "z_zone.h"
 #include "i_system.h"
 #include "gl_draw.h"
+#include "i_xinput.h"
 
 #ifdef __APPLE__
 #include "i_mac_audio.h"
@@ -389,6 +390,7 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
+	I_InitJoystick();
 	I_InitVideo();
 	I_InitClockRate();
 }

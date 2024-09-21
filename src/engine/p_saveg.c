@@ -54,7 +54,7 @@ void G_DoLoadLevel(void);
 static FILE* save_stream;
 static byte* savebuffer;
 
-static unsigned long save_offset = 0;
+static uint64_t save_offset = 0;
 
 //
 // P_GetSaveGameName

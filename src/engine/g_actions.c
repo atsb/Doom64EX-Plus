@@ -75,13 +75,15 @@ alist_t* CurrentActions[MAX_CURRENTACTIONS];
 
 //these must be in the order key, joy, mouse, mouse2, other
 #define KEY_ACTIONPOS       0
-#define MOUSE_ACTIONPOS     NUMKEYS
+#define GAMEPAD_ACTIONPOS	NUMKEYS
+#define MOUSE_ACTIONPOS     (GAMEPAD_ACTIONPOS+NUMGAMEPADBTNS)
 #define MOUSE2_ACTIONPOS    (MOUSE_ACTIONPOS+MOUSE_BUTTONS)
 #define NUM_ACTIONS         (MOUSE2_ACTIONPOS+MOUSE_BUTTONS)
 
 alist_t* AllActions[NUM_ACTIONS];
 
 alist_t** KeyActions;
+alist_t** GamepadActions;
 alist_t** MouseActions;
 alist_t** Mouse2Actions;
 
@@ -101,6 +103,7 @@ static CMD(UnbindAll);
 void G_InitActions(void) {
 	dmemset(AllActions, 0, NUM_ACTIONS);
 	KeyActions = AllActions + KEY_ACTIONPOS;
+	GamepadActions = AllActions + GAMEPAD_ACTIONPOS;
 	MouseActions = AllActions + MOUSE_ACTIONPOS;
 	Mouse2Actions = AllActions + MOUSE2_ACTIONPOS;
 
@@ -415,11 +418,16 @@ boolean G_ActionResponder(event_t* ev) {
 		G_DoCmdMouseMove(ev->data2, ev->data3);
 		break;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	case ev_gamepad:
-		I_XInputReadActions(ev);
+	case ev_gamepadup:
+	case ev_gamepaddown:
+		if ((ev->data1 < 0) || (ev->data1 >= NUMGAMEPADBTNS))
+			break;
+
+		TryActions(GamepadActions[ev->data1], ev->type == ev_gamepadup);
 		break;
-#endif
+	case ev_gamepad:
+		G_DoCmdGamepadMove(ev->data1, ev->data2, ev->data3, ev->data4);
+		break;
 	}
 
 	return false;

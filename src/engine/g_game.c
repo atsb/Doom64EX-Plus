@@ -60,6 +60,7 @@
 #include "i_video.h"
 #include "i_sdlinput.h"
 #include "g_demo.h"
+#include "i_xinput.h"
 
 #include "deh_main.h"
 #include "deh_misc.h"
@@ -173,6 +174,9 @@ CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_extendedcast);
+CVAR_EXTERNAL(i_joytwinstick);
+CVAR_EXTERNAL(i_joysensx);
+CVAR_EXTERNAL(i_joysensy);
 
 //
 // G_RegisterCvars
@@ -739,8 +743,25 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	// forward/side movement with joystick
 	//
 	if (pc->flags & PCF_GAMEPAD) {
-		forward += pc->joyy;
-		side += pc->joyx;
+		if (i_joytwinstick.value > 0) {
+			forward -= pc->joymovey;
+			side = pc->joymovex;
+
+			cmd->angleturn -= pc->joylookx * 400 * i_joysensx.value;
+			if (forcefreelook != 2) {
+				if ((int)v_mlook.value || forcefreelook)
+					cmd->pitch +=
+					(int)v_mlookinvert.value ? (pc->joylooky *
+						400 * i_joysensy.value) : -(pc->joylooky * 400 * i_joysensy.value);
+			}
+		}
+		else {
+			float x = pc->joymovex + pc->joylookx;
+			float y = pc->joymovey + pc->joylooky;
+
+			cmd->angleturn -= BETWEEN(-1.0f, 1.0f, x) * 400 * i_joysensx.value;
+			forward -= BETWEEN(-1.0f, 1.0f, y);
+		}
 	}
 
 	if (pc->key[PCKEY_BACK]) {
@@ -756,7 +777,8 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	}
 
 	pc->mousex = pc->mousey = 0;
-	pc->joyx = pc->joyy = 0;
+	pc->joymovex = pc->joymovey = 0;
+	pc->joylookx = pc->joylooky = 0;
 
 	cmd->chatchar = ST_DequeueChatChar();
 
@@ -880,6 +902,33 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 		sendsave = false;
 		cmd->buttons = BT_SPECIAL | BTS_SAVEGAME | (savegameslot << BTS_SAVESHIFT);
 	}
+}
+
+//
+// G_DoCmdGamepadMove
+//
+void G_DoCmdGamepadMove(int lx, int ly, int rx, int ry)
+{
+	playercontrols_t* pc;
+	float x;
+	float y;
+
+	pc = &Controls;
+	pc->flags |= PCF_GAMEPAD;
+
+	x = (float)lx / INT16_MAX;
+	y = (float)ly / INT16_MAX;
+
+	pc->joymovex += x;
+	pc->joymovey += y;
+
+	x = (float)rx / INT16_MAX;
+	y = (float)ry / INT16_MAX;
+
+	pc->joylookx += x;
+	pc->joylooky += y;
+
+	return;
 }
 
 //
