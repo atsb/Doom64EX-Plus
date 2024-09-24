@@ -124,38 +124,6 @@ static void saveg_write32(int value) {
 //
 //------------------------------------------------------------------------
 
-static void saveg_read_pad(void) {
-    /*unsigned long pos;
-    int padding;
-    int i;
-
-    //
-    // avoid using fseek due to returning incorrect file offsets
-    //
-    pos = save_offset;
-
-    padding = (4 - (pos & 3)) & 3;
-
-    for(i = 0; i < padding; i++)
-        saveg_read8();*/
-}
-
-static void saveg_write_pad(void) {
-    /*unsigned long pos;
-    int padding;
-    int i;
-
-    //
-    // avoid using fseek due to returning incorrect file offsets
-    //
-    pos = save_offset;
-
-    padding = (4 - (pos & 3)) & 3;
-
-    for(i = 0; i < padding; i++)
-        saveg_write8(0);*/
-}
-
 //------------------------------------------------------------------------
 //
 // Mobj read/save functions
@@ -279,7 +247,6 @@ static void saveg_read_mapthing_t(mapthing_t* mt) {
     mt->type = saveg_read16();
     mt->options = saveg_read16();
     mt->tid = saveg_read16();
-    saveg_read_pad();
 }
 
 static void saveg_write_mapthing_t(mapthing_t* mt) {
@@ -290,7 +257,6 @@ static void saveg_write_mapthing_t(mapthing_t* mt) {
     saveg_write16(mt->type);
     saveg_write16(mt->options);
     saveg_write16(mt->tid);
-    saveg_write_pad();
 }
 
 //
@@ -1147,13 +1113,11 @@ static void saveg_write_header(char* description) {
     saveg_write8(gameskill);
     saveg_write8(gamemap);
     saveg_write8(nextmap);
-    saveg_write_pad();
     saveg_write16(globalint);
 
     //
     // [kex] 12/26/11 - write total stat info
     //
-    saveg_write_pad();
     saveg_write32(totalkills);
     saveg_write32(totalitems);
     saveg_write32(totalsecret);
@@ -1165,7 +1129,6 @@ static void saveg_write_header(char* description) {
     saveg_write8((leveltime >> 16) & 0xff);
     saveg_write8((leveltime >> 8) & 0xff);
     saveg_write8(leveltime & 0xff);
-    saveg_write_pad();
 }
 
 static void saveg_read_header(void) {
@@ -1198,14 +1161,11 @@ static void saveg_read_header(void) {
     gamemap = saveg_read8();
     nextmap = saveg_read8();
 
-    saveg_read_pad();
-
     globalint = saveg_read16();
 
     //
     // [kex] 12/26/11 - read total stat info
     //
-    saveg_read_pad();
 
     totalkills = saveg_read32();
     totalitems = saveg_read32();
@@ -1221,8 +1181,6 @@ static void saveg_read_header(void) {
     c = saveg_read8();
 
     leveltime = (a << 16) + (b << 8) + c;
-
-    saveg_read_pad();
 }
 
 //------------------------------------------------------------------------
@@ -1234,14 +1192,12 @@ static void saveg_read_header(void) {
 static boolean saveg_read_marker(int marker) {
     int value;
 
-    saveg_read_pad();
     value = saveg_read32();
 
     return value == marker;
 }
 
 static void saveg_write_marker(int marker) {
-    saveg_write_pad();
     saveg_write32(marker);
 }
 
@@ -1361,7 +1317,6 @@ void P_ArchivePlayers(void) {
             continue;
         }
 
-        saveg_write_pad();
         saveg_write_player_t(&players[i]);
     }
 }
@@ -1376,8 +1331,6 @@ void P_UnArchivePlayers(void) {
         if (!playeringame[i]) {
             continue;
         }
-
-        saveg_read_pad();
         saveg_read_player_t(&players[i]);
     }
 }
@@ -1447,7 +1400,6 @@ void P_ArchiveWorld(void) {
         saveg_write8(light->r);
         saveg_write8(light->g);
         saveg_write8(light->b);
-        saveg_write_pad();
         saveg_write16(light->tag);
     }
 }
@@ -1517,7 +1469,6 @@ void P_UnArchiveWorld(void) {
         light->r = saveg_read8();
         light->g = saveg_read8();
         light->b = saveg_read8();
-        saveg_read_pad();
         light->tag = saveg_read16();
     }
 }
@@ -1540,12 +1491,9 @@ void P_ArchiveMobjs(void) {
             continue;
         }
 
-        saveg_write_pad();
         saveg_write_mobj_t(mobj);
         saveg_write_marker(SAVEGAME_MOBJ);
     }
-
-    saveg_write_pad();
 }
 
 //
@@ -1573,7 +1521,6 @@ void P_UnArchiveMobjs(void) {
     for (i = 0; i < savegmobjnum; i++) {
         mobj = savegmobj[i].mobj;
 
-        saveg_read_pad();
         saveg_read_mobj_t(mobj);
 
         if (!saveg_read_marker(SAVEGAME_MOBJ))
@@ -1585,8 +1532,6 @@ void P_UnArchiveMobjs(void) {
 
         mobj->info = &mobjinfo[mobj->type];
     }
-
-    saveg_read_pad();
 }
 
 
@@ -1798,7 +1743,6 @@ void P_ArchiveSpecials(void) {
 
             if (i < MAXCEILINGS) {
                 saveg_write8(tc_ceiling);
-                saveg_write_pad();
                 saveg_write_ceiling_t((ceiling_t*)th);
             }
 
@@ -1808,7 +1752,6 @@ void P_ArchiveSpecials(void) {
         for (i = 0; saveg_specials[i].type != tc_endthinkers; i++) {
             if (th->function.acp1 == (actionf_p1)saveg_specials[i].function) {
                 saveg_write8(saveg_specials[i].type);
-                saveg_write_pad();
                 saveg_specials[i].writefunc(th);
                 saveg_write32(th == macrothinker ? 1 : 0);
                 break;
@@ -1856,7 +1799,6 @@ void P_UnArchiveSpecials(void) {
 
         for (i = 0; saveg_specials[i].type != tc_endthinkers; i++) {
             if (tclass == saveg_specials[i].type) {
-                saveg_read_pad();
                 thinker = Z_Malloc(saveg_specials[i].structsize, PU_LEVEL, NULL);
                 saveg_specials[i].readfunc(thinker);
 
@@ -1910,8 +1852,6 @@ void P_UnArchiveSpecials(void) {
 void P_ArchiveMacros(void) {
     int i;
 
-    saveg_write_pad();
-
     // [kex] 12/26/11 - keep track of disabled macros
     for (i = 0; i < macros.macrocount; i++) {
         saveg_write8(macros.def[i].data[0].id == 0 ? 1 : 0);
@@ -1942,8 +1882,6 @@ void P_UnArchiveMacros(void) {
     int i;
     int current;
     byte havemacro;
-
-    saveg_read_pad();
 
     // [kex] 12/26/11 - read tracked info for disabled macros
     for (i = 0; i < macros.macrocount; i++) {
