@@ -73,8 +73,8 @@ int             amCheating = 0;        //villsa: no longer static..
 boolean        automapactive = false;
 fixed_t         automapx = 0;
 fixed_t         automapy = 0;
-fixed_t         automappanx = 0;
-fixed_t         automappany = 0;
+float			automappanx = 0.0f;
+float			automappany = 0.0f;
 byte            amModeCycle = 0;        // textured or line mode?
 int             followplayer = 1;        // specifies whether to follow the player around
 
@@ -462,9 +462,9 @@ boolean AM_Responder(event_t* ev) {
 //
 
 void AM_Ticker(void) {
-	fixed_t speed;
-	fixed_t oldautomapx;
-	fixed_t oldautomapy;
+	float speed;
+	float oldautomapx;
+	float oldautomapy;
 
 	if (!automapactive) {
 		return;
