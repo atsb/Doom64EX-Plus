@@ -34,9 +34,8 @@
 
 /* Thread synchronization primitives */
 #include <SDL3/SDL_atomic.h>
-#include <SDL3/SDL_mutex.h>
 
-#if (defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_GDK)) && !defined(SDL_PLATFORM_WINRT)
+#if defined(SDL_PLATFORM_WINDOWS)
 #include <process.h> /* _beginthreadex() and _endthreadex() */
 #endif
 
@@ -252,10 +251,10 @@ extern SDL_DECLSPEC SDL_Thread * SDLCALL SDL_CreateThread(SDL_ThreadFunction fn,
  */
 extern SDL_DECLSPEC SDL_Thread * SDLCALL SDL_CreateThreadWithProperties(SDL_PropertiesID props);
 
-#define SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER                  "entry_function"
-#define SDL_PROP_THREAD_CREATE_NAME_STRING                             "name"
-#define SDL_PROP_THREAD_CREATE_USERDATA_POINTER                        "userdata"
-#define SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER                        "stacksize"
+#define SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER                  "SDL.thread.create.entry_function"
+#define SDL_PROP_THREAD_CREATE_NAME_STRING                             "SDL.thread.create.name"
+#define SDL_PROP_THREAD_CREATE_USERDATA_POINTER                        "SDL.thread.create.userdata"
+#define SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER                        "SDL.thread.create.stacksize"
 
 /* end wiki documentation for macros that are meant to look like functions. */
 #endif
@@ -263,7 +262,7 @@ extern SDL_DECLSPEC SDL_Thread * SDLCALL SDL_CreateThreadWithProperties(SDL_Prop
 
 /* The real implementation, hidden from the wiki, so it can show this as real functions that don't have macro magic. */
 #ifndef SDL_WIKI_DOCUMENTATION_SECTION
-#  if (defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_GDK)) && !defined(SDL_PLATFORM_WINRT)
+#  if defined(SDL_PLATFORM_WINDOWS)
 #    ifndef SDL_BeginThreadFunction
 #      define SDL_BeginThreadFunction _beginthreadex
 #    endif
@@ -320,10 +319,10 @@ extern SDL_DECLSPEC SDL_Thread * SDLCALL SDL_CreateThreadWithPropertiesRuntime(S
 
 #define SDL_CreateThread(fn, name, data) SDL_CreateThreadRuntime((fn), (name), (data), (SDL_FunctionPointer) (SDL_BeginThreadFunction), (SDL_FunctionPointer) (SDL_EndThreadFunction))
 #define SDL_CreateThreadWithProperties(props) SDL_CreateThreadWithPropertiesRuntime((props), (SDL_FunctionPointer) (SDL_BeginThreadFunction), (SDL_FunctionPointer) (SDL_EndThreadFunction))
-#define SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER                  "entry_function"
-#define SDL_PROP_THREAD_CREATE_NAME_STRING                             "name"
-#define SDL_PROP_THREAD_CREATE_USERDATA_POINTER                        "userdata"
-#define SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER                        "stacksize"
+#define SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER                  "SDL.thread.create.entry_function"
+#define SDL_PROP_THREAD_CREATE_NAME_STRING                             "SDL.thread.create.name"
+#define SDL_PROP_THREAD_CREATE_USERDATA_POINTER                        "SDL.thread.create.userdata"
+#define SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER                        "SDL.thread.create.stacksize"
 #endif
 
 
@@ -381,12 +380,12 @@ extern SDL_DECLSPEC SDL_ThreadID SDLCALL SDL_GetThreadID(SDL_Thread *thread);
  * an administrator account. Be prepared for this to fail.
  *
  * \param priority the SDL_ThreadPriority to set.
- * \returns 0 on success or a negative error code on failure; call
- *          SDL_GetError() for more information.
+ * \returns true on success or false on failure; call SDL_GetError() for more
+ *          information.
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern SDL_DECLSPEC int SDLCALL SDL_SetThreadPriority(SDL_ThreadPriority priority);
+extern SDL_DECLSPEC bool SDLCALL SDL_SetThreadPriority(SDL_ThreadPriority priority);
 
 /**
  * Wait for a thread to finish.
@@ -504,8 +503,8 @@ typedef void (SDLCALL *SDL_TLSDestructorCallback)(void *value);
  * \param value the value to associate with the ID for the current thread.
  * \param destructor a function called when the thread exits, to free the
  *                   value, may be NULL.
- * \returns 0 on success or a negative error code on failure; call
- *          SDL_GetError() for more information.
+ * \returns true on success or false on failure; call SDL_GetError() for more
+ *          information.
  *
  * \threadsafety It is safe to call this function from any thread.
  *
@@ -513,7 +512,7 @@ typedef void (SDLCALL *SDL_TLSDestructorCallback)(void *value);
  *
  * \sa SDL_GetTLS
  */
-extern SDL_DECLSPEC int SDLCALL SDL_SetTLS(SDL_TLSID *id, const void *value, SDL_TLSDestructorCallback destructor);
+extern SDL_DECLSPEC bool SDLCALL SDL_SetTLS(SDL_TLSID *id, const void *value, SDL_TLSDestructorCallback destructor);
 
 /**
  * Cleanup all TLS data for this thread.

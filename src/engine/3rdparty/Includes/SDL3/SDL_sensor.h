@@ -23,6 +23,10 @@
  * # CategorySensor
  *
  * SDL sensor management.
+ *
+ * In order to use these functions, SDL_Init() must have been called with the
+ * SDL_INIT_SENSOR flag. This causes SDL to scan the system for sensors, and
+ * load appropriate drivers.
  */
 
 #ifndef SDL_sensor_h_
@@ -40,23 +44,13 @@ extern "C" {
 /* *INDENT-ON* */
 #endif
 
-/**
- *  SDL_sensor.h
- *
- *  In order to use these functions, SDL_Init() must have been called
- *  with the SDL_INIT_SENSOR flag.  This causes SDL to scan the system
- *  for sensors, and load appropriate drivers.
- */
-
-struct SDL_Sensor;
 typedef struct SDL_Sensor SDL_Sensor;
 
 /**
  * This is a unique ID for a sensor for the time it is connected to the
  * system, and is never reused for the lifetime of the application.
  *
- * The ID value starts at 1 and increments from there. The value 0 is an
- * invalid ID.
+ * The value 0 is an invalid ID.
  *
  * \since This datatype is available since SDL 3.0.0.
  */
@@ -278,12 +272,12 @@ extern SDL_DECLSPEC SDL_SensorID SDLCALL SDL_GetSensorID(SDL_Sensor *sensor);
  * \param sensor the SDL_Sensor object to query.
  * \param data a pointer filled with the current sensor state.
  * \param num_values the number of values to write to data.
- * \returns 0 on success or a negative error code on failure; call
- *          SDL_GetError() for more information.
+ * \returns true on success or false on failure; call SDL_GetError() for more
+ *          information.
  *
  * \since This function is available since SDL 3.0.0.
  */
-extern SDL_DECLSPEC int SDLCALL SDL_GetSensorData(SDL_Sensor *sensor, float *data, int num_values);
+extern SDL_DECLSPEC bool SDLCALL SDL_GetSensorData(SDL_Sensor *sensor, float *data, int num_values);
 
 /**
  * Close a sensor previously opened with SDL_OpenSensor().

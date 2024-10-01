@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_gamepad.h>
 
 #include "doomdef.h"
 #include "con_cvar.h"
@@ -155,7 +156,7 @@ static void JoystickOpen(int device_id)
 
 	j.device_id = device_id;
 	j.keyconv = NULL;
-	j.num_axes = SDL_GAMEPAD_AXIS_MAX;  // SDL_GameController has a fixed number of axes
+	j.num_axes = SDL_GAMEPAD_AXIS_COUNT;  // SDL_GameController has a fixed number of axes
 	j.num_hats = 0;  // Game controllers usually don't use hats
 
 	name = SDL_GetGamepadName(j.device);

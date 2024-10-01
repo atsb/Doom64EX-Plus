@@ -38,9 +38,14 @@
 #ifdef SDL_ENABLE_OLD_NAMES
 
 /* ##SDL_atomic.h */
-#define SDL_AtomicCAS SDL_AtomicCompareAndSwap
-#define SDL_AtomicCASPtr SDL_AtomicCompareAndSwapPointer
+#define SDL_AtomicAdd SDL_AddAtomicInt
+#define SDL_AtomicCAS SDL_CompareAndSwapAtomicInt
+#define SDL_AtomicCASPtr SDL_CompareAndSwapAtomicPointer
+#define SDL_AtomicGet SDL_GetAtomicInt
+#define SDL_AtomicGetPtr SDL_GetAtomicPointer
 #define SDL_AtomicLock SDL_LockSpinlock
+#define SDL_AtomicSet SDL_SetAtomicInt
+#define SDL_AtomicSetPtr SDL_SetAtomicPointer
 #define SDL_AtomicTryLock SDL_TryLockSpinlock
 #define SDL_AtomicUnlock SDL_UnlockSpinlock
 #define SDL_atomic_t SDL_AtomicInt
@@ -72,6 +77,7 @@
 #define SDL_NewAudioStream SDL_CreateAudioStream
 
 /* ##SDL_cpuinfo.h */
+#define SDL_GetCPUCount SDL_GetNumLogicalCPUCores
 #define SDL_SIMDGetAlignment SDL_GetSIMDAlignment
 
 /* ##SDL_endian.h */
@@ -116,6 +122,7 @@
 #define SDL_DROPCOMPLETE SDL_EVENT_DROP_COMPLETE
 #define SDL_DROPFILE SDL_EVENT_DROP_FILE
 #define SDL_DROPTEXT SDL_EVENT_DROP_TEXT
+#define SDL_DelEventWatch SDL_RemoveEventWatch
 #define SDL_FINGERDOWN SDL_EVENT_FINGER_DOWN
 #define SDL_FINGERMOTION SDL_EVENT_FINGER_MOTION
 #define SDL_FINGERUP SDL_EVENT_FINGER_UP
@@ -296,6 +303,7 @@
 #define SDL_MouseIsHaptic SDL_IsMouseHaptic
 
 /* ##SDL_hints.h */
+#define SDL_DelHintCallback SDL_RemoveHintCallback
 #define SDL_HINT_ALLOW_TOPMOST SDL_HINT_WINDOW_ALLOW_TOPMOST
 #define SDL_HINT_DIRECTINPUT_ENABLED SDL_HINT_JOYSTICK_DIRECTINPUT
 #define SDL_HINT_GDK_TEXTINPUT_DEFAULT SDL_HINT_GDK_TEXTINPUT_DEFAULT_TEXT
@@ -415,9 +423,14 @@
 #define SDL_LogSetAllPriority SDL_SetLogPriorities
 #define SDL_LogSetOutputFunction SDL_SetLogOutputFunction
 #define SDL_LogSetPriority SDL_SetLogPriority
+#define SDL_NUM_LOG_PRIORITIES SDL_LOG_PRIORITY_COUNT
+
+/* ##SDL_messagebox.h */
+#define SDL_MESSAGEBOX_COLOR_MAX SDL_MESSAGEBOX_COLOR_COUNT
 
 /* ##SDL_mouse.h */
 #define SDL_FreeCursor SDL_DestroyCursor
+#define SDL_NUM_SYSTEM_CURSORS SDL_SYSTEM_CURSOR_COUNT
 #define SDL_SYSTEM_CURSOR_ARROW SDL_SYSTEM_CURSOR_DEFAULT
 #define SDL_SYSTEM_CURSOR_HAND SDL_SYSTEM_CURSOR_POINTER
 #define SDL_SYSTEM_CURSOR_IBEAM SDL_SYSTEM_CURSOR_TEXT
@@ -523,7 +536,6 @@
 #define SDL_RenderSetVSync SDL_SetRenderVSync
 #define SDL_RenderSetViewport SDL_SetRenderViewport
 #define SDL_RenderWindowToLogical SDL_RenderCoordinatesFromWindow
-#define SDL_ScaleModeBest SDL_SCALEMODE_BEST
 #define SDL_ScaleModeLinear SDL_SCALEMODE_LINEAR
 #define SDL_ScaleModeNearest SDL_SCALEMODE_NEAREST
 
@@ -555,6 +567,7 @@
 #define SDL_WriteLE64 SDL_WriteU64LE
 
 /* ##SDL_scancode.h */
+#define SDL_NUM_SCANCODES SDL_SCANCODE_COUNT
 #define SDL_SCANCODE_AUDIOFASTFORWARD SDL_SCANCODE_MEDIA_FAST_FORWARD
 #define SDL_SCANCODE_AUDIOMUTE SDL_SCANCODE_MUTE
 #define SDL_SCANCODE_AUDIONEXT SDL_SCANCODE_MEDIA_NEXT_TRACK
@@ -577,7 +590,12 @@
 #define SDL_SensorUpdate SDL_UpdateSensors
 
 /* ##SDL_stdinc.h */
+#define SDL_FALSE false
 #define SDL_TABLESIZE SDL_arraysize
+#define SDL_TRUE true
+#define SDL_bool bool
+#define SDL_size_add_overflow SDL_size_add_check_overflow
+#define SDL_size_mul_overflow SDL_size_mul_check_overflow
 #define SDL_strtokr SDL_strtok_r
 
 /* ##SDL_surface.h */
@@ -620,8 +638,6 @@
 #define SDL_LinuxSetThreadPriorityAndPolicy SDL_SetLinuxThreadPriorityAndPolicy
 #define SDL_OnApplicationDidBecomeActive SDL_OnApplicationDidEnterForeground
 #define SDL_OnApplicationWillResignActive SDL_OnApplicationWillEnterBackground
-#define SDL_WinRTGetDeviceFamily SDL_GetWinRTDeviceFamily
-#define SDL_GetWinRTFSPathUTF8 SDL_GetWinRTFSPath
 #define SDL_iOSSetAnimationCallback SDL_SetiOSAnimationCallback
 #define SDL_iOSSetEventPump SDL_SetiOSEventPump
 #define SDL_iPhoneSetAnimationCallback SDL_SetiOSAnimationCallback
@@ -658,9 +674,14 @@
 #elif !defined(SDL_DISABLE_OLD_NAMES)
 
 /* ##SDL_atomic.h */
-#define SDL_AtomicCAS SDL_AtomicCAS_renamed_SDL_AtomicCompareAndSwap
-#define SDL_AtomicCASPtr SDL_AtomicCASPtr_renamed_SDL_AtomicCompareAndSwapPointer
+#define SDL_AtomicAdd SDL_AtomicAdd_renamed_SDL_AddAtomicInt
+#define SDL_AtomicCAS SDL_AtomicCAS_renamed_SDL_CompareAndSwapAtomicInt
+#define SDL_AtomicCASPtr SDL_AtomicCASPtr_renamed_SDL_CompareAndSwapAtomicPointer
+#define SDL_AtomicGet SDL_AtomicGet_renamed_SDL_GetAtomicInt
+#define SDL_AtomicGetPtr SDL_AtomicGetPtr_renamed_SDL_GetAtomicPointer
 #define SDL_AtomicLock SDL_AtomicLock_renamed_SDL_LockSpinlock
+#define SDL_AtomicSet SDL_AtomicSet_renamed_SDL_SetAtomicInt
+#define SDL_AtomicSetPtr SDL_AtomicSetPtr_renamed_SDL_SetAtomicPointer
 #define SDL_AtomicTryLock SDL_AtomicTryLock_renamed_SDL_TryLockSpinlock
 #define SDL_AtomicUnlock SDL_AtomicUnlock_renamed_SDL_UnlockSpinlock
 #define SDL_atomic_t SDL_atomic_t_renamed_SDL_AtomicInt
@@ -692,6 +713,7 @@
 #define SDL_NewAudioStream SDL_NewAudioStream_renamed_SDL_CreateAudioStream
 
 /* ##SDL_cpuinfo.h */
+#define SDL_GetCPUCount SDL_GetCPUCount_renamed_SDL_GetNumLogicalCPUCores
 #define SDL_SIMDGetAlignment SDL_SIMDGetAlignment_renamed_SDL_GetSIMDAlignment
 
 /* ##SDL_endian.h */
@@ -736,6 +758,7 @@
 #define SDL_DROPCOMPLETE SDL_DROPCOMPLETE_renamed_SDL_EVENT_DROP_COMPLETE
 #define SDL_DROPFILE SDL_DROPFILE_renamed_SDL_EVENT_DROP_FILE
 #define SDL_DROPTEXT SDL_DROPTEXT_renamed_SDL_EVENT_DROP_TEXT
+#define SDL_DelEventWatch SDL_DelEventWatch_renamed_SDL_RemoveEventWatch
 #define SDL_FINGERDOWN SDL_FINGERDOWN_renamed_SDL_EVENT_FINGER_DOWN
 #define SDL_FINGERMOTION SDL_FINGERMOTION_renamed_SDL_EVENT_FINGER_MOTION
 #define SDL_FINGERUP SDL_FINGERUP_renamed_SDL_EVENT_FINGER_UP
@@ -917,6 +940,7 @@
 #define SDL_MouseIsHaptic SDL_MouseIsHaptic_renamed_SDL_IsMouseHaptic
 
 /* ##SDL_hints.h */
+#define SDL_DelHintCallback SDL_DelHintCallback_renamed_SDL_RemoveHintCallback
 #define SDL_HINT_ALLOW_TOPMOST SDL_HINT_ALLOW_TOPMOST_renamed_SDL_HINT_WINDOW_ALLOW_TOPMOST
 #define SDL_HINT_DIRECTINPUT_ENABLED SDL_HINT_DIRECTINPUT_ENABLED_renamed_SDL_HINT_JOYSTICK_DIRECTINPUT
 #define SDL_HINT_GDK_TEXTINPUT_DEFAULT SDL_HINT_GDK_TEXTINPUT_DEFAULT_renamed_SDL_HINT_GDK_TEXTINPUT_DEFAULT_TEXT
@@ -1036,9 +1060,14 @@
 #define SDL_LogSetAllPriority SDL_LogSetAllPriority_renamed_SDL_SetLogPriorities
 #define SDL_LogSetOutputFunction SDL_LogSetOutputFunction_renamed_SDL_SetLogOutputFunction
 #define SDL_LogSetPriority SDL_LogSetPriority_renamed_SDL_SetLogPriority
+#define SDL_NUM_LOG_PRIORITIES SDL_NUM_LOG_PRIORITIES_renamed_SDL_LOG_PRIORITY_COUNT
+
+/* ##SDL_messagebox.h */
+#define SDL_MESSAGEBOX_COLOR_MAX SDL_MESSAGEBOX_COLOR_MAX_renamed_SDL_MESSAGEBOX_COLOR_COUNT
 
 /* ##SDL_mouse.h */
 #define SDL_FreeCursor SDL_FreeCursor_renamed_SDL_DestroyCursor
+#define SDL_NUM_SYSTEM_CURSORS SDL_NUM_SYSTEM_CURSORS_renamed_SDL_SYSTEM_CURSOR_COUNT
 #define SDL_SYSTEM_CURSOR_ARROW SDL_SYSTEM_CURSOR_ARROW_renamed_SDL_SYSTEM_CURSOR_DEFAULT
 #define SDL_SYSTEM_CURSOR_HAND SDL_SYSTEM_CURSOR_HAND_renamed_SDL_SYSTEM_CURSOR_POINTER
 #define SDL_SYSTEM_CURSOR_IBEAM SDL_SYSTEM_CURSOR_IBEAM_renamed_SDL_SYSTEM_CURSOR_TEXT
@@ -1144,7 +1173,6 @@
 #define SDL_RenderSetVSync SDL_RenderSetVSync_renamed_SDL_SetRenderVSync
 #define SDL_RenderSetViewport SDL_RenderSetViewport_renamed_SDL_SetRenderViewport
 #define SDL_RenderWindowToLogical SDL_RenderWindowToLogical_renamed_SDL_RenderCoordinatesFromWindow
-#define SDL_ScaleModeBest SDL_ScaleModeBest_renamed_SDL_SCALEMODE_BEST
 #define SDL_ScaleModeLinear SDL_ScaleModeLinear_renamed_SDL_SCALEMODE_LINEAR
 #define SDL_ScaleModeNearest SDL_ScaleModeNearest_renamed_SDL_SCALEMODE_NEAREST
 
@@ -1176,6 +1204,7 @@
 #define SDL_WriteLE64 SDL_WriteLE64_renamed_SDL_WriteU64LE
 
 /* ##SDL_scancode.h */
+#define SDL_NUM_SCANCODES SDL_NUM_SCANCODES_renamed_SDL_SCANCODE_COUNT
 #define SDL_SCANCODE_AUDIOFASTFORWARD SDL_SCANCODE_AUDIOFASTFORWARD_renamed_SDL_SCANCODE_MEDIA_FAST_FORWARD
 #define SDL_SCANCODE_AUDIOMUTE SDL_SCANCODE_AUDIOMUTE_renamed_SDL_SCANCODE_MUTE
 #define SDL_SCANCODE_AUDIONEXT SDL_SCANCODE_AUDIONEXT_renamed_SDL_SCANCODE_MEDIA_NEXT_TRACK
@@ -1198,7 +1227,12 @@
 #define SDL_SensorUpdate SDL_SensorUpdate_renamed_SDL_UpdateSensors
 
 /* ##SDL_stdinc.h */
+#define SDL_FALSE SDL_FALSE_renamed_false
 #define SDL_TABLESIZE SDL_TABLESIZE_renamed_SDL_arraysize
+#define SDL_TRUE SDL_TRUE_renamed_true
+#define SDL_bool SDL_bool_renamed_bool
+#define SDL_size_add_overflow SDL_size_add_overflow_renamed_SDL_size_add_check_overflow
+#define SDL_size_mul_overflow SDL_size_mul_overflow_renamed_SDL_size_mul_check_overflow
 #define SDL_strtokr SDL_strtokr_renamed_SDL_strtok_r
 
 /* ##SDL_surface.h */
@@ -1241,8 +1275,6 @@
 #define SDL_LinuxSetThreadPriorityAndPolicy SDL_LinuxSetThreadPriorityAndPolicy_renamed_SDL_SetLinuxThreadPriorityAndPolicy
 #define SDL_OnApplicationDidBecomeActive SDL_OnApplicationDidBecomeActive_renamed_SDL_OnApplicationDidEnterForeground
 #define SDL_OnApplicationWillResignActive SDL_OnApplicationWillResignActive_renamed_SDL_OnApplicationWillEnterBackground
-#define SDL_WinRTGetDeviceFamily SDL_WinRTGetDeviceFamily_renamed_SDL_GetWinRTDeviceFamily
-#define SDL_GetWinRTFSPathUTF8 SDL_GetWinRTFSPathUTF8_renamed_SDL_GetWinRTFSPath
 #define SDL_iOSSetAnimationCallback SDL_iOSSetAnimationCallback_renamed_SDL_SetiOSAnimationCallback
 #define SDL_iOSSetEventPump SDL_iOSSetEventPump_renamed_SDL_SetiOSEventPump
 #define SDL_iPhoneSetAnimationCallback SDL_iPhoneSetAnimationCallback_renamed_SDL_iOSSetAnimationCallback
