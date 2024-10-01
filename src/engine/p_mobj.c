@@ -1118,7 +1118,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	if (mthing->options & MTF_SECRET)
 	{
 		mobj->flags |= MF_COUNTSECRET;
-		totalsecret++;
+		totalsecret;
 	}
 
 	// styd: add a flag to things that allow them to fall off a cliff
