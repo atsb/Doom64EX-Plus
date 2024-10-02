@@ -9,7 +9,7 @@ I have kept the current release and current 'stable' branch as bug-free and stab
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for loading PWADs
-* Better performance (especially when compared to Nightdive Studios' official version
+* Better performance (especially when compared to Nightdive Studios' official version)
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
 * The "medkit you REALLY need!" message fix
