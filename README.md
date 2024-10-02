@@ -20,10 +20,6 @@ I have kept the current release and current 'stable' branch as bug-free and stab
 * NOTE for NVIDIA users, disable vsync from the control panel to fix stuttering.  No idea why it only happens on NVidia cards, though I can't say I'm surprised.
 * NOTE - for the launcher, you MUST have .NET 6 or higher installed as the launcher was programmed using .NET 6.0 and anything below won't work.
 
-There are a few bugs still present, which I am slowly fixing.
-
-This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/ but if any contributors wish to help, then GitHub is a better place for it.
-
 ## Mod Support
 
 For modders wanting to make their mods work with EX+, there are a few things that deviate from ancient EX:
