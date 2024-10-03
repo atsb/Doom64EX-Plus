@@ -67,10 +67,6 @@
 #include "i_audio.h"
 #endif
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
-#endif
-
 CVAR(i_interpolateframes, 1);
 CVAR(v_accessibility, 0);
 
