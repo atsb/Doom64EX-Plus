@@ -9,7 +9,7 @@ I have kept the current release and current 'stable' branch as bug-free and stab
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for loading PWADs
-* Better performance (especially when compared to Nightdive Studios' official version
+* Better performance (especially when compared to Nightdive Studios' official version)
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
 * The "medkit you REALLY need!" message fix
@@ -19,10 +19,6 @@ I have kept the current release and current 'stable' branch as bug-free and stab
 
 * NOTE for NVIDIA users, disable vsync from the control panel to fix stuttering.  No idea why it only happens on NVidia cards, though I can't say I'm surprised.
 * NOTE - for the launcher, you MUST have .NET 6 or higher installed as the launcher was programmed using .NET 6.0 and anything below won't work.
-
-There are a few bugs still present, which I am slowly fixing.
-
-This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/ but if any contributors wish to help, then GitHub is a better place for it.
 
 ## Mod Support
 
