@@ -85,14 +85,11 @@ void I_InitScreen(void) {
 	video_height = (int)v_height.value;
 	video_ratio = (float)video_width / (float)video_height;
 
-	if (M_CheckParm("-borderless")) {
+	if (M_CheckParm("-window")) {
 		InWindowBorderless = 1;
 	}
-	if (M_CheckParm("-window")) {
-		InWindow = 1;
-	}
 	if (M_CheckParm("-fullscreen")) {
-		InWindow = 0;
+		InWindow = 1;
 	}
 
 	newwidth = newheight = 0;
@@ -131,7 +128,7 @@ void I_InitScreen(void) {
 
 	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
-	if (!InWindow) {
+	if (InWindow) {
 		flags |= SDL_WINDOW_FULLSCREEN;
 	}
 
