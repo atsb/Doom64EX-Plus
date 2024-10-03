@@ -72,99 +72,107 @@ float mouse_y = 0.0f;
 //
 
 void I_InitScreen(void) {
-	int     newwidth;
-	int     newheight;
-	int     p;
-	unsigned int  flags = 0;
-	char    title[256];
-	SDL_DisplayID displayid;
+    int     newwidth;
+    int     newheight;
+    int     p;
+    unsigned int  flags = 0;
+    char    title[256];
+    SDL_DisplayID displayid;
 
-	InWindow = (int)v_windowed.value;
-	InWindowBorderless = (int)v_windowborderless.value;
-	video_width = (int)v_width.value;
-	video_height = (int)v_height.value;
-	video_ratio = (float)video_width / (float)video_height;
+    InWindow = (int)v_windowed.value;
+    InWindowBorderless = (int)v_windowborderless.value;
+    video_width = (int)v_width.value;
+    video_height = (int)v_height.value;
+    video_ratio = (float)video_width / (float)video_height;
 
-	if (M_CheckParm("-window")) {
-		InWindowBorderless = 1;
-	}
-	if (M_CheckParm("-fullscreen")) {
-		InWindow = 1;
-	}
+    if (M_CheckParm("-window")) {
+        InWindowBorderless = 1;
+    }
+    if (M_CheckParm("-fullscreen")) {
+        InWindow = 1;
+    }
 
-	newwidth = newheight = 0;
+    newwidth = newheight = 0;
 
-	p = M_CheckParm("-width");
-	if (p && p < myargc - 1) {
-		newwidth = datoi(myargv[p + 1]);
-	}
+    p = M_CheckParm("-width");
+    if (p && p < myargc - 1) {
+        newwidth = datoi(myargv[p + 1]);
+    }
 
-	p = M_CheckParm("-height");
-	if (p && p < myargc - 1) {
-		newheight = datoi(myargv[p + 1]);
-	}
+    p = M_CheckParm("-height");
+    if (p && p < myargc - 1) {
+        newheight = datoi(myargv[p + 1]);
+    }
 
-	if (newwidth && newheight) {
-		video_width = newwidth;
-		video_height = newheight;
-		CON_CvarSetValue(v_width.name, (float)video_width);
-		CON_CvarSetValue(v_height.name, (float)video_height);
-	}
+    if (newwidth && newheight) {
+        video_width = newwidth;
+        video_height = newheight;
+        CON_CvarSetValue(v_width.name, (float)video_width);
+        CON_CvarSetValue(v_height.name, (float)video_height);
+    }
 
-	usingGL = false;
+    usingGL = false;
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
-	if (InWindow) {
-		flags |= SDL_WINDOW_FULLSCREEN;
-	}
+    if (!InWindow) {
+        flags |= SDL_WINDOW_BORDERLESS;
+    }
 
-	if (InWindowBorderless) {
-		flags |= SDL_WINDOW_BORDERLESS;
-	}
+    if (!InWindowBorderless) {
+        flags |= SDL_WINDOW_FULLSCREEN;
+    }
 
-	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
-	window = SDL_CreateWindow(title,
-		video_width,
-		video_height,
-		flags);
+    sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
+    window = SDL_CreateWindow(title,
+        video_width,
+        video_height,
+        flags);
 
-	if (window == NULL) {
-		I_Error("I_InitScreen: Failed to create window");
-		return;
-	}
+    if (window == NULL) {
+        I_Error("I_InitScreen: Failed to create window");
+        return;
+    }
 
-	if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
-		I_Error("I_InitScreen: Failed to create OpenGL context");
-		return;
-	}
-	
-	displayid = SDL_GetDisplayForWindow(window);
-	if(displayid) {
-		float f = SDL_GetDisplayContentScale(displayid);
-		if(f != 0) {
-			display_scale = f;	   
-		} else {
-			I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
-		}
-	} else {
-		I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
-	}
+    if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
+        I_Error("I_InitScreen: Failed to create OpenGL context");
+        return;
+    }
 
-	SDL_HideCursor();
+    if (SDL_GL_SetSwapInterval(1) < 0) {
+        I_Printf("Warning: Unable to set VSync: %s\n", SDL_GetError());
+    }
+
+    displayid = SDL_GetDisplayForWindow(window);
+    if (displayid) {
+        float f = SDL_GetDisplayContentScale(displayid);
+        if (f != 0) {
+            display_scale = f;
+        }
+        else {
+            I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
+        }
+    }
+    else {
+        I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
+    }
+
+    SDL_GL_SwapWindow(window);
+
+    SDL_HideCursor();
 }
 
 //
@@ -172,17 +180,17 @@ void I_InitScreen(void) {
 //
 
 void I_ShutdownVideo(void) {
-	if (glContext) {
-		SDL_GL_DestroyContext(glContext);
-		glContext = NULL;
-	}
+    if (glContext) {
+        SDL_GL_DestroyContext(glContext);
+        glContext = NULL;
+    }
 
-	if (window) {
-		SDL_DestroyWindow(window);
-		window = NULL;
-	}
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = NULL;
+    }
 
-	SDL_Quit();
+    SDL_Quit();
 }
 
 //
@@ -190,15 +198,15 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-	unsigned int f = SDL_INIT_VIDEO;
+    unsigned int f = SDL_INIT_VIDEO;
 
-	if (SDL_Init(f) < 0) {
-		I_Error("ERROR - Failed to initialize SDL");
-		return;
-	}
+    if (SDL_Init(f) < 0) {
+        I_Error("ERROR - Failed to initialize SDL");
+        return;
+    }
 
-	I_StartTic();
-	I_InitScreen();
+    I_StartTic();
+    I_InitScreen();
 }
 
 //
@@ -206,8 +214,8 @@ void I_InitVideo(void) {
 //
 
 void V_RegisterCvars(void) {
-	CON_CvarRegister(&v_width);
-	CON_CvarRegister(&v_height);
-	CON_CvarRegister(&v_windowed);
-	CON_CvarRegister(&v_windowborderless);
+    CON_CvarRegister(&v_width);
+    CON_CvarRegister(&v_height);
+    CON_CvarRegister(&v_windowed);
+    CON_CvarRegister(&v_windowborderless);
 }
