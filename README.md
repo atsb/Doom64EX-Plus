@@ -2,8 +2,6 @@
 
 Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
-I have kept the current release and current 'stable' branch as bug-free and stable as possible with every single optimisation, fix etc..  that I could add to it.  For Linux and Windows users, this version will be stable and playable and will still give you exceptional usability over EX.  However, I cannot devote much time lately and the time I do spend developing outside of my job, I would like to spend on productive projects, rather then on projects that are not used much.
-
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
@@ -50,40 +48,11 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 
 ## Dependencies
 
-* SDL3 and SDL3_net
+* SDL3
 * ZLib
 * LibPNG
 * FluidSynth
 * OpenGL
-
-## System Requirements - 32 or 64bit
-
-Linux Single Board Computer
-
-- Raspberry Pi 3B
-
-*others may work but are untested*
-
-Linux / *BSD Desktop / Laptop
-
-- 1.8GHz Dual Core CPU
-- 2GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Or Later Compliant Video Chip / Card
-
-Windows
-
-- 1.8GHz Dual Core CPU
-- 4GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Or Later Compliant Video Chip / Card
-
-macOS
-
-- mid-2013 macbook air or better (also arm64 systems)
-- 4GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Or Later Compliant Video Chip / Card
 
 ## Installation
 
