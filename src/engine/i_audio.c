@@ -101,7 +101,7 @@ static SDL_Mutex* lock = NULL;
 // Semaphore stuff
 //
 
-static SDL_Semaphore* semaphore = 1;
+static SDL_Semaphore* semaphore;
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
 static int seqready = 0;
