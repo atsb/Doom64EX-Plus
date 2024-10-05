@@ -22,8 +22,6 @@
 /**
  * # CategoryHints
  *
- * Official documentation for SDL configuration variables
- *
  * This file contains functions to set and get configuration hints, as well as
  * listing each of them alphabetically.
  *
@@ -3002,7 +3000,7 @@ extern "C" {
  * - "1": Force SDL_THREAD_PRIORITY_TIME_CRITICAL to a realtime scheduling
  *   policy
  *
- * This hint should be set before calling SDL_SetThreadPriority()
+ * This hint should be set before calling SDL_SetCurrentThreadPriority()
  *
  * \since This hint is available since SDL 3.0.0.
  */
@@ -3010,22 +3008,22 @@ extern "C" {
 
 /**
  * A string specifying additional information to use with
- * SDL_SetThreadPriority.
+ * SDL_SetCurrentThreadPriority.
  *
- * By default SDL_SetThreadPriority will make appropriate system changes in
- * order to apply a thread priority. For example on systems using pthreads the
- * scheduler policy is changed automatically to a policy that works well with
- * a given priority. Code which has specific requirements can override SDL's
- * default behavior with this hint.
+ * By default SDL_SetCurrentThreadPriority will make appropriate system
+ * changes in order to apply a thread priority. For example on systems using
+ * pthreads the scheduler policy is changed automatically to a policy that
+ * works well with a given priority. Code which has specific requirements can
+ * override SDL's default behavior with this hint.
  *
  * pthread hint values are "current", "other", "fifo" and "rr". Currently no
  * other platform hint values are defined but may be in the future.
  *
  * On Linux, the kernel may send SIGKILL to realtime tasks which exceed the
  * distro configured execution budget for rtkit. This budget can be queried
- * through RLIMIT_RTTIME after calling SDL_SetThreadPriority().
+ * through RLIMIT_RTTIME after calling SDL_SetCurrentThreadPriority().
  *
- * This hint should be set before calling SDL_SetThreadPriority()
+ * This hint should be set before calling SDL_SetCurrentThreadPriority()
  *
  * \since This hint is available since SDL 3.0.0.
  */

@@ -38,7 +38,7 @@
 #endif
 
 #ifdef __OpenBSD__
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #else
 #include <SDL3/SDL.h>
 #endif

@@ -25,6 +25,7 @@
 #define __DOOMDEF__
 
 #ifdef _WIN32
+#undef USE_XINPUT
 #include <windows.h>
 #include <wtypes.h>//only for GUID type
 
