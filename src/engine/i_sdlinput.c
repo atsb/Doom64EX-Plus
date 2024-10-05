@@ -224,9 +224,9 @@ static int I_TranslateKey(const int key) {
 
 static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 	return 0
-		| (buttonstate & SDL_BUTTON(SDL_BUTTON_LEFT) ? 1 : 0)
-		| (buttonstate & SDL_BUTTON(SDL_BUTTON_MIDDLE) ? 2 : 0)
-		| (buttonstate & SDL_BUTTON(SDL_BUTTON_RIGHT) ? 4 : 0);
+		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_LEFT) ? 1 : 0)
+		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE) ? 2 : 0)
+		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT) ? 4 : 0);
 }
 
 //
