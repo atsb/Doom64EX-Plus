@@ -31,20 +31,20 @@
 
 #include "doomtype.h"
 
-#define I_SwapLE16(x)   SDL_Swap16LE(x)
-#define I_SwapLE32(x)   SDL_Swap32LE(x)
-#define I_SwapBE16(x)   SDL_Swap16BE(x)
-#define I_SwapBE32(x)   SDL_Swap32BE(x)
+#define I_SwapLE16(x)   SDL_SwapLE16(x)
+#define I_SwapLE32(x)   SDL_SwapLE32(x)
+#define I_SwapBE16(x)   SDL_SwapBE16(x)
+#define I_SwapBE32(x)   SDL_SwapBE32(x)
 
 #define SHORT(x)        ((short)I_SwapLE16(x))
 #define LONG(x)         ((signed long)I_SwapLE32(x))
 
 // Defines for checking the endianness of the system.
 
-#if SDL_BYTEORDER == SYS_LIL_ENDIAN
-#define SYS_LITTLE_ENDIAN
-#elif SDL_BYTEORDER == SYS_BIG_ENDIAN
-#define SYS_BIG_ENDIAN
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+#define SDL_LITTLE_ENDIAN
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+#define SDL_BIG_ENDIAN
 #endif
 
 #endif // __I_SWAP_H__
