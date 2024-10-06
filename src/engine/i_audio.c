@@ -97,12 +97,6 @@ static SDL_Mutex* lock = NULL;
 #define MUTEX_LOCK()    SDL_LockMutex(lock);
 #define MUTEX_UNLOCK()  SDL_UnlockMutex(lock);
 
-//
-// Semaphore stuff
-//
-
-static SDL_Semaphore* semaphore;
-
 // 20120205 villsa - bool to determine if sequencer is ready or not
 static int seqready = 0;
 
@@ -728,7 +722,6 @@ static int Signal_StopAll(doomseq_t* seq) {
     channel_t* c;
     int i;
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
 
@@ -736,8 +729,6 @@ static int Signal_StopAll(doomseq_t* seq) {
                 Chan_RemoveTrackFromPlaylist(seq, c);
             }
         }
-        SDL_SignalSemaphore(semaphore);
-    }
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
@@ -764,11 +755,8 @@ static int Signal_Pause(doomseq_t* seq) {
     int i;
     channel_t* c;
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
-        }
-        SDL_SignalSemaphore(semaphore);
     }
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
@@ -785,11 +773,8 @@ static int Signal_Resume(doomseq_t* seq) {
     int i;
     channel_t* c;
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
-        }
-        SDL_SignalSemaphore(semaphore);
     }
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
@@ -801,12 +786,10 @@ static int Signal_Resume(doomseq_t* seq) {
 //
 
 static int Signal_UpdateGain(doomseq_t* seq) {
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
 
         Seq_SetGain(seq);
         
-        SDL_SignalSemaphore(semaphore);
-    }
+    
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
@@ -958,7 +941,6 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
 
     seq->playtime = msecs;
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         for (i = 0; i < MIDI_CHANNELS; i++) {
             chan = &playlist[i];
 
@@ -972,8 +954,6 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
             else {
                 Chan_RunSong(seq, chan, msecs);
             }
-        }
-        SDL_SignalSemaphore(semaphore);
     }
 }
 
@@ -1170,15 +1150,6 @@ void I_InitSequencer(void) {
     lock = SDL_CreateMutex();
     if (lock == NULL) {
         CON_Warnf("I_InitSequencer: failed to create mutex");
-        return;
-    }
-
-    //
-    // init semaphore
-    //
-    semaphore = SDL_CreateSemaphore(1);
-    if (semaphore == NULL) {
-        CON_Warnf("I_InitSequencer: failed to create semaphore");
         return;
     }
 
@@ -1437,7 +1408,6 @@ void I_StartMusic(int mus_id) {
         return;
     }
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         song = &doomseq.songs[mus_id];
     for (i = 0; i < song->ntracks; i++) {
         chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
@@ -1447,8 +1417,6 @@ void I_StartMusic(int mus_id) {
         }
 
         chan->volume = doomseq.musicvolume;
-    }
-    SDL_SignalSemaphore(semaphore);
     }
 
         // [Immorpher] Re-establish linear sound interpolation
@@ -1470,7 +1438,6 @@ void I_StopSound(sndsrc_t* origin, int sfx_id) {
         return;
     }
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         song = &doomseq.songs[sfx_id];
     for (i = 0; i < MIDI_CHANNELS; i++) {
         c = &playlist[i];
@@ -1478,8 +1445,6 @@ void I_StopSound(sndsrc_t* origin, int sfx_id) {
         if (song == c->song || (origin && c->origin == origin)) {
             c->stop = true;
         }
-    }
-    SDL_SignalSemaphore(semaphore);
     }
 }
 
@@ -1500,7 +1465,6 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
         return;
     }
 
-    if (SDL_WaitSemaphoreTimeout(semaphore, -1) == 0) {
         song = &doomseq.songs[sfx_id];
     for (i = 0; i < song->ntracks; i++) {
         chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
@@ -1513,8 +1477,6 @@ void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb)
         chan->pan = (byte)(pan >> 1);
         chan->origin = origin;
         chan->depth = reverb;
-    }
-    SDL_SignalSemaphore(semaphore);
     }
 
         // [Immorpher] Re-establish linear sound interpolation
