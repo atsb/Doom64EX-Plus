@@ -299,6 +299,16 @@ char* I_FindDataFile(char* file) {
 	}
 
 #if !defined(_WIN32)
+
+#ifdef DOOM_UNIX_INSTALL
+	if ((dir = I_GetUserDir())) {
+		snprintf(path, 511, "%s%s", dir, file);
+		if (I_FileExists(path)) {
+			return path;
+		}
+	}
+#endif    
+    
 #ifdef DOOM_UNIX_SYSTEM_DATADIR
 	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
 	if (I_FileExists(path)) {
