@@ -1517,6 +1517,7 @@ void M_ChangeCrosshair(int choice);
 void M_ChangeOpacity(int choice);
 void M_DrawDisplay(void);
 void M_ChangeHUDColor(int choice);
+void M_ChangeFOV(int choice);
 
 CVAR_EXTERNAL(st_drawhud);
 CVAR_EXTERNAL(st_crosshair);
@@ -1528,6 +1529,7 @@ CVAR_EXTERNAL(st_showstatsalwayson);
 CVAR_EXTERNAL(m_messages);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(st_hud_color);
+CVAR_EXTERNAL(r_fov);
 
 enum {
 	messages,
@@ -1538,6 +1540,8 @@ enum {
 	display_stats,
 	display_stats_always_on,
 	display_hud_color,
+	display_fov,
+	display_empty2,
 	display_crosshair,
 	display_opacity,
 	display_empty1,
@@ -1555,6 +1559,8 @@ menuitem_t DisplayMenu[] = {
 	{2,"Show Stats:",M_ToggleShowStats, 't'},
 	{2,"Show Stats Always:",M_ToggleShowStatsAlwaysOn, 'a'},
 	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
+	{3,"Field of View",M_ChangeFOV, 'v'},
+	{-1,"",0},
 	{2,"Crosshair:",M_ChangeCrosshair, 'c'},
 	{3,"Crosshair Opacity",M_ChangeOpacity, 'o'},
 	{-1,"",0},
@@ -1571,6 +1577,7 @@ char* DisplayHints[display_end] = {
 	"display level stats in automap",
 	"display level stats in-game",
 	"change the hud text colour",
+	"change the field of view",
 	"toggle crosshair",
 	"change opacity for crosshairs",
 	NULL,
@@ -1586,6 +1593,7 @@ menudefault_t DisplayDefault[] = {
 	{ &st_showstats, 0 },
 	{ &st_showstatsalwayson, 0 },
 	{ &st_hud_color, 0 },
+	{ &r_fov, 75 },
 	{ &st_crosshair, 0 },
 	{ &st_crosshairopacity, 80 },
 	{ NULL, -1 }
@@ -1593,6 +1601,7 @@ menudefault_t DisplayDefault[] = {
 
 menuthermobar_t DisplayBars[] = {
 	{ display_empty1, 255, &st_crosshairopacity },
+	{ display_empty2, 75, &r_fov },
 	{ -1, 0 }
 };
 
@@ -1639,6 +1648,9 @@ void M_DrawDisplay(void) {
 		msgNames[(int)st_showstatsalwayson.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
 		hud_color[(int)st_hud_color.value]);
+
+	M_DrawThermo(DisplayDef.x, DisplayDef.y + LINEHEIGHT * (display_fov + 1),
+		255, r_fov.value);
 	
 	if (st_crosshair.value <= 0) {
 		Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_crosshair, MENUCOLORRED,
@@ -1699,6 +1711,26 @@ void M_ToggleFlashOverlay(int choice) {
 
 void M_ChangeCrosshair(int choice) {
 	M_SetOptionValue(choice, 0, (float)st_crosshairs, 1, &st_crosshair);
+}
+
+void M_ChangeFOV(int choice)
+{
+	if (choice) {
+		if (r_fov.value < 255.0f) {
+			M_SetCvar(&r_fov, r_fov.value + 1);
+		}
+		else {
+			CON_CvarSetValue(r_fov.name, 255);
+		}
+	}
+	else {
+		if (r_fov.value > 0.0f) {
+			M_SetCvar(&r_fov, r_fov.value - 1);
+		}
+		else {
+			CON_CvarSetValue(r_fov.name, 0);
+		}
+	}
 }
 
 void M_ChangeOpacity(int choice)
