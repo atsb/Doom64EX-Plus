@@ -58,6 +58,7 @@ CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
+CVAR(v_vsync, 1);
 
 float display_scale = 1.0f;
 SDL_Surface* screen;
@@ -169,6 +170,10 @@ void I_InitScreen(void) {
 		I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
 	}
 
+	SDL_GL_SetSwapInterval((int)v_vsync.value);
+
+	SDL_GL_SwapWindow(window);
+
 	SDL_HideCursor();
 }
 
@@ -215,4 +220,5 @@ void V_RegisterCvars(void) {
 	CON_CvarRegister(&v_height);
 	CON_CvarRegister(&v_windowed);
 	CON_CvarRegister(&v_windowborderless);
+	CON_CvarRegister(&v_vsync);
 }

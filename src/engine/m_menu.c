@@ -1773,6 +1773,7 @@ void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
 void M_DrawVideo(void);
+void M_ChangeVsync(int choice);
 
 CVAR_EXTERNAL(v_width);
 CVAR_EXTERNAL(v_height);
@@ -1784,6 +1785,7 @@ CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(v_vsync);
 
 enum {
 	video_dbrightness,
@@ -1796,6 +1798,7 @@ enum {
 	ratio,
 	resolution,
 	interpolate_frames,
+	vsync,
 	accessibility,
 	v_default,
 	v_videoreset,
@@ -1814,6 +1817,7 @@ menuitem_t VideoMenu[] = {
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
 	{2,"Resolution:",M_ChangeResolution, 'r'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
+	{2,"VSync:",M_ChangeVsync, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
 	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
@@ -1831,6 +1835,7 @@ char* VideoHints[video_end] = {
 	"select aspect ratio",
 	"resolution changes will take effect\n after restarting",
 	"toggle frame interpolation to\n achieve smooth framerates",
+	"toggle vsync on or off to prevent screen tearing",
 	"toggle accessibility to \n remove flashing lights",
 	"apply video settings"
 };
@@ -1842,6 +1847,7 @@ menudefault_t VideoDefault[] = {
 	{ &r_anisotropic, 1 },
 	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
+	{ &v_vsync, 1 },
 	{ &v_accessibility, 0 },
 	{ NULL, -1 }
 };
@@ -2069,6 +2075,7 @@ void M_DrawVideo(void) {
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
+	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, onofftype);
 
 #undef DRAWVIDEOITEM
@@ -2271,6 +2278,11 @@ void M_ChangeResolution(int choice) {
 void M_ChangeInterpolateFrames(int choice)
 {
 	M_SetOptionValue(choice, 0, 1, 1, &i_interpolateframes);
+}
+
+void M_ChangeVsync(int choice)
+{
+	M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
 }
 
 void M_ChangeAccessibility(int choice)
