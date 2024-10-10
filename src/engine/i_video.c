@@ -73,6 +73,24 @@ boolean window_focused;
 float mouse_x = 0.0f;
 float mouse_y = 0.0f;
 
+
+static void NVidiaGLFinishConditional(void) {
+	const char* vendor = (const char*)glGetString(GL_VENDOR);
+
+	if (vendor) {
+		if (strcmp(vendor, "NVIDIA Corporation") != 0) {
+			glFinish();
+			I_Printf("glFinish: Called for: %s\n", vendor);
+		}
+		else {
+			I_Printf("Vendor is NVIDIA! Skipping glFinish.\n");
+		}
+	}
+	else {
+		I_Printf("Error: Could not retrieve vendor.\n");
+	}
+}
+
 //
 // I_InitScreen
 //
@@ -189,6 +207,8 @@ void I_InitScreen(void) {
 	SDL_GL_SetSwapInterval((int)v_vsync.value);
 
     SDL_GL_SwapWindow(window);
+
+	NVidiaGLFinishConditional();
 
 	SDL_HideCursor();
 }
