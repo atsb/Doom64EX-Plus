@@ -188,6 +188,8 @@ void I_InitScreen(void) {
 
 	SDL_GL_SetSwapInterval((int)v_vsync.value);
 
+    SDL_GL_SwapWindow(window);
+
 	SDL_HideCursor();
 }
 
