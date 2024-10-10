@@ -47,8 +47,8 @@
 #include "d_main.h"
 #include "gl_main.h"
 
-SDL_Window* window;
-SDL_GLContext   glContext;
+SDL_Window* window = NULL;
+SDL_GLContext   glContext = NULL;
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
@@ -58,7 +58,10 @@ CVAR(v_width, 640);
 CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
-CVAR(v_vsync, 1);
+
+CVAR_CMD(v_vsync, 1) {
+    SDL_GL_SetSwapInterval((int)v_vsync.value);    
+}
 
 float display_scale = 1.0f;
 SDL_Surface* screen;
@@ -142,6 +145,14 @@ void I_InitScreen(void) {
 		flags |= SDL_WINDOW_BORDERLESS;
 	}
 
+    if(glContext) {
+        SDL_GL_DestroyContext(glContext);
+    }
+   
+    if(window) {
+        SDL_DestroyWindow(window);
+    }
+
 	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
 		video_width,
@@ -153,11 +164,16 @@ void I_InitScreen(void) {
 		return;
 	}
 
+#ifdef __linux__
+    // NVIDIA Linux specific: fixes input lag with vsync on
+    putenv("__GL_MaxFramesAllowed=1");
+#endif   
+    
 	if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
-	
+
 	displayid = SDL_GetDisplayForWindow(window);
 	if(displayid) {
 		float f = SDL_GetDisplayContentScale(displayid);
@@ -172,7 +188,7 @@ void I_InitScreen(void) {
 
 	SDL_GL_SetSwapInterval((int)v_vsync.value);
 
-	SDL_GL_SwapWindow(window);
+    SDL_GL_SwapWindow(window);
 
 	SDL_HideCursor();
 }
