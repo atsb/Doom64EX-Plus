@@ -63,11 +63,50 @@ Windows
 
 GNU/Linux / BSD
 
-- GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
-	this will force the software to look for all IWAD and supporting files inside `~/.local/share/doom64ex-plus`
-- compile-time macro *-DDOOM_UNIX_SYSTEM_DATADIR=\\"/some/system/path\\"* allows to specify the system folder where the software will look
-for all IWAD and supporting files.
-Packagers should set *DOOM_UNIX_SYSTEM_DATADIR* to a proper folder for the distro and package files `doom64ex-plus.wad` and `doomsnd.sf2` into that folder.
+When compiling `doom64ex-plus`, you can use compile-time macros to control where the game engine looks for its data files (like IWADs and supporting resources).
+
+### `-DDOOM_UNIX_INSTALL`
+
+- When enabled, the game will store and search for its data in `~/.local/share/doom64ex-plus`.
+  - `~` represents the user’s home directory.
+  - `~/.local/share` is a standard location for user-specific data on Linux and BSD systems.
+- For single-user installations without needing special permissions to write to system directories.
+
+### `-DDOOM_UNIX_SYSTEM_DATADIR="/some/system/path"`
+
+- Sets a system-wide directory where the game should look for its data files.
+- When set, the game will search the specified directory (e.g., `/usr/share/games/doom64ex-plus`) for mandatory game files like `doom64ex-plus.wad` and `doomsnd.sf2`.
+- Suitable for system administrators or packagers who want the game installed for all users on the system.
+
+## How to Use These Macros
+
+### 1. Command Line Compilation
+
+To compile the software manually using `gcc` or `make`, specify the macros directly:
+
+- For user-specific installation:
+  ```bash
+  gcc -DDOOM_UNIX_INSTALL -o doom64ex-plus <c files> <library links>
+  ```
+
+- To set a specific system-wide directory:
+  ```bash
+  gcc -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\" -o doom64ex-plus <c files> <library links>
+  ```
+
+### 2. Using a Makefile
+
+If the software uses a `Makefile`, you can add these macros as options:
+
+- For user-specific installation:
+  ```makefile
+  CFLAGS += -DDOOM_UNIX_INSTALL
+  ```
+
+- For specifying a system-wide directory:
+  ```makefile
+  CFLAGS += -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\"
+  ```
 
 Finally, if a data file cannot be found in one of the two folders above, it will look inside the current directory.
 
