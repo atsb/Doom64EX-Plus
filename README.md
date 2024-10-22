@@ -100,12 +100,12 @@ If the software uses a `Makefile`, you can add these macros as options:
 
 - For user-specific installation:
   ```makefile
-  CFLAGS += -DDOOM_UNIX_INSTALL
+  CFLAGS += DOOM_UNIX_INSTALL
   ```
 
 - For specifying a system-wide directory:
   ```makefile
-  CFLAGS += -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\"
+  CFLAGS += DOOM_UNIX_SYSTEM_DATADIR=/usr/share/games/doom64ex-plus
   ```
 
 Finally, if a data file cannot be found in one of the two folders above, it will look inside the current directory.
