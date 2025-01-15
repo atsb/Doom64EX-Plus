@@ -23,6 +23,19 @@
  * # CategoryVulkan
  *
  * Functions for creating Vulkan surfaces on SDL windows.
+ *
+ * For the most part, Vulkan operates independent of SDL, but it benefits from
+ * a little support during setup.
+ *
+ * Use SDL_Vulkan_GetInstanceExtensions() to get platform-specific bits for
+ * creating a VkInstance, then SDL_Vulkan_GetVkGetInstanceProcAddr() to get
+ * the appropriate function for querying Vulkan entry points. Then
+ * SDL_Vulkan_CreateSurface() will get you the final pieces you need to
+ * prepare for rendering into an SDL_Window with Vulkan.
+ *
+ * Unlike OpenGL, most of the details of "context" creation and window buffer
+ * swapping are handled by the Vulkan API directly, so SDL doesn't provide
+ * Vulkan equivalents of SDL_GL_SwapWindow(), etc; they aren't necessary.
  */
 
 #ifndef SDL_vulkan_h_
@@ -56,6 +69,10 @@ VK_DEFINE_HANDLE(VkPhysicalDevice)
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkSurfaceKHR)
 struct VkAllocationCallbacks;
 
+/* Make sure to undef to avoid issues in case of later vulkan include */
+#undef VK_DEFINE_HANDLE
+#undef VK_DEFINE_NON_DISPATCHABLE_HANDLE
+
 #endif /* !NO_SDL_VULKAN_TYPEDEFS */
 
 /**
@@ -69,6 +86,13 @@ struct VkAllocationCallbacks;
  * This should be called after initializing the video driver, but before
  * creating any Vulkan windows. If no Vulkan loader library is loaded, the
  * default library will be loaded upon creation of the first Vulkan window.
+ *
+ * SDL keeps a counter of how many times this function has been successfully
+ * called, so it is safe to call this function multiple times, so long as it
+ * is eventually paired with an equivalent number of calls to
+ * SDL_Vulkan_UnloadLibrary. The `path` argument is ignored unless there is no
+ * library currently loaded, and and the library isn't actually unloaded until
+ * there have been an equivalent number of calls to SDL_Vulkan_UnloadLibrary.
  *
  * It is fairly common for Vulkan applications to link with libvulkan instead
  * of explicitly loading it at run time. This will work with SDL provided the
@@ -99,7 +123,9 @@ struct VkAllocationCallbacks;
  * \returns true on success or false on failure; call SDL_GetError() for more
  *          information.
  *
- * \since This function is available since SDL 3.0.0.
+ * \threadsafety This function is not thread safe.
+ *
+ * \since This function is available since SDL 3.1.3.
  *
  * \sa SDL_Vulkan_GetVkGetInstanceProcAddr
  * \sa SDL_Vulkan_UnloadLibrary
@@ -123,14 +149,27 @@ extern SDL_DECLSPEC bool SDLCALL SDL_Vulkan_LoadLibrary(const char *path);
  * \returns the function pointer for `vkGetInstanceProcAddr` or NULL on
  *          failure; call SDL_GetError() for more information.
  *
- * \since This function is available since SDL 3.0.0.
+ * \since This function is available since SDL 3.1.3.
  */
 extern SDL_DECLSPEC SDL_FunctionPointer SDLCALL SDL_Vulkan_GetVkGetInstanceProcAddr(void);
 
 /**
  * Unload the Vulkan library previously loaded by SDL_Vulkan_LoadLibrary().
  *
- * \since This function is available since SDL 3.0.0.
+ * SDL keeps a counter of how many times this function has been called, so it
+ * is safe to call this function multiple times, so long as it is paired with
+ * an equivalent number of calls to SDL_Vulkan_LoadLibrary. The library isn't
+ * actually unloaded until there have been an equivalent number of calls to
+ * SDL_Vulkan_UnloadLibrary.
+ *
+ * Once the library has actually been unloaded, if any Vulkan instances
+ * remain, they will likely crash the program. Clean up any existing Vulkan
+ * resources, and destroy appropriate windows, renderers and GPU devices
+ * before calling this function.
+ *
+ * \threadsafety This function is not thread safe.
+ *
+ * \since This function is available since SDL 3.1.3.
  *
  * \sa SDL_Vulkan_LoadLibrary
  */
@@ -154,7 +193,7 @@ extern SDL_DECLSPEC void SDLCALL SDL_Vulkan_UnloadLibrary(void);
  * \returns an array of extension name strings on success, NULL on failure;
  *          call SDL_GetError() for more information.
  *
- * \since This function is available since SDL 3.0.0.
+ * \since This function is available since SDL 3.1.3.
  *
  * \sa SDL_Vulkan_CreateSurface
  */
@@ -179,7 +218,7 @@ extern SDL_DECLSPEC char const * const * SDLCALL SDL_Vulkan_GetInstanceExtension
  * \returns true on success or false on failure; call SDL_GetError() for more
  *          information.
  *
- * \since This function is available since SDL 3.0.0.
+ * \since This function is available since SDL 3.1.3.
  *
  * \sa SDL_Vulkan_GetInstanceExtensions
  * \sa SDL_Vulkan_DestroySurface
@@ -207,7 +246,7 @@ extern SDL_DECLSPEC bool SDLCALL SDL_Vulkan_CreateSurface(SDL_Window *window,
  * \param allocator a VkAllocationCallbacks struct, which lets the app set the
  *                  allocator that destroys the surface. Can be NULL.
  *
- * \since This function is available since SDL 3.0.0.
+ * \since This function is available since SDL 3.1.3.
  *
  * \sa SDL_Vulkan_GetInstanceExtensions
  * \sa SDL_Vulkan_CreateSurface
@@ -229,7 +268,7 @@ extern SDL_DECLSPEC void SDLCALL SDL_Vulkan_DestroySurface(VkInstance instance,
  *                         device.
  * \returns true if supported, false if unsupported or an error occurred.
  *
- * \since This function is available since SDL 3.0.0.
+ * \since This function is available since SDL 3.1.3.
  *
  * \sa SDL_Vulkan_GetInstanceExtensions
  */
