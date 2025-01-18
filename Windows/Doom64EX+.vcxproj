@@ -72,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <GenerateManifest>false</GenerateManifest>
+    <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -148,6 +148,7 @@
       <AdditionalDependencies>opengl32.lib;bz2.lib;gio-2.0.lib;gmodule-2.0.lib;gobject-2.0.lib;gthread-2.0.lib;charset.lib;iconv.lib;libffi.lib;fluidsynth.lib;glib-2.0.lib;intl.lib;pcre2-8.lib;pcre2-16.lib;pcre2-32.lib;pcre2-posix.lib;zlib.lib;libpng16.lib;SDL3.lib;wsock32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <LinkErrorReporting>NoErrorReport</LinkErrorReporting>
       <OptimizeReferences>true</OptimizeReferences>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
