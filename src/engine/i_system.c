@@ -75,12 +75,17 @@ CVAR(v_accessibility, 0);
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
+#ifdef DOOM_FLATPAK_INSTALL
+    #define DOOM_GAME_DATA_PATH "/app/share/games/doom64ex-plus/"
+    #define DOOM_CONFIG_DIR "/var/config/doom64ex-plus/"
+#else
 #ifdef DOOM_UNIX_INSTALL
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
 #elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
 #define GetBasePath()	SDL_GetBasePath();
 #elif defined __ANDROID__
 #define GetBasePath()   SDL_AndroidGetInternalStoragePath();
+#endif
 #endif
 
 ticcmd_t        emptycmd;
@@ -265,7 +270,7 @@ char* I_GetUserDir(void)
  */
 
 char* I_GetUserFile(char* file) {
-	const char* path, * userdir;
+	char* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
@@ -299,7 +304,7 @@ char* I_FindDataFile(char* file) {
 	}
 
 #if !defined(_WIN32)
-
+    
 #ifdef DOOM_UNIX_INSTALL
 	if ((dir = I_GetUserDir())) {
 		snprintf(path, 511, "%s%s", dir, file);
@@ -307,7 +312,14 @@ char* I_FindDataFile(char* file) {
 			return path;
 		}
 	}
-#endif    
+#endif
+    
+#ifdef DOOM_FLATPAK_INSTALL
+    snprintf(path, 511, "%s/%s", DOOM_GAME_DATA_PATH, file);
+    if (I_FileExists(path)) {
+        return path;
+    }
+#endif
     
 #ifdef DOOM_UNIX_SYSTEM_DATADIR
 	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
