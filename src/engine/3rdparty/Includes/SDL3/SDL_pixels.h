@@ -93,7 +93,7 @@ extern "C" {
 /**
  * A fully opaque 8-bit alpha value.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  *
  * \sa SDL_ALPHA_TRANSPARENT
  */
@@ -102,7 +102,7 @@ extern "C" {
 /**
  * A fully opaque floating point alpha value.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  *
  * \sa SDL_ALPHA_TRANSPARENT_FLOAT
  */
@@ -111,7 +111,7 @@ extern "C" {
 /**
  * A fully transparent 8-bit alpha value.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  *
  * \sa SDL_ALPHA_OPAQUE
  */
@@ -120,7 +120,7 @@ extern "C" {
 /**
  * A fully transparent floating point alpha value.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  *
  * \sa SDL_ALPHA_OPAQUE_FLOAT
  */
@@ -129,7 +129,7 @@ extern "C" {
 /**
  * Pixel type.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_PixelType
 {
@@ -152,7 +152,7 @@ typedef enum SDL_PixelType
 /**
  * Bitmap pixel order, high bit -> low bit.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_BitmapOrder
 {
@@ -164,7 +164,7 @@ typedef enum SDL_BitmapOrder
 /**
  * Packed component order, high bit -> low bit.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_PackedOrder
 {
@@ -182,7 +182,7 @@ typedef enum SDL_PackedOrder
 /**
  * Array component order, low byte -> high byte.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_ArrayOrder
 {
@@ -198,7 +198,7 @@ typedef enum SDL_ArrayOrder
 /**
  * Packed component layout.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_PackedLayout
 {
@@ -230,7 +230,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_DEFINE_PIXELFOURCC(A, B, C, D) SDL_FOURCC(A, B, C, D)
 
@@ -254,7 +254,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_DEFINE_PIXELFORMAT(type, order, layout, bits, bytes) \
     ((1 << 28) | ((type) << 24) | ((order) << 20) | ((layout) << 16) | \
@@ -271,7 +271,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_PIXELFLAG(format)    (((format) >> 28) & 0x0F)
 
@@ -285,7 +285,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_PIXELTYPE(format)    (((format) >> 24) & 0x0F)
 
@@ -300,7 +300,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_PIXELORDER(format)   (((format) >> 20) & 0x0F)
 
@@ -315,7 +315,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_PIXELLAYOUT(format)  (((format) >> 16) & 0x0F)
 
@@ -333,7 +333,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  *
  * \sa SDL_BYTESPERPIXEL
  */
@@ -354,7 +354,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  *
  * \sa SDL_BITSPERPIXEL
  */
@@ -377,7 +377,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_INDEXED(format)   \
     (!SDL_ISPIXELFORMAT_FOURCC(format) && \
@@ -397,7 +397,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_PACKED(format) \
     (!SDL_ISPIXELFORMAT_FOURCC(format) && \
@@ -416,7 +416,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_ARRAY(format) \
     (!SDL_ISPIXELFORMAT_FOURCC(format) && \
@@ -437,7 +437,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_10BIT(format)    \
       (!SDL_ISPIXELFORMAT_FOURCC(format) && \
@@ -455,7 +455,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_FLOAT(format)    \
       (!SDL_ISPIXELFORMAT_FOURCC(format) && \
@@ -473,7 +473,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_ALPHA(format)   \
     ((SDL_ISPIXELFORMAT_PACKED(format) && \
@@ -501,7 +501,7 @@ typedef enum SDL_PackedLayout
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISPIXELFORMAT_FOURCC(format)  /* The flag is set to 1 because 0x1? is not in the printable ASCII range */ \
     ((format) && (SDL_PIXELFLAG(format) != 1))
@@ -543,7 +543,7 @@ typedef enum SDL_PackedLayout
  * an alias for ABGR8888 on little-endian CPUs like x86, or an alias for
  * RGBA8888 on big-endian CPUs.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_PixelFormat
 {
@@ -676,6 +676,9 @@ typedef enum SDL_PixelFormat
     SDL_PIXELFORMAT_EXTERNAL_OES = 0x2053454fu,     /**< Android video texture format */
         /* SDL_DEFINE_PIXELFOURCC('O', 'E', 'S', ' ') */
 
+    SDL_PIXELFORMAT_MJPG = 0x47504a4du,     /**< Motion JPEG */
+        /* SDL_DEFINE_PIXELFOURCC('M', 'J', 'P', 'G') */
+
     /* Aliases for RGBA byte arrays of color data, for the current platform */
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     SDL_PIXELFORMAT_RGBA32 = SDL_PIXELFORMAT_RGBA8888,
@@ -701,7 +704,7 @@ typedef enum SDL_PixelFormat
 /**
  * Colorspace color type.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_ColorType
 {
@@ -714,7 +717,7 @@ typedef enum SDL_ColorType
  * Colorspace color range, as described by
  * https://www.itu.int/rec/R-REC-BT.2100-2-201807-I/en
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_ColorRange
 {
@@ -727,7 +730,7 @@ typedef enum SDL_ColorRange
  * Colorspace color primaries, as described by
  * https://www.itu.int/rec/T-REC-H.273-201612-S/en
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_ColorPrimaries
 {
@@ -752,7 +755,7 @@ typedef enum SDL_ColorPrimaries
  *
  * These are as described by https://www.itu.int/rec/T-REC-H.273-201612-S/en
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_TransferCharacteristics
 {
@@ -782,7 +785,7 @@ typedef enum SDL_TransferCharacteristics
  *
  * These are as described by https://www.itu.int/rec/T-REC-H.273-201612-S/en
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_MatrixCoefficients
 {
@@ -806,7 +809,7 @@ typedef enum SDL_MatrixCoefficients
 /**
  * Colorspace chroma sample location.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  */
 typedef enum SDL_ChromaLocation
 {
@@ -847,7 +850,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_DEFINE_COLORSPACE(type, range, primaries, transfer, matrix, chroma) \
     (((Uint32)(type) << 28) | ((Uint32)(range) << 24) | ((Uint32)(chroma) << 20) | \
@@ -861,7 +864,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_COLORSPACETYPE(cspace)       (SDL_ColorType)(((cspace) >> 28) & 0x0F)
 
@@ -873,7 +876,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_COLORSPACERANGE(cspace)      (SDL_ColorRange)(((cspace) >> 24) & 0x0F)
 
@@ -885,7 +888,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_COLORSPACECHROMA(cspace)     (SDL_ChromaLocation)(((cspace) >> 20) & 0x0F)
 
@@ -897,7 +900,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_COLORSPACEPRIMARIES(cspace)  (SDL_ColorPrimaries)(((cspace) >> 10) & 0x1F)
 
@@ -909,7 +912,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_COLORSPACETRANSFER(cspace)   (SDL_TransferCharacteristics)(((cspace) >> 5) & 0x1F)
 
@@ -921,7 +924,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_COLORSPACEMATRIX(cspace)     (SDL_MatrixCoefficients)((cspace) & 0x1F)
 
@@ -937,7 +940,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISCOLORSPACE_MATRIX_BT601(cspace)        (SDL_COLORSPACEMATRIX(cspace) == SDL_MATRIX_COEFFICIENTS_BT601 || SDL_COLORSPACEMATRIX(cspace) == SDL_MATRIX_COEFFICIENTS_BT470BG)
 
@@ -949,7 +952,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISCOLORSPACE_MATRIX_BT709(cspace)        (SDL_COLORSPACEMATRIX(cspace) == SDL_MATRIX_COEFFICIENTS_BT709)
 
@@ -962,7 +965,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISCOLORSPACE_MATRIX_BT2020_NCL(cspace)   (SDL_COLORSPACEMATRIX(cspace) == SDL_MATRIX_COEFFICIENTS_BT2020_NCL)
 
@@ -974,7 +977,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISCOLORSPACE_LIMITED_RANGE(cspace)       (SDL_COLORSPACERANGE(cspace) != SDL_COLOR_RANGE_FULL)
 
@@ -986,7 +989,7 @@ typedef enum SDL_ChromaLocation
  *
  * \threadsafety It is safe to call this macro from any thread.
  *
- * \since This macro is available since SDL 3.1.3.
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_ISCOLORSPACE_FULL_RANGE(cspace)          (SDL_COLORSPACERANGE(cspace) == SDL_COLOR_RANGE_FULL)
 
@@ -997,7 +1000,7 @@ typedef enum SDL_ChromaLocation
  * function, etc.), this is not an exhaustive list, but rather a
  * representative sample of the kinds of colorspaces supported in SDL.
  *
- * \since This enum is available since SDL 3.1.3.
+ * \since This enum is available since SDL 3.2.0.
  *
  * \sa SDL_ColorPrimaries
  * \sa SDL_ColorRange
@@ -1104,7 +1107,7 @@ typedef enum SDL_Colorspace
  * (SDL_PIXELFORMAT_ABGR8888 on little-endian systems and
  * SDL_PIXELFORMAT_RGBA8888 on big-endian systems).
  *
- * \since This struct is available since SDL 3.1.3.
+ * \since This struct is available since SDL 3.2.0.
  */
 typedef struct SDL_Color
 {
@@ -1118,7 +1121,7 @@ typedef struct SDL_Color
  * The bits of this structure can be directly reinterpreted as a float-packed
  * color which uses the SDL_PIXELFORMAT_RGBA128_FLOAT format
  *
- * \since This struct is available since SDL 3.1.3.
+ * \since This struct is available since SDL 3.2.0.
  */
 typedef struct SDL_FColor
 {
@@ -1131,7 +1134,7 @@ typedef struct SDL_FColor
 /**
  * A set of indexed colors representing a palette.
  *
- * \since This struct is available since SDL 3.1.3.
+ * \since This struct is available since SDL 3.2.0.
  *
  * \sa SDL_SetPaletteColors
  */
@@ -1146,7 +1149,7 @@ typedef struct SDL_Palette
 /**
  * Details about the format of a pixel.
  *
- * \since This struct is available since SDL 3.1.3.
+ * \since This struct is available since SDL 3.2.0.
  */
 typedef struct SDL_PixelFormatDetails
 {
@@ -1177,7 +1180,7 @@ typedef struct SDL_PixelFormatDetails
  *
  * \threadsafety It is safe to call this function from any thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  */
 extern SDL_DECLSPEC const char * SDLCALL SDL_GetPixelFormatName(SDL_PixelFormat format);
 
@@ -1195,7 +1198,7 @@ extern SDL_DECLSPEC const char * SDLCALL SDL_GetPixelFormatName(SDL_PixelFormat 
  *
  * \threadsafety It is safe to call this function from any thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPixelFormatForMasks
  */
@@ -1217,7 +1220,7 @@ extern SDL_DECLSPEC bool SDLCALL SDL_GetMasksForPixelFormat(SDL_PixelFormat form
  *
  * \threadsafety It is safe to call this function from any thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetMasksForPixelFormat
  */
@@ -1236,7 +1239,7 @@ extern SDL_DECLSPEC SDL_PixelFormat SDLCALL SDL_GetPixelFormatForMasks(int bpp, 
  *
  * \threadsafety It is safe to call this function from any thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  */
 extern SDL_DECLSPEC const SDL_PixelFormatDetails * SDLCALL SDL_GetPixelFormatDetails(SDL_PixelFormat format);
 
@@ -1252,7 +1255,7 @@ extern SDL_DECLSPEC const SDL_PixelFormatDetails * SDLCALL SDL_GetPixelFormatDet
  *
  * \threadsafety It is safe to call this function from any thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_DestroyPalette
  * \sa SDL_SetPaletteColors
@@ -1273,7 +1276,7 @@ extern SDL_DECLSPEC SDL_Palette * SDLCALL SDL_CreatePalette(int ncolors);
  * \threadsafety It is safe to call this function from any thread, as long as
  *               the palette is not modified or destroyed in another thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  */
 extern SDL_DECLSPEC bool SDLCALL SDL_SetPaletteColors(SDL_Palette *palette, const SDL_Color *colors, int firstcolor, int ncolors);
 
@@ -1285,7 +1288,7 @@ extern SDL_DECLSPEC bool SDLCALL SDL_SetPaletteColors(SDL_Palette *palette, cons
  * \threadsafety It is safe to call this function from any thread, as long as
  *               the palette is not modified or destroyed in another thread.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_CreatePalette
  */
@@ -1320,7 +1323,7 @@ extern SDL_DECLSPEC void SDLCALL SDL_DestroyPalette(SDL_Palette *palette);
  * \threadsafety It is safe to call this function from any thread, as long as
  *               the palette is not modified.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPixelFormatDetails
  * \sa SDL_GetRGB
@@ -1359,7 +1362,7 @@ extern SDL_DECLSPEC Uint32 SDLCALL SDL_MapRGB(const SDL_PixelFormatDetails *form
  * \threadsafety It is safe to call this function from any thread, as long as
  *               the palette is not modified.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPixelFormatDetails
  * \sa SDL_GetRGBA
@@ -1387,7 +1390,7 @@ extern SDL_DECLSPEC Uint32 SDLCALL SDL_MapRGBA(const SDL_PixelFormatDetails *for
  * \threadsafety It is safe to call this function from any thread, as long as
  *               the palette is not modified.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPixelFormatDetails
  * \sa SDL_GetRGBA
@@ -1419,7 +1422,7 @@ extern SDL_DECLSPEC void SDLCALL SDL_GetRGB(Uint32 pixel, const SDL_PixelFormatD
  * \threadsafety It is safe to call this function from any thread, as long as
  *               the palette is not modified.
  *
- * \since This function is available since SDL 3.1.3.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPixelFormatDetails
  * \sa SDL_GetRGB

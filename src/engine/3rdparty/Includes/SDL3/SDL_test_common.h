@@ -139,6 +139,7 @@ typedef struct
     int gl_accum_blue_size;
     int gl_accum_alpha_size;
     int gl_stereo;
+    int gl_release_behavior;
     int gl_multisamplebuffers;
     int gl_multisamplesamples;
     int gl_retained_backing;
@@ -176,7 +177,7 @@ extern "C" {
  *
  * \returns a newly allocated common state object.
  */
-SDLTest_CommonState *SDLCALL SDLTest_CommonCreateState(char **argv, SDL_InitFlags flags);
+SDLTest_CommonState * SDLCALL SDLTest_CommonCreateState(char **argv, SDL_InitFlags flags);
 
 /**
  * Free the common state object.
