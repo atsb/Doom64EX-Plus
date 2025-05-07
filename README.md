@@ -2,6 +2,10 @@
 
 Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
+Note for Linux users: Get it on Flathub!
+
+https://flathub.org/apps/io.github.atsb.Doom64EX-Plus
+
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
