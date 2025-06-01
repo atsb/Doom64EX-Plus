@@ -43,7 +43,8 @@
 #include <SDL3/SDL.h>
 #endif
 
-#include <fluidsynth.h>
+#include <fmod.h>
+#include <fmod_errors.h>
 
 #include "doomtype.h"
 #include "doomdef.h"
@@ -53,9 +54,12 @@
 #include "z_zone.h"
 #include "i_swap.h"
 #include "con_console.h"    // for cvars
+#include "d_player.h"
 
 // 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
+CVAR_EXTERNAL(s_sfxvol);
+CVAR_EXTERNAL(s_musvol);
 
 // 20120203 villsa - cvar for audio driver
 #ifdef _WIN32
@@ -89,6 +93,19 @@ CVAR_CMD(s_driver, sndio)
     CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
     CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
 }
+
+// FMOD Studio
+static float INCHES_PER_METER = 39.3701f;
+int num_sfx;
+
+FMOD_REVERB_PROPERTIES reverb_prop = FMOD_PRESET_GENERIC;
+
+FMOD_VECTOR fmod_reverb_position = { -8.0f, 2.0f, 2.0f };
+float min_dist = 1.0f;
+float max_dist = 15.0f;
+
+FMOD_BOOL IsPlaying;
+FMOD_BOOL Paused = FALSE;
 
 //
 // Mutex
@@ -228,11 +245,6 @@ typedef union {
 } seqmessage_t;
 
 typedef struct {
-    // library specific stuff. should never
-    // be modified after initialization
-    fluid_settings_t* settings;
-    fluid_synth_t* synth;
-    fluid_audio_driver_t* driver;
     int                     sfont_id; // 20120112 bkw: needs to be signed
     SDL_Thread* thread;
     int                   playtime;
@@ -264,6 +276,12 @@ static doomseq_t doomseq = { 0 };   // doom sequencer
 typedef void(*eventhandler)(doomseq_t*, channel_t*);
 typedef int(*signalhandler)(doomseq_t*);
 
+static void FMOD_ERROR_CHECK(FMOD_RESULT result) {
+    if (result != FMOD_OK) {
+        printf("FMOD Studio: %s", FMOD_ErrorString(result));
+    }
+}
+
 //
 // Seq_SetGain
 //
@@ -271,8 +289,9 @@ typedef int(*signalhandler)(doomseq_t*);
 // all sounds that are played
 //
 
-static void Seq_SetGain(doomseq_t* seq) {
-    fluid_synth_set_gain(seq->synth, seq->gain);
+void Seq_SetGain(float db) {
+    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel, db);
+    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
 }
 
 //
@@ -280,7 +299,7 @@ static void Seq_SetGain(doomseq_t* seq) {
 //
 
 static void Seq_SetConfig(doomseq_t* seq, char* setting, int value) {
-    fluid_settings_setint(seq->settings, setting, value);
+
 }
 
 //
@@ -320,12 +339,9 @@ static void Seq_SetStatus(doomseq_t* seq, int status) {
 // Should be set by the audio thread
 //
 
-static void Chan_SetMusicVolume(doomseq_t* seq, channel_t* chan) {
-    int vol;
-
-    vol = (int)((chan->volume * seq->musicvolume) / 127.0f);
-
-    fluid_synth_cc(seq->synth, chan->track->channel, 0x07, vol);
+void Chan_SetMusicVolume(float volume) {
+    FMOD_ERROR_CHECK(FMOD_System_GetMasterChannelGroup(sound.fmod_studio_system_music, &sound.master_music));
+    FMOD_ERROR_CHECK(FMOD_ChannelGroup_SetVolume(sound.master_music, volume / 255.0f));
 }
 
 //
@@ -334,15 +350,9 @@ static void Chan_SetMusicVolume(doomseq_t* seq, channel_t* chan) {
 // Should be set by the audio thread
 //
 
-static void Chan_SetSoundVolume(doomseq_t* seq, channel_t* chan) {
-    int vol;
-    int pan;
-
-    vol = (int)((chan->volume * seq->soundvolume) / 127.0f);
-    pan = chan->pan;
-
-    fluid_synth_cc(seq->synth, chan->id, 0x07, vol);
-    fluid_synth_cc(seq->synth, chan->id, 0x0A, pan);
+void Chan_SetSoundVolume(float volume) {
+    FMOD_ERROR_CHECK(FMOD_System_GetMasterChannelGroup(sound.fmod_studio_system, &sound.master));
+    FMOD_ERROR_CHECK(FMOD_ChannelGroup_SetVolume(sound.master, volume / 255.0f));
 }
 
 //
@@ -418,8 +428,6 @@ static void Chan_StopTrack(doomseq_t* seq, channel_t* chan) {
     else {
         c = chan->id;
     }
-
-    fluid_synth_cc(seq->synth, c, 0x78, 0);
 }
 
 //
@@ -531,8 +539,6 @@ static channel_t* Song_AddTrackToPlaylist(doomseq_t* seq, song_t* song, track_t*
 static void Event_NoteOff(doomseq_t* seq, channel_t* chan) {
     chan->key = Chan_GetNextMidiByte(chan);
     chan->velocity = 0;
-
-    fluid_synth_noteoff(seq->synth, chan->track->channel, chan->key);
 }
 
 //
@@ -542,9 +548,6 @@ static void Event_NoteOff(doomseq_t* seq, channel_t* chan) {
 static void Event_NoteOn(doomseq_t* seq, channel_t* chan) {
     chan->key = Chan_GetNextMidiByte(chan);
     chan->velocity = Chan_GetNextMidiByte(chan);
-
-    fluid_synth_cc(seq->synth, chan->id, 0x5B, chan->depth);
-    fluid_synth_noteon(seq->synth, chan->track->channel, chan->key, chan->velocity);
 }
 
 //
@@ -561,15 +564,12 @@ static void Event_ControlChange(doomseq_t* seq, channel_t* chan) {
     if (ctrl == 0x07) {  // update volume
         if (chan->song->type == 1) {
             chan->volume = ((float)val * seq->musicvolume) / 127.0f;
-            Chan_SetMusicVolume(seq, chan);
+            //Chan_SetMusicVolume(seq, chan);
         }
         else {
             chan->volume = ((float)val * chan->volume) / 127.0f;
-            Chan_SetSoundVolume(seq, chan);
+            //Chan_SetSoundVolume(seq, chan);
         }
-    }
-    else {
-        fluid_synth_cc(seq->synth, chan->track->channel, ctrl, val);
     }
 }
 
@@ -581,8 +581,6 @@ static void Event_ProgramChange(doomseq_t* seq, channel_t* chan) {
     int program;
 
     program = Chan_GetNextMidiByte(chan);
-
-    fluid_synth_program_change(seq->synth, chan->track->channel, program);
 }
 
 //
@@ -593,8 +591,6 @@ static void Event_ChannelPressure(doomseq_t* seq, channel_t* chan) {
     int val;
 
     val = Chan_GetNextMidiByte(chan);
-
-    fluid_synth_channel_pressure(seq->synth, chan->track->channel, val);
 }
 
 //
@@ -607,8 +603,6 @@ static void Event_PitchBend(doomseq_t* seq, channel_t* chan) {
 
     b1 = Chan_GetNextMidiByte(chan);
     b2 = Chan_GetNextMidiByte(chan);
-
-    fluid_synth_pitch_bend(seq->synth, chan->track->channel, ((b2 << 8) | b1) >> 1);
 }
 
 //
@@ -739,7 +733,6 @@ static int Signal_StopAll(doomseq_t* seq) {
 //
 
 static int Signal_Reset(doomseq_t* seq) {
-    fluid_synth_system_reset(seq->synth);
 
     Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
@@ -784,14 +777,14 @@ static int Signal_Resume(doomseq_t* seq) {
 //
 // Signal_UpdateGain
 //
+static int Signal_UpdateGain(float db) {
+    SEMAPHORE_LOCK()
 
-static int Signal_UpdateGain(doomseq_t* seq) {
+        Seq_SetGain(db);
 
-        Seq_SetGain(seq);
-        
-    
+    SEMAPHORE_UNLOCK()
 
-        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+        //Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -871,10 +864,10 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     while (chan->state != CHAN_STATE_ENDED) {
         if (chan->song->type == 0) {
             chan->volume = chan->basevol;
-            Chan_SetSoundVolume(seq, chan);
+           //Chan_SetSoundVolume(seq, chan);
         }
         else {
-            Chan_SetMusicVolume(seq, chan);
+            //Chan_SetMusicVolume(seq, chan);
         }
 
         //
@@ -1065,6 +1058,12 @@ static void Seq_Shutdown(doomseq_t* seq) {
     // signal the sequencer to shut down
     //
     Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
+
+#ifdef _WIN32
+    //
+    // Screw the shutdown, the OS will handle it :P
+    //
+#else
     //
     // wait until the audio thread is finished
     //
@@ -1080,6 +1079,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
     seq->synth = NULL;
     seq->driver = NULL;
     seq->settings = NULL;
+#endif
 }
 
 //
@@ -1138,11 +1138,38 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 // I_InitSequencer
 //
 
+
 void I_InitSequencer(void) {
     int   sffound;
     char* sfpath;
+    void* extradriverdata = 0;
 
-    CON_DPrintf("--------Initializing Software Synthesizer--------\n");
+    I_Printf("\n--------Initializing FMOD Studio--------\n");
+    I_Printf("Made with FMOD Studio by Firelight Technologies Pty Ltd.\n\n");
+
+    FMOD_ERROR_CHECK(FMOD_System_SetDSPBufferSize(sound.fmod_studio_system, 1024, 128));
+    FMOD_ERROR_CHECK(FMOD_System_SetDSPBufferSize(sound.fmod_studio_system_music, 1024, 128));
+
+    FMOD_ERROR_CHECK(FMOD_System_Create(&sound.fmod_studio_system, FMOD_VERSION));
+    FMOD_ERROR_CHECK(FMOD_System_Create(&sound.fmod_studio_system_music, FMOD_VERSION));
+
+    FMOD_ERROR_CHECK(FMOD_System_Init(sound.fmod_studio_system, 92, FMOD_INIT_3D_RIGHTHANDED | FMOD_INIT_PROFILE_ENABLE, NULL));
+    FMOD_ERROR_CHECK(FMOD_System_Init(sound.fmod_studio_system_music, 128, FMOD_INIT_NORMAL, NULL));
+
+    // FMOD_ERROR_CHECK(FMOD_System_CreateReverb3D(sound.fmod_studio_system, reverb.fmod_reverb));
+
+    FMOD_ERROR_CHECK(FMOD_System_GetMasterChannelGroup(sound.fmod_studio_system, &sound.master));
+    FMOD_ERROR_CHECK(FMOD_System_GetMasterChannelGroup(sound.fmod_studio_system_music, &sound.master_music));
+
+    // Set 3D min/max distance for each sound source if needed
+    FMOD_ERROR_CHECK(FMOD_Sound_Set3DMinMaxDistance(sound.fmod_studio_sound[num_sfx], 0.5f * INCHES_PER_METER, 127.0f * INCHES_PER_METER));
+    // Add similar lines for other sound sources if necessary
+
+    // Setup external tracks
+
+    FMOD_CreateMusicTracksInit();
+
+    FMOD_CreateSfxTracksInit();
 
     //
     // init mutex
@@ -1175,71 +1202,16 @@ void I_InitSequencer(void) {
     //
     // init settings
     //
-    doomseq.settings = new_fluid_settings();
     Seq_SetConfig(&doomseq, "synth.midi-channels", 0x10 + MIDI_CHANNELS);
     Seq_SetConfig(&doomseq, "synth.polyphony", 128); // [Immorpher] high polyphony slows down the game
-
-
-    // 20120105 bkw: On Linux, always use alsa (fluidsynth default is to use
-    // JACK, if it's compiled in. We don't want to start jackd for a game).
-    fluid_settings_setstr(doomseq.settings, "audio.driver", s_driver.string);
-
-    CON_DPrintf("Audio driver: %s\n", s_driver.string);
-
-    //
-    // init synth
-    //
-    doomseq.synth = new_fluid_synth(doomseq.settings);
-    if (doomseq.synth == NULL) {
-        CON_Warnf("I_InitSequencer: failed to create synthesizer");
-        return;
-    }
-
-    //
-    // init audio driver
-    //
-    doomseq.driver = new_fluid_audio_driver(doomseq.settings, doomseq.synth);
-    if (doomseq.driver == NULL) {
-        CON_Warnf("I_InitSequencer: failed to create audio driver");
-        return;
-    }
-
-    //
-    // load soundfont
-    //
-
-    sffound = false;
-    if (s_soundfont.string[0]) {
-        if (I_FileExists(s_soundfont.string)) {
-            I_Printf("Found SoundFont %s\n", s_soundfont.string);
-            doomseq.sfont_id = fluid_synth_sfload(doomseq.synth, s_soundfont.string, 1);
-
-            CON_DPrintf("Loading %s\n", s_soundfont.string);
-
-            sffound = true;
-        }
-        else {
-            CON_Warnf("CVar s_soundfont doesn't point to a file.", s_soundfont.string);
-        }
-    }
-
-    if (!sffound && (sfpath = I_FindDataFile("doomsnd.sf2"))) {
-        I_Printf("Found SoundFont %s\n", sfpath);
-        doomseq.sfont_id = fluid_synth_sfload(doomseq.synth, sfpath, 1);
-
-        CON_DPrintf("Loading %s\n", sfpath);
-
-        free(sfpath);
-        sffound = true;
-    }
 
     //
     // set state
     //
-    doomseq.gain = 1.0f;
+    float gain = 1.0f;
 
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_READY);
-    Seq_SetGain(&doomseq);
+    Seq_SetGain(gain);
 
     //
     // if something went terribly wrong, then shutdown everything
@@ -1305,8 +1277,13 @@ void I_RemoveSoundSource(int c) {
 // I_UpdateChannel
 //
 
-void I_UpdateChannel(int c, int volume, int pan) {
+void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
     channel_t* chan;
+
+    FMOD_VECTOR soundPosition = { x, y, 0.0f };  // Set the appropriate position in 3D space
+    FMOD_Channel_Set3DAttributes(sound.fmod_studio_channel, &soundPosition, NULL);
+
+    FMOD_Channel_SetMode(sound.fmod_studio_channel, FMOD_3D_WORLDRELATIVE);
 
     chan = &playlist[c];
     chan->basevol = (float)volume;
@@ -1317,10 +1294,13 @@ void I_UpdateChannel(int c, int volume, int pan) {
 // I_ShutdownSound
 // Shutdown sound when player exits the game / error occurs
 
-void I_ShutdownSound(void) {
-    if (doomseq.synth) {
-        Seq_Shutdown(&doomseq);
-    }
+void I_ShutdownSound(void)
+{
+    FMOD_ERROR_CHECK(FMOD_System_Close(sound.fmod_studio_system));
+    FMOD_ERROR_CHECK(FMOD_System_Release(sound.fmod_studio_system));
+
+    FMOD_ERROR_CHECK(FMOD_System_Close(sound.fmod_studio_system_music));
+    FMOD_ERROR_CHECK(FMOD_System_Release(sound.fmod_studio_system_music));
 }
 
 //
@@ -1328,7 +1308,7 @@ void I_ShutdownSound(void) {
 //
 
 void I_SetMusicVolume(float volume) {
-    doomseq.musicvolume = (volume * 1.125f);
+    FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel_music, volume / 255.0f));
 }
 
 //
@@ -1336,6 +1316,7 @@ void I_SetMusicVolume(float volume) {
 //
 
 void I_SetSoundVolume(float volume) {
+    FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel, volume / 255.0f));
     doomseq.soundvolume = (volume * 0.925f);
 }
 
@@ -1363,6 +1344,7 @@ void I_PauseSound(void) {
         return;
     }
 
+    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, true));
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_PAUSE);
     //Seq_WaitOnSignal(&doomseq);
 }
@@ -1376,6 +1358,7 @@ void I_ResumeSound(void) {
         return;
     }
 
+    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESUME);
     //Seq_WaitOnSignal(&doomseq);
 }
@@ -1391,96 +1374,94 @@ void I_SetGain(float db) {
 
     doomseq.gain = db;
 
+    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel, db);
+    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_SETGAIN);
     //Seq_WaitOnSignal(&doomseq);
 }
 
-//
-// I_StartMusic
-//
+// FMOD Studio SFX API
 
-void I_StartMusic(int mus_id) {
-    song_t* song;
-    channel_t* chan;
-    int i;
+int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, float properties_reverb) {
 
-    if (!seqready) {
-        return;
-    }
+    FMOD_System_SetReverbProperties(sound.fmod_studio_system, (int)properties_reverb, &reverb_prop);
 
-        song = &doomseq.songs[mus_id];
-    for (i = 0; i < song->ntracks; i++) {
-        chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
+    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
+    FMOD_ERROR_CHECK(FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound[sfx_id], sound.master, 0, &sound.fmod_studio_channel));
+    
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
 
-        if (chan == NULL) {
-            break;
-        }
-
-        chan->volume = doomseq.musicvolume;
-    }
-
-        // [Immorpher] Re-establish linear sound interpolation
-        for (i = 0; i < 15; i++) {
-            fluid_synth_set_interp_method(doomseq.synth, i, FLUID_INTERP_LINEAR);
-        }
+    return sfx_id;
 }
 
-//
-// I_StopSound
-//
+// Not proud of it here but it is a necessary evil for now, to prevent cut-off between plasma fire and plasma ball boom
+int FMOD_StartSoundPlasma(int sfx_id) {
+    FMOD_ERROR_CHECK(FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound_plasma[sfx_id], sound.master, 0, &sound.fmod_studio_channel));
 
-void I_StopSound(sndsrc_t* origin, int sfx_id) {
-    song_t* song;
-    channel_t* c;
-    int i;
+    FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel, false));
+    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
 
-    if (!seqready) {
-        return;
-    }
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
 
-        song = &doomseq.songs[sfx_id];
-    for (i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-
-        if (song == c->song || (origin && c->origin == origin)) {
-            c->stop = true;
-        }
-    }
+    return sfx_id;
 }
 
-//
-// I_StartSound
-//
+int FMOD_StartSFXLoop(int sfx_id) {
+    FMOD_Channel_SetVolume(sound.fmod_studio_channel_loop, 20.0f);
+    FMOD_ERROR_CHECK(FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound[sfx_id], sound.master, 0, &sound.fmod_studio_channel_loop));
 
-void I_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, int reverb) {
-    song_t* song;
-    channel_t* chan;
-    int i;
+    //FMOD_ERROR_CHECK(FMOD_Channel_Set3DAttributes(sound.fmod_studio_channel, &fmod_vec_position, NULL));
+    FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel, false));
 
-    if (!seqready) {
-        return;
-    }
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
 
-    if (doomseq.nsongs <= 0) {
-        return;
-    }
+    return sfx_id;
+}
 
-        song = &doomseq.songs[sfx_id];
-    for (i = 0; i < song->ntracks; i++) {
-        chan = Song_AddTrackToPlaylist(&doomseq, song, &song->tracks[i]);
+int FMOD_StopSFXLoop(void) {
+    FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_loop));
 
-        if (chan == NULL) {
-            break;
-        }
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, true);
 
-        chan->volume = (float)volume;
-        chan->pan = (byte)(pan >> 1);
-        chan->origin = origin;
-        chan->depth = reverb;
-    }
+    return 0;
+}
 
-        // [Immorpher] Re-establish linear sound interpolation
-        for (i = 16; i < MIDI_CHANNELS + 15; i++) {
-            fluid_synth_set_interp_method(doomseq.synth, i, FLUID_INTERP_LINEAR);
-        }
+int FMOD_StopSound(void) {
+    FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel));
+
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel, true);
+
+    return 0;
+}
+
+int FMOD_StartMusic(int mus_id) {
+    FMOD_ERROR_CHECK(FMOD_System_PlaySound(sound.fmod_studio_system_music, sound.fmod_studio_music[mus_id], sound.master_music, 0, &sound.fmod_studio_channel_music));
+
+    FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel_music, false));
+
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, false);
+
+    return mus_id;
+}
+
+void FMOD_StopMusic(void) {
+    FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_music));
+
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, true);
+}
+
+void FMOD_PauseMusic(void) {
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, true);
+}
+
+void FMOD_ResumeMusic(void) {
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, false);
+}
+
+void FMOD_PauseSFXLoop(void) {
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, true);
+}
+
+void FMOD_ResumeSFXLoop(void) {
+    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
 }

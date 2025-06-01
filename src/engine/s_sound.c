@@ -263,30 +263,27 @@ void S_RemoveOrigin(mobj_t* origin) {
 //
 
 void S_UpdateSounds(void) {
-    int     i;
-    int     audible;
-    int     volume;
-    int     sep;
+    int i;
+    int audible;
+    int volume;
+    int sep;
     mobj_t* source;
-    int     channels;
+    int channels;
 
     channels = I_GetMaxChannels();
 
-    for(i = 0; i < channels; i++) {
+    for (i = 0; i < channels; i++) {
         source = (mobj_t*)I_GetSoundSource(i);
 
-        if(source == NULL) {
+        if (source == NULL) {
             continue;
         }
 
-        // initialize parameters
         volume = NORM_VOLUME;
         sep = NORM_SEP;
 
-        // check non-local sounds for distance clipping
-        // or modify their params
-        if(source == players[consoleplayer].mo &&
-                players[consoleplayer].cameratarget == players[consoleplayer].mo) {
+        if (source == players[consoleplayer].mo &&
+            players[consoleplayer].cameratarget == players[consoleplayer].mo) {
             audible = 1;
             sep = NORM_SEP;
         }
@@ -294,8 +291,8 @@ void S_UpdateSounds(void) {
             audible = S_AdjustSoundParams(source->x, source->y, &volume, &sep);
         }
 
-        if(audible) {
-            I_UpdateChannel(i, volume, sep);
+        if (audible) {
+            I_UpdateChannel(i, volume, sep, source->x, source->y);
         }
     }
 }
@@ -339,7 +336,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
     }
 
     // Assigns the handle to one of the channels in the mix/output buffer.
-    I_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
+    FMOD_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
 }
 
 //
@@ -352,50 +349,45 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
 //
 
 int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep) {
-    fixed_t     approx_dist;
-    angle_t     angle;
-    mobj_t*        listener;
-    player_t*    player;
+    fixed_t approx_dist;
+    angle_t angle;
+    mobj_t* listener;
+    player_t* player;
 
     player = &players[consoleplayer];
 
     listener = player->cameratarget;
 
-    // calculate the distance to sound origin
-    //  and clip it if necessary
-
-    // From _GG1_ p.428. Appox. eucledian distance fast.
     approx_dist = P_AproxDistance(listener->x - x, listener->y - y);
 
-    if(approx_dist > S_CLIPPING_DIST) {
+    if (approx_dist > S_CLIPPING_DIST) {
         return 0;
     }
 
-    if(listener->x != x || listener->y != y) {
-        // angle of source to listener
+    if (listener->x != x || listener->y != y) {
         angle = R_PointToAngle2(listener->x, listener->y, x, y);
 
-        if(angle <= listener->angle) {
+        if (angle <= listener->angle) {
             angle += 0xffffffff;
         }
         angle -= listener->angle;
 
-        // stereo separation
         *sep = (NORM_VOLUME + 1) - (FixedMul(S_STEREO_SWING, dsin(angle)) >> FRACBITS);
     }
     else {
         *sep = NORM_SEP;
     }
 
-    // volume calculation
-    if(approx_dist < S_CLOSE_DIST) {
+    if (approx_dist < S_CLOSE_DIST) {
         *vol = NORM_VOLUME;
     }
     else {
-        // distance effect
         approx_dist >>= FRACBITS;
         *vol = (((-approx_dist << 7) + (approx_dist)) + S_MAX_DIST) / S_ATTENUATOR;
     }
+
+    // Adjust the calculated volume and separation if necessary
+    // For example, you might want to remap the values to better fit FMOD's expectations.
 
     return (*vol > 0);
 }
