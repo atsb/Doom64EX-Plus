@@ -778,14 +778,7 @@ static int Signal_Resume(doomseq_t* seq) {
 // Signal_UpdateGain
 //
 static int Signal_UpdateGain(float db) {
-    SEMAPHORE_LOCK()
 
-        Seq_SetGain(db);
-
-    SEMAPHORE_UNLOCK()
-
-        //Seq_SetStatus(seq, SEQ_SIGNAL_READY);
-    return 1;
 }
 
 static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
@@ -1426,12 +1419,10 @@ int FMOD_StopSFXLoop(void) {
     return 0;
 }
 
-int FMOD_StopSound(void) {
+void FMOD_StopSound(sndsrc_t* origin, int sfx_id) {
     FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel));
 
     FMOD_Channel_SetPaused(sound.fmod_studio_channel, true);
-
-    return 0;
 }
 
 int FMOD_StartMusic(int mus_id) {
@@ -1444,7 +1435,7 @@ int FMOD_StartMusic(int mus_id) {
     return mus_id;
 }
 
-void FMOD_StopMusic(void) {
+void FMOD_StopMusic(sndsrc_t* origin, int mus_id) {
     FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_music));
 
     FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, true);

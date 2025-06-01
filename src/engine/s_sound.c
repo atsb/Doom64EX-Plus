@@ -166,7 +166,7 @@ void S_StartMusic(int mnum) {
         return;
     }
 
-    I_StartMusic(mnum);
+    FMOD_StartMusic(mnum);
     lastmusic = mnum;
 }
 
@@ -175,7 +175,7 @@ void S_StartMusic(int mnum) {
 //
 
 void S_StopMusic(void) {
-    I_StopSound(NULL, lastmusic);
+    FMOD_StopMusic(NULL, lastmusic);
     lastmusic = 0;
 }
 
@@ -228,7 +228,7 @@ void S_ResumeSound(void) {
 //
 
 void S_StopSound(mobj_t* origin, int sfx_id) {
-    I_StopSound((sndsrc_t*)origin, sfx_id);
+    FMOD_StopSound((sndsrc_t*)origin, sfx_id);
 }
 
 //
