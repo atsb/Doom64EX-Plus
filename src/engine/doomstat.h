@@ -140,9 +140,9 @@ extern int          consoleplayer;
 // Scores, rating.
 // Statistics on a given map, for intermission.
 //
-extern  int         totalkills;
-extern  int         totalitems;
-extern  int         totalsecret;
+extern  int       totalkills;
+extern  int       totalitems;
+extern  int       totalsecret;
 
 // Timer, for scores.
 extern  int         basetic;

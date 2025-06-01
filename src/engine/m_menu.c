@@ -69,10 +69,8 @@
 #include "p_setup.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
-
-#ifdef _WIN32
 #include "i_xinput.h"
-#endif
+
 //
 // definitions
 //
@@ -1007,7 +1005,6 @@ CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(m_extendedcast);
-CVAR_EXTERNAL(p_disable_monster_infighting);
 
 enum {
 	misc_header1,
@@ -1036,7 +1033,6 @@ enum {
 	misc_header6,
 	misc_comp_pass,
 	misc_disablesecretmessages,
-	misc_monster_infighting,
 	misc_default,
 	misc_return,
 	misc_end
@@ -1069,7 +1065,6 @@ menuitem_t MiscMenu[] = {
 	{-1,"N64 Compatibility",0 },
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
-	{2,"Infighting:",M_MiscChoice,'m'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1101,7 +1096,6 @@ char* MiscHints[misc_end] = {
 	NULL,
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
-	"monster infighting",
 	NULL,
 	//NULL
 };
@@ -1125,7 +1119,6 @@ menudefault_t MiscDefault[] = {
 	{ &m_brutal, 0 },
 	{ &m_extendedcast, 0 },
 	{ &compat_mobjpass, 1 },
-	{ &p_disable_monster_infighting, 0 },
 	{ NULL, -1 }
 };
 
@@ -1260,10 +1253,6 @@ void M_MiscChoice(int choice) {
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
-
-	case misc_monster_infighting:
-		M_SetOptionValue(choice, 0, 1, 1, &p_disable_monster_infighting);
-		break;
 	}
 }
 
@@ -1311,7 +1300,6 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_extendedcast, m_extendedcast.value, autoruntype);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
-	DRAWMISCITEM(misc_monster_infighting, p_disable_monster_infighting.value, disablesecretmessages);
 
 #undef DRAWMISCITEM
 
@@ -1529,6 +1517,7 @@ void M_ChangeCrosshair(int choice);
 void M_ChangeOpacity(int choice);
 void M_DrawDisplay(void);
 void M_ChangeHUDColor(int choice);
+void M_ChangeFOV(int choice);
 
 CVAR_EXTERNAL(st_drawhud);
 CVAR_EXTERNAL(st_crosshair);
@@ -1540,6 +1529,7 @@ CVAR_EXTERNAL(st_showstatsalwayson);
 CVAR_EXTERNAL(m_messages);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(st_hud_color);
+CVAR_EXTERNAL(r_fov);
 
 enum {
 	messages,
@@ -1550,6 +1540,8 @@ enum {
 	display_stats,
 	display_stats_always_on,
 	display_hud_color,
+	display_fov,
+	display_empty2,
 	display_crosshair,
 	display_opacity,
 	display_empty1,
@@ -1567,6 +1559,8 @@ menuitem_t DisplayMenu[] = {
 	{2,"Show Stats:",M_ToggleShowStats, 't'},
 	{2,"Show Stats Always:",M_ToggleShowStatsAlwaysOn, 'a'},
 	{3,"HUD Colour",M_ChangeHUDColor, 'o'},
+	{3,"Field of View",M_ChangeFOV, 'v'},
+	{-1,"",0},
 	{2,"Crosshair:",M_ChangeCrosshair, 'c'},
 	{3,"Crosshair Opacity",M_ChangeOpacity, 'o'},
 	{-1,"",0},
@@ -1583,6 +1577,7 @@ char* DisplayHints[display_end] = {
 	"display level stats in automap",
 	"display level stats in-game",
 	"change the hud text colour",
+	"change the field of view",
 	"toggle crosshair",
 	"change opacity for crosshairs",
 	NULL,
@@ -1598,6 +1593,7 @@ menudefault_t DisplayDefault[] = {
 	{ &st_showstats, 0 },
 	{ &st_showstatsalwayson, 0 },
 	{ &st_hud_color, 0 },
+	{ &r_fov, 75 },
 	{ &st_crosshair, 0 },
 	{ &st_crosshairopacity, 80 },
 	{ NULL, -1 }
@@ -1605,6 +1601,7 @@ menudefault_t DisplayDefault[] = {
 
 menuthermobar_t DisplayBars[] = {
 	{ display_empty1, 255, &st_crosshairopacity },
+	{ display_empty2, 75, &r_fov },
 	{ -1, 0 }
 };
 
@@ -1651,6 +1648,9 @@ void M_DrawDisplay(void) {
 		msgNames[(int)st_showstatsalwayson.value]);
 	Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_hud_color, MENUCOLORRED,
 		hud_color[(int)st_hud_color.value]);
+
+	M_DrawThermo(DisplayDef.x, DisplayDef.y + LINEHEIGHT * (display_fov + 1),
+		255, r_fov.value);
 	
 	if (st_crosshair.value <= 0) {
 		Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_crosshair, MENUCOLORRED,
@@ -1713,6 +1713,26 @@ void M_ChangeCrosshair(int choice) {
 	M_SetOptionValue(choice, 0, (float)st_crosshairs, 1, &st_crosshair);
 }
 
+void M_ChangeFOV(int choice)
+{
+	if (choice) {
+		if (r_fov.value < 255.0f) {
+			M_SetCvar(&r_fov, r_fov.value + 1);
+		}
+		else {
+			CON_CvarSetValue(r_fov.name, 255);
+		}
+	}
+	else {
+		if (r_fov.value > 0.0f) {
+			M_SetCvar(&r_fov, r_fov.value - 1);
+		}
+		else {
+			CON_CvarSetValue(r_fov.name, 0);
+		}
+	}
+}
+
 void M_ChangeOpacity(int choice)
 {
 	if (choice) {
@@ -1753,6 +1773,7 @@ void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
 void M_DrawVideo(void);
+void M_ChangeVsync(int choice);
 
 CVAR_EXTERNAL(v_width);
 CVAR_EXTERNAL(v_height);
@@ -1764,6 +1785,7 @@ CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(v_vsync);
 
 enum {
 	video_dbrightness,
@@ -1776,6 +1798,7 @@ enum {
 	ratio,
 	resolution,
 	interpolate_frames,
+	vsync,
 	accessibility,
 	v_default,
 	v_videoreset,
@@ -1794,6 +1817,7 @@ menuitem_t VideoMenu[] = {
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
 	{2,"Resolution:",M_ChangeResolution, 'r'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
+	{2,"VSync:",M_ChangeVsync, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
 	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
@@ -1811,6 +1835,7 @@ char* VideoHints[video_end] = {
 	"select aspect ratio",
 	"resolution changes will take effect\n after restarting",
 	"toggle frame interpolation to\n achieve smooth framerates",
+	"toggle vsync on or off to prevent screen tearing",
 	"toggle accessibility to \n remove flashing lights",
 	"apply video settings"
 };
@@ -1822,6 +1847,7 @@ menudefault_t VideoDefault[] = {
 	{ &r_anisotropic, 1 },
 	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
+	{ &v_vsync, 1 },
 	{ &v_accessibility, 0 },
 	{ NULL, -1 }
 };
@@ -1903,9 +1929,10 @@ static const int Resolution16_10[MAX_RES16_10][2] = {
 	{   7680,   4800    }
 };
 
-#define MAX_RES21_09  2
-static const int Resolution21_09[MAX_RES21_09][2] = {
+#define MAX_RES21_09  3
+static const int Resolution21_09[MAX_RES21_09][3] = {
 	{   2560,    1080     },
+	{   3440,    1440     },
 	{   3840,    2160     }
 };
 
@@ -2048,6 +2075,7 @@ void M_DrawVideo(void) {
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
+	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, onofftype);
 
 #undef DRAWVIDEOITEM
@@ -2250,6 +2278,11 @@ void M_ChangeResolution(int choice) {
 void M_ChangeInterpolateFrames(int choice)
 {
 	M_SetOptionValue(choice, 0, 1, 1, &i_interpolateframes);
+}
+
+void M_ChangeVsync(int choice)
+{
+	M_SetOptionValue(choice, 0, 1, 1, &v_vsync);
 }
 
 void M_ChangeAccessibility(int choice)
@@ -3435,6 +3468,8 @@ static void M_DoDefaults(int choice) {
 // M_DoVideoReset
 //
 static void M_DoVideoReset(int choice) {
+	I_Init();
+	R_Init();
 	GL_Init();
 }
 
@@ -4131,47 +4166,21 @@ boolean M_Responder(event_t* ev) {
 			shiftdown = false;
 		}
 	}
+	else if (ev->type == ev_gamepaddown) {
+		ch = I_JoystickToKey(ev->data1);
+	}
 	else if (ev->type == ev_mouse && (ev->data2 != 0.0 || ev->data3 != 0.0)) {
 		// handle mouse-over selection
 		if (m_menumouse.value) {
 			M_CheckDragThermoBar(ev, currentMenu);
-			if (M_CursorHighlightItem(currentMenu)) {
+			if (M_CursorHighlightItem(currentMenu))
 				itemOn = itemSelected;
-			}
 		}
 	}
 
 	if (ch == -1) {
 		return false;
 	}
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
-	switch (ch) {
-	case BUTTON_DPAD_UP:
-		ch = KEY_UPARROW;
-		break;
-	case BUTTON_DPAD_DOWN:
-		ch = KEY_DOWNARROW;
-		break;
-	case BUTTON_DPAD_LEFT:
-		ch = KEY_LEFTARROW;
-		break;
-	case BUTTON_DPAD_RIGHT:
-		ch = KEY_RIGHTARROW;
-		break;
-	case BUTTON_START:
-		ch = KEY_ESCAPE;
-		break;
-	case BUTTON_A:
-		ch = KEY_ENTER;
-		break;
-	case BUTTON_B:
-		ch = KEY_DEL;
-		break;
-	}
-
-#endif
 
 	if (MenuBindActive == true) { //key Bindings
 		if (ch == KEY_ESCAPE) {

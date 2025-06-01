@@ -2,23 +2,25 @@
 
 Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
 
-I have kept the current release and current 'stable' branch as bug-free and stable as possible with every single optimisation, fix etc..  that I could add to it.  For Linux and Windows users, this version will be stable and playable and will still give you exceptional usability over EX.  However, I cannot devote much time lately and the time I do spend developing outside of my job, I would like to spend on productive projects, rather then on projects that are not used much.
+Note for Linux users: Get it on Flathub!
+
+https://flathub.org/apps/io.github.atsb.Doom64EX-Plus
 
 ## Differences from Kaiser's C++ version of EX on GitHub:
 
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for loading PWADs
-* Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
+* Better performance (especially when compared to Nightdive Studios' official version)
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
 * The "medkit you REALLY need!" message fix
 * Many bugfixes
 * KEX - This is pretty much removed.  The only remnants are some comments with [kex] and the rendering stuff that is used in later versions. I wanted to keep Doom 64 EX+ very close in format to other source ports for familiarity purposes and for ease of porting code from Erick's DOOM64-RE project.
+* SDL3 - I believe DOOM64 EX+ is the first Doom source port to officially move to SDL3 as standard.
 
-There are a few bugs still present, which I am slowly fixing.
-
-This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/ but if any contributors wish to help, then GitHub is a better place for it.
+* NOTE for NVIDIA users, disable vsync from the control panel to fix stuttering.  No idea why it only happens on NVidia cards, though I can't say I'm surprised.
+* NOTE - for the launcher, you MUST have .NET 6 or higher installed as the launcher was programmed using .NET 6.0 and anything below won't work.
 
 ## Mod Support
 
@@ -50,40 +52,11 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 
 ## Dependencies
 
-* SDL2 and SDL2_net
+* SDL3
 * ZLib
 * LibPNG
 * FluidSynth
 * OpenGL
-
-## System Requirements - 32 or 64bit
-
-Linux Single Board Computer
-
-- Raspberry Pi 3B
-
-*others may work but are untested*
-
-Linux / *BSD Desktop / Laptop
-
-- 1.8GHz Dual Core CPU
-- 2GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Or Later Compliant Video Chip / Card
-
-Windows
-
-- 1.8GHz Dual Core CPU
-- 4GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Or Later Compliant Video Chip / Card
-
-macOS
-
-- mid-2013 macbook air or better (also arm64 systems)
-- 4GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Or Later Compliant Video Chip / Card
 
 ## Installation
 
@@ -94,10 +67,52 @@ Windows
 
 GNU/Linux / BSD
 
-- GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
-	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
+When compiling `doom64ex-plus`, you can use compile-time macros to control where the game engine looks for its data files (like IWADs and supporting resources).
 
-Without the macro, it will look inside the current directory that the binary is in.
+### `-DDOOM_UNIX_INSTALL`
+
+- When enabled, the game will store and search for its data in `~/.local/share/doom64ex-plus`.
+  - `~` represents the user’s home directory.
+  - `~/.local/share` is a standard location for user-specific data on Linux and BSD systems.
+- For single-user installations without needing special permissions to write to system directories.
+
+### `-DDOOM_UNIX_SYSTEM_DATADIR="/some/system/path"`
+
+- Sets a system-wide directory where the game should look for its data files.
+- When set, the game will search the specified directory (e.g., `/usr/share/games/doom64ex-plus`) for mandatory game files like `doom64ex-plus.wad` and `doomsnd.sf2`.
+- Suitable for system administrators or packagers who want the game installed for all users on the system.
+
+## How to Use These Macros
+
+### 1. Command Line Compilation
+
+To compile the software manually using `gcc` or `make`, specify the macros directly:
+
+- For user-specific installation:
+  ```bash
+  gcc -DDOOM_UNIX_INSTALL -o doom64ex-plus <c files> <library links>
+  ```
+
+- To set a specific system-wide directory:
+  ```bash
+  gcc -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\" -o doom64ex-plus <c files> <library links>
+  ```
+
+### 2. Using a Makefile
+
+If the software uses a `Makefile`, you can add these macros as options:
+
+- For user-specific installation:
+  ```makefile
+  CFLAGS += DOOM_UNIX_INSTALL
+  ```
+
+- For specifying a system-wide directory:
+  ```makefile
+  CFLAGS += DOOM_UNIX_SYSTEM_DATADIR=/usr/share/games/doom64ex-plus
+  ```
+
+Finally, if a data file cannot be found in one of the two folders above, it will look inside the current directory.
 
 Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux or macOS.
 
@@ -147,10 +162,13 @@ Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able 
 
 ## Linux, FreeBSD/OpenBSD and Raspberry pi3
 
-You can place the asset data described above to any of the following directories:
+You can place the asset data described above into any of the following directories,
+searched in that order:
 
-* The directory in which `doom64ex-plus` resides
-* `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
+* `~/.local/share/doom64ex-plus` if compiled with the *DOOM_UNIX_INSTALL* macro
+* the folder specified by the *DOOM_UNIX_SYSTEM_DATADIR* compile macro, or `/usr/local/share/doom64ex-plus` if not specified
+
+If data files are not found in these directories, it will search in the current directory.
 
 ## macOS
 

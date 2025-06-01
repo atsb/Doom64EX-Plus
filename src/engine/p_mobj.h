@@ -138,7 +138,6 @@ typedef enum {
 	MF_RENDERLASER = 0x10000000,   // [d64] Exclusive to MT_LASERMARKER only
 	MF_TRIGDEATH = 0x20000000,   // [d64] Trigger line special on death
 	MF_SHADOW = 0x40000000,   // temporary player invisibility powerup.
-    MF_FRIEND = 0x90000000,        // killough 7/18/98: friendly monsters
     MF_NOINFIGHTING = 0x80000000    // [d64] Do not switch targets
 } mobjflag_t;
 

@@ -23,10 +23,11 @@
 #ifndef __I_PNG_H__
 #define __I_PNG_H__
 
+#include <stdbool.h>
 #include <png.h>
 #include "doomtype.h"
 
-byte* I_PNGReadData(int lump, int palette, int nopack, int alpha,
+byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 	int* w, int* h, int* offset, int palindex);
 
 byte* I_PNGCreate(int width, int height, byte* data, int* size);

@@ -26,7 +26,7 @@
 //-----------------------------------------------------------------------------
 
 #ifdef __OpenBSD__
-#include <SDL_timer.h>
+#include <SDL3/SDL_timer.h>
 #else
 #include <SDL3/SDL_timer.h>
 #endif
@@ -59,15 +59,12 @@
 #include "z_zone.h"
 #include "i_system.h"
 #include "gl_draw.h"
+#include "i_xinput.h"
 
 #ifdef __APPLE__
 #include "i_mac_audio.h"
 #else
 #include "i_audio.h"
-#endif
-
-#if defined(_WIN32) && defined(USE_XINPUT)
-#include "i_xinput.h"
 #endif
 
 CVAR(i_interpolateframes, 1);
@@ -85,13 +82,6 @@ CVAR(v_accessibility, 0);
 #elif defined __ANDROID__
 #define GetBasePath()   SDL_AndroidGetInternalStoragePath();
 #endif
-
-#if defined(__LINUX__) || defined(__OpenBSD__)
-#define Free(userdir)	free(userdir);
-#else
-#define Free(userdir)	SDL_free(userdir);
-#endif
-
 
 ticcmd_t        emptycmd;
 
@@ -257,7 +247,6 @@ ticcmd_t* I_BaseTiccmd(void) {
  * Assume this is the only user-writeable directory on the system.
  *
  * @return Fully-qualified path that ends with a separator or NULL if not found.
- * @note The returning value MUST be freed by the caller.
  */
 
 char* I_GetUserDir(void) 
@@ -273,17 +262,10 @@ char* I_GetUserDir(void)
  * @brief Find a regular file in the user-writeable directory.
  *
  * @return Fully-qualified path or NULL if not found.
- * @note The returning value MUST be freed by the caller.
  */
 
- /* ATSB: for some reason, these free() calls cause MSVC builds to bail out
- *  but are needed for Unix systems to even boot the game.
- *  whatever...  eventually we will clean up this mess and have
- *  portable fixed width types everywhere...  one day.
- *  WOLF3S 5-11-2022: Changed to SDL_free for some underterminated time!
- */
 char* I_GetUserFile(char* file) {
-	char* path, * userdir;
+	const char* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
@@ -292,8 +274,6 @@ char* I_GetUserFile(char* file) {
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
-        Free(userdir);
-
 	return path;
 }
 
@@ -301,66 +281,84 @@ char* I_GetUserFile(char* file) {
  * @brief Find a regular read-only data file.
  *
  * @return Fully-qualified path or NULL if not found.
- * @note The returning value MUST be freed by the caller.
  */
+
 char* I_FindDataFile(char* file) {
-	char *path, *dir;
+	char* path = malloc(512);
+	const char* dir;
 
-	path = malloc(512);
-
-	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
-
-         Free(dir);
-
-		if (I_FileExists(path))
-			return path;
+	if (path == NULL) {
+		return NULL;
 	}
 
-#ifdef __APPLE__
 	if ((dir = SDL_GetBasePath())) {
 		snprintf(path, 511, "%s%s", dir, file);
-		
-		  Free(dir);
-
-		if (I_FileExists(path))
+		if (I_FileExists(path)) {
 			return path;
-	}
-#endif
-
-	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
-           
-          Free(dir);
-
-		if (I_FileExists(path))
-			return path;
-	}
-
-#if defined(__LINUX__) || defined(__OpenBSD__)
-	{
-		int i;
-		const char* paths[] = {
-			//André: Removed all useless directories, Only The dir usr/local is fine to use.
-				//"/usr/local/share/games/doom64ex-plus/",
-				"/usr/local/share/doom64ex-plus/",
-				//"/usr/local/share/doom/",
-				//"/usr/share/games/doom64ex-plus/",
-				//"/usr/share/doom64ex-plus/",
-				//"/usr/share/doom/",
-				//"/opt/doom64ex-plus/",
-		};
-
-		for (i = 0; i < sizeof(paths) / sizeof(*paths); i++) {
-			snprintf(path, 511, "%s%s", paths[i], file);
-			if (I_FileExists(path))
-				return path;
 		}
 	}
+
+#if !defined(_WIN32)
+
+#ifdef DOOM_UNIX_INSTALL
+	if ((dir = I_GetUserDir())) {
+		snprintf(path, 511, "%s%s", dir, file);
+		if (I_FileExists(path)) {
+			return path;
+		}
+	}
+#endif    
+    
+#ifdef DOOM_UNIX_SYSTEM_DATADIR
+	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
+	if (I_FileExists(path)) {
+		return path;
+	}
 #endif
 
-	Free(path);
-	
+	snprintf(path, 511, "%s", file);
+	if (I_FileExists(path)) {
+		return path;
+	}
+
+	const char* homeDir = getenv("HOME");
+	if (homeDir) {
+		snprintf(path, 511, "%s/.steam/steam/steamapps/common/DOOM 64/%s", homeDir, file);
+		if (I_FileExists(path)) {
+			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
+			return path;
+		}
+
+		snprintf(path, 511, "%s/.local/share/Steam/steamapps/common/DOOM 64/%s", homeDir, file);
+		if (I_FileExists(path)) {
+			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
+			return path;
+		}
+	}
+
+	snprintf(path, 511, "%s/GOG Games/DOOM 64/%s", homeDir, file);
+	if (I_FileExists(path)) {
+		I_Printf("I_FindDataFile: Adding GOG Path %s\n", path);
+		return path;
+	}
+
+#elif defined(_WIN32)
+	const char* steamPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DOOM 64";
+	snprintf(path, 511, "%s\\%s", steamPath, file);
+	if (I_FileExists(path)) {
+		I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
+		return path;
+	}
+
+	const char* gogPath = "C:\\Program Files (x86)\\GOG Galaxy\\Games\\DOOM 64";
+	snprintf(path, 511, "%s\\%s", gogPath, file);
+	if (I_FileExists(path)) {
+		I_Printf("I_FindDataFile: Adding GOG Path %s\n", path);
+		return path;
+	}
+#endif
+
+	free(path);
 	return NULL;
 }
 
@@ -398,6 +396,7 @@ unsigned long I_GetRandomTimeSeed(void) {
 
 void I_Init(void)
 {
+	I_InitJoystick();
 	I_InitVideo();
 	I_InitClockRate();
 }
@@ -439,6 +438,31 @@ void I_Error(const char* string, ...) {
 		I_ShutdownVideo();
 	}
 	exit(0);    // just in case...
+}
+
+void I_Warning(const char* string, ...) {
+	char buff[1024];
+	va_list    va;
+
+	va_start(va, string);
+	vsprintf(buff, string, va);
+	va_end(va);
+
+	fprintf(stderr, "Warning - %s\n", buff);
+	fflush(stderr);
+
+	I_Printf("\n********* WARNING *********\n");
+	I_Printf("%s", buff);
+
+	if (usingGL) {
+		while (1) {
+			GL_ClearView(0xFF000000);
+			Draw_Text(0, 0, WHITE, 1, 1, "Warning - %s\n", buff);
+			GL_SwapBuffers();
+
+			I_Sleep(1);
+		}
+	}
 }
 
 //

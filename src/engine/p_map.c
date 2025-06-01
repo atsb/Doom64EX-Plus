@@ -217,10 +217,16 @@ boolean PIT_CheckLine(line_t* ld) {
         if (!tmthing->player && ld->flags & ML_BLOCKMONSTERS) {
             return false;    // block monsters only
         }
+
+        // styd: add new flag block player
+        if (!(tmthing->flags & MF_COUNTKILL) && ld->flags & ML_BLOCKPLAYER) {
+            return false;    // block player only
+        }
     }
 
     // [d64] don't cross mid-pegged lines
-    if (ld->flags & ML_BLOCKPROJECTILES) {
+    // styd: fixies block projectile to not block things and only blocks projectiles
+    if (!(tmthing->flags & MF_SOLID) && ld->flags & ML_BLOCKPROJECTILES) {
         tmhitline = ld;
         return false;
     }
@@ -1692,13 +1698,13 @@ boolean PIT_ChangeSector(mobj_t* thing) {
             P_DamageMobj(thing, NULL, NULL, 10);
 
             // spray blood in a random direction
-            if (mo->type == MT_BRUISER2) {
+            if (thing->type == MT_BRUISER2) {
                 mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD_GREEN);
             }
-            else if (mo->type == MT_IMP2) {
+            else if (thing->type == MT_IMP2) {
                 mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD_PURPLE);
             }
-            else if (mo->type == MT_SKULL) {
+            else if (thing->type == MT_SKULL) {
                 mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_SMOKE_GRAY);
             }
             else {

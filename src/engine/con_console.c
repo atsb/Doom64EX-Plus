@@ -38,7 +38,7 @@
 
 #define SDL_MAIN_HANDLED
 #ifdef __OpenBSD__
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #else
 #include <SDL3/SDL.h> // Gibbon - for *
 #endif

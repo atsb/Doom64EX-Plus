@@ -108,15 +108,25 @@ boolean P_SetMobjState(mobj_t* mobj, statenum_t state) {
 //
 
 void P_SetTarget(mobj_t** mop, mobj_t* targ) {
-	// If there was a target already, decrease its refcount
 	if (*mop) {
-		Z_Touch(*mop); // validate pointer
-		(*mop)->refcount--;
+		if (Z_PointerValidation(*mop)) {
+			Z_Touch(*mop);
+			(*mop)->refcount--;
+		}
+		else {
+			fprintf(stderr, "P_SetTarget: Invalid pointer detected in mop=%p\n", *mop);
+			return;
+		}
 	}
 
-	// Set new target and if non-NULL, increase its counter
 	if ((*mop = targ)) {
-		targ->refcount++;
+		if (Z_PointerValidation(targ)) {
+			targ->refcount++;
+		}
+		else {
+			fprintf(stderr, "P_SetTarget: Invalid pointer detected in targ=%p\n", targ);
+			*mop = NULL;
+		}
 	}
 }
 
@@ -1108,7 +1118,12 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	if (mthing->options & MTF_SECRET)
 	{
 		mobj->flags |= MF_COUNTSECRET;
-		totalsecret++;
+		totalsecret;
+	}
+
+	// styd: add a flag to things that allow them to fall off a cliff
+	if (mthing->options & MTF_DROPOFF) {
+		mobj->flags |= MF_DROPOFF;
 	}
 
 	// At least set BF_MIDPOINTONLY if no flags exist..

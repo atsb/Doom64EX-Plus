@@ -82,6 +82,7 @@ void* (Z_Alloca)(int n, const char* file, int line);
 void (Z_FreeAlloca)(const char* file, int line);
 void (Z_CheckHeap)(const char*, int);      // killough 3/22/98: add file/line info
 int (Z_CheckTag)(void*, const char*, int);
+int Z_PointerValidation(void* ptr);
 void (Z_Touch)(void* ptr, const char*, int);
 
 #define Z_Free(a)           (Z_Free)        (a,      __FILE__,__LINE__)
@@ -97,6 +98,8 @@ void (Z_Touch)(void* ptr, const char*, int);
 #define Z_CheckTag(a)       (Z_CheckTag)    (a,      __FILE__,__LINE__)
 #define Z_Touch(a)          (Z_Touch)       (a,      __FILE__,__LINE__)
 #define Z_FreeAlloca()      (Z_FreeAlloca)  (        __FILE__,__LINE__)
+
+#define Z_ReallocV(a,b,c,d)	(a = Z_Realloc	(a,sizeof(*a)*b,c,d))
 
 #define strdup(s)           (Z_Strdup) (s, PU_STATIC,0,__FILE__,__LINE__)
 

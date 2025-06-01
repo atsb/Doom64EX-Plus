@@ -32,8 +32,8 @@
 #endif
 
 #ifdef __OpenBSD__
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 #else
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
@@ -553,14 +553,7 @@ static void CalcViewSize(void) {
 
 typedef enum {
     OPENGL_VERSION_2_0,
-    OPENGL_VERSION_2_1,
-    OPENGL_VERSION_2_2,
-    OPENGL_VERSION_2_3,
-    OPENGL_VERSION_2_4,
-    OPENGL_VERSION_2_5,
-    OPENGL_VERSION_3_0,
-    OPENGL_VERSION_3_1,
-    OPENGL_VERSION_3_3,
+    OPENGL_VERSION_4_6,
 } glversion_t;
 
 static int GetVersionInt(const char* version) {
@@ -568,34 +561,14 @@ static int GetVersionInt(const char* version) {
     int MinorVersion;
     int versionvar;
 
-    versionvar = OPENGL_VERSION_3_3;
+    versionvar = OPENGL_VERSION_4_6;
 
-    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 3) {
-        if(MajorVersion > 2) {
-            versionvar = OPENGL_VERSION_3_0;
-
-            if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_3_3;
-            }
+    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 4) {
+        if(MajorVersion > 3) {
+            versionvar = OPENGL_VERSION_4_6;
         }
         else {
             versionvar = OPENGL_VERSION_2_0;
-
-            if(MinorVersion > 0) {
-                versionvar = OPENGL_VERSION_2_1;
-            }
-            if(MinorVersion > 1) {
-                versionvar = OPENGL_VERSION_2_2;
-            }
-            if(MinorVersion > 2) {
-                versionvar = OPENGL_VERSION_2_3;
-            }
-            if(MinorVersion > 3) {
-                versionvar = OPENGL_VERSION_2_4;
-            }
-            if(MinorVersion > 4) {
-                versionvar = OPENGL_VERSION_2_5;
-            }
         }
     }
 
@@ -665,7 +638,7 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_3_3 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
+    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_4_6 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 
     glScaleFactor = 1.0f;
 

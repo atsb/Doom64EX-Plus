@@ -35,9 +35,7 @@
 #include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
-#if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
-#endif
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -226,9 +224,9 @@ static int I_TranslateKey(const int key) {
 
 static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 	return 0
-		| (buttonstate & SDL_BUTTON(SDL_BUTTON_LEFT) ? 1 : 0)
-		| (buttonstate & SDL_BUTTON(SDL_BUTTON_MIDDLE) ? 2 : 0)
-		| (buttonstate & SDL_BUTTON(SDL_BUTTON_RIGHT) ? 4 : 0);
+		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_LEFT) ? 1 : 0)
+		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE) ? 2 : 0)
+		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT) ? 4 : 0);
 }
 
 //
@@ -302,13 +300,15 @@ boolean I_UpdateGrab(void) {
 		&& !demoplayback;
 
 	if (grab && !currently_grabbed) {
-		SDL_SetRelativeMouseMode(1);
-		SDL_SetWindowGrab(window, 1);
+		SDL_SetWindowRelativeMouseMode(window, 1);
+		SDL_SetWindowMouseGrab(window, 1);
+		SDL_SetWindowKeyboardGrab(window, 1);
 	}
 
 	if (!grab && currently_grabbed) {
-		SDL_SetRelativeMouseMode(0);
-		SDL_SetWindowGrab(window, 0);
+		SDL_SetWindowRelativeMouseMode(window, 0);
+		SDL_SetWindowMouseGrab(window, 0);
+		SDL_SetWindowKeyboardGrab(window, 0);
 	}
 
 	currently_grabbed = grab;
@@ -330,13 +330,13 @@ void I_GetEvent(SDL_Event* Event) {
 		if (Event->key.repeat)
 			break;
 		event.type = ev_keydown;
-		event.data1 = I_TranslateKey(Event->key.keysym.sym);
+		event.data1 = I_TranslateKey(Event->key.key);
 		D_PostEvent(&event);
 		break;
 
 	case SDL_EVENT_KEY_UP:
 		event.type = ev_keyup;
-		event.data1 = I_TranslateKey(Event->key.keysym.sym);
+		event.data1 = I_TranslateKey(Event->key.key);
 		D_PostEvent(&event);
 		break;
 
@@ -419,7 +419,7 @@ int I_ShutdownWait(void) {
 
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_EVENT_QUIT ||
-			(event.type == SDL_EVENT_KEY_DOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+			(event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)) {
 			I_ShutdownVideo();
 			return 1;
 		}
@@ -437,12 +437,14 @@ void I_StartTic(void) {
 
 	while (SDL_PollEvent(&Event)) {
 		I_GetEvent(&Event);
+		I_JoystickEvent(&Event);
 	}
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 	I_XInputPollEvent();
 #endif
 	I_InitInputs();
+	I_ReadJoystick();
 	I_ReadMouse();
 }
 
@@ -483,5 +485,4 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_yaxismove);
 	CON_CvarRegister(&v_xaxismove);
 }
-
 

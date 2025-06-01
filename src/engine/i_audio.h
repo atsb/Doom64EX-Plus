@@ -32,9 +32,13 @@
 #define DEFAULT_FLUID_DRIVER "sndio"
 
 // 20120203 villsa: add default for windows
-#else
 #define DEFAULT_FLUID_DRIVER "dsound"
-
+#elif __linux__
+#define DEFAULT_FLUID_DRIVER "alsa"
+#elif __APPLE__
+#define DEFAULT_FLUID_DRIVER "coreaudio"
+#else
+#define DEFAULT_FLUID_DRIVER "sndio"
 #endif
 
 typedef struct {

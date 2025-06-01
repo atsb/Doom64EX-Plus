@@ -60,6 +60,7 @@
 #include "i_video.h"
 #include "i_sdlinput.h"
 #include "g_demo.h"
+#include "i_xinput.h"
 
 #include "deh_main.h"
 #include "deh_misc.h"
@@ -108,7 +109,6 @@ static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
 // for intermission
-int             totalkills, totalitems, totalsecret;
 boolean        precache = true;     // if true, load all graphics at start
 
 byte            consistency[MAXPLAYERS][BACKUPTICS];
@@ -140,6 +140,13 @@ int         bodyqueslot;
 byte forcejump = 0;
 byte forcefreelook = 0;
 
+int killcount;
+int itemcount;
+int secretcount;
+int totalkills;
+int totalitems;
+int totalsecret;
+
 NETCVAR(sv_nomonsters, 0);
 NETCVAR(sv_fastmonsters, 0);
 NETCVAR(sv_respawnitems, 0);
@@ -167,7 +174,9 @@ CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_extendedcast);
-CVAR_EXTERNAL(p_disable_monster_infighting);
+CVAR_EXTERNAL(i_joytwinstick);
+CVAR_EXTERNAL(i_joysensx);
+CVAR_EXTERNAL(i_joysensy);
 
 //
 // G_RegisterCvars
@@ -191,7 +200,6 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
 	CON_CvarRegister(&m_extendedcast);
-	CON_CvarRegister(&p_disable_monster_infighting);
 }
 
 //
@@ -735,8 +743,25 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	// forward/side movement with joystick
 	//
 	if (pc->flags & PCF_GAMEPAD) {
-		forward += pc->joyy;
-		side += pc->joyx;
+		if (i_joytwinstick.value > 0) {
+			forward -= pc->joymovey;
+			side = pc->joymovex;
+
+			cmd->angleturn -= pc->joylookx * 400 * i_joysensx.value;
+			if (forcefreelook != 2) {
+				if ((int)v_mlook.value || forcefreelook)
+					cmd->pitch +=
+					(int)v_mlookinvert.value ? (pc->joylooky *
+						400 * i_joysensy.value) : -(pc->joylooky * 400 * i_joysensy.value);
+			}
+		}
+		else {
+			float x = pc->joymovex + pc->joylookx;
+			float y = pc->joymovey + pc->joylooky;
+
+			cmd->angleturn -= BETWEEN(-1.0f, 1.0f, x) * 400 * i_joysensx.value;
+			forward -= BETWEEN(-1.0f, 1.0f, y);
+		}
 	}
 
 	if (pc->key[PCKEY_BACK]) {
@@ -752,7 +777,8 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 	}
 
 	pc->mousex = pc->mousey = 0;
-	pc->joyx = pc->joyy = 0;
+	pc->joymovex = pc->joymovey = 0;
+	pc->joylookx = pc->joylooky = 0;
 
 	cmd->chatchar = ST_DequeueChatChar();
 
@@ -876,6 +902,33 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 		sendsave = false;
 		cmd->buttons = BT_SPECIAL | BTS_SAVEGAME | (savegameslot << BTS_SAVESHIFT);
 	}
+}
+
+//
+// G_DoCmdGamepadMove
+//
+void G_DoCmdGamepadMove(int lx, int ly, int rx, int ry)
+{
+	playercontrols_t* pc;
+	float x;
+	float y;
+
+	pc = &Controls;
+	pc->flags |= PCF_GAMEPAD;
+
+	x = (float)lx / INT16_MAX;
+	y = (float)ly / INT16_MAX;
+
+	pc->joymovex += x;
+	pc->joymovey += y;
+
+	x = (float)rx / INT16_MAX;
+	y = (float)ry / INT16_MAX;
+
+	pc->joylookx += x;
+	pc->joylooky += y;
+
+	return;
 }
 
 //
@@ -1192,15 +1245,12 @@ void G_PlayerFinishLevel(int player) {
 
 void G_PlayerReborn(int player) {
 	player_t* p;
-	int         i;
-	int         frags[MAXPLAYERS];
-	int         killcount;
-	int         itemcount;
-	int         secretcount;
+	int        i;
+	int        frags[MAXPLAYERS];
 	boolean    cards[NUMCARDS];
 	boolean    wpns[NUMWEAPONS];
-	int         pammo[NUMAMMO];
-	int         pmaxammo[NUMAMMO];
+	int        pammo[NUMAMMO];
+	int        pmaxammo[NUMAMMO];
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);

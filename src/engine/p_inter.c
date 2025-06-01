@@ -61,7 +61,6 @@
 CVAR_EXTERNAL(p_damageindicator);
 CVAR(m_obituaries, 0);
 CVAR_EXTERNAL(m_brutal);
-CVAR_EXTERNAL(p_disable_monster_infighting);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -407,7 +406,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 		// bonus items
 	case SPR_BON1:
-		player->health+=2;		// can go over 100%
+		player->health += 2;		// can go over 100%
 		if (player->health > deh_max_health)
 			player->health = deh_max_health;
 		player->mo->health = player->health;
@@ -416,7 +415,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_BON2:
-		player->armorpoints+=2;		// can go over 100%
+		player->armorpoints += 2;		// can go over 100%
 		if (player->armorpoints > deh_max_armor)
 			player->armorpoints = deh_max_armor;
 		if (!player->armortype) {
@@ -773,7 +772,6 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 	if (special->type != MT_FAKEITEM) {
 		if (special->flags & MF_COUNTITEM) {
 			player->itemcount++;
-		}
 	}
 
 	if (special->flags & MF_COUNTSECRET) {
@@ -787,9 +785,9 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	if (player == &players[consoleplayer]) {
 		S_StartSound(NULL, sound);
+		}
 	}
 }
-
 //
 // P_Obituary
 //
@@ -1140,21 +1138,15 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 	if ((P_Random() < target->info->painchance) && !(target->flags & MF_SKULLFLY))
 	{
-		target->flags |= MF_JUSTHIT;    // fight back!
+		target->flags |= MF_JUSTHIT; /* fight back! */
 		if (target->info->painstate)
 			P_SetMobjState(target, target->info->painstate);
 	}
 
-	target->reactiontime = 0;           // we're awake now...
-	if ((!target->threshold || target->type == MT_VILE)
-		&& source && (source->flags & MF_SHOOTABLE)
-		&& source->type != MT_VILE
-		&& !(target->flags & MF_NOINFIGHTING
-		     || ((source->flags ^ target->flags) && p_disable_monster_infighting.value) > 0))
-	{
-		// if not intent on another player,
-		// chase after this one
-		P_SetTarget(&target->target, source);
+	target->reactiontime = 0; /* we're awake now...	 */
+	if (!target->threshold && source && (source->flags & MF_SHOOTABLE) && !(target->flags & MF_NOINFIGHTING))
+	{	/* if not intent on another player, chase after this one */
+		target->target = source;
 		target->threshold = BASETHRESHOLD;
 		if (target->state == &states[target->info->spawnstate] && target->info->seestate != S_NULL)
 		{

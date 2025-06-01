@@ -47,8 +47,8 @@
 #include "d_main.h"
 #include "gl_main.h"
 
-SDL_Window* window;
-SDL_GLContext   glContext;
+SDL_Window* window = NULL;
+SDL_GLContext   glContext = NULL;
 
 #if defined(_WIN32) && defined(USE_XINPUT)
 #include "i_xinput.h"
@@ -59,6 +59,10 @@ CVAR(v_height, 480);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
 
+CVAR_CMD(v_vsync, 1) {
+    SDL_GL_SetSwapInterval((int)v_vsync.value);    
+}
+
 float display_scale = 1.0f;
 SDL_Surface* screen;
 int video_width;
@@ -68,6 +72,24 @@ boolean window_focused;
 
 float mouse_x = 0.0f;
 float mouse_y = 0.0f;
+
+
+static void NVidiaGLFinishConditional(void) {
+	const char* vendor = (const char*)glGetString(GL_VENDOR);
+
+	if (vendor) {
+		if (strcmp(vendor, "NVIDIA Corporation") != 0) {
+			glFinish();
+			I_Printf("glFinish: Called for: %s\n", vendor);
+		}
+		else {
+			I_Printf("Vendor is NVIDIA! Skipping glFinish.\n");
+		}
+	}
+	else {
+		I_Printf("Error: Could not retrieve vendor.\n");
+	}
+}
 
 //
 // I_InitScreen
@@ -131,7 +153,7 @@ void I_InitScreen(void) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
 	if (!InWindow) {
 		flags |= SDL_WINDOW_FULLSCREEN;
@@ -140,6 +162,14 @@ void I_InitScreen(void) {
 	if (InWindowBorderless) {
 		flags |= SDL_WINDOW_BORDERLESS;
 	}
+
+    if(glContext) {
+        SDL_GL_DestroyContext(glContext);
+    }
+   
+    if(window) {
+        SDL_DestroyWindow(window);
+    }
 
 	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
@@ -152,11 +182,16 @@ void I_InitScreen(void) {
 		return;
 	}
 
+#ifdef __linux__
+    // NVIDIA Linux specific: fixes input lag with vsync on
+    putenv("__GL_MaxFramesAllowed=1");
+#endif   
+    
 	if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
 		I_Error("I_InitScreen: Failed to create OpenGL context");
 		return;
 	}
-	
+
 	displayid = SDL_GetDisplayForWindow(window);
 	if(displayid) {
 		float f = SDL_GetDisplayContentScale(displayid);
@@ -169,6 +204,12 @@ void I_InitScreen(void) {
 		I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
 	}
 
+	SDL_GL_SetSwapInterval((int)v_vsync.value);
+
+    SDL_GL_SwapWindow(window);
+
+	NVidiaGLFinishConditional();
+
 	SDL_HideCursor();
 }
 
@@ -178,7 +219,7 @@ void I_InitScreen(void) {
 
 void I_ShutdownVideo(void) {
 	if (glContext) {
-		SDL_GL_DeleteContext(glContext);
+		SDL_GL_DestroyContext(glContext);
 		glContext = NULL;
 	}
 
@@ -215,4 +256,5 @@ void V_RegisterCvars(void) {
 	CON_CvarRegister(&v_height);
 	CON_CvarRegister(&v_windowed);
 	CON_CvarRegister(&v_windowborderless);
+	CON_CvarRegister(&v_vsync);
 }

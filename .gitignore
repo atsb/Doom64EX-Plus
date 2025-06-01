@@ -55,6 +55,12 @@ dkms.conf
 # macOS files
 *.DS_Store
 
+# Doom 64 EX Plus Installer specific
+/Setup/Setup-cache/part*/*.cab
+/Setup/Setup-cache/part*/*.ini
+/Setup/Setup-cache/*.txt
+/Setup/Setup-SetupFiles/Doom64EX+ Setup.msi
+
 # Doom 64 EX Plus specific
 /Windows/.vs
 /Windows/Debug
@@ -65,3 +71,6 @@ Windows/Doom64EXPlus.vcxproj.user
 .DS_Store
 src/engine/.DS_Store
 *.user
+*.bak
+Windows/DOOM64EX+/x64/Release/Doom64EX+.vcxproj.FileListAbsolute.txt
+Windows/DOOM64EX+/x64/Debug/Doom64EX+.vcxproj.FileListAbsolute.txt

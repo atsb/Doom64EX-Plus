@@ -38,7 +38,7 @@
 #endif
 
 #ifdef __OpenBSD__
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #else
 #include <SDL3/SDL.h>
 #endif
@@ -74,21 +74,10 @@ CVAR_CMD(s_driver, sndio)
 {
     char* driver = cvar->string;
 
-    // this is absolutely horrible
-    if (!dstrcmp(cvar->defvalue, "default")) {
-        cvar->defvalue = DEFAULT_FLUID_DRIVER;
-    }
-
-    // same as above
-    if (!dstrcmp(driver, "default")) {
-        CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
-        return;
-    }
-
     if (!dstrcmp(driver, "jack") ||
         !dstrcmp(driver, "alsa") ||
         !dstrcmp(driver, "oss") ||
-        !dstrcmp(driver, "alsa") ||
+        !dstrcmp(driver, "pulseaudio") ||
         !dstrcmp(driver, "coreaudio") ||
         !dstrcmp(driver, "dsound") ||
         !dstrcmp(driver, "portaudio") ||
@@ -124,14 +113,6 @@ FMOD_BOOL Paused = FALSE;
 static SDL_Mutex* lock = NULL;
 #define MUTEX_LOCK()    SDL_LockMutex(lock);
 #define MUTEX_UNLOCK()  SDL_UnlockMutex(lock);
-
-//
-// Semaphore stuff
-//
-
-static SDL_Semaphore* semaphore = NULL;
-#define SEMAPHORE_LOCK()    if(SDL_WaitSemaphore(semaphore) == 0) {
-#define SEMAPHORE_UNLOCK()  SDL_PostSemaphore(semaphore); }
 
 // 20120205 villsa - bool to determine if sequencer is ready or not
 static int seqready = 0;
@@ -735,7 +716,6 @@ static int Signal_StopAll(doomseq_t* seq) {
     channel_t* c;
     int i;
 
-    SEMAPHORE_LOCK()
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
 
@@ -743,7 +723,6 @@ static int Signal_StopAll(doomseq_t* seq) {
                 Chan_RemoveTrackFromPlaylist(seq, c);
             }
         }
-    SEMAPHORE_UNLOCK()
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
@@ -769,11 +748,9 @@ static int Signal_Pause(doomseq_t* seq) {
     int i;
     channel_t* c;
 
-    SEMAPHORE_LOCK()
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
-        }
-    SEMAPHORE_UNLOCK()
+    }
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
@@ -789,11 +766,9 @@ static int Signal_Resume(doomseq_t* seq) {
     int i;
     channel_t* c;
 
-    SEMAPHORE_LOCK()
         for (i = 0; i < MIDI_CHANNELS; i++) {
             c = &playlist[i];
-        }
-    SEMAPHORE_UNLOCK()
+    }
 
         Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
@@ -802,7 +777,6 @@ static int Signal_Resume(doomseq_t* seq) {
 //
 // Signal_UpdateGain
 //
-
 static int Signal_UpdateGain(float db) {
     SEMAPHORE_LOCK()
 
@@ -960,7 +934,6 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
 
     seq->playtime = msecs;
 
-    SEMAPHORE_LOCK()
         for (i = 0; i < MIDI_CHANNELS; i++) {
             chan = &playlist[i];
 
@@ -974,8 +947,7 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
             else {
                 Chan_RunSong(seq, chan, msecs);
             }
-        }
-    SEMAPHORE_UNLOCK()
+    }
 }
 
 //
@@ -1208,15 +1180,6 @@ void I_InitSequencer(void) {
         return;
     }
 
-    //
-    // init semaphore
-    //
-    semaphore = SDL_CreateSemaphore(1);
-    if (semaphore == NULL) {
-        CON_Warnf("I_InitSequencer: failed to create semaphore");
-        return;
-    }
-
     dmemset(&doomseq, 0, sizeof(doomseq_t));
 
     //
@@ -1417,53 +1380,15 @@ void I_SetGain(float db) {
     //Seq_WaitOnSignal(&doomseq);
 }
 
-//
-// I_StartMusic
-//
-
-void I_StartMusic(int mus_id) {
-
-    FMOD_StartMusic(mus_id);
-}
-
-//
-// I_StopSound
-//
-
-void I_StopSound(sndsrc_t* origin, int sfx_id) {
-    song_t* song;
-    channel_t* c;
-    int i;
-
-    if (!seqready) {
-        return;
-    }
-
-    SEMAPHORE_LOCK()
-        song = &doomseq.songs[sfx_id];
-    for (i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-
-        if (song == c->song || (origin && c->origin == origin)) {
-            c->stop = true;
-        }
-    }
-    SEMAPHORE_UNLOCK()
-}
-
 // FMOD Studio SFX API
 
 int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, float properties_reverb) {
 
     FMOD_System_SetReverbProperties(sound.fmod_studio_system, (int)properties_reverb, &reverb_prop);
 
-    //FMOD_Channel_SetVolume(sound.fmod_studio_channel, (float)volume);
-    //FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel, false));
-
     FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
-
     FMOD_ERROR_CHECK(FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound[sfx_id], sound.master, 0, &sound.fmod_studio_channel));
-
+    
     FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
 
     return sfx_id;

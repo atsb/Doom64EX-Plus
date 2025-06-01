@@ -1,7 +1,7 @@
-// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2007-2012 Samuel Villarreal
+// Copyright(C) 2014 Zohar Malamant
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,404 +19,287 @@
 // 02111-1307, USA.
 //
 //-----------------------------------------------------------------------------
-//
-// DESCRIPTION: XInput API Code
-//
-//-----------------------------------------------------------------------------
 
-#if defined(_WIN32) && defined(USE_XINPUT)
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_gamepad.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include "doomtype.h"
-#include "doomstat.h"
 #include "doomdef.h"
-#include "i_xinput.h"
-#include "d_main.h"
-#include "g_controls.h"
-#include "d_event.h"
 #include "con_cvar.h"
-#include "m_misc.h"
+#include "d_main.h"
+#include "i_xinput.h"
+#include "z_zone.h"
 
-xinputgamepad_t xgamepad;
+CVAR(i_joysensx, 3.0f);
+CVAR(i_joysensy, 3.0f);
+CVAR(i_joytwinstick, 0);
+
+typedef int (*keyconv_t)(int);
+
+typedef struct {
+	int16_t device_id;
+	SDL_Gamepad* device;
+
+	char* name;
+
+	keyconv_t keyconv;
+
+	int num_axes;
+	int num_hats;
+} joy_t;
+
+static joy_t* joy = NULL;
+static int num_joy = 0;
 
 //
-// Library functions
+// keyconv_Playstation4
 //
 
-typedef void (WINAPI* LPXINPUTENABLE)(boolean enable);
-static LPXINPUTENABLE   I_XInputEnable = NULL;
+static int keyconv_Playstation4(int key) {
+	int ch = -1;
 
-typedef int(WINAPI* LPXINPUTGETSTATE)(int userID, xinputstate_t* state);
-static LPXINPUTGETSTATE I_XInputGetState = NULL;
+	if (key == SDL_GAMEPAD_BUTTON_DPAD_UP)
+		ch = KEY_UPARROW;
+	else if (key == SDL_GAMEPAD_BUTTON_DPAD_RIGHT)
+		ch = KEY_RIGHTARROW;
+	else if (key == SDL_GAMEPAD_BUTTON_DPAD_DOWN)
+		ch = KEY_DOWNARROW;
+	else if (key == SDL_GAMEPAD_BUTTON_DPAD_LEFT)
+		ch = KEY_LEFTARROW;
+	else if (key == SDL_GAMEPAD_BUTTON_START)
+		ch = KEY_ESCAPE;
+	else if (key == SDL_GAMEPAD_BUTTON_BACK)
+		ch = KEY_BACKSPACE;
+	else if (key == SDL_GAMEPAD_BUTTON_LABEL_A)
+		ch = KEY_ENTER;
 
-typedef int(WINAPI* LPXINPUTSETRUMBLE)(int userID, xinputrumble_t* rumble);
-static LPXINPUTSETRUMBLE I_XInputSetRumble = NULL;
-
-CVAR(i_rsticksensitivity, 0.0080);
-CVAR(i_rstickthreshold, 20.0);
-CVAR(i_xinputscheme, 0);
-
-//
-// I_XInputClampDeadZone
-//
-
-static void I_XInputClampDeadZone(void) {
-	xinputbuttons_t* buttons;
-
-	buttons = &xgamepad.state.buttons;
-
-	if (buttons->lx < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
-		buttons->lx > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-		buttons->lx = 0;
-	}
-
-	if (buttons->ly < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
-		buttons->ly > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-		buttons->ly = 0;
-	}
-
-	if (buttons->rx < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
-		buttons->rx > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
-		buttons->rx = 0;
-	}
-
-	if (buttons->ry < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
-		buttons->ry > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
-		buttons->ry = 0;
-	}
+	return ch;
 }
 
+typedef struct {
+	const char* name;
+	keyconv_t func;
+} keyconvstruct_t;
+
+static keyconvstruct_t keyconv[] = {
+	{ "PS4 Controller", keyconv_Playstation4 },
+};
+
+static int num_keyconv = sizeof(keyconv) / sizeof(keyconv[0]);
+
 //
-// I_XInputPollEvent
+// JoystickCloseAll
 //
 
-void I_XInputPollEvent(void) {
-	xinputbuttons_t* buttons;
-	event_t event;
-	boolean ltrigger;
-	boolean rtrigger;
+static void JoystickCloseAll()
+{
 	int i;
-	int j;
-	int bits;
 
-	//
-	// is xinput api even available?
-	//
-	if (!xgamepad.available) {
+	for (i = 0; i < num_joy; i++) {
+		SDL_CloseGamepad(joy[i].device);
+		if (joy[i].name)
+			Z_Free(joy[i].name);
+	}
+	if (joy) {
+		Z_Free(joy);
+		joy = 0;
+	}
+}
+
+//
+// JoystickClose
+//
+
+static void JoystickClose(int device_id)
+{
+	int i;
+
+	for (i = 0; i < num_joy; i++) {
+		if (joy[i].device_id == device_id) {
+			I_Printf("Controller %d \"%s\" disconnected...\n", joy[i].device_id, joy[i].name);
+
+			SDL_CloseGamepad(joy[i].device);
+			Z_Free(joy[i].name);
+			break;
+		}
+	}
+
+	// Joystick not found.
+	if (i == num_joy)
 		return;
+
+	num_joy--;
+	for (; i < num_joy; i++) {
+		joy[i] = joy[i + 1];
 	}
 
-	dmemset(&event, 0, sizeof(event_t));
+	Z_ReallocV(joy, num_joy, PU_STATIC, NULL);
+}
 
-	//
-	// clamp cvar values
-	//
-	if (i_rsticksensitivity.value < 0.001f) {
-		CON_CvarSetValue(i_rsticksensitivity.name, 0.001f);
-	}
+//
+// JoystickOpen
+//
 
-	if (i_rstickthreshold.value < 1.0f) {
-		CON_CvarSetValue(i_rstickthreshold.name, 1.0f);
-	}
+static void JoystickOpen(int device_id)
+{
+	int i;
+	joy_t j;
+	const char* name;
 
-	//
-	// fetch current state and
-	// check if controller is still connected
-	//
-	if (I_XInputGetState(0, &xgamepad.state)) {
-		xgamepad.connected = false;
+	// Check if the device is a GameController
+	if (!SDL_IsGamepad(device_id))
 		return;
+
+	j.device = SDL_OpenGamepad(device_id);
+
+	if (!j.device)
+		return;
+
+	j.device_id = device_id;
+	j.keyconv = NULL;
+	j.num_axes = SDL_GAMEPAD_AXIS_COUNT;  // SDL_GameController has a fixed number of axes
+	j.num_hats = 0;  // Game controllers usually don't use hats
+
+	name = SDL_GetGamepadName(j.device);
+
+	if (name) {
+		j.name = Z_Malloc(dstrlen(name) + 1, PU_STATIC, NULL);
+		dstrcpy(j.name, name);
+
+		for (i = 0; i < num_keyconv; i++) {
+			if (dstrcmp(j.name, keyconv[i].name) == 0) {
+				j.keyconv = keyconv[i].func;
+				break;
+			}
+		}
 	}
 	else {
-		xgamepad.connected = true;
+		j.name = NULL;
 	}
 
-	//
-	// ramp down vibration speed
-	//
-	if (xgamepad.lMotorWindDown || xgamepad.rMotorWindDown) {
-		int temp;
+	num_joy++;
+	Z_ReallocV(joy, num_joy, PU_STATIC, NULL);
 
-		temp = xgamepad.vibration.lMotorSpeed;
-		xgamepad.vibration.lMotorSpeed = MAX(temp - xgamepad.lMotorWindDown, 0);
+	joy[num_joy - 1] = j;
 
-		temp = xgamepad.vibration.rMotorSpeed;
-		xgamepad.vibration.rMotorSpeed = MAX(temp - xgamepad.rMotorWindDown, 0);
-
-		I_XInputSetRumble(0, &xgamepad.vibration);
-	}
-
-	//
-	// clamp stick threshold
-	//
-	I_XInputClampDeadZone();
-
-	buttons = &xgamepad.state.buttons;
-	ltrigger = buttons->ltrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
-	rtrigger = buttons->rtrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
-
-	//
-	// read left stick
-	//
-	if (buttons->lx != 0 || buttons->ly != 0) {
-		//
-		// hack for classic scheme
-		//
-		if (i_xinputscheme.value && buttons->lx == 0) {
-			xgamepad.rxthreshold = 0.0f;
-		}
-
-		//
-		// set event data
-		//
-		event.type = ev_gamepad;
-		event.data1 = buttons->lx;
-		event.data2 = buttons->ly;
-		event.data3 = XINPUT_GAMEPAD_LEFT_STICK;
-		event.data4 = buttons->data;
-		D_PostEvent(&event);
-	}
-	else if (i_xinputscheme.value) {
-		xgamepad.rxthreshold = 0.0f;
-		xgamepad.rythreshold = 0.0f;
-	}
-
-	//
-	// read right stick
-	//
-	if (buttons->rx != 0 || buttons->ry != 0) {
-		event.type = ev_gamepad;
-		event.data1 = buttons->rx;
-		event.data2 = buttons->ry;
-		event.data3 = XINPUT_GAMEPAD_RIGHT_STICK;
-		event.data4 = buttons->data;
-		D_PostEvent(&event);
-	}
-	else if (!i_xinputscheme.value) {
-		xgamepad.rxthreshold = 0.0f;
-		xgamepad.rythreshold = 0.0f;
-	}
-
-	//
-	// read buttons
-	//
-	if ((buttons->data || (ltrigger || rtrigger))) {
-		bits = buttons->data;
-
-		//
-		// left/right triggers isn't classified as buttons
-		// but treat them like buttons here
-		//
-
-		if (ltrigger) {
-			bits |= XINPUT_GAMEPAD_LEFT_TRIGGER;
-		}
-
-		if (rtrigger) {
-			bits |= XINPUT_GAMEPAD_RIGHT_TRIGGER;
-		}
-
-		// villsa 01052014 -  check for button press
-		bits &= ~xgamepad.oldbuttons;
-		for (j = 0, i = 1; i != 0x100000; i <<= 1) {
-			if (!(i & 0xFF3FF)) {
-				continue;
-			}
-
-			if (bits & i) {
-				event.type = ev_keydown;
-				event.data1 = BUTTON_DPAD_UP + j;
-				D_PostEvent(&event);
-			}
-
-			j++;
-		}
-	}
-
-	bits = xgamepad.oldbuttons;
-	xgamepad.oldbuttons = buttons->data;
-
-	if (ltrigger) {
-		xgamepad.oldbuttons |= XINPUT_GAMEPAD_LEFT_TRIGGER;
-	}
-
-	if (rtrigger) {
-		xgamepad.oldbuttons |= XINPUT_GAMEPAD_RIGHT_TRIGGER;
-	}
-
-	// villsa 01052014 -  check for button release
-	bits &= ~xgamepad.oldbuttons;
-	for (j = 0, i = 1; i != 0x100000; i <<= 1) {
-		if (!(i & 0xFF3FF)) {
-			continue;
-		}
-
-		if (bits & i) {
-			event.type = ev_keyup;
-			event.data1 = BUTTON_DPAD_UP + j;
-			D_PostEvent(&event);
-		}
-
-		j++;
-	}
-}
-
-//
-// I_XInputVibrate
-//
-
-void I_XInputVibrate(boolean leftside, byte amount, int windDown) {
-	if (!xgamepad.connected) {
-		return;
-	}
-
-	if (leftside) {
-		xgamepad.vibration.lMotorSpeed = amount * 0xff;
-		xgamepad.lMotorWindDown = windDown;
+	if (j.keyconv) {
+		I_Printf("Supported controller %d \"%s\" connected...\n", j.device_id, j.name);
 	}
 	else {
-		xgamepad.vibration.rMotorSpeed = amount * 0xff;
-		xgamepad.rMotorWindDown = windDown;
-	}
-
-	I_XInputSetRumble(0, &xgamepad.vibration);
-}
-
-//
-// I_XInputReadActions
-// Read inputs for in-game player
-//
-
-void I_XInputReadActions(event_t* ev) {
-	playercontrols_t* pc = &Controls;
-
-	if (ev->type == ev_gamepad) {
-		//
-		// left analog stick
-		//
-		if (ev->data3 == XINPUT_GAMEPAD_LEFT_STICK) {
-			float x;
-			float y;
-
-			pc->flags |= PCF_GAMEPAD;
-
-			y = (float)ev->data2 * 0.0015f;
-
-			//
-			// classic scheme uses the traditional turning for x-axis
-			//
-			if (i_xinputscheme.value > 0) {
-				float turnspeed;
-
-				turnspeed = i_rsticksensitivity.value / i_rstickthreshold.value;
-
-				if (ev->data1 != 0) {
-					xgamepad.rxthreshold += turnspeed;
-
-					if (xgamepad.rxthreshold >= i_rsticksensitivity.value) {
-						xgamepad.rxthreshold = i_rsticksensitivity.value;
-					}
-				}
-
-				x = (float)ev->data1 * xgamepad.rxthreshold;
-				pc->mousex += (int)x;
-			}
-			//
-			// modern scheme uses strafing for x-axis
-			//
-			else {
-				x = (float)ev->data1 * 0.0015f;
-				pc->joyx += (int)x;
-			}
-
-			pc->joyy += (int)y;
-
-			return;
-		}
-
-		//
-		// right analog stick
-		//
-		if (ev->data3 == XINPUT_GAMEPAD_RIGHT_STICK) {
-			float x;
-			float y;
-			float turnspeed;
-
-			turnspeed = i_rsticksensitivity.value / i_rstickthreshold.value;
-
-			if (ev->data1 != 0) {
-				xgamepad.rxthreshold += turnspeed;
-
-				if (xgamepad.rxthreshold >= i_rsticksensitivity.value) {
-					xgamepad.rxthreshold = i_rsticksensitivity.value;
-				}
-			}
-
-			if (ev->data2 != 0) {
-				xgamepad.rythreshold += turnspeed;
-
-				if (xgamepad.rythreshold >= i_rsticksensitivity.value) {
-					xgamepad.rythreshold = i_rsticksensitivity.value;
-				}
-			}
-
-			x = (float)ev->data1 * xgamepad.rxthreshold;
-			y = (float)ev->data2 * xgamepad.rythreshold;
-
-			pc->mousex += (int)x;
-			pc->mousey += (int)y;
-
-			return;
-		}
+		I_Printf("Controller %d \"%s\" connected...\n", j.device_id, j.name);
 	}
 }
 
 //
-// I_XInputInit
-// Initialize the xinput API
+// I_InitJoystick
 //
 
-void I_XInputInit(void) {
-	HINSTANCE hInst;
+void I_InitJoystick(void)
+{
+	// sad face :(
+}
 
-	dmemset(&xgamepad, 0, sizeof(xinputgamepad_t));
+//
+// I_ShutdownJoystick
+//
 
-	//
-	// check for disabling parameter
-	//
-	if (M_CheckParm("-noxinput")) {
+void I_ShutdownJoystick(void)
+{
+	JoystickCloseAll();
+}
+
+//
+// I_ReadJoystick
+//
+
+void I_ReadJoystick(void)
+{
+	int16_t lx, ly, rx, ry;
+	event_t event;
+
+	if (!num_joy)
 		return;
-	}
 
-	//
-	// locate xinput dynamic link library
-	//
-	if (hInst = LoadLibrary(L"xinput1_3.dll")) {
-		//
-		// get routines from module
-		//
-		I_XInputEnable = (LPXINPUTENABLE)GetProcAddress(hInst, "XInputEnable");
-		I_XInputGetState = (LPXINPUTGETSTATE)GetProcAddress(hInst, "XInputGetState");
-		I_XInputSetRumble = (LPXINPUTSETRUMBLE)GetProcAddress(hInst, "XInputSetState");
+	lx = SDL_GetGamepadAxis(joy[0].device, SDL_GAMEPAD_AXIS_LEFTX);
+	ly = SDL_GetGamepadAxis(joy[0].device, SDL_GAMEPAD_AXIS_LEFTY);
+	rx = SDL_GetGamepadAxis(joy[0].device, SDL_GAMEPAD_AXIS_RIGHTX);
+	ry = SDL_GetGamepadAxis(joy[0].device, SDL_GAMEPAD_AXIS_RIGHTY);
 
-		if (I_XInputEnable == NULL || I_XInputGetState == NULL || I_XInputSetRumble == NULL) {
-			return;
-		}
-
-		I_XInputEnable(true);
-
-		//
-		// api is available
-		//
-		xgamepad.available = true;
-
-		//
-		// check if controller is plugged in
-		//
-		if (!(I_XInputGetState(0, &xgamepad.state))) {
-			xgamepad.connected = true;
-		}
-	}
+	event.type = ev_gamepad;
+	event.data1 = lx;
+	event.data2 = ly;
+	event.data3 = rx;
+	event.data4 = ry;
+	D_PostEvent(&event);
 }
-#endif
+
+//
+// I_JoystickName
+//
+
+const char* I_JoystickName(void)
+{
+	if (!num_joy || !joy[0].name)
+		return "None";
+
+	return joy[0].name;
+}
+
+//
+// I_JoystickToKey
+//
+
+int I_JoystickToKey(int key)
+{
+	if (!num_joy || !joy[0].keyconv)
+		return -1;
+
+	return joy[0].keyconv(key);
+}
+
+//
+// I_JoystickEvent
+//
+
+char I_JoystickEvent(const SDL_Event* Event)
+{
+	event_t event;
+	switch (Event->type) {
+	case SDL_EVENT_GAMEPAD_REMOVED:
+		JoystickClose(Event->cdevice.which);
+		break;
+
+	case SDL_EVENT_GAMEPAD_ADDED:
+		JoystickOpen(Event->cdevice.which);
+		break;
+
+	case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+		I_Printf("Controller button %d pressed\n", Event->button.button);
+		event.type = ev_gamepaddown;
+		event.data1 = Event->button.button;
+		D_PostEvent(&event);
+		break;
+
+	case SDL_EVENT_GAMEPAD_BUTTON_UP:
+		event.type = ev_gamepadup;
+		event.data1 = Event->button.button;
+		D_PostEvent(&event);
+		break;
+
+	default:
+		return false;
+		break;
+	}
+
+	return true;
+}
+
+//
+// I_RegisterJoystickCvars
+//
+
+void I_RegisterJoystickCvars(void)
+{
+	CON_CvarRegister(&i_joytwinstick);
+	CON_CvarRegister(&i_joysensx);
+	CON_CvarRegister(&i_joysensy);
+}

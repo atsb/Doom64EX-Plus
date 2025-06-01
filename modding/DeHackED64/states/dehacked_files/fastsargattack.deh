@@ -1,0 +1,153 @@
+Patch File for DeHackEd64
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+Frame 90
+Duration = 1
+
+Frame 91
+Duration = 1
+
+Frame 92
+Duration = 1
+
+Frame 93
+Duration = 1
+
+Frame 94
+Duration = 1
+
+Frame 95
+Duration = 1
+
+Frame 96
+Duration = 1
+
+Frame 111
+Sprite number = 1
+
+Frame 112
+Sprite number = 1
+
+Frame 113
+Sprite number = 1
+
+Frame 114
+Sprite number = 1
+
+Frame 115
+Sprite number = 1
+
+Frame 116
+Sprite number = 1
+
+Frame 117
+Sprite number = 1
+
+Frame 118
+Sprite number = 1
+
+Frame 119
+Sprite number = 1
+
+Frame 120
+Sprite number = 1
+
+Frame 121
+Sprite number = 1
+
+Frame 122
+Sprite number = 1
+
+Frame 123
+Sprite number = 1
+
+Frame 124
+Sprite number = 1
+
+Frame 125
+Sprite number = 1
+
+Frame 126
+Sprite number = 1
+
+Frame 127
+Sprite number = 1
+
+Frame 128
+Sprite number = 1
+
+Frame 129
+Sprite number = 1
+
+Frame 130
+Sprite number = 1
+
+Frame 131
+Sprite number = 1
+
+Frame 132
+Sprite number = 1
+
+Frame 133
+Sprite number = 1
+
+Frame 134
+Sprite number = 1
+
+Frame 135
+Sprite number = 1
+
+Frame 136
+Sprite number = 1
+
+Frame 137
+Sprite number = 1
+
+Frame 138
+Sprite number = 1
+
+Frame 139
+Sprite number = 1
+
+Frame 155
+Duration = 1
+
+Frame 156
+Duration = 1
+
+Frame 157
+Duration = 1
+
+Frame 761
+Duration = 1
+
+Frame 762
+Duration = 1
+
+Frame 763
+Duration = 1
+
+Frame 767
+Duration = 1
+
+Frame 768
+Duration = 1
+
+Frame 769
+Duration = 1
+
+Frame 770
+Duration = 1
+
+Frame 771
+Duration = 1
+
+Frame 846
+Duration = 1
+
+Frame 847
+Duration = 1

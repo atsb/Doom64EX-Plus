@@ -413,6 +413,17 @@ char* (Z_Strdup)(const char* s, int tag, void* user, const char* file, int line)
 	return dstrcpy((Z_Malloc)(dstrlen(s) + 1, tag, user, file, line), s);
 }
 
+int Z_PointerValidation(void* ptr) {
+	if (ptr == NULL) {
+		return 0;
+	}
+	memblock_t* block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+	if (block->id != ZONEID) {
+		return 0;
+	}
+	return 1;
+}
+
 //
 // Z_Touch
 //
@@ -423,6 +434,8 @@ void (Z_Touch)(void* ptr, const char* file, int line) {
 	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
 
 	if (block->id != ZONEID) {
+		fprintf(stderr, "Z_Touch: Invalid ZONEID! Expected %d, got %d. (ptr=%p, file=%s, line=%d)\n",
+			ZONEID, block->id, ptr, file, line);
 		I_Error("Z_Touch: touched a pointer without ZONEID (%s:%d)", file, line);
 	}
 

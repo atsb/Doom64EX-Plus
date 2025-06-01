@@ -28,6 +28,7 @@
 
 // villsa 01052014 - changed to 420
 #define NUMKEYS         420
+#define NUMGAMEPADBTNS	60
 
 #define PCKF_DOUBLEUSE  0x4000
 #define PCKF_UP         0x8000
@@ -60,8 +61,10 @@ typedef enum {
 typedef struct {
 	int            mousex;
 	int            mousey;
-	int            joyx;
-	int            joyy;
+	float		   joymovex;
+	float		   joymovey;
+	float		   joylookx;
+	float		   joylooky;
 	int            key[NUM_PCKEYS];
 	int            nextweapon;
 	int            sdclicktime;

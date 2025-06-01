@@ -24,17 +24,17 @@
 #define __I_SWAP_H__
 
 #ifdef __OpenBSD__
-#include <SDL_endian.h>
+#include <SDL3/SDL_endian.h>
 #else
 #include <SDL3/SDL_endian.h>
 #endif
 
 #include "doomtype.h"
 
-#define I_SwapLE16(x)   SDL_SwapLE16(x)
-#define I_SwapLE32(x)   SDL_SwapLE32(x)
-#define I_SwapBE16(x)   SDL_SwapBE16(x)
-#define I_SwapBE32(x)   SDL_SwapBE32(x)
+#define I_SwapLE16(x)   SDL_Swap16LE(x)
+#define I_SwapLE32(x)   SDL_Swap32LE(x)
+#define I_SwapBE16(x)   SDL_Swap16BE(x)
+#define I_SwapBE32(x)   SDL_Swap32BE(x)
 
 #define SHORT(x)        ((short)I_SwapLE16(x))
 #define LONG(x)         ((signed long)I_SwapLE32(x))
