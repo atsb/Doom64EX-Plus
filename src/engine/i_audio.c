@@ -95,6 +95,8 @@ CVAR_CMD(s_driver, sndio)
     CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
 }
 
+#define MAX_GAME_SFX 256
+
 // FMOD Studio
 static float INCHES_PER_METER = 39.3701f;
 int num_sfx;
@@ -1052,22 +1054,21 @@ static int Seq_RegisterSongs(doomseq_t* seq) {
 static int Seq_RegisterSounds(void) {
     int i;
     int start, end;
-    int num_sfx_lumps_to_process;
+    int first_sfx_lump_index, num_sfx_lumps_to_process;
     int success = 0;
     int fail = 0;
     FMOD_RESULT result;
 
     // Initialize FMOD_SOUND array
-    for (i = 0; i < 99; ++i) {
+    for (i = 0; i < MAX_GAME_SFX; ++i) {
         sound.fmod_studio_sound[i] = NULL;
     }
     num_sfx = 0;
 
-    start = W_GetNumForName("DS_START");
-    end = W_GetNumForName("DS_END");
+    start = W_GetNumForName("DS_START") + 1;
+    end = W_GetNumForName("DS_END") - 1;
 
-    int first_sfx_lump_index = start + 1;
-    num_sfx_lumps_to_process = (end - 1) - first_sfx_lump_index + 1;
+    num_sfx_lumps_to_process = (end - start) + 1;
 
     if (num_sfx_lumps_to_process <= 0) {
         I_Printf("Seq_RegisterSounds: No sound effect lumps found between DS_START and DS_END.\n");
@@ -1075,22 +1076,14 @@ static int Seq_RegisterSounds(void) {
     }
 
     for (i = 0; i < num_sfx_lumps_to_process; i++) {
-        if (num_sfx >= 99) {
-            CON_Warnf("Seq_RegisterSounds: Exceeded limit of %d. Further SFX ignored.\n", 99);
+        if (num_sfx >= MAX_GAME_SFX) {
+            CON_Warnf("Seq_RegisterSounds: Exceeded limit of %d. Further SFX ignored.\n", MAX_GAME_SFX);
             fail += (num_sfx_lumps_to_process - i);
             break;
         }
 
-        int current_lump_num = first_sfx_lump_index + i;
+        int current_lump_num = start + i;
         int sfx_lump_length = W_LumpLength(current_lump_num);
-
-        // Basic check: A WAV file needs to be at least ~44 bytes for headers.
-        if (sfx_lump_length < 44) {
-            sound.fmod_studio_sound[num_sfx++] = NULL;
-            fail++;
-            continue;
-        }
-
         void* sfx_lump_data = W_CacheLumpNum(current_lump_num, PU_STATIC);
         if (!sfx_lump_data) {
             sound.fmod_studio_sound[num_sfx++] = NULL;
@@ -1466,94 +1459,61 @@ void I_SetGain(float db) {
 
 // FMOD Studio SFX API
 
-int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, float properties_reverb) {
-    FMOD_CHANNEL* sfx_channel = NULL; // FMOD will pick an available channel
+int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
+    FMOD_CHANNEL* sfx_channel = NULL;
     FMOD_RESULT result;
 
     if (!seqready || !sound.fmod_studio_system) {
-        // CON_Printf("FMOD_StartSound: Sound system not ready.\n");
+        return -1; // Sound system not ready
+    }
+
+    if (sfx_id < 0 || sfx_id >= num_sfx || !sound.fmod_studio_sound[sfx_id]) {
+        CON_Warnf("FMOD_StartSound: Invalid sfx_id %d or sound not loaded (num_sfx: %d).\n", sfx_id, num_sfx);
         return -1;
     }
 
-    if (sfx_id < 0 || sfx_id >= num_sfx || sound.fmod_studio_sound[sfx_id] == NULL) {
-        CON_Warnf("FMOD_StartSound: Invalid or unloaded sfx_id: %d (num_sfx: %d)\n", sfx_id, num_sfx);
-        return -1;
-    }
-
-    // Play sound paused, set attributes, then unpause.
-    // Play on the master SFX group (sound.master)
     result = FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound[sfx_id], sound.master, true, &sfx_channel);
-    FMOD_ERROR_CHECK(result);
+    if (result != FMOD_OK) {
+        FMOD_ERROR_CHECK(result);
+        return -1;
+    }
 
-    if (result == FMOD_OK && sfx_channel) {
-        // Volume: combine instance volume with global SFX volume CVar
-        // Assuming 'volume' parameter is 0-255, and s_sfxvol.value is also 0-255.
+    if (sfx_channel) {
         float instance_vol = (float)volume / 255.0f;
-        float global_sfx_vol = s_sfxvol.value / 255.0f; // Assuming s_sfxvol is a CVAR struct with a 'value' field
+
+        // Ensure s_sfxvol.value is accessed safely if it's a pointer or requires a function call
+        float global_sfx_vol = (s_sfxvol.value >= 0 && s_sfxvol.value <= 255) ? (float)s_sfxvol.value / 255.0f : 1.0f;
         float final_volume = instance_vol * global_sfx_vol;
 
-        // Clamp volume to FMOD's range [0.0, 1.0] (though FMOD can amplify > 1.0)
+        if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f; // Default if calc is bad
         if (final_volume < 0.0f) final_volume = 0.0f;
-        // if (final_volume > 1.0f) final_volume = 1.0f; // Optional: clamp max to 1.0
 
-        FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sfx_channel, final_volume));
+        FMOD_Channel_SetVolume(sfx_channel, final_volume); // Error checked by caller via FMOD_ERROR_CHECK if return val is used
 
-        if (origin) { // 3D Sound
-            mobj_t* mobj = (mobj_t*)origin; // Cast sndsrc_t to your map object type
-            FMOD_VECTOR pos, vel;
+        if (origin) {
+            mobj_t* mobj = (mobj_t*)origin;
+            FMOD_VECTOR pos = { 0.0f, 0.0f, 0.0f }, vel = { 0.0f, 0.0f, 0.0f };
 
-            // Convert Doom fixed_t world coordinates to float.
-            float obj_x = (float)mobj->x / FRACUNIT;
-            float obj_y = (float)mobj->y / FRACUNIT; // Doom's North/South axis
-            float obj_z = (float)mobj->z / FRACUNIT; // Doom's Up/Down axis (height)
-
-            // Transform to FMOD's right-handed coordinate system:
-            // FMOD_X = Doom_X (East/West)
-            // FMOD_Y = Doom_Z (Up/Down)
-            // FMOD_Z = Doom_Y (North/South)
-            pos.x = obj_x;
-            pos.y = obj_z;
-            pos.z = obj_y;
-
-            // Optional: Scale to FMOD's world units if necessary (e.g. if FMOD units are inches and game units are meters)
-            // This depends on your FMOD_System_Set3DSettings distancefactor. If distancefactor is 1.0,
-            // then game units should be consistent with what FMOD_Sound_Set3DMinMaxDistance expects.
-            // E.g., if MinMaxDistance was set in inches, positions should be in inches.
-            // pos.x *= INCHES_PER_METER_IF_GAME_UNITS_ARE_METERS; (and for y, z)
-
-
-            // Velocity (convert from fixed_t, transform axes)
-            vel.x = (mobj->momx) ? (float)mobj->momx / FRACUNIT : 0.0f;
-            vel.y = (mobj->momz) ? (float)mobj->momz / FRACUNIT : 0.0f; // Doom Z-momentum to FMOD Y-velocity
-            vel.z = (mobj->momy) ? (float)mobj->momy / FRACUNIT : 0.0f; // Doom Y-momentum to FMOD Z-velocity
-            // Optional: Scale velocity like position if needed.
-
-            FMOD_ERROR_CHECK(FMOD_Channel_Set3DAttributes(sfx_channel, &pos, &vel));
-            // FMOD_Channel_SetMode is not strictly needed if the sound was created with FMOD_3D
-            // and played on a system initialized for 3D. FMOD_3D_WORLDRELATIVE is default.
+            if (origin) {
+                FMOD_Channel_Set3DAttributes(sfx_channel, &pos, &vel);
+            }
         }
-        else { // 2D Sound
-            // Convert pan (0-255, 128=center) to FMOD pan (-1.0 to 1.0)
+
+        if (!origin) {
             float fmod_pan = ((float)pan - 128.0f) / 128.0f;
-            if (fmod_pan < -1.0f) fmod_pan = -1.0f;
-            if (fmod_pan > 1.0f) fmod_pan = 1.0f;
-
-            FMOD_ERROR_CHECK(FMOD_Channel_SetPan(sfx_channel, fmod_pan));
-            // If the sound was created as FMOD_3D, explicitly set to 2D mode for this instance
-            FMOD_ERROR_CHECK(FMOD_Channel_SetMode(sfx_channel, FMOD_2D));
+            if (isnan(fmod_pan) || isinf(fmod_pan)) fmod_pan = 0.0f;
+            fmod_pan = (fmod_pan < -1.0f) ? -1.0f : (fmod_pan > 1.0f) ? 1.0f : fmod_pan;
+            FMOD_Channel_SetPan(sfx_channel, fmod_pan);
+            FMOD_Channel_SetMode(sfx_channel, FMOD_2D);
         }
 
-        FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sfx_channel, false)); // Unpause to start playback
+        FMOD_Channel_SetPaused(sfx_channel, false);
     }
-    else if (result != FMOD_OK) {
-        CON_Warnf("FMOD_StartSound: FMOD_System_PlaySound failed for sfx_id %d. Error: %s\n", sfx_id, FMOD_ErrorString(result));
-        return -1; // Error
+    else {
+        CON_Warnf("FMOD_StartSound: PlaySound OK but channel is NULL (sfx_id %d)\n", sfx_id);
+        return -1;
     }
-    // The original function returned sfx_id. If the game needs to track this specific channel instance
-    // (e.g., to stop it later), you would need to return 'sfx_channel' or an ID mapped to it.
-    // For fire-and-forget sounds, returning sfx_id or a simple success indicator is fine.
-    // The game's S_StartSound might map this return value to its own channel handling.
-    return sfx_id; // Or a game-specific channel handle, or simply 0 for success, -1 for failure.
+    return sfx_id;
 }
 
 // Not proud of it here but it is a necessary evil for now, to prevent cut-off between plasma fire and plasma ball boom
