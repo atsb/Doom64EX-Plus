@@ -1161,8 +1161,6 @@ void I_InitSequencer(void) {
 
     // Setup external tracks
 
-    FMOD_CreateMusicTracksInit();
-
     FMOD_CreateSfxTracksInit();
 
     //
