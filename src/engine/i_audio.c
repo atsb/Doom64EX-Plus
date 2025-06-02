@@ -1159,10 +1159,6 @@ void I_InitSequencer(void) {
     FMOD_ERROR_CHECK(FMOD_Sound_Set3DMinMaxDistance(sound.fmod_studio_sound[num_sfx], 0.5f * INCHES_PER_METER, 127.0f * INCHES_PER_METER));
     // Add similar lines for other sound sources if necessary
 
-    // Setup external tracks
-
-    FMOD_CreateSfxTracksInit();
-
     //
     // init mutex
     //
