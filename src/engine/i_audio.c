@@ -1391,6 +1391,7 @@ void I_ShutdownSound(void)
 
 void I_SetMusicVolume(float volume) {
     FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel_music, volume / 255.0f));
+    doomseq.musicvolume = (volume * 0.925f);
 }
 
 //
@@ -1563,6 +1564,17 @@ int FMOD_StartMusic(int mus_id) {
         if (isPlaying) {
             FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_music));
         }
+    }
+
+    if (isPlaying) {
+        // Ensure s_musvol.value is accessed safely if it's a pointer or requires a function call
+        float global_mus_vol = (s_musvol.value >= 0 && s_musvol.value <= 255) ? (float)s_musvol.value / 255.0f : 1.0f;
+        float final_volume = s_musvol.value * global_mus_vol;
+
+        if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f; // Default if calc is bad
+        if (final_volume < 0.0f) final_volume = 0.0f;
+
+        FMOD_Channel_SetVolume(sound.fmod_studio_channel_music, final_volume); // Error checked by caller via FMOD_ERROR_CHECK if return val is used
     }
 
     if (currentMidiSound) {
