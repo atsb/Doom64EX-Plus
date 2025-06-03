@@ -30,6 +30,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include <float.h>
 
 #ifndef _WIN32
 #include <sys/types.h>
@@ -53,8 +55,37 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "i_swap.h"
-#include "con_console.h"    // for cvars
+#include "con_console.h"
 #include "d_player.h"
+#include "doomstat.h"
+#include "tables.h"
+
+// Thresholds for distance checks in game units
+static const float GAME_SFX_MAX_UNITS_THRESHOLD = 2048.0f;
+static const float GAME_SFX_FORCED_FULL_VOL_UNITS_THRESHOLD = 64.0f;
+
+static float I_Audio_CalculateDistanceToListener(mobj_t* sound_origin_mobj) {
+    if (!sound_origin_mobj) {
+        return FLT_MAX; // Or some other indicator of invalid input
+    }
+
+    player_t* listener_player = &players[consoleplayer];
+    if (!listener_player || !listener_player->mo) {
+        // Listener data unavailable, treat as very far / unable to determine distance
+        return FLT_MAX;
+    }
+
+    mobj_t* listener_mobj = listener_player->mo;
+
+    float dx = (float)(sound_origin_mobj->x - listener_mobj->x) / FRACUNIT;
+    float dy_depth = (float)(sound_origin_mobj->y - listener_mobj->y) / FRACUNIT; // Doom Y is depth
+
+    fixed_t emitter_center_z = sound_origin_mobj->z + (sound_origin_mobj->height >> 1);
+    float dz_height = (float)(emitter_center_z - listener_player->viewz) / FRACUNIT; // Doom Z is height
+
+    // Calculate and return the distance. sqrtf is from math.h
+    return sqrtf(dx * dx + dy_depth * dy_depth + dz_height * dz_height);
+}
 
 // 20120203 villsa - cvar for soundfont location
 CVAR(s_soundfont, doomsnd.sf2);
@@ -719,15 +750,15 @@ static int Signal_StopAll(doomseq_t* seq) {
     channel_t* c;
     int i;
 
-        for (i = 0; i < MIDI_CHANNELS; i++) {
-            c = &playlist[i];
+    for (i = 0; i < MIDI_CHANNELS; i++) {
+        c = &playlist[i];
 
-            if (c->song) {
-                Chan_RemoveTrackFromPlaylist(seq, c);
-            }
+        if (c->song) {
+            Chan_RemoveTrackFromPlaylist(seq, c);
         }
+    }
 
-        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -751,11 +782,11 @@ static int Signal_Pause(doomseq_t* seq) {
     int i;
     channel_t* c;
 
-        for (i = 0; i < MIDI_CHANNELS; i++) {
-            c = &playlist[i];
+    for (i = 0; i < MIDI_CHANNELS; i++) {
+        c = &playlist[i];
     }
 
-        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -769,11 +800,11 @@ static int Signal_Resume(doomseq_t* seq) {
     int i;
     channel_t* c;
 
-        for (i = 0; i < MIDI_CHANNELS; i++) {
-            c = &playlist[i];
+    for (i = 0; i < MIDI_CHANNELS; i++) {
+        c = &playlist[i];
     }
 
-        Seq_SetStatus(seq, SEQ_SIGNAL_READY);
+    Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
 
@@ -860,7 +891,7 @@ static void Chan_RunSong(doomseq_t* seq, channel_t* chan, int msecs) {
     while (chan->state != CHAN_STATE_ENDED) {
         if (chan->song->type == 0) {
             chan->volume = chan->basevol;
-           //Chan_SetSoundVolume(seq, chan);
+            //Chan_SetSoundVolume(seq, chan);
         }
         else {
             //Chan_SetMusicVolume(seq, chan);
@@ -930,19 +961,19 @@ static void Seq_RunSong(doomseq_t* seq, int msecs) {
 
     seq->playtime = msecs;
 
-        for (i = 0; i < MIDI_CHANNELS; i++) {
-            chan = &playlist[i];
+    for (i = 0; i < MIDI_CHANNELS; i++) {
+        chan = &playlist[i];
 
-            if (!chan->song) {
-                continue;
-            }
+        if (!chan->song) {
+            continue;
+        }
 
-            if (chan->stop) {
-                Chan_RemoveTrackFromPlaylist(seq, chan);
-            }
-            else {
-                Chan_RunSong(seq, chan, msecs);
-            }
+        if (chan->stop) {
+            Chan_RemoveTrackFromPlaylist(seq, chan);
+        }
+        else {
+            Chan_RunSong(seq, chan, msecs);
+        }
     }
 }
 
@@ -1106,9 +1137,9 @@ static int Seq_RegisterSounds(void) {
         );
 
         if (result == FMOD_OK && sound.fmod_studio_sound[num_sfx]) {
-            float sfx_min_dist = 1.0f * INCHES_PER_METER;
-            float sfx_max_dist = 70.0f * INCHES_PER_METER;
-            FMOD_Sound_Set3DMinMaxDistance(sound.fmod_studio_sound[num_sfx], sfx_min_dist, sfx_max_dist);
+            float sfx_min_dist_scaled = GAME_SFX_FORCED_FULL_VOL_UNITS_THRESHOLD * INCHES_PER_METER;
+            float sfx_max_dist_scaled = GAME_SFX_MAX_UNITS_THRESHOLD * INCHES_PER_METER;
+            FMOD_Sound_Set3DMinMaxDistance(sound.fmod_studio_sound[num_sfx], sfx_min_dist_scaled, sfx_max_dist_scaled);
             success++;
         }
         else {
@@ -1458,6 +1489,34 @@ void I_SetGain(float db) {
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_SETGAIN);
 }
 
+//
+// I_UpdateListenerPosition
+//
+// Updates the 3D listener attributes for FMOD Studio based on player's position and orientation.
+//
+
+void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_depth, fixed_t player_eye_world_z_height, angle_t view_angle) {
+    if (!sound.fmod_studio_system) {
+        return;
+    }
+
+    FMOD_VECTOR listener_pos;
+    FMOD_VECTOR listener_vel = { 0.0f, 0.0f, 0.0f };
+    FMOD_VECTOR listener_forward;
+    FMOD_VECTOR listener_up = { 0.0f, 1.0f, 0.0f };
+
+    listener_pos.x = (float)player_world_x / FRACUNIT * INCHES_PER_METER;
+    listener_pos.y = (float)player_eye_world_z_height / FRACUNIT * INCHES_PER_METER;
+    listener_pos.z = (float)player_world_y_depth / FRACUNIT * INCHES_PER_METER;
+
+    listener_forward.x = (float)finecosine[view_angle >> ANGLETOFINESHIFT] / FRACUNIT;
+    listener_forward.z = (float)finesine[view_angle >> ANGLETOFINESHIFT] / FRACUNIT;
+    listener_forward.y = 0.0f;
+
+    FMOD_System_Set3DListenerAttributes(sound.fmod_studio_system, 0, &listener_pos, &listener_vel, &listener_forward, &listener_up);
+    FMOD_System_Update(sound.fmod_studio_system);
+}
+
 // FMOD Studio SFX API
 
 int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
@@ -1465,11 +1524,11 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
     FMOD_RESULT result;
 
     if (!seqready || !sound.fmod_studio_system) {
-        return -1; // Sound system not ready
+        return -1;
     }
 
     if (sfx_id < 0 || sfx_id >= num_sfx || !sound.fmod_studio_sound[sfx_id]) {
-        CON_Warnf("FMOD_StartSound: Invalid sfx_id %d or sound not loaded (num_sfx: %d).\n", sfx_id, num_sfx);
+        CON_Warnf("FMOD_StartSound: Invalid sfx_id %d or sound not loaded (num_sfx: %d)\n", sfx_id, num_sfx);
         return -1;
     }
 
@@ -1481,38 +1540,70 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
 
     if (sfx_channel) {
         float instance_vol = (float)volume / 255.0f;
-
-        // Ensure s_sfxvol.value is accessed safely if it's a pointer or requires a function call
         float global_sfx_vol = (s_sfxvol.value >= 0 && s_sfxvol.value <= 255) ? (float)s_sfxvol.value / 255.0f : 1.0f;
         float final_volume = instance_vol * global_sfx_vol;
-
-        if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f; // Default if calc is bad
+        if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f;
         if (final_volume < 0.0f) final_volume = 0.0f;
-
-        FMOD_Channel_SetVolume(sfx_channel, final_volume); // Error checked by caller via FMOD_ERROR_CHECK if return val is used
+        FMOD_Channel_SetVolume(sfx_channel, final_volume);
 
         if (origin) {
             mobj_t* mobj = (mobj_t*)origin;
-            FMOD_VECTOR pos = { 0.0f, 0.0f, 0.0f }, vel = { 0.0f, 0.0f, 0.0f };
+            FMOD_VECTOR pos, vel;
 
-            if (origin) {
-                FMOD_Channel_Set3DAttributes(sfx_channel, &pos, &vel);
-            }
+            pos.x = (float)mobj->x / FRACUNIT * INCHES_PER_METER;
+            pos.y = (float)mobj->z / FRACUNIT * INCHES_PER_METER;
+            pos.z = (float)mobj->y / FRACUNIT * INCHES_PER_METER;
+
+            vel.x = 0.0f; vel.y = 0.0f; vel.z = 0.0f;
+
+            FMOD_Channel_Set3DAttributes(sfx_channel, &pos, &vel);
+            FMOD_Channel_SetMode(sfx_channel, FMOD_3D_WORLDRELATIVE);
         }
-
-        if (!origin) {
+        else {
             float fmod_pan = ((float)pan - 128.0f) / 128.0f;
             if (isnan(fmod_pan) || isinf(fmod_pan)) fmod_pan = 0.0f;
             fmod_pan = (fmod_pan < -1.0f) ? -1.0f : (fmod_pan > 1.0f) ? 1.0f : fmod_pan;
             FMOD_Channel_SetPan(sfx_channel, fmod_pan);
             FMOD_Channel_SetMode(sfx_channel, FMOD_2D);
         }
-
         FMOD_Channel_SetPaused(sfx_channel, false);
     }
     else {
-        CON_Warnf("FMOD_StartSound: PlaySound OK but channel is NULL (sfx_id %d)\n", sfx_id);
+        CON_Warnf("FMOD_StartSound: PlaySound OK (default path) but channel is NULL (sfx_id %d)\n", sfx_id);
         return -1;
+    }
+
+    if (origin) {
+        float distance = I_Audio_CalculateDistanceToListener((mobj_t*)origin);
+
+        if (distance > GAME_SFX_MAX_UNITS_THRESHOLD) {
+            return -1;
+        }
+
+        if (distance <= GAME_SFX_FORCED_FULL_VOL_UNITS_THRESHOLD) {
+            result = FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound[sfx_id], sound.master, true, &sfx_channel);
+            if (result != FMOD_OK) {
+                FMOD_ERROR_CHECK(result);
+                return -1;
+            }
+            if (sfx_channel) {
+                float instance_vol = (float)volume / 255.0f;
+                float global_sfx_vol = (s_sfxvol.value >= 0 && s_sfxvol.value <= 255) ? (float)s_sfxvol.value / 255.0f : 1.0f;
+                float final_volume = instance_vol * global_sfx_vol;
+                if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f;
+                if (final_volume < 0.0f) final_volume = 0.0f;
+
+                FMOD_Channel_SetVolume(sfx_channel, final_volume);
+                FMOD_Channel_SetPan(sfx_channel, 0.0f);
+                FMOD_Channel_SetMode(sfx_channel, FMOD_2D);
+                FMOD_Channel_SetPaused(sfx_channel, false);
+                return sfx_id;
+            }
+            else {
+                CON_Warnf("FMOD_StartSound: PlaySound OK (2D override) but channel is NULL (sfx_id %d)\n", sfx_id);
+                return -1;
+            }
+        }
     }
     return sfx_id;
 }

@@ -49,21 +49,21 @@ typedef struct {
 
 // FMOD Studio
 struct Sound {
-    FMOD_SYSTEM*    fmod_studio_system;
-    FMOD_SYSTEM*    fmod_studio_system_music;
+    FMOD_SYSTEM* fmod_studio_system;
+    FMOD_SYSTEM* fmod_studio_system_music;
 
-    FMOD_SOUND*     fmod_studio_sound[93];
-    FMOD_SOUND*     fmod_studio_sound_plasma[93];
-    FMOD_SOUND*     fmod_studio_music[138];
+    FMOD_SOUND* fmod_studio_sound[93];
+    FMOD_SOUND* fmod_studio_sound_plasma[93];
+    FMOD_SOUND* fmod_studio_music[138];
 
-    FMOD_CHANNEL*   fmod_studio_channel;
-    FMOD_CHANNEL*   fmod_studio_channel_music;
-    FMOD_CHANNEL*   fmod_studio_channel_loop;
+    FMOD_CHANNEL* fmod_studio_channel;
+    FMOD_CHANNEL* fmod_studio_channel_music;
+    FMOD_CHANNEL* fmod_studio_channel_loop;
 
     FMOD_RESULT     fmod_studio_result;
 
-    FMOD_CHANNELGROUP*  master;
-    FMOD_CHANNELGROUP*  master_music;
+    FMOD_CHANNELGROUP* master;
+    FMOD_CHANNELGROUP* master_music;
 
     FMOD_VECTOR vec_position;
     FMOD_VECTOR vec_velocity;
@@ -114,5 +114,7 @@ void I_ResumeSound(void);
 void I_SetGain(float db);
 void I_StopSound(sndsrc_t* origin, int sfx_id);
 void I_StartMusic(int mus_id);
+
+void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_depth, fixed_t player_eye_world_z_height, angle_t view_angle);
 
 #endif // __I_AUDIO_H__
