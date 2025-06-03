@@ -1,6 +1,6 @@
-CC=gcc
+CC ?= gcc
 
-libs := sdl3 libpng gl glu fluidsynth
+libs := sdl3 libpng gl fluidsynth
 
 CFLAGS += $(foreach lib,$(libs),$(shell pkg-config --cflags $(lib)))
 LDFLAGS := -lm $(foreach lib,$(libs),$(shell pkg-config --libs $(lib)))

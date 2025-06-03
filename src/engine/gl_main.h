@@ -29,10 +29,6 @@
 #include <SDL3/SDL_opengl.h>
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#endif
-
 #include "doomtype.h"
 
 typedef GLuint        dtexture;
