@@ -11,6 +11,7 @@ https://flathub.org/apps/io.github.atsb.Doom64EX-Plus
 * Support for the IWAD from Nightdive Studios' official remaster.  Just so it is clear for everyone (NO IT DOES NOT SUPPORT THE OLD EX ROM DUMP IWAD).
 * Support for the Lost Levels campaign
 * Support for loading PWADs
+* FMOD Studio audio (no more fluidsynth!!!)
 * Better performance (especially when compared to Nightdive Studios' official version)
 * Messages for discovering secret areas
 * Support of MAP slots up to MAP40
@@ -55,7 +56,7 @@ For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' 
 * SDL3
 * ZLib
 * LibPNG
-* FluidSynth
+* FMOD Studio
 * OpenGL
 
 ## Installation
