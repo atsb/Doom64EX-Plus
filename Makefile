@@ -1,4 +1,4 @@
-CC=gcc
+CC ?= gcc
 
 libs := sdl3 libpng gl glu fluidsynth
 
