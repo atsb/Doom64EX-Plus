@@ -421,9 +421,6 @@ int M_CacheThumbNail(byte** data) {
 	buff = GL_GetScreenBuffer(0, 0, video_width, video_height);
 	tbn = Z_Calloc(SAVEGAMETBSIZE, PU_STATIC, 0);
 
-	//gluScaleImage(GL_RGB, video_width, video_height,
-	//             GL_UNSIGNED_BYTE, buff, 128, 128, GL_UNSIGNED_BYTE, tbn);
-
 	Z_Free(buff);
 
 	*data = tbn;
