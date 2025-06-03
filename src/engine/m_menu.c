@@ -3399,13 +3399,6 @@ static void M_SetCvar(cvar_t* cvar, float value) {
 		return;
 	}
 
-	if (prevtic != gametic) {
-		S_StartSound(NULL,
-			currentMenu->menuitems[itemOn].status == 3 ? sfx_secmove : sfx_switch2);
-
-		prevtic = gametic;
-	}
-
 	CON_CvarSetValue(cvar->name, value);
 }
 

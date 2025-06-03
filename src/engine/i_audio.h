@@ -59,6 +59,7 @@ struct Sound {
     FMOD_CHANNEL* fmod_studio_channel;
     FMOD_CHANNEL* fmod_studio_channel_music;
     FMOD_CHANNEL* fmod_studio_channel_loop;
+    FMOD_CHANNEL* fmod_studio_channel_plasma_loop;
 
     FMOD_RESULT     fmod_studio_result;
 
@@ -95,8 +96,10 @@ int FMOD_StartSoundPlasma(int sfx_id);
 void FMOD_StopSound(sndsrc_t* origin, int sfx_id);
 int FMOD_StartMusic(int mus_id);
 void FMOD_StopMusic(sndsrc_t* origin, int mus_id);
-int FMOD_StartSFXLoop(int sfx_id);
+int FMOD_StartSFXLoop(int sfx_id, int volume);
 int FMOD_StopSFXLoop(void);
+int FMOD_StartPlasmaLoop(int sfx_id, int volume);
+void FMOD_StopPlasmaLoop(void);
 void FMOD_PauseMusic(void);
 void FMOD_ResumeMusic(void);
 void FMOD_PauseSFXLoop(void);
@@ -115,6 +118,7 @@ void I_SetGain(float db);
 void I_StopSound(sndsrc_t* origin, int sfx_id);
 void I_StartMusic(int mus_id);
 
+// FMOD Studio Listener Update
 void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_depth, fixed_t player_eye_world_z_height, angle_t view_angle);
 
 #endif // __I_AUDIO_H__

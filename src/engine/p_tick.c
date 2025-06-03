@@ -317,7 +317,7 @@ void P_Stop(void) {
 	//
 	// [d64] stop plasma buzz
 	//
-	S_StopSound(NULL, sfx_electric);
+	S_StopPlasmaGunLoop();
 
 	for (i = 0; i < MAXPLAYERS; i++) {
 		// take away cards and stuff
