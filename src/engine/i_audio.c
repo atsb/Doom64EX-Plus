@@ -1252,8 +1252,7 @@ void I_InitSequencer(void) {
     char* sfpath;
     void* extradriverdata = 0;
 
-    I_Printf("\n--------Initializing FMOD Studio--------\n");
-    I_Printf("Made with FMOD Studio by Firelight Technologies Pty Ltd.\n\n");
+    I_Printf("Audio Engine: FMOD Studio by Firelight Technologies Pty Ltd.\n\n");
 
     FMOD_ERROR_CHECK(FMOD_System_SetDSPBufferSize(sound.fmod_studio_system, 1024, 128));
     FMOD_ERROR_CHECK(FMOD_System_SetDSPBufferSize(sound.fmod_studio_system_music, 1024, 128));
