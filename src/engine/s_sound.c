@@ -76,20 +76,20 @@ static boolean nosound = false;
 static boolean nomusic = false;
 static int lastmusic = 0;
 
-CVAR_CMD(s_sfxvol, 80)  {
-    if(cvar->value < 0.0f) {
+CVAR_CMD(s_sfxvol, 80) {
+    if (cvar->value < 0.0f) {
         return;
     }
     S_SetSoundVolume(cvar->value);
 }
-CVAR_CMD(s_musvol, 80)  {
-    if(cvar->value < 0.0f) {
+CVAR_CMD(s_musvol, 80) {
+    if (cvar->value < 0.0f) {
         return;
     }
     S_SetMusicVolume(cvar->value);
 }
-CVAR_CMD(s_gain, 1)     {
-    if(cvar->value < 0.0f) {
+CVAR_CMD(s_gain, 1) {
+    if (cvar->value < 0.0f) {
         return;
     }
     S_SetGainOutput(cvar->value);
@@ -108,17 +108,17 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep);
 //
 
 void S_Init(void) {
-    if(M_CheckParm("-nosound")) {
+    if (M_CheckParm("-nosound")) {
         nosound = true;
         CON_DPrintf("Sounds disabled\n");
     }
 
-    if(M_CheckParm("-nomusic")) {
+    if (M_CheckParm("-nomusic")) {
         nomusic = true;
         CON_DPrintf("Music disabled\n");
     }
 
-    if(nosound && nomusic) {
+    if (nosound && nomusic) {
         return;
     }
 
@@ -158,15 +158,15 @@ void S_SetGainOutput(float db) {
 //
 
 void S_StartMusic(int mnum) {
-    if(nomusic) {
+    if (nomusic) {
         return;
     }
 
-    if(mnum <= -1) {
+    if (mnum <= -1) {
         return;
     }
 
-    I_StartMusic(mnum);
+    FMOD_StartMusic(mnum);
     lastmusic = mnum;
 }
 
@@ -175,7 +175,7 @@ void S_StartMusic(int mnum) {
 //
 
 void S_StopMusic(void) {
-    I_StopSound(NULL, lastmusic);
+    FMOD_StopMusic(NULL, lastmusic);
     lastmusic = 0;
 }
 
@@ -186,7 +186,7 @@ void S_StopMusic(void) {
 void S_ResetSound(void) {
     int i;
 
-    if(nosound && nomusic) {
+    if (nosound && nomusic) {
         return;
     }
 
@@ -194,7 +194,7 @@ void S_ResetSound(void) {
 
     // villsa 12282013 - make sure we clear all sound sources
     // during level transition
-    for(i = 0; i < I_GetMaxChannels(); i++) {
+    for (i = 0; i < I_GetMaxChannels(); i++) {
         I_RemoveSoundSource(i);
     }
 }
@@ -204,7 +204,7 @@ void S_ResetSound(void) {
 //
 
 void S_PauseSound(void) {
-    if(nosound && nomusic) {
+    if (nosound && nomusic) {
         return;
     }
 
@@ -216,7 +216,7 @@ void S_PauseSound(void) {
 //
 
 void S_ResumeSound(void) {
-    if(nosound && nomusic) {
+    if (nosound && nomusic) {
         return;
     }
 
@@ -228,7 +228,53 @@ void S_ResumeSound(void) {
 //
 
 void S_StopSound(mobj_t* origin, int sfx_id) {
-    I_StopSound((sndsrc_t*)origin, sfx_id);
+    FMOD_StopSound((sndsrc_t*)origin, sfx_id);
+}
+
+//
+// S_StartLoopingSound
+// Function to start a dedicated looping sound effect
+//
+void S_StartLoopingSound(mobj_t* origin, int sfx_id, int volume) {
+    if (nosound) {
+        return;
+    }
+
+    FMOD_StartSFXLoop(sfx_id, volume);
+}
+
+//
+// S_StopLoopingSound
+// Function to stop the dedicated looping sound effect
+//
+void S_StopLoopingSound(void) {
+    if (nosound) {
+        return;
+    }
+    FMOD_StopSFXLoop();
+}
+
+//
+// S_StartPlasmaGunLoop
+// Function to start the dedicated plasma gun looping sound
+//
+void S_StartPlasmaGunLoop(mobj_t* origin, int sfx_id, int volume) {
+    if (nosound) {
+        return;
+    }
+
+    FMOD_StartPlasmaLoop(sfx_id, volume);
+}
+
+//
+// S_StopPlasmaGunLoop
+// Function to stop the dedicated plasma gun looping sound
+//
+void S_StopPlasmaGunLoop(void) {
+    if (nosound) {
+        return;
+    }
+    FMOD_StopPlasmaLoop();
 }
 
 //
@@ -250,9 +296,9 @@ void S_RemoveOrigin(mobj_t* origin) {
 
     channels = I_GetMaxChannels();
 
-    for(i = 0; i < channels; i++) {
+    for (i = 0; i < channels; i++) {
         source = (mobj_t*)I_GetSoundSource(i);
-        if(origin == source) {
+        if (origin == source) {
             I_RemoveSoundSource(i);
         }
     }
@@ -263,30 +309,27 @@ void S_RemoveOrigin(mobj_t* origin) {
 //
 
 void S_UpdateSounds(void) {
-    int     i;
-    int     audible;
-    int     volume;
-    int     sep;
+    int i;
+    int audible;
+    int volume;
+    int sep;
     mobj_t* source;
-    int     channels;
+    int channels;
 
     channels = I_GetMaxChannels();
 
-    for(i = 0; i < channels; i++) {
+    for (i = 0; i < channels; i++) {
         source = (mobj_t*)I_GetSoundSource(i);
 
-        if(source == NULL) {
+        if (source == NULL) {
             continue;
         }
 
-        // initialize parameters
         volume = NORM_VOLUME;
         sep = NORM_SEP;
 
-        // check non-local sounds for distance clipping
-        // or modify their params
-        if(source == players[consoleplayer].mo &&
-                players[consoleplayer].cameratarget == players[consoleplayer].mo) {
+        if (source == players[consoleplayer].mo &&
+            players[consoleplayer].cameratarget == players[consoleplayer].mo) {
             audible = 1;
             sep = NORM_SEP;
         }
@@ -294,8 +337,8 @@ void S_UpdateSounds(void) {
             audible = S_AdjustSoundParams(source->x, source->y, &volume, &sep);
         }
 
-        if(audible) {
-            I_UpdateChannel(i, volume, sep);
+        if (audible) {
+            I_UpdateChannel(i, volume, sep, source->x, source->y);
         }
     }
 }
@@ -309,12 +352,12 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
     int sep;
     int reverb;
 
-    if(nosound) {
+    if (nosound) {
         return;
     }
 
-    if(origin && origin != players[consoleplayer].cameratarget) {
-        if(!S_AdjustSoundParams(origin->x, origin->y, &volume, &sep)) {
+    if (origin && origin != players[consoleplayer].cameratarget) {
+        if (!S_AdjustSoundParams(origin->x, origin->y, &volume, &sep)) {
             return;
         }
     }
@@ -325,21 +368,63 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
 
     reverb = 0;
 
-    if(origin) {
+    if (origin) {
         subsector_t* subsector;
 
         subsector = R_PointInSubsector(origin->x, origin->y);
 
-        if(subsector->sector->flags & MS_REVERB) {
+        if (subsector->sector->flags & MS_REVERB) {
             reverb = 16;
         }
-        else if(subsector->sector->flags & MS_REVERBHEAVY) {
+        else if (subsector->sector->flags & MS_REVERBHEAVY) {
             reverb = 32;
         }
     }
 
     // Assigns the handle to one of the channels in the mix/output buffer.
-    I_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
+    FMOD_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
+}
+
+//
+// S_StartPlasmaSound
+//
+
+void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
+    int volume;
+    int sep;
+    int reverb;
+
+    if (nosound) {
+        return;
+    }
+
+    if (origin && origin != players[consoleplayer].cameratarget) {
+        if (!S_AdjustSoundParams(origin->x, origin->y, &volume, &sep)) {
+            return;
+        }
+    }
+    else {
+        sep = NORM_SEP;
+        volume = NORM_VOLUME;
+    }
+
+    reverb = 0;
+
+    if (origin) {
+        subsector_t* subsector;
+
+        subsector = R_PointInSubsector(origin->x, origin->y);
+
+        if (subsector->sector->flags & MS_REVERB) {
+            reverb = 16;
+        }
+        else if (subsector->sector->flags & MS_REVERBHEAVY) {
+            reverb = 32;
+        }
+    }
+
+    // Assigns the handle to one of the channels in the mix/output buffer.
+    S_StartPlasmaGunLoop(origin, sfx_id, volume);
 }
 
 //
@@ -352,50 +437,45 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
 //
 
 int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep) {
-    fixed_t     approx_dist;
-    angle_t     angle;
-    mobj_t*        listener;
-    player_t*    player;
+    fixed_t approx_dist;
+    angle_t angle;
+    mobj_t* listener;
+    player_t* player;
 
     player = &players[consoleplayer];
 
     listener = player->cameratarget;
 
-    // calculate the distance to sound origin
-    //  and clip it if necessary
-
-    // From _GG1_ p.428. Appox. eucledian distance fast.
     approx_dist = P_AproxDistance(listener->x - x, listener->y - y);
 
-    if(approx_dist > S_CLIPPING_DIST) {
+    if (approx_dist > S_CLIPPING_DIST) {
         return 0;
     }
 
-    if(listener->x != x || listener->y != y) {
-        // angle of source to listener
+    if (listener->x != x || listener->y != y) {
         angle = R_PointToAngle2(listener->x, listener->y, x, y);
 
-        if(angle <= listener->angle) {
+        if (angle <= listener->angle) {
             angle += 0xffffffff;
         }
         angle -= listener->angle;
 
-        // stereo separation
         *sep = (NORM_VOLUME + 1) - (FixedMul(S_STEREO_SWING, dsin(angle)) >> FRACBITS);
     }
     else {
         *sep = NORM_SEP;
     }
 
-    // volume calculation
-    if(approx_dist < S_CLOSE_DIST) {
+    if (approx_dist < S_CLOSE_DIST) {
         *vol = NORM_VOLUME;
     }
     else {
-        // distance effect
         approx_dist >>= FRACBITS;
         *vol = (((-approx_dist << 7) + (approx_dist)) + S_MAX_DIST) / S_ATTENUATOR;
     }
+
+    // Adjust the calculated volume and separation if necessary
+    // For example, you might want to remap the values to better fit FMOD's expectations.
 
     return (*vol > 0);
 }

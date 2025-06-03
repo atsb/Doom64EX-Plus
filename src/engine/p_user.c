@@ -42,6 +42,7 @@
 #include "sounds.h"
 #include "r_local.h"
 #include "st_stuff.h"
+#include "i_audio.h"
 
 //
 // Movement.
@@ -390,7 +391,7 @@ void P_DeathThink(player_t* player) {
 
     player->deltaviewheight = 0;
     player->onground = ((player->mo->floorz < player->mo->z &&
-        !(player->mo->blockflag& BF_MOBJSTAND)) ^ 1);
+        !(player->mo->blockflag & BF_MOBJSTAND)) ^ 1);
 
     P_CalcHeight(player);
 
@@ -464,8 +465,8 @@ void P_PlayerXYMovment(mobj_t* mo) {
         mo->momy = 0;
     }
     else {
-	mo->momx = (mo->momx>>8)*(FRICTION>>8);
-	mo->momy = (mo->momy>>8)*(FRICTION>>8);
+        mo->momx = (mo->momx >> 8) * (FRICTION >> 8);
+        mo->momy = (mo->momy >> 8) * (FRICTION >> 8);
     }
 }
 
@@ -525,7 +526,7 @@ void P_PlayerZMovement(mobj_t* mo) {
 void P_PlayerTic(mobj_t* mo) {
     state_t* st;
 
-    if(!mo->player) {
+    if (!mo->player) {
         return;
     }
     blockthing = NULL;
@@ -539,7 +540,7 @@ void P_PlayerTic(mobj_t* mo) {
     }
 
     mo->player->onground = ((mo->floorz < mo->z &&
-        !(mo->blockflag& BF_MOBJSTAND)) ^ 1);
+        !(mo->blockflag & BF_MOBJSTAND)) ^ 1);
 
     if ((mo->floorz != mo->z) || mo->momz || blockthing) {
         if (!P_OnMobjZ(mo)) {
@@ -552,13 +553,13 @@ void P_PlayerTic(mobj_t* mo) {
     }
 
     mo->tics--;
-    
+
     if (mo->tics > 0)
-	return;	/* not time to cycle yet */
+        return;	/* not time to cycle yet */
 
     if (!mo->tics) {
         st = &states[mo->state->nextstate];
-        
+
         mo->state = st;
         mo->tics = st->info_tics;
         mo->frame = st->info_frame;
@@ -618,6 +619,14 @@ void P_PlayerThink(player_t* player) {
     }
 
     P_CalcHeight(player);
+
+    // Update FMOD listener position for the console player
+    if (player == &players[consoleplayer]) {
+        // Ensure player->mo is valid before dereferencing
+        if (player->mo) {
+            I_UpdateListenerPosition(player->mo->x, player->mo->y, player->viewz, player->mo->angle);
+        }
+    }
 
     if (player->mo->subsector->sector->flags &
         (MS_SECRET |
@@ -761,7 +770,7 @@ void P_PlayerThink(player_t* player) {
 
     // [d64] - recoil pitch from weapons
     if (player->recoilpitch)
-    	player->recoilpitch = (((player->recoilpitch << 2) - player->recoilpitch) >> 2);
+        player->recoilpitch = (((player->recoilpitch << 2) - player->recoilpitch) >> 2);
 
     // [kex] check cvar for autoaim
     player->autoaim = (gameflags & GF_ALLOWAUTOAIM);

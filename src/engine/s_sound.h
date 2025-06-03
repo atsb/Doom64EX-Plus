@@ -53,7 +53,8 @@ void S_ResumeSound(void);
 //  using <sound_id> from sounds.h
 //
 void S_StartSound(mobj_t* origin, int sound_id);
-
+void S_StartPlasmaSound(mobj_t* origin, int sound_id);
+void S_StartPlasmaGunLoop(mobj_t* origin, int sfx_id, int volume);
 void S_UpdateSounds(void);
 void S_RemoveOrigin(mobj_t* origin);
 
@@ -62,9 +63,13 @@ void S_StartSoundAtVolume(mobj_t* origin, int sound_id, int volume);
 
 // Stop sound for thing at <origin>
 void S_StopSound(mobj_t* origin, int sfx_id);
+void S_StartLoopingSound(mobj_t* origin, int sfx_id, int volume);
+
+// Stop sound
+void S_StopLoopingSound(void);
+void S_StopPlasmaGunLoop(void);
 
 int S_GetActiveSounds(void);
-
 
 // Start music using <music_id> from sounds.h
 void S_StartMusic(int mnum);

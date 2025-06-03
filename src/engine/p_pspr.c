@@ -152,7 +152,7 @@ void P_BringUpWeapon(player_t* player) {
 		S_StartSound(player->mo, sfx_sawup);
 	}
 	else if (player->pendingweapon == wp_plasma) {
-		S_StartSound(player->mo, sfx_electric);
+		S_StartPlasmaSound(player->mo, sfx_electric);
 	}
 
 	newstate = weaponinfo[player->pendingweapon].upstate;
@@ -368,7 +368,7 @@ void A_Lower(player_t* player, pspdef_t* psp) {
 	// [d64] stop plasma buzz
 	//
 	if (player->readyweapon == wp_plasma) {
-		S_StopSound(NULL, sfx_electric);
+		S_StopPlasmaGunLoop();
 	}
 
 	/* */
