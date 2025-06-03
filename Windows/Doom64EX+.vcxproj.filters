@@ -94,8 +94,6 @@
     <ClCompile Include="..\src\engine\w_merge.c" />
     <ClCompile Include="..\src\engine\w_wad.c" />
     <ClCompile Include="..\src\engine\z_zone.c" />
-    <ClCompile Include="..\src\engine\i_fmod_sfx.c" />
-    <ClCompile Include="..\src\engine\i_fmod_music.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\deh_str.h" />

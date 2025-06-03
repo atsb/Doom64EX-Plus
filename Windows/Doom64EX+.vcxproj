@@ -114,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,8 +183,6 @@
     <ClCompile Include="..\src\engine\i_audio.c">
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="..\src\engine\i_fmod_music.c" />
-    <ClCompile Include="..\src\engine\i_fmod_sfx.c" />
     <ClCompile Include="..\src\engine\i_main.c" />
     <ClCompile Include="..\src\engine\i_png.c" />
     <ClCompile Include="..\src\engine\i_sdlinput.c" />
