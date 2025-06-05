@@ -78,9 +78,6 @@ struct Reverb {
     FMOD_REVERB3D* fmod_reverb;
 };
 
-struct Sound sound;
-struct Reverb reverb;
-
 int I_GetMaxChannels(void);
 int I_GetVoiceCount(void);
 sndsrc_t* I_GetSoundSource(int c);

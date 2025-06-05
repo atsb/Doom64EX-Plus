@@ -60,6 +60,9 @@
 #include "d_player.h"
 #include "tables.h"
 
+struct Sound sound;
+struct Reverb reverb;
+
 // Thresholds for distance checks in game units
 static const float GAME_SFX_MAX_UNITS_THRESHOLD = 1200.0f;
 static const float GAME_SFX_FORCED_FULL_VOL_UNITS_THRESHOLD = 400.0f;
@@ -137,7 +140,7 @@ float min_dist = 1.0f;
 float max_dist = 15.0f;
 
 FMOD_BOOL IsPlaying;
-FMOD_BOOL Paused = FALSE;
+FMOD_BOOL Paused = 0;
 
 //
 // Mutex
@@ -806,13 +809,6 @@ static int Signal_Resume(doomseq_t* seq) {
     return 1;
 }
 
-//
-// Signal_UpdateGain
-//
-static int Signal_UpdateGain(float db) {
-
-}
-
 static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
     Signal_Idle,
     Signal_Shutdown,
@@ -820,8 +816,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
     Signal_Reset,
     Signal_Pause,
     Signal_Resume,
-    Signal_StopAll,
-    Signal_UpdateGain
+    Signal_StopAll
 };
 
 //
@@ -1167,27 +1162,9 @@ static void Seq_Shutdown(doomseq_t* seq) {
     //
     Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
 
-#ifdef _WIN32
     //
     // Screw the shutdown, the OS will handle it :P
     //
-#else
-    //
-    // wait until the audio thread is finished
-    //
-    SDL_WaitThread(seq->thread, NULL);
-
-    //
-    // fluidsynth cleanup stuff
-    //
-    delete_fluid_audio_driver(seq->driver);
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
-#endif
 }
 
 //
@@ -1516,7 +1493,7 @@ void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_dep
 
 // FMOD Studio SFX API
 
-int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
+int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, float reverb_properties_reverb) {
     FMOD_CHANNEL* sfx_channel = NULL;
     FMOD_RESULT result;
 
@@ -1772,7 +1749,7 @@ int FMOD_StartMusic(int mus_id) {
             return mus_id;
         }
         else {
-            CON_Printf("FMOD_StartMusic: Failed to play pre-rendered track for mus_id %d.\n", mus_id);
+            CON_Printf(0, "FMOD_StartMusic: Failed to play pre-rendered track for mus_id %d.\n", mus_id);
             sound.fmod_studio_channel_music = NULL; // channel is null on failure
             return -1;
         }
@@ -1805,7 +1782,7 @@ int FMOD_StartMusic(int mus_id) {
                 return mus_id;
             }
             else {
-                CON_Printf("FMOD_StartMusic: Failed to play MIDI sound for mus_id %d after creation.\n", mus_id);
+                CON_Printf(0, "FMOD_StartMusic: Failed to play MIDI sound for mus_id %d after creation.\n", mus_id);
                 FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
                 currentMidiSound = NULL;
                 sound.fmod_studio_channel_music = NULL;
@@ -1813,7 +1790,7 @@ int FMOD_StartMusic(int mus_id) {
             }
         }
         else {
-            CON_Printf("FMOD_StartMusic: Failed to create MIDI sound for mus_id %d. Result: %d\n", mus_id, result);
+            CON_Printf(0, "FMOD_StartMusic: Failed to create MIDI sound for mus_id %d. Result: %d\n", mus_id, result);
             if (currentMidiSound) {
                 FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
                 currentMidiSound = NULL;
@@ -1823,13 +1800,13 @@ int FMOD_StartMusic(int mus_id) {
     }
     else {
         if (mus_id >= 0 && mus_id < MAX_FMOD_MUSIC_TRACKS && sound.fmod_studio_music[mus_id] == NULL) {
-            CON_Printf("FMOD_StartMusic: Pre-rendered track for mus_id %d is NULL (and not a MIDI).\n", mus_id);
+            CON_Printf(0, "FMOD_StartMusic: Pre-rendered track for mus_id %d is NULL (and not a MIDI).\n", mus_id);
         }
         else if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data == NULL) {
-            CON_Printf("FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
+            CON_Printf(0, "FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
         }
         else {
-            CON_Printf("FMOD_StartMusic: mus_id %d is out of bounds or invalid.\n", mus_id);
+            CON_Printf(0, "FMOD_StartMusic: mus_id %d is out of bounds or invalid.\n", mus_id);
         }
         return -1;
     }
