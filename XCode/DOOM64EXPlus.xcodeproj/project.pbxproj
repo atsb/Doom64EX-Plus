@@ -7,17 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A1E087C293263BF00FB6EB8 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD502930B1AC005B23CA /* libpng16.16.dylib */; };
-		2A1E087D293263BF00FB6EB8 /* libSDL2_net-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD4A2930B1AB005B23CA /* libSDL2_net-2.0.0.dylib */; };
-		2A1E087E293263BF00FB6EB8 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD462930B1AA005B23CA /* libSDL2-2.0.0.dylib */; };
-		2A1E0884293263D200FB6EB8 /* libSDL2-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A1E0885293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A1E0886293263D200FB6EB8 /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		2A1E08912932869900FB6EB8 /* libfluidlite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1E087F293263BF00FB6EB8 /* libfluidlite.a */; };
 		2A28028129E0652C00230288 /* deh_str.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027D29E0607E00230288 /* deh_str.c */; };
 		2A28028229E0652C00230288 /* deh_str.h in Sources */ = {isa = PBXBuildFile; fileRef = 2A28028029E0638800230288 /* deh_str.h */; };
-		2A28028329E0652C00230288 /* i_mac_audio.h in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027B29E05FAA00230288 /* i_mac_audio.h */; };
-		2A28028429E0652C00230288 /* i_mac_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027C29E05FAA00230288 /* i_mac_audio.c */; };
 		2A28028529E0652C00230288 /* net_structure.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027F29E0615900230288 /* net_structure.c */; };
 		2A28028629E0652C00230288 /* net_structure.h in Sources */ = {isa = PBXBuildFile; fileRef = 2A28027E29E0615900230288 /* net_structure.h */; };
 		2A44CD3E2930B13E005B23CA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3D2930B13E005B23CA /* CoreAudio.framework */; };
@@ -120,9 +111,12 @@
 		2A44CF4B2930B717005B23CA /* dgl.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEA2930B716005B23CA /* dgl.c */; };
 		2A44CF4C2930B717005B23CA /* r_sky.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEC2930B716005B23CA /* r_sky.c */; };
 		2A44CF4D2930B717005B23CA /* am_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEEE2930B717005B23CA /* am_draw.c */; };
-		2AB7DEC9293B9E1E009A3CA3 /* libz.1.2.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD512930B1AC005B23CA /* libz.1.2.13.dylib */; };
-		2AB7DECB293B9E2E009A3CA3 /* libz.1.2.13.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		2AB7DECE293BD848009A3CA3 /* i_sdlinput.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AB7DECD293BD825009A3CA3 /* i_sdlinput.c */; };
+		2AF38ECC2DF1F51D00663723 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF38EC92DF1F51D00663723 /* libpng16.16.dylib */; };
+		2AF38ECD2DF1F51D00663723 /* libSDL3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF38ECA2DF1F51D00663723 /* libSDL3.0.dylib */; };
+		2AF38ECE2DF1F51D00663723 /* libz.1.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF38ECB2DF1F51D00663723 /* libz.1.3.1.dylib */; };
+		2AF38ED02DF1F5B200663723 /* libfmod.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF38ECF2DF1F5B200663723 /* libfmod.dylib */; };
+		2AF38ED32DF2155600663723 /* i_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 2AF38ED22DF2155600663723 /* i_audio.c */; };
 		AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5A81D21A8DAEB600AF539F /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -133,51 +127,18 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				2AB7DECB293B9E2E009A3CA3 /* libz.1.2.13.dylib in CopyFiles */,
-				2A1E0884293263D200FB6EB8 /* libSDL2-2.0.0.dylib in CopyFiles */,
-				2A1E0885293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib in CopyFiles */,
-				2A1E0886293263D200FB6EB8 /* libpng16.16.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2A1E086E2932604C00FB6EB8 /* libfluidlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfluidlite.a; path = ../src/engine/3rdparty/Libs/macOS/libfluidlite.a; sourceTree = "<group>"; };
-		2A1E0870293260A200FB6EB8 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../src/engine/3rdparty/Libs/macOS/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A1E0871293260A200FB6EB8 /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "../src/engine/3rdparty/Libs/macOS/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A1E0872293260A200FB6EB8 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = ../src/engine/3rdparty/Libs/macOS/libpng16.16.dylib; sourceTree = "<group>"; };
-		2A1E087F293263BF00FB6EB8 /* libfluidlite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfluidlite.a; path = Libs/libfluidlite.a; sourceTree = "<group>"; };
-		2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "Libs/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "Libs/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = Libs/libpng16.16.dylib; sourceTree = "<group>"; };
-		2A28027B29E05FAA00230288 /* i_mac_audio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_mac_audio.h; path = ../src/engine/i_mac_audio.h; sourceTree = "<group>"; };
-		2A28027C29E05FAA00230288 /* i_mac_audio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_mac_audio.c; path = ../src/engine/i_mac_audio.c; sourceTree = "<group>"; };
 		2A28027D29E0607E00230288 /* deh_str.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = deh_str.c; path = ../src/engine/deh_str.c; sourceTree = "<group>"; };
 		2A28027E29E0615900230288 /* net_structure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = net_structure.h; path = ../src/engine/net_structure.h; sourceTree = "<group>"; };
 		2A28027F29E0615900230288 /* net_structure.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = net_structure.c; path = ../src/engine/net_structure.c; sourceTree = "<group>"; };
 		2A28028029E0638800230288 /* deh_str.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = deh_str.h; path = ../src/engine/deh_str.h; sourceTree = "<group>"; };
 		2A44CD3D2930B13E005B23CA /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		2A44CD3F2930B145005B23CA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		2A44CD412930B1A9005B23CA /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = Libs/libvorbisfile.3.dylib; sourceTree = "<group>"; };
-		2A44CD422930B1A9005B23CA /* libFLAC.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libFLAC.8.dylib; path = Libs/libFLAC.8.dylib; sourceTree = "<group>"; };
-		2A44CD432930B1AA005B23CA /* libreadline.8.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.8.1.dylib; path = Libs/libreadline.8.1.dylib; sourceTree = "<group>"; };
-		2A44CD442930B1AA005B23CA /* libopus.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopus.0.dylib; path = Libs/libopus.0.dylib; sourceTree = "<group>"; };
-		2A44CD452930B1AA005B23CA /* libfluidsynth.3.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfluidsynth.3.1.1.dylib; path = Libs/libfluidsynth.3.1.1.dylib; sourceTree = "<group>"; };
-		2A44CD462930B1AA005B23CA /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "Libs/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CD472930B1AA005B23CA /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libintl.8.dylib; path = Libs/libintl.8.dylib; sourceTree = "<group>"; };
-		2A44CD482930B1AA005B23CA /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcre.1.dylib; path = Libs/libpcre.1.dylib; sourceTree = "<group>"; };
-		2A44CD492930B1AB005B23CA /* libncurses.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libncurses.6.dylib; path = Libs/libncurses.6.dylib; sourceTree = "<group>"; };
-		2A44CD4A2930B1AB005B23CA /* libSDL2_net-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2_net-2.0.0.dylib"; path = "Libs/libSDL2_net-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CD4B2930B1AB005B23CA /* libvorbisenc.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisenc.2.dylib; path = Libs/libvorbisenc.2.dylib; sourceTree = "<group>"; };
-		2A44CD4C2930B1AB005B23CA /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = Libs/libvorbis.0.dylib; sourceTree = "<group>"; };
-		2A44CD4D2930B1AB005B23CA /* libgthread-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libgthread-2.0.0.dylib"; path = "Libs/libgthread-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CD4E2930B1AB005B23CA /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = Libs/libogg.0.dylib; sourceTree = "<group>"; };
-		2A44CD4F2930B1AB005B23CA /* libsndfile.1.0.34.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsndfile.1.0.34.dylib; path = Libs/libsndfile.1.0.34.dylib; sourceTree = "<group>"; };
-		2A44CD502930B1AC005B23CA /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = Libs/libpng16.16.dylib; sourceTree = "<group>"; };
-		2A44CD512930B1AC005B23CA /* libz.1.2.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.13.dylib; path = Libs/libz.1.2.13.dylib; sourceTree = "<group>"; };
-		2A44CD522930B1AC005B23CA /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libglib-2.0.0.dylib"; path = "Libs/libglib-2.0.0.dylib"; sourceTree = "<group>"; };
-		2A44CD532930B1AC005B23CA /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = Libs/libiconv.2.dylib; sourceTree = "<group>"; };
 		2A44CE212930B56F005B23CA /* doom64ex-plus.wad */ = {isa = PBXFileReference; lastKnownFileType = file; name = "doom64ex-plus.wad"; path = "../doom64ex-plus.wad"; sourceTree = "<group>"; };
 		2A44CE222930B56F005B23CA /* doomsnd.sf2 */ = {isa = PBXFileReference; lastKnownFileType = file; name = doomsnd.sf2; path = ../doomsnd.sf2; sourceTree = "<group>"; };
 		2A44CE232930B56F005B23CA /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; name = AUTHORS; path = ../AUTHORS; sourceTree = "<group>"; };
@@ -366,9 +327,14 @@
 		2A44CEEE2930B717005B23CA /* am_draw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = am_draw.c; path = ../src/engine/am_draw.c; sourceTree = "<group>"; };
 		2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = doom64explus.entitlements; sourceTree = "<group>"; };
 		2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DOOM64EX--Info.plist"; sourceTree = "<group>"; };
-		2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.13.dylib; path = Libs/libz.1.2.13.dylib; sourceTree = "<group>"; };
 		2AB7DECC293BD825009A3CA3 /* i_sdlinput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_sdlinput.h; path = ../src/engine/i_sdlinput.h; sourceTree = "<group>"; };
 		2AB7DECD293BD825009A3CA3 /* i_sdlinput.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_sdlinput.c; path = ../src/engine/i_sdlinput.c; sourceTree = "<group>"; };
+		2AF38EC92DF1F51D00663723 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpng16.16.dylib; sourceTree = "<group>"; };
+		2AF38ECA2DF1F51D00663723 /* libSDL3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libSDL3.0.dylib; sourceTree = "<group>"; };
+		2AF38ECB2DF1F51D00663723 /* libz.1.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libz.1.3.1.dylib; sourceTree = "<group>"; };
+		2AF38ECF2DF1F5B200663723 /* libfmod.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libfmod.dylib; sourceTree = "<group>"; };
+		2AF38ED12DF2155600663723 /* i_audio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_audio.h; path = ../src/engine/i_audio.h; sourceTree = SOURCE_ROOT; };
+		2AF38ED22DF2155600663723 /* i_audio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_audio.c; path = ../src/engine/i_audio.c; sourceTree = SOURCE_ROOT; };
 		AB5A80C21A8DABE100AF539F /* DOOM64EXPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOOM64EXPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5A81D21A8DAEB600AF539F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -378,14 +344,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AB7DEC9293B9E1E009A3CA3 /* libz.1.2.13.dylib in Frameworks */,
-				2A1E08912932869900FB6EB8 /* libfluidlite.a in Frameworks */,
-				2A1E087C293263BF00FB6EB8 /* libpng16.16.dylib in Frameworks */,
-				2A1E087D293263BF00FB6EB8 /* libSDL2_net-2.0.0.dylib in Frameworks */,
-				2A1E087E293263BF00FB6EB8 /* libSDL2-2.0.0.dylib in Frameworks */,
 				2A44CD402930B145005B23CA /* OpenGL.framework in Frameworks */,
 				2A44CD3E2930B13E005B23CA /* CoreAudio.framework in Frameworks */,
 				AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */,
+				2AF38ECC2DF1F51D00663723 /* libpng16.16.dylib in Frameworks */,
+				2AF38ECD2DF1F51D00663723 /* libSDL3.0.dylib in Frameworks */,
+				2AF38ED02DF1F5B200663723 /* libfmod.dylib in Frameworks */,
+				2AF38ECE2DF1F51D00663723 /* libz.1.3.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,30 +360,6 @@
 		9F385F2F1C29BFA400BD4F2B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2A1E087F293263BF00FB6EB8 /* libfluidlite.a */,
-				2A1E0872293260A200FB6EB8 /* libpng16.16.dylib */,
-				2A1E0871293260A200FB6EB8 /* libSDL2_net-2.0.0.dylib */,
-				2A1E0870293260A200FB6EB8 /* libSDL2-2.0.0.dylib */,
-				2A1E086E2932604C00FB6EB8 /* libfluidlite.a */,
-				2A44CD422930B1A9005B23CA /* libFLAC.8.dylib */,
-				2A44CD452930B1AA005B23CA /* libfluidsynth.3.1.1.dylib */,
-				2A44CD522930B1AC005B23CA /* libglib-2.0.0.dylib */,
-				2A44CD4D2930B1AB005B23CA /* libgthread-2.0.0.dylib */,
-				2A44CD532930B1AC005B23CA /* libiconv.2.dylib */,
-				2A44CD472930B1AA005B23CA /* libintl.8.dylib */,
-				2A44CD492930B1AB005B23CA /* libncurses.6.dylib */,
-				2A44CD4E2930B1AB005B23CA /* libogg.0.dylib */,
-				2A44CD442930B1AA005B23CA /* libopus.0.dylib */,
-				2A44CD482930B1AA005B23CA /* libpcre.1.dylib */,
-				2A44CD502930B1AC005B23CA /* libpng16.16.dylib */,
-				2A44CD432930B1AA005B23CA /* libreadline.8.1.dylib */,
-				2A44CD4A2930B1AB005B23CA /* libSDL2_net-2.0.0.dylib */,
-				2A44CD462930B1AA005B23CA /* libSDL2-2.0.0.dylib */,
-				2A44CD4F2930B1AB005B23CA /* libsndfile.1.0.34.dylib */,
-				2A44CD4C2930B1AB005B23CA /* libvorbis.0.dylib */,
-				2A44CD4B2930B1AB005B23CA /* libvorbisenc.2.dylib */,
-				2A44CD412930B1A9005B23CA /* libvorbisfile.3.dylib */,
-				2A44CD512930B1AC005B23CA /* libz.1.2.13.dylib */,
 				2A44CD3F2930B145005B23CA /* OpenGL.framework */,
 				2A44CD3D2930B13E005B23CA /* CoreAudio.framework */,
 				AB5A81D21A8DAEB600AF539F /* Cocoa.framework */,
@@ -444,14 +385,16 @@
 		AB5A80B91A8DABE100AF539F = {
 			isa = PBXGroup;
 			children = (
+				2AF38ECF2DF1F5B200663723 /* libfmod.dylib */,
+				2AF38EC92DF1F51D00663723 /* libpng16.16.dylib */,
+				2AF38ECA2DF1F51D00663723 /* libSDL3.0.dylib */,
+				2AF38ECB2DF1F51D00663723 /* libz.1.3.1.dylib */,
 				2AB7DECD293BD825009A3CA3 /* i_sdlinput.c */,
 				2AB7DECC293BD825009A3CA3 /* i_sdlinput.h */,
-				2AB7DECA293B9E2E009A3CA3 /* libz.1.2.13.dylib */,
-				2A1E0883293263D200FB6EB8 /* libpng16.16.dylib */,
-				2A1E0882293263D200FB6EB8 /* libSDL2_net-2.0.0.dylib */,
-				2A1E0881293263D200FB6EB8 /* libSDL2-2.0.0.dylib */,
 				2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */,
 				2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */,
+				2AF38ED12DF2155600663723 /* i_audio.h */,
+				2AF38ED22DF2155600663723 /* i_audio.c */,
 				2A44CEEE2930B717005B23CA /* am_draw.c */,
 				2A44CEBA2930B70F005B23CA /* am_draw.h */,
 				2A44CE442930B707005B23CA /* am_map.c */,
@@ -513,8 +456,6 @@
 				2A44CEC72930B710005B23CA /* gl_main.h */,
 				2A44CEDE2930B713005B23CA /* gl_texture.c */,
 				2A44CE9F2930B70E005B23CA /* gl_texture.h */,
-				2A28027B29E05FAA00230288 /* i_mac_audio.h */,
-				2A28027C29E05FAA00230288 /* i_mac_audio.c */,
 				2A44CE3A2930B706005B23CA /* i_main.c */,
 				2A44CEAA2930B70E005B23CA /* i_opndir.c */,
 				2A44CE7B2930B70B005B23CA /* i_opndir.h */,
@@ -729,8 +670,6 @@
 			files = (
 				2A28028129E0652C00230288 /* deh_str.c in Sources */,
 				2A28028229E0652C00230288 /* deh_str.h in Sources */,
-				2A28028329E0652C00230288 /* i_mac_audio.h in Sources */,
-				2A28028429E0652C00230288 /* i_mac_audio.c in Sources */,
 				2A28028529E0652C00230288 /* net_structure.c in Sources */,
 				2A28028629E0652C00230288 /* net_structure.h in Sources */,
 				2AB7DECE293BD848009A3CA3 /* i_sdlinput.c in Sources */,
@@ -749,6 +688,7 @@
 				2A44CF192930B717005B23CA /* deh_frame.c in Sources */,
 				2A44CF282930B717005B23CA /* deh_doom.c in Sources */,
 				2A44CF482930B717005B23CA /* g_demo.c in Sources */,
+				2AF38ED32DF2155600663723 /* i_audio.c in Sources */,
 				2A44CEFF2930B717005B23CA /* tables.c in Sources */,
 				2A44CF042930B717005B23CA /* m_password.c in Sources */,
 				2A44CF1C2930B717005B23CA /* net_server.c in Sources */,
@@ -966,9 +906,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = SDL20;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/SDL2.framework/Headers",
-					"$(PROJECT_DIR)/SDL2_mixer.framework/Headers",
-					"$(PROJECT_DIR)/SDL2_image.framework/Headers",
+					"\"/Applications/FMOD Programmers API/api/core/inc\"",
+					/opt/local/include/SDL3,
 				);
 				INFOPLIST_FILE = "DOOM64EX--Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
@@ -978,8 +917,9 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					./Libs,
-					"$(PROJECT_DIR)/Libs",
+					/opt/local/lib,
+					"\"/Applications/FMOD Programmers API/api/core/inc\"",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.6.5.1;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1011,9 +951,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = SDL20;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/SDL2.framework/Headers",
-					"$(PROJECT_DIR)/SDL2_mixer.framework/Headers",
-					"$(PROJECT_DIR)/SDL2_image.framework/Headers",
+					"\"/Applications/FMOD Programmers API/api/core/inc\"",
+					/opt/local/include/SDL3,
 				);
 				INFOPLIST_FILE = "DOOM64EX--Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
@@ -1023,8 +962,9 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					./Libs,
-					"$(PROJECT_DIR)/Libs",
+					/opt/local/lib,
+					"\"/Applications/FMOD Programmers API/api/core/inc\"",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.6.5.1;
 				ONLY_ACTIVE_ARCH = YES;

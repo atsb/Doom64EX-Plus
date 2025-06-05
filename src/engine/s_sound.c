@@ -43,12 +43,10 @@
 #include "m_misc.h"
 #include "p_setup.h"
 #include "con_console.h"
-
-#ifdef __APPLE__
-#include "i_mac_audio.h"
-#else
 #include "i_audio.h"
-#endif
+
+extern struct Sound sound;
+extern struct Reverb fmod_reverb;
 
 // Adjustable by menu.
 #define NORM_VOLUME     127
@@ -350,7 +348,7 @@ void S_UpdateSounds(void) {
 void S_StartSound(mobj_t* origin, int sfx_id) {
     int volume;
     int sep;
-    int reverb;
+    int reverb_sound;
 
     if (nosound) {
         return;
@@ -366,7 +364,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         volume = NORM_VOLUME;
     }
 
-    reverb = 0;
+    reverb_sound = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -374,15 +372,15 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         subsector = R_PointInSubsector(origin->x, origin->y);
 
         if (subsector->sector->flags & MS_REVERB) {
-            reverb = 16;
+            reverb_sound = 16;
         }
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
-            reverb = 32;
+            reverb_sound = 32;
         }
     }
 
     // Assigns the handle to one of the channels in the mix/output buffer.
-    FMOD_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep, reverb);
+    FMOD_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep);
 }
 
 //
@@ -392,7 +390,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
 void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
     int volume;
     int sep;
-    int reverb;
+    int reverb_plasma;
 
     if (nosound) {
         return;
@@ -408,7 +406,7 @@ void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
         volume = NORM_VOLUME;
     }
 
-    reverb = 0;
+    reverb_plasma = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -416,10 +414,10 @@ void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
         subsector = R_PointInSubsector(origin->x, origin->y);
 
         if (subsector->sector->flags & MS_REVERB) {
-            reverb = 16;
+            reverb_plasma = 16;
         }
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
-            reverb = 32;
+            reverb_plasma = 32;
         }
     }
 
@@ -485,14 +483,12 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep) {
 // S_RegisterCvars
 //
 
-CVAR_EXTERNAL(s_soundfont);
 CVAR_EXTERNAL(s_driver);
 
 void S_RegisterCvars(void) {
     CON_CvarRegister(&s_sfxvol);
     CON_CvarRegister(&s_musvol);
     CON_CvarRegister(&s_gain);
-    CON_CvarRegister(&s_soundfont);
     CON_CvarRegister(&s_driver);
 }
 

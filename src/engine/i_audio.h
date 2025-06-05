@@ -25,6 +25,7 @@
 
 #include <fmod.h>
 #include <fmod_common.h>
+#include <fmod_errors.h>
 #include "m_fixed.h"
 
 // 20120107 bkw: Linux users can change the default FluidSynth backend here:
@@ -78,9 +79,6 @@ struct Reverb {
     FMOD_REVERB3D* fmod_reverb;
 };
 
-struct Sound sound;
-struct Reverb reverb;
-
 int I_GetMaxChannels(void);
 int I_GetVoiceCount(void);
 sndsrc_t* I_GetSoundSource(int c);
@@ -91,7 +89,7 @@ void Seq_SetGain(float db);
 
 void FMOD_CreateMusicTracksInit(void);
 void FMOD_CreateSfxTracksInit(void);
-int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan, float properties_reverb);
+int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan);
 int FMOD_StartSoundPlasma(int sfx_id);
 void FMOD_StopSound(sndsrc_t* origin, int sfx_id);
 int FMOD_StartMusic(int mus_id);

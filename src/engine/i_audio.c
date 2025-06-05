@@ -45,9 +45,6 @@
 #include <SDL3/SDL.h>
 #endif
 
-#include <fmod.h>
-#include <fmod_errors.h>
-
 #include "doomtype.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -86,7 +83,6 @@ static float I_Audio_CalculateDistanceToListener(mobj_t* sound_origin_mobj) {
 }
 
 // 20120203 villsa - cvar for soundfont location
-CVAR(s_soundfont, doomsnd.sf2);
 CVAR_EXTERNAL(s_sfxvol);
 CVAR_EXTERNAL(s_musvol);
 static FMOD_SOUND* currentMidiSound = NULL;
@@ -124,6 +120,9 @@ CVAR_CMD(s_driver, sndio)
     CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
 }
 
+struct Sound sound;
+struct Reverb fmod_reverb;
+
 #define MAX_GAME_SFX 256
 
 // FMOD Studio
@@ -137,7 +136,7 @@ float min_dist = 1.0f;
 float max_dist = 15.0f;
 
 FMOD_BOOL IsPlaying;
-FMOD_BOOL Paused = FALSE;
+FMOD_BOOL Paused = false;
 
 //
 // Mutex
@@ -806,13 +805,6 @@ static int Signal_Resume(doomseq_t* seq) {
     return 1;
 }
 
-//
-// Signal_UpdateGain
-//
-static int Signal_UpdateGain(float db) {
-
-}
-
 static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
     Signal_Idle,
     Signal_Shutdown,
@@ -820,8 +812,7 @@ static const signalhandler seqsignallist[MAXSIGNALTYPES] = {
     Signal_Reset,
     Signal_Pause,
     Signal_Resume,
-    Signal_StopAll,
-    Signal_UpdateGain
+    Signal_StopAll
 };
 
 //
@@ -1166,28 +1157,7 @@ static void Seq_Shutdown(doomseq_t* seq) {
     // signal the sequencer to shut down
     //
     Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
-
-#ifdef _WIN32
-    //
-    // Screw the shutdown, the OS will handle it :P
-    //
-#else
-    //
-    // wait until the audio thread is finished
-    //
     SDL_WaitThread(seq->thread, NULL);
-
-    //
-    // fluidsynth cleanup stuff
-    //
-    delete_fluid_audio_driver(seq->driver);
-    delete_fluid_synth(seq->synth);
-    delete_fluid_settings(seq->settings);
-
-    seq->synth = NULL;
-    seq->driver = NULL;
-    seq->settings = NULL;
-#endif
 }
 
 //
@@ -1262,8 +1232,6 @@ void I_InitSequencer(void) {
 
     FMOD_ERROR_CHECK(FMOD_System_Init(sound.fmod_studio_system, 92, FMOD_INIT_3D_RIGHTHANDED | FMOD_INIT_PROFILE_ENABLE, NULL));
     FMOD_ERROR_CHECK(FMOD_System_Init(sound.fmod_studio_system_music, 128, FMOD_INIT_NORMAL, NULL));
-
-    //FMOD_ERROR_CHECK(FMOD_System_CreateReverb3D(sound.fmod_studio_system, reverb.fmod_reverb));
 
     FMOD_ERROR_CHECK(FMOD_System_GetMasterChannelGroup(sound.fmod_studio_system, &sound.master));
     FMOD_ERROR_CHECK(FMOD_System_GetMasterChannelGroup(sound.fmod_studio_system_music, &sound.master_music));

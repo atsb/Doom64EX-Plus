@@ -38,9 +38,9 @@
 
 #define SDL_MAIN_HANDLED
 #ifdef __OpenBSD__
-#include <SDL3/SDL.h>
+#include <SDL.h>
 #else
-#include <SDL3/SDL.h> // Gibbon - for *
+#include <SDL.h> // Gibbon - for *
 #endif
 
 #define CONSOLE_PROMPTCHAR      '>'

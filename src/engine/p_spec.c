@@ -56,9 +56,9 @@
 #include "p_setup.h"
 
 #ifdef __OpenBSD__
-#include <SDL3/SDL.h>
+#include <SDL.h>
 #else
-#include <SDL3/SDL.h>
+#include <SDL.h>
 #endif
 
 short globalint = 0;

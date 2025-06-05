@@ -24,9 +24,9 @@
 #define __GL_MAIN_H__
 
 #ifdef __OpenBSD__
-#include <SDL3/SDL_opengl.h>
+#include <SDL_opengl.h>
 #else
-#include <SDL3/SDL_opengl.h>
+#include <SDL_opengl.h>
 #endif
 
 #include "doomtype.h"

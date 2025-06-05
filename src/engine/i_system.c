@@ -26,9 +26,9 @@
 //-----------------------------------------------------------------------------
 
 #ifdef __OpenBSD__
-#include <SDL3/SDL_timer.h>
+#include <SDL_timer.h>
 #else
-#include <SDL3/SDL_timer.h>
+#include <SDL_timer.h>
 #endif
 
 #include <stdlib.h>
@@ -61,11 +61,7 @@
 #include "gl_draw.h"
 #include "i_xinput.h"
 
-#ifdef __APPLE__
-#include "i_mac_audio.h"
-#else
-#include "i_audio.h"
-#endif
+extern void I_ShutdownSound(void);
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_accessibility, 0);

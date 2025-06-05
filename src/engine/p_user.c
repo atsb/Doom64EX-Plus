@@ -42,7 +42,6 @@
 #include "sounds.h"
 #include "r_local.h"
 #include "st_stuff.h"
-#include "i_audio.h"
 
 //
 // Movement.
@@ -73,6 +72,7 @@ static char* mockstrings[MAXMOCKTEXT] = {
     MOCKPLAYER13
 };
 
+extern void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_depth, fixed_t player_eye_world_z_height, angle_t view_angle);
 
 //
 // P_Thrust
