@@ -48,14 +48,19 @@ typedef struct {
     fixed_t z;
 } sndsrc_t;
 
+
 // FMOD Studio
+
+#define MAX_GAME_SFX 93
+#define MAX_FMOD_MUSIC_TRACKS 138
+
 struct Sound {
     FMOD_SYSTEM* fmod_studio_system;
     FMOD_SYSTEM* fmod_studio_system_music;
 
-    FMOD_SOUND* fmod_studio_sound[93];
-    FMOD_SOUND* fmod_studio_sound_plasma[93];
-    FMOD_SOUND* fmod_studio_music[138];
+    FMOD_SOUND* fmod_studio_sound[MAX_GAME_SFX];
+    //FMOD_SOUND* fmod_studio_sound_plasma[MAX_GAME_SFX];
+    FMOD_SOUND* fmod_studio_music[MAX_FMOD_MUSIC_TRACKS];
 
     FMOD_CHANNEL* fmod_studio_channel;
     FMOD_CHANNEL* fmod_studio_channel_music;
