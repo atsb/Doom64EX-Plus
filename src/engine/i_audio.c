@@ -309,7 +309,7 @@ typedef int(*signalhandler)(doomseq_t*);
 
 static void FMOD_ERROR_CHECK(FMOD_RESULT result) {
     if (result != FMOD_OK) {
-        printf("FMOD Studio: %s", FMOD_ErrorString(result));
+        printf("FMOD Studio: %s\n", FMOD_ErrorString(result));
     }
 }
 
@@ -1740,7 +1740,7 @@ int FMOD_StartMusic(int mus_id) {
             return mus_id;
         }
         else {
-            CON_Printf("FMOD_StartMusic: Failed to play pre-rendered track for mus_id %d.\n", mus_id);
+            CON_Warnf("FMOD_StartMusic: Failed to play pre-rendered track for mus_id %d.\n", mus_id);
             sound.fmod_studio_channel_music = NULL; // channel is null on failure
             return -1;
         }
@@ -1773,7 +1773,7 @@ int FMOD_StartMusic(int mus_id) {
                 return mus_id;
             }
             else {
-                CON_Printf("FMOD_StartMusic: Failed to play MIDI sound for mus_id %d after creation.\n", mus_id);
+                CON_Warnf("FMOD_StartMusic: Failed to play MIDI sound for mus_id %d after creation.\n", mus_id);
                 FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
                 currentMidiSound = NULL;
                 sound.fmod_studio_channel_music = NULL;
@@ -1781,7 +1781,7 @@ int FMOD_StartMusic(int mus_id) {
             }
         }
         else {
-            CON_Printf("FMOD_StartMusic: Failed to create MIDI sound for mus_id %d. Result: %d\n", mus_id, result);
+            CON_Warnf("FMOD_StartMusic: Failed to create MIDI sound for mus_id %d. Result: %d\n", mus_id, result);
             if (currentMidiSound) {
                 FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
                 currentMidiSound = NULL;
@@ -1791,13 +1791,13 @@ int FMOD_StartMusic(int mus_id) {
     }
     else {
         if (mus_id >= 0 && mus_id < MAX_FMOD_MUSIC_TRACKS && sound.fmod_studio_music[mus_id] == NULL) {
-            CON_Printf("FMOD_StartMusic: Pre-rendered track for mus_id %d is NULL (and not a MIDI).\n", mus_id);
+            CON_Warnf("FMOD_StartMusic: Pre-rendered track for mus_id %d is NULL (and not a MIDI).\n", mus_id);
         }
         else if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data == NULL) {
-            CON_Printf("FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
+            CON_Warnf("FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
         }
         else {
-            CON_Printf("FMOD_StartMusic: mus_id %d is out of bounds or invalid.\n", mus_id);
+            CON_Warnf("FMOD_StartMusic: mus_id %d is out of bounds or invalid.\n", mus_id);
         }
         return -1;
     }
