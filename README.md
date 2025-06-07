@@ -60,7 +60,7 @@ First, clone the official repository to your local machine:
 
 ```bash
 git clone https://github.com/atsb/Doom64EX-Plus
-
+```
 
 ### Step 2: Acquire Game Data
 
