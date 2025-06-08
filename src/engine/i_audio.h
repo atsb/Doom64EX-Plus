@@ -51,7 +51,7 @@ typedef struct {
 
 // FMOD Studio
 
-#define MAX_GAME_SFX 93
+#define MAX_GAME_SFX 256
 #define MAX_FMOD_MUSIC_TRACKS 138
 
 struct Sound {
