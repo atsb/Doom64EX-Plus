@@ -1222,7 +1222,7 @@ void I_InitSequencer(void) {
     char* sfpath;
     void* extradriverdata = 0;
 
-    I_Printf("Audio Engine: FMOD Studio by Firelight Technologies Pty Ltd.\n\n");
+    I_Printf("Audio Engine: FMOD Studio by Firelight Technologies Pty Ltd.\n");
 
     FMOD_ERROR_CHECK(FMOD_System_Create(&sound.fmod_studio_system, FMOD_VERSION));
     FMOD_ERROR_CHECK(FMOD_System_Create(&sound.fmod_studio_system_music, FMOD_VERSION));
