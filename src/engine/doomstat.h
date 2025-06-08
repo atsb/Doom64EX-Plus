@@ -187,8 +187,8 @@ typedef struct {
 	int         id;
 	int         music;
 	boolean    enteronly;
-	short       pic_x;
-	short       pic_y;
+	int       pic_x;
+	int       pic_y;
 	boolean    nointermission;
 	boolean    scrolltextend;
 	char        text[512];
