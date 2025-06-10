@@ -1471,8 +1471,8 @@ void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_dep
     listener_pos.y = (float)player_eye_world_z_height / FRACUNIT * INCHES_PER_METER;
     listener_pos.z = (float)player_world_y_depth / FRACUNIT * INCHES_PER_METER;
 
-    listener_forward.x = (float)finecosine[view_angle >> ANGLETOFINESHIFT] / FRACUNIT;
-    listener_forward.z = (float)finesine[view_angle >> ANGLETOFINESHIFT] / FRACUNIT;
+    listener_forward.x = -(float)finecosine[view_angle >> ANGLETOFINESHIFT] / FRACUNIT;
+    listener_forward.z = -(float)finesine[view_angle >> ANGLETOFINESHIFT] / FRACUNIT;
     listener_forward.y = 0.0f;
 
     FMOD_System_Set3DListenerAttributes(sound.fmod_studio_system, 0, &listener_pos, &listener_vel, &listener_forward, &listener_up);
