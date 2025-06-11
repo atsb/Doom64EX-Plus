@@ -3324,7 +3324,9 @@ void M_LoadSelect(int choice) {
 
 	// sprintf(name, SAVEGAMENAME"%d.dsg", choice);
 	// G_LoadGame(name);
-	G_LoadGame(P_GetSaveGameName(choice));
+    char *filename = P_GetSaveGameName(choice);
+	G_LoadGame(filename);
+    free(filename);
 	M_ClearMenus();
 }
 
@@ -3362,11 +3364,13 @@ void M_ReadSaveStrings(void) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
 
 		// handle = open(name, O_RDONLY | 0, 0666);
+        char *filename = P_GetSaveGameName(i);
 #ifdef _WIN32
-		handle = _open(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+		handle = _open(filename, O_RDONLY | 0, 0666);
 #else
-		handle = open(P_GetSaveGameName(i), O_RDONLY | 0, 0666);
+		handle = open(filename, O_RDONLY | 0, 0666);
 #endif
+        free(filename);
 		if (handle == -1) {
 			dstrcpy(&savegamestrings[i][0], EMPTYSTRING);
 			DoomLoadMenu[i].status = 0;
@@ -3891,15 +3895,13 @@ static boolean M_SetThumbnail(int which) {
 	// poke into savegame file and fetch
 	// date and stats
 	//
-	if (!P_QuickReadSaveHeader(P_GetSaveGameName(which), thumbnail_date, (int*)data,
-		&thumbnail_skill, &thumbnail_map)) {
-		Z_Free(data);
-		return 0;
-	}
-
+    char *filename = P_GetSaveGameName(which);
+    boolean ret = P_QuickReadSaveHeader(filename, thumbnail_date, (int*)data,
+                                        &thumbnail_skill, &thumbnail_map);
+    free(filename);
 	Z_Free(data);
 
-	return 1;
+	return ret;
 }
 
 //

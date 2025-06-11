@@ -76,7 +76,7 @@ CVAR(v_accessibility, 0);
 #elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
 #define GetBasePath()	SDL_GetBasePath();
 #elif defined __ANDROID__
-#define GetBasePath()   SDL_AndroidGetInternalStoragePath();
+#define GetBasePath()   SDL_GetAndroidInternalStoragePath();
 #endif
 
 ticcmd_t        emptycmd;
@@ -270,7 +270,12 @@ char* I_GetUserFile(char* file) {
 
 	snprintf(path, 511, "%s%s", userdir, file);
 
-	return path;
+#ifdef DOOM_UNIX_INSTALL
+    // SDL_GetPrefPath() returns an allocated string
+    SDL_free(userdir);
+#endif
+
+    return path;
 }
 
 /**
