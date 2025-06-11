@@ -1,9 +1,36 @@
+ifndef FMOD_STUDIO_SDK_ROOT
+$(error FMOD_STUDIO_SDK_ROOT environment variable is not set. Point it to the root of the FMOD studio SDK that can be downloaded on https://www.fmod.com/download#fmodstudio).
+endif
+
+ARCH=$(shell arch)
+
+ifeq ($(ARCH), "aarch64")
+ARCH = arm64
+endif
+
+ifeq ($(ARCH), "i586")
+ARCH = x86
+endif
+
+ifeq ($(ARCH), "i686")
+ARCH = x86
+endif
+
+libs := sdl3 libpng gl
+
+# dir containing fmod.h
+FMOD_INC_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/inc
+
+# dir containing libfmod.so
+FMOD_LIB_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/lib/$(ARCH)
+
 CC ?= gcc
 
-libs := sdl3 libpng gl fluidsynth
+# -DDOOM_UNIX_INSTALL -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\"
+CFLAGS += $(shell pkg-config --cflags $(libs)) -I/usr/include/SDL3 -I$(FMOD_INC_DIR)
 
-CFLAGS += $(foreach lib,$(libs),$(shell pkg-config --cflags $(lib)))
-LDFLAGS := -lm $(foreach lib,$(libs),$(shell pkg-config --libs $(lib)))
+# put current directory (.) in the rpath so DOOM64Ex-Plus can also find libfmod.so.xx in the current directory
+LDFLAGS += $(shell pkg-config --libs $(libs)) -lm -L$(FMOD_LIB_DIR) -lfmod -Wl,-rpath=.
 
 OBJDIR=src/engine
 OUTPUT=DOOM64EX-Plus
@@ -13,12 +40,13 @@ OBJS_SRC = i_system.o am_draw.o am_map.o info.o md5.o tables.o con_console.o con
 OBJS := $(addprefix $(OBJDIR)/, $(OBJS_SRC))
 
 all: $(OUTPUT)
+	cp $(FMOD_LIB_DIR)/libfmod.so.?? .
 
 $(OUTPUT): $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@
 
 clean:
-	rm -f $(OUTPUT) $(OUTPUT).gdb $(OUTPUT).map $(OBJS)
+	rm -f $(OUTPUT) $(OUTPUT).gdb $(OUTPUT).map $(OBJS) libfmod.so.??
 
 
 
