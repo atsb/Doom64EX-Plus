@@ -1208,7 +1208,9 @@ static void saveg_write_marker(int marker) {
 boolean P_WriteSaveGame(char* description, int slot) {
 
     // setup game save file
-    save_stream = fopen(P_GetSaveGameName(slot), "wb");
+    char *filename = P_GetSaveGameName(slot);
+    save_stream = fopen(filename, "wb");
+    free(filename);
 
     // success?
     if (save_stream == NULL) {

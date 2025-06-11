@@ -137,6 +137,7 @@ void G_LoadSettings(void) {
 			ConfigFileName = myargv[p + 1];
 		}
 	}
-
-	G_ExecuteFile(G_GetConfigFileName());
+    char *filename = G_GetConfigFileName();
+	G_ExecuteFile(filename);
+    free(filename);
 }

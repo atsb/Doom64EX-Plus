@@ -282,7 +282,8 @@ void W_Init(void) {
 	}
 
 	wadfile = W_OpenFile(iwad);
-
+    free(iwad);
+    
 	W_Read(wadfile, 0, &header, sizeof(header));
 
 	if (dstrnicmp(header.identification, "IWAD", 4)) {

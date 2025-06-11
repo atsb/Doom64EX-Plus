@@ -179,6 +179,7 @@ void P_RunMobjs(void) {
 //
 
 void P_RunThinkers(void) {
+    int i = 0;
 	for (currentthinker = thinkercap.next;
 		currentthinker != &thinkercap;
 		currentthinker = currentthinker->next) {
