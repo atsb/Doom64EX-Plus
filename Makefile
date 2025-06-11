@@ -16,7 +16,7 @@ ifeq ($(ARCH), "i686")
 ARCH = x86
 endif
 
-libs := sdl3 libpng gl fluidsynth
+libs := sdl3 libpng gl
 
 # dir containing fmod.h
 FMOD_INC_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/inc
