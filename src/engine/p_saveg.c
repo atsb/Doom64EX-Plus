@@ -813,7 +813,8 @@ static void saveg_write_sequenceGlow_t(void* data) {
 static void saveg_read_sequenceGlow_t(void* data) {
     sequenceGlow_t* seq = (sequenceGlow_t*)data;
     seq->sector = &sectors[saveg_read32()];
-    seq->headsector = &sectors[saveg_read32() - 1];
+    int pos = saveg_read32();
+    seq->headsector = pos == 0 ? NULL: &sectors[pos-1];
     seq->count = saveg_read32();
     seq->start = saveg_read32();
     seq->index = saveg_read32();
