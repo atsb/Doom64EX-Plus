@@ -314,7 +314,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
             byte r = (byte)((c >> 8) & 0xff);
             byte a = (byte)(c & 0xff);
 
-            *check = ((a << 24) | (b << 16) | (g << 8) | r);
+            *check = (((unsigned int)a << 24) | (b << 16) | (g << 8) | r);
 
             check++;
         }

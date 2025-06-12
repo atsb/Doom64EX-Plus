@@ -113,7 +113,8 @@ extern float D_fabs(float x);
 //#define RANGECHECK
 
 //villsa
-#define D_RGBA(r,g,b,a) ((rcolor)((((a)&0xff)<<24)|(((b)&0xff)<<16)|(((g)&0xff)<<8)|((r)&0xff)))
+// cast first argument a to rcolor because: left shift of 255 by 24 places cannot be represented in type 'int'
+#define D_RGBA(r,g,b,a) ((rcolor)((((rcolor)((a)&0xff))<<24)|(((b)&0xff)<<16)|(((g)&0xff)<<8)|((r)&0xff)))
 
 // basic color definitions
 #define WHITE               0xFFFFFFFF
@@ -122,8 +123,8 @@ extern float D_fabs(float x);
 #define AQUA                0xFFFFFF00
 #define YELLOW              0xFF00FFFF
 #define GREEN               0xFF00FF00
-#define REDALPHA(x)         (x<<24|0x0000FF)
-#define WHITEALPHA(x)       (x<<24|0xFFFFFF)
+#define REDALPHA(x)         (((unsigned int)x)<<24|0x0000FF)
+#define WHITEALPHA(x)       (((unsigned int)x)<<24|0xFFFFFF)
 
 // The maximum number of players, multiplayer/networking.
 // remember to add settings for extra skins if increase:)
