@@ -87,43 +87,8 @@ CVAR_EXTERNAL(s_sfxvol);
 CVAR_EXTERNAL(s_musvol);
 static FMOD_SOUND* currentMidiSound = NULL;
 
-// 20120203 villsa - cvar for audio driver
-#ifdef _WIN32
-CVAR_CMD(s_driver, dsound)
-#elif __linux__
-CVAR_CMD(s_driver, alsa)
-#elif __APPLE__
-CVAR_CMD(s_driver, coreaudio)
-#else
-CVAR_CMD(s_driver, sndio)
-#endif
-{
-    char* driver = cvar->string;
-
-    if (!dstrcmp(driver, "jack") ||
-        !dstrcmp(driver, "alsa") ||
-        !dstrcmp(driver, "oss") ||
-        !dstrcmp(driver, "pulseaudio") ||
-        !dstrcmp(driver, "coreaudio") ||
-        !dstrcmp(driver, "dsound") ||
-        !dstrcmp(driver, "portaudio") ||
-        !dstrcmp(driver, "sndio") ||
-        !dstrcmp(driver, "sndman") ||
-        !dstrcmp(driver, "dart") ||
-        !dstrcmp(driver, "file")
-        ) {
-        return;
-    }
-
-    CON_Warnf("Invalid driver name\n");
-    CON_Warnf("Valid driver names: jack, alsa, oss, pulseaudio, coreaudio, dsound, portaudio, sndio, sndman, dart, file\n");
-    CON_CvarSet(cvar->name, DEFAULT_FLUID_DRIVER);
-}
-
 struct Sound sound;
 struct Reverb fmod_reverb;
-
-
 
 // FMOD Studio
 static float INCHES_PER_METER = 39.3701f;

@@ -28,20 +28,6 @@
 #include <fmod_errors.h>
 #include "m_fixed.h"
 
-// 20120107 bkw: Linux users can change the default FluidSynth backend here:
-#ifndef _WIN32
-#define DEFAULT_FLUID_DRIVER "sndio"
-
-// 20120203 villsa: add default for windows
-#define DEFAULT_FLUID_DRIVER "dsound"
-#elif __linux__
-#define DEFAULT_FLUID_DRIVER "alsa"
-#elif __APPLE__
-#define DEFAULT_FLUID_DRIVER "coreaudio"
-#else
-#define DEFAULT_FLUID_DRIVER "sndio"
-#endif
-
 typedef struct {
     fixed_t x;
     fixed_t y;

@@ -483,13 +483,10 @@ int S_AdjustSoundParams(fixed_t x, fixed_t y, int* vol, int* sep) {
 // S_RegisterCvars
 //
 
-CVAR_EXTERNAL(s_driver);
-
 void S_RegisterCvars(void) {
     CON_CvarRegister(&s_sfxvol);
     CON_CvarRegister(&s_musvol);
     CON_CvarRegister(&s_gain);
-    CON_CvarRegister(&s_driver);
 }
 
 
