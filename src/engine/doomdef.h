@@ -123,8 +123,8 @@ extern float D_fabs(float x);
 #define AQUA                0xFFFFFF00
 #define YELLOW              0xFF00FFFF
 #define GREEN               0xFF00FF00
-#define REDALPHA(x)         (((unsigned int)x)<<24|0x0000FF)
-#define WHITEALPHA(x)       (((unsigned int)x)<<24|0xFFFFFF)
+#define REDALPHA(x)         (((rcolor)x)<<24|0x0000FF)
+#define WHITEALPHA(x)       (((rcolor)x)<<24|0xFFFFFF)
 
 // The maximum number of players, multiplayer/networking.
 // remember to add settings for extra skins if increase:)
