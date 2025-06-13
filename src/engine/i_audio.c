@@ -272,17 +272,22 @@ typedef int(*signalhandler)(doomseq_t*);
 static void FMOD_ERROR_CHECK(FMOD_RESULT result) {
     if (result != FMOD_OK) {
         printf("FMOD Studio: %s\n", FMOD_ErrorString(result));
-        *((int *)0) = 0;
     }
 }
 
 static void StopChannel(FMOD_CHANNEL**channel) {
     if(*channel) {
         FMOD_ERROR_CHECK(FMOD_Channel_Stop(*channel));
+        *channel = NULL;
     }
-    *channel = NULL;
 }
 
+static void ReleaseSound(FMOD_SOUND **sound) {
+    if (*sound) {
+        FMOD_ERROR_CHECK(FMOD_Sound_Release(*sound));
+        *sound = NULL;
+    }
+}
 
 
 //
@@ -293,7 +298,7 @@ static void StopChannel(FMOD_CHANNEL**channel) {
 //
 
 void Seq_SetGain(float db) {
-    // FIXME: not entirely implemented ?
+    // FIXME: incomplete ?
     if(sound.fmod_studio_channel_loop) {
         FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
     }
@@ -1342,15 +1347,10 @@ void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
 void I_ShutdownSound(void)
 {
     for(int i = 0 ; i < num_sfx ; i++) {
-        if(sound.fmod_studio_sound[i]) {
-            FMOD_ERROR_CHECK(FMOD_Sound_Release(sound.fmod_studio_sound[i]));
-        }
+        ReleaseSound(&sound.fmod_studio_sound[i]);
     }
 
-    if (currentMidiSound) {
-        FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
-        currentMidiSound = NULL;
-    }
+    ReleaseSound(&currentMidiSound);
     
     StopChannel(&sound.fmod_studio_channel_music);
     StopChannel(&sound.fmod_studio_channel_loop);
@@ -1379,11 +1379,7 @@ void I_SetMusicVolume(float volume) {
 //
 
 void I_SetSoundVolume(float volume) {
-    //FIXME: TODO
-
-    //if(sound.fmod_studio_channel) {
-    //    FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel, volume / 255.0f));
-    //}
+    // FIXME: incomplete ?
     doomseq.soundvolume = (volume * 0.925f);
 }
 
@@ -1409,8 +1405,7 @@ void I_PauseSound(void) {
         return;
     }
 
-    // FIXME: TODO
-    //FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, true));
+    // FIXME: incomplete ?
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_PAUSE);
 }
 
@@ -1423,8 +1418,7 @@ void I_ResumeSound(void) {
         return;
     }
 
-    // FIXME: TODO
-    // FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
+    // FIXME: incomplete ?
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESUME);
 }
 
@@ -1439,10 +1433,7 @@ void I_SetGain(float db) {
 
     doomseq.gain = db;
 
-    // FIXME: TODO
-    //if(sound.fmod_studio_channel) {
-    //    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel, db);
-    //}
+    // FIXME: incomplete ?
     if(sound.fmod_studio_channel_loop) {
         FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
     }
@@ -1498,45 +1489,43 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
         return -1;
     }
 
-    if (sfx_channel) {
-        float instance_vol = (float)volume / 255.0f;
-        float global_sfx_vol = (s_sfxvol.value >= 0 && s_sfxvol.value <= 255) ? (float)s_sfxvol.value / 255.0f : 1.0f;
-        float final_volume = instance_vol * global_sfx_vol;
-        if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f;
-        if (final_volume < 0.0f) final_volume = 0.0f;
-
-        // Clamp to a maximum of 1.0 to prevent clipping (1.0f is really loud for FMOD)
-        if (final_volume > 1.0f) {
-            final_volume = 1.0f;
-        }
-        FMOD_Channel_SetVolume(sfx_channel, final_volume);
-
-        if (origin) {
-            mobj_t* mobj = (mobj_t*)origin;
-            FMOD_VECTOR pos, vel;
-
-            pos.x = (float)mobj->x / FRACUNIT * INCHES_PER_METER;
-            pos.y = (float)mobj->z / FRACUNIT * INCHES_PER_METER;
-            pos.z = (float)mobj->y / FRACUNIT * INCHES_PER_METER;
-
-            vel.x = 0.0f; vel.y = 0.0f; vel.z = 0.0f;
-
-            FMOD_Channel_Set3DAttributes(sfx_channel, &pos, &vel);
-            FMOD_Channel_SetMode(sfx_channel, FMOD_3D_WORLDRELATIVE);
-        }
-        else {
-            float fmod_pan = ((float)pan - 128.0f) / 128.0f;
-            if (isnan(fmod_pan) || isinf(fmod_pan)) fmod_pan = 0.0f;
-            fmod_pan = (fmod_pan < -1.0f) ? -1.0f : (fmod_pan > 1.0f) ? 1.0f : fmod_pan;
-            FMOD_Channel_SetPan(sfx_channel, fmod_pan);
-            FMOD_Channel_SetMode(sfx_channel, FMOD_2D);
-        }
-        FMOD_Channel_SetPaused(sfx_channel, false);
-    }
-    else {
+    if(!sfx_channel) {
         CON_Warnf("FMOD_StartSound: PlaySound OK (default path) but channel is NULL (sfx_id %d)\n", sfx_id);
         return -1;
     }
+
+    float instance_vol = (float)volume / 255.0f;
+    float global_sfx_vol = (s_sfxvol.value >= 0 && s_sfxvol.value <= 255) ? (float)s_sfxvol.value / 255.0f : 1.0f;
+    float final_volume = instance_vol * global_sfx_vol;
+    if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f;
+    if (final_volume < 0.0f) final_volume = 0.0f;
+    
+    // Clamp to a maximum of 1.0 to prevent clipping (1.0f is really loud for FMOD)
+    if (final_volume > 1.0f) {
+        final_volume = 1.0f;
+    }
+    FMOD_Channel_SetVolume(sfx_channel, final_volume);
+    
+    if (origin) {
+        mobj_t* mobj = (mobj_t*)origin;
+        FMOD_VECTOR pos, vel;
+        
+        pos.x = (float)mobj->x / FRACUNIT * INCHES_PER_METER;
+        pos.y = (float)mobj->z / FRACUNIT * INCHES_PER_METER;
+        pos.z = (float)mobj->y / FRACUNIT * INCHES_PER_METER;
+        
+        vel.x = 0.0f; vel.y = 0.0f; vel.z = 0.0f;
+        
+        FMOD_Channel_Set3DAttributes(sfx_channel, &pos, &vel);
+        FMOD_Channel_SetMode(sfx_channel, FMOD_3D_WORLDRELATIVE);
+    } else {
+        float fmod_pan = ((float)pan - 128.0f) / 128.0f;
+        if (isnan(fmod_pan) || isinf(fmod_pan)) fmod_pan = 0.0f;
+        fmod_pan = (fmod_pan < -1.0f) ? -1.0f : (fmod_pan > 1.0f) ? 1.0f : fmod_pan;
+        FMOD_Channel_SetPan(sfx_channel, fmod_pan);
+        FMOD_Channel_SetMode(sfx_channel, FMOD_2D);
+    }
+    FMOD_Channel_SetPaused(sfx_channel, false);
 
     if (origin) {
         float distance = I_Audio_CalculateDistanceToListener((mobj_t*)origin);
@@ -1547,10 +1536,12 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
 
         if (distance <= GAME_SFX_FORCED_FULL_VOL_UNITS_THRESHOLD) {
             result = FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound[sfx_id], sound.master, true, &sfx_channel);
+
             if (result != FMOD_OK) {
                 FMOD_ERROR_CHECK(result);
                 return -1;
             }
+
             if (sfx_channel) {
                 float instance_vol = (float)volume / 255.0f;
                 float global_sfx_vol = (s_sfxvol.value >= 0 && s_sfxvol.value <= 255) ? (float)s_sfxvol.value / 255.0f : 1.0f;
@@ -1568,10 +1559,9 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
                 FMOD_Channel_SetPaused(sfx_channel, false);
                 return sfx_id;
             }
-            else {
-                CON_Warnf("FMOD_StartSound: PlaySound OK (2D override) but channel is NULL (sfx_id %d)\n", sfx_id);
-                return -1;
-            }
+
+            CON_Warnf("FMOD_StartSound: PlaySound OK (2D override) but channel is NULL (sfx_id %d)\n", sfx_id);
+            return -1;
         }
     }
     return sfx_id;
@@ -1583,6 +1573,7 @@ int FMOD_StartSFXLoop(int sfx_id, int volume) {
     if (!seqready || !sound.fmod_studio_system) {
         return -1;
     }
+    
     if (sfx_id < 0 || sfx_id >= num_sfx || !sound.fmod_studio_sound[sfx_id]) {
         CON_Warnf("FMOD_StartSFXLoop: Invalid sfx_id %d or sound not loaded (num_sfx: %d)\n", sfx_id, num_sfx);
         return -1;
@@ -1612,12 +1603,11 @@ int FMOD_StartSFXLoop(int sfx_id, int volume) {
         FMOD_Channel_SetMode(sound.fmod_studio_channel_loop, FMOD_LOOP_NORMAL | FMOD_2D);
         FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel_loop, false);
         FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false); // Unpause
+        return sfx_id;
     }
-    else {
-        CON_Warnf("FMOD_StartSFXLoop: Failed to play sound or get channel (sfx_id %d)\n", sfx_id);
-        return -1;
-    }
-    return sfx_id;
+    
+    CON_Warnf("FMOD_StartSFXLoop: Failed to play sound or get channel (sfx_id %d)\n", sfx_id);
+    return -1;
 }
 
 void FMOD_StopPlasmaLoop(void) {
@@ -1635,6 +1625,7 @@ int FMOD_StartPlasmaLoop(int sfx_id, int volume) {
     if (!seqready || !sound.fmod_studio_system) {
         return -1;
     }
+
     if (sfx_id < 0 || sfx_id >= num_sfx || !sound.fmod_studio_sound[sfx_id]) {
         CON_Warnf("FMOD_StartPlasmaLoop: Invalid sfx_id %d or sound not loaded (num_sfx: %d)\n", sfx_id, num_sfx);
         return -1;
@@ -1652,17 +1643,16 @@ int FMOD_StartPlasmaLoop(int sfx_id, int volume) {
         FMOD_Channel_SetMode(sound.fmod_studio_channel_plasma_loop, FMOD_LOOP_NORMAL | FMOD_2D);
         FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel_plasma_loop, false);
         FMOD_Channel_SetPaused(sound.fmod_studio_channel_plasma_loop, false);
+        return sfx_id;
     }
-    else {
-        CON_Warnf("FMOD_StartPlasmaLoop: Failed to play sound or get channel (sfx_id %d)\n", sfx_id);
-        sound.fmod_studio_channel_plasma_loop = NULL;
-        return -1;
-    }
-    return sfx_id;
+  
+    CON_Warnf("FMOD_StartPlasmaLoop: Failed to play sound or get channel (sfx_id %d)\n", sfx_id);
+    sound.fmod_studio_channel_plasma_loop = NULL;
+    return -1;
 }
 
 void FMOD_StopSound(sndsrc_t* origin, int sfx_id) {
-    I_Warning("FIXME: FMOD_StopSound unimplemented\n");
+    I_Printf("FIXME: FMOD_StopSound unimplemented\n");
 }
 
 int FMOD_StartMusic(int mus_id) {
@@ -1670,12 +1660,8 @@ int FMOD_StartMusic(int mus_id) {
     FMOD_BOOL isPlaying = false;
 
     StopChannel(&sound.fmod_studio_channel_music);
-
-    if (currentMidiSound) {
-        FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
-        currentMidiSound = NULL;
-    }
-
+    ReleaseSound(&currentMidiSound);
+    
     // Prepare volume for the new track
     float final_volume = 0.75f;
     if (s_musvol.value >= 0 && s_musvol.value <= 255) {
@@ -1713,32 +1699,25 @@ int FMOD_StartMusic(int mus_id) {
                 FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel_music, false));
                 return mus_id;
             }
-            else {
-                CON_Warnf("FMOD_StartMusic: Failed to play MIDI sound for mus_id %d after creation.\n", mus_id);
-                FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
-                currentMidiSound = NULL;
-                sound.fmod_studio_channel_music = NULL;
-                return -1;
-            }
-        }
-        else {
-            CON_Warnf("FMOD_StartMusic: Failed to create MIDI sound for mus_id %d. Result: %d\n", mus_id, result);
-            if (currentMidiSound) {
-                FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
-                currentMidiSound = NULL;
-            }
+
+            CON_Warnf("FMOD_StartMusic: Failed to play MIDI sound for mus_id %d after creation.\n", mus_id);
+            ReleaseSound(&currentMidiSound);
+            StopChannel(&sound.fmod_studio_channel_music);
             return -1;
-        }
-    }
-    else {
-        if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data == NULL) {
-            CON_Warnf("FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
-        }
-        else {
-            CON_Warnf("FMOD_StartMusic: mus_id %d is out of bounds or invalid.\n", mus_id);
-        }
+        } 
+
+        CON_Warnf("FMOD_StartMusic: Failed to create MIDI sound for mus_id %d. Result: %d\n", mus_id, result);
+        ReleaseSound(&currentMidiSound);
         return -1;
+    } 
+
+    if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data == NULL) {
+        CON_Warnf("FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
+    } else {
+        CON_Warnf("FMOD_StartMusic: mus_id %d is out of bounds or invalid.\n", mus_id);
     }
+    return -1;
+    
 }
 
 void FMOD_StopMusic(sndsrc_t* origin, int mus_id) {
