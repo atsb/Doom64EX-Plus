@@ -100,9 +100,6 @@ FMOD_VECTOR fmod_reverb_position = { -8.0f, 2.0f, 2.0f };
 float min_dist = 1.0f;
 float max_dist = 15.0f;
 
-FMOD_BOOL IsPlaying;
-FMOD_BOOL Paused = false;
-
 //
 // Mutex
 //
@@ -275,8 +272,18 @@ typedef int(*signalhandler)(doomseq_t*);
 static void FMOD_ERROR_CHECK(FMOD_RESULT result) {
     if (result != FMOD_OK) {
         printf("FMOD Studio: %s\n", FMOD_ErrorString(result));
+        *((int *)0) = 0;
     }
 }
+
+static void StopChannel(FMOD_CHANNEL**channel) {
+    if(*channel) {
+        FMOD_ERROR_CHECK(FMOD_Channel_Stop(*channel));
+    }
+    *channel = NULL;
+}
+
+
 
 //
 // Seq_SetGain
@@ -286,8 +293,10 @@ static void FMOD_ERROR_CHECK(FMOD_RESULT result) {
 //
 
 void Seq_SetGain(float db) {
-    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel, db);
-    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
+    // FIXME: not entirely implemented ?
+    if(sound.fmod_studio_channel_loop) {
+        FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
+    }
 }
 
 //
@@ -1045,9 +1054,7 @@ static int Seq_RegisterSounds(void) {
     FMOD_RESULT result;
 
     // Initialize FMOD_SOUND array
-    for (i = 0; i < MAX_GAME_SFX; ++i) {
-        sound.fmod_studio_sound[i] = NULL;
-    }
+    memset(sound.fmod_studio_sound, 0, MAX_GAME_SFX * sizeof(FMOD_SOUND *)); 
     num_sfx = 0;
 
     start = W_GetNumForName("DS_START") + 1;
@@ -1316,10 +1323,12 @@ void I_RemoveSoundSource(int c) {
 void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
     channel_t* chan;
 
-    FMOD_VECTOR soundPosition = { x, y, 0.0f };  // Set the appropriate position in 3D space
-    FMOD_Channel_Set3DAttributes(sound.fmod_studio_channel, &soundPosition, NULL);
+    // FIXME: TODO
+    
+    //FMOD_VECTOR soundPosition = { x, y, 0.0f };  // Set the appropriate position in 3D space
+    //FMOD_Channel_Set3DAttributes(sound.fmod_studio_channel, &soundPosition, NULL);
 
-    FMOD_Channel_SetMode(sound.fmod_studio_channel, FMOD_3D_WORLDRELATIVE);
+    //FMOD_Channel_SetMode(sound.fmod_studio_channel, FMOD_3D_WORLDRELATIVE);
 
     chan = &playlist[c];
     chan->basevol = (float)volume;
@@ -1332,6 +1341,21 @@ void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
 
 void I_ShutdownSound(void)
 {
+    for(int i = 0 ; i < num_sfx ; i++) {
+        if(sound.fmod_studio_sound[i]) {
+            FMOD_ERROR_CHECK(FMOD_Sound_Release(sound.fmod_studio_sound[i]));
+        }
+    }
+
+    if (currentMidiSound) {
+        FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
+        currentMidiSound = NULL;
+    }
+    
+    StopChannel(&sound.fmod_studio_channel_music);
+    StopChannel(&sound.fmod_studio_channel_loop);
+    StopChannel(&sound.fmod_studio_channel_plasma_loop);
+
     FMOD_ERROR_CHECK(FMOD_System_Close(sound.fmod_studio_system));
     FMOD_ERROR_CHECK(FMOD_System_Release(sound.fmod_studio_system));
 
@@ -1355,9 +1379,11 @@ void I_SetMusicVolume(float volume) {
 //
 
 void I_SetSoundVolume(float volume) {
-    if(sound.fmod_studio_channel) {
-        FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel, volume / 255.0f));
-    }
+    //FIXME: TODO
+
+    //if(sound.fmod_studio_channel) {
+    //    FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel, volume / 255.0f));
+    //}
     doomseq.soundvolume = (volume * 0.925f);
 }
 
@@ -1383,7 +1409,8 @@ void I_PauseSound(void) {
         return;
     }
 
-    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, true));
+    // FIXME: TODO
+    //FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, true));
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_PAUSE);
 }
 
@@ -1396,7 +1423,8 @@ void I_ResumeSound(void) {
         return;
     }
 
-    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
+    // FIXME: TODO
+    // FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_RESUME);
 }
 
@@ -1411,8 +1439,13 @@ void I_SetGain(float db) {
 
     doomseq.gain = db;
 
-    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel, db);
-    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
+    // FIXME: TODO
+    //if(sound.fmod_studio_channel) {
+    //    FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel, db);
+    //}
+    if(sound.fmod_studio_channel_loop) {
+        FMOD_Channel_SetLowPassGain(sound.fmod_studio_channel_loop, db);
+    }
     Seq_SetStatus(&doomseq, SEQ_SIGNAL_SETGAIN);
 }
 
@@ -1544,24 +1577,8 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
     return sfx_id;
 }
 
-/*
-// Not proud of it here but it is a necessary evil for now, to prevent cut-off between plasma fire and plasma ball boom
-int FMOD_StartSoundPlasma(int sfx_id) {
-    FMOD_ERROR_CHECK(FMOD_System_PlaySound(sound.fmod_studio_system, sound.fmod_studio_sound_plasma[sfx_id], sound.master, 0, &sound.fmod_studio_channel));
-
-    FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel, false));
-    FMOD_ERROR_CHECK(FMOD_Channel_SetPaused(sound.fmod_studio_channel, false));
-
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
-
-    return sfx_id;
-}
-*/
-
 int FMOD_StartSFXLoop(int sfx_id, int volume) {
-    if (sound.fmod_studio_channel_loop) {
-        FMOD_Channel_Stop(sound.fmod_studio_channel_loop);
-    }
+    StopChannel(&sound.fmod_studio_channel_loop);
 
     if (!seqready || !sound.fmod_studio_system) {
         return -1;
@@ -1604,31 +1621,16 @@ int FMOD_StartSFXLoop(int sfx_id, int volume) {
 }
 
 void FMOD_StopPlasmaLoop(void) {
-    if (sound.fmod_studio_channel_plasma_loop) {
-        FMOD_Channel_IsPlaying(sound.fmod_studio_channel_plasma_loop, &IsPlaying);
-        if (IsPlaying) {
-            FMOD_Channel_Stop(sound.fmod_studio_channel_plasma_loop);
-        }
-        sound.fmod_studio_channel_plasma_loop = NULL;
-    }
+    StopChannel(&sound.fmod_studio_channel_plasma_loop);
 }
 
 int FMOD_StopSFXLoop(void) {
-    FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_loop));
-
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, true);
-
+    StopChannel(&sound.fmod_studio_channel_loop);
     return 0;
 }
 
 int FMOD_StartPlasmaLoop(int sfx_id, int volume) {
-    if (sound.fmod_studio_channel_plasma_loop) {
-        FMOD_Channel_IsPlaying(sound.fmod_studio_channel_plasma_loop, &IsPlaying);
-        if (IsPlaying) {
-            FMOD_Channel_Stop(sound.fmod_studio_channel_plasma_loop);
-        }
-        sound.fmod_studio_channel_plasma_loop = NULL;
-    }
+    FMOD_StopPlasmaLoop();
 
     if (!seqready || !sound.fmod_studio_system) {
         return -1;
@@ -1660,21 +1662,14 @@ int FMOD_StartPlasmaLoop(int sfx_id, int volume) {
 }
 
 void FMOD_StopSound(sndsrc_t* origin, int sfx_id) {
-    FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel));
-
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel, true);
+    I_Warning("FIXME: FMOD_StopSound unimplemented\n");
 }
 
 int FMOD_StartMusic(int mus_id) {
     FMOD_RESULT result;
     FMOD_BOOL isPlaying = false;
 
-    if (sound.fmod_studio_channel_music) {
-        FMOD_ERROR_CHECK(FMOD_Channel_IsPlaying(sound.fmod_studio_channel_music, &isPlaying));
-        if (isPlaying) {
-            FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_music));
-        }
-    }
+    StopChannel(&sound.fmod_studio_channel_music);
 
     if (currentMidiSound) {
         FMOD_ERROR_CHECK(FMOD_Sound_Release(currentMidiSound));
@@ -1689,26 +1684,8 @@ int FMOD_StartMusic(int mus_id) {
 
     if (isnan(final_volume) || isinf(final_volume)) final_volume = 0.75f;
     if (final_volume < 0.0f) final_volume = 0.0f;
-    if (mus_id >= 0 && mus_id < MAX_FMOD_MUSIC_TRACKS && sound.fmod_studio_music[mus_id] != NULL) {
-        result = FMOD_System_PlaySound(sound.fmod_studio_system_music,
-            sound.fmod_studio_music[mus_id],
-            sound.master_music, // Assuming this is the correct channel group
-            false,              // Not paused
-            &sound.fmod_studio_channel_music);
-        FMOD_ERROR_CHECK(result);
 
-        if (result == FMOD_OK) {
-            FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sound.fmod_studio_channel_music, final_volume));
-            FMOD_ERROR_CHECK(FMOD_Channel_SetVolumeRamp(sound.fmod_studio_channel_music, false));
-            return mus_id;
-        }
-        else {
-            CON_Warnf("FMOD_StartMusic: Failed to play pre-rendered track for mus_id %d.\n", mus_id);
-            sound.fmod_studio_channel_music = NULL; // channel is null on failure
-            return -1;
-        }
-    }
-    else if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data != NULL) {
+    if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data != NULL) {
         FMOD_CREATESOUNDEXINFO exinfo;
         dmemset(&exinfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
         exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
@@ -1754,10 +1731,7 @@ int FMOD_StartMusic(int mus_id) {
         }
     }
     else {
-        if (mus_id >= 0 && mus_id < MAX_FMOD_MUSIC_TRACKS && sound.fmod_studio_music[mus_id] == NULL) {
-            CON_Warnf("FMOD_StartMusic: Pre-rendered track for mus_id %d is NULL (and not a MIDI).\n", mus_id);
-        }
-        else if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data == NULL) {
+        if (mus_id >= 0 && mus_id < doomseq.nsongs && doomseq.songs[mus_id].data == NULL) {
             CON_Warnf("FMOD_StartMusic: MIDI track data for mus_id %d is NULL (and not pre-rendered).\n", mus_id);
         }
         else {
@@ -1768,23 +1742,29 @@ int FMOD_StartMusic(int mus_id) {
 }
 
 void FMOD_StopMusic(sndsrc_t* origin, int mus_id) {
-    FMOD_ERROR_CHECK(FMOD_Channel_Stop(sound.fmod_studio_channel_music));
-
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, true);
+    StopChannel(&sound.fmod_studio_channel_music);
 }
 
 void FMOD_PauseMusic(void) {
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, true);
+    if(sound.fmod_studio_channel_music) {
+        FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, true);
+    }
 }
 
 void FMOD_ResumeMusic(void) {
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, false);
+    if(sound.fmod_studio_channel_music) {
+        FMOD_Channel_SetPaused(sound.fmod_studio_channel_music, false);
+    }
 }
 
 void FMOD_PauseSFXLoop(void) {
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, true);
+    if(sound.fmod_studio_channel_loop) {
+        FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, true);
+    }
 }
 
 void FMOD_ResumeSFXLoop(void) {
-    FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
+    if(sound.fmod_studio_channel_loop) {
+        FMOD_Channel_SetPaused(sound.fmod_studio_channel_loop, false);
+    }
 }
