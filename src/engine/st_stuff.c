@@ -482,10 +482,9 @@ void ST_FlashingScreen(byte r, byte g, byte b, byte a) {
 		dglDisable(GL_TEXTURE_2D);
 		dglColor4ubv((byte*)&c);
 		dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
-		dglEnable(GL_TEXTURE_2D);
-
 		GL_SetState(GLSTATE_BLEND, 0);
 	}
+	dglEnable(GL_TEXTURE_2D);
 }
 
 //
