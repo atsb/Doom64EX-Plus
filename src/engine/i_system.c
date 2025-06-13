@@ -261,7 +261,7 @@ char* I_GetUserDir(void)
  */
 
 char* I_GetUserFile(char* file) {
-	const char* path, * userdir;
+	char* path, * userdir;
 
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
