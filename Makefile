@@ -27,7 +27,7 @@ FMOD_LIB_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/lib/$(ARCH)
 CC ?= gcc
 
 # -DDOOM_UNIX_INSTALL -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\"
-CFLAGS += $(shell pkg-config --cflags $(libs)) -I/usr/include/SDL3 -I$(FMOD_INC_DIR)
+CFLAGS += $(shell pkg-config --cflags $(libs)) -I$(FMOD_INC_DIR) -MD \
 
 # put current directory (.) in the rpath so DOOM64Ex-Plus can also find libfmod.so.xx in the current directory
 LDFLAGS += $(shell pkg-config --libs $(libs)) -lm -L$(FMOD_LIB_DIR) -lfmod -Wl,-rpath=.
@@ -39,6 +39,8 @@ OBJS_SRC = i_system.o am_draw.o am_map.o info.o md5.o tables.o con_console.o con
 
 OBJS := $(addprefix $(OBJDIR)/, $(OBJS_SRC))
 
+OBJS_DEPS := $(OBJS:.o=.d)
+
 all: $(OUTPUT)
 	cp $(FMOD_LIB_DIR)/libfmod.so.?? .
 
@@ -46,8 +48,7 @@ $(OUTPUT): $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@
 
 clean:
-	rm -f $(OUTPUT) $(OUTPUT).gdb $(OUTPUT).map $(OBJS) libfmod.so.??
+	rm -f $(OUTPUT) $(OUTPUT).gdb $(OUTPUT).map $(OBJS) $(OBJS_DEPS) libfmod.so.??
 
-
-
+-include $(OBJS_DEPS)
 
