@@ -27,7 +27,7 @@ FMOD_LIB_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/lib/$(ARCH)
 CC ?= gcc
 
 # -DDOOM_UNIX_INSTALL -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\"
-CFLAGS += $(shell pkg-config --cflags $(libs)) -I$(FMOD_INC_DIR) -MD \
+CFLAGS += $(shell pkg-config --cflags $(libs)) -I$(FMOD_INC_DIR) -MD
 
 # put current directory (.) in the rpath so DOOM64Ex-Plus can also find libfmod.so.xx in the current directory
 LDFLAGS += $(shell pkg-config --libs $(libs)) -lm -L$(FMOD_LIB_DIR) -lfmod -Wl,-rpath=.
