@@ -8,7 +8,6 @@ Doom 64 EX+ is a community-driven continuation of Samuel "Kaiser" Villarreal's o
 * **The Lost Levels:** Includes support for the "Lost Levels" campaign content introduced in the official remaster.
 * **Enhanced Modding:**
     * **PWAD Support:** Load custom PWAD files to play user-created maps and content.
-    * **Dehacked Support:** Modify game behavior using Dehacked patches. (Refer to the `modding` directory for examples).
 * **Upgraded Audio Engine:** Replaced the legacy FluidSynth with FMOD Studio for higher-quality, more reliable audio playback.
 * **Optimized Performance:** Delivers superior performance, running smoother than even the official Nightdive remaster in many cases.
 * **Quality of Life Fixes:**
