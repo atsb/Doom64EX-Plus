@@ -29,7 +29,6 @@
 #include "doomstat.h"
 #include "con_console.h"
 #include "z_zone.h"
-#include "i_xinput.h"
 
 //do controls menu length properly
 //if list of actions for menu>=MAX_MENUACTION_LENGTH then won't display any more

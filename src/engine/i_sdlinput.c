@@ -28,7 +28,6 @@
 #include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
-#include "i_xinput.h"
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);

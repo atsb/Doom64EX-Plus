@@ -44,8 +44,6 @@
 #include "g_actions.h"
 #include "g_controls.h"
 
-#include "i_xinput.h"
-
 // automap flags
 
 enum {
@@ -82,6 +80,9 @@ static float    mpany;
 static angle_t  autoprevangle = 0;
 static fixed_t  automapprevx = 0;
 static fixed_t  automapprevy = 0;
+static fixed_t automap_prev_x_interpolation = 0;
+static fixed_t automap_prev_y_interpolation = 0;
+static angle_t automap_prev_ang_interpolation = 0;
 
 void AM_Start(void);
 
@@ -96,8 +97,12 @@ CVAR(am_showkeymarkers, 0);
 CVAR(am_drawobjects, 0);
 CVAR(am_overlay, 0);
 
+extern fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, boolean enable);
+extern float rendertic_frac;
+
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
+CVAR_EXTERNAL(i_interpolateframes);
 
 #if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
 CVAR_EXTERNAL(i_rsticksensitivity);
@@ -491,6 +496,11 @@ void AM_Ticker(void) {
 			mpanx = mpany = 0;
 		}
 		else {
+			if (i_interpolateframes.value) {
+				automap_prev_x_interpolation = automapx;
+				automap_prev_y_interpolation = automapy;
+				automap_prev_ang_interpolation = automapangle;
+			}
 			automapx = plr->mo->x;
 			automapy = plr->mo->y;
 			automapangle = plr->mo->angle;
@@ -505,6 +515,11 @@ void AM_Ticker(void) {
 		mpanx = mpany = 0;
 	}
 	else {
+		if (i_interpolateframes.value) {
+			automap_prev_x_interpolation = automapx;
+			automap_prev_y_interpolation = automapy;
+			automap_prev_ang_interpolation = automapangle;
+		}
 		automapx = plr->mo->x;
 		automapy = plr->mo->y;
 		automapangle = plr->mo->angle;
@@ -822,46 +837,101 @@ void AM_DrawWalls(void) {
 //
 // AM_drawPlayers
 //
-
 void AM_drawPlayers(void) {
-	int         i;
-	player_t* p;
-	byte        flash;
+	int i;
+	player_t* p_loop_player;
+	byte flash;
+	mobj_t* player_mobj;
+	fixed_t original_x, original_y, render_x, render_y;
+	angle_t original_angle, render_angle;
 
 	flash = am_blink & 0xff;
 
 	if (!netgame) {
-		AM_DrawTriangle(plr->mo, scale, amModeCycle, 0, flash, 0);
+		p_loop_player = plr;
+
+		// Ensure player and its mobj are valid
+		if (!p_loop_player || !p_loop_player->mo) return;
+		player_mobj = p_loop_player->mo;
+
+		if (i_interpolateframes.value) {
+			render_x = R_Interpolate(player_mobj->x, player_mobj->frame_x, true);
+			render_y = R_Interpolate(player_mobj->y, player_mobj->frame_y, true);
+			render_angle = R_Interpolate(player_mobj->angle, player_mobj->angle, true);
+		}
+		else {
+			render_x = player_mobj->x;
+			render_y = player_mobj->y;
+			render_angle = player_mobj->angle;
+		}
+
+		original_x = player_mobj->x;
+		original_y = player_mobj->y;
+		original_angle = player_mobj->angle;
+
+		player_mobj->x = render_x;
+		player_mobj->y = render_y;
+		player_mobj->angle = render_angle;
+
+		AM_DrawTriangle(player_mobj, scale, amModeCycle, 0, flash, 0);
+
+		player_mobj->x = original_x;
+		player_mobj->y = original_y;
+		player_mobj->angle = original_angle;
 		return;
 	}
 
-	else {
-		for (i = 0; i < MAXPLAYERS; i++) {
-			p = &players[i];
+	for (i = 0; i < MAXPLAYERS; i++) {
+		p_loop_player = &players[i];
 
-			if ((deathmatch && !singledemo) && p != plr) {
-				continue;
-			}
-
-			if (!playeringame[i]) {
-				continue;
-			}
-
-			switch (i) {
-			case 0:        // Green
-				AM_DrawTriangle(p->mo, scale, amModeCycle, 0, flash, 0);
-				break;
-			case 1:        // Red
-				AM_DrawTriangle(p->mo, scale, amModeCycle, flash, 0, 0);
-				break;
-			case 2:        // Aqua
-				AM_DrawTriangle(p->mo, scale, amModeCycle, 0, flash, flash);
-				break;
-			case 3:        // Blue
-				AM_DrawTriangle(p->mo, scale, amModeCycle, 0, 0, flash);
-				break;
-			}
+		if ((deathmatch && !singledemo) && p_loop_player != plr) {
+			continue;
 		}
+		if (!playeringame[i] || !p_loop_player->mo) {
+			continue;
+		}
+
+		player_mobj = p_loop_player->mo;
+
+		if (i_interpolateframes.value) {
+			render_x = R_Interpolate(player_mobj->x, player_mobj->frame_x, true);
+			render_y = R_Interpolate(player_mobj->y, player_mobj->frame_y, true);
+			render_angle = R_Interpolate(player_mobj->angle, player_mobj->angle, true);
+		}
+		else {
+			render_x = player_mobj->x;
+			render_y = player_mobj->y;
+			render_angle = player_mobj->angle;
+		}
+
+		original_x = player_mobj->x;
+		original_y = player_mobj->y;
+		original_angle = player_mobj->angle;
+
+		player_mobj->x = render_x;
+		player_mobj->y = render_y;
+		player_mobj->angle = render_angle;
+
+		byte r_color = 0, g_color = 0, b_color = 0;
+
+		if (i == 0) { // Green
+			g_color = flash;
+		}
+		else if (i == 1) { // Red
+			r_color = flash;
+		}
+		else if (i == 2) { // Aqua
+			g_color = flash; b_color = flash;
+		}
+		else if (i == 3) { // Blue
+			b_color = flash;
+		}
+		// Default is (0,0,0) if i > 3, which is fine.
+		AM_DrawTriangle(player_mobj, scale, amModeCycle, r_color, g_color, b_color);
+
+		player_mobj->x = original_x;
+		player_mobj->y = original_y;
+		player_mobj->angle = original_angle;
 	}
 }
 
@@ -877,6 +947,30 @@ void AM_drawThings(void) {
 		t = sectors[i].thinglist;
 
 		while (t) {
+			fixed_t original_t_x, original_t_y;
+			angle_t original_t_angle;
+			fixed_t render_t_x, render_t_y;
+			angle_t render_t_angle;
+
+			if (i_interpolateframes.value) {
+				render_t_x = R_Interpolate(t->x, t->frame_x, true);
+				render_t_y = R_Interpolate(t->y, t->frame_y, true);
+				render_t_angle = R_Interpolate(t->angle, t->angle, true);
+			}
+			else {
+				render_t_x = t->x;
+				render_t_y = t->y;
+				render_t_angle = t->angle;
+			}
+
+			original_t_x = t->x;
+			original_t_y = t->y;
+			original_t_angle = t->angle;
+
+			t->x = render_t_x;
+			t->y = render_t_y;
+			t->angle = render_t_angle;
+
 			//
 			// draw thing triangles for automap cheat
 			//
@@ -958,6 +1052,10 @@ void AM_drawThings(void) {
 				}
 			}
 
+			t->x = original_t_x;
+			t->y = original_t_y;
+			t->angle = original_t_angle;
+
 			t = t->snext;
 		}
 	}
@@ -968,33 +1066,42 @@ void AM_drawThings(void) {
 //
 
 void AM_Drawer(void) {
-	fixed_t x;
-	fixed_t y;
-	angle_t view;
-	boolean follow = false;
+	fixed_t base_x, base_y;
+	angle_t base_angle;
+	fixed_t render_x, render_y;
+	angle_t view_for_draw;
 
 	if (!automapactive) {
 		return;
 	}
 
-	follow = (followplayer && !(am_flags & AF_PANMODE));
-
-	if (follow) {
-		automapprevx = automapx;
-		automapprevy = automapy;
-		autoprevangle = automapangle;
+	if (followplayer && !(am_flags & (AF_PANMODE | AF_PANGAMEPAD))) {
+		if (i_interpolateframes.value) {
+			base_x = R_Interpolate(plr->mo->x, automap_prev_x_interpolation, true);
+			base_y = R_Interpolate(plr->mo->y, automap_prev_y_interpolation, true);
+			base_angle = R_Interpolate(plr->mo->angle, automap_prev_ang_interpolation, true);
+		}
+		else {
+			base_x = plr->mo->x;
+			base_y = plr->mo->y;
+			base_angle = plr->mo->angle;
+		}
 	}
-
-	view = autoprevangle - ANG90;
-	x = automapprevx;
-	y = automapprevy;
+	else {
+		base_x = automapx;
+		base_y = automapy;
+		base_angle = automapangle;
+	}
+	render_x = base_x;
+	render_y = base_y;
 
 	if (plr->onground) {
-		x += (quakeviewx >> 7);
-		y += quakeviewy;
+		render_x += (quakeviewx >> 7);
+		render_y += quakeviewy;
 	}
+	view_for_draw = base_angle - ANG90;
 
-	AM_BeginDraw(view, x, y);
+	AM_BeginDraw(view_for_draw, render_x, render_y);
 
 	if (!amModeCycle) {
 		AM_DrawMapped();

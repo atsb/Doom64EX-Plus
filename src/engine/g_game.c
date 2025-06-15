@@ -54,7 +54,6 @@
 #include "i_video.h"
 #include "i_sdlinput.h"
 #include "g_demo.h"
-#include "i_xinput.h"
 
 #define DCLICK_TIME     20
 

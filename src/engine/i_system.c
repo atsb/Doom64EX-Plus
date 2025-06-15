@@ -49,7 +49,6 @@
 #include "z_zone.h"
 #include "i_system.h"
 #include "gl_draw.h"
-#include "i_xinput.h"
 
 extern void I_ShutdownSound(void);
 
