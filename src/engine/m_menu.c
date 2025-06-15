@@ -63,7 +63,6 @@
 #include "p_setup.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
-#include "i_xinput.h"
 
 //
 // definitions
