@@ -44,8 +44,6 @@
 #include "g_actions.h"
 #include "g_controls.h"
 
-#include "i_xinput.h"
-
 // automap flags
 
 enum {

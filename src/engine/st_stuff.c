@@ -45,7 +45,6 @@
 #include "p_setup.h"
 #include "gl_draw.h"
 #include "g_demo.h"
-#include "i_xinput.h"
 
 void M_DrawXInputButton(int x, int y, int button);
 
