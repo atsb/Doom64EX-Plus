@@ -5,17 +5,6 @@
     <ClCompile Include="..\src\engine\am_map.c" />
     <ClCompile Include="..\src\engine\con_console.c" />
     <ClCompile Include="..\src\engine\con_cvar.c" />
-    <ClCompile Include="..\src\engine\deh_ammo.c" />
-    <ClCompile Include="..\src\engine\deh_doom.c" />
-    <ClCompile Include="..\src\engine\deh_frame.c" />
-    <ClCompile Include="..\src\engine\deh_io.c" />
-    <ClCompile Include="..\src\engine\deh_main.c" />
-    <ClCompile Include="..\src\engine\deh_mapping.c" />
-    <ClCompile Include="..\src\engine\deh_misc.c" />
-    <ClCompile Include="..\src\engine\deh_ptr.c" />
-    <ClCompile Include="..\src\engine\deh_str.c" />
-    <ClCompile Include="..\src\engine\deh_thing.c" />
-    <ClCompile Include="..\src\engine\deh_weapon.c" />
     <ClCompile Include="..\src\engine\dgl.c" />
     <ClCompile Include="..\src\engine\d_devstat.c" />
     <ClCompile Include="..\src\engine\d_main.c" />
@@ -36,7 +25,6 @@
     <ClCompile Include="..\src\engine\i_sdlinput.c" />
     <ClCompile Include="..\src\engine\i_system.c" />
     <ClCompile Include="..\src\engine\i_video.c" />
-    <ClCompile Include="..\src\engine\i_xinput.c" />
     <ClCompile Include="..\src\engine\md5.c" />
     <ClCompile Include="..\src\engine\m_cheat.c" />
     <ClCompile Include="..\src\engine\m_fixed.c" />
@@ -48,12 +36,10 @@
     <ClCompile Include="..\src\engine\m_shift.c" />
     <ClCompile Include="..\src\engine\net_client.c" />
     <ClCompile Include="..\src\engine\net_common.c" />
-    <ClCompile Include="..\src\engine\net_dedicated.c" />
     <ClCompile Include="..\src\engine\net_io.c" />
     <ClCompile Include="..\src\engine\net_loop.c" />
     <ClCompile Include="..\src\engine\net_packet.c" />
     <ClCompile Include="..\src\engine\net_query.c" />
-    <ClCompile Include="..\src\engine\net_server.c" />
     <ClCompile Include="..\src\engine\net_structure.c" />
     <ClCompile Include="..\src\engine\p_ceilng.c" />
     <ClCompile Include="..\src\engine\p_doors.c" />
@@ -94,9 +80,9 @@
     <ClCompile Include="..\src\engine\w_merge.c" />
     <ClCompile Include="..\src\engine\w_wad.c" />
     <ClCompile Include="..\src\engine\z_zone.c" />
+    <ClCompile Include="..\src\engine\net_server.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\engine\deh_str.h" />
     <ClInclude Include="..\src\engine\dgl.h" />
     <ClInclude Include="..\src\engine\doomdata.h" />
     <ClInclude Include="..\src\engine\doomdef.h" />
@@ -121,7 +107,6 @@
     <ClInclude Include="..\src\engine\i_swap.h" />
     <ClInclude Include="..\src\engine\i_system.h" />
     <ClInclude Include="..\src\engine\i_video.h" />
-    <ClInclude Include="..\src\engine\i_xinput.h" />
     <ClInclude Include="..\src\engine\md5.h" />
     <ClInclude Include="..\src\engine\m_cheat.h" />
     <ClInclude Include="..\src\engine\m_fixed.h" />
@@ -133,13 +118,11 @@
     <ClInclude Include="..\src\engine\m_shift.h" />
     <ClInclude Include="..\src\engine\net_client.h" />
     <ClInclude Include="..\src\engine\net_common.h" />
-    <ClInclude Include="..\src\engine\net_dedicated.h" />
     <ClInclude Include="..\src\engine\net_defs.h" />
     <ClInclude Include="..\src\engine\net_io.h" />
     <ClInclude Include="..\src\engine\net_loop.h" />
     <ClInclude Include="..\src\engine\net_packet.h" />
     <ClInclude Include="..\src\engine\net_query.h" />
-    <ClInclude Include="..\src\engine\net_server.h" />
     <ClInclude Include="..\src\engine\net_structure.h" />
     <ClInclude Include="..\src\engine\p_inter.h" />
     <ClInclude Include="..\src\engine\p_local.h" />
@@ -170,6 +153,7 @@
     <ClInclude Include="..\src\engine\w_merge.h" />
     <ClInclude Include="..\src\engine\w_wad.h" />
     <ClInclude Include="..\src\engine\z_zone.h" />
+    <ClInclude Include="..\src\engine\net_server.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />

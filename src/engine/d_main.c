@@ -5,20 +5,14 @@
 // Copyright(C) 1997 Midway Home Entertainment, Inc
 // Copyright(C) 2007-2012 Samuel Villarreal
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
+// This source is available for distribution and/or modification
+// only under the terms of the DOOM Source Code License as
+// published by id Software. All rights reserved.
 //
-// This program is distributed in the hope that it will be useful,
+// The source is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
+// FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License
+// for more details.
 //
 //-----------------------------------------------------------------------------
 //
@@ -65,7 +59,6 @@
 #include "g_demo.h"
 #include "p_saveg.h"
 #include "gl_draw.h"
-#include "deh_main.h"
 #include "net_client.h"
 
 //
@@ -938,14 +931,6 @@ void D_DoomMain(void) {
 
 	I_Printf("W_Init: Init WADfiles.\n");
 	W_Init();
-
-	// Load Dehacked patches specified on the command line with -deh.
-	// Note that there's a very careful and deliberate ordering to how
-	// Dehacked patches are loaded. The order we use is:
-	//  1. IWAD dehacked patches.
-	//  2. Command line dehacked patches specified with -deh.
-	//  3. PWAD dehacked patches in DEHACKED lumps.
-	DEH_ParseCommandLine();
 
 	I_Printf("R_Init: Init DOOM refresh daemon.\n");
 	R_Init();

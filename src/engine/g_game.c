@@ -4,20 +4,14 @@
 // Copyright(C) 1993-1997 Id Software, Inc.
 // Copyright(C) 2007-2012 Samuel Villarreal
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
+// This source is available for distribution and/or modification
+// only under the terms of the DOOM Source Code License as
+// published by id Software. All rights reserved.
 //
-// This program is distributed in the hope that it will be useful,
+// The source is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
+// FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License
+// for more details.
 //
 //-----------------------------------------------------------------------------
 //
@@ -61,9 +55,6 @@
 #include "i_sdlinput.h"
 #include "g_demo.h"
 #include "i_xinput.h"
-
-#include "deh_main.h"
-#include "deh_misc.h"
 
 #define DCLICK_TIME     20
 
@@ -174,9 +165,6 @@ CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_extendedcast);
-CVAR_EXTERNAL(i_joytwinstick);
-CVAR_EXTERNAL(i_joysensx);
-CVAR_EXTERNAL(i_joysensy);
 
 //
 // G_RegisterCvars
@@ -739,31 +727,6 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 		forward += forwardmove[speed];
 	}
 
-	//
-	// forward/side movement with joystick
-	//
-	if (pc->flags & PCF_GAMEPAD) {
-		if (i_joytwinstick.value > 0) {
-			forward -= pc->joymovey;
-			side = pc->joymovex;
-
-			cmd->angleturn -= pc->joylookx * 400 * i_joysensx.value;
-			if (forcefreelook != 2) {
-				if ((int)v_mlook.value || forcefreelook)
-					cmd->pitch +=
-					(int)v_mlookinvert.value ? (pc->joylooky *
-						400 * i_joysensy.value) : -(pc->joylooky * 400 * i_joysensy.value);
-			}
-		}
-		else {
-			float x = pc->joymovex + pc->joylookx;
-			float y = pc->joymovey + pc->joylooky;
-
-			cmd->angleturn -= BETWEEN(-1.0f, 1.0f, x) * 400 * i_joysensx.value;
-			forward -= BETWEEN(-1.0f, 1.0f, y);
-		}
-	}
-
 	if (pc->key[PCKEY_BACK]) {
 		forward -= forwardmove[speed];
 	}
@@ -1277,11 +1240,11 @@ void G_PlayerReborn(int player) {
 
 	p->usedown = p->attackdown = p->jumpdown = true;  // don't do anything immediately
 	p->playerstate = PST_LIVE;
-	p->health = deh_initial_health;
+	p->health = MAXHEALTH;
 	p->readyweapon = p->pendingweapon = wp_pistol;
 	p->weaponowned[wp_fist] = true;
 	p->weaponowned[wp_pistol] = true;
-	p->ammo[am_clip] = deh_initial_bullets;
+	p->ammo[am_clip] = 50;
 	p->recoilpitch = 0;
 
 	for (i = 0; i < NUMAMMO; i++) {

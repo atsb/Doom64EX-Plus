@@ -4,20 +4,14 @@
 // Copyright(C) 1993-1997 Id Software, Inc.
 // Copyright(C) 2007-2012 Samuel Villarreal
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
+// This source is available for distribution and/or modification
+// only under the terms of the DOOM Source Code License as
+// published by id Software. All rights reserved.
 //
-// This program is distributed in the hope that it will be useful,
+// The source is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
+// FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License
+// for more details.
 //
 //-----------------------------------------------------------------------------
 //
@@ -38,9 +32,6 @@
 #include "am_map.h"
 #include "m_password.h"
 #include "st_stuff.h"
-#include "deh_main.h"
-#include "deh_misc.h"
-#include "deh_str.h"
 
 typedef struct {
 	const char* cheat;
@@ -82,7 +73,7 @@ void M_CheatGod(player_t* player, char dat[4]) {
 			player->mo->health = 100;
 		}
 
-		player->health = deh_god_mode_health;
+		player->health = 100;
 		player->message = STSTR_DQDON;
 	}
 	else {
@@ -93,8 +84,8 @@ void M_CheatGod(player_t* player, char dat[4]) {
 static void M_CheatFa(player_t* player, char dat[4]) {
 	int i;
 
-	player->armorpoints = deh_idfa_armor;
-	player->armortype = deh_idfa_armor_class;
+	player->armorpoints = 200;
+	player->armortype = 2;
 
 	for (i = 0; i < NUMWEAPONS; i++) {
 		player->weaponowned[i] = true;
@@ -110,8 +101,8 @@ static void M_CheatFa(player_t* player, char dat[4]) {
 void M_CheatKfa(player_t* player, char dat[4]) {
 	int i;
 
-	player->armorpoints = deh_idkfa_armor;
-	player->armortype = deh_idkfa_armor_class;
+	player->armorpoints = 200;
+	player->armortype = 2;
 
 	for (i = 0; i < NUMWEAPONS; i++) {
 		player->weaponowned[i] = true;
@@ -159,10 +150,10 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 	}
 	if (map < 10)
 	{
-		DEH_snprintf(lumpname, 9, "MAP0%i", map);
+		snprintf(lumpname, 9, "MAP0%i", map);
 	}
 	else {
-		DEH_snprintf(lumpname, 9, "MAP%i", map);
+		snprintf(lumpname, 9, "MAP%i", map);
 	}
 	if (map > 40) {
 		G_InitNew(gameskill, 33);
@@ -204,10 +195,10 @@ static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 	}
 	if (map < 10)
 	{
-		DEH_snprintf(lumpname, 9, "MAP0%i", map);
+		snprintf(lumpname, 9, "MAP0%i", map);
 	}
 	else {
-		DEH_snprintf(lumpname, 9, "MAP%i", map);
+		snprintf(lumpname, 9, "MAP%i", map);
 	}
 	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
 

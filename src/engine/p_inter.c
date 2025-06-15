@@ -5,20 +5,14 @@
 // Copyright(C) 1997 Midway Home Entertainment, Inc
 // Copyright(C) 2007-2012 Samuel Villarreal
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
+// This source is available for distribution and/or modification
+// only under the terms of the DOOM Source Code License as
+// published by id Software. All rights reserved.
 //
-// This program is distributed in the hope that it will be useful,
+// The source is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
+// FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License
+// for more details.
 //
 //-----------------------------------------------------------------------------
 //
@@ -54,9 +48,6 @@
 
 #include "tables.h"
 #include "info.h"
-
-#include "deh_main.h"
-#include "deh_misc.h"
 
 CVAR_EXTERNAL(p_damageindicator);
 CVAR(m_obituaries, 0);
@@ -389,7 +380,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 	switch (special->sprite) {
 		// armor
 	case SPR_ARM1:
-		if (!P_GiveArmor(player, deh_green_armor_class))
+		if (!P_GiveArmor(player, 1))
 			return;
 
 		player->message = GOTARMOR;
@@ -397,7 +388,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_ARM2:
-		if (!P_GiveArmor(player, deh_blue_armor_class))
+		if (!P_GiveArmor(player, 2))
 			return;
 
 		player->message = GOTMEGA;
@@ -407,8 +398,8 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		// bonus items
 	case SPR_BON1:
 		player->health += 2;		// can go over 100%
-		if (player->health > deh_max_health)
-			player->health = deh_max_health;
+		if (player->health > 200)
+			player->health = 200;
 		player->mo->health = player->health;
 		player->message = GOTHTHBONUS;
 		player->messagepic = 3;
@@ -416,8 +407,8 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	case SPR_BON2:
 		player->armorpoints += 2;		// can go over 100%
-		if (player->armorpoints > deh_max_armor)
-			player->armorpoints = deh_max_armor;
+		if (player->armorpoints > 200)
+			player->armorpoints = 200;
 		if (!player->armortype) {
 			player->armortype = 1;
 		}
@@ -426,9 +417,9 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_SOUL:
-		player->health += deh_soulsphere_health;
-		if (player->health > deh_max_soulsphere)
-			player->health = deh_max_soulsphere;
+		player->health += 100;
+		if (player->health > 200)
+			player->health = 200;
 		player->mo->health = player->health;
 		player->message = GOTSUPER;
 		player->messagepic = 5;
@@ -436,7 +427,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_MEGA:
-		player->health = deh_megasphere_health;
+		player->health = 200;
 		player->mo->health = player->health;
 		P_GiveArmor(player, 2);
 		player->message = GOTMSPHERE;
