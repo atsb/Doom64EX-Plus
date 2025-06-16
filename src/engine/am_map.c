@@ -98,7 +98,6 @@ CVAR(am_drawobjects, 0);
 CVAR(am_overlay, 0);
 
 extern fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, boolean enable);
-extern float rendertic_frac;
 
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
