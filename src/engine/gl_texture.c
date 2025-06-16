@@ -193,6 +193,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	// if texture is already in video ram
 	if (textureptr[texnum][palettetranslation[texnum]]) {
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
+		GL_SetState(GLSTATE_BLEND, true);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		if (devparm) {
@@ -208,6 +209,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
+	GL_SetState(GLSTATE_BLEND, true);
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

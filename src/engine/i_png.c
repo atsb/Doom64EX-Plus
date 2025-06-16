@@ -177,11 +177,6 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
     if (usingGL && !alpha) {
         int num_trans = 0;
         png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
-        if (num_trans)
-            //if(usingGL && !alpha && info_ptr->num_trans)
-        {
-            I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
-        }
     }
 
     // if the data will be outputted as palette index data (non RGB(A))
