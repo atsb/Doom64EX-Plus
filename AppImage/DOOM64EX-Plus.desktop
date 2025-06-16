@@ -1,0 +1,8 @@
+[Desktop Entry]
+Categories=Game;
+Icon=DOOM64EX-Plus
+Name=DOOM64EX-Plus
+Type=Application
+Exec=DOOM64EX-Plus
+
+X-AppImage-Version=9ac8367d
