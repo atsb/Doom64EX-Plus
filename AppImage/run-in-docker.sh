@@ -4,7 +4,7 @@
 set -xe
 
 make clean
-CFLAGS="$(rpm -E '%optflags') -DDOOM_UNIX_INSTALL" make -j
+CFLAGS="$(rpm -E '%optflags') -DDOOM_UNIX_INSTALL" $(rpm -E '%make_build')
 
 ARCH=$(arch)
 DEPLOYBIN=linuxdeploy-${ARCH}.AppImage
@@ -21,10 +21,10 @@ fi
 ln -sf ../libfmod.so.??
 
 APPDIR=AppDir
-rm -rf $APPDIR
+rm -rf "$APPDIR"
 mkdir -p "$APPDIR/usr/bin"
 cp ../doom64ex-plus.wad "${APPDIR}/usr/bin"
 
-./$DEPLOYBIN --appdir AppDir --executable ../DOOM64EX-Plus --desktop-file DOOM64EX-Plus.desktop  --icon-file DOOM64EX-Plus.png --output appimage
+./$DEPLOYBIN --appdir "$APPDIR" --executable ../DOOM64EX-Plus --desktop-file DOOM64EX-Plus.desktop  --icon-file DOOM64EX-Plus.png --output appimage
 
 chown -R $HOST_UID:$HOST_GID .
