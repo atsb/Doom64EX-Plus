@@ -165,7 +165,11 @@ static int SC_SetData(void* data, const scdatatable_t* table) {
 				*(int*)pointer = sc_parser.getint();
 				break;
 			case 'b':
+#ifndef __APPLE__
+				*(int*)pointer = true;
+#else
 				*(boolean*)pointer = true;
+#endif
 				break;
 			case 'c':
 				sc_parser.compare("="); // expect a '='

@@ -129,7 +129,12 @@ void I_InitScreen(void) {
 
 	usingGL = false;
 
+#if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#else
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#endif
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
@@ -142,7 +147,11 @@ void I_InitScreen(void) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+    
+#ifndef __APPLE__
+	flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
+#endif
 
 	if (!InWindow) {
 		flags |= SDL_WINDOW_FULLSCREEN;
