@@ -5,9 +5,11 @@ if [ -z "$FMOD_STUDIO_SDK_ROOT" ]; then
    exit 1
 fi
 
+set -xe
+
 IMAGE_NAME=doom64-build
 
-docker build --progress=plain -t $IMAGE_NAME  .
+docker build --progress=plain -t $IMAGE_NAME .
 
 # if linuxdeploy complains about FUSE, add --priviledged
 

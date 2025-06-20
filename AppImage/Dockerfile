@@ -1,11 +1,13 @@
-FROM registry.opensuse.org/opensuse/leap:15.6
+FROM registry.opensuse.org/opensuse/leap:15.5
 LABEL maintainer="bubbleguuum"
-
-RUN zypper ar -f https://download.opensuse.org/repositories/games/15.6 games
+COPY libSDL3-0-3.2.16-0.x86_64.rpm /tmp
+COPY SDL3-devel-3.2.16-0.x86_64.rpm /tmp
 
 RUN zypper --gpg-auto-import-keys \
     in -y \
-    wget libtool make file fuse gcc 'pkgconfig(sdl3)' 'pkgconfig(libpng)'
+    --allow-unsigned-rpm \
+    wget libtool make file fuse gcc 'pkgconfig(libpng)' \
+    /tmp/*.rpm
 
 WORKDIR /Doom64EX-Plus
 
