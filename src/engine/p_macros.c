@@ -54,12 +54,11 @@ void P_QueueSpecial(mobj_t* mobj) {
 //
 
 void P_RestartMacro(int id) {
-	int i = 0;
 	macrodata_t* m;
 
 	m = macro->data;
 
-	for (i = m->id; m != &macro->data[macro->count]; m++) {
+	for (; m != &macro->data[macro->count]; m++) {
 		if (m->id == id) {
 			nextmacro = m;
 			return;

@@ -236,7 +236,7 @@ void I_ShutdownVideo(void) {
 void I_InitVideo(void) {
 	unsigned int f = SDL_INIT_VIDEO;
 
-	if (SDL_Init(f) < 0) {
+	if (!SDL_Init(f)) {
 		I_Error("ERROR - Failed to initialize SDL");
 		return;
 	}

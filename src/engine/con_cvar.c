@@ -103,7 +103,6 @@ char* CON_CvarString(char* name) {
 
 void CON_CvarSet(char* var_name, char* value) {
 	cvar_t* var;
-	boolean changed;
 
 	var = CON_CvarGet(var_name);
 	if (!var) {
@@ -112,7 +111,7 @@ void CON_CvarSet(char* var_name, char* value) {
 		return;
 	}
 
-	changed = dstrcmp(var->string, value);
+	dstrcmp(var->string, value);
 
 	Z_Free(var->string);    // free the old value string
 
@@ -155,7 +154,7 @@ void CON_CvarRegister(cvar_t* variable) {
 	dstrcpy(variable->string, oldstr);
 	variable->value = datof(variable->string);
 	variable->defvalue = Z_Malloc(dstrlen(variable->string) + 1, PU_STATIC, 0);
-	dstrcpy(variable->defvalue, variable->string);
+	dstrcpy((char *)variable->defvalue, variable->string);
 
 	// link the variable in
 	variable->next = cvarcap;

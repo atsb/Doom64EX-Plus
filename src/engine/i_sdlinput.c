@@ -225,7 +225,7 @@ static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 // I_ReadMouse
 //
 
-static void I_ReadMouse(void) {
+void I_ReadMouse(void) {
 	float x, y;
 	Uint8 btn;
 	event_t ev;
@@ -475,4 +475,3 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_yaxismove);
 	CON_CvarRegister(&v_xaxismove);
 }
-

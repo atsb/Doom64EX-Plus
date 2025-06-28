@@ -118,7 +118,7 @@ static bool FindExtension(const char *ext) {
         return 0;
     }
 
-    extensions = dglGetString(GL_EXTENSIONS);
+    extensions = (const char *)dglGetString(GL_EXTENSIONS);
 
     start = extensions;
     for(;;) {
@@ -570,11 +570,11 @@ static int GetVersionInt(const char* version) {
 //
 
 void GL_Init(void) {
-    gl_vendor = dglGetString(GL_VENDOR);
+    gl_vendor = (const char *)dglGetString(GL_VENDOR);
     I_Printf("GL_VENDOR: %s\n", gl_vendor);
-    gl_renderer = dglGetString(GL_RENDERER);
+    gl_renderer = (const char *)dglGetString(GL_RENDERER);
     I_Printf("GL_RENDERER: %s\n", gl_renderer);
-    gl_version = dglGetString(GL_VERSION);
+    gl_version = (const char *)dglGetString(GL_VERSION);
     I_Printf("GL_VERSION: %s\n", gl_version);
     dglGetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_max_texture_size);
     I_Printf("GL_MAX_TEXTURE_SIZE: %i\n", gl_max_texture_size);

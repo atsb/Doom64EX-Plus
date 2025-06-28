@@ -26,8 +26,8 @@ typedef struct {
 typedef struct {
 	char    token[512];
 	byte* buffer;
-	char* pointer_start;
-	char* pointer_end;
+	unsigned char* pointer_start;
+	unsigned char* pointer_end;
 	int     linepos;
 	int     rowpos;
 	int     buffpos;

@@ -63,7 +63,7 @@ CVAR(v_accessibility, 0);
 #ifdef DOOM_UNIX_INSTALL
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
 #elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
-#define GetBasePath()	SDL_GetBasePath();
+#define GetBasePath()	(char *)SDL_GetBasePath();
 #elif defined __ANDROID__
 #define GetBasePath()   SDL_GetAndroidInternalStoragePath();
 #endif

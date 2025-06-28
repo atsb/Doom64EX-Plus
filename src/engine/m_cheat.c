@@ -137,7 +137,7 @@ static void M_CheatBerserk(player_t* player, char dat[4]) {
 
 CVAR_EXTERNAL(sv_skill);
 static void M_CheatWarp(player_t* player, char dat[4]) {
-	char	lumpname[9];
+	char	lumpname[14];
 	int		lumpnum;
 	int map;
 	map = datoi(dat);
@@ -150,10 +150,10 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 	}
 	if (map < 10)
 	{
-		snprintf(lumpname, 9, "MAP0%i", map);
+		snprintf(lumpname, 14, "MAP0%i", map);
 	}
 	else {
-		snprintf(lumpname, 9, "MAP%i", map);
+		snprintf(lumpname, 14, "MAP%i", map);
 	}
 	if (map > 40) {
 		G_InitNew(gameskill, 33);
@@ -182,7 +182,7 @@ static void M_CheatWarpZero(player_t* player, char dat[4]) {
 }
 
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
-	char	lumpname[9];
+	char	lumpname[14];
 	int		lumpnum;
 	int map;
 	map = datoi(dat);
@@ -195,10 +195,10 @@ static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 	}
 	if (map < 10)
 	{
-		snprintf(lumpname, 9, "MAP0%i", map);
+		snprintf(lumpname, 14, "MAP0%i", map);
 	}
 	else {
-		snprintf(lumpname, 9, "MAP%i", map);
+		snprintf(lumpname, 14, "MAP%i", map);
 	}
 	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
 

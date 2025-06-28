@@ -637,6 +637,8 @@ boolean G_BindActionByEvent(event_t* ev, char* action) {
 			plist = &MouseActions[button];
 		}
 		break;
+	default:
+		break;
 	}
 	if (plist) {
 		G_BindAction(plist, action);
