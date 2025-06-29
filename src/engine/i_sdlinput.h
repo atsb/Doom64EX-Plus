@@ -34,9 +34,9 @@ void I_MouseAccelChange(void);
 
 void ISDL_RegisterKeyCvars(void);
 
-static void I_GetEvent(SDL_Event* Event);
-static void I_ReadMouse(void);
-static void I_InitInputs(void);
+void I_GetEvent(SDL_Event* Event);
+void I_ReadMouse(void);
+void I_InitInputs(void);
 
 void I_StartTic(void);
 void I_FinishUpdate(void);

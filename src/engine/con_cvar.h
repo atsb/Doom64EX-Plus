@@ -29,8 +29,8 @@
 typedef struct cvar_s cvar_t;
 
 struct cvar_s {
-    int8_t*           name;
-    int8_t*           string;
+    char*           name;
+    char*           string;
     boolean        nonclient;
     void (*callback)(cvar_t*);
     float           value;
@@ -88,5 +88,4 @@ void CON_CvarSetValue(char *var_name, float value);
 cvar_t *CON_CvarGet(char *name);
 
 #endif
-
 

@@ -342,7 +342,7 @@ void S_UpdateSounds(void) {
 void S_StartSound(mobj_t* origin, int sfx_id) {
     int volume;
     int sep;
-    int reverb_sound;
+    // int reverb_sound;
 
     if (nosound) {
         return;
@@ -358,7 +358,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         volume = NORM_VOLUME;
     }
 
-    reverb_sound = 0;
+    // reverb_sound = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -366,10 +366,10 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         subsector = R_PointInSubsector(origin->x, origin->y);
 
         if (subsector->sector->flags & MS_REVERB) {
-            reverb_sound = 16;
+            // reverb_sound = 16;
         }
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
-            reverb_sound = 32;
+            // reverb_sound = 32;
         }
     }
 
@@ -384,7 +384,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
 void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
     int volume;
     int sep;
-    int reverb_plasma;
+    // int reverb_plasma;
 
     if (nosound) {
         return;
@@ -400,7 +400,7 @@ void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
         volume = NORM_VOLUME;
     }
 
-    reverb_plasma = 0;
+    // reverb_plasma = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -408,10 +408,10 @@ void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
         subsector = R_PointInSubsector(origin->x, origin->y);
 
         if (subsector->sector->flags & MS_REVERB) {
-            reverb_plasma = 16;
+            // reverb_plasma = 16;
         }
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
-            reverb_plasma = 32;
+            // reverb_plasma = 32;
         }
     }
 
@@ -482,7 +482,6 @@ void S_RegisterCvars(void) {
     CON_CvarRegister(&s_musvol);
     CON_CvarRegister(&s_gain);
 }
-
 
 
 

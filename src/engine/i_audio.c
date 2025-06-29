@@ -426,23 +426,6 @@ static int Chan_GetNextTick(channel_t* chan) {
 }
 
 //
-// Chan_StopTrack
-//
-// Stops a specific channel and any played sounds
-//
-
-static void Chan_StopTrack(doomseq_t* seq, channel_t* chan) {
-    int c;
-
-    if (chan->song->type >= 1) {
-        c = chan->track->channel;
-    }
-    else {
-        c = chan->id;
-    }
-}
-
-//
 // Song_ClearPlaylist
 //
 
@@ -465,8 +448,6 @@ static int Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
     if (!chan->song || !chan->track) {
         return false;
     }
-
-    Chan_StopTrack(seq, chan);
 
     chan->song = NULL;
     chan->track = NULL;
@@ -492,56 +473,6 @@ static int Chan_RemoveTrackFromPlaylist(doomseq_t* seq, channel_t* chan) {
     seq->voices--;
 
     return true;
-}
-
-//
-// Song_AddTrackToPlaylist
-//
-// Add a song to the playlist for the sequencer to play.
-// Sets any default values to the channel in the process
-// Both start sound and start music refer to this
-
-static channel_t* Song_AddTrackToPlaylist(doomseq_t* seq, song_t* song, track_t* track) {
-    int i;
-
-    for (i = 0; i < MIDI_CHANNELS; i++) {
-
-        if (playlist[i].song == NULL) {
-            playlist[i].song = song;
-            playlist[i].track = track;
-            playlist[i].tics = 0;
-            playlist[i].lasttic = 0;
-            playlist[i].starttic = 0;
-            playlist[i].pos = track->data;
-            playlist[i].jump = NULL;
-            playlist[i].state = CHAN_STATE_READY;
-            playlist[i].paused = false;
-            playlist[i].stop = false;
-            playlist[i].key = 0;
-            playlist[i].velocity = 0;
-
-            // channels 0 through 15 are reserved for music only
-            // channel ids should only be accessed by non-music sounds
-            playlist[i].id = 0x0f + i;
-
-            playlist[i].volume = 127.0f;
-            playlist[i].basevol = 127.0f;
-            playlist[i].pan = 64;
-            playlist[i].origin = NULL;
-            playlist[i].depth = 0;
-            playlist[i].starttime = 0;
-            playlist[i].curtime = 0;
-
-            // immediately start reading the midi track
-            playlist[i].nexttic = Chan_GetNextTick(&playlist[i]);
-
-            seq->voices++;
-
-            return &playlist[i];
-        }
-    }
-
-    return NULL;
 }
 
 //
@@ -590,9 +521,7 @@ static void Event_ControlChange(doomseq_t* seq, channel_t* chan) {
 //
 
 static void Event_ProgramChange(doomseq_t* seq, channel_t* chan) {
-    int program;
-
-    program = Chan_GetNextMidiByte(chan);
+    Chan_GetNextMidiByte(chan);
 }
 
 //
@@ -600,9 +529,7 @@ static void Event_ProgramChange(doomseq_t* seq, channel_t* chan) {
 //
 
 static void Event_ChannelPressure(doomseq_t* seq, channel_t* chan) {
-    int val;
-
-    val = Chan_GetNextMidiByte(chan);
+    Chan_GetNextMidiByte(chan);
 }
 
 //
@@ -610,11 +537,8 @@ static void Event_ChannelPressure(doomseq_t* seq, channel_t* chan) {
 //
 
 static void Event_PitchBend(doomseq_t* seq, channel_t* chan) {
-    int b1;
-    int b2;
-
-    b1 = Chan_GetNextMidiByte(chan);
-    b2 = Chan_GetNextMidiByte(chan);
+    Chan_GetNextMidiByte(chan);
+    Chan_GetNextMidiByte(chan);
 }
 
 //
@@ -757,13 +681,6 @@ static int Signal_Reset(doomseq_t* seq) {
 //
 
 static int Signal_Pause(doomseq_t* seq) {
-    int i;
-    channel_t* c;
-
-    for (i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-    }
-
     Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
@@ -775,13 +692,6 @@ static int Signal_Pause(doomseq_t* seq) {
 //
 
 static int Signal_Resume(doomseq_t* seq) {
-    int i;
-    channel_t* c;
-
-    for (i = 0; i < MIDI_CHANNELS; i++) {
-        c = &playlist[i];
-    }
-
     Seq_SetStatus(seq, SEQ_SIGNAL_READY);
     return 1;
 }
@@ -1055,7 +965,7 @@ static int Seq_RegisterSongs(doomseq_t* seq) {
 static int Seq_RegisterSounds(void) {
     int i;
     int start, end;
-    int first_sfx_lump_index, num_sfx_lumps_to_process;
+    int num_sfx_lumps_to_process;
     int success = 0;
     int fail = 0;
     FMOD_RESULT result;
@@ -1197,10 +1107,6 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
 
 
 void I_InitSequencer(void) {
-    int   sffound;
-    char* sfpath;
-    void* extradriverdata = 0;
-
     I_Printf("Audio Engine: FMOD Studio by Firelight Technologies Pty Ltd.\n");
 
     FMOD_ERROR_CHECK(FMOD_System_Create(&sound.fmod_studio_system, FMOD_VERSION));
@@ -1661,7 +1567,6 @@ void FMOD_StopSound(sndsrc_t* origin, int sfx_id) {
 
 int FMOD_StartMusic(int mus_id) {
     FMOD_RESULT result;
-    FMOD_BOOL isPlaying = false;
 
     StopChannel(&sound.fmod_studio_channel_music);
     ReleaseSound(&currentMidiSound);

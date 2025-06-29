@@ -446,7 +446,7 @@ P_BlockLinesIterator
 
 	offset = *(blockmap + offset);
 
-	for (list = blockmaplump + offset; *list != -1; list++) {
+	for (list = (short *)blockmaplump + offset; *list != -1; list++) {
 		ld = &lines[*list];
 
 		if ((ld - lines) >= numlines) {
