@@ -38,6 +38,7 @@
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(r_wipe);
+CVAR_EXTERNAL(v_fadein);
 
 int     leveltime;
 
@@ -287,8 +288,10 @@ void P_Start(void) {
 	AM_Stop();
 	M_ClearRandom();
 
-	// do a nice little fade in effect
-	P_FadeInBrightness();
+	if (v_fadein.value) {
+		// do a nice little fade in effect
+		P_FadeInBrightness();
+	}
 
 	// autoactivate line specials
 	P_ActivateLineByTag(999, players[0].mo);

@@ -1758,6 +1758,7 @@ void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
+void M_ChangeFadeIn(int choice);
 void M_DrawVideo(void);
 void M_ChangeVsync(int choice);
 
@@ -1771,6 +1772,7 @@ CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(v_fadein);
 CVAR_EXTERNAL(v_vsync);
 
 enum {
@@ -1786,6 +1788,7 @@ enum {
 	interpolate_frames,
 	vsync,
 	accessibility,
+	fadein,
 	v_default,
 	v_videoreset,
 	video_return,
@@ -1805,6 +1808,7 @@ menuitem_t VideoMenu[] = {
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
 	{2,"VSync:",M_ChangeVsync, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
+	{2,"Fade In:",M_ChangeFadeIn, 'd'},
 	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
 	{1,"/r Return",M_Return, 0x20}
@@ -1822,7 +1826,8 @@ char* VideoHints[video_end] = {
 	"resolution changes will take effect\n after restarting",
 	"toggle frame interpolation to\n achieve smooth framerates",
 	"toggle vsync on or off to prevent screen tearing",
-	"toggle accessibility to \n remove flashing lights",
+	"toggle accessibility to\n remove flashing lights",
+	"toggle fade in animation that plays when starting a level",
 	"apply video settings"
 };
 
@@ -1835,6 +1840,7 @@ menudefault_t VideoDefault[] = {
 	{ &i_interpolateframes, 1 },
 	{ &v_vsync, 1 },
 	{ &v_accessibility, 0 },
+	{ &v_fadein, 1 },
 	{ NULL, -1 }
 };
 
@@ -2063,6 +2069,7 @@ void M_DrawVideo(void) {
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, onofftype);
+	DRAWVIDEOITEM2(fadein, v_fadein.value, onofftype);
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
@@ -2274,6 +2281,11 @@ void M_ChangeVsync(int choice)
 void M_ChangeAccessibility(int choice)
 {
 	M_SetOptionValue(choice, 0, 1, 1, &v_accessibility);
+}
+
+void M_ChangeFadeIn(int choice)
+{
+	M_SetOptionValue(choice, 0, 1, 1, &v_fadein);
 }
 
 //------------------------------------------------------------------------

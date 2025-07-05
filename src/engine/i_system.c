@@ -54,6 +54,7 @@ extern void I_ShutdownSound(void);
 
 CVAR(i_interpolateframes, 1);
 CVAR(v_accessibility, 0);
+CVAR(v_fadein, 1);
 
 // Gibbon - hack from curl to deal with some crap
 #if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
@@ -521,6 +522,7 @@ CVAR_EXTERNAL(i_xinputscheme);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(v_fadein);
 
 void I_RegisterCvars(void) {
 #if defined(_WIN32) && defined(USE_XINPUT)
@@ -532,4 +534,5 @@ void I_RegisterCvars(void) {
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_interpolateframes);
 	CON_CvarRegister(&v_accessibility);
+	CON_CvarRegister(&v_fadein);
 }
