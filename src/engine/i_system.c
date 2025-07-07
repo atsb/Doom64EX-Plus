@@ -314,13 +314,13 @@ char* I_FindDataFile(char* file) {
 
 	const char* homeDir = getenv("HOME");
 	if (homeDir) {
-		snprintf(path, 511, "%s/.steam/steam/steamapps/common/DOOM 64/%s", homeDir, file);
+		snprintf(path, 511, "%s/.steam/steam/steamapps/common/Doom 64/%s", homeDir, file);
 		if (I_FileExists(path)) {
 			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
 			return path;
 		}
 
-		snprintf(path, 511, "%s/.local/share/Steam/steamapps/common/DOOM 64/%s", homeDir, file);
+		snprintf(path, 511, "%s/.local/share/Steam/steamapps/common/Doom 64/%s", homeDir, file);
 		if (I_FileExists(path)) {
 			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
 			return path;
