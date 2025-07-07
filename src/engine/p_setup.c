@@ -300,8 +300,8 @@ void P_LoadSectors(int lump) {
 	for (i = 0; i < numsectors; i++, ss++, ms++) {
 		ss->floorheight = INT2F(SHORT(ms->floorheight));
 		ss->ceilingheight = INT2F(SHORT(ms->ceilingheight));
-		ss->floorpic = P_GetTextureHashKey(LONG(ms->floorpic));
-		ss->ceilingpic = P_GetTextureHashKey(LONG(ms->ceilingpic));
+		ss->floorpic = P_GetTextureHashKey((word)SHORT(ms->floorpic));
+		ss->ceilingpic = P_GetTextureHashKey((word)SHORT(ms->ceilingpic));
 		ss->special = SHORT(ms->special);
 		ss->flags = SHORT(ms->flags);
 
@@ -725,9 +725,9 @@ void P_LoadSideDefs(int lump) {
 	for (i = 0; i < numsides; i++, msd++, sd++) {
 		sd->textureoffset = INT2F(SHORT(msd->textureoffset));
 		sd->rowoffset = INT2F(SHORT(msd->rowoffset));
-		sd->toptexture = P_GetTextureHashKey(SHORT(msd->toptexture));
-		sd->bottomtexture = P_GetTextureHashKey(SHORT(msd->bottomtexture));
-		sd->midtexture = P_GetTextureHashKey(SHORT(msd->midtexture));
+		sd->toptexture = P_GetTextureHashKey((word)SHORT(msd->toptexture));
+		sd->bottomtexture = P_GetTextureHashKey((word)SHORT(msd->bottomtexture));
+		sd->midtexture = P_GetTextureHashKey((word)SHORT(msd->midtexture));
 		sd->sector = &sectors[SHORT(msd->sector)];
 	}
 }

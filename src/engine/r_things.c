@@ -600,7 +600,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 		color = D_RGBA(255, 255, 255, alpha);
 	}
 	else {
-		color = LONG(R_GetSectorLight(alpha, sector->colors[LIGHT_THING]));
+		color = R_GetSectorLight(alpha, sector->colors[LIGHT_THING]);
 	}
 
 	spritenum = sprframe->lump[0];

@@ -445,7 +445,7 @@ P_BlockLinesIterator
 
 	offset = y * bmapwidth + x;
 
-	offset = SHORT(*(blockmap)) + offset;
+	offset = (uint16_t)SHORT(*(blockmap + offset));
 
 	for (list = (short *)blockmaplump + offset; *list != -1; list++) {
 		ld = &lines[SHORT(*list)];

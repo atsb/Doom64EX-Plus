@@ -628,10 +628,17 @@ void GL_UpdateEnvTexture(rcolor color) {
 	dmemset(rgb, 0, sizeof(rcolor) * 16);
 
 	for (i = 0; i < 16; i++) {
+#ifdef SYS_BIG_ENDIAN
+		*c++ = (byte)((env >> 24) & 0xff);
+		*c++ = (byte)((env >> 16) & 0xff);
+		*c++ = (byte)((env >> 8) & 0xff);
+		*c++ = (byte)((env >> 0) & 0xff);
+#else
 		*c++ = (byte)((env >> 0) & 0xff);
 		*c++ = (byte)((env >> 8) & 0xff);
 		*c++ = (byte)((env >> 16) & 0xff);
 		*c++ = (byte)((env >> 24) & 0xff);
+#endif
 	}
 
 	dglTexSubImage2D(
