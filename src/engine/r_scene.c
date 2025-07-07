@@ -25,6 +25,7 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_drawlist.h"
+#include "i_swap.h"
 
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
@@ -262,7 +263,7 @@ static void SetupFog(void) {
 			dglFogf(GL_FOG_END, max);
 		}
 
-		dglGetColorf(fogcolor, color);
+		dglGetColorf(LONG(fogcolor), color);
 		dglFogfv(GL_FOG_COLOR, color);
 	}
 }

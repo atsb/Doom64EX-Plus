@@ -298,13 +298,21 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         // need to reverse the bytes to ABGR format
         for (i = 0; i < (height * rowSize) / 4; i++) {
             int c = *check;
+#ifdef SYS_BIG_ENDIAN
+            byte a = (byte)((c >> 24) & 0xff);
+            byte b = (byte)((c >> 16) & 0xff);
+            byte g = (byte)((c >> 8) & 0xff);
+            byte r = (byte)(c & 0xff);
 
+            *check = (((unsigned int)b << 24) | (g << 16) | (r << 8) | a);
+#else
             byte b = (byte)((c >> 24) & 0xff);
             byte g = (byte)((c >> 16) & 0xff);
             byte r = (byte)((c >> 8) & 0xff);
             byte a = (byte)(c & 0xff);
 
             *check = (((unsigned int)a << 24) | (b << 16) | (g << 8) | r);
+#endif
 
             check++;
         }

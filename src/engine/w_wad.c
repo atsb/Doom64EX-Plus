@@ -386,8 +386,8 @@ void W_CacheMapLump(int map) {
 		mapLumpData = (byte*)W_CacheLumpNum(lump, PU_STATIC);
 	}
 
-	numMapLumps = ((wadinfo_t*)mapLumpData)->numlumps;
-	mapLump = (filelump_t*)(mapLumpData + ((wadinfo_t*)mapLumpData)->infotableofs);
+	numMapLumps = LONG(((wadinfo_t*)mapLumpData)->numlumps);
+	mapLump = (filelump_t*)(mapLumpData + LONG(((wadinfo_t*)mapLumpData)->infotableofs));
 }
 
 //
@@ -431,7 +431,7 @@ int W_MapLumpLength(int lump) {
 		I_Error("W_MapLumpLength: %i out of range", lump);
 	}
 
-	return mapLump[lump].size;
+	return LONG(mapLump[lump].size);
 }
 
 //
@@ -455,7 +455,7 @@ void* W_GetMapLump(int lump) {
 		I_Error("W_GetMapLump: lump %d out of range", lump);
 	}
 
-	return (mapLumpData + mapLump[lump].filepos);
+	return (mapLumpData + LONG(mapLump[lump].filepos));
 }
 
 //

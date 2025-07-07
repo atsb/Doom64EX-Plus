@@ -33,6 +33,7 @@
 #include "doomstat.h"
 #include "z_zone.h"
 #include "i_system.h"
+#include "i_swap.h"
 
 //
 // P_AproxDistance
@@ -444,10 +445,10 @@ P_BlockLinesIterator
 
 	offset = y * bmapwidth + x;
 
-	offset = *(blockmap + offset);
+	offset = SHORT(*(blockmap)) + offset;
 
 	for (list = (short *)blockmaplump + offset; *list != -1; list++) {
-		ld = &lines[*list];
+		ld = &lines[SHORT(*list)];
 
 		if ((ld - lines) >= numlines) {
 			I_Error("P_BlockLinesIterator: Linedef out of range");

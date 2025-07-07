@@ -300,8 +300,8 @@ void P_LoadSectors(int lump) {
 	for (i = 0; i < numsectors; i++, ss++, ms++) {
 		ss->floorheight = INT2F(SHORT(ms->floorheight));
 		ss->ceilingheight = INT2F(SHORT(ms->ceilingheight));
-		ss->floorpic = P_GetTextureHashKey(ms->floorpic);
-		ss->ceilingpic = P_GetTextureHashKey(ms->ceilingpic);
+		ss->floorpic = P_GetTextureHashKey(LONG(ms->floorpic));
+		ss->ceilingpic = P_GetTextureHashKey(LONG(ms->ceilingpic));
 		ss->special = SHORT(ms->special);
 		ss->flags = SHORT(ms->flags);
 
@@ -356,7 +356,7 @@ void P_LoadLights(int lump) {
 			l->r = ml->r;
 			l->g = ml->g;
 			l->b = ml->b;
-			l->tag = ml->tag;
+			l->tag = SHORT(ml->tag);
 
 			ml++;
 		}
@@ -473,7 +473,7 @@ void P_LoadLeafs(int lump) {
 		while (((byte*)src - (byte*)mlf) < length) {
 			count++;
 			size += (word)SHORT(*src);
-			next = (*src << 2) + 2;
+			next = (SHORT(*src) << 2) + 2;
 			src += (next >> 1);
 		}
 	}
@@ -639,8 +639,8 @@ void P_LoadLineDefs(int lump) {
 	mld = (maplinedef_t*)W_GetMapLump(lump);
 	ld = lines;
 	for (i = 0; i < numlines; i++, mld++, ld++) {
-		ld->flags = mld->flags;
-		ld->special = mld->special;
+		ld->flags = LONG(mld->flags);
+		ld->special = SHORT(mld->special);
 		ld->tag = SHORT(mld->tag);
 		v1 = ld->v1 = &vertexes[(word)SHORT(mld->v1)];
 		v2 = ld->v2 = &vertexes[(word)SHORT(mld->v2)];
@@ -725,9 +725,9 @@ void P_LoadSideDefs(int lump) {
 	for (i = 0; i < numsides; i++, msd++, sd++) {
 		sd->textureoffset = INT2F(SHORT(msd->textureoffset));
 		sd->rowoffset = INT2F(SHORT(msd->rowoffset));
-		sd->toptexture = P_GetTextureHashKey(msd->toptexture);
-		sd->bottomtexture = P_GetTextureHashKey(msd->bottomtexture);
-		sd->midtexture = P_GetTextureHashKey(msd->midtexture);
+		sd->toptexture = P_GetTextureHashKey(SHORT(msd->toptexture));
+		sd->bottomtexture = P_GetTextureHashKey(SHORT(msd->bottomtexture));
+		sd->midtexture = P_GetTextureHashKey(SHORT(msd->midtexture));
 		sd->sector = &sectors[SHORT(msd->sector)];
 	}
 }
@@ -770,10 +770,10 @@ static void P_LoadBlockMap(void) {
 		blockmaplump[i] = (t == -1) ? -1l : (int32_t)t & 0xffff;
 	}
 
-	bmaporgx = blockmaplump[0] << FRACBITS;
-	bmaporgy = blockmaplump[1] << FRACBITS;
-	bmapwidth = blockmaplump[2];
-	bmapheight = blockmaplump[3];
+	bmaporgx = SHORT(blockmaplump[0]) << FRACBITS;
+	bmaporgy = SHORT(blockmaplump[1]) << FRACBITS;
+	bmapwidth = SHORT(blockmaplump[2]);
+	bmapheight = SHORT(blockmaplump[3]);
 
 	// clear out mobj chains
 	count = sizeof(*blocklinks) * bmapwidth * bmapheight;
