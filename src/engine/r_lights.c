@@ -266,8 +266,8 @@ rcolor R_SplitLineColor(seg_t* line, byte side) {
 	rcolor d3dc2 = 0;
 
 	height = (line->frontsector->ceilingheight - line->frontsector->floorheight) / FRACUNIT;
-	d3dc1 = bspColor[LIGHT_UPRWALL];
-	d3dc2 = bspColor[LIGHT_LWRWALL];
+	d3dc1 = LONG(bspColor[LIGHT_UPRWALL]);
+	d3dc2 = LONG(bspColor[LIGHT_LWRWALL]);
 
 	b1 = (float)((d3dc1 >> 16) & 0xff);
 	g1 = (float)((d3dc1 >> 8) & 0xff);

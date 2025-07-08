@@ -33,6 +33,7 @@
 #include "r_clipper.h"
 #include "m_misc.h"
 #include "con_console.h"
+#include "i_swap.h"
 
 #include <stdlib.h>
 

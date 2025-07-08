@@ -30,6 +30,7 @@
 #include "doomtype.h"
 #include "d_keywds.h"
 #include "tables.h"
+#include "i_swap.h"
 
 // build version
 extern const char version_date[];
@@ -108,17 +109,21 @@ extern float D_fabs(float x);
 
 //villsa
 // cast first argument a to rcolor because: left shift of 255 by 24 places cannot be represented in type 'int'
+#ifdef SYS_BIG_ENDIAN
+#define D_RGBA(r,g,b,a) ((rcolor)((((rcolor)((r)&0xff))<<24)|(((g)&0xff)<<16)|(((b)&0xff)<<8)|((a)&0xff)))
+#else
 #define D_RGBA(r,g,b,a) ((rcolor)((((rcolor)((a)&0xff))<<24)|(((b)&0xff)<<16)|(((g)&0xff)<<8)|((r)&0xff)))
+#endif
 
 // basic color definitions
-#define WHITE               0xFFFFFFFF
-#define RED                 0xFF0000FF
-#define BLUE                0xFFFF0000
-#define AQUA                0xFFFFFF00
-#define YELLOW              0xFF00FFFF
-#define GREEN               0xFF00FF00
-#define REDALPHA(x)         (((rcolor)x)<<24|0x0000FF)
-#define WHITEALPHA(x)       (((rcolor)x)<<24|0xFFFFFF)
+#define WHITE       D_RGBA(255, 255, 255, 255)
+#define RED         D_RGBA(255, 0, 0, 255)
+#define GREEN       D_RGBA(0, 255, 0, 255)
+#define BLUE        D_RGBA(0, 0, 255, 255)
+#define YELLOW      D_RGBA(255, 255, 0, 255)
+#define AQUA        D_RGBA(0, 255, 255, 255)
+#define REDALPHA(x)     D_RGBA(255, 0, 0, (x))
+#define WHITEALPHA(x)   D_RGBA(255, 255, 255, (x))
 
 // The maximum number of players, multiplayer/networking.
 // remember to add settings for extra skins if increase:)

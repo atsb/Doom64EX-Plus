@@ -1026,7 +1026,7 @@ void ST_UpdateFlash(void) {
 
 	// invulnerability flash (white)
 	if (p->powers[pw_invulnerability] > 61 || (p->powers[pw_invulnerability] & 8)) {
-		flashcolor = D_RGBA(128, 128, 128, 0xff);
+		flashcolor = LONG(D_RGBA(128, 128, 128, 0xff));
 		st_flash_r = 255;
 		st_flash_g = 255;
 		st_flash_b = 255;
@@ -1034,7 +1034,7 @@ void ST_UpdateFlash(void) {
 	}
 	// bfg flash (green)
 	else if (p->bfgcount) {
-		flashcolor = D_RGBA(0, p->bfgcount & 0xff, 0, 0xff);
+		flashcolor = LONG(D_RGBA(0, p->bfgcount & 0xff, 0, 0xff));
 		st_flash_r = 0;
 		st_flash_g = 255;
 		st_flash_b = 0;
@@ -1060,14 +1060,14 @@ void ST_UpdateFlash(void) {
 
 		// take priority based on value
 		if (r1 > r2) {
-			flashcolor = D_RGBA(r1 & 0xff, 0, 0, 0xff);
+			flashcolor = LONG(D_RGBA(r1 & 0xff, 0, 0, 0xff));
 			st_flash_r = 255;
 			st_flash_g = 0;
 			st_flash_b = 0;
 			st_flash_a = r1;
 		}
 		else {
-			flashcolor = D_RGBA(r2 & 0xff, 0, 0, 0xff);
+			flashcolor = LONG(D_RGBA(r2 & 0xff, 0, 0, 0xff));
 			st_flash_r = 255;
 			st_flash_g = 0;
 			st_flash_b = 0;
@@ -1076,7 +1076,7 @@ void ST_UpdateFlash(void) {
 	}
 	// suit flash (green/yellow)
 	else if (p->powers[pw_ironfeet] > 61 || (p->powers[pw_ironfeet] & 8)) {
-		flashcolor = D_RGBA(0, 32, 4, 0xff);
+		flashcolor = LONG(D_RGBA(0, 32, 4, 0xff));
 		st_flash_r = 0;
 		st_flash_g = 255;
 		st_flash_b = 31;
@@ -1093,7 +1093,7 @@ void ST_UpdateFlash(void) {
 
 		c2 = (((c1 << 2) + c1) << 1);
 
-		flashcolor = D_RGBA(c2 & 0xff, c2 & 0xff, c1 & 0xff, 0xff);
+		flashcolor = LONG(D_RGBA(c2 & 0xff, c2 & 0xff, c1 & 0xff, 0xff));
 		st_flash_r = 255;
 		st_flash_g = 255;
 		st_flash_b = 0;
