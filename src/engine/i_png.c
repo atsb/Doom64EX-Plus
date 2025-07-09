@@ -246,6 +246,11 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         }
     }
 
+    // needed to avoid this warning
+    // libpng warning: Interlace handling should be turned on when using png_read_image
+    // concern lumps: CRSHAIRS, CONFONT, BUTTONS
+    png_set_interlace_handling(png_ptr);
+
     // refresh png information
     png_read_update_info(png_ptr, info_ptr);
 
