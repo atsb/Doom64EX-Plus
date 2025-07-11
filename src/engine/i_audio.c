@@ -1045,8 +1045,11 @@ static void Seq_Shutdown(doomseq_t* seq) {
     //
     // signal the sequencer to shut down
     //
-    Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
-    SDL_WaitThread(seq->thread, NULL);
+    if(seq->thread) {
+        Seq_SetStatus(seq, SEQ_SIGNAL_SHUTDOWN);
+        SDL_WaitThread(seq->thread, NULL);
+        seq->thread = NULL;
+    }
 }
 
 //
@@ -1064,6 +1067,7 @@ static int SDLCALL Thread_PlayerHandler(void* param) {
     signalhandler signal;
 
     while (1) {
+
         //
         // check status of the sequencer
         //
@@ -1254,15 +1258,19 @@ void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
 
 void I_ShutdownSound(void)
 {
+    // wait for seq thread to terminate
+    Seq_Shutdown(&doomseq);
+
     for(int i = 0 ; i < num_sfx ; i++) {
         ReleaseSound(&sound.fmod_studio_sound[i]);
     }
-
-    ReleaseSound(&currentMidiSound);
     
     StopChannel(&sound.fmod_studio_channel_music);
     StopChannel(&sound.fmod_studio_channel_loop);
     StopChannel(&sound.fmod_studio_channel_plasma_loop);
+
+    // must be done after stopping fmod_studio_channel_music
+    ReleaseSound(&currentMidiSound);
 
     FMOD_ERROR_CHECK(FMOD_System_Close(sound.fmod_studio_system));
     FMOD_ERROR_CHECK(FMOD_System_Release(sound.fmod_studio_system));
