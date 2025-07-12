@@ -4,15 +4,15 @@ endif
 
 ARCH=$(shell arch)
 
-ifeq ($(ARCH), "aarch64")
+ifeq ($(ARCH),aarch64)
 ARCH = arm64
 endif
 
-ifeq ($(ARCH), "i586")
+ifeq ($(ARCH),i586)
 ARCH = x86
 endif
 
-ifeq ($(ARCH), "i686")
+ifeq ($(ARCH),i686)
 ARCH = x86
 endif
 
