@@ -1752,6 +1752,7 @@ void M_ChangeHUDColor(int choice) {
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
+void M_ChangehudFilter(int choice);
 void M_ChangeWindowed(int choice);
 void M_ChangeRatio(int choice);
 void M_ChangeResolution(int choice);
@@ -1769,6 +1770,7 @@ CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
+CVAR_EXTERNAL(r_hudFilter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
@@ -1781,6 +1783,7 @@ enum {
 	video_dgamma,
 	video_empty2,
 	filter,
+	hud_filter,
 	anisotropic,
 	windowed,
 	ratio,
@@ -1801,6 +1804,7 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
+	{2,"HUD Filter:",M_ChangehudFilter, 't'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
 	{2,"Windowed:",M_ChangeWindowed, 'w'},
 	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
@@ -1820,6 +1824,7 @@ char* VideoHints[video_end] = {
 	"adjust screen gamma",
 	NULL,
 	"toggle texture filtering",
+	"toggle texture filtering on hud and text",
 	"toggle blur reduction on textures",
 	"toggle windowed mode",
 	"select aspect ratio",
@@ -1835,6 +1840,7 @@ menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
+	{ &r_hudFilter, 0 },
 	{ &r_anisotropic, 1 },
 	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
@@ -2060,6 +2066,7 @@ void M_DrawVideo(void) {
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
+	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
 	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
@@ -2149,6 +2156,10 @@ void M_ChangeGammaLevel(int choice)
 
 void M_ChangeFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_filter);
+}
+
+void M_ChangehudFilter(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &r_hudFilter);
 }
 
 void M_ChangeAnisotropic(int choice) {
