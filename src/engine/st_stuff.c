@@ -64,6 +64,7 @@ CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(v_accessibility);
 CVAR_EXTERNAL(r_texturecombiner);
+CVAR_EXTERNAL(r_hudFilter);
 
 //
 // STATUS BAR DATA
@@ -583,6 +584,8 @@ static void ST_DrawStatus(void) {
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_hudFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_hudFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
 	if (st_drawhud.value >= 2) {
 		GL_SetOrthoScale(0.725f);
