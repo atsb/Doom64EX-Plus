@@ -1,4 +1,5 @@
 #!/bin/sh
+#shellcheck disable=SC2086,SC2046
 
 if [ -z "$FMOD_STUDIO_SDK_ROOT" ]; then
    echo "FMOD_STUDIO_SDK_ROOT environment variable is not set. Point it to the root of the FMOD studio SDK that can be downloaded on https://www.fmod.com/download#fmodstudio)"
@@ -7,13 +8,29 @@ fi
 
 set -xe
 
-IMAGE_NAME=doom64-build
+TARGET_ARCH=$1
 
-docker build --progress=plain -t $IMAGE_NAME .
+[ -z "$TARGET_ARCH" ] && TARGET_ARCH=x86_64
 
-# if linuxdeploy complains about FUSE, add --priviledged
+case $TARGET_ARCH in
+    x86_64)
+        PLATFORM_ARCH=amd64
+        ;;
+    aarch64)
+        PLATFORM_ARCH=arm64
+        ;;
+    *)
+        echo "Unmanaged target arch: $TARGET_ARCH"
+esac
+
+IMAGE_NAME=doom64-build-$PLATFORM_ARCH
+
+docker buildx build --progress=plain --platform=linux/$PLATFORM_ARCH --build-arg TARGET_ARCH=$TARGET_ARCH -t $IMAGE_NAME --load .
+
+# if linuxdeploy complains about FUSE, add --privileged
 
 docker run \
+       --platform=linux/$PLATFORM_ARCH \
        --rm -it \
        --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined \
        -v ..:/Doom64EX-Plus \
