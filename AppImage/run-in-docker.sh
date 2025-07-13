@@ -9,12 +9,17 @@ patch_appimage_elf_header() {
     dd if=/dev/zero of=$1 bs=1 count=3 seek=8 conv=notrunc
 }
 
+# if there is a newer version of SDL3 from OBS (Open Build Service), install it
+zypper ref -r SDL3
+zypper --no-refresh in -y SDL3-devel
+
 make clean
 
 # -fPIC and -pie are needed on aarch64 for linuxdeploy to work (otherwise ldd on DOOM64Ex-Plus crashes)
 CFLAGS="$(rpm -E '%optflags') -fPIC -DDOOM_UNIX_INSTALL" LDFLAGS="-pie" $(rpm -E '%make_build')
 
-ARCH=$(arch)
+ARCH=$(uname -m)
+
 DEPLOYBIN=linuxdeploy-${ARCH}.AppImage
 DEPLOYBIN_PLUGIN=linuxdeploy-plugin-appimage-${ARCH}.AppImage
 

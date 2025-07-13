@@ -1,19 +1,31 @@
 ifndef FMOD_STUDIO_SDK_ROOT
-$(error FMOD_STUDIO_SDK_ROOT environment variable is not set. Point it to the root of the FMOD studio SDK that can be downloaded on https://www.fmod.com/download#fmodstudio).
+$(error FMOD_STUDIO_SDK_ROOT environment variable is not set. Point it to the root of the FMOD studio SDK that can be downloaded on https://www.fmod.com/download#fmodstudio)
 endif
 
-ARCH=$(shell arch)
+ARCH=$(shell uname -m)
+
+ifeq ($(ARCH),x86_64)
+FMOD_ARCH=x86_64
+endif
 
 ifeq ($(ARCH),aarch64)
-ARCH = arm64
+FMOD_ARCH=arm64
 endif
 
 ifeq ($(ARCH),i586)
-ARCH = x86
+FMOD_ARCH=x86
 endif
 
 ifeq ($(ARCH),i686)
-ARCH = x86
+FMOD_ARCH=x86
+endif
+
+ifeq ($(findstring arm,$ARCH),arm)
+FMOD_ARCH=arm
+endif
+
+ifndef FMOD_ARCH
+$(error Unsupported arch: $(ARCH))
 endif
 
 libs := sdl3 libpng gl
@@ -22,7 +34,7 @@ libs := sdl3 libpng gl
 FMOD_INC_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/inc
 
 # dir containing libfmod.so
-FMOD_LIB_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/lib/$(ARCH)
+FMOD_LIB_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/lib/$(FMOD_ARCH)
 
 CC ?= gcc
 
@@ -49,6 +61,12 @@ $(OUTPUT): $(OBJS)
 
 clean:
 	rm -f $(OUTPUT) $(OUTPUT).gdb $(OUTPUT).map $(OBJS) $(OBJS_DEPS) libfmod.so.??
+
+appimage:
+	(cd AppImage && ./build.sh $(PLATFORM))
+
+appimage-clean:
+	(cd AppImage && ./build.sh clean)
 
 -include $(OBJS_DEPS)
 
