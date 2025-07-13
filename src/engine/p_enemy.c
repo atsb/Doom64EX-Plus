@@ -1589,11 +1589,11 @@ void A_PainShootSkull(mobj_t* actor, angle_t angle) {
 		if (newmobj->type == MT_SKULL) {
 			count++;
 		}
-	}
 
-	// if there are all ready 17 skulls on the level, don't spit another one
-	if (count >= 17) {
-		return;
+		// if there are all ready 17 skulls on the level, don't spit another one
+		if (count >= 17) {
+			return;
+		}
 	}
 
 	an = angle >> ANGLETOFINESHIFT;
