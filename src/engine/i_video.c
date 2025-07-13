@@ -45,6 +45,7 @@ SDL_GLContext   glContext = NULL;
 
 CVAR(v_width, 640);
 CVAR(v_height, 480);
+CVAR(v_checkratio, 0);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
 
@@ -252,6 +253,7 @@ void I_InitVideo(void) {
 void V_RegisterCvars(void) {
 	CON_CvarRegister(&v_width);
 	CON_CvarRegister(&v_height);
+	CON_CvarRegister(&v_checkratio);
 	CON_CvarRegister(&v_windowed);
 	CON_CvarRegister(&v_windowborderless);
 	CON_CvarRegister(&v_vsync);
