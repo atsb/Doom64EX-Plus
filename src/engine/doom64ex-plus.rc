@@ -58,8 +58,8 @@ END
 IDI_ICON1               ICON                    "doom64ex-plus.ico"
 
 1 VERSIONINFO
-FILEVERSION 4, 1, 0, 0
-PRODUCTVERSION 4, 1, 0, 0
+FILEVERSION 4, 2, 0, 0
+PRODUCTVERSION 4, 2, 0, 0
 FILETYPE VFT_APP
 {
 	BLOCK "StringFileInfo"
@@ -67,8 +67,8 @@ FILETYPE VFT_APP
 		BLOCK "040904E4"
 		{
 			VALUE "CompanyName", ""
-				VALUE "FileVersion", "4.1.0.0"
-				VALUE "ProductVersion", "4.1.0.0"
+				VALUE "FileVersion", "4.2.0.0"
+				VALUE "ProductVersion", "4.2.0.0"
 		}
 	}
 }
