@@ -177,6 +177,11 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
     if (usingGL && !alpha) {
         int num_trans = 0;
         png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
+        if (num_trans)
+            //if(usingGL && !alpha && info_ptr->num_trans)
+        {
+            I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
+        }
     }
 
     // if the data will be outputted as palette index data (non RGB(A))
@@ -246,11 +251,6 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         }
     }
 
-    // needed to avoid this warning
-    // libpng warning: Interlace handling should be turned on when using png_read_image
-    // concern lumps: CRSHAIRS, CONFONT, BUTTONS
-    png_set_interlace_handling(png_ptr);
-
     // refresh png information
     png_read_update_info(png_ptr, info_ptr);
 
@@ -311,6 +311,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
             *check = (((unsigned int)b << 24) | (g << 16) | (r << 8) | a);
 #else
+
             byte b = (byte)((c >> 24) & 0xff);
             byte g = (byte)((c >> 16) & 0xff);
             byte r = (byte)((c >> 8) & 0xff);
@@ -318,7 +319,6 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
             *check = (((unsigned int)a << 24) | (b << 16) | (g << 8) | r);
 #endif
-
             check++;
         }
     }
@@ -387,7 +387,7 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
         width,
         height,
         8,
-        PNG_COLOR_TYPE_RGB_ALPHA,
+        PNG_COLOR_TYPE_RGB,
         PNG_INTERLACE_NONE,
         PNG_COMPRESSION_TYPE_BASE,
         PNG_FILTER_TYPE_DEFAULT);
