@@ -1,7 +1,6 @@
 #!/bin/sh
 #shellcheck disable=SC2086,SC2046
 
-
 IMAGE_NAME=bubblesoftapps/doom64ex-plus-build
 
 if [ "$1" = "clean" ]; then
@@ -20,11 +19,9 @@ set -xe
 # can be passed as first parameter
 PLATFORM=${1:-linux/amd64}
 
-# if linuxdeploy complains about FUSE, add --privileged
 docker run \
        --platform=$PLATFORM \
        --rm -it \
-       --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined \
        -v ..:/Doom64EX-Plus \
        -v "$FMOD_STUDIO_SDK_ROOT":"$FMOD_STUDIO_SDK_ROOT" \
        -e FMOD_STUDIO_SDK_ROOT \
