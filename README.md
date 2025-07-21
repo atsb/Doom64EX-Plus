@@ -108,7 +108,8 @@ For manual compilation, you must install the dependencies via a package manager 
 
 For Windows, use the Visual Studio solution file provided in the `Windows` directory of the repository to compile for either 32-bit or 64-bit systems.
 
-**Data File Path (Windows):** Place the three asset files (`DOOM64.wad`, `doom64ex-plus.wad`, `doomsnd.sf2`) in the **same directory** as the compiled `DOOM64EX+.exe`.
+**Data File Path (Windows):** Place the three asset files (`DOOM64.wad`, `doom64ex-plus.wad`, `DOOMSND.DLS`) in the **same directory** as the compiled `DOOM64EX+.exe`.
+ These data files are retrieved from the DOOM64 Remaster on GOG or Steam.
 
 ## Usage
 
