@@ -132,7 +132,7 @@ void IN_Drawer(void) {
 	}
 
 	// Draw background
-	Draw_GfxImageInter(fcluster->pic_x, fcluster->pic_y, fcluster->pic, color, false);
+	Draw_GfxImage(fcluster->pic_x, fcluster->pic_y, fcluster->pic, color, false);
 
 	if (!fInterFadeOut) {
 		// don't draw anything else until background is fully opaque
