@@ -766,7 +766,7 @@ void P_SpawnDelayTimer(line_t* line, void (*func)(void)) {
 void T_Quake(quake_t* quake) { // 0x8000EDE8
 	if ((--quake->tics) == 0)
 	{
-		S_StopSound(NULL, sfx_quake);
+		S_StopLoopingSound();
 		quakeviewx = 0;
 		quakeviewy = 0;
 		P_RemoveThinker(&quake->thinker);
@@ -789,7 +789,7 @@ static void P_SpawnQuake(int tics) {
 	quake->thinker.function.acp1 = (actionf_p1)T_Quake;
     quake->tics = tics;
 
-	S_StopSound(NULL, sfx_quake);
+	S_StartLoopingSound(NULL, sfx_quake, 127);
 }
 
 //
