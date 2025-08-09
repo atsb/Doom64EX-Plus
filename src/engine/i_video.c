@@ -39,6 +39,7 @@
 SDL_Window* window = NULL;
 SDL_GLContext   glContext = NULL;
 
+CVAR(r_trishader, 1);
 CVAR(v_checkratio, 0);
 CVAR(v_windowed, 1);
 CVAR(v_windowborderless, 0);
@@ -79,27 +80,44 @@ static void NVidiaGLFinishConditional(void) {
     }
 }
 
-static void GetNativeDisplayPixels(int* out_w, int* out_h) {
+static void GetNativeDisplayPixels(int* out_w, int* out_h, SDL_Window* window) {
     *out_w = 0; *out_h = 0;
 
-    SDL_DisplayID primary = SDL_GetPrimaryDisplay();
-    if (!primary) {
-        I_Printf("SDL_GetPrimaryDisplay failed (%s)", SDL_GetError());
+    SDL_DisplayID display = 0;
+    if (window) {
+        display = SDL_GetDisplayForWindow(window);
+        if (!display) {
+            I_Printf("SDL3: SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
+        }
+    }
+    if (!display) {
+        display = SDL_GetPrimaryDisplay();
+        if (!display) {
+            I_Printf("SDL3: SDL_GetPrimaryDisplay failed (%s)", SDL_GetError());
+        }
     }
 
-    SDL_DisplayMode mode;
-    memset(&mode, 0, sizeof(mode));
+    const SDL_DisplayMode* dm = NULL;
+    if (display) {
+        dm = SDL_GetDesktopDisplayMode(display);
+        if (!dm) {
+            I_Printf("SDL3: SDL_GetDesktopDisplayMode failed (%s)", SDL_GetError());
+            dm = SDL_GetCurrentDisplayMode(display);
+            if (!dm) {
+                I_Printf("SDL3: SDL_GetCurrentDisplayMode failed (%s)", SDL_GetError());
+            }
+        }
+    }
 
-    if (primary && SDL_GetCurrentDisplayMode(primary) == 0) {
-        *out_w = mode.w;
-        *out_h = mode.h;
+    if (dm) {
+        *out_w = dm->w;
+        *out_h = dm->h;
+        return;
     }
-    else {
-        *out_w = 1920;
-        *out_h = 1080;
-        I_Printf("SDL_GetCurrentDisplayMode failed (%s); defaulting to %dx%d",
-            SDL_GetError(), *out_w, *out_h);
-    }
+
+    *out_w = 1920;
+    *out_h = 1080;
+    I_Printf("SDL3: SDL_DisplayMode falling back to %dx%d", *out_w, *out_h);
 }
 
 //
@@ -115,7 +133,7 @@ void I_InitScreen(void) {
     InWindowBorderless = (int)v_windowborderless.value;
 
     int native_w = 0, native_h = 0;
-    GetNativeDisplayPixels(&native_w, &native_h);
+    GetNativeDisplayPixels(&native_w, &native_h, window);
 
     video_width = native_w;
     video_height = native_h;
@@ -123,12 +141,9 @@ void I_InitScreen(void) {
 
     usingGL = false;
 
-#if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-#else
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-#endif
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
@@ -251,6 +266,7 @@ void I_InitVideo(void) {
 //
 
 void V_RegisterCvars(void) {
+    CON_CvarRegister(&r_trishader);
     CON_CvarRegister(&v_checkratio);
     CON_CvarRegister(&v_windowed);
     CON_CvarRegister(&v_windowborderless);
