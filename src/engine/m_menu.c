@@ -1754,8 +1754,6 @@ void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
 void M_ChangehudFilter(int choice);
 void M_ChangeWindowed(int choice);
-void M_ChangeRatio(int choice);
-void M_ChangeResolution(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
@@ -1764,8 +1762,6 @@ void M_DrawVideo(void);
 void M_ChangeVsync(int choice);
 
 CVAR_EXTERNAL(v_checkratio);
-CVAR_EXTERNAL(v_width);
-CVAR_EXTERNAL(v_height);
 CVAR_EXTERNAL(v_windowed);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
@@ -1787,8 +1783,6 @@ enum {
 	hud_filter,
 	anisotropic,
 	windowed,
-	ratio,
-	resolution,
 	interpolate_frames,
 	vsync,
 	accessibility,
@@ -1808,8 +1802,6 @@ menuitem_t VideoMenu[] = {
 	{2,"HUD Filter:",M_ChangehudFilter, 't'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
 	{2,"Windowed:",M_ChangeWindowed, 'w'},
-	{2,"Aspect Ratio:",M_ChangeRatio, 'a'},
-	{2,"Resolution:",M_ChangeResolution, 'r'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
 	{2,"VSync:",M_ChangeVsync, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
@@ -1828,8 +1820,6 @@ char* VideoHints[video_end] = {
 	"toggle texture filtering on hud and text",
 	"toggle blur reduction on textures",
 	"toggle windowed mode",
-	"select aspect ratio",
-	"resolution changes will take effect\n after restarting",
 	"toggle frame interpolation to\n achieve smooth framerates",
 	"toggle vsync on or off to prevent screen tearing",
 	"toggle accessibility to\n remove flashing lights",
@@ -1845,7 +1835,6 @@ menudefault_t VideoDefault[] = {
 	{ &r_anisotropic, 1 },
 	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
-	{ &v_checkratio, 0 },
 	{ &v_vsync, 1 },
 	{ &v_accessibility, 0 },
 	{ &v_fadein, 1 },
@@ -1875,75 +1864,6 @@ menu_t VideoDef = {
 	VideoBars
 };
 
-#define MAX_RES4_3  14
-static const int Resolution4_3[MAX_RES4_3][2] = {
-	{   256,    192     },	
-	{   320,    240     },
-	{   640,    480     },
-	{   768,    576     },
-	{   800,    600     },
-	{   1024,   768     },
-	{   1152,   864     },
-	{   1280,   960     },
-	{   1400,   1050    },
-	{   1600,   1200    },
-	{   2048,   1536    },
-	{   3200,   2400    },
-	{   4096,   3072    },
-	{   6400,   4800    }
-};
-
-#define MAX_RES5_4  3
-static const int Resolution5_4[MAX_RES5_4][2] = {
-	{   1280,   1024     },
-	{   2560,   2048     },
-	{   5120,   4096     }
-};
-#define MAX_RES16_9  12
-static const int Resolution16_9[MAX_RES16_9][2] = {
-	{   640,    360     },
-	{   854,    480     },
-	{   1024,   576     },
-	{   1024,   600     },
-	{   1280,   720     },
-	{   1366,   768     },
-	{   1600,   900     },
-	{   1920,   1080    },
-	{   2048,   1152    },
-	{   2560,   1440    },
-	{   2880,   1620    },
-	{   3840,   2160    }
-};
-
-#define MAX_RES16_10  10
-static const int Resolution16_10[MAX_RES16_10][2] = {
-	{   320,    200     },
-	{   1024,   640     },
-	{	1280,   600		},
-	{   1280,   800     },
-	{   1440,   900     },
-	{   1680,   1050    },
-	{   1920,   1200    },
-	{   2560,   1600    },
-	{   3840,   2400    },
-	{   7680,   4800    }
-};
-
-#define MAX_RES21_09  3
-static const int Resolution21_09[MAX_RES21_09][3] = {
-	{   2560,    1080     },
-	{   3440,    1440     },
-	{   3840,    2160     }
-};
-
-static const float ratioVal[5] = {
-	4.0f / 3.0f,
-	16.0f / 9.0f,
-	16.0f / 10.0f,
-	5.0f / 4.0f,
-	21.0f / 9.0f,
-};
-
 static char gammamsg[21][28] = {
 	GAMMALVL0,
 	GAMMALVL1,
@@ -1969,79 +1889,14 @@ static char gammamsg[21][28] = {
 };
 
 void M_Video(int choice) {
-	int i;
 
 	M_SetupNextMenu(&VideoDef);
-
-	v_checkratio.value = v_width.value / v_height.value;
-
-	if (dfcmp(v_checkratio.value, ratioVal[2])) {
-		m_aspectRatio = 2;
-	}
-	else if (dfcmp(v_checkratio.value, ratioVal[1])) {
-		m_aspectRatio = 1;
-	}
-	else if (dfcmp(v_checkratio.value, ratioVal[3])) {
-		m_aspectRatio = 3;
-	}
-	else if (dfcmp(v_checkratio.value, ratioVal[4])) {
-		m_aspectRatio = 4;
-	}
-	else {
-		m_aspectRatio = 0;
-	}
-
-	switch (m_aspectRatio) {
-	case 0:
-		for (i = 0; i < MAX_RES4_3; i++) {
-			if ((int)v_width.value == Resolution4_3[i][0]) {
-				m_ScreenSize = i;
-				return;
-			}
-		}
-		break;
-	case 1:
-		for (i = 0; i < MAX_RES16_9; i++) {
-			if ((int)v_width.value == Resolution16_9[i][0]) {
-				m_ScreenSize = i;
-				return;
-			}
-		}
-		break;
-	case 2:
-		for (i = 0; i < MAX_RES16_10; i++) {
-			if ((int)v_width.value == Resolution16_10[i][0]) {
-				m_ScreenSize = i;
-				return;
-			}
-		}
-		break;
-	case 3:
-		for (i = 0; i < MAX_RES5_4; i++) {
-			if ((int)v_width.value == Resolution5_4[i][0]) {
-				m_ScreenSize = i;
-				return;
-			}
-		}
-		break;
-	case 4:
-		for (i = 0; i < MAX_RES21_09; i++) {
-			if ((int)v_width.value == Resolution21_09[i][0]) {
-				m_ScreenSize = i;
-				return;
-			}
-		}
-		break;
-	}
-
 	m_ScreenSize = 1;
 }
 
 void M_DrawVideo(void) {
 	static const char* filterType[2] = { "Linear", "Nearest" };
-	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09"};
 	static const char* onofftype[2] = { "Off", "On" };
-	char res[16];
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
@@ -2070,10 +1925,6 @@ void M_DrawVideo(void) {
 	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
-	DRAWVIDEOITEM2(ratio, m_aspectRatio, ratioName);
-
-	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
-	DRAWVIDEOITEM(resolution, res);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, onofftype);
@@ -2081,11 +1932,6 @@ void M_DrawVideo(void) {
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
-	/*
-	Draw_Text(120, 308, MENUCOLORWHITE, VideoDef.scale, false,
-			  "Resolution changes will take effect\nafter restarting the game..");
-	GL_SetOrthoScale(VideoDef.scale);
-	*/
 	if (VideoDef.hints[itemOn] != NULL)
 	{
 		GL_SetOrthoScale(0.55f);
@@ -2169,116 +2015,6 @@ void M_ChangeAnisotropic(int choice) {
 
 void M_ChangeWindowed(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_windowed);
-}
-
-static void M_SetResolution(void) {
-	int width = SCREENWIDTH;
-	int height = SCREENHEIGHT;
-
-	switch (m_aspectRatio) {
-	case 0:
-		width = Resolution4_3[m_ScreenSize][0];
-		height = Resolution4_3[m_ScreenSize][1];
-		break;
-	case 1:
-		width = Resolution16_9[m_ScreenSize][0];
-		height = Resolution16_9[m_ScreenSize][1];
-		break;
-	case 2:
-		width = Resolution16_10[m_ScreenSize][0];
-		height = Resolution16_10[m_ScreenSize][1];
-		break;
-	case 3:
-		width = Resolution5_4[m_ScreenSize][0];
-		height = Resolution5_4[m_ScreenSize][1];
-		break;
-	case 4:
-		width = Resolution21_09[m_ScreenSize][0];
-		height = Resolution21_09[m_ScreenSize][1];
-		break;
-	}
-
-	M_SetCvar(&v_width, (float)width);
-	M_SetCvar(&v_height, (float)height);
-	M_SetCvar(&v_checkratio, (float)m_aspectRatio);
-}
-
-void M_ChangeRatio(int choice) {
-	int max = 0;
-
-	if (choice) {
-		if (++m_aspectRatio > 4) {
-			if (choice == 4) {
-				m_aspectRatio = 0;
-			}
-			else {
-				m_aspectRatio = 4;
-			}
-		}
-	}
-	else {
-		m_aspectRatio = MAX(m_aspectRatio - 1, 0);
-	}
-
-	switch (m_aspectRatio) {
-	case 0:
-		max = MAX_RES4_3;
-		break;
-	case 1:
-		max = MAX_RES16_9;
-		break;
-	case 2:
-		max = MAX_RES16_10;
-		break;
-	case 3:
-		max = MAX_RES5_4;
-		break;
-	case 4:
-		max = MAX_RES21_09;
-		break;
-	}
-
-	m_ScreenSize = MIN(m_ScreenSize, max - 1);
-
-	M_SetResolution();
-}
-
-void M_ChangeResolution(int choice) {
-	int max = 0;
-
-	switch (m_aspectRatio) {
-	case 0:
-		max = MAX_RES4_3;
-		break;
-	case 1:
-		max = MAX_RES16_9;
-		break;
-	case 2:
-		max = MAX_RES16_10;
-		break;
-	case 3:
-		max = MAX_RES5_4;
-		break;
-	case 4:
-		max = MAX_RES21_09;
-		break;
-	}
-
-	if (choice) {
-		if (++m_ScreenSize > max - 1) {
-			if (choice == 2) {
-				m_ScreenSize = 0;
-			}
-			else {
-				m_ScreenSize = max - 1;
-			}
-		}
-	}
-	else {
-		m_ScreenSize = MAX(m_ScreenSize - 1, 0);
-	}
-
-	M_SetResolution();
 }
 
 void M_ChangeInterpolateFrames(int choice)
@@ -3459,9 +3195,6 @@ static void M_DoDefaults(int choice) {
 	}
 
 	if (currentMenu == &VideoDef) {
-		CON_CvarSetValue(v_width.name, 640);
-		CON_CvarSetValue(v_height.name, 480);
-
 		GL_DumpTextures();
 		GL_SetTextureFilter();
 	}

@@ -69,6 +69,10 @@ CVAR_EXTERNAL(r_multisample);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(r_colorscale);
 
+extern int win_px_w, win_px_h;
+
+void GL_OnResize(int w, int h);
+
 //
 // CMD_DumpGLExtensions
 //
@@ -95,10 +99,6 @@ static CMD(DumpGLExtensions) {
 
 GL_ARB_multitexture_Define();
 GL_EXT_compiled_vertex_array_Define();
-//GL_EXT_multi_draw_arrays_Define();
-//GL_EXT_fog_coord_Define();
-//GL_ARB_vertex_buffer_object_Define();
-//GL_ARB_texture_non_power_of_two_Define();
 GL_ARB_texture_env_combine_Define();
 GL_EXT_texture_env_combine_Define();
 GL_EXT_texture_filter_anisotropic_Define();
@@ -521,19 +521,13 @@ boolean GL_GetBool(int x) {
 //
 
 static void CalcViewSize(void) {
-    ViewWidth = video_width;
-    ViewHeight = video_height;
+    ViewWidth  = (win_px_w > 0) ? win_px_w : video_width;
+    ViewHeight = (win_px_h > 0) ? win_px_h : video_height;
 
     widescreen = !dfcmp(((float)ViewWidth / (float)ViewHeight), (4.0f / 3.0f));
 
-    ViewWindowX = (video_width - ViewWidth) / 2;
-
-    if(ViewWidth == video_width) {
-        ViewWindowY = 0;
-    }
-    else {
-        ViewWindowY = (ViewHeight) / 2;
-    }
+    ViewWindowX = 0;
+    ViewWindowY = 0;
 }
 
 //
@@ -553,7 +547,7 @@ static int GetVersionInt(const char* version) {
 
     versionvar = OPENGL_VERSION_4_6;
 
-    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 4) {
+    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 2) {
         if(MajorVersion > 3) {
             versionvar = OPENGL_VERSION_4_6;
         }
@@ -563,6 +557,25 @@ static int GetVersionInt(const char* version) {
     }
 
     return versionvar;
+}
+
+//
+// GL_OnResize
+// Keep GL viewport in sync with res.
+//
+
+void GL_OnResize(int w, int h) {
+    ViewWidth  = w;
+    ViewHeight = h;
+    ViewWindowX = 0;
+    ViewWindowY = 0;
+
+    widescreen = !dfcmp(((float)w / (float)h), (4.0f / 3.0f));
+
+    dglViewport(0, 0, w, h);
+    dglScissor(0, 0, w, h);
+
+    checkortho = 0;
 }
 
 //
@@ -587,7 +600,7 @@ void GL_Init(void) {
 
     CalcViewSize();
 
-    dglViewport(0, 0, video_width, video_height);
+    dglViewport(0, 0, ViewWidth, ViewHeight);
     dglClearDepth(1.0f);
     dglDisable(GL_TEXTURE_2D);
     dglEnable(GL_CULL_FACE);
