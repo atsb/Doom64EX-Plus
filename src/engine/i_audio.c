@@ -1202,6 +1202,9 @@ void I_Update(void) {
     if(sound.fmod_studio_system) {
         FMOD_ERROR_CHECK(FMOD_System_Update(sound.fmod_studio_system));
     }
+    if(sound.fmod_studio_system_music) {
+        FMOD_ERROR_CHECK(FMOD_System_Update(sound.fmod_studio_system_music));
+    }
 }
 
 //
