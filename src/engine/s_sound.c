@@ -333,6 +333,8 @@ void S_UpdateSounds(void) {
             I_UpdateChannel(i, volume, sep, source->x, source->y);
         }
     }
+
+    I_Update();
 }
 
 //
