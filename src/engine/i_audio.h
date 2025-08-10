@@ -88,6 +88,7 @@ void FMOD_ResumeSFXLoop(void);
 
 void I_InitSequencer(void);
 void I_ShutdownSound(void);
+void I_Update(void);
 void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y);
 void I_RemoveSoundSource(int c);
 void I_SetMusicVolume(float volume);
