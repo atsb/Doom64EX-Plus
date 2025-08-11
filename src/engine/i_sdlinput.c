@@ -90,8 +90,8 @@ static struct {
 	SDL_Joystick* joy;
 	SDL_JoystickID active_id;
 
-	bool player_forward, Player_backwards, player_left, player_right;
-	bool player_fire, p_alt, player_next_weapon, player_previous_weapon, player_jump, player_use, player_pause, player_run, player_automap;
+	bool player_forward, player_backwards, player_left, player_right;
+	bool player_fire, player_next_weapon, player_previous_weapon, player_jump, player_use, player_pause, player_run, player_automap;
 
 	bool mouse_up, mouse_down, mouse_left, mouse_right;
 	bool mouse_accept, mouse_back, mouse_scroll_up, mouse_scroll_down;
@@ -155,7 +155,7 @@ static inline void I_GamepadEdgeDetection(bool now, bool* prev, int keycode) {
 
 static inline void I_GamepadKeyRelease(void) {
 	I_GamepadEdgeDetection(false, &gamepad64.player_forward, GAMEPAD_KEY_MOVE_FWD);
-	I_GamepadEdgeDetection(false, &gamepad64.Player_backwards, GAMEPAD_KEY_MOVE_BACK);
+	I_GamepadEdgeDetection(false, &gamepad64.player_backwards, GAMEPAD_KEY_MOVE_BACK);
 	I_GamepadEdgeDetection(false, &gamepad64.player_left, GAMEPAD_KEY_MOVE_LEFT);
 	I_GamepadEdgeDetection(false, &gamepad64.player_right, GAMEPAD_KEY_MOVE_RIGHT);
 	I_GamepadEdgeDetection(false, &gamepad64.player_fire, GAMEPAD_KEY_FIRE);
@@ -346,7 +346,7 @@ static void I_GamepadUpdate(void) {
 	const bool mv_right = (lx) > mth;
 
 	I_GamepadEdgeDetection(mv_fwd, &gamepad64.player_forward, GAMEPAD_KEY_MOVE_FWD);
-	I_GamepadEdgeDetection(mv_back, &gamepad64.Player_backwards, GAMEPAD_KEY_MOVE_BACK);
+	I_GamepadEdgeDetection(mv_back, &gamepad64.player_backwards, GAMEPAD_KEY_MOVE_BACK);
 	I_GamepadEdgeDetection(mv_left, &gamepad64.player_left, GAMEPAD_KEY_MOVE_LEFT);
 	I_GamepadEdgeDetection(mv_right, &gamepad64.player_right, GAMEPAD_KEY_MOVE_RIGHT);
 
