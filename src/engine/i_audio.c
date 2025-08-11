@@ -1197,6 +1197,16 @@ void I_InitSequencer(void) {
     seqready = true;
 }
 
+
+void I_Update(void) {
+    if(sound.fmod_studio_system) {
+        FMOD_ERROR_CHECK(FMOD_System_Update(sound.fmod_studio_system));
+    }
+    if(sound.fmod_studio_system_music) {
+        FMOD_ERROR_CHECK(FMOD_System_Update(sound.fmod_studio_system_music));
+    }
+}
+
 //
 // I_GetMaxChannels
 //
@@ -1381,7 +1391,6 @@ void I_UpdateListenerPosition(fixed_t player_world_x, fixed_t player_world_y_dep
     listener_forward.y = 0.0f;
 
     FMOD_ERROR_CHECK(FMOD_System_Set3DListenerAttributes(sound.fmod_studio_system, 0, &listener_pos, &listener_vel, &listener_forward, &listener_up));
-    FMOD_ERROR_CHECK(FMOD_System_Update(sound.fmod_studio_system));
 }
 
 // FMOD Studio SFX API
@@ -1421,7 +1430,7 @@ int FMOD_StartSound(int sfx_id, sndsrc_t* origin, int volume, int pan) {
         final_volume = 1.0f;
     }
     FMOD_ERROR_CHECK(FMOD_Channel_SetVolume(sfx_channel, final_volume));
-    
+
     if (origin) {
         mobj_t* mobj = (mobj_t*)origin;
         FMOD_VECTOR pos, vel;
