@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+﻿// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -20,12 +20,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <math.h>
 #include "i_sdlinput.h"
 #include "doomdef.h"
 #include "m_misc.h"
 #include "doomstat.h"
 #include "i_system.h"
-#include "i_sdlinput.h"
 #include "i_video.h"
 #include "d_main.h"
 
@@ -40,174 +40,444 @@ CVAR_EXTERNAL(m_menumouse);
 
 float mouse_accelfactor;
 
-int         UseJoystick;
-boolean    DigiJoy;
-int         DualMouse;
+int	UseJoystick;
+int	DualMouse;
 
-boolean    MouseMode;//false=microsoft, true=mouse systems
-boolean window_mouse;
+boolean	DigiJoy;
+boolean	MouseMode;
+boolean	window_mouse;
+
+//
+// SDL3 Gamepad
+//
+
+// Ugly shims to link the Gamepad with the keyboard / mouse controls
+#define GAMEPAD_MENU_INITIAL_DELAY_TICS  12
+#define GAMEPAD_MENU_REPEAT_TICS         4
+#define GAMEPAD_MENU_STICK_THRESH        0.50f
+#define GAMEPAD_LEFT_DEADZONE     0.18f
+#define GAMEPAD_RIGHT_DEADZONE    0.20f
+#define GAMEPAD_TRIGGER_THRESHOLD 0.30f
+#define GAMEPAD_LOOK_BASE_SPEED   6.0f
+#define GAMEPAD_KEY_MOVE_FWD      SDLK_W
+#define GAMEPAD_KEY_MOVE_BACK     SDLK_S
+#define GAMEPAD_KEY_MOVE_LEFT     SDLK_A
+#define GAMEPAD_KEY_MOVE_RIGHT    SDLK_D
+#define GAMEPAD_KEY_FIRE          KEY_CTRL
+#define GAMEPAD_KEY_USE           SDLK_E
+#define GAMEPAD_KEY_JUMP          SDLK_SPACE
+#define GAMEPAD_KEY_RUN			  KEY_SHIFT
+#define GAMEPAD_KEY_AUTOMAP		  SDLK_TAB
+#define GAMEPAD_KEY_NEXT_WEAPON   KEY_MWHEELUP
+#define GAMEPAD_KEY_PREV_WEAPON   KEY_MWHEELDOWN
+#define GAMEPAD_KEY_PAUSE         SDLK_ESCAPE
+#define GAMEPAD_INNER_DZ_LEFT    0.18f
+#define GAMEPAD_INNER_DZ_RIGHT   0.20f
+#define GAMEPAD_OUTER_DZ         0.02f
+#define GAMEPAD_ANTI_DZ          0.04f
+#define GAMEPAD_EXPO_LEFT        1.20f
+#define GAMEPAD_EXPO_RIGHT       1.60f
+#define GAMEPAD_LOOK_SMOOTH_TC   0.060f
+#define GAMEPAD_ADS_LTRIG        0.55f
+#define GAMEPAD_ADS_SLOWDOWN     0.55f
+
+extern void D_PostEvent(event_t*);
+extern boolean menuactive;
+extern gamestate_t gamestate;
+
+static struct {
+	SDL_Gamepad* gamepad;
+	SDL_Joystick* joy;
+	SDL_JoystickID active_id;
+
+	bool player_forward, Player_backwards, player_left, player_right;
+	bool player_fire, p_alt, player_next_weapon, player_previous_weapon, player_jump, player_use, player_pause, player_run, player_automap;
+
+	bool mouse_up, mouse_down, mouse_left, mouse_right;
+	bool mouse_accept, mouse_back, mouse_scroll_up, mouse_scroll_down;
+	unsigned int right_arrow_key_up, right_arrow_key_down, right_arrow_key_left, right_arrow_key_right;
+	float gamepad_look_fx, gamepad_look_fy, gamepad_look_dx, gamepad_look_dy;
+
+	bool init;
+} gamepad64;
+
+static inline float I_GamepadClamp(float x) { return x < 0.f ? 0.f : (x > 1.f ? 1.f : x); }
+
+static void I_GamepadRadialLookSmoothing(float x, float y,
+	float inner_dz, float outer_dz,
+	float expo, float anti_dz,
+	float* ox, float* oy)
+{
+	float r = SDL_sqrtf(x * x + y * y);
+	if (r <= inner_dz) { *ox = 0.f; *oy = 0.f; return; }
+
+	float nx = x / (r > 0.f ? r : 1.f);
+	float ny = y / (r > 0.f ? r : 1.f);
+	float span = 1.f - inner_dz - outer_dz;
+	float t = I_GamepadClamp((r - inner_dz) / (span > 0.f ? span : 1.f));
+
+	t = SDL_powf(t, expo);
+	t = anti_dz + (1.f - anti_dz) * t;
+
+	*ox = nx * t;
+	*oy = ny * t;
+}
+
+static inline float I_GamepadLookSmoothing(float prev, float input, float dt, float tc) {
+	float alpha = (tc > 0.f) ? (dt / (tc + dt)) : 1.f;
+	if (alpha < 0.f) alpha = 0.f; if (alpha > 1.f) alpha = 1.f;
+	return prev + alpha * (input - prev);
+}
+
+static inline void I_GamepadPostKeyEvent(int key, bool down) {
+	event_t ev; ev.type = down ? ev_keydown : ev_keyup; ev.data1 = key; ev.data2 = ev.data3 = 0; ev.data4 = 0;
+	D_PostEvent(&ev);
+}
+
+static inline void I_GamepadMenuEvent(bool now, bool* prev, int keycode, unsigned int* next_tic) {
+	if (now && !*prev) {
+		I_GamepadPostKeyEvent(keycode, true);
+		*next_tic = gametic + GAMEPAD_MENU_INITIAL_DELAY_TICS;
+	}
+	else if (now && *prev && gametic >= *next_tic) {
+		I_GamepadPostKeyEvent(keycode, true);
+		*next_tic = gametic + GAMEPAD_MENU_REPEAT_TICS;
+	}
+	else if (!now && *prev) {
+		I_GamepadPostKeyEvent(keycode, false);
+	}
+	*prev = now;
+}
+
+static inline void I_GamepadEdgeDetection(bool now, bool* prev, int keycode) {
+	if (now != *prev) { I_GamepadPostKeyEvent(keycode, now); *prev = now; }
+}
+
+static inline void I_GamepadKeyRelease(void) {
+	I_GamepadEdgeDetection(false, &gamepad64.player_forward, GAMEPAD_KEY_MOVE_FWD);
+	I_GamepadEdgeDetection(false, &gamepad64.Player_backwards, GAMEPAD_KEY_MOVE_BACK);
+	I_GamepadEdgeDetection(false, &gamepad64.player_left, GAMEPAD_KEY_MOVE_LEFT);
+	I_GamepadEdgeDetection(false, &gamepad64.player_right, GAMEPAD_KEY_MOVE_RIGHT);
+	I_GamepadEdgeDetection(false, &gamepad64.player_fire, GAMEPAD_KEY_FIRE);
+	I_GamepadEdgeDetection(false, &gamepad64.player_next_weapon, GAMEPAD_KEY_NEXT_WEAPON);
+	I_GamepadEdgeDetection(false, &gamepad64.player_previous_weapon, GAMEPAD_KEY_PREV_WEAPON);
+	I_GamepadEdgeDetection(false, &gamepad64.player_jump, GAMEPAD_KEY_JUMP);
+	I_GamepadEdgeDetection(false, &gamepad64.player_use, GAMEPAD_KEY_USE);
+	I_GamepadEdgeDetection(false, &gamepad64.player_run, GAMEPAD_KEY_RUN);
+	I_GamepadEdgeDetection(false, &gamepad64.player_automap, GAMEPAD_KEY_AUTOMAP);
+}
+
+static inline float I_GamepadAxisAlive(Sint16 v) {
+	const float maxmag = (float)SDL_JOYSTICK_AXIS_MAX;
+	float f = (float)v / maxmag;
+	if (f < -1.f) f = -1.f; if (f > 1.f) f = 1.f;
+	return f;
+}
+static inline float I_GamepadAxisDead(float v, float dz) {
+	float a = fabsf(v);
+	if (a <= dz) return 0.f;
+	float sign = (v < 0.f) ? -1.f : 1.f;
+	return sign * (a - dz) / (1.f - dz);
+}
+static inline void I_MouseRelease(int dx, int dy) {
+	event_t ev; ev.type = ev_mouse;
+	ev.data1 = 0;
+	ev.data2 = dx * 32;
+	ev.data3 = -dy * 32;
+	ev.data4 = 0;
+	D_PostEvent(&ev);
+}
+
+static void I_GamepadInit(void) {
+	int n = 0; SDL_JoystickID* ids = SDL_GetGamepads(&n);
+	if (ids && n > 0) {
+		gamepad64.gamepad = SDL_OpenGamepad(ids[0]);
+		if (gamepad64.gamepad) gamepad64.active_id = SDL_GetGamepadID(gamepad64.gamepad);
+	}
+	if (ids) SDL_free(ids);
+
+	if (!gamepad64.gamepad) {
+		int jn = 0; SDL_JoystickID* jids = SDL_GetJoysticks(&jn);
+		if (jids && jn > 0) {
+			if (SDL_IsGamepad(jids[0])) {
+				gamepad64.gamepad = SDL_OpenGamepad(jids[0]);
+				if (gamepad64.gamepad) gamepad64.active_id = SDL_GetGamepadID(gamepad64.gamepad);
+			}
+			if (!gamepad64.gamepad) {
+				gamepad64.joy = SDL_OpenJoystick(jids[0]);
+				if (gamepad64.joy) gamepad64.active_id = jids[0];
+			}
+		}
+		if (jids) SDL_free(jids);
+	}
+}
+static void I_GamepadClose(void) {
+	if (gamepad64.gamepad) { SDL_CloseGamepad(gamepad64.gamepad); gamepad64.gamepad = NULL; }
+	if (gamepad64.joy) { SDL_CloseJoystick(gamepad64.joy); gamepad64.joy = NULL; }
+	gamepad64.active_id = 0;
+}
+
+static void I_GamepadInitOnce(void) {
+	if (gamepad64.init) return;
+	if (!SDL_WasInit(SDL_INIT_GAMEPAD)) SDL_InitSubSystem(SDL_INIT_GAMEPAD);
+	I_GamepadInit();
+	gamepad64.init = true;
+}
+
+static void I_GamepadHandleSDLEvent(const SDL_Event* e) {
+	if (!gamepad64.init) return;
+	switch (e->type) {
+	case SDL_EVENT_GAMEPAD_ADDED:
+		if (!gamepad64.gamepad && !gamepad64.joy) {
+			gamepad64.gamepad = SDL_OpenGamepad(e->gdevice.which);
+			if (gamepad64.gamepad) gamepad64.active_id = SDL_GetGamepadID(gamepad64.gamepad);
+		}
+		break;
+	case SDL_EVENT_GAMEPAD_REMOVED:
+		if (gamepad64.active_id == e->gdevice.which) I_GamepadClose();
+		break;
+	case SDL_EVENT_JOYSTICK_ADDED:
+		if (!gamepad64.gamepad && !gamepad64.joy) {
+			if (SDL_IsGamepad(e->jdevice.which)) {
+				gamepad64.gamepad = SDL_OpenGamepad(e->jdevice.which);
+				if (gamepad64.gamepad) gamepad64.active_id = SDL_GetGamepadID(gamepad64.gamepad);
+			}
+			else {
+				gamepad64.joy = SDL_OpenJoystick(e->jdevice.which);
+				if (gamepad64.joy) gamepad64.active_id = e->jdevice.which;
+			}
+		}
+		break;
+	case SDL_EVENT_JOYSTICK_REMOVED:
+		if (gamepad64.active_id == e->jdevice.which) I_GamepadClose();
+		break;
+	default: break;
+	}
+}
+
+static void I_GamepadUpdate(void) {
+	if (!gamepad64.init) return;
+
+	float lx_raw = 0.f, ly_raw = 0.f, rx_raw = 0.f, ry_raw = 0.f;
+	float lt = 0.f, rt = 0.f;
+
+	if (gamepad64.gamepad) {
+		lx_raw = I_GamepadAxisAlive(SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_LEFTX));
+		ly_raw = I_GamepadAxisAlive(SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_LEFTY));
+		rx_raw = I_GamepadAxisAlive(SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_RIGHTX));
+		ry_raw = I_GamepadAxisAlive(SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_RIGHTY));
+		lt = (float)SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_LEFT_TRIGGER) / (float)SDL_JOYSTICK_AXIS_MAX;
+		rt = (float)SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER) / (float)SDL_JOYSTICK_AXIS_MAX;
+	}
+	else if (gamepad64.joy) {
+		lx_raw = I_GamepadAxisAlive(SDL_GetJoystickAxis(gamepad64.joy, 0));
+		ly_raw = I_GamepadAxisAlive(SDL_GetJoystickAxis(gamepad64.joy, 1));
+		rx_raw = I_GamepadAxisAlive(SDL_GetJoystickAxis(gamepad64.joy, 2));
+		ry_raw = I_GamepadAxisAlive(SDL_GetJoystickAxis(gamepad64.joy, 3));
+	}
+	float lx = 0.f, ly = 0.f, rx = 0.f, ry = 0.f;
+	I_GamepadRadialLookSmoothing(lx_raw, ly_raw, GAMEPAD_INNER_DZ_LEFT, GAMEPAD_OUTER_DZ, GAMEPAD_EXPO_LEFT, GAMEPAD_ANTI_DZ, &lx, &ly);
+	I_GamepadRadialLookSmoothing(rx_raw, ry_raw, GAMEPAD_INNER_DZ_RIGHT, GAMEPAD_OUTER_DZ, GAMEPAD_EXPO_RIGHT, GAMEPAD_ANTI_DZ, &rx, &ry);
+
+	const bool in_menu = (menuactive || gamestate != GS_LEVEL);
+
+	if (in_menu) {
+		I_GamepadKeyRelease();
+
+		bool d_up = false, d_down = false, d_left = false, d_right = false;
+		if (gamepad64.gamepad) {
+			d_up = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_DPAD_UP) != 0;
+			d_down = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_DPAD_DOWN) != 0;
+			d_left = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_DPAD_LEFT) != 0;
+			d_right = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_DPAD_RIGHT) != 0;
+		}
+		else if (gamepad64.joy) {
+			d_up = SDL_GetJoystickButton(gamepad64.joy, 10) != 0;
+			d_down = SDL_GetJoystickButton(gamepad64.joy, 11) != 0;
+			d_left = SDL_GetJoystickButton(gamepad64.joy, 12) != 0;
+			d_right = SDL_GetJoystickButton(gamepad64.joy, 13) != 0;
+		}
+		bool s_up = false, s_down = false, s_left = false, s_right = false;
+		if (!(d_up | d_down | d_left | d_right)) {
+			s_up = (-ly) > GAMEPAD_MENU_STICK_THRESH;
+			s_down = (-ly) < -GAMEPAD_MENU_STICK_THRESH;
+			s_left = (lx) < -GAMEPAD_MENU_STICK_THRESH;
+			s_right = (lx) > GAMEPAD_MENU_STICK_THRESH;
+		}
+		const bool mouse_up = d_up || s_up;
+		const bool mouse_down = d_down || s_down;
+		const bool mouse_left = d_left || s_left;
+		const bool mouse_right = d_right || s_right;
+
+		I_GamepadMenuEvent(mouse_up, &gamepad64.mouse_up, KEY_UPARROW, &gamepad64.right_arrow_key_up);
+		I_GamepadMenuEvent(mouse_down, &gamepad64.mouse_down, KEY_DOWNARROW, &gamepad64.right_arrow_key_down);
+		I_GamepadMenuEvent(mouse_left, &gamepad64.mouse_left, KEY_LEFTARROW, &gamepad64.right_arrow_key_left);
+		I_GamepadMenuEvent(mouse_right, &gamepad64.mouse_right, KEY_RIGHTARROW, &gamepad64.right_arrow_key_right);
+
+		bool a = false, b = false, startbtn = false, lb = false, rb = false;
+		if (gamepad64.gamepad) {
+			a = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_SOUTH) != 0;
+			b = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_EAST) != 0;
+			startbtn = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_START) != 0;
+			lb = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_LEFT_SHOULDER) != 0;
+			rb = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER) != 0;
+		}
+		else if (gamepad64.joy) {
+			a = SDL_GetJoystickButton(gamepad64.joy, 0) != 0;
+			b = SDL_GetJoystickButton(gamepad64.joy, 1) != 0;
+			startbtn = SDL_GetJoystickButton(gamepad64.joy, 9) != 0;
+			lb = SDL_GetJoystickButton(gamepad64.joy, 4) != 0;
+			rb = SDL_GetJoystickButton(gamepad64.joy, 5) != 0;
+		}
+		I_GamepadEdgeDetection(a, &gamepad64.mouse_accept, KEY_ENTER);
+		I_GamepadEdgeDetection((b | startbtn), &gamepad64.mouse_back, KEY_ESCAPE);
+		I_GamepadEdgeDetection(lb, &gamepad64.mouse_scroll_up, KEY_PAGEUP);
+		I_GamepadEdgeDetection(rb, &gamepad64.mouse_scroll_down, KEY_PAGEDOWN);
+
+		static float s_look_fx = 0.f, s_look_fy = 0.f;
+		s_look_fx = s_look_fy = 0.f;
+		gamepad64.gamepad_look_dx = gamepad64.gamepad_look_dy = 0.f;
+		return;
+	}
+	const float mth = 0.28f;
+	const bool mv_fwd = (-ly) > mth;
+	const bool mv_back = (-ly) < -mth;
+	const bool mv_left = (lx) < -mth;
+	const bool mv_right = (lx) > mth;
+
+	I_GamepadEdgeDetection(mv_fwd, &gamepad64.player_forward, GAMEPAD_KEY_MOVE_FWD);
+	I_GamepadEdgeDetection(mv_back, &gamepad64.Player_backwards, GAMEPAD_KEY_MOVE_BACK);
+	I_GamepadEdgeDetection(mv_left, &gamepad64.player_left, GAMEPAD_KEY_MOVE_LEFT);
+	I_GamepadEdgeDetection(mv_right, &gamepad64.player_right, GAMEPAD_KEY_MOVE_RIGHT);
+
+	float ads_scale = 1.f;
+	if (gamepad64.gamepad) {
+		if (lt >= GAMEPAD_ADS_LTRIG) ads_scale = GAMEPAD_ADS_SLOWDOWN;
+	}
+	else if (gamepad64.joy) {
+		if (SDL_GetJoystickButton(gamepad64.joy, 6)) ads_scale = GAMEPAD_ADS_SLOWDOWN;
+	}
+	const float sensx = v_msensitivityx.value > 0 ? v_msensitivityx.value : 1.f;
+	const float sensy = v_msensitivityy.value > 0 ? v_msensitivityy.value : 1.f;
+	const float inv = (v_mlookinvert.value ? -1.f : 1.f);
+
+	static float s_look_fx = 0.f, s_look_fy = 0.f;
+	const float dt = (1.0f / 35.0f);
+	s_look_fx = I_GamepadLookSmoothing(s_look_fx, rx, dt, GAMEPAD_LOOK_SMOOTH_TC);
+	s_look_fy = I_GamepadLookSmoothing(s_look_fy, ry, dt, GAMEPAD_LOOK_SMOOTH_TC);
+
+	const float dx = s_look_fx * GAMEPAD_LOOK_BASE_SPEED * sensx * ads_scale;
+	const float dy = s_look_fy * GAMEPAD_LOOK_BASE_SPEED * sensy * ads_scale * inv;
+
+	gamepad64.gamepad_look_dx += dx; gamepad64.gamepad_look_dy += dy;
+	const int sdx = (int)gamepad64.gamepad_look_dx;
+	const int sdy = (int)gamepad64.gamepad_look_dy;
+	if (sdx != 0 || sdy != 0) {
+		I_MouseRelease(sdx, sdy);
+		gamepad64.gamepad_look_dx -= sdx; gamepad64.gamepad_look_dy -= sdy;
+	}
+	bool fire = (rt >= GAMEPAD_TRIGGER_THRESHOLD);
+	bool alt = (lt >= GAMEPAD_TRIGGER_THRESHOLD);
+	bool nextw = false, prevw = false, jump = false, use = false, pausebtn = false, run = false, automap = false;
+
+	if (gamepad64.gamepad) {
+		nextw = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER) != 0;
+		prevw = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_LEFT_SHOULDER) != 0;
+		jump = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_EAST) != 0;
+		use = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_SOUTH) != 0;
+		run = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_WEST) != 0;
+		automap = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_NORTH) != 0;
+		pausebtn = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_START) != 0;
+	}
+	else if (gamepad64.joy) {
+		nextw = SDL_GetJoystickButton(gamepad64.joy, 5) != 0;
+		prevw = SDL_GetJoystickButton(gamepad64.joy, 4) != 0;
+		jump = SDL_GetJoystickButton(gamepad64.joy, 0) != 0;
+		use = SDL_GetJoystickButton(gamepad64.joy, 2) != 0;
+		run = SDL_GetJoystickButton(gamepad64.joy, 6) != 0;
+		automap = SDL_GetJoystickButton(gamepad64.joy, 7) != 0;
+		pausebtn = SDL_GetJoystickButton(gamepad64.joy, 9) != 0;
+		if (!fire) fire = SDL_GetJoystickButton(gamepad64.joy, 7) != 0;
+		if (!alt)  alt = SDL_GetJoystickButton(gamepad64.joy, 6) != 0;
+	}
+	I_GamepadEdgeDetection(fire, &gamepad64.player_fire, GAMEPAD_KEY_FIRE);
+	I_GamepadEdgeDetection(nextw, &gamepad64.player_next_weapon, GAMEPAD_KEY_NEXT_WEAPON);
+	I_GamepadEdgeDetection(prevw, &gamepad64.player_previous_weapon, GAMEPAD_KEY_PREV_WEAPON);
+	I_GamepadEdgeDetection(jump, &gamepad64.player_jump, GAMEPAD_KEY_JUMP);
+	I_GamepadEdgeDetection(use, &gamepad64.player_use, GAMEPAD_KEY_USE);
+	I_GamepadEdgeDetection(pausebtn, &gamepad64.player_pause, GAMEPAD_KEY_PAUSE);
+	I_GamepadEdgeDetection(run, &gamepad64.player_run, GAMEPAD_KEY_RUN);
+	I_GamepadEdgeDetection(automap, &gamepad64.player_automap, GAMEPAD_KEY_AUTOMAP);
+}
+
 //
 // I_TranslateKey
 //
 
-static int I_TranslateKey(const int key) {
-	int rc = 0;
-
-	switch (key) {
-	case SDLK_LEFT:
-		rc = KEY_LEFTARROW;
-		break;
-	case SDLK_RIGHT:
-		rc = KEY_RIGHTARROW;
-		break;
-	case SDLK_DOWN:
-		rc = KEY_DOWNARROW;
-		break;
-	case SDLK_UP:
-		rc = KEY_UPARROW;
-		break;
-	case SDLK_ESCAPE:
-		rc = KEY_ESCAPE;
-		break;
-	case SDLK_RETURN:
-		rc = KEY_ENTER;
-		break;
-	case SDLK_TAB:
-		rc = KEY_TAB;
-		break;
-	case SDLK_F1:
-		rc = KEY_F1;
-		break;
-	case SDLK_F2:
-		rc = KEY_F2;
-		break;
-	case SDLK_F3:
-		rc = KEY_F3;
-		break;
-	case SDLK_F4:
-		rc = KEY_F4;
-		break;
-	case SDLK_F5:
-		rc = KEY_F5;
-		break;
-	case SDLK_F6:
-		rc = KEY_F6;
-		break;
-	case SDLK_F7:
-		rc = KEY_F7;
-		break;
-	case SDLK_F8:
-		rc = KEY_F8;
-		break;
-	case SDLK_F9:
-		rc = KEY_F9;
-		break;
-	case SDLK_F10:
-		rc = KEY_F10;
-		break;
-	case SDLK_F11:
-		rc = KEY_F11;
-		break;
-	case SDLK_F12:
-		rc = KEY_F12;
-		break;
-	case SDLK_BACKSPACE:
-		rc = KEY_BACKSPACE;
-		break;
-	case SDLK_DELETE:
-		rc = KEY_DEL;
-		break;
-	case SDLK_INSERT:
-		rc = KEY_INSERT;
-		break;
-	case SDLK_PAGEUP:
-		rc = KEY_PAGEUP;
-		break;
-	case SDLK_PAGEDOWN:
-		rc = KEY_PAGEDOWN;
-		break;
-	case SDLK_HOME:
-		rc = KEY_HOME;
-		break;
-	case SDLK_END:
-		rc = KEY_END;
-		break;
-	case SDLK_PAUSE:
-		rc = KEY_PAUSE;
-		break;
-	case SDLK_EQUALS:
-		rc = KEY_EQUALS;
-		break;
-	case SDLK_MINUS:
-		rc = KEY_MINUS;
-		break;
-	case SDLK_KP_0:
-		rc = KEY_KEYPAD0;
-		break;
-	case SDLK_KP_1:
-		rc = KEY_KEYPAD1;
-		break;
-	case SDLK_KP_2:
-		rc = KEY_KEYPAD2;
-		break;
-	case SDLK_KP_3:
-		rc = KEY_KEYPAD3;
-		break;
-	case SDLK_KP_4:
-		rc = KEY_KEYPAD4;
-		break;
-	case SDLK_KP_5:
-		rc = KEY_KEYPAD5;
-		break;
-	case SDLK_KP_6:
-		rc = KEY_KEYPAD6;
-		break;
-	case SDLK_KP_7:
-		rc = KEY_KEYPAD7;
-		break;
-	case SDLK_KP_8:
-		rc = KEY_KEYPAD8;
-		break;
-	case SDLK_KP_9:
-		rc = KEY_KEYPAD9;
-		break;
-	case SDLK_KP_PLUS:
-		rc = KEY_KEYPADPLUS;
-		break;
-	case SDLK_KP_MINUS:
-		rc = KEY_KEYPADMINUS;
-		break;
-	case SDLK_KP_DIVIDE:
-		rc = KEY_KEYPADDIVIDE;
-		break;
-	case SDLK_KP_MULTIPLY:
-		rc = KEY_KEYPADMULTIPLY;
-		break;
-	case SDLK_KP_ENTER:
-		rc = KEY_KEYPADENTER;
-		break;
-	case SDLK_KP_PERIOD:
-		rc = KEY_KEYPADPERIOD;
-		break;
-	case SDLK_LSHIFT:
-	case SDLK_RSHIFT:
-		rc = KEY_RSHIFT;
-		break;
-	case SDLK_LCTRL:
-	case SDLK_RCTRL:
-		rc = KEY_RCTRL;
-		break;
-	case SDLK_LALT:
-
-	case SDLK_RALT:
-		rc = KEY_RALT;
-		break;
-	default:
-		rc = key;
-		break;
+// Modernised, it was really needed!
+static int I_TranslateKey(const int key)
+{
+	struct { int sdl; int eng; } map[] = {
+		{ SDLK_LEFT,        KEY_LEFTARROW },
+		{ SDLK_RIGHT,       KEY_RIGHTARROW },
+		{ SDLK_UP,          KEY_UPARROW },
+		{ SDLK_DOWN,        KEY_DOWNARROW },
+		{ SDLK_ESCAPE,      KEY_ESCAPE },
+		{ SDLK_RETURN,      KEY_ENTER },
+		{ SDLK_TAB,         KEY_TAB },
+		{ SDLK_BACKSPACE,   KEY_BACKSPACE },
+		{ SDLK_DELETE,      KEY_DEL },
+		{ SDLK_INSERT,      KEY_INSERT },
+		{ SDLK_HOME,        KEY_HOME },
+		{ SDLK_END,         KEY_END },
+		{ SDLK_PAGEUP,      KEY_PAGEUP },
+		{ SDLK_PAGEDOWN,    KEY_PAGEDOWN },
+		{ SDLK_PAUSE,       KEY_PAUSE },
+		{ SDLK_LSHIFT,      KEY_RSHIFT },
+		{ SDLK_RSHIFT,      KEY_RSHIFT },
+		{ SDLK_LCTRL,       KEY_RCTRL },
+		{ SDLK_RCTRL,       KEY_RCTRL },
+		{ SDLK_LALT,        KEY_RALT },
+		{ SDLK_RALT,        KEY_RALT },
+		{ SDLK_EQUALS,      KEY_EQUALS },
+		{ SDLK_MINUS,       KEY_MINUS },
+		{ SDLK_SPACE,       KEY_SPACEBAR },
+		{ SDLK_F1,          KEY_F1 },
+		{ SDLK_F2,			KEY_F2  },
+		{ SDLK_F3,			KEY_F3  },
+		{ SDLK_F4,			KEY_F4  },
+		{ SDLK_F5,          KEY_F5 },
+		{ SDLK_F6,			KEY_F6  },
+		{ SDLK_F7,			KEY_F7  },
+		{ SDLK_F8,			KEY_F8  },
+		{ SDLK_F9,          KEY_F9 },
+		{ SDLK_F10,			KEY_F10 },
+		{ SDLK_F11,			KEY_F11 },
+		{ SDLK_F12,			KEY_F12 },
+		{ SDLK_KP_0,        KEY_KEYPAD0 },
+		{ SDLK_KP_1,        KEY_KEYPAD1 },
+		{ SDLK_KP_2,        KEY_KEYPAD2 },
+		{ SDLK_KP_3,        KEY_KEYPAD3 },
+		{ SDLK_KP_4,        KEY_KEYPAD4 },
+		{ SDLK_KP_5,        KEY_KEYPAD5 },
+		{ SDLK_KP_6,        KEY_KEYPAD6 },
+		{ SDLK_KP_7,        KEY_KEYPAD7 },
+		{ SDLK_KP_8,        KEY_KEYPAD8 },
+		{ SDLK_KP_9,        KEY_KEYPAD9 },
+		{ SDLK_KP_ENTER,    KEY_KEYPADENTER },
+		{ SDLK_KP_MULTIPLY, KEY_KEYPADMULTIPLY },
+		{ SDLK_KP_PLUS,     KEY_KEYPADPLUS },
+		{ SDLK_KP_MINUS,    KEY_KEYPADMINUS },
+		{ SDLK_KP_DIVIDE,   KEY_KEYPADDIVIDE },
+		{ SDLK_KP_PERIOD,   KEY_KEYPADPERIOD },
+	};
+	for (size_t i = 0; i < sizeof(map) / sizeof(map[0]); ++i) {
+		if (key == map[i].sdl) return map[i].eng;
 	}
-
-	return rc;
+	if (key >= 32 && key < 127) {
+		return key;
+	}
+	return 0;
 }
 
 //
@@ -247,10 +517,7 @@ void I_ReadMouse(void) {
 }
 
 void I_CenterMouse(void) {
-	// Warp the the screen center
 	SDL_WarpMouseInWindow(window, (unsigned short)(video_width / 2), (unsigned short)(video_height / 2));
-
-	// Clear any relative movement caused by warping
 	SDL_PumpEvents();
 	SDL_GetRelativeMouseState(NULL, NULL);
 }
@@ -287,7 +554,7 @@ boolean I_UpdateGrab(void) {
 	static boolean currently_grabbed = false;
 	boolean grab;
 
-	grab = /*window_mouse &&*/ !menuactive
+	grab = !menuactive
 		&& (gamestate == GS_LEVEL)
 		&& !demoplayback;
 
@@ -316,6 +583,8 @@ void I_GetEvent(SDL_Event* Event) {
 	event_t event;
 	unsigned int mwheeluptic = 0, mwheeldowntic = 0;
 	unsigned int tic = gametic;
+
+	I_GamepadHandleSDLEvent(Event);
 
 	switch (Event->type) {
 	case SDL_EVENT_KEY_DOWN:
@@ -431,11 +700,9 @@ void I_StartTic(void) {
 		I_GetEvent(&Event);
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputPollEvent();
-#endif
 	I_InitInputs();
 	I_ReadMouse();
+	I_GamepadUpdate();
 }
 
 //
@@ -456,10 +723,7 @@ void I_FinishUpdate(void) {
 void I_InitInputs(void) {
 	SDL_PumpEvents();
 	I_MouseAccelChange();
-
-#if defined(_WIN32) && defined(USE_XINPUT)
-	I_XInputInit();
-#endif
+	I_GamepadInitOnce();
 }
 
 //

@@ -43,3 +43,7 @@ void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
 boolean I_UpdateGrab(void);
+
+const char* I_KeycodeToName_All(int keycode);
+int I_NameToKeycode_All(const char* name);
+void I_RegisterGamepadKeyNames(void);
