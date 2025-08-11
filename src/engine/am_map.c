@@ -63,8 +63,8 @@ int             amCheating = 0;        //villsa: no longer static..
 boolean        automapactive = false;
 fixed_t         automapx = 0;
 fixed_t         automapy = 0;
-float			automappanx = 0.0f;
-float			automappany = 0.0f;
+fixed_t			automappanx = 0;
+fixed_t			automappany = 0;
 byte            amModeCycle = 0;        // textured or line mode?
 int             followplayer = 1;        // specifies whether to follow the player around
 
@@ -75,8 +75,8 @@ static angle_t  automapangle = 0;
 static float    scale = 640.0f;   // todo: reset scale after changing levels
 static fixed_t  am_box[4];                  // automap bounding box of level
 static byte     am_flags;                   // action flags for automap. Mostly for controls
-static float    mpanx;
-static float    mpany;
+static fixed_t  mpanx = 0;
+static fixed_t  mpany = 0;
 static angle_t  autoprevangle = 0;
 static fixed_t  automapprevx = 0;
 static fixed_t  automapprevy = 0;
@@ -102,11 +102,6 @@ extern fixed_t R_Interpolate(fixed_t ticframe, fixed_t updateframe, boolean enab
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
 CVAR_EXTERNAL(i_interpolateframes);
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-CVAR_EXTERNAL(i_rsticksensitivity);
-CVAR_EXTERNAL(i_xinputscheme);
-#endif
 
 //
 // CMD_Automap
@@ -247,6 +242,88 @@ void AM_Start(void) {
 	automapangle = plr->mo->angle;
 }
 
+static bool AM_HandleGamepadEvent(const SDL_Event* e)
+{
+	if (!automapactive) return false;
+
+	static float s_leftx = 0.0f, s_lefty = 0.0f;
+
+	switch (e->type) {
+	case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+		switch (e->gbutton.button) {
+		case SDL_GAMEPAD_BUTTON_SOUTH:
+			CMD_AutomapSetFlag(AF_PANGAMEPAD, NULL);
+			return true;
+
+		case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER:
+			if (am_flags & AF_PANGAMEPAD) { CMD_AutomapSetFlag(AF_ZOOMIN, NULL);  return true; }
+			break;
+
+		case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER:
+			if (am_flags & AF_PANGAMEPAD) { CMD_AutomapSetFlag(AF_ZOOMOUT, NULL); return true; }
+			break;
+
+		case SDL_GAMEPAD_BUTTON_DPAD_UP:
+			if (am_flags & AF_PANGAMEPAD) { CMD_AutomapSetFlag(AF_PANTOP, NULL);    return true; }
+			break;
+
+		case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
+			if (am_flags & AF_PANGAMEPAD) { CMD_AutomapSetFlag(AF_PANBOTTOM, NULL); return true; }
+			break;
+
+		case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
+			if (am_flags & AF_PANGAMEPAD) { CMD_AutomapSetFlag(AF_PANLEFT, NULL);   return true; }
+			break;
+
+		case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
+			if (am_flags & AF_PANGAMEPAD) { CMD_AutomapSetFlag(AF_PANRIGHT, NULL);  return true; }
+			break;
+		}
+		break;
+
+	case SDL_EVENT_GAMEPAD_BUTTON_UP:
+		switch (e->gbutton.button) {
+		case SDL_GAMEPAD_BUTTON_SOUTH:
+			CMD_AutomapSetFlag(AF_PANGAMEPAD | PCKF_UP, NULL);
+			return true;
+
+		case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER:
+			CMD_AutomapSetFlag(AF_ZOOMIN | PCKF_UP, NULL);  return true;
+		case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER:
+			CMD_AutomapSetFlag(AF_ZOOMOUT | PCKF_UP, NULL);  return true;
+
+		case SDL_GAMEPAD_BUTTON_DPAD_UP:
+			CMD_AutomapSetFlag(AF_PANTOP | PCKF_UP, NULL);    return true;
+		case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
+			CMD_AutomapSetFlag(AF_PANBOTTOM | PCKF_UP, NULL);    return true;
+		case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
+			CMD_AutomapSetFlag(AF_PANLEFT | PCKF_UP, NULL);    return true;
+		case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
+			CMD_AutomapSetFlag(AF_PANRIGHT | PCKF_UP, NULL);    return true;
+		}
+		break;
+
+	case SDL_EVENT_GAMEPAD_AXIS_MOTION:
+		if (!(am_flags & AF_PANGAMEPAD)) return false;
+		if (e->gaxis.axis == SDL_GAMEPAD_AXIS_LEFTX) s_leftx = e->gaxis.value;
+		if (e->gaxis.axis == SDL_GAMEPAD_AXIS_LEFTY) s_lefty = e->gaxis.value;
+
+		const float dead = 0.15f;
+		float x = (fabsf(s_leftx) > dead) ? s_leftx : 0.0f;
+		float y = (fabsf(s_lefty) > dead) ? s_lefty : 0.0f;
+
+		float sx = x * 32767.0f * v_msensitivityx.value / (1500.0f / scale);
+		float sy = y * 32767.0f * v_msensitivityx.value / (1500.0f / scale);
+
+		mpanx = (fixed_t)(sx * (float)FRACUNIT);
+		mpany = (fixed_t)(sy * (float)FRACUNIT);
+
+		return true;
+	}
+
+	return false;
+}
+
 //
 // AM_GetBounds
 // Get a dynamically resizable bounding box
@@ -314,6 +391,7 @@ static void AM_GetBounds(void) {
 
 boolean AM_Responder(event_t* ev) {
 	int rc = false;
+	SDL_Event se;
 
 	if (am_flags & AF_PANMODE) {
 		if (ev->type == ev_mouse) {
@@ -340,115 +418,11 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
-	else if (ev->type == ev_gamepad) {
-		//
-		// user has pan button held down and is
-		// moving around with the stick
-		//
-		if (am_flags & AF_PANGAMEPAD) {
-			if (ev->data3 == XINPUT_GAMEPAD_LEFT_STICK) {
-				float x;
-				float y;
-
-				x = (float)ev->data1 * i_rsticksensitivity.value / (1500.0f / scale);
-				y = (float)ev->data2 * i_rsticksensitivity.value / (1500.0f / scale);
-
-				mpanx = (int)x << 16;
-				mpany = (int)y << 16;
-
-				rc = true;
-			}
+	while (SDL_PollEvent(&se)) {
+		if (AM_HandleGamepadEvent(&se)) {
+			rc = true;
 		}
 	}
-	else if (automapactive) {
-		if (ev->type == ev_keydown) {
-			switch (ev->data1) {
-				//
-				// pan button
-				//
-			case BUTTON_A:
-				CMD_AutomapSetFlag(AF_PANGAMEPAD, NULL);
-				break;
-
-			case BUTTON_LEFT_SHOULDER:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_ZOOMIN, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_RIGHT_SHOULDER:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_ZOOMOUT, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_UP:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANTOP, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_DOWN:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANBOTTOM, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_LEFT:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANLEFT, NULL);
-					rc = true;
-				}
-				break;
-
-			case BUTTON_DPAD_RIGHT:
-				if (am_flags & AF_PANGAMEPAD) {
-					CMD_AutomapSetFlag(AF_PANRIGHT, NULL);
-					rc = true;
-				}
-				break;
-			}
-		}
-		else if (ev->type == ev_keyup) {
-			switch (ev->data1) {
-			case BUTTON_A:
-				CMD_AutomapSetFlag(AF_PANGAMEPAD | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_LEFT_SHOULDER:
-				CMD_AutomapSetFlag(AF_ZOOMIN | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_RIGHT_SHOULDER:
-				CMD_AutomapSetFlag(AF_ZOOMOUT | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_UP:
-				CMD_AutomapSetFlag(AF_PANTOP | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_DOWN:
-				CMD_AutomapSetFlag(AF_PANBOTTOM | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_LEFT:
-				CMD_AutomapSetFlag(AF_PANLEFT | PCKF_UP, NULL);
-				break;
-
-			case BUTTON_DPAD_RIGHT:
-				CMD_AutomapSetFlag(AF_PANRIGHT | PCKF_UP, NULL);
-				break;
-			}
-		}
-	}
-#endif
-
 	return rc;
 }
 
@@ -490,8 +464,12 @@ void AM_Ticker(void) {
 			float panscalex = v_msensitivityx.value / (150.0f / scale);
 			float panscaley = v_msensitivityy.value / (150.0f / scale);
 
-			automappanx += ((I_MouseAccel(mpanx) * panscalex) / 128.0f) < 16.0f;
-			automappany += ((I_MouseAccel(mpany) * panscaley) / 128.0f) < 16.0f;
+			fixed_t dx = (fixed_t)((I_MouseAccel(mpanx) * panscalex) * (FRACUNIT / 128.0f));
+			fixed_t dy = (fixed_t)((I_MouseAccel(mpany) * panscaley) * (FRACUNIT / 128.0f));
+
+			automappanx += dx;
+			automappany += dy;
+
 			mpanx = mpany = 0;
 		}
 		else {
@@ -505,9 +483,6 @@ void AM_Ticker(void) {
 			automapangle = plr->mo->angle;
 		}
 	}
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
 	if (am_flags & AF_PANGAMEPAD) {
 		automappanx += mpanx;
 		automappany += mpany;
@@ -523,9 +498,6 @@ void AM_Ticker(void) {
 		automapy = plr->mo->y;
 		automapangle = plr->mo->angle;
 	}
-
-#endif
-
 	if ((!followplayer || (am_flags & AF_PANGAMEPAD)) &&
 		am_flags & (AF_PANLEFT | AF_PANRIGHT | AF_PANTOP | AF_PANBOTTOM)) {
 		if (am_flags & AF_PANTOP) {
@@ -1087,8 +1059,8 @@ void AM_Drawer(void) {
 		}
 	}
 	else {
-		base_x = automapx;
-		base_y = automapy;
+		base_x = automapx + automappanx;
+		base_y = automapy + automappany;
 		base_angle = automapangle;
 	}
 	render_x = base_x;
