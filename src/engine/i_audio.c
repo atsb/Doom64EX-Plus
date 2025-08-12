@@ -1262,6 +1262,14 @@ void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
     chan->pan = (byte)(pan >> 1);
 }
 
+void ShutdownSystem(FMOD_SYSTEM **system) {
+    if(*system) {
+        FMOD_ERROR_CHECK(FMOD_System_Close(*system));
+        FMOD_ERROR_CHECK(FMOD_System_Release(*system));
+        *system = NULL;
+    }
+}
+
 //
 // I_ShutdownSound
 // Shutdown sound when player exits the game / error occurs
@@ -1282,11 +1290,8 @@ void I_ShutdownSound(void)
     // must be done after stopping fmod_studio_channel_music
     ReleaseSound(&currentMidiSound);
 
-    FMOD_ERROR_CHECK(FMOD_System_Close(sound.fmod_studio_system));
-    FMOD_ERROR_CHECK(FMOD_System_Release(sound.fmod_studio_system));
-
-    FMOD_ERROR_CHECK(FMOD_System_Close(sound.fmod_studio_system_music));
-    FMOD_ERROR_CHECK(FMOD_System_Release(sound.fmod_studio_system_music));
+    ShutdownSystem(&sound.fmod_studio_system);
+    ShutdownSystem(&sound.fmod_studio_system_music);
 }
 
 //
