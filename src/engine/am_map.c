@@ -1059,8 +1059,8 @@ void AM_Drawer(void) {
 		}
 	}
 	else {
-		base_x = automapx + automappanx;
-		base_y = automapy + automappany;
+		base_x = automapx;
+		base_y = automapy;
 		base_angle = automapangle;
 	}
 	render_x = base_x;
