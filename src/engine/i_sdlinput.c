@@ -486,9 +486,11 @@ static int I_TranslateKey(const int key)
 
 static int I_SDLtoDoomMouseState(Uint8 buttonstate) {
 	return 0
-		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_LEFT) ? 1 : 0)
-		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_MIDDLE) ? 2 : 0)
-		| (buttonstate & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT) ? 4 : 0);
+		| (buttonstate & SDL_BUTTON_LMASK ? 1 : 0)
+		| (buttonstate & SDL_BUTTON_MMASK ? 2 : 0)
+		| (buttonstate & SDL_BUTTON_RMASK ? 4 : 0)
+		| (buttonstate & SDL_BUTTON_X1MASK ? 8 : 0)
+		| (buttonstate & SDL_BUTTON_X2MASK ? 16 : 0);
 }
 
 //

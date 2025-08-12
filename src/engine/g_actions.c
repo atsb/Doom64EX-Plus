@@ -1235,13 +1235,9 @@ void G_GetActionBindings(char* buff, char* action) {
 			if (p != buff) {
 				*(p++) = ',';
 			}
-
-			if (i < MOUSE_BUTTONS - 2) {
-				dstrcpy(p, "mouse?");
-				p[5] = i + '1';
-				p += 6;
-			}
-
+			dstrcpy(p, "mouse?");
+			p[5] = i + '1';
+			p += 6;
 			if (p - buff >= MAX_MENUACTION_LENGTH) {
 				return;
 			}
@@ -1280,10 +1276,8 @@ void G_UnbindAction(char* action) {
 		if (IsSameAction(action, MouseActions[i])) {
 			char p[16];
 
-			if (i < MOUSE_BUTTONS - 2) {
-				dstrcpy(p, "mouse?");
-				p[5] = i + '1';
-			}
+			dstrcpy(p, "mouse?");
+			p[5] = i + '1';
 
 			Unbind(p);
 			return;
