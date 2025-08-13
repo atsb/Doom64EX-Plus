@@ -87,4 +87,10 @@ extern boolean    DigiJoy;
 #define strncasecmp _strnicmp
 #endif
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <winreg.h>
+boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars);
+#endif
+
 #endif
