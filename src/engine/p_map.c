@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*-
+﻿// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -1408,39 +1408,42 @@ line_t* contextline = NULL;
 // P_CheckUseHeight
 //
 
-static int P_CheckUseHeight(line_t* line, mobj_t* thing) {
-    fixed_t check = 0;
+static int P_CheckUseHeight(line_t* line, mobj_t* thing)
+{
+    int     flags = line->flags & (ML_CHECKFLOORHEIGHT | ML_SWITCHX08);
+    fixed_t rowoffset = sides[line->sidenum[0]].rowoffset;
+    fixed_t check;
 
-    if (!(line->flags & ML_SWITCHX02 ||
-        line->flags & ML_SWITCHX04 ||
-        line->flags & ML_SWITCHX08)) {
-        return true;    // ignore non-switches
-    }
+    switch (flags)
+    {
+    case ML_SWITCHX08:
+        if (!line->backsector) {
+            return true;
+        }
+        check = (line->backsector->ceilingheight + rowoffset) + (32 * FRACUNIT);
+        break;
 
-    if (line->flags & ML_CHECKFLOORHEIGHT) {
-        if (line->flags & ML_TWOSIDED) {
-            check = (line->backsector->floorheight + sides[line->sidenum[0]].rowoffset) - (32 * FRACUNIT);
+    case ML_CHECKFLOORHEIGHT:
+        if (!line->backsector) {
+            return true;
         }
-        else {
-            check = (line->frontsector->floorheight + sides[line->sidenum[0]].rowoffset) + (32 * FRACUNIT);
-        }
-    }
-    else if (line->flags & ML_TWOSIDED) {
-        check = (line->backsector->ceilingheight + sides[line->sidenum[0]].rowoffset) + (32 * FRACUNIT);
-    }
-    else {
+        check = (line->backsector->floorheight + rowoffset) - (32 * FRACUNIT);
+        break;
+
+    case (ML_CHECKFLOORHEIGHT | ML_SWITCHX08):
+        check = (line->frontsector->floorheight + rowoffset) + (32 * FRACUNIT);
+        break;
+
+    default:
         return true;
     }
 
-    if (!(check < thing->z)) {
-        if ((thing->z + thing->height) < check) {
-            return false;
-        }
-    }
-    else {
+    if (check < thing->z) {
         return false;
     }
-
+    if ((thing->z + (64 * FRACUNIT)) < check) {
+        return false;
+    }
     return true;
 }
 
@@ -1462,8 +1465,6 @@ boolean PTR_UseTraverse(intercept_t* in) {
 
             return false;    // can't use through a wall
         }
-
-
         return true;    // keep checking
     }
 
@@ -1533,54 +1534,44 @@ mobj_t* bombsource;
 mobj_t* bombspot;
 int             bombdamage;
 
-
 //
 // PIT_RadiusAttack
 // "bombsource" is the creature that caused the explosion at "bombspot"
 //
 
-boolean PIT_RadiusAttack(mobj_t* thing) {
-    fixed_t     dx;
-    fixed_t     dy;
-    fixed_t     dist;
+boolean PIT_RadiusAttack(mobj_t* thing)
+{
+    fixed_t dx, dy;
+    int     dist;
 
-    if (!(thing->flags & MF_SHOOTABLE)) {
+    if (!(thing->flags & MF_SHOOTABLE))
         return true;
-    }
 
     // Boss cyborg take no damage from concussion.
-    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER) {
+    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER)
         return true;
-    }
 
-    if (thing->type == MT_SKULL || thing->type == MT_PAIN) {
-        if (bombsource && bombsource->type == MT_SKULL) {
-            return true;
-        }
-    }
+    if ((thing->type == MT_SKULL || thing->type == MT_PAIN) &&
+        bombsource && bombsource->type == MT_SKULL)
+        return true;
 
     dx = D_abs(thing->x - bombspot->x);
     dy = D_abs(thing->y - bombspot->y);
 
-    dist = dx > dy ? dx : dy;
-    dist = F2INT(dist - thing->radius);
-
-    if (dist < 0) {
-        dist = 0;
+    {
+        fixed_t maxf = (dx > dy) ? dx : dy;
+        fixed_t adj = maxf - thing->radius;
+        dist = (adj >= 0) ? (adj >> FRACBITS) : 0;
     }
 
-    if (dist >= bombdamage) {
-        return true;    // out of range
-    }
+    if (dist >= bombdamage)
+        return true;     // out of range
 
     if (P_CheckSight(thing, bombspot) != 0) // must be in direct path */
-    {
         P_DamageMobj(thing, bombspot, bombsource, bombdamage - dist);
-    }
 
     return true;
 }
-
 
 //
 // P_RadiusAttack
