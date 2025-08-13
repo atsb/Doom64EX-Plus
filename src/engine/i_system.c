@@ -49,6 +49,7 @@
 #include "z_zone.h"
 #include "i_system.h"
 #include "gl_draw.h"
+#include "steam.h"
 
 extern void I_ShutdownSound(void);
 
@@ -274,10 +275,14 @@ char* I_GetUserFile(char* file) {
  * @return Fully-qualified path or NULL if not found.
  */
 
+static boolean steam_install_dir_found = false;
+static char steam_install_dir[512];
+
 char* I_FindDataFile(char* file) {
 	char* path = malloc(512);
 	const char* dir;
-
+	steamgame_t game;
+    
 	if (path == NULL) {
 		return NULL;
 	}
@@ -312,41 +317,30 @@ char* I_FindDataFile(char* file) {
 		return path;
 	}
 
-	const char* homeDir = getenv("HOME");
-	if (homeDir) {
-		snprintf(path, 511, "%s/.steam/steam/steamapps/common/Doom 64/%s", homeDir, file);
-		if (I_FileExists(path)) {
-			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
-			return path;
-		}
+#endif
 
-		snprintf(path, 511, "%s/.local/share/Steam/steamapps/common/Doom 64/%s", homeDir, file);
-		if (I_FileExists(path)) {
-			I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
-			return path;
-		}
-	}
+    // Steam works with Windows and Linux
+    // cache Steam install dir value as calling Steam_FindGame is a bit expensive
+	if(!steam_install_dir_found) {
+        steam_install_dir_found = Steam_FindGame(&game, DOOM64_STEAM_APPID)
+            && Steam_ResolvePath(steam_install_dir, 511, &game);
+    }
 
-	snprintf(path, 511, "%s/GOG Games/DOOM 64/%s", homeDir, file);
-	if (I_FileExists(path)) {
-		I_Printf("I_FindDataFile: Adding GOG Path %s\n", path);
-		return path;
-	}
+    if(steam_install_dir_found) {
+       snprintf(path, 511, "%s/%s", steam_install_dir, file); 
+       I_Printf("I_FindDataFile: Adding Steam file %s\n", path);
+       return path;
+    }
 
-#elif defined(_WIN32)
-	const char* steamPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DOOM 64";
-	snprintf(path, 511, "%s\\%s", steamPath, file);
-	if (I_FileExists(path)) {
-		I_Printf("I_FindDataFile: Adding Steam Path %s\n", path);
-		return path;
-	}
-
-	const char* gogPath = "C:\\Program Files (x86)\\GOG Galaxy\\Games\\DOOM 64";
-	snprintf(path, 511, "%s\\%s", gogPath, file);
-	if (I_FileExists(path)) {
-		I_Printf("I_FindDataFile: Adding GOG Path %s\n", path);
-		return path;
-	}
+#ifdef _WIN32
+    // GOG is Windows only
+    char install_dir[512];
+    if (I_GetRegistryString (HKEY_LOCAL_MACHINE,
+		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", install_dir, 511)) {
+        snprintf(path, 511, "%s/%s", install_dir, file); 
+        I_Printf("I_FindDataFile: Adding GOG file %s\n", path);
+        return path;
+    }
 #endif
 
 	free(path);
@@ -536,3 +530,46 @@ void I_RegisterCvars(void) {
 	CON_CvarRegister(&v_accessibility);
 	CON_CvarRegister(&v_fadein);
 }
+
+
+#ifdef _WIN32
+
+boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars)
+{
+	LSTATUS		err;
+	HKEY		key;
+	WCHAR		wpath[MAX_PATH + 1];
+	DWORD		size, type;
+
+	if (!maxchars)
+		return false;
+	*out = 0;
+
+	err = RegOpenKeyExW (root, dir, 0, KEY_READ, &key);
+	if (err != ERROR_SUCCESS)
+		return false;
+
+	// Note: string might not contain a terminating null character
+	// https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regqueryvalueexw#remarks
+
+	err = RegQueryValueExW (key, keyname, NULL, &type, NULL, &size);
+	if (err != ERROR_SUCCESS || type != REG_SZ || size > sizeof (wpath) - sizeof (wpath[0]))
+	{
+		RegCloseKey (key);
+		return false;
+	}
+
+	err = RegQueryValueExW (key, keyname, NULL, &type, (BYTE *)wpath, &size);
+	RegCloseKey (key);
+	if (err != ERROR_SUCCESS || type != REG_SZ)
+		return false;
+
+	wpath[size / sizeof (wpath[0])] = 0;
+
+	if (WideCharToMultiByte (CP_UTF8, 0, wpath, -1, out, maxchars, NULL, NULL) != 0)
+		return true;
+	*out = 0;
+	return false;
+}
+
+#endif

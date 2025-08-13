@@ -128,6 +128,7 @@ add_executable(
 	${SOURCE_DIR}/z_zone.c
 	${SOURCE_DIR}/i_sdlinput.c
 	${SOURCE_DIR}/sha1.c
+	${SOURCE_DIR}/steam.c
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY BUILD_RPATH ".")
