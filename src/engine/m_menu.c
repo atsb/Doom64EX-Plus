@@ -2632,7 +2632,7 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Pan Right", "+automap_right"},
 	{"Pan Up", "+automap_up"},
 	{"Pan Down", "+automap_down"},
-	{"Mouse Pan", "+automap_freepan"},
+	{"Mouse Pan/Zoom", "+automap_freepan"},
 	{"Follow Mode", "automap_follow"},
 	{"Other", NULL},
 	{"Quick Save", "quicksave"},
