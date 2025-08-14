@@ -594,13 +594,17 @@ void I_GetEvent(SDL_Event* Event) {
 			break;
 		event.type = ev_keydown;
 		event.data1 = I_TranslateKey(Event->key.key);
-		D_PostEvent(&event);
+		if(event.data1) {
+			D_PostEvent(&event);
+		}
 		break;
 
 	case SDL_EVENT_KEY_UP:
 		event.type = ev_keyup;
 		event.data1 = I_TranslateKey(Event->key.key);
-		D_PostEvent(&event);
+		if(event.data1) {
+			D_PostEvent(&event);
+		}
 		break;
 
 	case SDL_EVENT_MOUSE_BUTTON_DOWN:
