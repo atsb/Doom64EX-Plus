@@ -22,10 +22,16 @@
 #include "doomstat.h"
 #include "gl_main.h"
 #include "gl_texture.h"
-#include "r_local.h"
+#include "r_lights.h"
 #include "r_sky.h"
 #include "r_drawlist.h"
+#include "r_main.h"
+#include "r_things.h"
 #include "i_swap.h"
+#include "i_system.h"
+#include "dgl.h"
+#include "con_cvar.h"
+#include "m_fixed.h"
 
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);

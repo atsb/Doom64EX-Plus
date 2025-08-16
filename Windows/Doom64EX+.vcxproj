@@ -78,7 +78,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
     </ClCompile>
@@ -95,7 +95,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
     </ClCompile>
@@ -112,7 +112,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;USE_XINPUT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
     </ClCompile>
@@ -236,11 +236,19 @@
     <ClCompile Include="..\src\engine\z_zone.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\engine\am_draw.h" />
+    <ClInclude Include="..\src\engine\am_map.h" />
+    <ClInclude Include="..\src\engine\con_console.h" />
+    <ClInclude Include="..\src\engine\con_cvar.h" />
     <ClInclude Include="..\src\engine\dgl.h" />
     <ClInclude Include="..\src\engine\doomdata.h" />
     <ClInclude Include="..\src\engine\doomdef.h" />
     <ClInclude Include="..\src\engine\doomstat.h" />
     <ClInclude Include="..\src\engine\doomtype.h" />
+    <ClInclude Include="..\src\engine\d_devstat.h" />
+    <ClInclude Include="..\src\engine\d_main.h" />
+    <ClInclude Include="..\src\engine\d_net.h" />
+    <ClInclude Include="..\src\engine\d_player.h" />
     <ClInclude Include="..\src\engine\d_think.h" />
     <ClInclude Include="..\src\engine\d_ticcmd.h" />
     <ClInclude Include="..\src\engine\f_finale.h" />
@@ -251,7 +259,6 @@
     <ClInclude Include="..\src\engine\g_controls.h" />
     <ClInclude Include="..\src\engine\g_demo.h" />
     <ClInclude Include="..\src\engine\g_game.h" />
-    <ClInclude Include="..\src\engine\g_local.h" />
     <ClInclude Include="..\src\engine\g_settings.h" />
     <ClInclude Include="..\src\engine\info.h" />
     <ClInclude Include="..\src\engine\i_audio.h" />
@@ -259,6 +266,7 @@
     <ClInclude Include="..\src\engine\i_sdlinput.h" />
     <ClInclude Include="..\src\engine\i_swap.h" />
     <ClInclude Include="..\src\engine\i_system.h" />
+    <ClInclude Include="..\src\engine\i_system_io.h" />
     <ClInclude Include="..\src\engine\i_video.h" />
     <ClInclude Include="..\src\engine\md5.h" />
     <ClInclude Include="..\src\engine\m_cheat.h" />
@@ -291,12 +299,12 @@
     <ClInclude Include="..\src\engine\r_clipper.h" />
     <ClInclude Include="..\src\engine\r_drawlist.h" />
     <ClInclude Include="..\src\engine\r_lights.h" />
-    <ClInclude Include="..\src\engine\r_local.h" />
     <ClInclude Include="..\src\engine\r_main.h" />
     <ClInclude Include="..\src\engine\r_sky.h" />
     <ClInclude Include="..\src\engine\r_things.h" />
     <ClInclude Include="..\src\engine\r_wipe.h" />
     <ClInclude Include="..\src\engine\sc_main.h" />
+    <ClInclude Include="..\src\engine\sha1.h" />
     <ClInclude Include="..\src\engine\sounds.h" />
     <ClInclude Include="..\src\engine\steam.h" />
     <ClInclude Include="..\src\engine\st_stuff.h" />
@@ -314,6 +322,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\engine\defconfig.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

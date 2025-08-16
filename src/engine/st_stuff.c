@@ -25,9 +25,9 @@
 //-----------------------------------------------------------------------------
 
 #include <stdio.h>
-#include "doomdef.h"
-#include "g_game.h"
+
 #include "st_stuff.h"
+#include "doomdef.h"
 #include "r_main.h"
 #include "p_local.h"
 #include "m_cheat.h"
@@ -37,7 +37,6 @@
 #include "sounds.h"
 #include "m_shift.h"
 #include "con_console.h"
-#include "i_system.h"
 #include "am_map.h"
 #include "gl_texture.h"
 #include "g_actions.h"
@@ -45,6 +44,9 @@
 #include "p_setup.h"
 #include "gl_draw.h"
 #include "g_demo.h"
+#include "dgl.h"
+#include "i_swap.h"
+#include "w_wad.h"
 
 void M_DrawXInputButton(int x, int y, int button);
 
@@ -949,21 +951,12 @@ void ST_Drawer(void) {
 			char contextstring[32];
 			float x;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-			if (xgamepad.connected) {
-				M_DrawXInputButton(140, 156, XINPUT_GAMEPAD_A);
-				Draw_Text(213, 214, WHITEALPHA(0xA0), 0.75, false, "Use");
-			}
-			else
-#endif
-			{
-				G_GetActionBindings(usestring, "+use");
-				sprintf(contextstring, "(%s)Use", usestring);
+			G_GetActionBindings(usestring, "+use");
+			sprintf(contextstring, "(%s)Use", usestring);
 
-				x = (160 / 0.75f) - ((dstrlen(contextstring) * 8) / 2);
+			x = (160 / 0.75f) - ((dstrlen(contextstring) * 8) / 2);
 
-				Draw_Text((int)x, 214, WHITEALPHA(0xA0), 0.75f, false, contextstring);
-			}
+			Draw_Text((int)x, 214, WHITEALPHA(0xA0), 0.75f, false, contextstring);
 		}
 	}
 
@@ -1516,7 +1509,7 @@ static void ST_DisplayName(int playernum) {
 	color |= ((255 - (int)((float)distance * 0.19921875f)) << 24);
 
 	// display player name
-	dsnprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
+	SDL_snprintf(name, MAXPLAYERNAME, "%s", player_names[playernum]);
 	Draw_Text(screenx, screeny, color, 1.0f, 0, name);
 }
 

@@ -22,8 +22,8 @@
 #include "doomtype.h"
 #include "d_event.h"
 #include "p_mobj.h"
-
 #include "net_client.h"
+#include "gl_main.h"
 
 //
 // STATUS BAR

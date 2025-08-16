@@ -24,6 +24,7 @@
 
 #include <math.h>
 
+#include "p_pspr.h"
 #include "doomdef.h"
 #include "d_event.h"
 #include "m_fixed.h"
@@ -31,11 +32,10 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "z_zone.h"
-#include "r_local.h"
+#include "r_main.h"
 #include "doomstat.h"
 #include "sounds.h"
-#include "p_pspr.h"
-#include "m_misc.h"
+
 
 #define LOWERSPEED                FRACUNIT*7
 #define RAISESPEED                FRACUNIT*7
@@ -792,7 +792,7 @@ void A_CloseShotgun2(player_t* player, pspdef_t* psp) {
 // P_LaserPointOnSide
 //
 
-d_inline static fixed_t P_LaserPointOnSide(fixed_t x, fixed_t y, node_t* node) {
+SDL_INLINE static fixed_t P_LaserPointOnSide(fixed_t x, fixed_t y, node_t* node) {
 	fixed_t    dx;
 	fixed_t    dy;
 	fixed_t    left;

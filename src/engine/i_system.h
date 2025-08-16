@@ -19,14 +19,10 @@
 #define __I_SYSTEM__
 
 #include <stdio.h>
+#include <SDL3/SDL_platform_defines.h>
 
 #include "d_ticcmd.h"
-#include "d_event.h"
 #include "m_fixed.h"
-
-#ifdef __GNUG__
-#pragma interface
-#endif
 
 // Called by DoomMain.
 void I_Init(void);
@@ -76,20 +72,8 @@ void I_RegisterCvars(void);
 extern FILE* DebugFile;
 extern boolean    DigiJoy;
 
-#ifdef _MSC_VER
-#include <direct.h>
-#include <io.h>
-#define F_OK 0
-#define W_OK 2
-#define R_OK 4
-#define S_ISDIR(x) (((sbuf.st_mode & S_IFDIR)==S_IFDIR)?1:0)
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
-#endif
-
-#ifdef _WIN32
-#include <Windows.h>
-#include <winreg.h>
+#ifdef SDL_PLATFORM_WIN32
+#include <windows.h>
 boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars);
 #endif
 

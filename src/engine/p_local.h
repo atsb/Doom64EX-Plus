@@ -18,11 +18,12 @@
 #ifndef __P_LOCAL__
 #define __P_LOCAL__
 
+#include <stdint.h>
+#include <limits.h>
+
 #include "doomdef.h"
 #include "d_player.h"
-#include "w_wad.h"
 #include "info.h"
-#include "m_menu.h"
 #include "t_bsp.h"
 
 #define FLOATSPEED      (FRACUNIT*4)

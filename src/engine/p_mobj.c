@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "p_mobj.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_fixed.h"
@@ -33,10 +34,8 @@
 #include "doomstat.h"
 #include "info.h"
 #include "tables.h"
-#include "r_local.h"
+#include "r_main.h"
 #include "r_sky.h"
-#include "m_misc.h"
-#include "con_console.h"
 #include "m_password.h"
 
 mapthing_t* spawnlist;

@@ -21,8 +21,10 @@
 //
 //-----------------------------------------------------------------------------
 
-
+#include <stdlib.h>
 #include <time.h> // [kex] - for saving the date and time
+
+#include "p_saveg.h"
 #include "i_system.h"
 #include "g_game.h"
 #include "z_zone.h"
@@ -31,7 +33,7 @@
 #include "doomstat.h"
 #include "info.h"
 #include "m_password.h"
-#include "p_saveg.h"
+
 #include "d_englsh.h"
 #include "m_misc.h"
 #include "doomdef.h" // added just so MSVC would shut up about warning C4761

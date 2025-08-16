@@ -18,11 +18,10 @@
 #ifndef _R_THINGS_H_
 #define _R_THINGS_H_
 
-#include "doomtype.h"
-#include "doomdef.h"
+#include <stdint.h> // for intptr_t
+
 #include "t_bsp.h"
 #include "d_player.h"
-#include "gl_main.h"
 
 typedef struct {
 	mobj_t* spr;

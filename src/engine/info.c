@@ -23,15 +23,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stddef.h> // for NULL
+
 // Data.
+#include "info.h"
 #include "sounds.h"
 #include "m_fixed.h"
-
-#ifdef __GNUG__
-#pragma implementation "info.h"
-#endif
-#include "info.h"
-
 #include "p_mobj.h"
 
 char* sprnames[NUMSPRITES + 1] = {  //0x5FA30

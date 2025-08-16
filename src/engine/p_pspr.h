@@ -18,12 +18,12 @@
 
 #ifndef __P_PSPR__
 #define __P_PSPR__
+#include <stdbool.h>
 
 #include "doomdef.h"
 // Basic data types.
 // Needs fixed point, and BAM angles.
-//#include "m_fixed.h"
-#include "tables.h"
+
 //
 // Needs to include the precompiled
 //  sprite animation tables.
@@ -33,10 +33,6 @@
 // and the Frame Sequence table.
 #include "info.h"
 #include "m_fixed.h"
-
-#ifdef __GNUG__
-#pragma interface
-#endif
 
 //
 // Frame flags:

@@ -20,7 +20,6 @@
 #define T_BSP_H
 
 #include "m_fixed.h"
-#include "d_think.h"
 #include "p_mobj.h"
 
 //

@@ -22,11 +22,10 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-
+#include <stdbool.h>
 #include "z_zone.h"
 #include "i_system.h"
 #include "doomdef.h"
-#include "doomstat.h"
 
 #define ZONEID    0x1d4a11
 //#define ZONEFILE

@@ -22,19 +22,24 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <string.h>
+#include <limits.h>
+
+#include "d_net.h"
 #include "m_menu.h"
 #include "i_system.h"
-#include "g_game.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "tables.h"
 #include "m_misc.h"
-#include "con_console.h"
-
-#include <SDL3/SDL.h>
-#include "i_video.h"
 #include "i_sdlinput.h"
+#include "md5.h"
+#include "net_client.h"
+#include "net_server.h"
+#include "net_loop.h"
+#include "net_query.h"
+#include "net_io.h"
+#include "r_main.h"
+
 
 #define FEATURE_MULTIPLAYER 1
 
@@ -70,7 +75,6 @@ int         extratics;
 
 void D_ProcessEvents(void);
 void G_BuildTiccmd(ticcmd_t* cmd);
-void D_Display(void);
 
 boolean renderinframe = false;
 
@@ -191,7 +195,7 @@ void NetUpdate(void) {
 // Called after the screen is set but before the game starts running.
 //
 
-void D_StartGameLoop(void) {
+static void D_StartGameLoop(void) {
 	gametime = GetAdjustedTime() / ticdup;
 }
 

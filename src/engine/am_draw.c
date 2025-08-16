@@ -19,20 +19,20 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "am_draw.h"
 #include "r_lights.h"
 #include "m_fixed.h"
 #include "tables.h"
-#include "doomstat.h"
-#include "z_zone.h"
 #include "gl_main.h"
 #include "gl_texture.h"
 #include "am_map.h"
-#include "am_draw.h"
 #include "m_cheat.h"
 #include "r_sky.h"
-#include "p_local.h"
+#include "r_main.h"
+#include "r_things.h"
 #include "r_clipper.h"
 #include "r_drawlist.h"
+#include "dgl.h"
 
 extern fixed_t automappanx;
 extern fixed_t automappany;

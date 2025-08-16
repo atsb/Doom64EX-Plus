@@ -20,9 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <stdarg.h>
-
+#include "g_game.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "z_zone.h"
@@ -39,21 +37,22 @@
 #include "wi_stuff.h"
 #include "st_stuff.h"
 #include "am_map.h"
-#include "w_wad.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "d_englsh.h"
 #include "sounds.h"
 #include "tables.h"
 #include "info.h"
-#include "r_local.h"
-#include "r_wipe.h"
+#include "r_lights.h"
+#include "r_main.h"
 #include "con_console.h"
-#include "g_local.h"
-#include "m_password.h"
-#include "i_video.h"
 #include "i_sdlinput.h"
 #include "g_demo.h"
+#include "g_controls.h"
+#include "g_settings.h"
+#include "g_actions.h"
+#include "net_server.h"
+
 
 #define DCLICK_TIME     20
 

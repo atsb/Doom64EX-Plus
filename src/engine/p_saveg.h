@@ -20,10 +20,7 @@
 #ifndef __P_SAVEG__
 #define __P_SAVEG__
 
-
-#ifdef __GNUG__
-#pragma interface
-#endif
+#include "doomtype.h"
 
 #define SAVEGAMESIZE    0x60000
 #define SAVEGAMETBSIZE  0xC000

@@ -17,7 +17,6 @@
 
 #include "md5.h"
 #include "net_defs.h"
-#include "net_packet.h"
 
 extern void NET_WriteSettings(net_packet_t* packet, net_gamesettings_t* settings);
 extern boolean NET_ReadSettings(net_packet_t* packet, net_gamesettings_t* settings);

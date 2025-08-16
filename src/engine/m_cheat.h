@@ -18,9 +18,8 @@
 #ifndef __M_CHEAT__
 #define __M_CHEAT__
 
-#include "doomdef.h"
-#include "g_game.h"
-#include "doomstat.h"
+#include "d_player.h"
+#include "d_event.h"
 
 //
 // CHEAT SEQUENCE PACKAGE

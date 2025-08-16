@@ -18,7 +18,7 @@
 // 
 //-----------------------------------------------------------------------------
 
-#include "doomstat.h"
+#include "m_shift.h"
 
 const char* shiftxform;
 

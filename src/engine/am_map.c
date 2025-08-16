@@ -20,29 +20,24 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "i_video.h"
+#include <math.h>
+
+#include "am_map.h"
 #include "i_sdlinput.h"
-#include "z_zone.h"
 #include "doomdef.h"
-#include "st_stuff.h"
 #include "p_local.h"
-#include "w_wad.h"
 #include "t_bsp.h"
-#include "m_cheat.h"
 #include "m_fixed.h"
-#include "i_system.h"
 #include "doomstat.h"
 #include "d_englsh.h"
 #include "tables.h"
-#include "am_map.h"
 #include "am_draw.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "gl_draw.h"
 #include "g_actions.h"
 #include "g_controls.h"
+#include "r_lights.h"
+#include "r_main.h"
 
 // automap flags
 
@@ -391,7 +386,6 @@ static void AM_GetBounds(void) {
 
 boolean AM_Responder(event_t* ev) {
 	int rc = false;
-	SDL_Event se;
 
 	if (am_flags & AF_PANMODE) {
 		if (ev->type == ev_mouse) {
@@ -418,11 +412,7 @@ boolean AM_Responder(event_t* ev) {
 			}
 		}
 	}
-	while (SDL_PollEvent(&se)) {
-		if (AM_HandleGamepadEvent(&se)) {
-			rc = true;
-		}
-	}
+
 	return rc;
 }
 
@@ -725,7 +715,7 @@ static void AM_DrawNodes(void) {
 // This is LineDef based, not LineSeg based.
 //
 
-void AM_DrawWalls(void) {
+static void AM_DrawWalls(void) {
 	int i;
 	int x1, x2, y1, y2;
 
@@ -808,7 +798,7 @@ void AM_DrawWalls(void) {
 //
 // AM_drawPlayers
 //
-void AM_drawPlayers(void) {
+static void AM_drawPlayers(void) {
 	int i;
 	player_t* p_loop_player;
 	byte flash;
@@ -910,7 +900,7 @@ void AM_drawPlayers(void) {
 // AM_drawThings
 //
 
-void AM_drawThings(void) {
+static void AM_drawThings(void) {
 	int     i;
 	mobj_t* t;
 

@@ -19,25 +19,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "i_system.h"
-#include "sounds.h"
 #include "s_sound.h"
-#include "z_zone.h"
 #include "m_fixed.h"
-#include "m_random.h"
-#include "w_wad.h"
 #include "doomdef.h"
 #include "p_local.h"
 #include "doomstat.h"
 #include "tables.h"
-#include "r_local.h"
 #include "m_misc.h"
-#include "p_setup.h"
 #include "con_console.h"
+#include "con_cvar.h"
 #include "i_audio.h"
+#include "r_main.h"
 
 extern struct Sound sound;
 extern struct Reverb fmod_reverb;

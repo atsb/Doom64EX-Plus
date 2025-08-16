@@ -18,6 +18,10 @@
 #ifndef R_CLIPPER_H
 #define R_CLIPPER_H
 
+#include "tables.h"
+#include "gl_main.h"
+
+
 boolean    R_Clipper_SafeCheckRange(angle_t startAngle, angle_t endAngle);
 void        R_Clipper_SafeAddClipRange(angle_t startangle, angle_t endangle);
 void        R_Clipper_Clear(void);

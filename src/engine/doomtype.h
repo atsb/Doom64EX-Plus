@@ -18,15 +18,9 @@
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
-#include <stdint.h>
-#include <limits.h>
-#include <stdbool.h>
-
 typedef unsigned char		boolean;
 typedef unsigned char		byte;
 typedef unsigned short		word;
-
-#include <limits.h>
 
 #ifndef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -40,14 +34,4 @@ typedef unsigned short		word;
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))
 #endif
 
-#ifdef _WIN32
-#define DIR_SEPARATOR '\\'
-#define PATH_SEPARATOR ';'
-
-#else
-
-#define DIR_SEPARATOR '/'
-#define PATH_SEPARATOR ':'
-
-#endif
 #endif

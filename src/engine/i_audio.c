@@ -23,35 +23,29 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
 
-#ifndef _WIN32
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#endif
+#include <fmod.h>
+#include <fmod_errors.h>
 
-#ifdef __OpenBSD__
-#include <SDL3/SDL.h>
-#else
-#include <SDL3/SDL.h>
-#endif
+#include <SDL3/SDL_mutex.h>
+#include <SDL3/SDL_timer.h>
 
+#include "i_audio.h"
 #include "doomtype.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_system.h"
-#include "i_audio.h"
 #include "w_wad.h"
 #include "z_zone.h"
 #include "i_swap.h"
 #include "con_console.h"
 #include "d_player.h"
 #include "tables.h"
+#include "con_cvar.h"
 
 // Thresholds for distance checks in game units
 static const float GAME_SFX_MAX_UNITS_THRESHOLD = 1200.0f;
@@ -1262,7 +1256,7 @@ void I_UpdateChannel(int c, int volume, int pan, fixed_t x, fixed_t y) {
     chan->pan = (byte)(pan >> 1);
 }
 
-void ShutdownSystem(FMOD_SYSTEM **system) {
+static void ShutdownSystem(FMOD_SYSTEM **system) {
     if(*system) {
         FMOD_ERROR_CHECK(FMOD_System_Close(*system));
         FMOD_ERROR_CHECK(FMOD_System_Release(*system));

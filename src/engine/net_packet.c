@@ -15,6 +15,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdbool.h>
 #include <string.h>
 #include "net_packet.h"
 #include "z_zone.h"

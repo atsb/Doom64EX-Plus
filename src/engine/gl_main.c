@@ -19,21 +19,16 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <math.h>
+#include <SDL3/SDL_opengl.h>
 
-
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_MACOS
 #include <OpenGL/OpenGL.h>
 #endif
 
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_opengl.h>
-
+#include "gl_main.h"
 #include "i_sdlinput.h"
 #include "doomdef.h"
 #include "doomstat.h"
-#include "i_video.h"
-#include "gl_main.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "r_main.h"
@@ -41,6 +36,7 @@
 #include "con_console.h"
 #include "m_misc.h"
 #include "g_actions.h"
+#include "dgl.h"
 
 int ViewWindowX = 0;
 int ViewWindowY = 0;

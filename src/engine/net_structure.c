@@ -14,13 +14,15 @@
 //
 //--------------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <string.h>
+#include <stddef.h> // for NULL
+#include <stdbool.h>
+#include <string.h> // for memcpy
 
-#include "doomdef.h"
 
-#include "net_packet.h"
 #include "net_structure.h"
+#include "doomdef.h"
+#include "net_packet.h"
+
 
 void NET_WriteSettings(net_packet_t* packet, net_gamesettings_t* settings)
 {

@@ -18,6 +18,8 @@
 #ifndef __SHA1_H__
 #define __SHA1_H__
 
+#include <stdint.h>
+
 #include "doomtype.h"
 
 typedef struct sha1_context_s sha1_context_t;

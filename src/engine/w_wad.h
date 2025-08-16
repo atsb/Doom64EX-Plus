@@ -19,13 +19,7 @@
 #ifndef __W_WAD__
 #define __W_WAD__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
-#include "d_main.h"
 #include "w_file.h"
-#include "w_merge.h"
 
 //
 // WADFILE I/O related stuff.

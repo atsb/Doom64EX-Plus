@@ -19,6 +19,12 @@
 #ifndef __P_SPEC__
 #define __P_SPEC__
 
+#include "doomtype.h"
+#include "p_mobj.h"
+#include "t_bsp.h"
+#include "d_player.h"
+
+
 //
 // End-level timer (-TIMER option)
 //
@@ -63,11 +69,6 @@ fixed_t     P_FindHighestCeilingSurrounding(sector_t* sec);
 int         P_FindSectorFromLineTag(line_t* line, int start);
 boolean    P_ActivateLineByTag(int tag, mobj_t* activator);
 
-//
-// SPECIAL
-//
-
-int EV_DoFloorAndCeiling(line_t* line, boolean fast, boolean elevatorOrSplit);
 
 //
 // P_LIGHTS

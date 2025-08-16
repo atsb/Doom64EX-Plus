@@ -19,16 +19,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "doomdef.h"
 #include "r_wipe.h"
-#include "r_local.h"
-#include "st_stuff.h"
-#include "m_fixed.h"
-#include "z_zone.h"
+#include "doomdef.h"
 #include "i_system.h"
-#include "m_random.h"
 #include "gl_texture.h"
 #include "doomstat.h"
+#include "dgl.h"
 
 void M_ClearMenus(void);    // from m_menu.c
 

@@ -20,23 +20,14 @@
 //-----------------------------------------------------------------------------
 
 #include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_platform_defines.h>
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#ifndef _WIN32
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
-#include <time.h>
-#else
-#include <windows.h>
-#include <direct.h>
-#include <io.h>
-#endif
-
 #include <stdarg.h>
 #include <sys/stat.h>
+
+#include "i_system.h"
 #include "doomstat.h"
 #include "doomdef.h"
 #include "m_misc.h"
@@ -46,8 +37,7 @@
 #include "g_demo.h"
 #include "d_main.h"
 #include "con_console.h"
-#include "z_zone.h"
-#include "i_system.h"
+#include "con_cvar.h"
 #include "gl_draw.h"
 #include "steam.h"
 
@@ -64,7 +54,7 @@ CVAR(v_fadein, 1);
 
 #ifdef DOOM_UNIX_INSTALL
 #define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined _WIN32 || !defined __ANDROID__
+#elif !defined DOOM_UNIX_INSTALL || defined SDL_PLATFORM_WIN32 || !defined __ANDROID__
 #define GetBasePath()	(char *)SDL_GetBasePath();
 #elif defined __ANDROID__
 #define GetBasePath()   SDL_GetAndroidInternalStoragePath();
@@ -73,18 +63,10 @@ CVAR(v_fadein, 1);
 ticcmd_t        emptycmd;
 
 //
-// I_uSleep
+// I_Sleep
 //
-
-void I_Sleep(unsigned long usecs) {
-#ifdef _WIN32
-	Sleep((DWORD)usecs);
-#else
-	struct timespec tc;
-	tc.tv_sec = usecs / 1000;
-	tc.tv_nsec = (usecs % 1000) * 1000000;
-	nanosleep(&tc, NULL);
-#endif
+void I_Sleep(unsigned long ms) {
+	SDL_Delay(ms);
 }
 
 static Uint64 basetime = 0;
@@ -294,7 +276,7 @@ char* I_FindDataFile(char* file) {
 		}
 	}
 
-#if !defined(_WIN32)
+#ifndef SDL_PLATFORM_WIN32
 
 #ifdef DOOM_UNIX_INSTALL
 	if ((dir = I_GetUserDir())) {
@@ -316,11 +298,24 @@ char* I_FindDataFile(char* file) {
 	if (I_FileExists(path)) {
 		return path;
 	}
+#else // SDL_PLATFORM_WIN32
 
+	// detect GOG prior to Steam because it is faster
+	char install_dir[512];
+	if (I_GetRegistryString(HKEY_LOCAL_MACHINE,
+		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", install_dir, 511)) {
+		snprintf(path, 511, "%s/%s", install_dir, file);
+		if (I_FileExists(path)) {
+			I_Printf("I_FindDataFile: Adding GOG file %s\n", path);
+			return path;
+		}
+	}
 #endif
 
-    // Steam works with Windows and Linux
+#if defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_LINUX)  
+
     // cache Steam install dir value as calling Steam_FindGame is a bit expensive
+
 	if(!steam_install_dir_found) {
         steam_install_dir_found = Steam_FindGame(&game, DOOM64_STEAM_APPID)
             && Steam_ResolvePath(steam_install_dir, 511, &game);
@@ -328,21 +323,13 @@ char* I_FindDataFile(char* file) {
 
     if(steam_install_dir_found) {
        snprintf(path, 511, "%s/%s", steam_install_dir, file); 
-       I_Printf("I_FindDataFile: Adding Steam file %s\n", path);
-       return path;
+	   if (I_FileExists(path)) {
+		   I_Printf("I_FindDataFile: Adding Steam file %s\n", path);
+		   return path;
+	   }
     }
-
-#ifdef _WIN32
-    // GOG is Windows only
-    char install_dir[512];
-    if (I_GetRegistryString (HKEY_LOCAL_MACHINE,
-		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", install_dir, 511)) {
-        snprintf(path, 511, "%s/%s", install_dir, file); 
-        I_Printf("I_FindDataFile: Adding GOG file %s\n", path);
-        return path;
-    }
+    
 #endif
-
 	free(path);
 	return NULL;
 }
@@ -507,23 +494,12 @@ void I_BeginRead(void) {
 // I_RegisterCvars
 //
 
-#if defined(_WIN32) && defined(USE_XINPUT)
-CVAR_EXTERNAL(i_rsticksensitivity);
-CVAR_EXTERNAL(i_rstickthreshold);
-CVAR_EXTERNAL(i_xinputscheme);
-#endif
-
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(v_accessibility);
 CVAR_EXTERNAL(v_fadein);
 
 void I_RegisterCvars(void) {
-#if defined(_WIN32) && defined(USE_XINPUT)
-	CON_CvarRegister(&i_rsticksensitivity);
-	CON_CvarRegister(&i_rstickthreshold);
-	CON_CvarRegister(&i_xinputscheme);
-#endif
 	CON_CvarRegister(&i_gamma);
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_interpolateframes);
@@ -532,7 +508,7 @@ void I_RegisterCvars(void) {
 }
 
 
-#ifdef _WIN32
+#ifdef SDL_PLATFORM_WIN32
 
 boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars)
 {

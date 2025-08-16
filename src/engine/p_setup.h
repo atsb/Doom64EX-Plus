@@ -18,9 +18,8 @@
 #ifndef __P_SETUP__
 #define __P_SETUP__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
+#include "doomstat.h"
+#include "gl_main.h"
 
 // NOT called by W_Ticker. Fixme.
 void P_SetupLevel(int map, int playermask, skill_t skill);

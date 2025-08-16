@@ -19,7 +19,7 @@
 #define __I_PNG_H__
 
 #include <stdbool.h>
-#include <png.h>
+
 #include "doomtype.h"
 
 byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,

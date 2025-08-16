@@ -21,48 +21,38 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef _WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
 
-#ifdef _MSC_VER
-#include "i_opndir.h"
-#else
-#include <dirent.h>
-#endif
-
+#include <stdlib.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include <SDL3/SDL_platform_defines.h>
+
+#include "m_menu.h"
 #include "doomdef.h"
-#include "i_video.h"
 #include "i_sdlinput.h"
 #include "d_englsh.h"
 #include "m_cheat.h"
 #include "m_misc.h"
-#include "d_main.h"
 #include "i_system.h"
+#include "i_system_io.h"
 #include "z_zone.h"
-#include "w_wad.h"
 #include "st_stuff.h"
 #include "g_actions.h"
 #include "g_game.h"
 #include "s_sound.h"
 #include "doomstat.h"
 #include "sounds.h"
-#include "m_menu.h"
-#include "m_fixed.h"
-#include "d_devstat.h"
-#include "r_local.h"
 #include "m_shift.h"
 #include "m_password.h"
-#include "r_wipe.h"
-#include "st_stuff.h"
 #include "p_saveg.h"
 #include "p_setup.h"
 #include "gl_texture.h"
 #include "gl_draw.h"
+#include "r_lights.h"
+#include "r_main.h"
+#include "net_server.h"
+#include "dgl.h"
+
 
 //
 // definitions
@@ -2086,13 +2076,8 @@ void M_DrawPassword(void) {
 	byte* passData;
 	int i = 0;
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	if (!xgamepad.connected)
-#endif
-	{
-		Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
-		Draw_BigText(-1, 240 - 32, MENUCOLORWHITE, "Press Escape To Return");
-	}
+	Draw_BigText(-1, 240 - 48, MENUCOLORWHITE, "Press Delete To Change");
+	Draw_BigText(-1, 240 - 32, MENUCOLORWHITE, "Press Escape To Return");
 
 	if (passInvalid) {
 		if (!passInvalidTic--) {
@@ -2451,132 +2436,6 @@ void M_DoFeature(int choice) {
 	S_StartSound(NULL, sfx_switch2);
 }
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
-#include "g_controls.h"
-
-//------------------------------------------------------------------------
-//
-// GAMEPAD CONTROLLER MENU
-//
-//------------------------------------------------------------------------
-
-void M_XGamePadChoice(int choice);
-void M_DrawXGamePad(void);
-
-CVAR_EXTERNAL(i_rsticksensitivity);
-CVAR_EXTERNAL(i_rstickthreshold);
-CVAR_EXTERNAL(i_xinputscheme);
-
-enum {
-	xgp_sensitivity,
-	xgp_empty1,
-	xgp_threshold,
-	xgp_empty2,
-	xgp_look,
-	xgp_invert,
-	xgp_default,
-	xgp_return,
-	xgp_end
-} xgp_e;
-
-menuitem_t XGamePadMenu[] = {
-	{3,"Stick Sensitivity",M_XGamePadChoice,'s'},
-	{-1,"",0},
-	{3,"Turn Threshold",M_XGamePadChoice,'t'},
-	{-1,"",0},
-	{2,"Y Axis Look:",M_ChangeMouseLook,'l'},
-	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
-	{-2,"Default",M_DoDefaults,'d'},
-	{1,"/r Return",M_Return, 0x20}
-};
-
-menudefault_t XGamePadDefault[] = {
-	{ &i_rsticksensitivity, 0.0080f },
-	{ &i_rstickthreshold, 20 },
-	{ &v_mlook, 0 },
-	{ &v_mlookinvert, 0 },
-	{ NULL, -1 }
-};
-
-menu_t XGamePadDef = {
-	xgp_end,
-	false,
-	&ControlMenuDef,
-	XGamePadMenu,
-	M_DrawXGamePad,
-	"Gamepad Menu",
-	88,48,
-	0,
-	false,
-	XGamePadDefault,
-	-1,
-	0,
-	1.0f,
-	NULL,
-	NULL
-};
-
-void M_XGamePadChoice(int choice) {
-	float slope1 = 0.0125f / 100.0f;
-	float slope2 = 100.0f / 50.0f;
-
-	switch (itemOn) {
-	case xgp_sensitivity:
-		if (choice) {
-			if (i_rsticksensitivity.value < 0.0125f) {
-				M_SetCvar(&i_rsticksensitivity, i_rsticksensitivity.value + slope1);
-			}
-			else {
-				CON_CvarSetValue(i_rsticksensitivity.name, 0.0125f);
-			}
-		}
-		else {
-			if (i_rsticksensitivity.value > 0.001f) {
-				M_SetCvar(&i_rsticksensitivity, i_rsticksensitivity.value - slope1);
-			}
-			else {
-				CON_CvarSetValue(i_rsticksensitivity.name, 0.001f);
-			}
-		}
-		break;
-
-	case xgp_threshold:
-		if (choice) {
-			if (i_rstickthreshold.value < 100) {
-				M_SetCvar(&i_rstickthreshold, i_rstickthreshold.value + slope2);
-			}
-			else {
-				CON_CvarSetValue(i_rstickthreshold.name, 100);
-			}
-		}
-		else {
-			if (i_rstickthreshold.value > 1) {
-				M_SetCvar(&i_rstickthreshold, i_rstickthreshold.value - slope2);
-			}
-			else {
-				CON_CvarSetValue(i_rstickthreshold.name, 1);
-			}
-		}
-		break;
-	}
-}
-
-void M_DrawXGamePad(void) {
-	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_sensitivity + 1),
-		100, i_rsticksensitivity.value * 8000.0f);
-
-	M_DrawThermo(XGamePadDef.x, XGamePadDef.y + LINEHEIGHT * (xgp_threshold + 1),
-		50, i_rstickthreshold.value * 0.5f);
-
-	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_look, MENUCOLORRED,
-		msgNames[(int)v_mlook.value]);
-
-	Draw_BigText(XGamePadDef.x + 128, XGamePadDef.y + LINEHEIGHT * xgp_invert, MENUCOLORRED,
-		msgNames[(int)v_mlookinvert.value]);
-}
-
-#endif  // XINPUT
 
 //------------------------------------------------------------------------
 //
@@ -2727,9 +2586,6 @@ void M_DrawControlMenu(void);
 enum {
 	controls_keyboard,
 	controls_mouse,
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	controls_gamepad,
-#endif
 	controls_return,
 	controls_end
 } controls_e;
@@ -2737,18 +2593,12 @@ enum {
 menuitem_t ControlsMenu[] = {
 	{1,"Bindings",M_ControlChoice, 'k'},
 	{1,"Mouse",M_ControlChoice, 'm'},
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	{1,"Gamepad",M_ControlChoice, 'g'},
-#endif
 	{1,"/r Return",M_Return, 0x20}
 };
 
 char* ControlsHints[controls_end] = {
 	"configure bindings",
 	"configure mouse functionality",
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	"configure gamepad functionality",
-#endif
 	NULL
 };
 
@@ -2779,11 +2629,6 @@ void M_ControlChoice(int choice) {
 	case controls_mouse:
 		M_SetupNextMenu(&MouseDef);
 		break;
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	case controls_gamepad:
-		M_SetupNextMenu(&XGamePadDef);
-		break;
-#endif
 	}
 }
 
@@ -3111,24 +2956,16 @@ void M_ReadSaveStrings(void) {
 
 		// handle = open(name, O_RDONLY | 0, 0666);
         char *filename = P_GetSaveGameName(i);
-#ifdef _WIN32
-		handle = _open(filename, O_RDONLY | 0, 0666);
-#else
 		handle = open(filename, O_RDONLY | 0, 0666);
-#endif
-        free(filename);
+
+		free(filename);
 		if (handle == -1) {
 			dstrcpy(&savegamestrings[i][0], EMPTYSTRING);
 			DoomLoadMenu[i].status = 0;
 			continue;
 		}
-#ifdef _WIN32
-		_read(handle, &savegamestrings[i], MENUSTRINGSIZE);
-		_close(handle);
-#else
 		read(handle, &savegamestrings[i], MENUSTRINGSIZE);
 		close(handle);
-#endif
 		DoomLoadMenu[i].status = 1;
 	}
 }
@@ -3290,7 +3127,7 @@ static int M_StringWidth(const char* string) {
 	int c;
 
 	for (i = 0; i < dstrlen(string); i++) {
-		c = toupper(string[i]) - ST_FONTSTART;
+		c = SDL_toupper(string[i]) - ST_FONTSTART;
 		if (c < 0 || c >= ST_FONTSIZE) {
 			w += 4;
 		}
@@ -3735,134 +3572,6 @@ static void M_DrawSaveGameFrontend(menu_t* def) {
 //
 //------------------------------------------------------------------------
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-
-const symboldata_t xinputbutons[12] = {
-	{ 0, 0, 15, 16 },   // B
-	{ 15, 0, 15, 16 },  // A
-	{ 30, 0, 15, 16 },  // Y
-	{ 45, 0, 15, 16 },  // X
-	{ 60, 0, 19, 16 },  // LB
-	{ 79, 0, 19, 16 },  // RB
-	{ 98, 0, 15, 16 },  // LEFT
-	{ 113, 0, 15, 16 }, // RIGHT
-	{ 128, 0, 15, 16 }, // UP
-	{ 143, 0, 15, 16 }, // DOWN
-	{ 158, 0, 12, 16 }, // START
-	{ 170, 0, 12, 16 }  // SELECT
-};
-
-//
-// M_DrawXInputButton
-//
-
-void M_DrawXInputButton(int x, int y, int button) {
-	int index = 0;
-	float vx1 = 0.0f;
-	float vy1 = 0.0f;
-	float tx1 = 0.0f;
-	float tx2 = 0.0f;
-	float ty1 = 0.0f;
-	float ty2 = 0.0f;
-	float width;
-	float height;
-	int pic;
-	vtx_t vtx[4];
-	const rcolor color = MENUCOLORWHITE;
-
-	switch (button) {
-	case XINPUT_GAMEPAD_B:
-		index = 0;
-		break;
-	case XINPUT_GAMEPAD_A:
-		index = 1;
-		break;
-	case XINPUT_GAMEPAD_Y:
-		index = 2;
-		break;
-	case XINPUT_GAMEPAD_X:
-		index = 3;
-		break;
-	case XINPUT_GAMEPAD_LEFT_SHOULDER:
-		index = 4;
-		break;
-	case XINPUT_GAMEPAD_RIGHT_SHOULDER:
-		index = 5;
-		break;
-	case XINPUT_GAMEPAD_DPAD_LEFT:
-		index = 6;
-		break;
-	case XINPUT_GAMEPAD_DPAD_RIGHT:
-		index = 7;
-		break;
-	case XINPUT_GAMEPAD_DPAD_UP:
-		index = 8;
-		break;
-	case XINPUT_GAMEPAD_DPAD_DOWN:
-		index = 9;
-		break;
-	case XINPUT_GAMEPAD_START:
-		index = 10;
-		break;
-	case XINPUT_GAMEPAD_BACK:
-		index = 11;
-		break;
-	case XINPUT_GAMEPAD_LEFT_TRIGGER:
-		index = 4;
-		break;
-	case XINPUT_GAMEPAD_RIGHT_TRIGGER:
-		index = 5;
-		break;
-		//
-		// [kex] TODO: finish adding remaining buttons?
-		//
-	default:
-		return;
-	}
-
-	pic = GL_BindGfxTexture("BUTTONS", true);
-
-	width = (float)gfxwidth[pic];
-	height = (float)gfxheight[pic];
-
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
-
-	dglEnable(GL_BLEND);
-	dglSetVertex(vtx);
-
-	GL_SetOrtho(0);
-
-	vx1 = (float)x;
-	vy1 = (float)y;
-
-	tx1 = ((float)xinputbutons[index].x / width) + 0.001f;
-	tx2 = (tx1 + (float)xinputbutons[index].w / width) - 0.001f;
-	ty1 = ((float)xinputbutons[index].y / height) + 0.005f;
-	ty2 = (ty1 + (((float)xinputbutons[index].h / height))) - 0.008f;
-
-	GL_Set2DQuad(
-		vtx,
-		vx1,
-		vy1,
-		xinputbutons[index].w,
-		xinputbutons[index].h,
-		tx1,
-		tx2,
-		ty1,
-		ty2,
-		color
-	);
-
-	dglTriangle(0, 1, 2);
-	dglTriangle(3, 2, 1);
-	dglDrawGeometry(4, vtx);
-
-	GL_ResetViewport();
-	dglDisable(GL_BLEND);
-}
-
-#endif
 
 //
 // M_Responder
@@ -4560,28 +4269,6 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	if (xgamepad.connected && currentMenu != &MainDef) {
-		GL_SetOrthoScale(0.75f);
-		if (currentMenu == &PasswordDef) {
-			M_DrawXInputButton(4, 271, XINPUT_GAMEPAD_B);
-			Draw_Text(22, 276, MENUCOLORWHITE, 0.75f, false, "Change");
-		}
-
-		GL_SetOrthoScale(0.75f);
-		M_DrawXInputButton(4, 287, XINPUT_GAMEPAD_A);
-		Draw_Text(22, 292, MENUCOLORWHITE, 0.75f, false, "Select");
-
-		if (currentMenu != &PauseDef) {
-			GL_SetOrthoScale(0.75f);
-			M_DrawXInputButton(5, 303, XINPUT_GAMEPAD_START);
-			Draw_Text(22, 308, MENUCOLORWHITE, 0.75f, false, "Return");
-		}
-
-		GL_SetOrthoScale(1);
-	}
-#endif
-
 	M_DrawCursor(mouse_x, mouse_y);
 }
 
@@ -4706,15 +4393,6 @@ void M_Ticker(void) {
 		LoadDef.prevMenu = &PauseDef;
 		SaveDef.prevMenu = &PauseDef;
 	}
-
-#if defined(_WIN32) && defined(USE_XINPUT)  // XINPUT
-	//
-	// hide mouse menu if gamepad controller is plugged in
-	//
-	if (currentMenu == &ControlMenuDef) {
-		currentMenu->menuitems[controls_gamepad].status = xgamepad.connected ? 1 : -3;
-	}
-#endif
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&

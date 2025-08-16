@@ -17,6 +17,9 @@
 #ifndef __SC_MAIN__
 #define __SC_MAIN__
 
+#include <stdint.h>
+#include "doomtype.h"
+
 typedef struct {
 	const char* token;
 	int64_t   ptroffset;

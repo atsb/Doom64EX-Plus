@@ -21,14 +21,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include "g_local.h"
+#include <SDL3/SDL_stdinc.h>
+#include <ctype.h>
+
+#include "g_actions.h"
 #include "m_keys.h"
 #include "i_system.h"
-#include "i_video.h"
 #include "doomstat.h"
 #include "con_console.h"
 #include "z_zone.h"
+#include "g_controls.h"
+#include "net_server.h"
 
 //do controls menu length properly
 //if list of actions for menu>=MAX_MENUACTION_LENGTH then won't display any more
@@ -483,7 +486,7 @@ alist_t* ParseActions(char* actions) {
 
 	alist = (alist_t*)Z_Malloc(sizeof(alist_t), PU_STATIC, NULL);
 	al = alist;
-	al->buff = strdup(p);
+	al->buff = zstrdup(p);
 	p = al->buff;
 	quoted = false;
 
@@ -960,7 +963,7 @@ void G_AddCommand(char* name, actionproc_t proc, int64_t data) {
 	action_t* action;
 
 	action = (action_t*)Z_Malloc(sizeof(action_t), PU_STATIC, NULL);
-	action->name = strdup(name);
+	action->name = zstrdup(name);
 	dstrlwr(action->name);
 	action->proc = proc;
 	action->data = data;

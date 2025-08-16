@@ -24,15 +24,13 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <SDL3/SDL_stdinc.h>
 
+#include "w_merge.h"
 #include "doomdef.h"
 #include "i_system.h"
-#include "w_merge.h"
 #include "w_wad.h"
 #include "z_zone.h"
-#ifdef _WIN32
-#include "i_opndir.h"
-#endif
 
 typedef enum {
 	SECTION_NORMAL,
@@ -79,7 +77,7 @@ static int FindInList(searchlist_t* list, const char* name) {
 	int i;
 
 	for (i = 0; i < list->numlumps; ++i) {
-		if (!strncasecmp(list->lumps[i].name, name, 8)) {
+		if (!dstrnicmp(list->lumps[i].name, name, 8)) {
 			return i;
 		}
 	}
@@ -168,7 +166,7 @@ static sprite_frame_t* FindSpriteFrame(char* name, int frame) {
 	for (i = 0; i < num_sprite_frames; ++i) {
 		sprite_frame_t* cur = &sprite_frames[i];
 
-		if (!strncasecmp(cur->sprname, name, 4) && cur->frame == frame) {
+		if (!dstrnicmp(cur->sprname, name, 4) && cur->frame == frame) {
 			return cur;
 		}
 	}
@@ -362,16 +360,16 @@ static void DoMerge(void) {
 
 		switch (current_section) {
 		case SECTION_NORMAL:
-			if (!strncasecmp(lump->name, "T_START", 8)) {
+			if (!dstrnicmp(lump->name, "T_START", 8)) {
 				current_section = SECTION_TEXTURES;
 			}
-			else if (!strncasecmp(lump->name, "S_START", 8)) {
+			else if (!dstrnicmp(lump->name, "S_START", 8)) {
 				current_section = SECTION_SPRITES;
 			}
-			else if (!strncasecmp(lump->name, "SYMBOLS", 8)) {
+			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
 				current_section = SECTION_GFX;
 			}
-			else if (!strncasecmp(lump->name, "DM_START", 8)) {
+			else if (!dstrnicmp(lump->name, "DM_START", 8)) {
 				current_section = SECTION_SOUNDS;
 			}
 
@@ -383,7 +381,7 @@ static void DoMerge(void) {
 
 			// Have we reached the end of the section?
 
-			if (!strncasecmp(lump->name, "T_END", 8)) {
+			if (!dstrnicmp(lump->name, "T_END", 8)) {
 				// Add all new flats from the PWAD to the end
 				// of the section
 
@@ -415,7 +413,7 @@ static void DoMerge(void) {
 
 			// Have we reached the end of the section?
 
-			if (!strncasecmp(lump->name, "S_END", 8)) {
+			if (!dstrnicmp(lump->name, "S_END", 8)) {
 				// add all the pwad sprites
 
 				for (n = 0; n < pwad_sprites.numlumps; ++n) {
@@ -445,7 +443,7 @@ static void DoMerge(void) {
 
 			// Have we reached the end of the section?
 
-			if (!strncasecmp(lump->name, "MOUNTC", 8)) {
+			if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
 				// Add all new flats from the PWAD to the end
 				// of the section
 
@@ -477,7 +475,7 @@ static void DoMerge(void) {
 
 			// Have we reached the end of the section?
 
-			if (!strncasecmp(lump->name, "DM_END", 8)) {
+			if (!dstrnicmp(lump->name, "DM_END", 8)) {
 				// Add all new flats from the PWAD to the end
 				// of the section
 
@@ -515,19 +513,19 @@ static void DoMerge(void) {
 
 		switch (current_section) {
 		case SECTION_NORMAL:
-			if (!strncasecmp(lump->name, "T_START", 8)
-				|| !strncasecmp(lump->name, "TT_START", 8)) {
+			if (!dstrnicmp(lump->name, "T_START", 8)
+				|| !dstrnicmp(lump->name, "TT_START", 8)) {
 				current_section = SECTION_TEXTURES;
 			}
-			else if (!strncasecmp(lump->name, "S_START", 8)
-				|| !strncasecmp(lump->name, "SS_START", 8)) {
+			else if (!dstrnicmp(lump->name, "S_START", 8)
+				|| !dstrnicmp(lump->name, "SS_START", 8)) {
 				current_section = SECTION_SPRITES;
 			}
-			else if (!strncasecmp(lump->name, "SYMBOLS", 8)
-				|| !strncasecmp(lump->name, "SYMBOLS", 8)) {
+			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)
+				|| !dstrnicmp(lump->name, "SYMBOLS", 8)) {
 				current_section = SECTION_GFX;
 			}
-			else if (!strncasecmp(lump->name, "DM_START", 8)) {
+			else if (!dstrnicmp(lump->name, "DM_START", 8)) {
 				current_section = SECTION_SOUNDS;
 			}
 			else {
@@ -541,8 +539,8 @@ static void DoMerge(void) {
 
 			// PWAD flats are ignored (already merged)
 
-			if (!strncasecmp(lump->name, "TT_END", 8)
-				|| !strncasecmp(lump->name, "T_END", 8)) {
+			if (!dstrnicmp(lump->name, "TT_END", 8)
+				|| !dstrnicmp(lump->name, "T_END", 8)) {
 				// end of section
 				current_section = SECTION_NORMAL;
 			}
@@ -552,8 +550,8 @@ static void DoMerge(void) {
 
 			// PWAD sprites are ignored (already merged)
 
-			if (!strncasecmp(lump->name, "SS_END", 8)
-				|| !strncasecmp(lump->name, "S_END", 8)) {
+			if (!dstrnicmp(lump->name, "SS_END", 8)
+				|| !dstrnicmp(lump->name, "S_END", 8)) {
 				// end of section
 				current_section = SECTION_NORMAL;
 			}
@@ -563,8 +561,8 @@ static void DoMerge(void) {
 
 			// PWAD gfx are ignored (already merged)
 
-			if (!strncasecmp(lump->name, "MOUNTC", 8)
-				|| !strncasecmp(lump->name, "MOUNTC", 8)) {
+			if (!dstrnicmp(lump->name, "MOUNTC", 8)
+				|| !dstrnicmp(lump->name, "MOUNTC", 8)) {
 				// end of section
 				current_section = SECTION_NORMAL;
 			}
@@ -574,7 +572,7 @@ static void DoMerge(void) {
 
 			// PWAD sounds are ignored (already merged)
 
-			if (!strncasecmp(lump->name, "DM_END", 8)) {
+			if (!dstrnicmp(lump->name, "DM_END", 8)) {
 				// end of section
 				current_section = SECTION_NORMAL;
 			}

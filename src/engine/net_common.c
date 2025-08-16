@@ -13,13 +13,12 @@
 // Common code shared between the client and server
 //
 //------------------------------------------------------------------------------
-#include <ctype.h>
 #include <stdlib.h>
-
-#include "doomdef.h"
-#include "i_system.h"
+#include <stdbool.h>
+#include <ctype.h>
 
 #include "net_common.h"
+#include "i_system.h"
 #include "net_io.h"
 #include "net_packet.h"
 

@@ -20,17 +20,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "i_system.h"
-#include "doomdef.h"
-#include "p_local.h"
-#include "w_wad.h"
-#include "g_game.h"
+#include "p_spec.h"
 #include "s_sound.h"
 #include "sounds.h"
 #include "doomstat.h"
 #include "gl_texture.h"
-#include "r_local.h"
-#include "z_zone.h"
 
 button_t buttonlist[MAXBUTTONS];
 

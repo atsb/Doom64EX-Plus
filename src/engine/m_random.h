@@ -18,8 +18,7 @@
 #ifndef __M_RANDOM__
 #define __M_RANDOM__
 
-#include "doomtype.h"
-#include "d_keywds.h"
+#include <stdint.h>
 
 extern unsigned char rndtable[256];
 int M_Random(void);

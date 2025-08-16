@@ -19,23 +19,8 @@
 #ifndef __Z_ZONE__
 #define __Z_ZONE__
 
-#include "d_keywds.h" // haleyjd 05/22/02
-
-#undef strdup
-
 // Include system definitions so that prototypes become
 // active before macro replacements below are in effect.
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#ifdef LINUX
-// Linux needs strings.h too, for strcasecmp etc.
-#include <strings.h>
-#endif
-
-#include <ctype.h>
 
 // ZONE MEMORY
 
@@ -95,7 +80,7 @@ void (Z_Touch)(void* ptr, const char*, int);
 
 #define Z_ReallocV(a,b,c,d)	(a = Z_Realloc	(a,sizeof(*a)*b,c,d))
 
-#define strdup(s)           (Z_Strdup) (s, PU_STATIC,0,__FILE__,__LINE__)
+#define zstrdup(s)           (Z_Strdup) (s, PU_STATIC,0,__FILE__,__LINE__)
 
 int Z_TagUsage(int tag);
 int Z_FreeMemory(void);

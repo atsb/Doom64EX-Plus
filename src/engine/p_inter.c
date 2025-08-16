@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "p_inter.h"
 #include "doomdef.h"
 #include "d_englsh.h"
 #include "sounds.h"
@@ -37,17 +38,13 @@
 #include "p_local.h"
 #include "p_macros.h"
 #include "s_sound.h"
-#include "r_local.h"
 #include "con_console.h"
+#include "con_cvar.h"
 #include "st_stuff.h"
-
-#ifdef __GNUG__
-#pragma implementation "p_inter.h"
-#endif
-#include "p_inter.h"
-
 #include "tables.h"
 #include "info.h"
+#include "r_lights.h"
+#include "r_main.h"
 
 CVAR_EXTERNAL(p_damageindicator);
 CVAR(m_obituaries, 0);

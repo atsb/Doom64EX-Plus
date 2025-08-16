@@ -65,7 +65,7 @@ git clone https://github.com/atsb/Doom64EX-Plus
 
 Doom 64 EX+ requires asset files from your legally owned copy of the official *DOOM 64* remaster (e.g., from Steam or GOG).
 
-On startup, Doom 64 EX+ will try to automatically locate asset files from your DOOM 64 installation from Steam (Windows, Linux) and GOG (Windows), in that order.
+On startup, Doom 64 EX+ will try to automatically locate asset files from your DOOM 64 installation from GOG (Windows) and Steam (Windows, Linux), in that order.
 
 ### Step 3: Compile for Your Platform
 

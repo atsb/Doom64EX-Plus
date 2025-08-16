@@ -21,7 +21,10 @@
 //-----------------------------------------------------------------------------
 
 #include <math.h>
+#include <png.h>
+//#include <SDL3/SDL_stdinc.h> // for SDL_INLINE
 
+#include "i_png.h"
 #include "doomdef.h"
 #include "doomtype.h"
 #include "i_system.h"
@@ -30,8 +33,8 @@
 #include "z_zone.h"
 #include "w_wad.h"
 #include "gl_texture.h"
-#include "con_console.h"
-#include "i_png.h"
+#include "con_cvar.h"
+
 
 static byte* pngWriteData;
 static byte* pngReadData;
@@ -45,7 +48,7 @@ CVAR_CMD(i_gamma, 0) {
 // I_PNGRowSize
 //
 
-d_inline static size_t I_PNGRowSize(int width, byte bits) {
+SDL_INLINE static size_t I_PNGRowSize(int width, byte bits) {
     if (bits >= 8) {
         return ((width * bits) >> 3);
     }
@@ -84,7 +87,7 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 // I_GetRGBGamma
 //
 
-d_inline static byte I_GetRGBGamma(int c) {
+SDL_INLINE static byte I_GetRGBGamma(int c) {
     return (byte)MIN(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
 }
 

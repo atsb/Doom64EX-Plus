@@ -18,12 +18,6 @@
 #ifndef __M_FIXED__
 #define __M_FIXED__
 
-#include "d_keywds.h"
-
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 //
 // Fixed point, 32bit as 16.16.
 //

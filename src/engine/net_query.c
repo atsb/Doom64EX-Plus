@@ -14,17 +14,16 @@
 //     Querying servers to find their current status.
 //
 
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdlib.h>
 
+#include "net_query.h"
 #include "i_system.h"
-//#include "i_timer.h"
-
 #include "net_common.h"
 #include "net_defs.h"
 #include "net_io.h"
 #include "net_packet.h"
-#include "net_query.h"
 #include "net_structure.h"
 
 typedef struct

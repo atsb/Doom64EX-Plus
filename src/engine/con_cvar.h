@@ -24,6 +24,8 @@
 #ifndef CON_CVAR_H
 #define CON_CVAR_H
 
+#include <stdint.h>
+
 #include "doomtype.h"
 
 typedef struct cvar_s cvar_t;

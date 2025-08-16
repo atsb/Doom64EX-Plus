@@ -18,17 +18,15 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <SDL3/SDL_opengl.h>
+#include <SDL3/SDL_platform_defines.h>
 
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_MACOS
 #include <math.h>
 #endif
-
-#include "doomdef.h"
+#include "dgl.h"
 #include "doomstat.h"
 #include "gl_main.h"
 #include "gl_texture.h"
-#include "con_console.h"
 #include "i_system.h"
 
 #define MAXINDICES  0x10000

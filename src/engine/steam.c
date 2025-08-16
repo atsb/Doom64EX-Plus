@@ -1,19 +1,15 @@
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-
+#include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_platform_defines.h>
-
 #ifdef SDL_PLATFORM_LINUX
 #include <unistd.h>
-#include <sys/types.h>
 #include <pwd.h>
 #endif
 
-#include "i_system.h"
 #include "steam.h"
+#include "i_system.h"
 
 
 typedef struct vdbcontext_s vdbcontext_t;
@@ -107,11 +103,11 @@ boolean Sys_GetSteamDir (char *path, size_t pathsize)
 
 	if ((size_t) snprintf (path, pathsize, "%s/.steam/steam", home_dir) < pathsize && Steam_IsValidPath (path))
 		return true;
-	if ((size_t) snprintf (path, pathsize, "%s/.local/share/Steam", home_dir) < pathsize && Steam_IsValidPath (path))
+	if ((size_t) SDL_snprintf (path, pathsize, "%s/.local/share/Steam", home_dir) < pathsize && Steam_IsValidPath (path))
 		return true;
-	if ((size_t) snprintf (path, pathsize, "%s/.var/app/com.valvesoftware.Steam/.steam/steam", home_dir) < pathsize && Steam_IsValidPath (path))
+	if ((size_t) SDL_snprintf (path, pathsize, "%s/.var/app/com.valvesoftware.Steam/.steam/steam", home_dir) < pathsize && Steam_IsValidPath (path))
 		return true;
-	if ((size_t) snprintf (path, pathsize, "%s/.var/app/com.valvesoftware.Steam/.local/share/Steam", home_dir) < pathsize && Steam_IsValidPath (path))
+	if ((size_t) SDL_snprintf (path, pathsize, "%s/.var/app/com.valvesoftware.Steam/.local/share/Steam", home_dir) < pathsize && Steam_IsValidPath (path))
 		return true;
 
 	return false;
@@ -335,10 +331,9 @@ Returns true if the given path contains a valid Steam install
 boolean Steam_IsValidPath (const char *path)
 {
 	char libpath[STEAM_PATH_MAX_SIZE];
-	if ((size_t) snprintf (libpath, sizeof (libpath), "%s/config/libraryfolders.vdf", path) >= sizeof (libpath))
+	if ((size_t) SDL_snprintf (libpath, sizeof (libpath), "%s/config/libraryfolders.vdf", path) >= sizeof (libpath))
 		return false;
 
-    // FIXME: WIN32
     return I_FileExists(libpath);
 }
 
@@ -357,7 +352,7 @@ static char *Steam_ReadLibFolders (void)
 
 	char vfd_file[STEAM_PATH_MAX_SIZE];
 
-	if ((size_t) snprintf (vfd_file, STEAM_PATH_MAX_SIZE, "%s/config/libraryfolders.vdf", steam_dir) >= STEAM_PATH_MAX_SIZE)
+	if ((size_t) SDL_snprintf (vfd_file, STEAM_PATH_MAX_SIZE, "%s/config/libraryfolders.vdf", steam_dir) >= STEAM_PATH_MAX_SIZE)
 		return NULL;
 	return (char *) COM_LoadMallocFile_TextMode_OSPath (vfd_file, NULL);
 }
@@ -389,7 +384,7 @@ boolean Steam_FindGame (steamgame_t *game, int appid)
 		return false;
 	}
 
-	snprintf (appidstr, sizeof (appidstr), "%d", appid);
+	SDL_snprintf (appidstr, sizeof (appidstr), "%d", appid);
 	memset (&libparser, 0, sizeof (libparser));
 	libparser.appid = appidstr;
 	if (!VDB_Parse (steamcfg, VDB_OnLibFolderProperty, &libparser))
@@ -398,7 +393,7 @@ boolean Steam_FindGame (steamgame_t *game, int appid)
 		goto done_cfg;
 	}
 
-	if ((size_t) snprintf (path, sizeof (path), "%s/steamapps/appmanifest_%s.acf", libparser.result, appidstr) >= sizeof (path))
+	if ((size_t) SDL_snprintf (path, sizeof (path), "%s/steamapps/appmanifest_%s.acf", libparser.result, appidstr) >= sizeof (path))
 	{
 		I_Printf ("ERROR: Couldn't read Steam manifest for app %s (path too long).\n", appidstr);
 		goto done_cfg;
@@ -444,6 +439,6 @@ boolean Steam_ResolvePath (char *path, size_t pathsize, const steamgame_t *game)
 {
 	return
 		game->subdir &&
-		(size_t) snprintf (path, pathsize, "%s/steamapps/common/%s", game->library, game->subdir) < pathsize
+		(size_t) SDL_snprintf (path, pathsize, "%s/steamapps/common/%s", game->library, game->subdir) < pathsize
 	;
 }
