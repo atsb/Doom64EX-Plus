@@ -19,15 +19,18 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdlib.h>
+
+#include "r_drawlist.h"
 #include "doomdef.h"
 #include "doomstat.h"
-#include "d_devstat.h"
-#include "r_local.h"
+#include "r_main.h"
+#include "r_things.h"
 #include "gl_texture.h"
 #include "gl_main.h"
-#include "r_drawlist.h"
 #include "i_system.h"
 #include "z_zone.h"
+#include "dgl.h"
 
 vtx_t drawVertex[MAXDLDRAWCOUNT];
 

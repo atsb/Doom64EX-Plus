@@ -25,21 +25,10 @@
 #ifndef __D_NET__
 #define __D_NET__
 
-#include "d_player.h"
-
-#include "net_client.h"
-#include "net_io.h"
-#include "net_query.h"
-#include "net_server.h"
-#include "net_loop.h"
-
-#ifdef __GNUG__
-#pragma interface
-#endif
+#include "doomtype.h"
 
 #define MAXNETNODES        8    // Max computers/players in a game.
 #define BACKUPTICS        128    // Networking and tick handling related.
-
 
 // Create any new ticcmds and broadcast to other players.
 void NetUpdate(void);
@@ -50,7 +39,7 @@ void D_QuitNetGame(void);
 
 extern boolean ShowGun;
 extern boolean drone;
-extern boolean    net_cl_new_sync;
+extern boolean net_cl_new_sync;
 
 #endif
 

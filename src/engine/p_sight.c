@@ -21,9 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "doomdef.h"
 #include "m_fixed.h"
-#include "i_system.h"
 #include "p_local.h"
 #include "doomstat.h"
 

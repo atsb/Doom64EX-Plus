@@ -24,6 +24,9 @@
 #ifndef __AMMAP_H__
 #define __AMMAP_H__
 
+#include "con_cvar.h"
+#include "d_event.h"
+
 CVAR_EXTERNAL(am_overlay);
 
 // Called by main loop.

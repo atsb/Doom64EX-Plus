@@ -19,19 +19,18 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <math.h>
+//#include <math.h>
 
-#include "r_local.h"
 #include "r_clipper.h"
+#include "r_main.h"
+#include "r_lights.h"
+#include "r_things.h"
 #include "i_system.h"
 #include "doomstat.h"
-#include "d_main.h"
 #include "m_misc.h"
 #include "z_zone.h"
 #include "r_sky.h"
 #include "r_drawlist.h"
-#include "con_console.h"
-#include "p_local.h"
 #include "gl_texture.h"
 
 sector_t* frontsector;
@@ -273,7 +272,7 @@ boolean R_GenerateSwitchPlane(seg_t* line, vtx_t* v) {
 	return true;
 }
 
-d_inline static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bottom) {
+SDL_INLINE static void GetSideTopBottom(sector_t* sector, rfloat* top, rfloat* bottom) {
 	if (i_interpolateframes.value) {
 		fixed_t frame_c = sector->frame_z2[1];
 		fixed_t frame_f = sector->frame_z1[1];

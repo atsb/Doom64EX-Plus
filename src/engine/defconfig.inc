@@ -33,6 +33,7 @@
 "bind - \"+automap_out\"\n"
 "bind + \"+automap_in\"\n"
 "bind Q \"+automap_freepan\"\n"
+"bind mouse4 \"+automap_freepan\"\n"
 "bind F \"automap_follow\"\n"
 "bind F1 \"quicksave\"\n"
 "bind F2 \"quickload\"\n"

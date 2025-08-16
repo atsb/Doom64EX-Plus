@@ -18,6 +18,7 @@
 #define NET_SERVER_H
 
 #include "con_cvar.h"
+#include "net_defs.h"
 
 // initialise server and wait for connections
 

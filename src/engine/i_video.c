@@ -20,21 +20,16 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
-
-#include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
 
-#include "m_misc.h"
+#include "i_video.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_system.h"
-#include "i_video.h"
 #include "i_sdlinput.h"
-#include "d_main.h"
 #include "gl_main.h"
+#include "con_cvar.h"
 
 SDL_Window* window = NULL;
 SDL_GLContext   glContext = NULL;
@@ -158,7 +153,7 @@ void I_InitScreen(void) {
 
     flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 
-#ifndef __APPLE__
+#ifndef SDL_PLATFORM_MACOS
     flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
 #endif
 
@@ -191,9 +186,17 @@ void I_InitScreen(void) {
         return;
     }
 
-#ifdef __linux__
+#if SDL_PLATFORM_LINUX 
     // NVIDIA Linux specific: fixes input lag with vsync on
-    putenv("__GL_MaxFramesAllowed=1");
+    // does not do anything if not running on NVIDIA card
+    SDL_Environment *env = SDL_GetEnvironment();
+    if(env) {
+        if(!SDL_SetEnvironmentVariable(env, "__GL_MaxFramesAllowed", "1", false)) {
+            I_Printf("SDL_SetEnvironmentVariable failed (%s)", SDL_GetError());
+        }
+    } else {
+        I_Printf("SDL_GetEnvironment failed (%s)", SDL_GetError());
+    }
 #endif
 
     if ((glContext = SDL_GL_CreateContext(window)) == NULL) {

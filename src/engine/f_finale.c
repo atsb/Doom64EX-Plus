@@ -21,21 +21,18 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <ctype.h>
-#include "i_system.h"
-#include "z_zone.h"
-#include "w_wad.h"
+#include "f_finale.h"
 #include "s_sound.h"
 #include "d_englsh.h"
+#include "d_event.h"
 #include "sounds.h"
 #include "doomstat.h"
-#include "t_bsp.h"
-#include "g_local.h"
 #include "info.h"
-#include "r_local.h"
-#include "st_stuff.h"
 #include "r_wipe.h"
 #include "gl_draw.h"
+#include "g_controls.h"
+#include "con_cvar.h"
+
 
 static int          castrotation = 0;
 static int          castnum;

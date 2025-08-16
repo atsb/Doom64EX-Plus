@@ -23,35 +23,17 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-
-#ifdef _MSC_VER
-#include "i_opndir.h"
-#else
-#include <dirent.h>
-#endif
-
-#include <ctype.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#ifdef _WIN32
-#include <io.h>
-#include <windows.h>
-#endif
-
-#include "doomtype.h"
-#include "doomstat.h"
-#include "i_swap.h"
-#include "i_system.h"
-#include "z_zone.h"
-#include "con_console.h"
-#include "m_misc.h"
-
-#include "md5.h"
+#include <SDL3/SDL_stdinc.h>
 
 #include "w_wad.h"
+#include "w_merge.h"
 #include "w_file.h"
-
+#include "doomstat.h"
+#include "i_system.h"
+#include "z_zone.h"
+#include "m_misc.h"
+#include "md5.h"
+#include "i_swap.h"
 //
 // GLOBALS
 //
@@ -111,7 +93,7 @@ void ExtractFileBase(char* path, char* dest) {
 			I_Error("Filename base of %s >8 chars", path);
 		}
 
-		*dest++ = toupper((int)*src++);
+		*dest++ = SDL_toupper((int)*src++);
 	}
 }
 
@@ -124,7 +106,7 @@ unsigned int W_HashLumpName(const char* str) {
 	unsigned int i = 0;
 
 	for (i = 0; i < 8 && *str != '\0'; str++, i++) {
-		hash ^= ((hash << 5) + toupper((int)*str) + (hash >> 2));
+		hash ^= ((hash << 5) + SDL_toupper((int)*str) + (hash >> 2));
 	}
 
 	return hash;
@@ -182,7 +164,7 @@ wad_file_t* W_AddFile(char* filename) {
 
 	startlump = numlumps;
 
-	if (strcasecmp(filename + dstrlen(filename) - 3, "wad")) {
+	if (dstricmp(filename + dstrlen(filename) - 3, "wad")) {
 		// single lump file
 
 		// fraggle: Swap the filepos and size here.  The WAD directory

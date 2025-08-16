@@ -23,11 +23,12 @@
 #include <math.h>
 #include "i_sdlinput.h"
 #include "doomdef.h"
-#include "m_misc.h"
 #include "doomstat.h"
 #include "i_system.h"
 #include "i_video.h"
 #include "d_main.h"
+#include "con_cvar.h"
+
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -587,11 +588,12 @@ void I_GetEvent(SDL_Event* Event) {
 	unsigned int tic = gametic;
 
 	I_GamepadHandleSDLEvent(Event);
-
+	
 	switch (Event->type) {
 	case SDL_EVENT_KEY_DOWN:
-		if (Event->key.repeat)
+		if (Event->key.repeat) {
 			break;
+		}
 		event.type = ev_keydown;
 		event.data1 = I_TranslateKey(Event->key.key);
 		if(event.data1) {

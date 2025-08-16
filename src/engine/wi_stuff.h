@@ -18,8 +18,6 @@
 #ifndef __WI_STUFF__
 #define __WI_STUFF__
 
-#include "doomdef.h"
-
 // Called by main loop, animate the intermission.
 int WI_Ticker(void);
 

@@ -20,12 +20,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "doomdef.h"
 #include "s_sound.h"
 #include "p_local.h"
 #include "sounds.h"
 #include "tables.h"
-#include "doomstat.h"
 
 //
 // TELEPORTATION

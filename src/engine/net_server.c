@@ -14,25 +14,22 @@
 //
 //-------------------------------------------------------------------------------
 
-#include <stdarg.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
+#include <limits.h>
+#include <SDL3/SDL_stdinc.h>
 
-//#include "config.h"
-
+#include "net_server.h"
 #include "doomdef.h"
-#include "doomstat.h"
 #include "i_system.h"
-//#include "i_timer.h"
 #include "m_misc.h"
-
+#include "d_net.h"
 #include "net_client.h"
 #include "net_common.h"
 #include "net_defs.h"
 #include "net_io.h"
-#include "net_loop.h"
 #include "net_packet.h"
-#include "net_server.h"
 #include "net_structure.h"
 
 typedef enum
@@ -409,11 +406,7 @@ static void NET_SV_InitNewClient(net_client_t* client,
 	NET_Conn_InitServer(&client->connection, addr);
 	client->addr = addr;
 	client->last_send_time = -1;
-#ifdef _WIN32
-	client->name = _strdup(player_name);
-#else
-	client->name = strdup(player_name);
-#endif
+	client->name = SDL_strdup(player_name);
 
 	// init the ticcmd send queue
 

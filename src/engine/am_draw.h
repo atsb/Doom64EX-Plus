@@ -21,8 +21,14 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef D3DR_AM_H
-#define D3DR_AM_H
+#ifndef AM_DRAW_H
+#define AM_DRAW_H
+
+#include "tables.h"
+#include "m_fixed.h"
+#include "p_mobj.h"
+#include "doomtype.h"
+#include "gl_main.h"
 
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y);
 void AM_EndDraw(void);

@@ -28,10 +28,6 @@
 
 #include "d_event.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 //
 // D_DoomMain()
 // Not a globally visible function, just included for source reference,

@@ -19,12 +19,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "z_zone.h"
-#include "doomdef.h"
+#include "p_macros.h"
 #include "doomstat.h"
 #include "p_local.h"
-#include "p_macros.h"
-#include "i_system.h"
 
 thinker_t* macrothinker = NULL;
 macrodef_t* macro = NULL;

@@ -19,20 +19,19 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-
+#include "d_devstat.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "p_local.h"
 #include "i_system.h"
-#include "r_local.h"
 #include "z_zone.h"
 #include "gl_draw.h"
 #include "s_sound.h"
 #include "d_englsh.h"
 #include "r_drawlist.h"
-#include "i_video.h"
 #include "i_sdlinput.h"
+#include "r_main.h"
+
 static boolean showstats = true;
 
 extern word statindice;

@@ -19,11 +19,14 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "r_local.h"
+#include <stdlib.h>
+#include <SDL3/SDL_opengl.h>
+
+#include "r_clipper.h"
+#include "doomtype.h"
 #include "tables.h"
-#include "m_fixed.h"
-#include "z_zone.h"
-#include <math.h>
+#include "r_main.h"
+#include "dgl.h"
 
 static GLdouble viewMatrix[16];
 static GLdouble projMatrix[16];

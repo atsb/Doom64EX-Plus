@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "p_tick.h"
 #include "doomstat.h"
 #include "z_zone.h"
 #include "p_local.h"
@@ -34,6 +35,7 @@
 #include "r_wipe.h"
 #include "p_setup.h"
 #include "g_demo.h"
+#include "con_cvar.h"
 
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(p_damageindicator);

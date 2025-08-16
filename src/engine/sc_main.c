@@ -19,29 +19,15 @@
 //-----------------------------------------------------------------------------
 
 #include <stdbool.h>
+#include <SDL3/SDL_stdinc.h>
 
-#ifdef _MSC_VER
-#include "i_opndir.h"
-#else
-#include <dirent.h>
-#endif
-
-#ifdef __APPLE__
-#include <ctype.h> // toupper
-#endif
-
-#ifndef _WIN32 // toupper for linux
-#include <ctype.h>
-#include <stdio.h>
-#endif
-
+#include "sc_main.h"
 #include "doomdef.h"
-#include "doomtype.h"
 #include "z_zone.h"
 #include "w_wad.h"
 #include "m_misc.h"
-#include "sc_main.h"
 #include "con_console.h"
+#include "i_system.h"
 
 scparser_t sc_parser;
 
@@ -243,7 +229,7 @@ static int SC_Find(boolean forceupper) {
 				if (c > ' ') {
 					havetoken = true;
 					sc_parser.token[i++] =
-						forceupper ? toupper(c) : c;
+						forceupper ? SDL_toupper(c) : c;
 				}
 				else if (havetoken) {
 					return true;
@@ -253,7 +239,7 @@ static int SC_Find(boolean forceupper) {
 				if (c >= ' ' && c != '"') {
 					havetoken = true;
 					sc_parser.token[i++] =
-						forceupper ? toupper(c) : c;
+						forceupper ? SDL_toupper(c) : c;
 				}
 			}
 		}

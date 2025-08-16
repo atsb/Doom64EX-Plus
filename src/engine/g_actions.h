@@ -18,6 +18,12 @@
 #ifndef G_ACTIONS_H
 #define G_ACTIONS_H
 
+#include <stdint.h>
+#include <stdio.h>
+
+#include "d_event.h"
+
+
 #define MAX_ACTIONPARAM        2
 
 typedef void (*actionproc_t)(int64_t data, char** param);

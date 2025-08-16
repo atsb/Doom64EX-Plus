@@ -20,25 +20,13 @@
 //
 //-----------------------------------------------------------------------------
 
-
-#include <stdbool.h>
-
-#ifdef _MSC_VER
-#include "i_opndir.h"
-#else
-#include <dirent.h>
-#endif
+#include <SDL3/SDL_stdinc.h>
 
 #include "doomdef.h"
 #include "doomstat.h"
 #include "d_main.h"
-
-#include <SDL3/SDL.h>
-
-#include "i_video.h"
 #include "m_misc.h"
 #include "i_system.h"
-#include "con_console.h"
 
 const char version_date[] = __DATE__;
 
@@ -153,7 +141,7 @@ int dstrncmp(const char* s1, const char* s2, int len) {
 //
 
 int dstricmp(const char* s1, const char* s2) {
-	return strcasecmp(s1, s2);
+	return SDL_strcasecmp(s1, s2);
 }
 
 //
@@ -161,8 +149,9 @@ int dstricmp(const char* s1, const char* s2) {
 //
 
 int dstrnicmp(const char* s1, const char* s2, int len) {
-	return strncasecmp(s1, s2, len);
+	return SDL_strncasecmp(s1, s2, len);
 }
+
 
 //
 // dstrupr
@@ -419,7 +408,7 @@ int dhtoi(char* str) {
 // dfcmp
 //
 
-bool dfcmp(float f1, float f2) {
+boolean dfcmp(float f1, float f2) {
 	float precision = 0.00001f;
 	if (((f1 - precision) < f2) &&
 		((f1 + precision) > f2)) {
@@ -446,45 +435,6 @@ int D_abs(int x) {
 
 float D_fabs(float x) {
 	return x < 0 ? -x : x;
-}
-
-//
-// dsprintf
-//
-
-int dsprintf(char* buf, const char* format, ...) {
-	va_list arg;
-	int x;
-
-	va_start(arg, format);
-#ifdef HAVE_VSNPRINTF
-	x = vsnprintf(buf, dstrlen(buf), format, arg);
-#else
-	x = vsprintf(buf, format, arg);
-#endif
-	va_end(arg);
-
-	return x;
-}
-
-//
-// dsnprintf
-//
-
-int dsnprintf(char* src, unsigned int n, const char* str, ...) {
-	int x;
-	va_list argptr;
-	va_start(argptr, str);
-
-#ifdef HAVE_VSNPRINTF
-	x = vsnprintf(src, n, str, argptr);
-#else
-	x = vsprintf(src, str, argptr);
-#endif
-
-	va_end(argptr);
-
-	return x;
 }
 
 //

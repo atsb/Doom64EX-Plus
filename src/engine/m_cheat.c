@@ -20,18 +20,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include "m_cheat.h"
 #include <ctype.h>
 #include "g_game.h"
 #include "d_englsh.h"
 #include "doomstat.h"
-#include "m_cheat.h"
 #include "p_inter.h"
 #include "d_devstat.h"
-#include "m_misc.h"
-#include "am_map.h"
+#include "w_wad.h"
 #include "m_password.h"
 #include "st_stuff.h"
+#include "con_cvar.h"
 
 typedef struct {
 	const char* cheat;

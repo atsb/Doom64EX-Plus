@@ -18,9 +18,7 @@
 #define _R_DRAWLIST_H_
 
 #include "doomtype.h"
-#include "doomdef.h"
 #include "gl_main.h"
-#include "r_things.h"
 
 typedef enum {
 	DLF_GLOW = 0x1,

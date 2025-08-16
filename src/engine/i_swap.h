@@ -20,8 +20,6 @@
 
 #include <SDL3/SDL_endian.h>
 
-#include "doomtype.h"
-
 #define I_SwapLE16(x)   SDL_Swap16LE(x)
 #define I_SwapLE32(x)   SDL_Swap32LE(x)
 #define I_SwapBE16(x)   SDL_Swap16BE(x)

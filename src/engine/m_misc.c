@@ -25,27 +25,24 @@
 //-----------------------------------------------------------------------------
 
 #include <stdbool.h>
-
-#ifdef _WIN32
-#include <io.h>
-#else
-#include <unistd.h> 
-#endif
-
-#include <fcntl.h>
-#include <sys/stat.h>
+#include <limits.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <errno.h>
+#include <SDL3/SDL_stdinc.h>
+#include <fcntl.h>
 
-#include "doomstat.h"
 #include "m_misc.h"
+#include "doomstat.h"
 #include "z_zone.h"
-#include "g_local.h"
-#include "st_stuff.h"
 #include "i_png.h"
-#include "gl_texture.h"
+#include "i_system.h"
 #include "p_saveg.h"
+#include "g_actions.h"
+#include "g_settings.h"
+#include "gl_main.h"
+#include "doomdef.h"
+#include "i_system_io.h"
+
 
 int      myargc;
 char**   myargv;
@@ -104,7 +101,7 @@ char* M_StringDuplicate(const char* orig)
 {
 	char* result;
 
-	result = strdup(orig);
+	result = SDL_strdup(orig);
 
 	if (result == NULL)
 	{
@@ -175,22 +172,13 @@ boolean M_WriteFile(char const* name, void* source, int length) {
 boolean M_WriteTextFile(char const* name, char* source, int length) {
 	int handle;
 	int count;
-#ifdef _WIN32
-	handle = _open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-#else
 	handle = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-#endif
 
 	if (handle == -1) {
 		return false;
 	}
-#ifdef _WIN32
-	count = _write(handle, source, length);
-	_close(handle);
-#else
 	count = write(handle, source, length);
 	close(handle);
-#endif
 
 	if (count < length) {
 		return false;
@@ -252,33 +240,6 @@ long M_FileLength(FILE* handle) {
 	fseek(handle, savedpos, SEEK_SET);
 
 	return length;
-}
-
-//
-// M_NormalizeSlashes
-//
-// Remove trailing slashes, translate backslashes to slashes
-// The string to normalize is passed and returned in str
-//
-// killough 11/98: rewritten
-//
-
-void M_NormalizeSlashes(char* str) {
-	char* p;
-
-	// Convert all slashes/backslashes to DIR_SEPARATOR
-	for (p = str; *p; p++) {
-		if ((*p == '/' || *p == '\\') && *p != DIR_SEPARATOR) {
-			*p = DIR_SEPARATOR;
-		}
-	}
-
-	// Collapse multiple slashes
-	for (p = str; (*str++ = *p);)
-		if (*p++ == DIR_SEPARATOR)
-			while (*p == DIR_SEPARATOR) {
-				p++;
-			}
 }
 
 //
@@ -345,11 +306,7 @@ void M_ScreenShot(void) {
 
 	while (shotnum < 1000) {
 		sprintf(name, "sshot%03d.png", shotnum);
-#ifdef _WIN32
-		if (_access(name, 0) != 0)
-#else
 		if (access(name, 0) != 0)
-#endif
 		{
 			break;
 		}

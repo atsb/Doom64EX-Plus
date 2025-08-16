@@ -22,7 +22,6 @@
 #include <SDL3/SDL_opengl.h>
 
 #include "gl_main.h"
-#include "i_system.h"
 
 //#define LOG_GLFUNC_CALLS
 //#define USE_DEBUG_GLFUNCS
@@ -394,7 +393,7 @@ void dglTexCombReplaceAlpha(int t);
 
 #else
 
-d_inline static void glAccum_DEBUG(GLenum op, GLfloat value, const char* file, int line) {
+SDL_INLINE static void glAccum_DEBUG(GLenum op, GLfloat value, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glAccum(op=0x%x, value=%f)\n", file, line, op, value);
 #endif
@@ -402,7 +401,7 @@ d_inline static void glAccum_DEBUG(GLenum op, GLfloat value, const char* file, i
 	dglLogError("glAccum", file, line);
 }
 
-d_inline static void glAlphaFunc_DEBUG(GLenum func, GLclampf ref, const char* file, int line) {
+SDL_INLINE static void glAlphaFunc_DEBUG(GLenum func, GLclampf ref, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glAlphaFunc(func=0x%x, ref=%f)\n", file, line, func, ref);
 #endif
@@ -410,7 +409,7 @@ d_inline static void glAlphaFunc_DEBUG(GLenum func, GLclampf ref, const char* fi
 	dglLogError("glAlphaFunc", file, line);
 }
 
-d_inline static GLboolean glAreTexturesResident_DEBUG(GLsizei n, GLuint* textures, GLboolean* residences, const char* file, int line) {
+SDL_INLINE static GLboolean glAreTexturesResident_DEBUG(GLsizei n, GLuint* textures, GLboolean* residences, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glAreTexturesResident(n=0x%x, textures=%p, residences=%p)\n", file, line, n, textures, residences);
 #endif
@@ -418,7 +417,7 @@ d_inline static GLboolean glAreTexturesResident_DEBUG(GLsizei n, GLuint* texture
 	dglLogError("glAreTexturesResident", file, line);
 }
 
-d_inline static void glArrayElement_DEBUG(GLint i, const char* file, int line) {
+SDL_INLINE static void glArrayElement_DEBUG(GLint i, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glArrayElement(i=%i)\n", file, line, i);
 #endif
@@ -426,14 +425,14 @@ d_inline static void glArrayElement_DEBUG(GLint i, const char* file, int line) {
 	dglLogError("glArrayElement", file, line);
 }
 
-d_inline static void glBegin_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glBegin_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBegin(mode=0x%x)\n", file, line, mode);
 #endif
 	glBegin(mode);
 }
 
-d_inline static void glBindTexture_DEBUG(GLenum target, GLuint texture, const char* file, int line) {
+SDL_INLINE static void glBindTexture_DEBUG(GLenum target, GLuint texture, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBindTexture(target=0x%x, texture=%i)\n", file, line, target, texture);
 #endif
@@ -441,7 +440,7 @@ d_inline static void glBindTexture_DEBUG(GLenum target, GLuint texture, const ch
 	dglLogError("glBindTexture", file, line);
 }
 
-d_inline static void glBitmap_DEBUG(GLsizei width, GLsizei height, GLfloat xorig, GLfloat yorig, GLfloat xmove, GLfloat ymove, GLubyte* bitmap, const char* file, int line) {
+SDL_INLINE static void glBitmap_DEBUG(GLsizei width, GLsizei height, GLfloat xorig, GLfloat yorig, GLfloat xmove, GLfloat ymove, GLubyte* bitmap, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBitmap(width=0x%x, height=0x%x, xorig=%f, yorig=%f, xmove=%f, ymove=%f, bitmap=%p)\n", file, line, width, height, xorig, yorig, xmove, ymove, bitmap);
 #endif
@@ -449,7 +448,7 @@ d_inline static void glBitmap_DEBUG(GLsizei width, GLsizei height, GLfloat xorig
 	dglLogError("glBitmap", file, line);
 }
 
-d_inline static void glBlendFunc_DEBUG(GLenum sfactor, GLenum dfactor, const char* file, int line) {
+SDL_INLINE static void glBlendFunc_DEBUG(GLenum sfactor, GLenum dfactor, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBlendFunc(sfactor=0x%x, dfactor=0x%x)\n", file, line, sfactor, dfactor);
 #endif
@@ -457,7 +456,7 @@ d_inline static void glBlendFunc_DEBUG(GLenum sfactor, GLenum dfactor, const cha
 	dglLogError("glBlendFunc", file, line);
 }
 
-d_inline static void glCallList_DEBUG(GLuint list, const char* file, int line) {
+SDL_INLINE static void glCallList_DEBUG(GLuint list, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCallList(list=%i)\n", file, line, list);
 #endif
@@ -465,7 +464,7 @@ d_inline static void glCallList_DEBUG(GLuint list, const char* file, int line) {
 	dglLogError("glCallList", file, line);
 }
 
-d_inline static void glCallLists_DEBUG(GLsizei n, GLenum type, GLvoid* lists, const char* file, int line) {
+SDL_INLINE static void glCallLists_DEBUG(GLsizei n, GLenum type, GLvoid* lists, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCallLists(n=0x%x, type=0x%x, lists=%p)\n", file, line, n, type, lists);
 #endif
@@ -473,7 +472,7 @@ d_inline static void glCallLists_DEBUG(GLsizei n, GLenum type, GLvoid* lists, co
 	dglLogError("glCallLists", file, line);
 }
 
-d_inline static void glClear_DEBUG(GLbitfield mask, const char* file, int line) {
+SDL_INLINE static void glClear_DEBUG(GLbitfield mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClear(mask=0x%x)\n", file, line, mask);
 #endif
@@ -481,7 +480,7 @@ d_inline static void glClear_DEBUG(GLbitfield mask, const char* file, int line) 
 	dglLogError("glClear", file, line);
 }
 
-d_inline static void glClearAccum_DEBUG(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha, const char* file, int line) {
+SDL_INLINE static void glClearAccum_DEBUG(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClearAccum(red=%f, green=%f, blue=%f, alpha=%f)\n", file, line, red, green, blue, alpha);
 #endif
@@ -489,7 +488,7 @@ d_inline static void glClearAccum_DEBUG(GLfloat red, GLfloat green, GLfloat blue
 	dglLogError("glClearAccum", file, line);
 }
 
-d_inline static void glClearColor_DEBUG(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha, const char* file, int line) {
+SDL_INLINE static void glClearColor_DEBUG(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClearColor(red=%f, green=%f, blue=%f, alpha=%f)\n", file, line, red, green, blue, alpha);
 #endif
@@ -497,7 +496,7 @@ d_inline static void glClearColor_DEBUG(GLclampf red, GLclampf green, GLclampf b
 	dglLogError("glClearColor", file, line);
 }
 
-d_inline static void glClearDepth_DEBUG(GLclampd depth, const char* file, int line) {
+SDL_INLINE static void glClearDepth_DEBUG(GLclampd depth, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClearDepth(depth=%f)\n", file, line, depth);
 #endif
@@ -505,7 +504,7 @@ d_inline static void glClearDepth_DEBUG(GLclampd depth, const char* file, int li
 	dglLogError("glClearDepth", file, line);
 }
 
-d_inline static void glClearIndex_DEBUG(GLfloat c, const char* file, int line) {
+SDL_INLINE static void glClearIndex_DEBUG(GLfloat c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClearIndex(c=%f)\n", file, line, c);
 #endif
@@ -513,7 +512,7 @@ d_inline static void glClearIndex_DEBUG(GLfloat c, const char* file, int line) {
 	dglLogError("glClearIndex", file, line);
 }
 
-d_inline static void glClearStencil_DEBUG(GLint s, const char* file, int line) {
+SDL_INLINE static void glClearStencil_DEBUG(GLint s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClearStencil(s=%i)\n", file, line, s);
 #endif
@@ -521,7 +520,7 @@ d_inline static void glClearStencil_DEBUG(GLint s, const char* file, int line) {
 	dglLogError("glClearStencil", file, line);
 }
 
-d_inline static void glClipPlane_DEBUG(GLenum plane, GLdouble* equation, const char* file, int line) {
+SDL_INLINE static void glClipPlane_DEBUG(GLenum plane, GLdouble* equation, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClipPlane(plane=0x%x, equation=%p)\n", file, line, plane, equation);
 #endif
@@ -529,7 +528,7 @@ d_inline static void glClipPlane_DEBUG(GLenum plane, GLdouble* equation, const c
 	dglLogError("glClipPlane", file, line);
 }
 
-d_inline static void glColor3b_DEBUG(GLbyte red, GLbyte green, GLbyte blue, const char* file, int line) {
+SDL_INLINE static void glColor3b_DEBUG(GLbyte red, GLbyte green, GLbyte blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3b(red=%i, green=%i, blue=%i)\n", file, line, red, green, blue);
 #endif
@@ -537,7 +536,7 @@ d_inline static void glColor3b_DEBUG(GLbyte red, GLbyte green, GLbyte blue, cons
 	dglLogError("glColor3b", file, line);
 }
 
-d_inline static void glColor3bv_DEBUG(GLbyte* v, const char* file, int line) {
+SDL_INLINE static void glColor3bv_DEBUG(GLbyte* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3bv(v=%p)\n", file, line, v);
 #endif
@@ -545,7 +544,7 @@ d_inline static void glColor3bv_DEBUG(GLbyte* v, const char* file, int line) {
 	dglLogError("glColor3bv", file, line);
 }
 
-d_inline static void glColor3d_DEBUG(GLdouble red, GLdouble green, GLdouble blue, const char* file, int line) {
+SDL_INLINE static void glColor3d_DEBUG(GLdouble red, GLdouble green, GLdouble blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3d(red=%f, green=%f, blue=%f)\n", file, line, red, green, blue);
 #endif
@@ -553,7 +552,7 @@ d_inline static void glColor3d_DEBUG(GLdouble red, GLdouble green, GLdouble blue
 	dglLogError("glColor3d", file, line);
 }
 
-d_inline static void glColor3dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glColor3dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3dv(v=%p)\n", file, line, v);
 #endif
@@ -561,7 +560,7 @@ d_inline static void glColor3dv_DEBUG(GLdouble* v, const char* file, int line) {
 	dglLogError("glColor3dv", file, line);
 }
 
-d_inline static void glColor3f_DEBUG(GLfloat red, GLfloat green, GLfloat blue, const char* file, int line) {
+SDL_INLINE static void glColor3f_DEBUG(GLfloat red, GLfloat green, GLfloat blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3f(red=%f, green=%f, blue=%f)\n", file, line, red, green, blue);
 #endif
@@ -569,7 +568,7 @@ d_inline static void glColor3f_DEBUG(GLfloat red, GLfloat green, GLfloat blue, c
 	dglLogError("glColor3f", file, line);
 }
 
-d_inline static void glColor3fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glColor3fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3fv(v=%p)\n", file, line, v);
 #endif
@@ -577,7 +576,7 @@ d_inline static void glColor3fv_DEBUG(GLfloat* v, const char* file, int line) {
 	dglLogError("glColor3fv", file, line);
 }
 
-d_inline static void glColor3i_DEBUG(GLint red, GLint green, GLint blue, const char* file, int line) {
+SDL_INLINE static void glColor3i_DEBUG(GLint red, GLint green, GLint blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3i(red=%i, green=%i, blue=%i)\n", file, line, red, green, blue);
 #endif
@@ -585,7 +584,7 @@ d_inline static void glColor3i_DEBUG(GLint red, GLint green, GLint blue, const c
 	dglLogError("glColor3i", file, line);
 }
 
-d_inline static void glColor3iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glColor3iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3iv(v=%p)\n", file, line, v);
 #endif
@@ -593,7 +592,7 @@ d_inline static void glColor3iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glColor3iv", file, line);
 }
 
-d_inline static void glColor3s_DEBUG(GLshort red, GLshort green, GLshort blue, const char* file, int line) {
+SDL_INLINE static void glColor3s_DEBUG(GLshort red, GLshort green, GLshort blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3s(red=%i, green=%i, blue=%i)\n", file, line, red, green, blue);
 #endif
@@ -601,7 +600,7 @@ d_inline static void glColor3s_DEBUG(GLshort red, GLshort green, GLshort blue, c
 	dglLogError("glColor3s", file, line);
 }
 
-d_inline static void glColor3sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glColor3sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3sv(v=%p)\n", file, line, v);
 #endif
@@ -609,7 +608,7 @@ d_inline static void glColor3sv_DEBUG(GLshort* v, const char* file, int line) {
 	dglLogError("glColor3sv", file, line);
 }
 
-d_inline static void glColor3ub_DEBUG(GLubyte red, GLubyte green, GLubyte blue, const char* file, int line) {
+SDL_INLINE static void glColor3ub_DEBUG(GLubyte red, GLubyte green, GLubyte blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3ub(red=%i, green=%i, blue=%i)\n", file, line, red, green, blue);
 #endif
@@ -617,7 +616,7 @@ d_inline static void glColor3ub_DEBUG(GLubyte red, GLubyte green, GLubyte blue, 
 	dglLogError("glColor3ub", file, line);
 }
 
-d_inline static void glColor3ubv_DEBUG(GLubyte* v, const char* file, int line) {
+SDL_INLINE static void glColor3ubv_DEBUG(GLubyte* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3ubv(v=%p)\n", file, line, v);
 #endif
@@ -625,7 +624,7 @@ d_inline static void glColor3ubv_DEBUG(GLubyte* v, const char* file, int line) {
 	dglLogError("glColor3ubv", file, line);
 }
 
-d_inline static void glColor3ui_DEBUG(GLuint red, GLuint green, GLuint blue, const char* file, int line) {
+SDL_INLINE static void glColor3ui_DEBUG(GLuint red, GLuint green, GLuint blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3ui(red=%i, green=%i, blue=%i)\n", file, line, red, green, blue);
 #endif
@@ -633,7 +632,7 @@ d_inline static void glColor3ui_DEBUG(GLuint red, GLuint green, GLuint blue, con
 	dglLogError("glColor3ui", file, line);
 }
 
-d_inline static void glColor3uiv_DEBUG(GLuint* v, const char* file, int line) {
+SDL_INLINE static void glColor3uiv_DEBUG(GLuint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3uiv(v=%p)\n", file, line, v);
 #endif
@@ -641,7 +640,7 @@ d_inline static void glColor3uiv_DEBUG(GLuint* v, const char* file, int line) {
 	dglLogError("glColor3uiv", file, line);
 }
 
-d_inline static void glColor3us_DEBUG(GLushort red, GLushort green, GLushort blue, const char* file, int line) {
+SDL_INLINE static void glColor3us_DEBUG(GLushort red, GLushort green, GLushort blue, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3us(red=%i, green=%i, blue=%i)\n", file, line, red, green, blue);
 #endif
@@ -649,7 +648,7 @@ d_inline static void glColor3us_DEBUG(GLushort red, GLushort green, GLushort blu
 	dglLogError("glColor3us", file, line);
 }
 
-d_inline static void glColor3usv_DEBUG(GLushort* v, const char* file, int line) {
+SDL_INLINE static void glColor3usv_DEBUG(GLushort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor3usv(v=%p)\n", file, line, v);
 #endif
@@ -657,7 +656,7 @@ d_inline static void glColor3usv_DEBUG(GLushort* v, const char* file, int line) 
 	dglLogError("glColor3usv", file, line);
 }
 
-d_inline static void glColor4b_DEBUG(GLbyte red, GLbyte green, GLbyte blue, GLbyte alpha, const char* file, int line) {
+SDL_INLINE static void glColor4b_DEBUG(GLbyte red, GLbyte green, GLbyte blue, GLbyte alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4b(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -665,7 +664,7 @@ d_inline static void glColor4b_DEBUG(GLbyte red, GLbyte green, GLbyte blue, GLby
 	dglLogError("glColor4b", file, line);
 }
 
-d_inline static void glColor4bv_DEBUG(GLbyte* v, const char* file, int line) {
+SDL_INLINE static void glColor4bv_DEBUG(GLbyte* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4bv(v=%p)\n", file, line, v);
 #endif
@@ -673,7 +672,7 @@ d_inline static void glColor4bv_DEBUG(GLbyte* v, const char* file, int line) {
 	dglLogError("glColor4bv", file, line);
 }
 
-d_inline static void glColor4d_DEBUG(GLdouble red, GLdouble green, GLdouble blue, GLdouble alpha, const char* file, int line) {
+SDL_INLINE static void glColor4d_DEBUG(GLdouble red, GLdouble green, GLdouble blue, GLdouble alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4d(red=%f, green=%f, blue=%f, alpha=%f)\n", file, line, red, green, blue, alpha);
 #endif
@@ -681,7 +680,7 @@ d_inline static void glColor4d_DEBUG(GLdouble red, GLdouble green, GLdouble blue
 	dglLogError("glColor4d", file, line);
 }
 
-d_inline static void glColor4dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glColor4dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4dv(v=%p)\n", file, line, v);
 #endif
@@ -689,7 +688,7 @@ d_inline static void glColor4dv_DEBUG(GLdouble* v, const char* file, int line) {
 	dglLogError("glColor4dv", file, line);
 }
 
-d_inline static void glColor4f_DEBUG(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha, const char* file, int line) {
+SDL_INLINE static void glColor4f_DEBUG(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4f(red=%f, green=%f, blue=%f, alpha=%f)\n", file, line, red, green, blue, alpha);
 #endif
@@ -697,7 +696,7 @@ d_inline static void glColor4f_DEBUG(GLfloat red, GLfloat green, GLfloat blue, G
 	dglLogError("glColor4f", file, line);
 }
 
-d_inline static void glColor4fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glColor4fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4fv(v=%p)\n", file, line, v);
 #endif
@@ -705,7 +704,7 @@ d_inline static void glColor4fv_DEBUG(GLfloat* v, const char* file, int line) {
 	dglLogError("glColor4fv", file, line);
 }
 
-d_inline static void glColor4i_DEBUG(GLint red, GLint green, GLint blue, GLint alpha, const char* file, int line) {
+SDL_INLINE static void glColor4i_DEBUG(GLint red, GLint green, GLint blue, GLint alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4i(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -713,7 +712,7 @@ d_inline static void glColor4i_DEBUG(GLint red, GLint green, GLint blue, GLint a
 	dglLogError("glColor4i", file, line);
 }
 
-d_inline static void glColor4iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glColor4iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4iv(v=%p)\n", file, line, v);
 #endif
@@ -721,7 +720,7 @@ d_inline static void glColor4iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glColor4iv", file, line);
 }
 
-d_inline static void glColor4s_DEBUG(GLshort red, GLshort green, GLshort blue, GLshort alpha, const char* file, int line) {
+SDL_INLINE static void glColor4s_DEBUG(GLshort red, GLshort green, GLshort blue, GLshort alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4s(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -729,7 +728,7 @@ d_inline static void glColor4s_DEBUG(GLshort red, GLshort green, GLshort blue, G
 	dglLogError("glColor4s", file, line);
 }
 
-d_inline static void glColor4sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glColor4sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4sv(v=%p)\n", file, line, v);
 #endif
@@ -737,7 +736,7 @@ d_inline static void glColor4sv_DEBUG(GLshort* v, const char* file, int line) {
 	dglLogError("glColor4sv", file, line);
 }
 
-d_inline static void glColor4ub_DEBUG(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha, const char* file, int line) {
+SDL_INLINE static void glColor4ub_DEBUG(GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4ub(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -745,7 +744,7 @@ d_inline static void glColor4ub_DEBUG(GLubyte red, GLubyte green, GLubyte blue, 
 	dglLogError("glColor4ub", file, line);
 }
 
-d_inline static void glColor4ubv_DEBUG(GLubyte* v, const char* file, int line) {
+SDL_INLINE static void glColor4ubv_DEBUG(GLubyte* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4ubv(v=%p)\n", file, line, v);
 #endif
@@ -753,7 +752,7 @@ d_inline static void glColor4ubv_DEBUG(GLubyte* v, const char* file, int line) {
 	dglLogError("glColor4ubv", file, line);
 }
 
-d_inline static void glColor4ui_DEBUG(GLuint red, GLuint green, GLuint blue, GLuint alpha, const char* file, int line) {
+SDL_INLINE static void glColor4ui_DEBUG(GLuint red, GLuint green, GLuint blue, GLuint alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4ui(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -761,7 +760,7 @@ d_inline static void glColor4ui_DEBUG(GLuint red, GLuint green, GLuint blue, GLu
 	dglLogError("glColor4ui", file, line);
 }
 
-d_inline static void glColor4uiv_DEBUG(GLuint* v, const char* file, int line) {
+SDL_INLINE static void glColor4uiv_DEBUG(GLuint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4uiv(v=%p)\n", file, line, v);
 #endif
@@ -769,7 +768,7 @@ d_inline static void glColor4uiv_DEBUG(GLuint* v, const char* file, int line) {
 	dglLogError("glColor4uiv", file, line);
 }
 
-d_inline static void glColor4us_DEBUG(GLushort red, GLushort green, GLushort blue, GLushort alpha, const char* file, int line) {
+SDL_INLINE static void glColor4us_DEBUG(GLushort red, GLushort green, GLushort blue, GLushort alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4us(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -777,7 +776,7 @@ d_inline static void glColor4us_DEBUG(GLushort red, GLushort green, GLushort blu
 	dglLogError("glColor4us", file, line);
 }
 
-d_inline static void glColor4usv_DEBUG(GLushort* v, const char* file, int line) {
+SDL_INLINE static void glColor4usv_DEBUG(GLushort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColor4usv(v=%p)\n", file, line, v);
 #endif
@@ -785,7 +784,7 @@ d_inline static void glColor4usv_DEBUG(GLushort* v, const char* file, int line) 
 	dglLogError("glColor4usv", file, line);
 }
 
-d_inline static void glColorMask_DEBUG(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha, const char* file, int line) {
+SDL_INLINE static void glColorMask_DEBUG(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColorMask(red=%i, green=%i, blue=%i, alpha=%i)\n", file, line, red, green, blue, alpha);
 #endif
@@ -793,7 +792,7 @@ d_inline static void glColorMask_DEBUG(GLboolean red, GLboolean green, GLboolean
 	dglLogError("glColorMask", file, line);
 }
 
-d_inline static void glColorMaterial_DEBUG(GLenum face, GLenum mode, const char* file, int line) {
+SDL_INLINE static void glColorMaterial_DEBUG(GLenum face, GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColorMaterial(face=0x%x, mode=0x%x)\n", file, line, face, mode);
 #endif
@@ -801,7 +800,7 @@ d_inline static void glColorMaterial_DEBUG(GLenum face, GLenum mode, const char*
 	dglLogError("glColorMaterial", file, line);
 }
 
-d_inline static void glColorPointer_DEBUG(GLint size, GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glColorPointer_DEBUG(GLint size, GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glColorPointer(size=%i, type=0x%x, stride=0x%x, pointer=%p)\n", file, line, size, type, stride, pointer);
 #endif
@@ -809,7 +808,7 @@ d_inline static void glColorPointer_DEBUG(GLint size, GLenum type, GLsizei strid
 	dglLogError("glColorPointer", file, line);
 }
 
-d_inline static void glCopyPixels_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type, const char* file, int line) {
+SDL_INLINE static void glCopyPixels_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCopyPixels(x=%i, y=%i, width=0x%x, height=0x%x, type=0x%x)\n", file, line, x, y, width, height, type);
 #endif
@@ -817,7 +816,7 @@ d_inline static void glCopyPixels_DEBUG(GLint x, GLint y, GLsizei width, GLsizei
 	dglLogError("glCopyPixels", file, line);
 }
 
-d_inline static void glCopyTexImage1D_DEBUG(GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border, const char* file, int line) {
+SDL_INLINE static void glCopyTexImage1D_DEBUG(GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCopyTexImage1D(target=0x%x, level=%i, internalFormat=0x%x, x=%i, y=%i, width=0x%x, border=%i)\n", file, line, target, level, internalFormat, x, y, width, border);
 #endif
@@ -825,7 +824,7 @@ d_inline static void glCopyTexImage1D_DEBUG(GLenum target, GLint level, GLenum i
 	dglLogError("glCopyTexImage1D", file, line);
 }
 
-d_inline static void glCopyTexImage2D_DEBUG(GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border, const char* file, int line) {
+SDL_INLINE static void glCopyTexImage2D_DEBUG(GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCopyTexImage2D(target=0x%x, level=%i, internalFormat=0x%x, x=%i, y=%i, width=0x%x, height=0x%x, border=%i)\n", file, line, target, level, internalFormat, x, y, width, height, border);
 #endif
@@ -833,7 +832,7 @@ d_inline static void glCopyTexImage2D_DEBUG(GLenum target, GLint level, GLenum i
 	dglLogError("glCopyTexImage2D", file, line);
 }
 
-d_inline static void glCopyTexSubImage1D_DEBUG(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width, const char* file, int line) {
+SDL_INLINE static void glCopyTexSubImage1D_DEBUG(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCopyTexSubImage1D(target=0x%x, level=%i, xoffset=%i, x=%i, y=%i, width=0x%x)\n", file, line, target, level, xoffset, x, y, width);
 #endif
@@ -841,7 +840,7 @@ d_inline static void glCopyTexSubImage1D_DEBUG(GLenum target, GLint level, GLint
 	dglLogError("glCopyTexSubImage1D", file, line);
 }
 
-d_inline static void glCopyTexSubImage2D_DEBUG(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height, const char* file, int line) {
+SDL_INLINE static void glCopyTexSubImage2D_DEBUG(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCopyTexSubImage2D(target=0x%x, level=%i, xoffset=%i, yoffset=%i, x=%i, y=%i, width=0x%x, height=0x%x)\n", file, line, target, level, xoffset, yoffset, x, y, width, height);
 #endif
@@ -849,7 +848,7 @@ d_inline static void glCopyTexSubImage2D_DEBUG(GLenum target, GLint level, GLint
 	dglLogError("glCopyTexSubImage2D", file, line);
 }
 
-d_inline static void glCullFace_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glCullFace_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glCullFace(mode=0x%x)\n", file, line, mode);
 #endif
@@ -857,7 +856,7 @@ d_inline static void glCullFace_DEBUG(GLenum mode, const char* file, int line) {
 	dglLogError("glCullFace", file, line);
 }
 
-d_inline static void glDeleteLists_DEBUG(GLuint list, GLsizei range, const char* file, int line) {
+SDL_INLINE static void glDeleteLists_DEBUG(GLuint list, GLsizei range, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDeleteLists(list=%i, range=0x%x)\n", file, line, list, range);
 #endif
@@ -865,7 +864,7 @@ d_inline static void glDeleteLists_DEBUG(GLuint list, GLsizei range, const char*
 	dglLogError("glDeleteLists", file, line);
 }
 
-d_inline static void glDeleteTextures_DEBUG(GLsizei n, GLuint* textures, const char* file, int line) {
+SDL_INLINE static void glDeleteTextures_DEBUG(GLsizei n, GLuint* textures, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDeleteTextures(n=0x%x, textures=%p)\n", file, line, n, textures);
 #endif
@@ -873,7 +872,7 @@ d_inline static void glDeleteTextures_DEBUG(GLsizei n, GLuint* textures, const c
 	dglLogError("glDeleteTextures", file, line);
 }
 
-d_inline static void glDepthFunc_DEBUG(GLenum func, const char* file, int line) {
+SDL_INLINE static void glDepthFunc_DEBUG(GLenum func, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDepthFunc(func=0x%x)\n", file, line, func);
 #endif
@@ -881,7 +880,7 @@ d_inline static void glDepthFunc_DEBUG(GLenum func, const char* file, int line) 
 	dglLogError("glDepthFunc", file, line);
 }
 
-d_inline static void glDepthMask_DEBUG(GLboolean flag, const char* file, int line) {
+SDL_INLINE static void glDepthMask_DEBUG(GLboolean flag, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDepthMask(flag=%i)\n", file, line, flag);
 #endif
@@ -889,7 +888,7 @@ d_inline static void glDepthMask_DEBUG(GLboolean flag, const char* file, int lin
 	dglLogError("glDepthMask", file, line);
 }
 
-d_inline static void glDepthRange_DEBUG(GLclampd zNear, GLclampd zFar, const char* file, int line) {
+SDL_INLINE static void glDepthRange_DEBUG(GLclampd zNear, GLclampd zFar, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDepthRange(zNear=%f, zFar=%f)\n", file, line, zNear, zFar);
 #endif
@@ -897,7 +896,7 @@ d_inline static void glDepthRange_DEBUG(GLclampd zNear, GLclampd zFar, const cha
 	dglLogError("glDepthRange", file, line);
 }
 
-d_inline static void glDisable_DEBUG(GLenum cap, const char* file, int line) {
+SDL_INLINE static void glDisable_DEBUG(GLenum cap, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDisable(cap=0x%x)\n", file, line, cap);
 #endif
@@ -905,7 +904,7 @@ d_inline static void glDisable_DEBUG(GLenum cap, const char* file, int line) {
 	dglLogError("glDisable", file, line);
 }
 
-d_inline static void glDisableClientState_DEBUG(GLenum array, const char* file, int line) {
+SDL_INLINE static void glDisableClientState_DEBUG(GLenum array, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDisableClientState(array=0x%x)\n", file, line, array);
 #endif
@@ -913,7 +912,7 @@ d_inline static void glDisableClientState_DEBUG(GLenum array, const char* file, 
 	dglLogError("glDisableClientState", file, line);
 }
 
-d_inline static void glDrawArrays_DEBUG(GLenum mode, GLint first, GLsizei count, const char* file, int line) {
+SDL_INLINE static void glDrawArrays_DEBUG(GLenum mode, GLint first, GLsizei count, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDrawArrays(mode=0x%x, first=%i, count=0x%x)\n", file, line, mode, first, count);
 #endif
@@ -921,7 +920,7 @@ d_inline static void glDrawArrays_DEBUG(GLenum mode, GLint first, GLsizei count,
 	dglLogError("glDrawArrays", file, line);
 }
 
-d_inline static void glDrawBuffer_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glDrawBuffer_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDrawBuffer(mode=0x%x)\n", file, line, mode);
 #endif
@@ -929,7 +928,7 @@ d_inline static void glDrawBuffer_DEBUG(GLenum mode, const char* file, int line)
 	dglLogError("glDrawBuffer", file, line);
 }
 
-d_inline static void glDrawElements_DEBUG(GLenum mode, GLsizei count, GLenum type, GLvoid* indices, const char* file, int line) {
+SDL_INLINE static void glDrawElements_DEBUG(GLenum mode, GLsizei count, GLenum type, GLvoid* indices, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDrawElements(mode=0x%x, count=0x%x, type=0x%x, indices=%p)\n", file, line, mode, count, type, indices);
 #endif
@@ -937,7 +936,7 @@ d_inline static void glDrawElements_DEBUG(GLenum mode, GLsizei count, GLenum typ
 	dglLogError("glDrawElements", file, line);
 }
 
-d_inline static void glDrawPixels_DEBUG(GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glDrawPixels_DEBUG(GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDrawPixels(width=0x%x, height=0x%x, format=0x%x, type=0x%x, pixels=%p)\n", file, line, width, height, format, type, pixels);
 #endif
@@ -945,7 +944,7 @@ d_inline static void glDrawPixels_DEBUG(GLsizei width, GLsizei height, GLenum fo
 	dglLogError("glDrawPixels", file, line);
 }
 
-d_inline static void glEdgeFlag_DEBUG(GLboolean flag, const char* file, int line) {
+SDL_INLINE static void glEdgeFlag_DEBUG(GLboolean flag, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEdgeFlag(flag=%i)\n", file, line, flag);
 #endif
@@ -953,7 +952,7 @@ d_inline static void glEdgeFlag_DEBUG(GLboolean flag, const char* file, int line
 	dglLogError("glEdgeFlag", file, line);
 }
 
-d_inline static void glEdgeFlagPointer_DEBUG(GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glEdgeFlagPointer_DEBUG(GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEdgeFlagPointer(stride=0x%x, pointer=%p)\n", file, line, stride, pointer);
 #endif
@@ -961,7 +960,7 @@ d_inline static void glEdgeFlagPointer_DEBUG(GLsizei stride, GLvoid* pointer, co
 	dglLogError("glEdgeFlagPointer", file, line);
 }
 
-d_inline static void glEdgeFlagv_DEBUG(GLboolean* flag, const char* file, int line) {
+SDL_INLINE static void glEdgeFlagv_DEBUG(GLboolean* flag, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEdgeFlagv(flag=%p)\n", file, line, flag);
 #endif
@@ -969,7 +968,7 @@ d_inline static void glEdgeFlagv_DEBUG(GLboolean* flag, const char* file, int li
 	dglLogError("glEdgeFlagv", file, line);
 }
 
-d_inline static void glEnable_DEBUG(GLenum cap, const char* file, int line) {
+SDL_INLINE static void glEnable_DEBUG(GLenum cap, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEnable(cap=0x%x)\n", file, line, cap);
 #endif
@@ -977,7 +976,7 @@ d_inline static void glEnable_DEBUG(GLenum cap, const char* file, int line) {
 	dglLogError("glEnable", file, line);
 }
 
-d_inline static void glEnableClientState_DEBUG(GLenum array, const char* file, int line) {
+SDL_INLINE static void glEnableClientState_DEBUG(GLenum array, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEnableClientState(array=0x%x)\n", file, line, array);
 #endif
@@ -985,14 +984,14 @@ d_inline static void glEnableClientState_DEBUG(GLenum array, const char* file, i
 	dglLogError("glEnableClientState", file, line);
 }
 
-d_inline static void glEnd_DEBUG(const char* file, int line) {
+SDL_INLINE static void glEnd_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEnd()\n", file, line);
 #endif
 	glEnd();
 }
 
-d_inline static void glEndList_DEBUG(const char* file, int line) {
+SDL_INLINE static void glEndList_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEndList()\n", file, line);
 #endif
@@ -1000,7 +999,7 @@ d_inline static void glEndList_DEBUG(const char* file, int line) {
 	dglLogError("glEndList", file, line);
 }
 
-d_inline static void glEvalCoord1d_DEBUG(GLdouble u, const char* file, int line) {
+SDL_INLINE static void glEvalCoord1d_DEBUG(GLdouble u, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord1d(u=%f)\n", file, line, u);
 #endif
@@ -1008,7 +1007,7 @@ d_inline static void glEvalCoord1d_DEBUG(GLdouble u, const char* file, int line)
 	dglLogError("glEvalCoord1d", file, line);
 }
 
-d_inline static void glEvalCoord1dv_DEBUG(GLdouble* u, const char* file, int line) {
+SDL_INLINE static void glEvalCoord1dv_DEBUG(GLdouble* u, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord1dv(u=%p)\n", file, line, u);
 #endif
@@ -1016,7 +1015,7 @@ d_inline static void glEvalCoord1dv_DEBUG(GLdouble* u, const char* file, int lin
 	dglLogError("glEvalCoord1dv", file, line);
 }
 
-d_inline static void glEvalCoord1f_DEBUG(GLfloat u, const char* file, int line) {
+SDL_INLINE static void glEvalCoord1f_DEBUG(GLfloat u, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord1f(u=%f)\n", file, line, u);
 #endif
@@ -1024,7 +1023,7 @@ d_inline static void glEvalCoord1f_DEBUG(GLfloat u, const char* file, int line) 
 	dglLogError("glEvalCoord1f", file, line);
 }
 
-d_inline static void glEvalCoord1fv_DEBUG(GLfloat* u, const char* file, int line) {
+SDL_INLINE static void glEvalCoord1fv_DEBUG(GLfloat* u, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord1fv(u=%p)\n", file, line, u);
 #endif
@@ -1032,7 +1031,7 @@ d_inline static void glEvalCoord1fv_DEBUG(GLfloat* u, const char* file, int line
 	dglLogError("glEvalCoord1fv", file, line);
 }
 
-d_inline static void glEvalCoord2d_DEBUG(GLdouble u, GLdouble v, const char* file, int line) {
+SDL_INLINE static void glEvalCoord2d_DEBUG(GLdouble u, GLdouble v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord2d(u=%f, v=%f)\n", file, line, u, v);
 #endif
@@ -1040,7 +1039,7 @@ d_inline static void glEvalCoord2d_DEBUG(GLdouble u, GLdouble v, const char* fil
 	dglLogError("glEvalCoord2d", file, line);
 }
 
-d_inline static void glEvalCoord2dv_DEBUG(GLdouble* u, const char* file, int line) {
+SDL_INLINE static void glEvalCoord2dv_DEBUG(GLdouble* u, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord2dv(u=%p)\n", file, line, u);
 #endif
@@ -1048,7 +1047,7 @@ d_inline static void glEvalCoord2dv_DEBUG(GLdouble* u, const char* file, int lin
 	dglLogError("glEvalCoord2dv", file, line);
 }
 
-d_inline static void glEvalCoord2f_DEBUG(GLfloat u, GLfloat v, const char* file, int line) {
+SDL_INLINE static void glEvalCoord2f_DEBUG(GLfloat u, GLfloat v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord2f(u=%f, v=%f)\n", file, line, u, v);
 #endif
@@ -1056,7 +1055,7 @@ d_inline static void glEvalCoord2f_DEBUG(GLfloat u, GLfloat v, const char* file,
 	dglLogError("glEvalCoord2f", file, line);
 }
 
-d_inline static void glEvalCoord2fv_DEBUG(GLfloat* u, const char* file, int line) {
+SDL_INLINE static void glEvalCoord2fv_DEBUG(GLfloat* u, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalCoord2fv(u=%p)\n", file, line, u);
 #endif
@@ -1064,7 +1063,7 @@ d_inline static void glEvalCoord2fv_DEBUG(GLfloat* u, const char* file, int line
 	dglLogError("glEvalCoord2fv", file, line);
 }
 
-d_inline static void glEvalMesh1_DEBUG(GLenum mode, GLint i1, GLint i2, const char* file, int line) {
+SDL_INLINE static void glEvalMesh1_DEBUG(GLenum mode, GLint i1, GLint i2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalMesh1(mode=0x%x, i1=%i, i2=%i)\n", file, line, mode, i1, i2);
 #endif
@@ -1072,7 +1071,7 @@ d_inline static void glEvalMesh1_DEBUG(GLenum mode, GLint i1, GLint i2, const ch
 	dglLogError("glEvalMesh1", file, line);
 }
 
-d_inline static void glEvalMesh2_DEBUG(GLenum mode, GLint i1, GLint i2, GLint j1, GLint j2, const char* file, int line) {
+SDL_INLINE static void glEvalMesh2_DEBUG(GLenum mode, GLint i1, GLint i2, GLint j1, GLint j2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalMesh2(mode=0x%x, i1=%i, i2=%i, j1=%i, j2=%i)\n", file, line, mode, i1, i2, j1, j2);
 #endif
@@ -1080,7 +1079,7 @@ d_inline static void glEvalMesh2_DEBUG(GLenum mode, GLint i1, GLint i2, GLint j1
 	dglLogError("glEvalMesh2", file, line);
 }
 
-d_inline static void glEvalPoint1_DEBUG(GLint i, const char* file, int line) {
+SDL_INLINE static void glEvalPoint1_DEBUG(GLint i, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalPoint1(i=%i)\n", file, line, i);
 #endif
@@ -1088,7 +1087,7 @@ d_inline static void glEvalPoint1_DEBUG(GLint i, const char* file, int line) {
 	dglLogError("glEvalPoint1", file, line);
 }
 
-d_inline static void glEvalPoint2_DEBUG(GLint i, GLint j, const char* file, int line) {
+SDL_INLINE static void glEvalPoint2_DEBUG(GLint i, GLint j, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glEvalPoint2(i=%i, j=%i)\n", file, line, i, j);
 #endif
@@ -1096,7 +1095,7 @@ d_inline static void glEvalPoint2_DEBUG(GLint i, GLint j, const char* file, int 
 	dglLogError("glEvalPoint2", file, line);
 }
 
-d_inline static void glFeedbackBuffer_DEBUG(GLsizei size, GLenum type, GLfloat* buffer, const char* file, int line) {
+SDL_INLINE static void glFeedbackBuffer_DEBUG(GLsizei size, GLenum type, GLfloat* buffer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFeedbackBuffer(size=0x%x, type=0x%x, buffer=%p)\n", file, line, size, type, buffer);
 #endif
@@ -1104,7 +1103,7 @@ d_inline static void glFeedbackBuffer_DEBUG(GLsizei size, GLenum type, GLfloat* 
 	dglLogError("glFeedbackBuffer", file, line);
 }
 
-d_inline static void glFinish_DEBUG(const char* file, int line) {
+SDL_INLINE static void glFinish_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFinish()\n", file, line);
 #endif
@@ -1112,7 +1111,7 @@ d_inline static void glFinish_DEBUG(const char* file, int line) {
 	dglLogError("glFinish", file, line);
 }
 
-d_inline static void glFlush_DEBUG(const char* file, int line) {
+SDL_INLINE static void glFlush_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFlush()\n", file, line);
 #endif
@@ -1120,7 +1119,7 @@ d_inline static void glFlush_DEBUG(const char* file, int line) {
 	dglLogError("glFlush", file, line);
 }
 
-d_inline static void glFogf_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glFogf_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogf(pname=0x%x, param=%f)\n", file, line, pname, param);
 #endif
@@ -1128,7 +1127,7 @@ d_inline static void glFogf_DEBUG(GLenum pname, GLfloat param, const char* file,
 	dglLogError("glFogf", file, line);
 }
 
-d_inline static void glFogfv_DEBUG(GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glFogfv_DEBUG(GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogfv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1136,7 +1135,7 @@ d_inline static void glFogfv_DEBUG(GLenum pname, GLfloat* params, const char* fi
 	dglLogError("glFogfv", file, line);
 }
 
-d_inline static void glFogi_DEBUG(GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glFogi_DEBUG(GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogi(pname=0x%x, param=%i)\n", file, line, pname, param);
 #endif
@@ -1144,7 +1143,7 @@ d_inline static void glFogi_DEBUG(GLenum pname, GLint param, const char* file, i
 	dglLogError("glFogi", file, line);
 }
 
-d_inline static void glFogiv_DEBUG(GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glFogiv_DEBUG(GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogiv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1152,7 +1151,7 @@ d_inline static void glFogiv_DEBUG(GLenum pname, GLint* params, const char* file
 	dglLogError("glFogiv", file, line);
 }
 
-d_inline static void glFrontFace_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glFrontFace_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFrontFace(mode=0x%x)\n", file, line, mode);
 #endif
@@ -1160,7 +1159,7 @@ d_inline static void glFrontFace_DEBUG(GLenum mode, const char* file, int line) 
 	dglLogError("glFrontFace", file, line);
 }
 
-d_inline static void glFrustum_DEBUG(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar, const char* file, int line) {
+SDL_INLINE static void glFrustum_DEBUG(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFrustum(left=%f, right=%f, bottom=%f, top=%f, zNear=%f, zFar=%f)\n", file, line, left, right, bottom, top, zNear, zFar);
 #endif
@@ -1168,7 +1167,7 @@ d_inline static void glFrustum_DEBUG(GLdouble left, GLdouble right, GLdouble bot
 	dglLogError("glFrustum", file, line);
 }
 
-d_inline static GLuint glGenLists_DEBUG(GLsizei range, const char* file, int line) {
+SDL_INLINE static GLuint glGenLists_DEBUG(GLsizei range, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGenLists(range=0x%x)\n", file, line, range);
 #endif
@@ -1176,7 +1175,7 @@ d_inline static GLuint glGenLists_DEBUG(GLsizei range, const char* file, int lin
 	dglLogError("glGenLists", file, line);
 }
 
-d_inline static void glGenTextures_DEBUG(GLsizei n, GLuint* textures, const char* file, int line) {
+SDL_INLINE static void glGenTextures_DEBUG(GLsizei n, GLuint* textures, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGenTextures(n=0x%x, textures=%p)\n", file, line, n, textures);
 #endif
@@ -1184,7 +1183,7 @@ d_inline static void glGenTextures_DEBUG(GLsizei n, GLuint* textures, const char
 	dglLogError("glGenTextures", file, line);
 }
 
-d_inline static void glGetBooleanv_DEBUG(GLenum pname, GLboolean* params, const char* file, int line) {
+SDL_INLINE static void glGetBooleanv_DEBUG(GLenum pname, GLboolean* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetBooleanv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1192,7 +1191,7 @@ d_inline static void glGetBooleanv_DEBUG(GLenum pname, GLboolean* params, const 
 	dglLogError("glGetBooleanv", file, line);
 }
 
-d_inline static void glGetClipPlane_DEBUG(GLenum plane, GLdouble* equation, const char* file, int line) {
+SDL_INLINE static void glGetClipPlane_DEBUG(GLenum plane, GLdouble* equation, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetClipPlane(plane=0x%x, equation=%p)\n", file, line, plane, equation);
 #endif
@@ -1200,7 +1199,7 @@ d_inline static void glGetClipPlane_DEBUG(GLenum plane, GLdouble* equation, cons
 	dglLogError("glGetClipPlane", file, line);
 }
 
-d_inline static void glGetDoublev_DEBUG(GLenum pname, GLdouble* params, const char* file, int line) {
+SDL_INLINE static void glGetDoublev_DEBUG(GLenum pname, GLdouble* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetDoublev(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1208,7 +1207,7 @@ d_inline static void glGetDoublev_DEBUG(GLenum pname, GLdouble* params, const ch
 	dglLogError("glGetDoublev", file, line);
 }
 
-d_inline static GLenum glGetError_DEBUG(const char* file, int line) {
+SDL_INLINE static GLenum glGetError_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetError()\n", file, line);
 #endif
@@ -1216,7 +1215,7 @@ d_inline static GLenum glGetError_DEBUG(const char* file, int line) {
 	dglLogError("glGetError", file, line);
 }
 
-d_inline static void glGetFloatv_DEBUG(GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetFloatv_DEBUG(GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetFloatv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1224,7 +1223,7 @@ d_inline static void glGetFloatv_DEBUG(GLenum pname, GLfloat* params, const char
 	dglLogError("glGetFloatv", file, line);
 }
 
-d_inline static void glGetIntegerv_DEBUG(GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetIntegerv_DEBUG(GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetIntegerv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1232,7 +1231,7 @@ d_inline static void glGetIntegerv_DEBUG(GLenum pname, GLint* params, const char
 	dglLogError("glGetIntegerv", file, line);
 }
 
-d_inline static void glGetLightfv_DEBUG(GLenum light, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetLightfv_DEBUG(GLenum light, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetLightfv(light=0x%x, pname=0x%x, params=%p)\n", file, line, light, pname, params);
 #endif
@@ -1240,7 +1239,7 @@ d_inline static void glGetLightfv_DEBUG(GLenum light, GLenum pname, GLfloat* par
 	dglLogError("glGetLightfv", file, line);
 }
 
-d_inline static void glGetLightiv_DEBUG(GLenum light, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetLightiv_DEBUG(GLenum light, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetLightiv(light=0x%x, pname=0x%x, params=%p)\n", file, line, light, pname, params);
 #endif
@@ -1248,7 +1247,7 @@ d_inline static void glGetLightiv_DEBUG(GLenum light, GLenum pname, GLint* param
 	dglLogError("glGetLightiv", file, line);
 }
 
-d_inline static void glGetMapdv_DEBUG(GLenum target, GLenum query, GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glGetMapdv_DEBUG(GLenum target, GLenum query, GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetMapdv(target=0x%x, query=0x%x, v=%p)\n", file, line, target, query, v);
 #endif
@@ -1256,7 +1255,7 @@ d_inline static void glGetMapdv_DEBUG(GLenum target, GLenum query, GLdouble* v, 
 	dglLogError("glGetMapdv", file, line);
 }
 
-d_inline static void glGetMapfv_DEBUG(GLenum target, GLenum query, GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glGetMapfv_DEBUG(GLenum target, GLenum query, GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetMapfv(target=0x%x, query=0x%x, v=%p)\n", file, line, target, query, v);
 #endif
@@ -1264,7 +1263,7 @@ d_inline static void glGetMapfv_DEBUG(GLenum target, GLenum query, GLfloat* v, c
 	dglLogError("glGetMapfv", file, line);
 }
 
-d_inline static void glGetMapiv_DEBUG(GLenum target, GLenum query, GLint* v, const char* file, int line) {
+SDL_INLINE static void glGetMapiv_DEBUG(GLenum target, GLenum query, GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetMapiv(target=0x%x, query=0x%x, v=%p)\n", file, line, target, query, v);
 #endif
@@ -1272,7 +1271,7 @@ d_inline static void glGetMapiv_DEBUG(GLenum target, GLenum query, GLint* v, con
 	dglLogError("glGetMapiv", file, line);
 }
 
-d_inline static void glGetMaterialfv_DEBUG(GLenum face, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetMaterialfv_DEBUG(GLenum face, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetMaterialfv(face=0x%x, pname=0x%x, params=%p)\n", file, line, face, pname, params);
 #endif
@@ -1280,7 +1279,7 @@ d_inline static void glGetMaterialfv_DEBUG(GLenum face, GLenum pname, GLfloat* p
 	dglLogError("glGetMaterialfv", file, line);
 }
 
-d_inline static void glGetMaterialiv_DEBUG(GLenum face, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetMaterialiv_DEBUG(GLenum face, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetMaterialiv(face=0x%x, pname=0x%x, params=%p)\n", file, line, face, pname, params);
 #endif
@@ -1288,7 +1287,7 @@ d_inline static void glGetMaterialiv_DEBUG(GLenum face, GLenum pname, GLint* par
 	dglLogError("glGetMaterialiv", file, line);
 }
 
-d_inline static void glGetPixelMapfv_DEBUG(GLenum map, GLfloat* values, const char* file, int line) {
+SDL_INLINE static void glGetPixelMapfv_DEBUG(GLenum map, GLfloat* values, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetPixelMapfv(map=0x%x, values=%p)\n", file, line, map, values);
 #endif
@@ -1296,7 +1295,7 @@ d_inline static void glGetPixelMapfv_DEBUG(GLenum map, GLfloat* values, const ch
 	dglLogError("glGetPixelMapfv", file, line);
 }
 
-d_inline static void glGetPixelMapuiv_DEBUG(GLenum map, GLuint* values, const char* file, int line) {
+SDL_INLINE static void glGetPixelMapuiv_DEBUG(GLenum map, GLuint* values, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetPixelMapuiv(map=0x%x, values=%p)\n", file, line, map, values);
 #endif
@@ -1304,7 +1303,7 @@ d_inline static void glGetPixelMapuiv_DEBUG(GLenum map, GLuint* values, const ch
 	dglLogError("glGetPixelMapuiv", file, line);
 }
 
-d_inline static void glGetPixelMapusv_DEBUG(GLenum map, GLushort* values, const char* file, int line) {
+SDL_INLINE static void glGetPixelMapusv_DEBUG(GLenum map, GLushort* values, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetPixelMapusv(map=0x%x, values=%p)\n", file, line, map, values);
 #endif
@@ -1312,7 +1311,7 @@ d_inline static void glGetPixelMapusv_DEBUG(GLenum map, GLushort* values, const 
 	dglLogError("glGetPixelMapusv", file, line);
 }
 
-d_inline static void glGetPointerv_DEBUG(GLenum pname, void* params, const char* file, int line) {
+SDL_INLINE static void glGetPointerv_DEBUG(GLenum pname, void* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetPointerv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1320,7 +1319,7 @@ d_inline static void glGetPointerv_DEBUG(GLenum pname, void* params, const char*
 	dglLogError("glGetPointerv", file, line);
 }
 
-d_inline static void glGetPolygonStipple_DEBUG(GLubyte* mask, const char* file, int line) {
+SDL_INLINE static void glGetPolygonStipple_DEBUG(GLubyte* mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetPolygonStipple(mask=%p)\n", file, line, mask);
 #endif
@@ -1328,7 +1327,7 @@ d_inline static void glGetPolygonStipple_DEBUG(GLubyte* mask, const char* file, 
 	dglLogError("glGetPolygonStipple", file, line);
 }
 
-d_inline static void glGetTexEnvfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetTexEnvfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexEnvfv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -1336,7 +1335,7 @@ d_inline static void glGetTexEnvfv_DEBUG(GLenum target, GLenum pname, GLfloat* p
 	dglLogError("glGetTexEnvfv", file, line);
 }
 
-d_inline static void glGetTexEnviv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetTexEnviv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexEnviv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -1344,7 +1343,7 @@ d_inline static void glGetTexEnviv_DEBUG(GLenum target, GLenum pname, GLint* par
 	dglLogError("glGetTexEnviv", file, line);
 }
 
-d_inline static void glGetTexGendv_DEBUG(GLenum coord, GLenum pname, GLdouble* params, const char* file, int line) {
+SDL_INLINE static void glGetTexGendv_DEBUG(GLenum coord, GLenum pname, GLdouble* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexGendv(coord=0x%x, pname=0x%x, params=%p)\n", file, line, coord, pname, params);
 #endif
@@ -1352,7 +1351,7 @@ d_inline static void glGetTexGendv_DEBUG(GLenum coord, GLenum pname, GLdouble* p
 	dglLogError("glGetTexGendv", file, line);
 }
 
-d_inline static void glGetTexGenfv_DEBUG(GLenum coord, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetTexGenfv_DEBUG(GLenum coord, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexGenfv(coord=0x%x, pname=0x%x, params=%p)\n", file, line, coord, pname, params);
 #endif
@@ -1360,7 +1359,7 @@ d_inline static void glGetTexGenfv_DEBUG(GLenum coord, GLenum pname, GLfloat* pa
 	dglLogError("glGetTexGenfv", file, line);
 }
 
-d_inline static void glGetTexGeniv_DEBUG(GLenum coord, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetTexGeniv_DEBUG(GLenum coord, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexGeniv(coord=0x%x, pname=0x%x, params=%p)\n", file, line, coord, pname, params);
 #endif
@@ -1368,7 +1367,7 @@ d_inline static void glGetTexGeniv_DEBUG(GLenum coord, GLenum pname, GLint* para
 	dglLogError("glGetTexGeniv", file, line);
 }
 
-d_inline static void glGetTexImage_DEBUG(GLenum target, GLint level, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glGetTexImage_DEBUG(GLenum target, GLint level, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexImage(target=0x%x, level=%i, format=0x%x, type=0x%x, pixels=%p)\n", file, line, target, level, format, type, pixels);
 #endif
@@ -1376,7 +1375,7 @@ d_inline static void glGetTexImage_DEBUG(GLenum target, GLint level, GLenum form
 	dglLogError("glGetTexImage", file, line);
 }
 
-d_inline static void glGetTexLevelParameterfv_DEBUG(GLenum target, GLint level, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetTexLevelParameterfv_DEBUG(GLenum target, GLint level, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexLevelParameterfv(target=0x%x, level=%i, pname=0x%x, params=%p)\n", file, line, target, level, pname, params);
 #endif
@@ -1384,7 +1383,7 @@ d_inline static void glGetTexLevelParameterfv_DEBUG(GLenum target, GLint level, 
 	dglLogError("glGetTexLevelParameterfv", file, line);
 }
 
-d_inline static void glGetTexLevelParameteriv_DEBUG(GLenum target, GLint level, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetTexLevelParameteriv_DEBUG(GLenum target, GLint level, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexLevelParameteriv(target=0x%x, level=%i, pname=0x%x, params=%p)\n", file, line, target, level, pname, params);
 #endif
@@ -1392,7 +1391,7 @@ d_inline static void glGetTexLevelParameteriv_DEBUG(GLenum target, GLint level, 
 	dglLogError("glGetTexLevelParameteriv", file, line);
 }
 
-d_inline static void glGetTexParameterfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glGetTexParameterfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexParameterfv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -1400,7 +1399,7 @@ d_inline static void glGetTexParameterfv_DEBUG(GLenum target, GLenum pname, GLfl
 	dglLogError("glGetTexParameterfv", file, line);
 }
 
-d_inline static void glGetTexParameteriv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetTexParameteriv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetTexParameteriv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -1408,7 +1407,7 @@ d_inline static void glGetTexParameteriv_DEBUG(GLenum target, GLenum pname, GLin
 	dglLogError("glGetTexParameteriv", file, line);
 }
 
-d_inline static void glHint_DEBUG(GLenum target, GLenum mode, const char* file, int line) {
+SDL_INLINE static void glHint_DEBUG(GLenum target, GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glHint(target=0x%x, mode=0x%x)\n", file, line, target, mode);
 #endif
@@ -1416,7 +1415,7 @@ d_inline static void glHint_DEBUG(GLenum target, GLenum mode, const char* file, 
 	dglLogError("glHint", file, line);
 }
 
-d_inline static void glIndexMask_DEBUG(GLuint mask, const char* file, int line) {
+SDL_INLINE static void glIndexMask_DEBUG(GLuint mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexMask(mask=%i)\n", file, line, mask);
 #endif
@@ -1424,7 +1423,7 @@ d_inline static void glIndexMask_DEBUG(GLuint mask, const char* file, int line) 
 	dglLogError("glIndexMask", file, line);
 }
 
-d_inline static void glIndexPointer_DEBUG(GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glIndexPointer_DEBUG(GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexPointer(type=0x%x, stride=0x%x, pointer=%p)\n", file, line, type, stride, pointer);
 #endif
@@ -1432,7 +1431,7 @@ d_inline static void glIndexPointer_DEBUG(GLenum type, GLsizei stride, GLvoid* p
 	dglLogError("glIndexPointer", file, line);
 }
 
-d_inline static void glIndexd_DEBUG(GLdouble c, const char* file, int line) {
+SDL_INLINE static void glIndexd_DEBUG(GLdouble c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexd(c=%f)\n", file, line, c);
 #endif
@@ -1440,7 +1439,7 @@ d_inline static void glIndexd_DEBUG(GLdouble c, const char* file, int line) {
 	dglLogError("glIndexd", file, line);
 }
 
-d_inline static void glIndexdv_DEBUG(GLdouble* c, const char* file, int line) {
+SDL_INLINE static void glIndexdv_DEBUG(GLdouble* c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexdv(c=%p)\n", file, line, c);
 #endif
@@ -1448,7 +1447,7 @@ d_inline static void glIndexdv_DEBUG(GLdouble* c, const char* file, int line) {
 	dglLogError("glIndexdv", file, line);
 }
 
-d_inline static void glIndexf_DEBUG(GLfloat c, const char* file, int line) {
+SDL_INLINE static void glIndexf_DEBUG(GLfloat c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexf(c=%f)\n", file, line, c);
 #endif
@@ -1456,7 +1455,7 @@ d_inline static void glIndexf_DEBUG(GLfloat c, const char* file, int line) {
 	dglLogError("glIndexf", file, line);
 }
 
-d_inline static void glIndexfv_DEBUG(GLfloat* c, const char* file, int line) {
+SDL_INLINE static void glIndexfv_DEBUG(GLfloat* c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexfv(c=%p)\n", file, line, c);
 #endif
@@ -1464,7 +1463,7 @@ d_inline static void glIndexfv_DEBUG(GLfloat* c, const char* file, int line) {
 	dglLogError("glIndexfv", file, line);
 }
 
-d_inline static void glIndexi_DEBUG(GLint c, const char* file, int line) {
+SDL_INLINE static void glIndexi_DEBUG(GLint c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexi(c=%i)\n", file, line, c);
 #endif
@@ -1472,7 +1471,7 @@ d_inline static void glIndexi_DEBUG(GLint c, const char* file, int line) {
 	dglLogError("glIndexi", file, line);
 }
 
-d_inline static void glIndexiv_DEBUG(GLint* c, const char* file, int line) {
+SDL_INLINE static void glIndexiv_DEBUG(GLint* c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexiv(c=%p)\n", file, line, c);
 #endif
@@ -1480,7 +1479,7 @@ d_inline static void glIndexiv_DEBUG(GLint* c, const char* file, int line) {
 	dglLogError("glIndexiv", file, line);
 }
 
-d_inline static void glIndexs_DEBUG(GLshort c, const char* file, int line) {
+SDL_INLINE static void glIndexs_DEBUG(GLshort c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexs(c=%i)\n", file, line, c);
 #endif
@@ -1488,7 +1487,7 @@ d_inline static void glIndexs_DEBUG(GLshort c, const char* file, int line) {
 	dglLogError("glIndexs", file, line);
 }
 
-d_inline static void glIndexsv_DEBUG(GLshort* c, const char* file, int line) {
+SDL_INLINE static void glIndexsv_DEBUG(GLshort* c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexsv(c=%p)\n", file, line, c);
 #endif
@@ -1496,7 +1495,7 @@ d_inline static void glIndexsv_DEBUG(GLshort* c, const char* file, int line) {
 	dglLogError("glIndexsv", file, line);
 }
 
-d_inline static void glIndexub_DEBUG(GLubyte c, const char* file, int line) {
+SDL_INLINE static void glIndexub_DEBUG(GLubyte c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexub(c=%i)\n", file, line, c);
 #endif
@@ -1504,7 +1503,7 @@ d_inline static void glIndexub_DEBUG(GLubyte c, const char* file, int line) {
 	dglLogError("glIndexub", file, line);
 }
 
-d_inline static void glIndexubv_DEBUG(GLubyte* c, const char* file, int line) {
+SDL_INLINE static void glIndexubv_DEBUG(GLubyte* c, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIndexubv(c=%p)\n", file, line, c);
 #endif
@@ -1512,7 +1511,7 @@ d_inline static void glIndexubv_DEBUG(GLubyte* c, const char* file, int line) {
 	dglLogError("glIndexubv", file, line);
 }
 
-d_inline static void glInitNames_DEBUG(const char* file, int line) {
+SDL_INLINE static void glInitNames_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glInitNames()\n", file, line);
 #endif
@@ -1520,7 +1519,7 @@ d_inline static void glInitNames_DEBUG(const char* file, int line) {
 	dglLogError("glInitNames", file, line);
 }
 
-d_inline static void glInterleavedArrays_DEBUG(GLenum format, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glInterleavedArrays_DEBUG(GLenum format, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glInterleavedArrays(format=0x%x, stride=0x%x, pointer=%p)\n", file, line, format, stride, pointer);
 #endif
@@ -1528,7 +1527,7 @@ d_inline static void glInterleavedArrays_DEBUG(GLenum format, GLsizei stride, GL
 	dglLogError("glInterleavedArrays", file, line);
 }
 
-d_inline static GLboolean glIsEnabled_DEBUG(GLenum cap, const char* file, int line) {
+SDL_INLINE static GLboolean glIsEnabled_DEBUG(GLenum cap, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIsEnabled(cap=0x%x)\n", file, line, cap);
 #endif
@@ -1536,7 +1535,7 @@ d_inline static GLboolean glIsEnabled_DEBUG(GLenum cap, const char* file, int li
 	dglLogError("glIsEnabled", file, line);
 }
 
-d_inline static GLboolean glIsList_DEBUG(GLuint list, const char* file, int line) {
+SDL_INLINE static GLboolean glIsList_DEBUG(GLuint list, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIsList(list=%i)\n", file, line, list);
 #endif
@@ -1544,7 +1543,7 @@ d_inline static GLboolean glIsList_DEBUG(GLuint list, const char* file, int line
 	dglLogError("glIsList", file, line);
 }
 
-d_inline static GLboolean glIsTexture_DEBUG(GLuint texture, const char* file, int line) {
+SDL_INLINE static GLboolean glIsTexture_DEBUG(GLuint texture, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIsTexture(texture=%i)\n", file, line, texture);
 #endif
@@ -1552,7 +1551,7 @@ d_inline static GLboolean glIsTexture_DEBUG(GLuint texture, const char* file, in
 	dglLogError("glIsTexture", file, line);
 }
 
-d_inline static void glLightModelf_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glLightModelf_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightModelf(pname=0x%x, param=%f)\n", file, line, pname, param);
 #endif
@@ -1560,7 +1559,7 @@ d_inline static void glLightModelf_DEBUG(GLenum pname, GLfloat param, const char
 	dglLogError("glLightModelf", file, line);
 }
 
-d_inline static void glLightModelfv_DEBUG(GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glLightModelfv_DEBUG(GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightModelfv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1568,7 +1567,7 @@ d_inline static void glLightModelfv_DEBUG(GLenum pname, GLfloat* params, const c
 	dglLogError("glLightModelfv", file, line);
 }
 
-d_inline static void glLightModeli_DEBUG(GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glLightModeli_DEBUG(GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightModeli(pname=0x%x, param=%i)\n", file, line, pname, param);
 #endif
@@ -1576,7 +1575,7 @@ d_inline static void glLightModeli_DEBUG(GLenum pname, GLint param, const char* 
 	dglLogError("glLightModeli", file, line);
 }
 
-d_inline static void glLightModeliv_DEBUG(GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glLightModeliv_DEBUG(GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightModeliv(pname=0x%x, params=%p)\n", file, line, pname, params);
 #endif
@@ -1584,7 +1583,7 @@ d_inline static void glLightModeliv_DEBUG(GLenum pname, GLint* params, const cha
 	dglLogError("glLightModeliv", file, line);
 }
 
-d_inline static void glLightf_DEBUG(GLenum light, GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glLightf_DEBUG(GLenum light, GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightf(light=0x%x, pname=0x%x, param=%f)\n", file, line, light, pname, param);
 #endif
@@ -1592,7 +1591,7 @@ d_inline static void glLightf_DEBUG(GLenum light, GLenum pname, GLfloat param, c
 	dglLogError("glLightf", file, line);
 }
 
-d_inline static void glLightfv_DEBUG(GLenum light, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glLightfv_DEBUG(GLenum light, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightfv(light=0x%x, pname=0x%x, params=%p)\n", file, line, light, pname, params);
 #endif
@@ -1600,7 +1599,7 @@ d_inline static void glLightfv_DEBUG(GLenum light, GLenum pname, GLfloat* params
 	dglLogError("glLightfv", file, line);
 }
 
-d_inline static void glLighti_DEBUG(GLenum light, GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glLighti_DEBUG(GLenum light, GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLighti(light=0x%x, pname=0x%x, param=%i)\n", file, line, light, pname, param);
 #endif
@@ -1608,7 +1607,7 @@ d_inline static void glLighti_DEBUG(GLenum light, GLenum pname, GLint param, con
 	dglLogError("glLighti", file, line);
 }
 
-d_inline static void glLightiv_DEBUG(GLenum light, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glLightiv_DEBUG(GLenum light, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLightiv(light=0x%x, pname=0x%x, params=%p)\n", file, line, light, pname, params);
 #endif
@@ -1616,7 +1615,7 @@ d_inline static void glLightiv_DEBUG(GLenum light, GLenum pname, GLint* params, 
 	dglLogError("glLightiv", file, line);
 }
 
-d_inline static void glLineStipple_DEBUG(GLint factor, GLushort pattern, const char* file, int line) {
+SDL_INLINE static void glLineStipple_DEBUG(GLint factor, GLushort pattern, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLineStipple(factor=%i, pattern=%i)\n", file, line, factor, pattern);
 #endif
@@ -1624,7 +1623,7 @@ d_inline static void glLineStipple_DEBUG(GLint factor, GLushort pattern, const c
 	dglLogError("glLineStipple", file, line);
 }
 
-d_inline static void glLineWidth_DEBUG(GLfloat width, const char* file, int line) {
+SDL_INLINE static void glLineWidth_DEBUG(GLfloat width, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLineWidth(width=%f)\n", file, line, width);
 #endif
@@ -1632,7 +1631,7 @@ d_inline static void glLineWidth_DEBUG(GLfloat width, const char* file, int line
 	dglLogError("glLineWidth", file, line);
 }
 
-d_inline static void glListBase_DEBUG(GLuint base, const char* file, int line) {
+SDL_INLINE static void glListBase_DEBUG(GLuint base, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glListBase(base=%i)\n", file, line, base);
 #endif
@@ -1640,7 +1639,7 @@ d_inline static void glListBase_DEBUG(GLuint base, const char* file, int line) {
 	dglLogError("glListBase", file, line);
 }
 
-d_inline static void glLoadIdentity_DEBUG(const char* file, int line) {
+SDL_INLINE static void glLoadIdentity_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLoadIdentity()\n", file, line);
 #endif
@@ -1648,7 +1647,7 @@ d_inline static void glLoadIdentity_DEBUG(const char* file, int line) {
 	dglLogError("glLoadIdentity", file, line);
 }
 
-d_inline static void glLoadMatrixd_DEBUG(GLdouble* m, const char* file, int line) {
+SDL_INLINE static void glLoadMatrixd_DEBUG(GLdouble* m, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLoadMatrixd(m=%p)\n", file, line, m);
 #endif
@@ -1656,7 +1655,7 @@ d_inline static void glLoadMatrixd_DEBUG(GLdouble* m, const char* file, int line
 	dglLogError("glLoadMatrixd", file, line);
 }
 
-d_inline static void glLoadMatrixf_DEBUG(GLfloat* m, const char* file, int line) {
+SDL_INLINE static void glLoadMatrixf_DEBUG(GLfloat* m, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLoadMatrixf(m=%p)\n", file, line, m);
 #endif
@@ -1664,7 +1663,7 @@ d_inline static void glLoadMatrixf_DEBUG(GLfloat* m, const char* file, int line)
 	dglLogError("glLoadMatrixf", file, line);
 }
 
-d_inline static void glLoadName_DEBUG(GLuint name, const char* file, int line) {
+SDL_INLINE static void glLoadName_DEBUG(GLuint name, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLoadName(name=%i)\n", file, line, name);
 #endif
@@ -1672,7 +1671,7 @@ d_inline static void glLoadName_DEBUG(GLuint name, const char* file, int line) {
 	dglLogError("glLoadName", file, line);
 }
 
-d_inline static void glLogicOp_DEBUG(GLenum opcode, const char* file, int line) {
+SDL_INLINE static void glLogicOp_DEBUG(GLenum opcode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLogicOp(opcode=0x%x)\n", file, line, opcode);
 #endif
@@ -1680,7 +1679,7 @@ d_inline static void glLogicOp_DEBUG(GLenum opcode, const char* file, int line) 
 	dglLogError("glLogicOp", file, line);
 }
 
-d_inline static void glMap1d_DEBUG(GLenum target, GLdouble u1, GLdouble u2, GLint stride, GLint order, GLdouble* points, const char* file, int line) {
+SDL_INLINE static void glMap1d_DEBUG(GLenum target, GLdouble u1, GLdouble u2, GLint stride, GLint order, GLdouble* points, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMap1d(target=0x%x, u1=%f, u2=%f, stride=%i, order=%i, points=%p)\n", file, line, target, u1, u2, stride, order, points);
 #endif
@@ -1688,7 +1687,7 @@ d_inline static void glMap1d_DEBUG(GLenum target, GLdouble u1, GLdouble u2, GLin
 	dglLogError("glMap1d", file, line);
 }
 
-d_inline static void glMap1f_DEBUG(GLenum target, GLfloat u1, GLfloat u2, GLint stride, GLint order, GLfloat* points, const char* file, int line) {
+SDL_INLINE static void glMap1f_DEBUG(GLenum target, GLfloat u1, GLfloat u2, GLint stride, GLint order, GLfloat* points, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMap1f(target=0x%x, u1=%f, u2=%f, stride=%i, order=%i, points=%p)\n", file, line, target, u1, u2, stride, order, points);
 #endif
@@ -1696,7 +1695,7 @@ d_inline static void glMap1f_DEBUG(GLenum target, GLfloat u1, GLfloat u2, GLint 
 	dglLogError("glMap1f", file, line);
 }
 
-d_inline static void glMap2d_DEBUG(GLenum target, GLdouble u1, GLdouble u2, GLint ustride, GLint uorder, GLdouble v1, GLdouble v2, GLint vstride, GLint vorder, GLdouble* points, const char* file, int line) {
+SDL_INLINE static void glMap2d_DEBUG(GLenum target, GLdouble u1, GLdouble u2, GLint ustride, GLint uorder, GLdouble v1, GLdouble v2, GLint vstride, GLint vorder, GLdouble* points, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMap2d(target=0x%x, u1=%f, u2=%f, ustride=%i, uorder=%i, v1=%f, v2=%f, vstride=%i, vorder=%i, points=%p)\n", file, line, target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
 #endif
@@ -1704,7 +1703,7 @@ d_inline static void glMap2d_DEBUG(GLenum target, GLdouble u1, GLdouble u2, GLin
 	dglLogError("glMap2d", file, line);
 }
 
-d_inline static void glMap2f_DEBUG(GLenum target, GLfloat u1, GLfloat u2, GLint ustride, GLint uorder, GLfloat v1, GLfloat v2, GLint vstride, GLint vorder, GLfloat* points, const char* file, int line) {
+SDL_INLINE static void glMap2f_DEBUG(GLenum target, GLfloat u1, GLfloat u2, GLint ustride, GLint uorder, GLfloat v1, GLfloat v2, GLint vstride, GLint vorder, GLfloat* points, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMap2f(target=0x%x, u1=%f, u2=%f, ustride=%i, uorder=%i, v1=%f, v2=%f, vstride=%i, vorder=%i, points=%p)\n", file, line, target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
 #endif
@@ -1712,7 +1711,7 @@ d_inline static void glMap2f_DEBUG(GLenum target, GLfloat u1, GLfloat u2, GLint 
 	dglLogError("glMap2f", file, line);
 }
 
-d_inline static void glMapGrid1d_DEBUG(GLint un, GLdouble u1, GLdouble u2, const char* file, int line) {
+SDL_INLINE static void glMapGrid1d_DEBUG(GLint un, GLdouble u1, GLdouble u2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMapGrid1d(un=%i, u1=%f, u2=%f)\n", file, line, un, u1, u2);
 #endif
@@ -1720,7 +1719,7 @@ d_inline static void glMapGrid1d_DEBUG(GLint un, GLdouble u1, GLdouble u2, const
 	dglLogError("glMapGrid1d", file, line);
 }
 
-d_inline static void glMapGrid1f_DEBUG(GLint un, GLfloat u1, GLfloat u2, const char* file, int line) {
+SDL_INLINE static void glMapGrid1f_DEBUG(GLint un, GLfloat u1, GLfloat u2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMapGrid1f(un=%i, u1=%f, u2=%f)\n", file, line, un, u1, u2);
 #endif
@@ -1728,7 +1727,7 @@ d_inline static void glMapGrid1f_DEBUG(GLint un, GLfloat u1, GLfloat u2, const c
 	dglLogError("glMapGrid1f", file, line);
 }
 
-d_inline static void glMapGrid2d_DEBUG(GLint un, GLdouble u1, GLdouble u2, GLint vn, GLdouble v1, GLdouble v2, const char* file, int line) {
+SDL_INLINE static void glMapGrid2d_DEBUG(GLint un, GLdouble u1, GLdouble u2, GLint vn, GLdouble v1, GLdouble v2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMapGrid2d(un=%i, u1=%f, u2=%f, vn=%i, v1=%f, v2=%f)\n", file, line, un, u1, u2, vn, v1, v2);
 #endif
@@ -1736,7 +1735,7 @@ d_inline static void glMapGrid2d_DEBUG(GLint un, GLdouble u1, GLdouble u2, GLint
 	dglLogError("glMapGrid2d", file, line);
 }
 
-d_inline static void glMapGrid2f_DEBUG(GLint un, GLfloat u1, GLfloat u2, GLint vn, GLfloat v1, GLfloat v2, const char* file, int line) {
+SDL_INLINE static void glMapGrid2f_DEBUG(GLint un, GLfloat u1, GLfloat u2, GLint vn, GLfloat v1, GLfloat v2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMapGrid2f(un=%i, u1=%f, u2=%f, vn=%i, v1=%f, v2=%f)\n", file, line, un, u1, u2, vn, v1, v2);
 #endif
@@ -1744,7 +1743,7 @@ d_inline static void glMapGrid2f_DEBUG(GLint un, GLfloat u1, GLfloat u2, GLint v
 	dglLogError("glMapGrid2f", file, line);
 }
 
-d_inline static void glMaterialf_DEBUG(GLenum face, GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glMaterialf_DEBUG(GLenum face, GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMaterialf(face=0x%x, pname=0x%x, param=%f)\n", file, line, face, pname, param);
 #endif
@@ -1752,7 +1751,7 @@ d_inline static void glMaterialf_DEBUG(GLenum face, GLenum pname, GLfloat param,
 	dglLogError("glMaterialf", file, line);
 }
 
-d_inline static void glMaterialfv_DEBUG(GLenum face, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glMaterialfv_DEBUG(GLenum face, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMaterialfv(face=0x%x, pname=0x%x, params=%p)\n", file, line, face, pname, params);
 #endif
@@ -1760,7 +1759,7 @@ d_inline static void glMaterialfv_DEBUG(GLenum face, GLenum pname, GLfloat* para
 	dglLogError("glMaterialfv", file, line);
 }
 
-d_inline static void glMateriali_DEBUG(GLenum face, GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glMateriali_DEBUG(GLenum face, GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMateriali(face=0x%x, pname=0x%x, param=%i)\n", file, line, face, pname, param);
 #endif
@@ -1768,7 +1767,7 @@ d_inline static void glMateriali_DEBUG(GLenum face, GLenum pname, GLint param, c
 	dglLogError("glMateriali", file, line);
 }
 
-d_inline static void glMaterialiv_DEBUG(GLenum face, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glMaterialiv_DEBUG(GLenum face, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMaterialiv(face=0x%x, pname=0x%x, params=%p)\n", file, line, face, pname, params);
 #endif
@@ -1776,7 +1775,7 @@ d_inline static void glMaterialiv_DEBUG(GLenum face, GLenum pname, GLint* params
 	dglLogError("glMaterialiv", file, line);
 }
 
-d_inline static void glMatrixMode_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glMatrixMode_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMatrixMode(mode=0x%x)\n", file, line, mode);
 #endif
@@ -1784,7 +1783,7 @@ d_inline static void glMatrixMode_DEBUG(GLenum mode, const char* file, int line)
 	dglLogError("glMatrixMode", file, line);
 }
 
-d_inline static void glMultMatrixd_DEBUG(GLdouble* m, const char* file, int line) {
+SDL_INLINE static void glMultMatrixd_DEBUG(GLdouble* m, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultMatrixd(m=%p)\n", file, line, m);
 #endif
@@ -1792,7 +1791,7 @@ d_inline static void glMultMatrixd_DEBUG(GLdouble* m, const char* file, int line
 	dglLogError("glMultMatrixd", file, line);
 }
 
-d_inline static void glMultMatrixf_DEBUG(GLfloat* m, const char* file, int line) {
+SDL_INLINE static void glMultMatrixf_DEBUG(GLfloat* m, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultMatrixf(m=%p)\n", file, line, m);
 #endif
@@ -1800,7 +1799,7 @@ d_inline static void glMultMatrixf_DEBUG(GLfloat* m, const char* file, int line)
 	dglLogError("glMultMatrixf", file, line);
 }
 
-d_inline static void glNewList_DEBUG(GLuint list, GLenum mode, const char* file, int line) {
+SDL_INLINE static void glNewList_DEBUG(GLuint list, GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNewList(list=%i, mode=0x%x)\n", file, line, list, mode);
 #endif
@@ -1808,7 +1807,7 @@ d_inline static void glNewList_DEBUG(GLuint list, GLenum mode, const char* file,
 	dglLogError("glNewList", file, line);
 }
 
-d_inline static void glNormal3b_DEBUG(GLbyte nx, GLbyte ny, GLbyte nz, const char* file, int line) {
+SDL_INLINE static void glNormal3b_DEBUG(GLbyte nx, GLbyte ny, GLbyte nz, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3b(nx=%i, ny=%i, nz=%i)\n", file, line, nx, ny, nz);
 #endif
@@ -1816,7 +1815,7 @@ d_inline static void glNormal3b_DEBUG(GLbyte nx, GLbyte ny, GLbyte nz, const cha
 	dglLogError("glNormal3b", file, line);
 }
 
-d_inline static void glNormal3bv_DEBUG(GLbyte* v, const char* file, int line) {
+SDL_INLINE static void glNormal3bv_DEBUG(GLbyte* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3bv(v=%p)\n", file, line, v);
 #endif
@@ -1824,7 +1823,7 @@ d_inline static void glNormal3bv_DEBUG(GLbyte* v, const char* file, int line) {
 	dglLogError("glNormal3bv", file, line);
 }
 
-d_inline static void glNormal3d_DEBUG(GLdouble nx, GLdouble ny, GLdouble nz, const char* file, int line) {
+SDL_INLINE static void glNormal3d_DEBUG(GLdouble nx, GLdouble ny, GLdouble nz, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3d(nx=%f, ny=%f, nz=%f)\n", file, line, nx, ny, nz);
 #endif
@@ -1832,7 +1831,7 @@ d_inline static void glNormal3d_DEBUG(GLdouble nx, GLdouble ny, GLdouble nz, con
 	dglLogError("glNormal3d", file, line);
 }
 
-d_inline static void glNormal3dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glNormal3dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3dv(v=%p)\n", file, line, v);
 #endif
@@ -1840,7 +1839,7 @@ d_inline static void glNormal3dv_DEBUG(GLdouble* v, const char* file, int line) 
 	dglLogError("glNormal3dv", file, line);
 }
 
-d_inline static void glNormal3f_DEBUG(GLfloat nx, GLfloat ny, GLfloat nz, const char* file, int line) {
+SDL_INLINE static void glNormal3f_DEBUG(GLfloat nx, GLfloat ny, GLfloat nz, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3f(nx=%f, ny=%f, nz=%f)\n", file, line, nx, ny, nz);
 #endif
@@ -1848,7 +1847,7 @@ d_inline static void glNormal3f_DEBUG(GLfloat nx, GLfloat ny, GLfloat nz, const 
 	dglLogError("glNormal3f", file, line);
 }
 
-d_inline static void glNormal3fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glNormal3fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3fv(v=%p)\n", file, line, v);
 #endif
@@ -1856,7 +1855,7 @@ d_inline static void glNormal3fv_DEBUG(GLfloat* v, const char* file, int line) {
 	dglLogError("glNormal3fv", file, line);
 }
 
-d_inline static void glNormal3i_DEBUG(GLint nx, GLint ny, GLint nz, const char* file, int line) {
+SDL_INLINE static void glNormal3i_DEBUG(GLint nx, GLint ny, GLint nz, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3i(nx=%i, ny=%i, nz=%i)\n", file, line, nx, ny, nz);
 #endif
@@ -1864,7 +1863,7 @@ d_inline static void glNormal3i_DEBUG(GLint nx, GLint ny, GLint nz, const char* 
 	dglLogError("glNormal3i", file, line);
 }
 
-d_inline static void glNormal3iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glNormal3iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3iv(v=%p)\n", file, line, v);
 #endif
@@ -1872,7 +1871,7 @@ d_inline static void glNormal3iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glNormal3iv", file, line);
 }
 
-d_inline static void glNormal3s_DEBUG(GLshort nx, GLshort ny, GLshort nz, const char* file, int line) {
+SDL_INLINE static void glNormal3s_DEBUG(GLshort nx, GLshort ny, GLshort nz, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3s(nx=%i, ny=%i, nz=%i)\n", file, line, nx, ny, nz);
 #endif
@@ -1880,7 +1879,7 @@ d_inline static void glNormal3s_DEBUG(GLshort nx, GLshort ny, GLshort nz, const 
 	dglLogError("glNormal3s", file, line);
 }
 
-d_inline static void glNormal3sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glNormal3sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormal3sv(v=%p)\n", file, line, v);
 #endif
@@ -1888,7 +1887,7 @@ d_inline static void glNormal3sv_DEBUG(GLshort* v, const char* file, int line) {
 	dglLogError("glNormal3sv", file, line);
 }
 
-d_inline static void glNormalPointer_DEBUG(GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glNormalPointer_DEBUG(GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glNormalPointer(type=0x%x, stride=0x%x, pointer=%p)\n", file, line, type, stride, pointer);
 #endif
@@ -1896,7 +1895,7 @@ d_inline static void glNormalPointer_DEBUG(GLenum type, GLsizei stride, GLvoid* 
 	dglLogError("glNormalPointer", file, line);
 }
 
-d_inline static void glOrtho_DEBUG(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar, const char* file, int line) {
+SDL_INLINE static void glOrtho_DEBUG(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glOrtho(left=%f, right=%f, bottom=%f, top=%f, zNear=%f, zFar=%f)\n", file, line, left, right, bottom, top, zNear, zFar);
 #endif
@@ -1904,7 +1903,7 @@ d_inline static void glOrtho_DEBUG(GLdouble left, GLdouble right, GLdouble botto
 	dglLogError("glOrtho", file, line);
 }
 
-d_inline static void glPassThrough_DEBUG(GLfloat token, const char* file, int line) {
+SDL_INLINE static void glPassThrough_DEBUG(GLfloat token, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPassThrough(token=%f)\n", file, line, token);
 #endif
@@ -1912,7 +1911,7 @@ d_inline static void glPassThrough_DEBUG(GLfloat token, const char* file, int li
 	dglLogError("glPassThrough", file, line);
 }
 
-d_inline static void glPixelMapfv_DEBUG(GLenum map, GLsizei mapsize, GLfloat* values, const char* file, int line) {
+SDL_INLINE static void glPixelMapfv_DEBUG(GLenum map, GLsizei mapsize, GLfloat* values, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelMapfv(map=0x%x, mapsize=0x%x, values=%p)\n", file, line, map, mapsize, values);
 #endif
@@ -1920,7 +1919,7 @@ d_inline static void glPixelMapfv_DEBUG(GLenum map, GLsizei mapsize, GLfloat* va
 	dglLogError("glPixelMapfv", file, line);
 }
 
-d_inline static void glPixelMapuiv_DEBUG(GLenum map, GLsizei mapsize, GLuint* values, const char* file, int line) {
+SDL_INLINE static void glPixelMapuiv_DEBUG(GLenum map, GLsizei mapsize, GLuint* values, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelMapuiv(map=0x%x, mapsize=0x%x, values=%p)\n", file, line, map, mapsize, values);
 #endif
@@ -1928,7 +1927,7 @@ d_inline static void glPixelMapuiv_DEBUG(GLenum map, GLsizei mapsize, GLuint* va
 	dglLogError("glPixelMapuiv", file, line);
 }
 
-d_inline static void glPixelMapusv_DEBUG(GLenum map, GLsizei mapsize, GLushort* values, const char* file, int line) {
+SDL_INLINE static void glPixelMapusv_DEBUG(GLenum map, GLsizei mapsize, GLushort* values, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelMapusv(map=0x%x, mapsize=0x%x, values=%p)\n", file, line, map, mapsize, values);
 #endif
@@ -1936,7 +1935,7 @@ d_inline static void glPixelMapusv_DEBUG(GLenum map, GLsizei mapsize, GLushort* 
 	dglLogError("glPixelMapusv", file, line);
 }
 
-d_inline static void glPixelStoref_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glPixelStoref_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelStoref(pname=0x%x, param=%f)\n", file, line, pname, param);
 #endif
@@ -1944,7 +1943,7 @@ d_inline static void glPixelStoref_DEBUG(GLenum pname, GLfloat param, const char
 	dglLogError("glPixelStoref", file, line);
 }
 
-d_inline static void glPixelStorei_DEBUG(GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glPixelStorei_DEBUG(GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelStorei(pname=0x%x, param=%i)\n", file, line, pname, param);
 #endif
@@ -1952,7 +1951,7 @@ d_inline static void glPixelStorei_DEBUG(GLenum pname, GLint param, const char* 
 	dglLogError("glPixelStorei", file, line);
 }
 
-d_inline static void glPixelTransferf_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glPixelTransferf_DEBUG(GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelTransferf(pname=0x%x, param=%f)\n", file, line, pname, param);
 #endif
@@ -1960,7 +1959,7 @@ d_inline static void glPixelTransferf_DEBUG(GLenum pname, GLfloat param, const c
 	dglLogError("glPixelTransferf", file, line);
 }
 
-d_inline static void glPixelTransferi_DEBUG(GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glPixelTransferi_DEBUG(GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelTransferi(pname=0x%x, param=%i)\n", file, line, pname, param);
 #endif
@@ -1968,7 +1967,7 @@ d_inline static void glPixelTransferi_DEBUG(GLenum pname, GLint param, const cha
 	dglLogError("glPixelTransferi", file, line);
 }
 
-d_inline static void glPixelZoom_DEBUG(GLfloat xfactor, GLfloat yfactor, const char* file, int line) {
+SDL_INLINE static void glPixelZoom_DEBUG(GLfloat xfactor, GLfloat yfactor, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPixelZoom(xfactor=%f, yfactor=%f)\n", file, line, xfactor, yfactor);
 #endif
@@ -1976,7 +1975,7 @@ d_inline static void glPixelZoom_DEBUG(GLfloat xfactor, GLfloat yfactor, const c
 	dglLogError("glPixelZoom", file, line);
 }
 
-d_inline static void glPointSize_DEBUG(GLfloat size, const char* file, int line) {
+SDL_INLINE static void glPointSize_DEBUG(GLfloat size, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPointSize(size=%f)\n", file, line, size);
 #endif
@@ -1984,7 +1983,7 @@ d_inline static void glPointSize_DEBUG(GLfloat size, const char* file, int line)
 	dglLogError("glPointSize", file, line);
 }
 
-d_inline static void glPolygonMode_DEBUG(GLenum face, GLenum mode, const char* file, int line) {
+SDL_INLINE static void glPolygonMode_DEBUG(GLenum face, GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPolygonMode(face=0x%x, mode=0x%x)\n", file, line, face, mode);
 #endif
@@ -1992,7 +1991,7 @@ d_inline static void glPolygonMode_DEBUG(GLenum face, GLenum mode, const char* f
 	dglLogError("glPolygonMode", file, line);
 }
 
-d_inline static void glPolygonOffset_DEBUG(GLfloat factor, GLfloat units, const char* file, int line) {
+SDL_INLINE static void glPolygonOffset_DEBUG(GLfloat factor, GLfloat units, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPolygonOffset(factor=%f, units=%f)\n", file, line, factor, units);
 #endif
@@ -2000,7 +1999,7 @@ d_inline static void glPolygonOffset_DEBUG(GLfloat factor, GLfloat units, const 
 	dglLogError("glPolygonOffset", file, line);
 }
 
-d_inline static void glPolygonStipple_DEBUG(GLubyte* mask, const char* file, int line) {
+SDL_INLINE static void glPolygonStipple_DEBUG(GLubyte* mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPolygonStipple(mask=%p)\n", file, line, mask);
 #endif
@@ -2008,7 +2007,7 @@ d_inline static void glPolygonStipple_DEBUG(GLubyte* mask, const char* file, int
 	dglLogError("glPolygonStipple", file, line);
 }
 
-d_inline static void glPopAttrib_DEBUG(const char* file, int line) {
+SDL_INLINE static void glPopAttrib_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPopAttrib()\n", file, line);
 #endif
@@ -2016,7 +2015,7 @@ d_inline static void glPopAttrib_DEBUG(const char* file, int line) {
 	dglLogError("glPopAttrib", file, line);
 }
 
-d_inline static void glPopClientAttrib_DEBUG(const char* file, int line) {
+SDL_INLINE static void glPopClientAttrib_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPopClientAttrib()\n", file, line);
 #endif
@@ -2024,7 +2023,7 @@ d_inline static void glPopClientAttrib_DEBUG(const char* file, int line) {
 	dglLogError("glPopClientAttrib", file, line);
 }
 
-d_inline static void glPopMatrix_DEBUG(const char* file, int line) {
+SDL_INLINE static void glPopMatrix_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPopMatrix()\n", file, line);
 #endif
@@ -2032,7 +2031,7 @@ d_inline static void glPopMatrix_DEBUG(const char* file, int line) {
 	dglLogError("glPopMatrix", file, line);
 }
 
-d_inline static void glPopName_DEBUG(const char* file, int line) {
+SDL_INLINE static void glPopName_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPopName()\n", file, line);
 #endif
@@ -2040,7 +2039,7 @@ d_inline static void glPopName_DEBUG(const char* file, int line) {
 	dglLogError("glPopName", file, line);
 }
 
-d_inline static void glPrioritizeTextures_DEBUG(GLsizei n, GLuint* textures, GLclampf* priorities, const char* file, int line) {
+SDL_INLINE static void glPrioritizeTextures_DEBUG(GLsizei n, GLuint* textures, GLclampf* priorities, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPrioritizeTextures(n=0x%x, textures=%p, priorities=%p)\n", file, line, n, textures, priorities);
 #endif
@@ -2048,7 +2047,7 @@ d_inline static void glPrioritizeTextures_DEBUG(GLsizei n, GLuint* textures, GLc
 	dglLogError("glPrioritizeTextures", file, line);
 }
 
-d_inline static void glPushAttrib_DEBUG(GLbitfield mask, const char* file, int line) {
+SDL_INLINE static void glPushAttrib_DEBUG(GLbitfield mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPushAttrib(mask=0x%x)\n", file, line, mask);
 #endif
@@ -2056,7 +2055,7 @@ d_inline static void glPushAttrib_DEBUG(GLbitfield mask, const char* file, int l
 	dglLogError("glPushAttrib", file, line);
 }
 
-d_inline static void glPushClientAttrib_DEBUG(GLbitfield mask, const char* file, int line) {
+SDL_INLINE static void glPushClientAttrib_DEBUG(GLbitfield mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPushClientAttrib(mask=0x%x)\n", file, line, mask);
 #endif
@@ -2064,7 +2063,7 @@ d_inline static void glPushClientAttrib_DEBUG(GLbitfield mask, const char* file,
 	dglLogError("glPushClientAttrib", file, line);
 }
 
-d_inline static void glPushMatrix_DEBUG(const char* file, int line) {
+SDL_INLINE static void glPushMatrix_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPushMatrix()\n", file, line);
 #endif
@@ -2072,7 +2071,7 @@ d_inline static void glPushMatrix_DEBUG(const char* file, int line) {
 	dglLogError("glPushMatrix", file, line);
 }
 
-d_inline static void glPushName_DEBUG(GLuint name, const char* file, int line) {
+SDL_INLINE static void glPushName_DEBUG(GLuint name, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glPushName(name=%i)\n", file, line, name);
 #endif
@@ -2080,7 +2079,7 @@ d_inline static void glPushName_DEBUG(GLuint name, const char* file, int line) {
 	dglLogError("glPushName", file, line);
 }
 
-d_inline static void glRasterPos2d_DEBUG(GLdouble x, GLdouble y, const char* file, int line) {
+SDL_INLINE static void glRasterPos2d_DEBUG(GLdouble x, GLdouble y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2d(x=%f, y=%f)\n", file, line, x, y);
 #endif
@@ -2088,7 +2087,7 @@ d_inline static void glRasterPos2d_DEBUG(GLdouble x, GLdouble y, const char* fil
 	dglLogError("glRasterPos2d", file, line);
 }
 
-d_inline static void glRasterPos2dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos2dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2dv(v=%p)\n", file, line, v);
 #endif
@@ -2096,7 +2095,7 @@ d_inline static void glRasterPos2dv_DEBUG(GLdouble* v, const char* file, int lin
 	dglLogError("glRasterPos2dv", file, line);
 }
 
-d_inline static void glRasterPos2f_DEBUG(GLfloat x, GLfloat y, const char* file, int line) {
+SDL_INLINE static void glRasterPos2f_DEBUG(GLfloat x, GLfloat y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2f(x=%f, y=%f)\n", file, line, x, y);
 #endif
@@ -2104,7 +2103,7 @@ d_inline static void glRasterPos2f_DEBUG(GLfloat x, GLfloat y, const char* file,
 	dglLogError("glRasterPos2f", file, line);
 }
 
-d_inline static void glRasterPos2fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos2fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2fv(v=%p)\n", file, line, v);
 #endif
@@ -2112,7 +2111,7 @@ d_inline static void glRasterPos2fv_DEBUG(GLfloat* v, const char* file, int line
 	dglLogError("glRasterPos2fv", file, line);
 }
 
-d_inline static void glRasterPos2i_DEBUG(GLint x, GLint y, const char* file, int line) {
+SDL_INLINE static void glRasterPos2i_DEBUG(GLint x, GLint y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2i(x=%i, y=%i)\n", file, line, x, y);
 #endif
@@ -2120,7 +2119,7 @@ d_inline static void glRasterPos2i_DEBUG(GLint x, GLint y, const char* file, int
 	dglLogError("glRasterPos2i", file, line);
 }
 
-d_inline static void glRasterPos2iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos2iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2iv(v=%p)\n", file, line, v);
 #endif
@@ -2128,7 +2127,7 @@ d_inline static void glRasterPos2iv_DEBUG(GLint* v, const char* file, int line) 
 	dglLogError("glRasterPos2iv", file, line);
 }
 
-d_inline static void glRasterPos2s_DEBUG(GLshort x, GLshort y, const char* file, int line) {
+SDL_INLINE static void glRasterPos2s_DEBUG(GLshort x, GLshort y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2s(x=%i, y=%i)\n", file, line, x, y);
 #endif
@@ -2136,7 +2135,7 @@ d_inline static void glRasterPos2s_DEBUG(GLshort x, GLshort y, const char* file,
 	dglLogError("glRasterPos2s", file, line);
 }
 
-d_inline static void glRasterPos2sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos2sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos2sv(v=%p)\n", file, line, v);
 #endif
@@ -2144,7 +2143,7 @@ d_inline static void glRasterPos2sv_DEBUG(GLshort* v, const char* file, int line
 	dglLogError("glRasterPos2sv", file, line);
 }
 
-d_inline static void glRasterPos3d_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
+SDL_INLINE static void glRasterPos3d_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3d(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2152,7 +2151,7 @@ d_inline static void glRasterPos3d_DEBUG(GLdouble x, GLdouble y, GLdouble z, con
 	dglLogError("glRasterPos3d", file, line);
 }
 
-d_inline static void glRasterPos3dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos3dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3dv(v=%p)\n", file, line, v);
 #endif
@@ -2160,7 +2159,7 @@ d_inline static void glRasterPos3dv_DEBUG(GLdouble* v, const char* file, int lin
 	dglLogError("glRasterPos3dv", file, line);
 }
 
-d_inline static void glRasterPos3f_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
+SDL_INLINE static void glRasterPos3f_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3f(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2168,7 +2167,7 @@ d_inline static void glRasterPos3f_DEBUG(GLfloat x, GLfloat y, GLfloat z, const 
 	dglLogError("glRasterPos3f", file, line);
 }
 
-d_inline static void glRasterPos3fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos3fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3fv(v=%p)\n", file, line, v);
 #endif
@@ -2176,7 +2175,7 @@ d_inline static void glRasterPos3fv_DEBUG(GLfloat* v, const char* file, int line
 	dglLogError("glRasterPos3fv", file, line);
 }
 
-d_inline static void glRasterPos3i_DEBUG(GLint x, GLint y, GLint z, const char* file, int line) {
+SDL_INLINE static void glRasterPos3i_DEBUG(GLint x, GLint y, GLint z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3i(x=%i, y=%i, z=%i)\n", file, line, x, y, z);
 #endif
@@ -2184,7 +2183,7 @@ d_inline static void glRasterPos3i_DEBUG(GLint x, GLint y, GLint z, const char* 
 	dglLogError("glRasterPos3i", file, line);
 }
 
-d_inline static void glRasterPos3iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos3iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3iv(v=%p)\n", file, line, v);
 #endif
@@ -2192,7 +2191,7 @@ d_inline static void glRasterPos3iv_DEBUG(GLint* v, const char* file, int line) 
 	dglLogError("glRasterPos3iv", file, line);
 }
 
-d_inline static void glRasterPos3s_DEBUG(GLshort x, GLshort y, GLshort z, const char* file, int line) {
+SDL_INLINE static void glRasterPos3s_DEBUG(GLshort x, GLshort y, GLshort z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3s(x=%i, y=%i, z=%i)\n", file, line, x, y, z);
 #endif
@@ -2200,7 +2199,7 @@ d_inline static void glRasterPos3s_DEBUG(GLshort x, GLshort y, GLshort z, const 
 	dglLogError("glRasterPos3s", file, line);
 }
 
-d_inline static void glRasterPos3sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos3sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos3sv(v=%p)\n", file, line, v);
 #endif
@@ -2208,7 +2207,7 @@ d_inline static void glRasterPos3sv_DEBUG(GLshort* v, const char* file, int line
 	dglLogError("glRasterPos3sv", file, line);
 }
 
-d_inline static void glRasterPos4d_DEBUG(GLdouble x, GLdouble y, GLdouble z, GLdouble w, const char* file, int line) {
+SDL_INLINE static void glRasterPos4d_DEBUG(GLdouble x, GLdouble y, GLdouble z, GLdouble w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4d(x=%f, y=%f, z=%f, w=%f)\n", file, line, x, y, z, w);
 #endif
@@ -2216,7 +2215,7 @@ d_inline static void glRasterPos4d_DEBUG(GLdouble x, GLdouble y, GLdouble z, GLd
 	dglLogError("glRasterPos4d", file, line);
 }
 
-d_inline static void glRasterPos4dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos4dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4dv(v=%p)\n", file, line, v);
 #endif
@@ -2224,7 +2223,7 @@ d_inline static void glRasterPos4dv_DEBUG(GLdouble* v, const char* file, int lin
 	dglLogError("glRasterPos4dv", file, line);
 }
 
-d_inline static void glRasterPos4f_DEBUG(GLfloat x, GLfloat y, GLfloat z, GLfloat w, const char* file, int line) {
+SDL_INLINE static void glRasterPos4f_DEBUG(GLfloat x, GLfloat y, GLfloat z, GLfloat w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4f(x=%f, y=%f, z=%f, w=%f)\n", file, line, x, y, z, w);
 #endif
@@ -2232,7 +2231,7 @@ d_inline static void glRasterPos4f_DEBUG(GLfloat x, GLfloat y, GLfloat z, GLfloa
 	dglLogError("glRasterPos4f", file, line);
 }
 
-d_inline static void glRasterPos4fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos4fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4fv(v=%p)\n", file, line, v);
 #endif
@@ -2240,7 +2239,7 @@ d_inline static void glRasterPos4fv_DEBUG(GLfloat* v, const char* file, int line
 	dglLogError("glRasterPos4fv", file, line);
 }
 
-d_inline static void glRasterPos4i_DEBUG(GLint x, GLint y, GLint z, GLint w, const char* file, int line) {
+SDL_INLINE static void glRasterPos4i_DEBUG(GLint x, GLint y, GLint z, GLint w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4i(x=%i, y=%i, z=%i, w=%i)\n", file, line, x, y, z, w);
 #endif
@@ -2248,7 +2247,7 @@ d_inline static void glRasterPos4i_DEBUG(GLint x, GLint y, GLint z, GLint w, con
 	dglLogError("glRasterPos4i", file, line);
 }
 
-d_inline static void glRasterPos4iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos4iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4iv(v=%p)\n", file, line, v);
 #endif
@@ -2256,7 +2255,7 @@ d_inline static void glRasterPos4iv_DEBUG(GLint* v, const char* file, int line) 
 	dglLogError("glRasterPos4iv", file, line);
 }
 
-d_inline static void glRasterPos4s_DEBUG(GLshort x, GLshort y, GLshort z, GLshort w, const char* file, int line) {
+SDL_INLINE static void glRasterPos4s_DEBUG(GLshort x, GLshort y, GLshort z, GLshort w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4s(x=%i, y=%i, z=%i, w=%i)\n", file, line, x, y, z, w);
 #endif
@@ -2264,7 +2263,7 @@ d_inline static void glRasterPos4s_DEBUG(GLshort x, GLshort y, GLshort z, GLshor
 	dglLogError("glRasterPos4s", file, line);
 }
 
-d_inline static void glRasterPos4sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glRasterPos4sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRasterPos4sv(v=%p)\n", file, line, v);
 #endif
@@ -2272,7 +2271,7 @@ d_inline static void glRasterPos4sv_DEBUG(GLshort* v, const char* file, int line
 	dglLogError("glRasterPos4sv", file, line);
 }
 
-d_inline static void glReadBuffer_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glReadBuffer_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glReadBuffer(mode=0x%x)\n", file, line, mode);
 #endif
@@ -2280,7 +2279,7 @@ d_inline static void glReadBuffer_DEBUG(GLenum mode, const char* file, int line)
 	dglLogError("glReadBuffer", file, line);
 }
 
-d_inline static void glReadPixels_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glReadPixels_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glReadPixels(x=%i, y=%i, width=0x%x, height=0x%x, format=0x%x, type=0x%x, pixels=%p)\n", file, line, x, y, width, height, format, type, pixels);
 #endif
@@ -2288,7 +2287,7 @@ d_inline static void glReadPixels_DEBUG(GLint x, GLint y, GLsizei width, GLsizei
 	dglLogError("glReadPixels", file, line);
 }
 
-d_inline static void glRectd_DEBUG(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2, const char* file, int line) {
+SDL_INLINE static void glRectd_DEBUG(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRectd(x1=%f, y1=%f, x2=%f, y2=%f)\n", file, line, x1, y1, x2, y2);
 #endif
@@ -2296,7 +2295,7 @@ d_inline static void glRectd_DEBUG(GLdouble x1, GLdouble y1, GLdouble x2, GLdoub
 	dglLogError("glRectd", file, line);
 }
 
-d_inline static void glRectdv_DEBUG(GLdouble* v1, GLdouble* v2, const char* file, int line) {
+SDL_INLINE static void glRectdv_DEBUG(GLdouble* v1, GLdouble* v2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRectdv(v1=%p, v2=%p)\n", file, line, v1, v2);
 #endif
@@ -2304,7 +2303,7 @@ d_inline static void glRectdv_DEBUG(GLdouble* v1, GLdouble* v2, const char* file
 	dglLogError("glRectdv", file, line);
 }
 
-d_inline static void glRectf_DEBUG(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, const char* file, int line) {
+SDL_INLINE static void glRectf_DEBUG(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRectf(x1=%f, y1=%f, x2=%f, y2=%f)\n", file, line, x1, y1, x2, y2);
 #endif
@@ -2312,7 +2311,7 @@ d_inline static void glRectf_DEBUG(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y
 	dglLogError("glRectf", file, line);
 }
 
-d_inline static void glRectfv_DEBUG(GLfloat* v1, GLfloat* v2, const char* file, int line) {
+SDL_INLINE static void glRectfv_DEBUG(GLfloat* v1, GLfloat* v2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRectfv(v1=%p, v2=%p)\n", file, line, v1, v2);
 #endif
@@ -2320,7 +2319,7 @@ d_inline static void glRectfv_DEBUG(GLfloat* v1, GLfloat* v2, const char* file, 
 	dglLogError("glRectfv", file, line);
 }
 
-d_inline static void glRecti_DEBUG(GLint x1, GLint y1, GLint x2, GLint y2, const char* file, int line) {
+SDL_INLINE static void glRecti_DEBUG(GLint x1, GLint y1, GLint x2, GLint y2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRecti(x1=%i, y1=%i, x2=%i, y2=%i)\n", file, line, x1, y1, x2, y2);
 #endif
@@ -2328,7 +2327,7 @@ d_inline static void glRecti_DEBUG(GLint x1, GLint y1, GLint x2, GLint y2, const
 	dglLogError("glRecti", file, line);
 }
 
-d_inline static void glRectiv_DEBUG(GLint* v1, GLint* v2, const char* file, int line) {
+SDL_INLINE static void glRectiv_DEBUG(GLint* v1, GLint* v2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRectiv(v1=%p, v2=%p)\n", file, line, v1, v2);
 #endif
@@ -2336,7 +2335,7 @@ d_inline static void glRectiv_DEBUG(GLint* v1, GLint* v2, const char* file, int 
 	dglLogError("glRectiv", file, line);
 }
 
-d_inline static void glRects_DEBUG(GLshort x1, GLshort y1, GLshort x2, GLshort y2, const char* file, int line) {
+SDL_INLINE static void glRects_DEBUG(GLshort x1, GLshort y1, GLshort x2, GLshort y2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRects(x1=%i, y1=%i, x2=%i, y2=%i)\n", file, line, x1, y1, x2, y2);
 #endif
@@ -2344,7 +2343,7 @@ d_inline static void glRects_DEBUG(GLshort x1, GLshort y1, GLshort x2, GLshort y
 	dglLogError("glRects", file, line);
 }
 
-d_inline static void glRectsv_DEBUG(GLshort* v1, GLshort* v2, const char* file, int line) {
+SDL_INLINE static void glRectsv_DEBUG(GLshort* v1, GLshort* v2, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRectsv(v1=%p, v2=%p)\n", file, line, v1, v2);
 #endif
@@ -2352,7 +2351,7 @@ d_inline static void glRectsv_DEBUG(GLshort* v1, GLshort* v2, const char* file, 
 	dglLogError("glRectsv", file, line);
 }
 
-d_inline static GLint glRenderMode_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static GLint glRenderMode_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRenderMode(mode=0x%x)\n", file, line, mode);
 #endif
@@ -2360,7 +2359,7 @@ d_inline static GLint glRenderMode_DEBUG(GLenum mode, const char* file, int line
 	dglLogError("glRenderMode", file, line);
 }
 
-d_inline static void glRotated_DEBUG(GLdouble angle, GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
+SDL_INLINE static void glRotated_DEBUG(GLdouble angle, GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRotated(angle=%f, x=%f, y=%f, z=%f)\n", file, line, angle, x, y, z);
 #endif
@@ -2368,7 +2367,7 @@ d_inline static void glRotated_DEBUG(GLdouble angle, GLdouble x, GLdouble y, GLd
 	dglLogError("glRotated", file, line);
 }
 
-d_inline static void glRotatef_DEBUG(GLfloat angle, GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
+SDL_INLINE static void glRotatef_DEBUG(GLfloat angle, GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glRotatef(angle=%f, x=%f, y=%f, z=%f)\n", file, line, angle, x, y, z);
 #endif
@@ -2376,7 +2375,7 @@ d_inline static void glRotatef_DEBUG(GLfloat angle, GLfloat x, GLfloat y, GLfloa
 	dglLogError("glRotatef", file, line);
 }
 
-d_inline static void glScaled_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
+SDL_INLINE static void glScaled_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glScaled(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2384,7 +2383,7 @@ d_inline static void glScaled_DEBUG(GLdouble x, GLdouble y, GLdouble z, const ch
 	dglLogError("glScaled", file, line);
 }
 
-d_inline static void glScalef_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
+SDL_INLINE static void glScalef_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glScalef(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2392,7 +2391,7 @@ d_inline static void glScalef_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char*
 	dglLogError("glScalef", file, line);
 }
 
-d_inline static void glScissor_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, const char* file, int line) {
+SDL_INLINE static void glScissor_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glScissor(x=%i, y=%i, width=0x%x, height=0x%x)\n", file, line, x, y, width, height);
 #endif
@@ -2400,7 +2399,7 @@ d_inline static void glScissor_DEBUG(GLint x, GLint y, GLsizei width, GLsizei he
 	dglLogError("glScissor", file, line);
 }
 
-d_inline static void glSelectBuffer_DEBUG(GLsizei size, GLuint* buffer, const char* file, int line) {
+SDL_INLINE static void glSelectBuffer_DEBUG(GLsizei size, GLuint* buffer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glSelectBuffer(size=0x%x, buffer=%p)\n", file, line, size, buffer);
 #endif
@@ -2408,7 +2407,7 @@ d_inline static void glSelectBuffer_DEBUG(GLsizei size, GLuint* buffer, const ch
 	dglLogError("glSelectBuffer", file, line);
 }
 
-d_inline static void glShadeModel_DEBUG(GLenum mode, const char* file, int line) {
+SDL_INLINE static void glShadeModel_DEBUG(GLenum mode, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glShadeModel(mode=0x%x)\n", file, line, mode);
 #endif
@@ -2416,7 +2415,7 @@ d_inline static void glShadeModel_DEBUG(GLenum mode, const char* file, int line)
 	dglLogError("glShadeModel", file, line);
 }
 
-d_inline static void glStencilFunc_DEBUG(GLenum func, GLint ref, GLuint mask, const char* file, int line) {
+SDL_INLINE static void glStencilFunc_DEBUG(GLenum func, GLint ref, GLuint mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glStencilFunc(func=0x%x, ref=%i, mask=%i)\n", file, line, func, ref, mask);
 #endif
@@ -2424,7 +2423,7 @@ d_inline static void glStencilFunc_DEBUG(GLenum func, GLint ref, GLuint mask, co
 	dglLogError("glStencilFunc", file, line);
 }
 
-d_inline static void glStencilMask_DEBUG(GLuint mask, const char* file, int line) {
+SDL_INLINE static void glStencilMask_DEBUG(GLuint mask, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glStencilMask(mask=%i)\n", file, line, mask);
 #endif
@@ -2432,7 +2431,7 @@ d_inline static void glStencilMask_DEBUG(GLuint mask, const char* file, int line
 	dglLogError("glStencilMask", file, line);
 }
 
-d_inline static void glStencilOp_DEBUG(GLenum fail, GLenum zfail, GLenum zpass, const char* file, int line) {
+SDL_INLINE static void glStencilOp_DEBUG(GLenum fail, GLenum zfail, GLenum zpass, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glStencilOp(fail=0x%x, zfail=0x%x, zpass=0x%x)\n", file, line, fail, zfail, zpass);
 #endif
@@ -2440,7 +2439,7 @@ d_inline static void glStencilOp_DEBUG(GLenum fail, GLenum zfail, GLenum zpass, 
 	dglLogError("glStencilOp", file, line);
 }
 
-d_inline static void glTexCoord1d_DEBUG(GLdouble s, const char* file, int line) {
+SDL_INLINE static void glTexCoord1d_DEBUG(GLdouble s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1d(s=%f)\n", file, line, s);
 #endif
@@ -2448,7 +2447,7 @@ d_inline static void glTexCoord1d_DEBUG(GLdouble s, const char* file, int line) 
 	dglLogError("glTexCoord1d", file, line);
 }
 
-d_inline static void glTexCoord1dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord1dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1dv(v=%p)\n", file, line, v);
 #endif
@@ -2456,7 +2455,7 @@ d_inline static void glTexCoord1dv_DEBUG(GLdouble* v, const char* file, int line
 	dglLogError("glTexCoord1dv", file, line);
 }
 
-d_inline static void glTexCoord1f_DEBUG(GLfloat s, const char* file, int line) {
+SDL_INLINE static void glTexCoord1f_DEBUG(GLfloat s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1f(s=%f)\n", file, line, s);
 #endif
@@ -2464,7 +2463,7 @@ d_inline static void glTexCoord1f_DEBUG(GLfloat s, const char* file, int line) {
 	dglLogError("glTexCoord1f", file, line);
 }
 
-d_inline static void glTexCoord1fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord1fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1fv(v=%p)\n", file, line, v);
 #endif
@@ -2472,7 +2471,7 @@ d_inline static void glTexCoord1fv_DEBUG(GLfloat* v, const char* file, int line)
 	dglLogError("glTexCoord1fv", file, line);
 }
 
-d_inline static void glTexCoord1i_DEBUG(GLint s, const char* file, int line) {
+SDL_INLINE static void glTexCoord1i_DEBUG(GLint s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1i(s=%i)\n", file, line, s);
 #endif
@@ -2480,7 +2479,7 @@ d_inline static void glTexCoord1i_DEBUG(GLint s, const char* file, int line) {
 	dglLogError("glTexCoord1i", file, line);
 }
 
-d_inline static void glTexCoord1iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord1iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1iv(v=%p)\n", file, line, v);
 #endif
@@ -2488,7 +2487,7 @@ d_inline static void glTexCoord1iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glTexCoord1iv", file, line);
 }
 
-d_inline static void glTexCoord1s_DEBUG(GLshort s, const char* file, int line) {
+SDL_INLINE static void glTexCoord1s_DEBUG(GLshort s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1s(s=%i)\n", file, line, s);
 #endif
@@ -2496,7 +2495,7 @@ d_inline static void glTexCoord1s_DEBUG(GLshort s, const char* file, int line) {
 	dglLogError("glTexCoord1s", file, line);
 }
 
-d_inline static void glTexCoord1sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord1sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord1sv(v=%p)\n", file, line, v);
 #endif
@@ -2504,7 +2503,7 @@ d_inline static void glTexCoord1sv_DEBUG(GLshort* v, const char* file, int line)
 	dglLogError("glTexCoord1sv", file, line);
 }
 
-d_inline static void glTexCoord2d_DEBUG(GLdouble s, GLdouble t, const char* file, int line) {
+SDL_INLINE static void glTexCoord2d_DEBUG(GLdouble s, GLdouble t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2d(s=%f, t=%f)\n", file, line, s, t);
 #endif
@@ -2512,7 +2511,7 @@ d_inline static void glTexCoord2d_DEBUG(GLdouble s, GLdouble t, const char* file
 	dglLogError("glTexCoord2d", file, line);
 }
 
-d_inline static void glTexCoord2dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord2dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2dv(v=%p)\n", file, line, v);
 #endif
@@ -2520,7 +2519,7 @@ d_inline static void glTexCoord2dv_DEBUG(GLdouble* v, const char* file, int line
 	dglLogError("glTexCoord2dv", file, line);
 }
 
-d_inline static void glTexCoord2f_DEBUG(GLfloat s, GLfloat t, const char* file, int line) {
+SDL_INLINE static void glTexCoord2f_DEBUG(GLfloat s, GLfloat t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2f(s=%f, t=%f)\n", file, line, s, t);
 #endif
@@ -2528,7 +2527,7 @@ d_inline static void glTexCoord2f_DEBUG(GLfloat s, GLfloat t, const char* file, 
 	dglLogError("glTexCoord2f", file, line);
 }
 
-d_inline static void glTexCoord2fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord2fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2fv(v=%p)\n", file, line, v);
 #endif
@@ -2536,7 +2535,7 @@ d_inline static void glTexCoord2fv_DEBUG(GLfloat* v, const char* file, int line)
 	dglLogError("glTexCoord2fv", file, line);
 }
 
-d_inline static void glTexCoord2i_DEBUG(GLint s, GLint t, const char* file, int line) {
+SDL_INLINE static void glTexCoord2i_DEBUG(GLint s, GLint t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2i(s=%i, t=%i)\n", file, line, s, t);
 #endif
@@ -2544,7 +2543,7 @@ d_inline static void glTexCoord2i_DEBUG(GLint s, GLint t, const char* file, int 
 	dglLogError("glTexCoord2i", file, line);
 }
 
-d_inline static void glTexCoord2iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord2iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2iv(v=%p)\n", file, line, v);
 #endif
@@ -2552,7 +2551,7 @@ d_inline static void glTexCoord2iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glTexCoord2iv", file, line);
 }
 
-d_inline static void glTexCoord2s_DEBUG(GLshort s, GLshort t, const char* file, int line) {
+SDL_INLINE static void glTexCoord2s_DEBUG(GLshort s, GLshort t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2s(s=%i, t=%i)\n", file, line, s, t);
 #endif
@@ -2560,7 +2559,7 @@ d_inline static void glTexCoord2s_DEBUG(GLshort s, GLshort t, const char* file, 
 	dglLogError("glTexCoord2s", file, line);
 }
 
-d_inline static void glTexCoord2sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord2sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord2sv(v=%p)\n", file, line, v);
 #endif
@@ -2568,7 +2567,7 @@ d_inline static void glTexCoord2sv_DEBUG(GLshort* v, const char* file, int line)
 	dglLogError("glTexCoord2sv", file, line);
 }
 
-d_inline static void glTexCoord3d_DEBUG(GLdouble s, GLdouble t, GLdouble r, const char* file, int line) {
+SDL_INLINE static void glTexCoord3d_DEBUG(GLdouble s, GLdouble t, GLdouble r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3d(s=%f, t=%f, r=%f)\n", file, line, s, t, r);
 #endif
@@ -2576,7 +2575,7 @@ d_inline static void glTexCoord3d_DEBUG(GLdouble s, GLdouble t, GLdouble r, cons
 	dglLogError("glTexCoord3d", file, line);
 }
 
-d_inline static void glTexCoord3dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord3dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3dv(v=%p)\n", file, line, v);
 #endif
@@ -2584,7 +2583,7 @@ d_inline static void glTexCoord3dv_DEBUG(GLdouble* v, const char* file, int line
 	dglLogError("glTexCoord3dv", file, line);
 }
 
-d_inline static void glTexCoord3f_DEBUG(GLfloat s, GLfloat t, GLfloat r, const char* file, int line) {
+SDL_INLINE static void glTexCoord3f_DEBUG(GLfloat s, GLfloat t, GLfloat r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3f(s=%f, t=%f, r=%f)\n", file, line, s, t, r);
 #endif
@@ -2592,7 +2591,7 @@ d_inline static void glTexCoord3f_DEBUG(GLfloat s, GLfloat t, GLfloat r, const c
 	dglLogError("glTexCoord3f", file, line);
 }
 
-d_inline static void glTexCoord3fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord3fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3fv(v=%p)\n", file, line, v);
 #endif
@@ -2600,7 +2599,7 @@ d_inline static void glTexCoord3fv_DEBUG(GLfloat* v, const char* file, int line)
 	dglLogError("glTexCoord3fv", file, line);
 }
 
-d_inline static void glTexCoord3i_DEBUG(GLint s, GLint t, GLint r, const char* file, int line) {
+SDL_INLINE static void glTexCoord3i_DEBUG(GLint s, GLint t, GLint r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3i(s=%i, t=%i, r=%i)\n", file, line, s, t, r);
 #endif
@@ -2608,7 +2607,7 @@ d_inline static void glTexCoord3i_DEBUG(GLint s, GLint t, GLint r, const char* f
 	dglLogError("glTexCoord3i", file, line);
 }
 
-d_inline static void glTexCoord3iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord3iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3iv(v=%p)\n", file, line, v);
 #endif
@@ -2616,7 +2615,7 @@ d_inline static void glTexCoord3iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glTexCoord3iv", file, line);
 }
 
-d_inline static void glTexCoord3s_DEBUG(GLshort s, GLshort t, GLshort r, const char* file, int line) {
+SDL_INLINE static void glTexCoord3s_DEBUG(GLshort s, GLshort t, GLshort r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3s(s=%i, t=%i, r=%i)\n", file, line, s, t, r);
 #endif
@@ -2624,7 +2623,7 @@ d_inline static void glTexCoord3s_DEBUG(GLshort s, GLshort t, GLshort r, const c
 	dglLogError("glTexCoord3s", file, line);
 }
 
-d_inline static void glTexCoord3sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord3sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord3sv(v=%p)\n", file, line, v);
 #endif
@@ -2632,7 +2631,7 @@ d_inline static void glTexCoord3sv_DEBUG(GLshort* v, const char* file, int line)
 	dglLogError("glTexCoord3sv", file, line);
 }
 
-d_inline static void glTexCoord4d_DEBUG(GLdouble s, GLdouble t, GLdouble r, GLdouble q, const char* file, int line) {
+SDL_INLINE static void glTexCoord4d_DEBUG(GLdouble s, GLdouble t, GLdouble r, GLdouble q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4d(s=%f, t=%f, r=%f, q=%f)\n", file, line, s, t, r, q);
 #endif
@@ -2640,7 +2639,7 @@ d_inline static void glTexCoord4d_DEBUG(GLdouble s, GLdouble t, GLdouble r, GLdo
 	dglLogError("glTexCoord4d", file, line);
 }
 
-d_inline static void glTexCoord4dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord4dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4dv(v=%p)\n", file, line, v);
 #endif
@@ -2648,7 +2647,7 @@ d_inline static void glTexCoord4dv_DEBUG(GLdouble* v, const char* file, int line
 	dglLogError("glTexCoord4dv", file, line);
 }
 
-d_inline static void glTexCoord4f_DEBUG(GLfloat s, GLfloat t, GLfloat r, GLfloat q, const char* file, int line) {
+SDL_INLINE static void glTexCoord4f_DEBUG(GLfloat s, GLfloat t, GLfloat r, GLfloat q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4f(s=%f, t=%f, r=%f, q=%f)\n", file, line, s, t, r, q);
 #endif
@@ -2656,7 +2655,7 @@ d_inline static void glTexCoord4f_DEBUG(GLfloat s, GLfloat t, GLfloat r, GLfloat
 	dglLogError("glTexCoord4f", file, line);
 }
 
-d_inline static void glTexCoord4fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord4fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4fv(v=%p)\n", file, line, v);
 #endif
@@ -2664,7 +2663,7 @@ d_inline static void glTexCoord4fv_DEBUG(GLfloat* v, const char* file, int line)
 	dglLogError("glTexCoord4fv", file, line);
 }
 
-d_inline static void glTexCoord4i_DEBUG(GLint s, GLint t, GLint r, GLint q, const char* file, int line) {
+SDL_INLINE static void glTexCoord4i_DEBUG(GLint s, GLint t, GLint r, GLint q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4i(s=%i, t=%i, r=%i, q=%i)\n", file, line, s, t, r, q);
 #endif
@@ -2672,7 +2671,7 @@ d_inline static void glTexCoord4i_DEBUG(GLint s, GLint t, GLint r, GLint q, cons
 	dglLogError("glTexCoord4i", file, line);
 }
 
-d_inline static void glTexCoord4iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord4iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4iv(v=%p)\n", file, line, v);
 #endif
@@ -2680,7 +2679,7 @@ d_inline static void glTexCoord4iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glTexCoord4iv", file, line);
 }
 
-d_inline static void glTexCoord4s_DEBUG(GLshort s, GLshort t, GLshort r, GLshort q, const char* file, int line) {
+SDL_INLINE static void glTexCoord4s_DEBUG(GLshort s, GLshort t, GLshort r, GLshort q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4s(s=%i, t=%i, r=%i, q=%i)\n", file, line, s, t, r, q);
 #endif
@@ -2688,7 +2687,7 @@ d_inline static void glTexCoord4s_DEBUG(GLshort s, GLshort t, GLshort r, GLshort
 	dglLogError("glTexCoord4s", file, line);
 }
 
-d_inline static void glTexCoord4sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glTexCoord4sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoord4sv(v=%p)\n", file, line, v);
 #endif
@@ -2696,7 +2695,7 @@ d_inline static void glTexCoord4sv_DEBUG(GLshort* v, const char* file, int line)
 	dglLogError("glTexCoord4sv", file, line);
 }
 
-d_inline static void glTexCoordPointer_DEBUG(GLint size, GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glTexCoordPointer_DEBUG(GLint size, GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexCoordPointer(size=%i, type=0x%x, stride=0x%x, pointer=%p)\n", file, line, size, type, stride, pointer);
 #endif
@@ -2704,7 +2703,7 @@ d_inline static void glTexCoordPointer_DEBUG(GLint size, GLenum type, GLsizei st
 	dglLogError("glTexCoordPointer", file, line);
 }
 
-d_inline static void glTexEnvf_DEBUG(GLenum target, GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glTexEnvf_DEBUG(GLenum target, GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexEnvf(target=0x%x, pname=0x%x, param=%f)\n", file, line, target, pname, param);
 #endif
@@ -2712,7 +2711,7 @@ d_inline static void glTexEnvf_DEBUG(GLenum target, GLenum pname, GLfloat param,
 	dglLogError("glTexEnvf", file, line);
 }
 
-d_inline static void glTexEnvfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glTexEnvfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexEnvfv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -2720,7 +2719,7 @@ d_inline static void glTexEnvfv_DEBUG(GLenum target, GLenum pname, GLfloat* para
 	dglLogError("glTexEnvfv", file, line);
 }
 
-d_inline static void glTexEnvi_DEBUG(GLenum target, GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glTexEnvi_DEBUG(GLenum target, GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexEnvi(target=0x%x, pname=0x%x, param=%i)\n", file, line, target, pname, param);
 #endif
@@ -2728,7 +2727,7 @@ d_inline static void glTexEnvi_DEBUG(GLenum target, GLenum pname, GLint param, c
 	dglLogError("glTexEnvi", file, line);
 }
 
-d_inline static void glTexEnviv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glTexEnviv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexEnviv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -2736,7 +2735,7 @@ d_inline static void glTexEnviv_DEBUG(GLenum target, GLenum pname, GLint* params
 	dglLogError("glTexEnviv", file, line);
 }
 
-d_inline static void glTexGend_DEBUG(GLenum coord, GLenum pname, GLdouble param, const char* file, int line) {
+SDL_INLINE static void glTexGend_DEBUG(GLenum coord, GLenum pname, GLdouble param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexGend(coord=0x%x, pname=0x%x, param=%f)\n", file, line, coord, pname, param);
 #endif
@@ -2744,7 +2743,7 @@ d_inline static void glTexGend_DEBUG(GLenum coord, GLenum pname, GLdouble param,
 	dglLogError("glTexGend", file, line);
 }
 
-d_inline static void glTexGendv_DEBUG(GLenum coord, GLenum pname, GLdouble* params, const char* file, int line) {
+SDL_INLINE static void glTexGendv_DEBUG(GLenum coord, GLenum pname, GLdouble* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexGendv(coord=0x%x, pname=0x%x, params=%p)\n", file, line, coord, pname, params);
 #endif
@@ -2752,7 +2751,7 @@ d_inline static void glTexGendv_DEBUG(GLenum coord, GLenum pname, GLdouble* para
 	dglLogError("glTexGendv", file, line);
 }
 
-d_inline static void glTexGenf_DEBUG(GLenum coord, GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glTexGenf_DEBUG(GLenum coord, GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexGenf(coord=0x%x, pname=0x%x, param=%f)\n", file, line, coord, pname, param);
 #endif
@@ -2760,7 +2759,7 @@ d_inline static void glTexGenf_DEBUG(GLenum coord, GLenum pname, GLfloat param, 
 	dglLogError("glTexGenf", file, line);
 }
 
-d_inline static void glTexGenfv_DEBUG(GLenum coord, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glTexGenfv_DEBUG(GLenum coord, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexGenfv(coord=0x%x, pname=0x%x, params=%p)\n", file, line, coord, pname, params);
 #endif
@@ -2768,7 +2767,7 @@ d_inline static void glTexGenfv_DEBUG(GLenum coord, GLenum pname, GLfloat* param
 	dglLogError("glTexGenfv", file, line);
 }
 
-d_inline static void glTexGeni_DEBUG(GLenum coord, GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glTexGeni_DEBUG(GLenum coord, GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexGeni(coord=0x%x, pname=0x%x, param=%i)\n", file, line, coord, pname, param);
 #endif
@@ -2776,7 +2775,7 @@ d_inline static void glTexGeni_DEBUG(GLenum coord, GLenum pname, GLint param, co
 	dglLogError("glTexGeni", file, line);
 }
 
-d_inline static void glTexGeniv_DEBUG(GLenum coord, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glTexGeniv_DEBUG(GLenum coord, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexGeniv(coord=0x%x, pname=0x%x, params=%p)\n", file, line, coord, pname, params);
 #endif
@@ -2784,7 +2783,7 @@ d_inline static void glTexGeniv_DEBUG(GLenum coord, GLenum pname, GLint* params,
 	dglLogError("glTexGeniv", file, line);
 }
 
-d_inline static void glTexImage1D_DEBUG(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glTexImage1D_DEBUG(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexImage1D(target=0x%x, level=%i, internalformat=%i, width=0x%x, border=%i, format=0x%x, type=0x%x, pixels=%p)\n", file, line, target, level, internalformat, width, border, format, type, pixels);
 #endif
@@ -2792,7 +2791,7 @@ d_inline static void glTexImage1D_DEBUG(GLenum target, GLint level, GLint intern
 	dglLogError("glTexImage1D", file, line);
 }
 
-d_inline static void glTexImage2D_DEBUG(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glTexImage2D_DEBUG(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexImage2D(target=0x%x, level=%i, internalformat=%i, width=0x%x, height=0x%x, border=%i, format=0x%x, type=0x%x, pixels=%p)\n", file, line, target, level, internalformat, width, height, border, format, type, pixels);
 #endif
@@ -2800,7 +2799,7 @@ d_inline static void glTexImage2D_DEBUG(GLenum target, GLint level, GLint intern
 	dglLogError("glTexImage2D", file, line);
 }
 
-d_inline static void glTexParameterf_DEBUG(GLenum target, GLenum pname, GLfloat param, const char* file, int line) {
+SDL_INLINE static void glTexParameterf_DEBUG(GLenum target, GLenum pname, GLfloat param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexParameterf(target=0x%x, pname=0x%x, param=%f)\n", file, line, target, pname, param);
 #endif
@@ -2808,7 +2807,7 @@ d_inline static void glTexParameterf_DEBUG(GLenum target, GLenum pname, GLfloat 
 	dglLogError("glTexParameterf", file, line);
 }
 
-d_inline static void glTexParameterfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
+SDL_INLINE static void glTexParameterfv_DEBUG(GLenum target, GLenum pname, GLfloat* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexParameterfv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -2816,7 +2815,7 @@ d_inline static void glTexParameterfv_DEBUG(GLenum target, GLenum pname, GLfloat
 	dglLogError("glTexParameterfv", file, line);
 }
 
-d_inline static void glTexParameteri_DEBUG(GLenum target, GLenum pname, GLint param, const char* file, int line) {
+SDL_INLINE static void glTexParameteri_DEBUG(GLenum target, GLenum pname, GLint param, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexParameteri(target=0x%x, pname=0x%x, param=%i)\n", file, line, target, pname, param);
 #endif
@@ -2824,7 +2823,7 @@ d_inline static void glTexParameteri_DEBUG(GLenum target, GLenum pname, GLint pa
 	dglLogError("glTexParameteri", file, line);
 }
 
-d_inline static void glTexParameteriv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glTexParameteriv_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexParameteriv(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -2832,7 +2831,7 @@ d_inline static void glTexParameteriv_DEBUG(GLenum target, GLenum pname, GLint* 
 	dglLogError("glTexParameteriv", file, line);
 }
 
-d_inline static void glTexSubImage1D_DEBUG(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glTexSubImage1D_DEBUG(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexSubImage1D(target=0x%x, level=%i, xoffset=%i, width=0x%x, format=0x%x, type=0x%x, pixels=%p)\n", file, line, target, level, xoffset, width, format, type, pixels);
 #endif
@@ -2840,7 +2839,7 @@ d_inline static void glTexSubImage1D_DEBUG(GLenum target, GLint level, GLint xof
 	dglLogError("glTexSubImage1D", file, line);
 }
 
-d_inline static void glTexSubImage2D_DEBUG(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
+SDL_INLINE static void glTexSubImage2D_DEBUG(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTexSubImage2D(target=0x%x, level=%i, xoffset=%i, yoffset=%i, width=0x%x, height=0x%x, format=0x%x, type=0x%x, pixels=%p)\n", file, line, target, level, xoffset, yoffset, width, height, format, type, pixels);
 #endif
@@ -2848,7 +2847,7 @@ d_inline static void glTexSubImage2D_DEBUG(GLenum target, GLint level, GLint xof
 	dglLogError("glTexSubImage2D", file, line);
 }
 
-d_inline static void glTranslated_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
+SDL_INLINE static void glTranslated_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTranslated(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2856,7 +2855,7 @@ d_inline static void glTranslated_DEBUG(GLdouble x, GLdouble y, GLdouble z, cons
 	dglLogError("glTranslated", file, line);
 }
 
-d_inline static void glTranslatef_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
+SDL_INLINE static void glTranslatef_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glTranslatef(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2864,7 +2863,7 @@ d_inline static void glTranslatef_DEBUG(GLfloat x, GLfloat y, GLfloat z, const c
 	dglLogError("glTranslatef", file, line);
 }
 
-d_inline static void glVertex2d_DEBUG(GLdouble x, GLdouble y, const char* file, int line) {
+SDL_INLINE static void glVertex2d_DEBUG(GLdouble x, GLdouble y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2d(x=%f, y=%f)\n", file, line, x, y);
 #endif
@@ -2872,7 +2871,7 @@ d_inline static void glVertex2d_DEBUG(GLdouble x, GLdouble y, const char* file, 
 	dglLogError("glVertex2d", file, line);
 }
 
-d_inline static void glVertex2dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glVertex2dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2dv(v=%p)\n", file, line, v);
 #endif
@@ -2880,7 +2879,7 @@ d_inline static void glVertex2dv_DEBUG(GLdouble* v, const char* file, int line) 
 	dglLogError("glVertex2dv", file, line);
 }
 
-d_inline static void glVertex2f_DEBUG(GLfloat x, GLfloat y, const char* file, int line) {
+SDL_INLINE static void glVertex2f_DEBUG(GLfloat x, GLfloat y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2f(x=%f, y=%f)\n", file, line, x, y);
 #endif
@@ -2888,7 +2887,7 @@ d_inline static void glVertex2f_DEBUG(GLfloat x, GLfloat y, const char* file, in
 	dglLogError("glVertex2f", file, line);
 }
 
-d_inline static void glVertex2fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glVertex2fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2fv(v=%p)\n", file, line, v);
 #endif
@@ -2896,7 +2895,7 @@ d_inline static void glVertex2fv_DEBUG(GLfloat* v, const char* file, int line) {
 	dglLogError("glVertex2fv", file, line);
 }
 
-d_inline static void glVertex2i_DEBUG(GLint x, GLint y, const char* file, int line) {
+SDL_INLINE static void glVertex2i_DEBUG(GLint x, GLint y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2i(x=%i, y=%i)\n", file, line, x, y);
 #endif
@@ -2904,7 +2903,7 @@ d_inline static void glVertex2i_DEBUG(GLint x, GLint y, const char* file, int li
 	dglLogError("glVertex2i", file, line);
 }
 
-d_inline static void glVertex2iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glVertex2iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2iv(v=%p)\n", file, line, v);
 #endif
@@ -2912,7 +2911,7 @@ d_inline static void glVertex2iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glVertex2iv", file, line);
 }
 
-d_inline static void glVertex2s_DEBUG(GLshort x, GLshort y, const char* file, int line) {
+SDL_INLINE static void glVertex2s_DEBUG(GLshort x, GLshort y, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2s(x=%i, y=%i)\n", file, line, x, y);
 #endif
@@ -2920,7 +2919,7 @@ d_inline static void glVertex2s_DEBUG(GLshort x, GLshort y, const char* file, in
 	dglLogError("glVertex2s", file, line);
 }
 
-d_inline static void glVertex2sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glVertex2sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex2sv(v=%p)\n", file, line, v);
 #endif
@@ -2928,7 +2927,7 @@ d_inline static void glVertex2sv_DEBUG(GLshort* v, const char* file, int line) {
 	dglLogError("glVertex2sv", file, line);
 }
 
-d_inline static void glVertex3d_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
+SDL_INLINE static void glVertex3d_DEBUG(GLdouble x, GLdouble y, GLdouble z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3d(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2936,7 +2935,7 @@ d_inline static void glVertex3d_DEBUG(GLdouble x, GLdouble y, GLdouble z, const 
 	dglLogError("glVertex3d", file, line);
 }
 
-d_inline static void glVertex3dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glVertex3dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3dv(v=%p)\n", file, line, v);
 #endif
@@ -2944,7 +2943,7 @@ d_inline static void glVertex3dv_DEBUG(GLdouble* v, const char* file, int line) 
 	dglLogError("glVertex3dv", file, line);
 }
 
-d_inline static void glVertex3f_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
+SDL_INLINE static void glVertex3f_DEBUG(GLfloat x, GLfloat y, GLfloat z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3f(x=%f, y=%f, z=%f)\n", file, line, x, y, z);
 #endif
@@ -2952,7 +2951,7 @@ d_inline static void glVertex3f_DEBUG(GLfloat x, GLfloat y, GLfloat z, const cha
 	dglLogError("glVertex3f", file, line);
 }
 
-d_inline static void glVertex3fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glVertex3fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3fv(v=%p)\n", file, line, v);
 #endif
@@ -2960,7 +2959,7 @@ d_inline static void glVertex3fv_DEBUG(GLfloat* v, const char* file, int line) {
 	dglLogError("glVertex3fv", file, line);
 }
 
-d_inline static void glVertex3i_DEBUG(GLint x, GLint y, GLint z, const char* file, int line) {
+SDL_INLINE static void glVertex3i_DEBUG(GLint x, GLint y, GLint z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3i(x=%i, y=%i, z=%i)\n", file, line, x, y, z);
 #endif
@@ -2968,7 +2967,7 @@ d_inline static void glVertex3i_DEBUG(GLint x, GLint y, GLint z, const char* fil
 	dglLogError("glVertex3i", file, line);
 }
 
-d_inline static void glVertex3iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glVertex3iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3iv(v=%p)\n", file, line, v);
 #endif
@@ -2976,7 +2975,7 @@ d_inline static void glVertex3iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glVertex3iv", file, line);
 }
 
-d_inline static void glVertex3s_DEBUG(GLshort x, GLshort y, GLshort z, const char* file, int line) {
+SDL_INLINE static void glVertex3s_DEBUG(GLshort x, GLshort y, GLshort z, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3s(x=%i, y=%i, z=%i)\n", file, line, x, y, z);
 #endif
@@ -2984,7 +2983,7 @@ d_inline static void glVertex3s_DEBUG(GLshort x, GLshort y, GLshort z, const cha
 	dglLogError("glVertex3s", file, line);
 }
 
-d_inline static void glVertex3sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glVertex3sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex3sv(v=%p)\n", file, line, v);
 #endif
@@ -2992,7 +2991,7 @@ d_inline static void glVertex3sv_DEBUG(GLshort* v, const char* file, int line) {
 	dglLogError("glVertex3sv", file, line);
 }
 
-d_inline static void glVertex4d_DEBUG(GLdouble x, GLdouble y, GLdouble z, GLdouble w, const char* file, int line) {
+SDL_INLINE static void glVertex4d_DEBUG(GLdouble x, GLdouble y, GLdouble z, GLdouble w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4d(x=%f, y=%f, z=%f, w=%f)\n", file, line, x, y, z, w);
 #endif
@@ -3000,7 +2999,7 @@ d_inline static void glVertex4d_DEBUG(GLdouble x, GLdouble y, GLdouble z, GLdoub
 	dglLogError("glVertex4d", file, line);
 }
 
-d_inline static void glVertex4dv_DEBUG(GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glVertex4dv_DEBUG(GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4dv(v=%p)\n", file, line, v);
 #endif
@@ -3008,7 +3007,7 @@ d_inline static void glVertex4dv_DEBUG(GLdouble* v, const char* file, int line) 
 	dglLogError("glVertex4dv", file, line);
 }
 
-d_inline static void glVertex4f_DEBUG(GLfloat x, GLfloat y, GLfloat z, GLfloat w, const char* file, int line) {
+SDL_INLINE static void glVertex4f_DEBUG(GLfloat x, GLfloat y, GLfloat z, GLfloat w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4f(x=%f, y=%f, z=%f, w=%f)\n", file, line, x, y, z, w);
 #endif
@@ -3016,7 +3015,7 @@ d_inline static void glVertex4f_DEBUG(GLfloat x, GLfloat y, GLfloat z, GLfloat w
 	dglLogError("glVertex4f", file, line);
 }
 
-d_inline static void glVertex4fv_DEBUG(GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glVertex4fv_DEBUG(GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4fv(v=%p)\n", file, line, v);
 #endif
@@ -3024,7 +3023,7 @@ d_inline static void glVertex4fv_DEBUG(GLfloat* v, const char* file, int line) {
 	dglLogError("glVertex4fv", file, line);
 }
 
-d_inline static void glVertex4i_DEBUG(GLint x, GLint y, GLint z, GLint w, const char* file, int line) {
+SDL_INLINE static void glVertex4i_DEBUG(GLint x, GLint y, GLint z, GLint w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4i(x=%i, y=%i, z=%i, w=%i)\n", file, line, x, y, z, w);
 #endif
@@ -3032,7 +3031,7 @@ d_inline static void glVertex4i_DEBUG(GLint x, GLint y, GLint z, GLint w, const 
 	dglLogError("glVertex4i", file, line);
 }
 
-d_inline static void glVertex4iv_DEBUG(GLint* v, const char* file, int line) {
+SDL_INLINE static void glVertex4iv_DEBUG(GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4iv(v=%p)\n", file, line, v);
 #endif
@@ -3040,7 +3039,7 @@ d_inline static void glVertex4iv_DEBUG(GLint* v, const char* file, int line) {
 	dglLogError("glVertex4iv", file, line);
 }
 
-d_inline static void glVertex4s_DEBUG(GLshort x, GLshort y, GLshort z, GLshort w, const char* file, int line) {
+SDL_INLINE static void glVertex4s_DEBUG(GLshort x, GLshort y, GLshort z, GLshort w, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4s(x=%i, y=%i, z=%i, w=%i)\n", file, line, x, y, z, w);
 #endif
@@ -3048,7 +3047,7 @@ d_inline static void glVertex4s_DEBUG(GLshort x, GLshort y, GLshort z, GLshort w
 	dglLogError("glVertex4s", file, line);
 }
 
-d_inline static void glVertex4sv_DEBUG(GLshort* v, const char* file, int line) {
+SDL_INLINE static void glVertex4sv_DEBUG(GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertex4sv(v=%p)\n", file, line, v);
 #endif
@@ -3056,7 +3055,7 @@ d_inline static void glVertex4sv_DEBUG(GLshort* v, const char* file, int line) {
 	dglLogError("glVertex4sv", file, line);
 }
 
-d_inline static void glVertexPointer_DEBUG(GLint size, GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glVertexPointer_DEBUG(GLint size, GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glVertexPointer(size=%i, type=0x%x, stride=0x%x, pointer=%p)\n", file, line, size, type, stride, pointer);
 #endif
@@ -3064,7 +3063,7 @@ d_inline static void glVertexPointer_DEBUG(GLint size, GLenum type, GLsizei stri
 	dglLogError("glVertexPointer", file, line);
 }
 
-d_inline static void glViewport_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, const char* file, int line) {
+SDL_INLINE static void glViewport_DEBUG(GLint x, GLint y, GLsizei width, GLsizei height, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glViewport(x=%i, y=%i, width=0x%x, height=0x%x)\n", file, line, x, y, width, height);
 #endif
@@ -3563,7 +3562,7 @@ _glMultiTexCoord4svARB = GL_RegisterProc("glMultiTexCoord4svARB")
 
 #else
 
-d_inline static void glActiveTextureARB_DEBUG(GLenum texture, const char* file, int line) {
+SDL_INLINE static void glActiveTextureARB_DEBUG(GLenum texture, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glActiveTextureARB(texture=0x%x)\n", file, line, texture);
 #endif
@@ -3571,7 +3570,7 @@ d_inline static void glActiveTextureARB_DEBUG(GLenum texture, const char* file, 
 	dglLogError("glActiveTextureARB", file, line);
 }
 
-d_inline static void glClientActiveTextureARB_DEBUG(GLenum texture, const char* file, int line) {
+SDL_INLINE static void glClientActiveTextureARB_DEBUG(GLenum texture, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glClientActiveTextureARB(texture=0x%x)\n", file, line, texture);
 #endif
@@ -3579,7 +3578,7 @@ d_inline static void glClientActiveTextureARB_DEBUG(GLenum texture, const char* 
 	dglLogError("glClientActiveTextureARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1dARB_DEBUG(GLenum target, GLdouble s, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1dARB_DEBUG(GLenum target, GLdouble s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1dARB(target=0x%x, s=%f)\n", file, line, target, s);
 #endif
@@ -3587,7 +3586,7 @@ d_inline static void glMultiTexCoord1dARB_DEBUG(GLenum target, GLdouble s, const
 	dglLogError("glMultiTexCoord1dARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1dvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3595,7 +3594,7 @@ d_inline static void glMultiTexCoord1dvARB_DEBUG(GLenum target, GLdouble* v, con
 	dglLogError("glMultiTexCoord1dvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1fARB_DEBUG(GLenum target, GLfloat s, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1fARB_DEBUG(GLenum target, GLfloat s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1fARB(target=0x%x, s=%f)\n", file, line, target, s);
 #endif
@@ -3603,7 +3602,7 @@ d_inline static void glMultiTexCoord1fARB_DEBUG(GLenum target, GLfloat s, const 
 	dglLogError("glMultiTexCoord1fARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1fvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3611,7 +3610,7 @@ d_inline static void glMultiTexCoord1fvARB_DEBUG(GLenum target, GLfloat* v, cons
 	dglLogError("glMultiTexCoord1fvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1iARB_DEBUG(GLenum target, GLint s, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1iARB_DEBUG(GLenum target, GLint s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1iARB(target=0x%x, s=%i)\n", file, line, target, s);
 #endif
@@ -3619,7 +3618,7 @@ d_inline static void glMultiTexCoord1iARB_DEBUG(GLenum target, GLint s, const ch
 	dglLogError("glMultiTexCoord1iARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1ivARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3627,7 +3626,7 @@ d_inline static void glMultiTexCoord1ivARB_DEBUG(GLenum target, GLint* v, const 
 	dglLogError("glMultiTexCoord1ivARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1sARB_DEBUG(GLenum target, GLshort s, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1sARB_DEBUG(GLenum target, GLshort s, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1sARB(target=0x%x, s=%i)\n", file, line, target, s);
 #endif
@@ -3635,7 +3634,7 @@ d_inline static void glMultiTexCoord1sARB_DEBUG(GLenum target, GLshort s, const 
 	dglLogError("glMultiTexCoord1sARB", file, line);
 }
 
-d_inline static void glMultiTexCoord1svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord1svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord1svARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3643,7 +3642,7 @@ d_inline static void glMultiTexCoord1svARB_DEBUG(GLenum target, GLshort* v, cons
 	dglLogError("glMultiTexCoord1svARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2dARB_DEBUG(GLenum target, GLdouble s, GLdouble t, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2dARB_DEBUG(GLenum target, GLdouble s, GLdouble t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2dARB(target=0x%x, s=%f, t=%f)\n", file, line, target, s, t);
 #endif
@@ -3651,7 +3650,7 @@ d_inline static void glMultiTexCoord2dARB_DEBUG(GLenum target, GLdouble s, GLdou
 	dglLogError("glMultiTexCoord2dARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2dvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3659,7 +3658,7 @@ d_inline static void glMultiTexCoord2dvARB_DEBUG(GLenum target, GLdouble* v, con
 	dglLogError("glMultiTexCoord2dvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2fARB_DEBUG(GLenum target, GLfloat s, GLfloat t, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2fARB_DEBUG(GLenum target, GLfloat s, GLfloat t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2fARB(target=0x%x, s=%f, t=%f)\n", file, line, target, s, t);
 #endif
@@ -3667,7 +3666,7 @@ d_inline static void glMultiTexCoord2fARB_DEBUG(GLenum target, GLfloat s, GLfloa
 	dglLogError("glMultiTexCoord2fARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2fvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3675,7 +3674,7 @@ d_inline static void glMultiTexCoord2fvARB_DEBUG(GLenum target, GLfloat* v, cons
 	dglLogError("glMultiTexCoord2fvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2iARB_DEBUG(GLenum target, GLint s, GLint t, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2iARB_DEBUG(GLenum target, GLint s, GLint t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2iARB(target=0x%x, s=%i, t=%i)\n", file, line, target, s, t);
 #endif
@@ -3683,7 +3682,7 @@ d_inline static void glMultiTexCoord2iARB_DEBUG(GLenum target, GLint s, GLint t,
 	dglLogError("glMultiTexCoord2iARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2ivARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3691,7 +3690,7 @@ d_inline static void glMultiTexCoord2ivARB_DEBUG(GLenum target, GLint* v, const 
 	dglLogError("glMultiTexCoord2ivARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2sARB_DEBUG(GLenum target, GLshort s, GLshort t, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2sARB_DEBUG(GLenum target, GLshort s, GLshort t, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2sARB(target=0x%x, s=%i, t=%i)\n", file, line, target, s, t);
 #endif
@@ -3699,7 +3698,7 @@ d_inline static void glMultiTexCoord2sARB_DEBUG(GLenum target, GLshort s, GLshor
 	dglLogError("glMultiTexCoord2sARB", file, line);
 }
 
-d_inline static void glMultiTexCoord2svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord2svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord2svARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3707,7 +3706,7 @@ d_inline static void glMultiTexCoord2svARB_DEBUG(GLenum target, GLshort* v, cons
 	dglLogError("glMultiTexCoord2svARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3dARB_DEBUG(GLenum target, GLdouble s, GLdouble t, GLdouble r, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3dARB_DEBUG(GLenum target, GLdouble s, GLdouble t, GLdouble r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3dARB(target=0x%x, s=%f, t=%f, r=%f)\n", file, line, target, s, t, r);
 #endif
@@ -3715,7 +3714,7 @@ d_inline static void glMultiTexCoord3dARB_DEBUG(GLenum target, GLdouble s, GLdou
 	dglLogError("glMultiTexCoord3dARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3dvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3723,7 +3722,7 @@ d_inline static void glMultiTexCoord3dvARB_DEBUG(GLenum target, GLdouble* v, con
 	dglLogError("glMultiTexCoord3dvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3fARB_DEBUG(GLenum target, GLfloat s, GLfloat t, GLfloat r, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3fARB_DEBUG(GLenum target, GLfloat s, GLfloat t, GLfloat r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3fARB(target=0x%x, s=%f, t=%f, r=%f)\n", file, line, target, s, t, r);
 #endif
@@ -3731,7 +3730,7 @@ d_inline static void glMultiTexCoord3fARB_DEBUG(GLenum target, GLfloat s, GLfloa
 	dglLogError("glMultiTexCoord3fARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3fvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3739,7 +3738,7 @@ d_inline static void glMultiTexCoord3fvARB_DEBUG(GLenum target, GLfloat* v, cons
 	dglLogError("glMultiTexCoord3fvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3iARB_DEBUG(GLenum target, GLint s, GLint t, GLint r, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3iARB_DEBUG(GLenum target, GLint s, GLint t, GLint r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3iARB(target=0x%x, s=%i, t=%i, r=%i)\n", file, line, target, s, t, r);
 #endif
@@ -3747,7 +3746,7 @@ d_inline static void glMultiTexCoord3iARB_DEBUG(GLenum target, GLint s, GLint t,
 	dglLogError("glMultiTexCoord3iARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3ivARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3755,7 +3754,7 @@ d_inline static void glMultiTexCoord3ivARB_DEBUG(GLenum target, GLint* v, const 
 	dglLogError("glMultiTexCoord3ivARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3sARB_DEBUG(GLenum target, GLshort s, GLshort t, GLshort r, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3sARB_DEBUG(GLenum target, GLshort s, GLshort t, GLshort r, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3sARB(target=0x%x, s=%i, t=%i, r=%i)\n", file, line, target, s, t, r);
 #endif
@@ -3763,7 +3762,7 @@ d_inline static void glMultiTexCoord3sARB_DEBUG(GLenum target, GLshort s, GLshor
 	dglLogError("glMultiTexCoord3sARB", file, line);
 }
 
-d_inline static void glMultiTexCoord3svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord3svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord3svARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3771,7 +3770,7 @@ d_inline static void glMultiTexCoord3svARB_DEBUG(GLenum target, GLshort* v, cons
 	dglLogError("glMultiTexCoord3svARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4dARB_DEBUG(GLenum target, GLdouble s, GLdouble t, GLdouble r, GLdouble q, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4dARB_DEBUG(GLenum target, GLdouble s, GLdouble t, GLdouble r, GLdouble q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4dARB(target=0x%x, s=%f, t=%f, r=%f, q=%f)\n", file, line, target, s, t, r, q);
 #endif
@@ -3779,7 +3778,7 @@ d_inline static void glMultiTexCoord4dARB_DEBUG(GLenum target, GLdouble s, GLdou
 	dglLogError("glMultiTexCoord4dARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4dvARB_DEBUG(GLenum target, GLdouble* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4dvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3787,7 +3786,7 @@ d_inline static void glMultiTexCoord4dvARB_DEBUG(GLenum target, GLdouble* v, con
 	dglLogError("glMultiTexCoord4dvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4fARB_DEBUG(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4fARB_DEBUG(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4fARB(target=0x%x, s=%f, t=%f, r=%f, q=%f)\n", file, line, target, s, t, r, q);
 #endif
@@ -3795,7 +3794,7 @@ d_inline static void glMultiTexCoord4fARB_DEBUG(GLenum target, GLfloat s, GLfloa
 	dglLogError("glMultiTexCoord4fARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4fvARB_DEBUG(GLenum target, GLfloat* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4fvARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3803,7 +3802,7 @@ d_inline static void glMultiTexCoord4fvARB_DEBUG(GLenum target, GLfloat* v, cons
 	dglLogError("glMultiTexCoord4fvARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4iARB_DEBUG(GLenum target, GLint s, GLint t, GLint r, GLint q, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4iARB_DEBUG(GLenum target, GLint s, GLint t, GLint r, GLint q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4iARB(target=0x%x, s=%i, t=%i, r=%i, q=%i)\n", file, line, target, s, t, r, q);
 #endif
@@ -3811,7 +3810,7 @@ d_inline static void glMultiTexCoord4iARB_DEBUG(GLenum target, GLint s, GLint t,
 	dglLogError("glMultiTexCoord4iARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4ivARB_DEBUG(GLenum target, GLint* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4ivARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3819,7 +3818,7 @@ d_inline static void glMultiTexCoord4ivARB_DEBUG(GLenum target, GLint* v, const 
 	dglLogError("glMultiTexCoord4ivARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4sARB_DEBUG(GLenum target, GLshort s, GLshort t, GLshort r, GLshort q, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4sARB_DEBUG(GLenum target, GLshort s, GLshort t, GLshort r, GLshort q, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4sARB(target=0x%x, s=%i, t=%i, r=%i, q=%i)\n", file, line, target, s, t, r, q);
 #endif
@@ -3827,7 +3826,7 @@ d_inline static void glMultiTexCoord4sARB_DEBUG(GLenum target, GLshort s, GLshor
 	dglLogError("glMultiTexCoord4sARB", file, line);
 }
 
-d_inline static void glMultiTexCoord4svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
+SDL_INLINE static void glMultiTexCoord4svARB_DEBUG(GLenum target, GLshort* v, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiTexCoord4svARB(target=0x%x, v=%p)\n", file, line, target, v);
 #endif
@@ -3890,7 +3889,7 @@ PFNGLUNLOCKARRAYSEXTPROC _glUnlockArraysEXT = NULL
 
 #else
 
-d_inline static void glLockArraysEXT_DEBUG(GLint first, GLsizei count, const char* file, int line) {
+SDL_INLINE static void glLockArraysEXT_DEBUG(GLint first, GLsizei count, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glLockArraysEXT(first=%i, count=0x%x)\n", file, line, first, count);
 #endif
@@ -3898,7 +3897,7 @@ d_inline static void glLockArraysEXT_DEBUG(GLint first, GLsizei count, const cha
 	dglLogError("glLockArraysEXT", file, line);
 }
 
-d_inline static void glUnlockArraysEXT_DEBUG(const char* file, int line) {
+SDL_INLINE static void glUnlockArraysEXT_DEBUG(const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glUnlockArraysEXT()\n", file, line);
 #endif
@@ -3936,7 +3935,7 @@ _glMultiDrawElementsEXT = GL_RegisterProc("glMultiDrawElementsEXT")
 
 #else
 
-d_inline static void glMultiDrawArraysEXT_DEBUG(GLenum mode, GLint* first, GLsizei* count, GLsizei primcount, const char* file, int line) {
+SDL_INLINE static void glMultiDrawArraysEXT_DEBUG(GLenum mode, GLint* first, GLsizei* count, GLsizei primcount, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiDrawArraysEXT(mode=0x%x, first=%p, count=%p, primcount=0x%x)\n", file, line, mode, first, count, primcount);
 #endif
@@ -3944,7 +3943,7 @@ d_inline static void glMultiDrawArraysEXT_DEBUG(GLenum mode, GLint* first, GLsiz
 	dglLogError("glMultiDrawArraysEXT", file, line);
 }
 
-d_inline static void glMultiDrawElementsEXT_DEBUG(GLenum mode, GLsizei* count, GLenum type, void* indices, GLsizei primcount, const char* file, int line) {
+SDL_INLINE static void glMultiDrawElementsEXT_DEBUG(GLenum mode, GLsizei* count, GLenum type, void* indices, GLsizei primcount, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMultiDrawElementsEXT(mode=0x%x, count=%p, type=0x%x, indices=%p, primcount=0x%x)\n", file, line, mode, count, type, indices, primcount);
 #endif
@@ -3994,7 +3993,7 @@ _glFogCoordPointerEXT = GL_RegisterProc("glFogCoordPointerEXT")
 
 #else
 
-d_inline static void glFogCoordfEXT_DEBUG(GLfloat coord, const char* file, int line) {
+SDL_INLINE static void glFogCoordfEXT_DEBUG(GLfloat coord, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogCoordfEXT(coord=%f)\n", file, line, coord);
 #endif
@@ -4002,7 +4001,7 @@ d_inline static void glFogCoordfEXT_DEBUG(GLfloat coord, const char* file, int l
 	dglLogError("glFogCoordfEXT", file, line);
 }
 
-d_inline static void glFogCoordfvEXT_DEBUG(GLfloat* coord, const char* file, int line) {
+SDL_INLINE static void glFogCoordfvEXT_DEBUG(GLfloat* coord, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogCoordfvEXT(coord=%p)\n", file, line, coord);
 #endif
@@ -4010,7 +4009,7 @@ d_inline static void glFogCoordfvEXT_DEBUG(GLfloat* coord, const char* file, int
 	dglLogError("glFogCoordfvEXT", file, line);
 }
 
-d_inline static void glFogCoorddEXT_DEBUG(GLdouble coord, const char* file, int line) {
+SDL_INLINE static void glFogCoorddEXT_DEBUG(GLdouble coord, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogCoorddEXT(coord=%f)\n", file, line, coord);
 #endif
@@ -4018,7 +4017,7 @@ d_inline static void glFogCoorddEXT_DEBUG(GLdouble coord, const char* file, int 
 	dglLogError("glFogCoorddEXT", file, line);
 }
 
-d_inline static void glFogCoorddvEXT_DEBUG(GLdouble* coord, const char* file, int line) {
+SDL_INLINE static void glFogCoorddvEXT_DEBUG(GLdouble* coord, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogCoorddvEXT(coord=%p)\n", file, line, coord);
 #endif
@@ -4026,7 +4025,7 @@ d_inline static void glFogCoorddvEXT_DEBUG(GLdouble* coord, const char* file, in
 	dglLogError("glFogCoorddvEXT", file, line);
 }
 
-d_inline static void glFogCoordPointerEXT_DEBUG(GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
+SDL_INLINE static void glFogCoordPointerEXT_DEBUG(GLenum type, GLsizei stride, GLvoid* pointer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glFogCoordPointerEXT(type=0x%x, stride=0x%x, pointer=%p)\n", file, line, type, stride, pointer);
 #endif
@@ -4103,7 +4102,7 @@ _glGetBufferPointervARB = GL_RegisterProc("glGetBufferPointervARB")
 
 #else
 
-d_inline static void glBindBufferARB_DEBUG(GLenum target, GLuint buffer, const char* file, int line) {
+SDL_INLINE static void glBindBufferARB_DEBUG(GLenum target, GLuint buffer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBindBufferARB(target=0x%x, buffer=%i)\n", file, line, target, buffer);
 #endif
@@ -4111,7 +4110,7 @@ d_inline static void glBindBufferARB_DEBUG(GLenum target, GLuint buffer, const c
 	dglLogError("glBindBufferARB", file, line);
 }
 
-d_inline static void glDeleteBuffersARB_DEBUG(GLsizei n, GLuint* buffers, const char* file, int line) {
+SDL_INLINE static void glDeleteBuffersARB_DEBUG(GLsizei n, GLuint* buffers, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glDeleteBuffersARB(n=0x%x, buffers=%p)\n", file, line, n, buffers);
 #endif
@@ -4119,7 +4118,7 @@ d_inline static void glDeleteBuffersARB_DEBUG(GLsizei n, GLuint* buffers, const 
 	dglLogError("glDeleteBuffersARB", file, line);
 }
 
-d_inline static void glGenBuffersARB_DEBUG(GLsizei n, GLuint* buffers, const char* file, int line) {
+SDL_INLINE static void glGenBuffersARB_DEBUG(GLsizei n, GLuint* buffers, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGenBuffersARB(n=0x%x, buffers=%p)\n", file, line, n, buffers);
 #endif
@@ -4127,7 +4126,7 @@ d_inline static void glGenBuffersARB_DEBUG(GLsizei n, GLuint* buffers, const cha
 	dglLogError("glGenBuffersARB", file, line);
 }
 
-d_inline static GLboolean glIsBufferARB_DEBUG(GLuint buffer, const char* file, int line) {
+SDL_INLINE static GLboolean glIsBufferARB_DEBUG(GLuint buffer, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glIsBufferARB(buffer=%i)\n", file, line, buffer);
 #endif
@@ -4135,7 +4134,7 @@ d_inline static GLboolean glIsBufferARB_DEBUG(GLuint buffer, const char* file, i
 	dglLogError("glIsBufferARB", file, line);
 }
 
-d_inline static void glBufferDataARB_DEBUG(GLenum target, GLsizeiptrARB size, GLvoid* data, GLenum usage, const char* file, int line) {
+SDL_INLINE static void glBufferDataARB_DEBUG(GLenum target, GLsizeiptrARB size, GLvoid* data, GLenum usage, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBufferDataARB(target=0x%x, size=, data=%p, usage=0x%x)\n", file, line, target, size, data, usage);
 #endif
@@ -4143,7 +4142,7 @@ d_inline static void glBufferDataARB_DEBUG(GLenum target, GLsizeiptrARB size, GL
 	dglLogError("glBufferDataARB", file, line);
 }
 
-d_inline static void glBufferSubDataARB_DEBUG(GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid* data, const char* file, int line) {
+SDL_INLINE static void glBufferSubDataARB_DEBUG(GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid* data, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glBufferSubDataARB(target=0x%x, offset=, size=, data=%p)\n", file, line, target, offset, size, data);
 #endif
@@ -4151,7 +4150,7 @@ d_inline static void glBufferSubDataARB_DEBUG(GLenum target, GLintptrARB offset,
 	dglLogError("glBufferSubDataARB", file, line);
 }
 
-d_inline static void glGetBufferSubDataARB_DEBUG(GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid* data, const char* file, int line) {
+SDL_INLINE static void glGetBufferSubDataARB_DEBUG(GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid* data, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetBufferSubDataARB(target=0x%x, offset=, size=, data=%p)\n", file, line, target, offset, size, data);
 #endif
@@ -4159,7 +4158,7 @@ d_inline static void glGetBufferSubDataARB_DEBUG(GLenum target, GLintptrARB offs
 	dglLogError("glGetBufferSubDataARB", file, line);
 }
 
-d_inline static void glMapBufferARB_DEBUG(GLenum target, GLenum access, const char* file, int line) {
+SDL_INLINE static void glMapBufferARB_DEBUG(GLenum target, GLenum access, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glMapBufferARB(target=0x%x, access=0x%x)\n", file, line, target, access);
 #endif
@@ -4167,7 +4166,7 @@ d_inline static void glMapBufferARB_DEBUG(GLenum target, GLenum access, const ch
 	dglLogError("glMapBufferARB", file, line);
 }
 
-d_inline static GLboolean glUnmapBufferARB_DEBUG(GLenum target, const char* file, int line) {
+SDL_INLINE static GLboolean glUnmapBufferARB_DEBUG(GLenum target, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glUnmapBufferARB(target=0x%x)\n", file, line, target);
 #endif
@@ -4175,7 +4174,7 @@ d_inline static GLboolean glUnmapBufferARB_DEBUG(GLenum target, const char* file
 	dglLogError("glUnmapBufferARB", file, line);
 }
 
-d_inline static void glGetBufferParameterivARB_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
+SDL_INLINE static void glGetBufferParameterivARB_DEBUG(GLenum target, GLenum pname, GLint* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetBufferParameterivARB(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif
@@ -4183,7 +4182,7 @@ d_inline static void glGetBufferParameterivARB_DEBUG(GLenum target, GLenum pname
 	dglLogError("glGetBufferParameterivARB", file, line);
 }
 
-d_inline static void glGetBufferPointervARB_DEBUG(GLenum target, GLenum pname, void* params, const char* file, int line) {
+SDL_INLINE static void glGetBufferPointervARB_DEBUG(GLenum target, GLenum pname, void* params, const char* file, int line) {
 #ifdef LOG_GLFUNC_CALLS
 	I_Printf("file = %s, line = %i, glGetBufferPointervARB(target=0x%x, pname=0x%x, params=%p)\n", file, line, target, pname, params);
 #endif

@@ -15,21 +15,18 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef __D_STATE__
-#define __D_STATE__
+#ifndef __DOOMSTAT__
+#define __DOOMSTAT__
 
 // We need globally shared data structures,
 //  for defining the global state variables.
+#include <stdio.h>
 #include "doomdata.h"
 #include "d_net.h"
 #include "t_bsp.h"
 
 // We need the playr data structure as well.
 #include "d_player.h"
-
-#ifdef __GNUG__
-#pragma interface
-#endif
 
 // ------------------------
 // Command line parameters.

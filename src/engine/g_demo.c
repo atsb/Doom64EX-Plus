@@ -19,23 +19,21 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdlib.h>
+#include <SDL3/SDL_stdinc.h>
+
+#include "g_demo.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "z_zone.h"
 #include "p_tick.h"
-#include "g_local.h"
-#include "g_demo.h"
+#include "g_game.h"
 #include "m_misc.h"
-#include "m_random.h"
 #include "con_console.h"
-
-#ifdef _WIN32
-#include "i_opndir.h"
-#endif
-
-#if !defined _WIN32
-#include <unistd.h>
-#endif
+#include "i_system.h"
+#include "w_wad.h"
+#include "d_main.h"
+#include "i_system_io.h"
 
 void        G_DoLoadLevel(void);
 boolean    G_CheckDemoStatus(void);
@@ -127,11 +125,7 @@ void G_RecordDemo(const char* name) {
 
 	dstrcpy(demoname, name);
 	dstrcat(demoname, ".lmp");
-#ifdef _WIN32
-	if (_access(demoname, F_OK))
-#else
 	if (access(demoname, F_OK))
-#endif
 	{
 		demofp = fopen(demoname, "wb");
 	}
@@ -140,11 +134,7 @@ void G_RecordDemo(const char* name) {
 
 		while (demonum < 10000) {
 			sprintf(demoname, "%s%i.lmp", name, demonum);
-#ifdef _WIN32
-			if (_access(demoname, F_OK))
-#else
 			if (access(demoname, F_OK))
-#endif
 			{
 				demofp = fopen(demoname, "wb");
 				break;
@@ -220,7 +210,7 @@ void G_PlayDemo(const char* name) {
 			dstrcpy(filename, myargv[p + 1]);
 		}
 		else {
-			dsprintf(filename, "%s.lmp", myargv[p + 1]);
+			SDL_snprintf(filename, sizeof(filename), "%s.lmp", myargv[p + 1]);
 		}
 
 		CON_DPrintf("--------Reading demo %s--------\n", filename);

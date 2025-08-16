@@ -23,17 +23,15 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-
+#include <limits.h>
 #include "m_misc.h"
 #include "m_fixed.h"
 #include "doomdef.h"
 #include "p_local.h"
-#include "r_local.h"
 #include "doomstat.h"
-#include "z_zone.h"
 #include "i_system.h"
 #include "i_swap.h"
+#include "r_main.h"
 
 //
 // P_AproxDistance

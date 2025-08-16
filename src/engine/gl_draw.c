@@ -19,22 +19,15 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifdef __APPLE__
-#include <ctype.h>
-#endif
-
-#ifndef _WIN32 // toupper for linux
-#include <ctype.h>
-#include <stdio.h>
-#endif
-
 #include <stdarg.h>
+#include <SDL3/SDL_stdinc.h>
+
+#include "gl_draw.h"
 #include "doomtype.h"
 #include "doomstat.h"
 #include "dgl.h"
 #include "r_things.h"
 #include "gl_texture.h"
-#include "gl_draw.h"
 #include "r_main.h"
 
 CVAR_EXTERNAL(r_hudFilter);
@@ -221,7 +214,7 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	dglSetVertex(vtxstring);
 
 	for (i = 0, vi = 0; i < dstrlen(msg); i++, vi += 4) {
-		c = toupper(msg[i]);
+		c = SDL_toupper(msg[i]);
 		if (c == '\t') {
 			while (x % 64) {
 				x++;

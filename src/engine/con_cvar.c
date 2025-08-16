@@ -19,13 +19,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "doomstat.h"
+#include "con_cvar.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
 #include "con_console.h"
 #include "z_zone.h"
 #include "i_system.h"
-#include "con_cvar.h"
 #include "am_map.h"
 #include "s_sound.h"
 #include "r_main.h"

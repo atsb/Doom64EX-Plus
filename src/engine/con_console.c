@@ -20,19 +20,20 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "doomstat.h"
+#include <stdarg.h> // for va_* stuff
+
 #include "con_console.h"
+#include "con_cvar.h"
+#include "doomstat.h"
 #include "z_zone.h"
 #include "st_stuff.h"
 #include "g_actions.h"
 #include "m_shift.h"
 #include "gl_draw.h"
-#include "r_main.h"
 #include "i_system.h"
-#include "gl_texture.h"
+#include "dgl.h"
 
 #define SDL_MAIN_HANDLED
-#include <SDL3/SDL.h>
 
 #define CONSOLE_PROMPTCHAR      '>'
 #define MAX_CONSOLE_LINES       256//must be power of 2

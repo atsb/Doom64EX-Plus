@@ -25,11 +25,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <SDL3/SDL_timer.h>
 
+#include "p_spec.h"
 #include "doomdef.h"
 #include "doomstat.h"
-#include "i_system.h"
 #include "z_zone.h"
 #include "m_random.h"
 #include "w_wad.h"
@@ -40,16 +40,16 @@
 #include "g_game.h"
 #include "s_sound.h"
 #include "d_englsh.h"
-#include "r_local.h"
 #include "sounds.h"
 #include "gl_texture.h"
 #include "m_misc.h"
 #include "con_console.h"
 #include "r_sky.h"
+#include "r_lights.h"
+#include "r_main.h"
 #include "sc_main.h"
 #include "p_setup.h"
 
-#include <SDL3/SDL.h>
 
 short globalint = 0;
 static byte tryopentype[3];

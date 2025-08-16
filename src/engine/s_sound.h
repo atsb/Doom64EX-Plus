@@ -19,13 +19,7 @@
 #ifndef __S_SOUND__
 #define __S_SOUND__
 
-
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #include "p_mobj.h"
-#include "sounds.h"
 
 //
 // Initializes sound stuff, including volume

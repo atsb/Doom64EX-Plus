@@ -18,8 +18,9 @@
 #ifndef __I_VIDEO_H__
 #define __I_VIDEO_H__
 
-#include <SDL3/SDL.h>
-#include "d_event.h"
+#include <SDL3/SDL_surface.h>
+#include <SDL3/SDL_video.h>
+
 
 ////////////Video///////////////
 

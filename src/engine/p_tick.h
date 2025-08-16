@@ -18,10 +18,6 @@
 #ifndef __P_TICK__
 #define __P_TICK__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 void P_Start(void);
 void P_Stop(void);
 void P_Drawer(void);

@@ -22,20 +22,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
-
 #include "m_fixed.h"
 #include "m_random.h"
-#include "i_system.h"
 #include "m_misc.h"
 #include "doomdef.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
-#include "r_local.h"
 #include "sounds.h"
 #include "tables.h"
 #include "r_sky.h"
+#include "r_main.h"
 #include "con_console.h"
 
 fixed_t         tmbbox[4];
@@ -69,7 +66,7 @@ int numthingspec = 0;
 // P_CheckThingCollision
 //
 
-d_inline
+SDL_INLINE
 static int P_CheckThingCollision(mobj_t* thing) {
     fixed_t blockdist;
 
@@ -110,7 +107,7 @@ static int P_CheckThingCollision(mobj_t* thing) {
 
 extern byte forcecollision;
 
-d_inline
+SDL_INLINE
 static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
     // [D64] does not use MAXRADIUS
 

@@ -15,12 +15,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef D3DR_MAIN_H
-#define D3DR_MAIN_H
+#ifndef R_MAIN_H
+#define R_MAIN_H
 
 #include "t_bsp.h"
 #include "d_player.h"
-#include "w_wad.h"
 #include "gl_main.h"
 #include "con_cvar.h"
 

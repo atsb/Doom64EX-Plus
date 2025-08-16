@@ -19,13 +19,16 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <SDL3/SDL_stdinc.h>
+
+#include "r_things.h"
 #include "r_lights.h"
+#include "r_main.h"
 #include "i_system.h"
 #include "tables.h"
 #include "w_wad.h"
 #include "doomstat.h"
 #include "z_zone.h"
-#include "r_things.h"
 #include "gl_texture.h"
 #include "gl_main.h"
 #include "r_drawlist.h"
@@ -33,10 +36,7 @@
 #include "r_clipper.h"
 #include "m_misc.h"
 #include "con_console.h"
-#include "i_swap.h"
-
-#include <stdlib.h>
-
+#include "dgl.h"
 
 #define MAX_SPRITES    999999
 
@@ -167,7 +167,7 @@ void R_InitSprites(char** namelist) {
 		//  filling in the frames for whatever is found
 
 		for (l = start + 1; l < end; l++)
-			if (!strncasecmp(lumpinfo[l].name, spritename, 4))
+			if (!dstrnicmp(lumpinfo[l].name, spritename, 4))
 			{
 				frame = lumpinfo[l].name[4] - 'A';
 				rotation = lumpinfo[l].name[5] - '0';

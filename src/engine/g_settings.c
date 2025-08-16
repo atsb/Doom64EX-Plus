@@ -19,22 +19,16 @@
 //
 //-----------------------------------------------------------------------------
 
-#ifndef _WIN32
-// 20120105 bkw: G_GetConfigFileName() needs these, better safe than sorry
-#include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#endif
 
-#include "g_local.h"
+#include "g_settings.h"
 #include "z_zone.h"
 #include "m_misc.h"
-#include "con_console.h"
 #include "i_system.h"
+#include "g_actions.h"
 
 static char* ConfigFileName =
-#ifdef _WIN32
+#ifdef SDL_PLATFORM_WIN32
 "config.cfg"
 #else
 NULL

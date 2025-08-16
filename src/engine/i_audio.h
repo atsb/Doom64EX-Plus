@@ -19,10 +19,10 @@
 #ifndef __I_AUDIO_H__
 #define __I_AUDIO_H__
 
-#include <fmod.h>
 #include <fmod_common.h>
-#include <fmod_errors.h>
+
 #include "m_fixed.h"
+#include "tables.h"
 
 typedef struct {
     fixed_t x;

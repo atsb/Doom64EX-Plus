@@ -77,11 +77,11 @@
     <ClCompile Include="..\src\engine\tables.c" />
     <ClCompile Include="..\src\engine\wi_stuff.c" />
     <ClCompile Include="..\src\engine\w_file.c" />
-    <ClCompile Include="..\src\engine\w_merge.c" />
     <ClCompile Include="..\src\engine\w_wad.c" />
     <ClCompile Include="..\src\engine\z_zone.c" />
     <ClCompile Include="..\src\engine\net_server.c" />
     <ClCompile Include="..\src\engine\steam.c" />
+    <ClCompile Include="..\src\engine\w_merge.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\dgl.h" />
@@ -99,7 +99,6 @@
     <ClInclude Include="..\src\engine\g_controls.h" />
     <ClInclude Include="..\src\engine\g_demo.h" />
     <ClInclude Include="..\src\engine\g_game.h" />
-    <ClInclude Include="..\src\engine\g_local.h" />
     <ClInclude Include="..\src\engine\g_settings.h" />
     <ClInclude Include="..\src\engine\info.h" />
     <ClInclude Include="..\src\engine\i_audio.h" />
@@ -138,7 +137,6 @@
     <ClInclude Include="..\src\engine\r_clipper.h" />
     <ClInclude Include="..\src\engine\r_drawlist.h" />
     <ClInclude Include="..\src\engine\r_lights.h" />
-    <ClInclude Include="..\src\engine\r_local.h" />
     <ClInclude Include="..\src\engine\r_main.h" />
     <ClInclude Include="..\src\engine\r_sky.h" />
     <ClInclude Include="..\src\engine\r_things.h" />
@@ -151,16 +149,29 @@
     <ClInclude Include="..\src\engine\t_bsp.h" />
     <ClInclude Include="..\src\engine\wi_stuff.h" />
     <ClInclude Include="..\src\engine\w_file.h" />
-    <ClInclude Include="..\src\engine\w_merge.h" />
     <ClInclude Include="..\src\engine\w_wad.h" />
     <ClInclude Include="..\src\engine\z_zone.h" />
     <ClInclude Include="..\src\engine\net_server.h" />
     <ClInclude Include="..\src\engine\steam.h" />
+    <ClInclude Include="..\src\engine\w_merge.h" />
+    <ClInclude Include="..\src\engine\d_main.h" />
+    <ClInclude Include="..\src\engine\d_net.h" />
+    <ClInclude Include="..\src\engine\d_player.h" />
+    <ClInclude Include="..\src\engine\con_cvar.h" />
+    <ClInclude Include="..\src\engine\am_map.h" />
+    <ClInclude Include="..\src\engine\am_draw.h" />
+    <ClInclude Include="..\src\engine\con_console.h" />
+    <ClInclude Include="..\src\engine\d_devstat.h" />
+    <ClInclude Include="..\src\engine\sha1.h" />
+    <ClInclude Include="..\src\engine\i_system_io.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\engine\doom64ex-plus.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\engine\defconfig.inc" />
   </ItemGroup>
 </Project>

@@ -20,13 +20,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "stdlib.h"
-
-#include "doomtype.h"
-#include "doomdef.h"
-#include "i_system.h"
+#include <stdint.h>
+#include <limits.h>
 
 #include "m_fixed.h"
+#include "doomdef.h"
 
 /* ATSB 
 

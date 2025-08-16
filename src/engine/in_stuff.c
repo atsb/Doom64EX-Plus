@@ -20,21 +20,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "i_system.h"
-#include "d_englsh.h"
 #include "doomstat.h"
-#include "st_stuff.h"
-#include "f_finale.h"
-#include "r_local.h"
 #include "r_wipe.h"
 #include "p_setup.h"
 #include "s_sound.h"
 #include "gl_draw.h"
+#include "d_event.h"
 
 static int              f_alpha = 0;
 static int              fInterFadeOut = false;
 static char             fInterString[16][32];
-static boolean         fInterDone = false;
+static boolean          fInterDone = false;
 static int              fInterAlpha = 0;
 static int              fInterSlot = 0;
 static int              fTextOffset = 0;

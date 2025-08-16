@@ -19,13 +19,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <math.h>
-
+#include "r_lights.h"
 #include "doomstat.h"
-
-#include "r_local.h"
-#include "d_keywds.h"
+#include "i_swap.h"
 #include "p_local.h"
+#include "con_cvar.h"
 
 rcolor    bspColor[5];
 

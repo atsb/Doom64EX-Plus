@@ -18,9 +18,11 @@
 #ifndef __TABLES__
 #define __TABLES__
 
+#include <SDL3/SDL_platform_defines.h>
+
 #include "m_fixed.h"
 
-#ifndef __APPLE__ //ATSB: macOS already defines M_PI
+#ifndef SDL_PLATFORM_MACOS //ATSB: macOS already defines M_PI
 #ifdef M_PI
 #undef M_PI
 #endif

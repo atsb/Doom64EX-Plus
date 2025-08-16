@@ -23,11 +23,10 @@
 
 #include "z_zone.h"
 #include "m_random.h"
-#include "doomdef.h"
 #include "doomstat.h"
 #include "p_local.h"
-#include "i_system.h"
 #include "r_lights.h"
+#include "con_cvar.h"
 
 CVAR_EXTERNAL(v_accessibility);
 

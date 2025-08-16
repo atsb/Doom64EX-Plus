@@ -18,7 +18,8 @@
 #ifndef D3DR_LIGHTS_H
 #define D3DR_LIGHTS_H
 
-#include "r_local.h"
+#include "gl_main.h"
+#include "t_bsp.h"
 
 enum {
 	LIGHT_FLOOR,

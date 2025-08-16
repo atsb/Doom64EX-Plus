@@ -23,14 +23,7 @@
 #include "tables.h"
 #include "info.h"
 #include "m_fixed.h"
-#include "d_think.h"
 #include "doomdata.h"
-#include "tables.h"
-#include "info.h"
-
-#ifdef __GNUG__
-#pragma interface
-#endif
 
 //
 // NOTES: mobj_t

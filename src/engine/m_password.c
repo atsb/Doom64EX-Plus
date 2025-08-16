@@ -20,12 +20,10 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "m_password.h"
 #include "doomdef.h"
 #include "doomstat.h"
-#include "d_englsh.h"
 #include "i_swap.h"
-#include "con_console.h"
-#include "m_password.h"
 
 //
 // PASSWORD STUFF

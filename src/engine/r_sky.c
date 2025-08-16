@@ -20,23 +20,21 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdlib.h>
+//#include <stdlib.h>
 
-#include "doomstat.h"
-#include "r_lights.h"
 #include "r_sky.h"
+#include "doomstat.h"
+#include "doomdef.h"
+#include "r_main.h"
 #include "w_wad.h"
 #include "m_random.h"
 #include "sounds.h"
 #include "s_sound.h"
-#include "p_local.h"
-#include "z_zone.h"
-#define close _close
 #include "i_png.h"
-#undef _close
 #include "gl_texture.h"
 #include "gl_draw.h"
 #include "r_drawlist.h"
+#include "dgl.h"
 
 skydef_t* sky;
 int         skypicnum = -1;

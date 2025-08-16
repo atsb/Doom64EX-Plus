@@ -17,9 +17,9 @@
 #ifndef __P_MACROS__
 #define __P_MACROS__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
+#include "p_mobj.h"
+#include "d_think.h"
+#include "t_bsp.h"
 
 #define MAXQUEUELIST    16
 

@@ -21,21 +21,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <SDL3/SDL_stdinc.h>
 
-#include "z_zone.h"
-#include "g_game.h"
+#include "wi_stuff.h"
 #include "s_sound.h"
 #include "doomstat.h"
 #include "sounds.h"
-#include "wi_stuff.h"
-#include "d_englsh.h"
 #include "m_password.h"
 #include "p_setup.h"
 #include "st_stuff.h"
 #include "r_wipe.h"
 #include "gl_draw.h"
-#include "m_misc.h"
 
 #define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
@@ -95,7 +91,7 @@ void WI_Start(void) {
 		seconds = (leveltime / TICRATE) % 60;
 	}
 
-	dsnprintf(timevalue, 16, "%2.2d:%2.2d", minutes, seconds);
+	SDL_snprintf(timevalue, sizeof(timevalue), "%2.2d:%2.2d", minutes, seconds);
 
 	// generate password
 	if (nextmap < 40) {
