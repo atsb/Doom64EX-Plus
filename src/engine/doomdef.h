@@ -152,6 +152,8 @@ typedef enum {
 	wp_plasma,
 	wp_bfg,
 	wp_laser,
+	wp_onlyshotgun,
+	wp_onlyfist,
 	NUMWEAPONS,
 
 	// No pending weapon change.
