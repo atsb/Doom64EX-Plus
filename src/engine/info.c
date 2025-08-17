@@ -144,8 +144,11 @@ void A_VileStart();
 void A_VileTarget();
 void A_VileAttack();
 
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4113)
+#endif
+
 state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_NULL*/              { SPR_SPOT, 0, -1, {NULL}, S_NULL },
 
@@ -1361,7 +1364,9 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	
 };
 
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 	{

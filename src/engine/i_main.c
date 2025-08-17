@@ -31,21 +31,6 @@
 const char version_date[] = __DATE__;
 
 //
-// _dprintf
-//
-
-void _dprintf(const char* s, ...) {
-	static char msg[MAX_MESSAGE_SIZE];
-	va_list    va;
-
-	va_start(va, s);
-	vsprintf(msg, s, va);
-	va_end(va);
-
-	players[consoleplayer].message = msg;
-}
-
-//
 // dmemcpy
 //
 

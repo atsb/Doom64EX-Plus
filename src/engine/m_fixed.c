@@ -23,6 +23,8 @@
 #include <stdint.h>
 #include <limits.h>
 
+#include <SDL3/SDL_platform_defines.h>
+
 #include "m_fixed.h"
 #include "doomdef.h"
 
@@ -47,7 +49,7 @@ FixedMul
 (fixed_t    a,
 	fixed_t    b) {
 
-#if defined __arm__ && !defined __APPLE__ && !defined __GNUC__
+#if defined __arm__ && !defined SDL_PLATFORM_MACOS && !defined __GNUC__
 	asm(
 		"SMULL 	 R2, R3, R0, R1\n\t"
 		"MOV	 R1, R2, LSR #16\n\t"
@@ -55,7 +57,7 @@ FixedMul
 		"ORR	 R0, R1, R2\n\t"
 		"BX		 LR"
 	);
-#elif defined __aarch64__ && !defined __APPLE__ && !defined __GNUC__
+#elif defined __aarch64__ && !defined SDL_PLATFORM_MACOS && !defined __GNUC__
 	asm(
 		"SMLAL 	 R2, R3, R0, R1\n\t"
 		"MOV	 R1, R2, LSR #16\n\t"

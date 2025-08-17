@@ -68,7 +68,6 @@ void M_LoadDefaults(void);
 void M_SaveDefaults(void);
 bool M_StringCopy(char* dest, const char* src, unsigned int dest_size);
 char* M_StringDuplicate(const char* orig);
-int M_vsnprintf(char* buf, unsigned int buf_len, const char* s, va_list args);
 
 //
 // DEFAULTS

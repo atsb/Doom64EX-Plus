@@ -24,11 +24,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "w_file.h"
 #include "doomtype.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_misc.h"
-#include "w_file.h"
 
 // Array of locations to search for IWAD files
 //

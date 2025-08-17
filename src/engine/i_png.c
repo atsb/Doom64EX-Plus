@@ -22,7 +22,6 @@
 
 #include <math.h>
 #include <png.h>
-//#include <SDL3/SDL_stdinc.h> // for SDL_INLINE
 
 #include "i_png.h"
 #include "doomdef.h"

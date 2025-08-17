@@ -198,7 +198,7 @@ void G_RecordDemo(const char* name) {
 void G_PlayDemo(const char* name) {
 	int i;
 	int p;
-	char filename[256];
+	filepath_t filename;
 
 	gameaction = ga_nothing;
 	endDemo = false;

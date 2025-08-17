@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <math.h>
+
 #include "i_sdlinput.h"
 #include "doomdef.h"
 #include "doomstat.h"

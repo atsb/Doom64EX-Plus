@@ -20,8 +20,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "m_cheat.h"
+#include <stdarg.h>
 #include <ctype.h>
+
+#include "m_cheat.h"
 #include "g_game.h"
 #include "d_englsh.h"
 #include "doomstat.h"
@@ -149,10 +151,10 @@ static void M_CheatWarp(player_t* player, char dat[4]) {
 	}
 	if (map < 10)
 	{
-		snprintf(lumpname, 14, "MAP0%i", map);
+		sprintf(lumpname, "MAP0%i", map);
 	}
 	else {
-		snprintf(lumpname, 14, "MAP%i", map);
+		sprintf(lumpname, "MAP%i", map);
 	}
 	if (map > 40) {
 		G_InitNew(gameskill, 33);
@@ -194,10 +196,10 @@ static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 	}
 	if (map < 10)
 	{
-		snprintf(lumpname, 14, "MAP0%i", map);
+		sprintf(lumpname, "MAP0%i", map);
 	}
 	else {
-		snprintf(lumpname, 14, "MAP%i", map);
+		sprintf(lumpname, "MAP%i", map);
 	}
 	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
 
@@ -208,6 +210,18 @@ static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 		dmemset(passwordData, 0xff, 16);
 	}
 }
+
+static void _dprintf(const char* s, ...) {
+	static char msg[MAX_MESSAGE_SIZE];
+	va_list    va;
+
+	va_start(va, s);
+	vsprintf(msg, s, va);
+	va_end(va);
+
+	players[consoleplayer].message = msg;
+}
+
 
 static void M_CheatMyPos(player_t* player, char dat[4]) {
 	_dprintf("ang = %d; x,y = (%d, %d)",
