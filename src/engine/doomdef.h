@@ -18,15 +18,12 @@
 #ifndef __DOOMDEF__
 #define __DOOMDEF__
 
-#include <SDL3/SDL_platform_defines.h>
-
 #include "doomtype.h"
 #include "tables.h"
 
 // build version
 extern const char version_date[];
 
-void        _dprintf(const char* s, ...);
 void*		dmemcpy(void* s1, const void* s2, unsigned int n);
 void*		dmemset(void* s, int c, unsigned int n);
 char*		dstrcpy(char* dest, const char* src);
@@ -51,21 +48,6 @@ extern float D_fabs(float x);
 
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]
 #define dsin(angle) finesine[(angle) >> ANGLETOFINESHIFT]
-
-//
-// The packed attribute forces structures to be packed into the minimum
-// space necessary.  If this is not done, the compiler may align structure
-// fields differently to optimise memory access, inflating the overall
-// structure size.  It is important to use the packed attribute on certain
-// structures where alignment is important, particularly data read/written
-// to disk.
-//
-
-#ifdef __GNUC__
-#define PACKEDATTR __attribute__((packed))
-#else
-#define PACKEDATTR
-#endif
 
 //
 // Global parameters/defines.

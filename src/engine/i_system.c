@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 
 #include "i_system.h"
+#include "i_system_io.h"
 #include "doomstat.h"
 #include "doomdef.h"
 #include "m_misc.h"
@@ -47,17 +48,12 @@ CVAR(i_interpolateframes, 1);
 CVAR(v_accessibility, 0);
 CVAR(v_fadein, 1);
 
-// Gibbon - hack from curl to deal with some crap
-#if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
-#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
-#endif
-
-#ifdef DOOM_UNIX_INSTALL
-#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus");
-#elif !defined DOOM_UNIX_INSTALL || defined SDL_PLATFORM_WIN32 || !defined __ANDROID__
-#define GetBasePath()	(char *)SDL_GetBasePath();
-#elif defined __ANDROID__
+#ifdef SDL_PLATFORM_ANDROID
 #define GetBasePath()   SDL_GetAndroidInternalStoragePath();
+#elif defined(DOOM_UNIX_INSTALL)
+#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus"); // returns allocated string
+#else 
+#define GetBasePath()	(char *)SDL_GetBasePath(); // not guaranteed to be writeable !
 #endif
 
 ticcmd_t        emptycmd;
@@ -239,9 +235,9 @@ char* I_GetUserFile(char* file) {
 	if (!(userdir = I_GetUserDir()))
 		return NULL;
 
-	path = malloc(512);
+	path = malloc(MAX_PATH);
 
-	snprintf(path, 511, "%s%s", userdir, file);
+	SDL_snprintf(path, MAX_PATH, "%s%s", userdir, file);
 
 #ifdef DOOM_UNIX_INSTALL
     // SDL_GetPrefPath() returns an allocated string
@@ -257,20 +253,20 @@ char* I_GetUserFile(char* file) {
  * @return Fully-qualified path or NULL if not found.
  */
 
-static boolean steam_install_dir_found = false;
-static char steam_install_dir[512];
 
 char* I_FindDataFile(char* file) {
-	char* path = malloc(512);
+	char *path = malloc(MAX_PATH);
 	const char* dir;
 	steamgame_t game;
+	static boolean steam_install_dir_found = false;
+	static filepath_t steam_install_dir;
     
 	if (path == NULL) {
 		return NULL;
 	}
 
 	if ((dir = SDL_GetBasePath())) {
-		snprintf(path, 511, "%s%s", dir, file);
+        SDL_snprintf(path, MAX_PATH, "%s%s", dir, file);
 		if (I_FileExists(path)) {
 			return path;
 		}
@@ -280,7 +276,7 @@ char* I_FindDataFile(char* file) {
 
 #ifdef DOOM_UNIX_INSTALL
 	if ((dir = I_GetUserDir())) {
-		snprintf(path, 511, "%s%s", dir, file);
+		SDL_snprintf(path, MAX_PATH, "%s%s", dir, file);
 		if (I_FileExists(path)) {
 			return path;
 		}
@@ -288,28 +284,30 @@ char* I_FindDataFile(char* file) {
 #endif    
     
 #ifdef DOOM_UNIX_SYSTEM_DATADIR
-	snprintf(path, 511, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
+	SDL_snprintf(path, MAX_PATH, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
 	if (I_FileExists(path)) {
 		return path;
 	}
 #endif
 
-	snprintf(path, 511, "%s", file);
+	SDL_snprintf(path, MAX_PATH, "%s", file);
 	if (I_FileExists(path)) {
 		return path;
 	}
 #else // SDL_PLATFORM_WIN32
 
 	// detect GOG prior to Steam because it is faster
-	char install_dir[512];
+
+	filepath_t install_dir;
 	if (I_GetRegistryString(HKEY_LOCAL_MACHINE,
-		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", install_dir, 511)) {
-		snprintf(path, 511, "%s/%s", install_dir, file);
+		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", install_dir, MAX_PATH)) {
+		SDL_snprintf(path, MAX_PATH, "%s/%s", install_dir, file);
 		if (I_FileExists(path)) {
 			I_Printf("I_FindDataFile: Adding GOG file %s\n", path);
 			return path;
 		}
 	}
+
 #endif
 
 #if defined(SDL_PLATFORM_WIN32) || defined(SDL_PLATFORM_LINUX)  
@@ -318,11 +316,11 @@ char* I_FindDataFile(char* file) {
 
 	if(!steam_install_dir_found) {
         steam_install_dir_found = Steam_FindGame(&game, DOOM64_STEAM_APPID)
-            && Steam_ResolvePath(steam_install_dir, 511, &game);
+            && Steam_ResolvePath(steam_install_dir, &game);
     }
 
     if(steam_install_dir_found) {
-       snprintf(path, 511, "%s/%s", steam_install_dir, file); 
+       SDL_snprintf(path, MAX_PATH, "%s/%s", steam_install_dir, file); 
 	   if (I_FileExists(path)) {
 		   I_Printf("I_FindDataFile: Adding Steam file %s\n", path);
 		   return path;
@@ -460,7 +458,7 @@ void I_Printf(const char* string, ...) {
 	char buff[1024];
 	va_list    va;
 
-	dmemset(buff, 0, 1024);
+	dmemset(buff, 0, sizeof(buff));
 
 	va_start(va, string);
 	vsprintf(buff, string, va);

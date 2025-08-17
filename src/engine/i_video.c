@@ -186,7 +186,7 @@ void I_InitScreen(void) {
         return;
     }
 
-#if SDL_PLATFORM_LINUX 
+#ifdef SDL_PLATFORM_LINUX
     // NVIDIA Linux specific: fixes input lag with vsync on
     // does not do anything if not running on NVIDIA card
     SDL_Environment *env = SDL_GetEnvironment();

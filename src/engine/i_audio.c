@@ -261,7 +261,7 @@ typedef int(*signalhandler)(doomseq_t*);
 
 static void FMOD_ERROR_CHECK(FMOD_RESULT result) {
     if (result != FMOD_OK) {
-        printf("FMOD Studio: %s\n", FMOD_ErrorString(result));
+        fprintf(stderr, "FMOD Studio: %s\n", FMOD_ErrorString(result));
         // useful for crashing as soon as there is an fmod error
         //
         // compile program with LDFLAGS="-fsanitize=address" CFLAGS="-O0 -g -fsanitize=address  -fno-omit-frame-pointer"
