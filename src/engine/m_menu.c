@@ -109,7 +109,6 @@ static char     MenuBindMessage[256];
 static boolean MenuBindActive = false;
 static boolean showfullitemvalue[3] = { false, false, false };
 static int      thermowait = 0;
-static int      m_aspectRatio = 0;
 static int      m_ScreenSize = 1;
 
 //------------------------------------------------------------------------

@@ -157,6 +157,11 @@ static void InitSpriteList(void) {
 
 // Find a sprite frame
 
+#ifdef GCC_COMPILER
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+
 static sprite_frame_t* FindSpriteFrame(char* name, int frame) {
 	sprite_frame_t* result;
 	int i;
@@ -201,6 +206,11 @@ static sprite_frame_t* FindSpriteFrame(char* name, int frame) {
 
 	return result;
 }
+
+#ifdef GCC_COMPILER
+#pragma GCC diagnostic pop
+#endif
+
 
 // Check if sprite lump is needed in the new wad
 
