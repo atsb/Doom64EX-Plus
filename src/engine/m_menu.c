@@ -2447,7 +2447,7 @@ void M_ChangeKeyBinding(int choice);
 void M_BuildControlMenu(void);
 void M_DrawControls(void);
 
-#define NUM_CONTROL_ACTIONS     48
+#define NUM_CONTROL_ACTIONS     51
 #define NUM_CONTROL_ITEMS       NUM_CONTROL_ACTIONS
 
 menuaction_t* PlayerActions;
@@ -2474,7 +2474,7 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Weapons", NULL},
 	{"Next Weapon", "nextweap"},
 	{"Previous Weapon", "prevweap"},
-	{"Fist", "weapon 2"},
+	{"Fist/Chainsaw", "weapon 2"},
 	{"Pistol", "weapon 3"},
 	{"Shotgun(s)", "weapon 4"},
 	{"Chaingun", "weapon 6"},
@@ -2482,7 +2482,10 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Plasma Rifle", "weapon 8"},
 	{"BFG 9000", "weapon 9"},
 	{"Unmaker", "weapon 10"},
+	{"Fist", "weapon 12"},
 	{"Chainsaw", "weapon 1"},
+	{"Shotgun", "weapon 11"},
+	{"Super Shotgun", "weapon 5"},
 	{"Automap", NULL},
 	{"Toggle", "automap"},
 	{"Zoom In", "+automap_in"},

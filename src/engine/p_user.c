@@ -655,6 +655,15 @@ void P_PlayerThink(player_t* player) {
                 newweapon = wp_supershotgun;
             }
 
+            if (newweapon == wp_onlyshotgun
+                && player->weaponowned[wp_shotgun]) {
+                newweapon = wp_shotgun;
+            }
+
+            if (newweapon == wp_onlyfist) {
+                newweapon = wp_fist;
+            }
+
             if (player->weaponowned[newweapon] && newweapon != player->readyweapon) {
                 player->pendingweapon = newweapon;
             }
