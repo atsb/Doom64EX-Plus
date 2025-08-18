@@ -47,6 +47,7 @@
 #include "r_main.h"
 
 CVAR_EXTERNAL(p_damageindicator);
+CVAR_EXTERNAL(r_weaponswitch);
 CVAR(m_obituaries, 0);
 CVAR_EXTERNAL(m_brutal);
 
@@ -210,7 +211,9 @@ boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dr
 	{
 		gaveweapon = true;
 		player->weaponowned[weapon] = true;
-		player->pendingweapon = weapon;
+		if (r_weaponswitch.value) {
+			player->pendingweapon = weapon;
+		}
 	}
 
 	return gaveweapon || gaveammo;
