@@ -23,6 +23,8 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+#include <SDL3/SDL_stdinc.h>
+
 #include "m_cheat.h"
 #include "g_game.h"
 #include "d_englsh.h"
@@ -139,7 +141,7 @@ static void M_CheatBerserk(player_t* player, char dat[4]) {
 CVAR_EXTERNAL(sv_skill);
 static void M_CheatWarp(player_t* player, char dat[4]) {
 	char	lumpname[14];
-	int		lumpnum;
+	int		lumpnum = 0;
 	int map;
 	map = datoi(dat);
 	gameskill = (int)sv_skill.value;
@@ -393,7 +395,7 @@ static boolean M_FindCheats(player_t* plyr, int key) {
 				if (!matchedbefore) {
 					// responder has eaten key
 					matchedbefore = ret = 1;
-					sprintf(buff, "%i", cheat[i].arg);
+					SDL_snprintf(buff, sizeof(buff), "%i", cheat[i].arg);
 
 					// call cheat handler
 					if (netgame) {

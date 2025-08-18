@@ -77,4 +77,8 @@ extern boolean    DigiJoy;
 boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars);
 #endif
 
+#if defined(__GNUC__) && !defined(__clang__)
+#define GCC_COMPILER
+#endif
+
 #endif

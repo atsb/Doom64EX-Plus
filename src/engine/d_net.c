@@ -190,16 +190,6 @@ void NetUpdate(void) {
 }
 
 //
-// D_StartGameLoop
-//
-// Called after the screen is set but before the game starts running.
-//
-
-static void D_StartGameLoop(void) {
-	gametime = GetAdjustedTime() / ticdup;
-}
-
-//
 // PrintMD5Digest
 //
 
