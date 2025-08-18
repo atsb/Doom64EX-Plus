@@ -487,8 +487,8 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	//
 	// do the drawing
 	//
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	dglTriangle(2, 1, 0);
 	dglTriangle(2, 0, 3);
 	dglDrawGeometry(4, vtx);

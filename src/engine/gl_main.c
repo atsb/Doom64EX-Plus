@@ -54,7 +54,6 @@ const char *gl_version;
 static float glScaleFactor = 1.0f;
 
 boolean    usingGL = false;
-int         DGL_CLAMP = GL_CLAMP;
 float       max_anisotropic = 16.0;
 boolean    widescreen = false;
 
@@ -637,7 +636,6 @@ void GL_Init(void) {
     dglEnableClientState(GL_TEXTURE_COORD_ARRAY);
     dglEnableClientState(GL_COLOR_ARRAY);
 
-    DGL_CLAMP = (GetVersionInt(gl_version) >= OPENGL_VERSION_4_6 ? GL_CLAMP_TO_EDGE : GL_CLAMP);
 
     glScaleFactor = 1.0f;
 
