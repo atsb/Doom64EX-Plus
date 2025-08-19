@@ -461,8 +461,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	// if texture is already in video ram
 	if (spriteptr[spritenum][pal]) {
 		dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		if (devparm) {
 			glBindCalls++;
 		}
@@ -474,8 +474,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	dglGenTextures(1, &spriteptr[spritenum][pal]);
 	dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	SetTextureImage(png, 4, &w, &h, GL_RGBA8, GL_RGBA);
 	Z_Free(png);
@@ -502,8 +502,8 @@ dtexture GL_ScreenToTexture(void) {
 	dglGenTextures(1, &id);
 	dglBindTexture(GL_TEXTURE_2D, id);
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, DGL_CLAMP);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, DGL_CLAMP);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
