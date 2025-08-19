@@ -34,9 +34,10 @@
 #include "gl_texture.h"
 #include "con_cvar.h"
 
+
 static byte* pngWriteData;
 static byte* pngReadData;
-static size_t pngWritePos = 0;
+static size_t   pngWritePos = 0;
 
 CVAR_CMD(i_gamma, 0) {
     GL_DumpTextures();
@@ -45,6 +46,7 @@ CVAR_CMD(i_gamma, 0) {
 //
 // I_PNGRowSize
 //
+
 SDL_INLINE static size_t I_PNGRowSize(int width, byte bits) {
     if (bits >= 8) {
         return ((width * bits) >> 3);
@@ -57,6 +59,7 @@ SDL_INLINE static size_t I_PNGRowSize(int width, byte bits) {
 //
 // I_PNGReadFunc
 //
+
 static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
     dmemcpy(area, pngReadData, size);
     pngReadData += size;
@@ -65,6 +68,7 @@ static void I_PNGReadFunc(png_structp ctx, byte* area, size_t size) {
 //
 // I_PNGFindChunk
 //
+
 static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
     int* dat;
 
@@ -81,6 +85,7 @@ static int I_PNGFindChunk(png_struct* png_ptr, png_unknown_chunkp chunk) {
 //
 // I_GetRGBGamma
 //
+
 SDL_INLINE static byte I_GetRGBGamma(int c) {
     return (byte)MIN(pow((float)c, (1.0f + (0.01f * i_gamma.value))), 255);
 }
@@ -89,8 +94,10 @@ SDL_INLINE static byte I_GetRGBGamma(int c) {
 // I_TranslatePalette
 // Increases the palette RGB based on gamma settings
 //
+
 static void I_TranslatePalette(png_colorp dest) {
     int i = 0;
+
     for (i = 0; i < 256; i++) {
         dest[i].red = I_GetRGBGamma(dest[i].red);
         dest[i].green = I_GetRGBGamma(dest[i].green);
@@ -101,18 +108,22 @@ static void I_TranslatePalette(png_colorp dest) {
 //
 // I_PNGReadData
 //
-byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
-    int* w, int* h, int* offset, int palindex)
-{
-    png_structp png_ptr = NULL;
-    png_infop   info_ptr = NULL;
-    png_uint_32 width, height;
-    int         bit_depth, color_type, interlace_type;
 
+byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
+    int* w, int* h, int* offset, int palindex) {
+    png_structp png_ptr;
+    png_infop   info_ptr;
+    png_uint_32 width;
+    png_uint_32 height;
+    int         bit_depth;
+    int         color_type;
+    int         interlace_type;
+    int         pixel_depth;
     byte* png;
     byte* out;
-    size_t row;
-    png_bytep* row_pointers = NULL;
+    size_t      row;
+    size_t      rowSize;
+    byte** row_pointers;
 
     // get lump data
     png = W_CacheLumpNum(lump, PU_STATIC);
@@ -146,6 +157,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
     if (offset) {
         offset[0] = 0;
         offset[1] = 0;
+
         png_set_read_user_chunk_fn(png_ptr, offset, I_PNGFindChunk);
     }
 
@@ -154,49 +166,51 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
     // get IHDR chunk
     png_get_IHDR(
-        png_ptr, info_ptr,
-        &width, &height,
-        &bit_depth, &color_type,
-        &interlace_type, NULL, NULL);
+        png_ptr,
+        info_ptr,
+        &width,
+        &height,
+        &bit_depth,
+        &color_type,
+        &interlace_type,
+        NULL,
+        NULL);
 
     if (usingGL && !alpha) {
         int num_trans = 0;
         png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
-        if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
+        if (num_trans)
+            //if(usingGL && !alpha && info_ptr->num_trans)
+        {
             I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
         }
     }
 
-    // indexed palette data!!!
+    // if the data will be outputted as palette index data (non RGB(A))
     if (palette) {
         if (bit_depth == 4 && nopack) {
             png_set_packing(png_ptr);
         }
     }
-    else {
+    else {  // data will be outputted as RGB(A) data
         if (bit_depth == 16) {
             png_set_strip_16(png_ptr);
         }
 
-        if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
-            png_set_expand_gray_1_2_4_to_8(png_ptr);
-        }
-        if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-            png_set_gray_to_rgb(png_ptr);
-        }
-
         if (color_type == PNG_COLOR_TYPE_PALETTE) {
-            int i = 0, num_pal = 0;
-            png_colorp pal = NULL;
-            png_get_PLTE(png_ptr, info_ptr, &pal, &num_pal);
+            int i = 0;
+            png_colorp pal = NULL; //info_ptr->palette;
+            int num_pal = 0;
+            png_get_PLTE(png_ptr, info_ptr, &pal, &num_pal);  // FIXME: num_pal not used??
 
             if (palindex) {
+                // palindex specifies each row (16 colors per row) in the palette for 4 bit color textures
                 if (bit_depth == 4) {
-                    for (i = 0; i < 16 && (16 * palindex + i) < num_pal; i++) {
+                    for (i = 0; i < 16; i++) {
                         dmemcpy(&pal[i], &pal[(16 * palindex) + i], sizeof(png_color));
                     }
                 }
-                else if (bit_depth >= 8) {
+                else if (bit_depth >= 8) {  // 8 bit and up requires an external palette lump
                     png_colorp pallump;
                     char palname[9];
 
@@ -204,10 +218,12 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
                     dstrncpy(palname + 3, lumpinfo[lump].name, 4);
                     sprintf(palname + 7, "%i", palindex);
 
+                    // villsa 12/04/13: don't abort if external palette is not found
                     if (W_CheckNumForName(palname) != -1) {
                         pallump = W_CacheLumpName(palname, PU_STATIC);
 
-                        for (i = 0; i < MIN(num_pal, 256); i++) {
+                        // swap out current palette with the new one
+                        for (i = 0; i < 256; i++) {
                             pal[i].red = pallump[i].red;
                             pal[i].green = pallump[i].green;
                             pal[i].blue = pallump[i].blue;
@@ -215,100 +231,101 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
                         Z_Free(pallump);
                     }
+                    // villsa 12/04/13: if we're loading texture palette as normal
+                    // but palindex is not zero, then just copy out a single row from the
+                    // palette in case world textures have a 8-32 bit depth color table
                     else {
-                        for (i = 0; i < 16 && (16 * palindex + i) < num_pal; i++) {
+                        for (i = 0; i < 16; i++) {
                             dmemcpy(&pal[i], &pal[(16 * palindex) + i], sizeof(png_color));
                         }
                     }
                 }
             }
 
-            if (pal) {
-                I_TranslatePalette(pal);
-            }
-
+            I_TranslatePalette(pal);
             png_set_palette_to_rgb(png_ptr);
-            color_type = PNG_COLOR_TYPE_RGB;
-        }
-
-        // Respect tRNS
-        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
-            png_set_tRNS_to_alpha(png_ptr);
         }
 
         if (alpha) {
-            if (!(color_type & PNG_COLOR_MASK_ALPHA) && !png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
-                png_set_filler(png_ptr, 0xFF, PNG_FILLER_AFTER);
-            }
-            else {
-            }
-        }
-        else {
-            if ((color_type & PNG_COLOR_MASK_ALPHA) || png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
-                png_set_strip_alpha(png_ptr);
-            }
+            // add alpha values to the RGB data
+            png_set_swap_alpha(png_ptr);
+            png_set_add_alpha(png_ptr, 0xff, 0);
         }
     }
 
+    // refresh png information
     png_read_update_info(png_ptr, info_ptr);
+
+    // refresh data in IHDR chunk
     png_get_IHDR(
-        png_ptr, info_ptr,
-        &width, &height,
-        &bit_depth, &color_type,
-        &interlace_type, NULL, NULL);
+        png_ptr,
+        info_ptr,
+        &width,
+        &height,
+        &bit_depth,
+        &color_type,
+        &interlace_type,
+        NULL,
+        NULL);
 
-    if (w) *w = (int)width;
-    if (h) *h = (int)height;
+    // get the size of each row
+    pixel_depth = bit_depth;
 
-    const png_size_t rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+    if (color_type == PNG_COLOR_TYPE_RGB) {
+        pixel_depth *= 3;
+    }
+    else if (color_type == PNG_COLOR_TYPE_RGB_ALPHA) {
+        pixel_depth *= 4;
+    }
 
-    out = (byte*)Z_Calloc(rowbytes * height, PU_STATIC, 0);
-    row_pointers = (png_bytep*)Z_Malloc(sizeof(png_bytep) * height, PU_STATIC, 0);
+    rowSize = I_PNGRowSize(width, pixel_depth /*info_ptr->pixel_depth*/);
+
+    if (w) {
+        *w = width;
+    }
+    if (h) {
+        *h = height;
+    }
+
+    // allocate output and row pointers
+    out = (byte*)Z_Calloc(rowSize * height, PU_STATIC, 0);
+    row_pointers = (byte**)Z_Malloc(sizeof(byte*) * height, PU_STATIC, 0);
 
     for (row = 0; row < height; row++) {
-        row_pointers[row] = out + (row * rowbytes);
+        row_pointers[row] = out + (row * rowSize);
     }
 
-    // read image
     png_read_image(png_ptr, row_pointers);
     png_read_end(png_ptr, info_ptr);
 
-    if (!palette && alpha) {
-        const size_t expected = (size_t)width * 4;
-        if (rowbytes == expected) {
-            const size_t pixels = (size_t)width * (size_t)height;
-            for (size_t p = 0; p < pixels; ++p) {
-                byte r = out[4 * p + 0];
-                byte g = out[4 * p + 1];
-                byte b = out[4 * p + 2];
-                byte a = out[4 * p + 3];
+    if (alpha) {
+        size_t i;
+        int* check = (int*)out;
 
-                out[4 * p + 0] = a; // A
-                out[4 * p + 1] = b; // B
-                out[4 * p + 2] = g; // G
-                out[4 * p + 3] = r; // R
-            }
-        }
-        else {
-            size_t y;
-            for (y = 0; y < height; ++y) {
-                byte* rowptr = out + y * rowbytes;
-                for (size_t x = 0; x < width; ++x) {
-                    byte r = rowptr[4 * x + 0];
-                    byte g = rowptr[4 * x + 1];
-                    byte b = rowptr[4 * x + 2];
-                    byte a = rowptr[4 * x + 3];
+        // need to reverse the bytes to ABGR format
+        for (i = 0; i < (height * rowSize) / 4; i++) {
+            int c = *check;
+#ifdef SYS_BIG_ENDIAN
+            byte a = (byte)((c >> 24) & 0xff);
+            byte b = (byte)((c >> 16) & 0xff);
+            byte g = (byte)((c >> 8) & 0xff);
+            byte r = (byte)(c & 0xff);
 
-                    rowptr[4 * x + 0] = a;
-                    rowptr[4 * x + 1] = b;
-                    rowptr[4 * x + 2] = g;
-                    rowptr[4 * x + 3] = r;
-                }
-            }
+            *check = (((unsigned int)b << 24) | (g << 16) | (r << 8) | a);
+#else
+
+            byte b = (byte)((c >> 24) & 0xff);
+            byte g = (byte)((c >> 16) & 0xff);
+            byte r = (byte)((c >> 8) & 0xff);
+            byte a = (byte)(c & 0xff);
+
+            *check = (((unsigned int)a << 24) | (b << 16) | (g << 8) | r);
+#endif
+            check++;
         }
     }
 
-    // cleanup
+    //cleanup
     Z_Free(row_pointers);
     Z_Free(png);
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
@@ -319,6 +336,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 //
 // I_PNGWriteFunc
 //
+
 static void I_PNGWriteFunc(png_structp png_ptr, byte* data, size_t length) {
     pngWriteData = (byte*)Z_Realloc(pngWriteData, pngWritePos + length, PU_STATIC, 0);
     dmemcpy(pngWriteData + pngWritePos, data, length);
@@ -328,6 +346,7 @@ static void I_PNGWriteFunc(png_structp png_ptr, byte* data, size_t length) {
 //
 // I_PNGCreate
 //
+
 byte* I_PNGCreate(int width, int height, byte* data, int* size) {
     png_structp png_ptr;
     png_infop   info_ptr;
@@ -338,12 +357,14 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
     size_t      j = 0;
     size_t      row;
 
+    // setup png pointer
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (png_ptr == NULL) {
         I_Error("I_PNGCreate: Failed getting png_ptr");
         return NULL;
     }
 
+    // setup info pointer
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL) {
         png_destroy_write_struct(&png_ptr, NULL);
@@ -351,26 +372,33 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
         return NULL;
     }
 
+    // what does this do again?
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
         I_Error("I_PNGCreate: Failed on setjmp");
         return NULL;
     }
 
+    // setup custom data writing procedure
     png_set_write_fn(png_ptr, NULL, I_PNGWriteFunc, NULL);
+
+    // setup image
     png_set_IHDR(
-        png_ptr, info_ptr,
-        width, height,
+        png_ptr,
+        info_ptr,
+        width,
+        height,
         8,
         PNG_COLOR_TYPE_RGB,
         PNG_INTERLACE_NONE,
         PNG_COMPRESSION_TYPE_BASE,
         PNG_FILTER_TYPE_DEFAULT);
 
+    // add png info to data
     png_write_info(png_ptr, info_ptr);
 
     row_pointers = (byte**)Z_Malloc(sizeof(byte*) * height, PU_STATIC, 0);
-    row = I_PNGRowSize(width, 24);
+    row = I_PNGRowSize(width, 24 /*info_ptr->pixel_depth*/);
     pic = data;
 
     for (i = 0; i < height; i++) {
@@ -399,9 +427,10 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 
     png_destroy_write_struct(&png_ptr, &info_ptr);
 
+    // allocate output
     out = (byte*)Z_Malloc(pngWritePos, PU_STATIC, 0);
     dmemcpy(out, pngWriteData, pngWritePos);
-    *size = (int)pngWritePos;
+    *size = pngWritePos;
 
     Z_Free(pngWriteData);
     pngWriteData = NULL;
