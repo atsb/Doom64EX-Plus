@@ -425,7 +425,7 @@ void GL_SetupAndDraw2DQuad(float x, float y, int width, int height,
 
     GL_Set2DQuad(v, x, y, width, height, u1, u2, v1, v2, c);
     GL_Draw2DQuad(v, stretch);
-};
+}
 
 //
 // GL_SetState
@@ -523,35 +523,6 @@ static void CalcViewSize(void) {
 
     ViewWindowX = 0;
     ViewWindowY = 0;
-}
-
-//
-// GetVersionInt
-// Borrowed from prboom+
-//
-
-typedef enum {
-    OPENGL_VERSION_2_0,
-    OPENGL_VERSION_4_6,
-} glversion_t;
-
-static int GetVersionInt(const char* version) {
-    int MajorVersion;
-    int MinorVersion;
-    int versionvar;
-
-    versionvar = OPENGL_VERSION_4_6;
-
-    if(sscanf(version, "%d.%d", &MajorVersion, &MinorVersion) == 2) {
-        if(MajorVersion > 3) {
-            versionvar = OPENGL_VERSION_4_6;
-        }
-        else {
-            versionvar = OPENGL_VERSION_2_0;
-        }
-    }
-
-    return versionvar;
 }
 
 //

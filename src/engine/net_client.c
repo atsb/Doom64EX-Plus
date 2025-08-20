@@ -321,6 +321,13 @@ static void NET_CL_ExpandFullTiccmd(net_full_ticcmd_t* cmd, unsigned int seq)
 
 // Advance the receive window
 
+#ifdef GCC_COMPILER
+// disable GCC overlapped memcpy warning in -Wall mode:
+// warning: ‘memcpy’ accessing 10668 bytes at offsets 0 and 84 overlaps 10584 bytes at offset 84 [-Wrestrict]
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+#endif
+
 static void NET_CL_AdvanceWindow(void)
 {
 	while (recvwindow[0].active)
@@ -340,6 +347,10 @@ static void NET_CL_AdvanceWindow(void)
 		//printf("CL: advanced to %i\n", recvwindow_start);
 	}
 }
+
+#ifdef GCC_COMPILER
+#pragma GCC diagnostic pop
+#endif
 
 // Shut down the client code, etc.  Invoked after a disconnect.
 
@@ -1264,6 +1275,7 @@ void NET_CL_Disconnect(void)
 		{
 			// time out after 5 seconds
 
+			// WTF? : warning: implicit conversion from enumeration type 'net_connstate_t' to different enumeration type 'net_clientstate_t' [-Wenum-conversion]
 			client_state = NET_CONN_STATE_DISCONNECTED;
 
 			fprintf(stderr, "NET_CL_Disconnect: Timeout while disconnecting from server\n");
