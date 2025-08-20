@@ -279,8 +279,6 @@ static void D_NetWait(void) {
 
 void D_CheckNetGame(void) {
 	int    i;
-	int    num_players;
-
 	// default values for single player
 
 	consoleplayer = 0;
@@ -387,14 +385,6 @@ void D_CheckNetGame(void) {
 	}
 
 #endif
-
-	num_players = 0;
-
-	for (i = 0; i < MAXPLAYERS; ++i) {
-		if (playeringame[i]) {
-			++num_players;
-		}
-	}
 }
 
 //

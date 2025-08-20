@@ -103,7 +103,7 @@ static struct {
 	bool init;
 } gamepad64;
 
-static inline float I_GamepadClamp(float x) { return x < 0.f ? 0.f : (x > 1.f ? 1.f : x); }
+static SDL_INLINE float I_GamepadClamp(float x) { return SDL_clamp(x, 0.f, 1.f); }
 
 static void I_GamepadRadialLookSmoothing(float x, float y,
 	float inner_dz, float outer_dz,
@@ -125,18 +125,18 @@ static void I_GamepadRadialLookSmoothing(float x, float y,
 	*oy = ny * t;
 }
 
-static inline float I_GamepadLookSmoothing(float prev, float input, float dt, float tc) {
+static SDL_INLINE float I_GamepadLookSmoothing(float prev, float input, float dt, float tc) {
 	float alpha = (tc > 0.f) ? (dt / (tc + dt)) : 1.f;
-	if (alpha < 0.f) alpha = 0.f; if (alpha > 1.f) alpha = 1.f;
+	alpha = SDL_clamp(alpha, 0.f, 1.f);
 	return prev + alpha * (input - prev);
 }
 
-static inline void I_GamepadPostKeyEvent(int key, bool down) {
+static SDL_INLINE void I_GamepadPostKeyEvent(int key, bool down) {
 	event_t ev; ev.type = down ? ev_keydown : ev_keyup; ev.data1 = key; ev.data2 = ev.data3 = 0; ev.data4 = 0;
 	D_PostEvent(&ev);
 }
 
-static inline void I_GamepadMenuEvent(bool now, bool* prev, int keycode, unsigned int* next_tic) {
+static SDL_INLINE void I_GamepadMenuEvent(bool now, bool* prev, int keycode, unsigned int* next_tic) {
 	if (now && !*prev) {
 		I_GamepadPostKeyEvent(keycode, true);
 		*next_tic = gametic + GAMEPAD_MENU_INITIAL_DELAY_TICS;
@@ -151,11 +151,11 @@ static inline void I_GamepadMenuEvent(bool now, bool* prev, int keycode, unsigne
 	*prev = now;
 }
 
-static inline void I_GamepadEdgeDetection(bool now, bool* prev, int keycode) {
+static SDL_INLINE void I_GamepadEdgeDetection(bool now, bool* prev, int keycode) {
 	if (now != *prev) { I_GamepadPostKeyEvent(keycode, now); *prev = now; }
 }
 
-static inline void I_GamepadKeyRelease(void) {
+static SDL_INLINE void I_GamepadKeyRelease(void) {
 	I_GamepadEdgeDetection(false, &gamepad64.player_forward, GAMEPAD_KEY_MOVE_FWD);
 	I_GamepadEdgeDetection(false, &gamepad64.player_backwards, GAMEPAD_KEY_MOVE_BACK);
 	I_GamepadEdgeDetection(false, &gamepad64.player_left, GAMEPAD_KEY_MOVE_LEFT);
@@ -169,19 +169,19 @@ static inline void I_GamepadKeyRelease(void) {
 	I_GamepadEdgeDetection(false, &gamepad64.player_automap, GAMEPAD_KEY_AUTOMAP);
 }
 
-static inline float I_GamepadAxisAlive(Sint16 v) {
+static SDL_INLINE float I_GamepadAxisAlive(Sint16 v) {
 	const float maxmag = (float)SDL_JOYSTICK_AXIS_MAX;
 	float f = (float)v / maxmag;
-	if (f < -1.f) f = -1.f; if (f > 1.f) f = 1.f;
+	f = SDL_clamp(f, -1.f, 1.f);
 	return f;
 }
-static inline float I_GamepadAxisDead(float v, float dz) {
+static SDL_INLINE float I_GamepadAxisDead(float v, float dz) {
 	float a = fabsf(v);
 	if (a <= dz) return 0.f;
 	float sign = (v < 0.f) ? -1.f : 1.f;
 	return sign * (a - dz) / (1.f - dz);
 }
-static inline void I_MouseRelease(int dx, int dy) {
+static SDL_INLINE void I_MouseRelease(int dx, int dy) {
 	event_t ev; ev.type = ev_mouse;
 	ev.data1 = 0;
 	ev.data2 = dx * 32;

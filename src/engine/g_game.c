@@ -142,13 +142,13 @@ NETCVAR(sv_respawnitems, 0);
 NETCVAR(sv_respawn, 0);
 NETCVAR(sv_skill, 2);
 
-NETCVAR_PARAM(sv_lockmonsters, 0, gameflags, GF_LOCKMONSTERS);
-NETCVAR_PARAM(sv_allowcheats, 0, gameflags, GF_ALLOWCHEATS);
-NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE);
-NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
-NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
-NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
-NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
+NETCVAR_PARAM(sv_lockmonsters, 0, gameflags, GF_LOCKMONSTERS)
+NETCVAR_PARAM(sv_allowcheats, 0, gameflags, GF_ALLOWCHEATS)
+NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE)
+NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS)
+NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP)
+NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM)
+NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS)
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
@@ -1014,9 +1014,17 @@ void G_DoLoadLevel(void) {
 boolean G_Responder(event_t* ev) {
 	// Handle level specific ticcmds
 	if (gamestate == GS_LEVEL) {
+
+		/* FIXME: if we support this, add a configurable key binding
 		// allow spy mode changes even during the demo
 		if (ev->type == ev_keydown
 			&& ev->data1 == KEY_F12 && (singledemo || !deathmatch)) {
+
+			int player_count = 0;
+			for(int i = 0 ; i < MAXPLAYERS ; i++) {
+				if(playeringame[i]) player_count++;
+			}
+
 			// spy mode
 			do {
 				displayplayer++;
@@ -1027,6 +1035,7 @@ boolean G_Responder(event_t* ev) {
 
 			return true;
 		}
+		*/
 
 		if (demoplayback && gameaction == ga_nothing) {
 			if (ev->type == ev_keydown ||

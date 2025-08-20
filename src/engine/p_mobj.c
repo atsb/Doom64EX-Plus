@@ -107,7 +107,7 @@ void P_SetTarget(mobj_t** mop, mobj_t* targ) {
 			(*mop)->refcount--;
 		}
 		else {
-			fprintf(stderr, "P_SetTarget: Invalid pointer detected in mop=%p\n", *mop);
+			fprintf(stderr, "P_SetTarget: Invalid pointer detected in mop=%p\n", (void *)*mop);
 			return;
 		}
 	}
@@ -117,7 +117,7 @@ void P_SetTarget(mobj_t** mop, mobj_t* targ) {
 			targ->refcount++;
 		}
 		else {
-			fprintf(stderr, "P_SetTarget: Invalid pointer detected in targ=%p\n", targ);
+			fprintf(stderr, "P_SetTarget: Invalid pointer detected in targ=%p\n", (void *)targ);
 			*mop = NULL;
 		}
 	}

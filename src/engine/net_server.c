@@ -288,6 +288,14 @@ static unsigned int NET_SV_LatestAcknowledged(void)
 	return lowtic;
 }
 
+
+#ifdef GCC_COMPILER
+// disable GCC overlapped memcpy warning in -Wall mode:
+// warning: ‘memcpy’ accessing 14224 bytes at offsets 0 and 112 overlaps 14112 bytes at offset 112 [-Wrestrict]
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+#endif
+
 // Possibly advance the recv window if all connected clients have
 // used the data in the window
 
@@ -365,6 +373,10 @@ static net_client_t* NET_SV_Controller(void)
 
 	return NULL;
 }
+
+#ifdef GCC_COMPILER
+#pragma GCC diagnostic pop
+#endif
 
 // Given an address, find the corresponding client
 
