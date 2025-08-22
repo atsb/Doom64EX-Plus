@@ -60,7 +60,7 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_misl,      S_ROCKETLUP, S_ROCKETLDOWN, S_ROCKETL, S_ROCKETL1, S_ROCKETLLIGHT1 },    // rocket launcher
 	{ am_cell,      S_PLASMAGUP1, S_PLASMAGDOWN, S_PLASMAG, S_PLASMAG1, S_NULL },    // plasma gun
 	{ am_cell,      S_BFGUP, S_BFGDOWN, S_BFG, S_BFG1, S_BFGLIGHT1 },    // bfg
-	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT }    // laser rifle
+	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT }    // demon artifact
 };
 
 static int laserCells = 1;
@@ -691,7 +691,7 @@ void A_FireCGun(player_t* player, pspdef_t* psp) {
 	psp->sx = (rand * FRACUNIT);
 
 	// randomize sy
-	rand = ((((ammo - 1) & 1) << 1) - 1);
+	rand = (((P_Random() & 1) << 1) - 1);
 	psp->sy = WEAPONTOP - (rand * (2 * FRACUNIT));
 	if (v_accessibility.value < 1)
 	{

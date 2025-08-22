@@ -71,14 +71,12 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 		return;
 	}
 
-	cmd->forwardmove = ((char)*demo_p++);
-	cmd->sidemove = ((char)*demo_p++);
-	lowbyte = (unsigned char)(*demo_p++);
-	cmd->angleturn = (((unsigned int)(unsigned char)(*demo_p++)) << 8) | lowbyte;
-	lowbyte = (unsigned char)(*demo_p++);
-	cmd->pitch = (((unsigned int)(unsigned char)(*demo_p++)) << 8) | lowbyte;
-	cmd->buttons = (unsigned char)*demo_p++;
-	cmd->buttons2 = (unsigned char)*demo_p++;
+	cmd->forwardmove = (int8_t)*demo_p++;
+	cmd->sidemove = (int8_t)*demo_p++;
+	cmd->angleturn = (int16_t)(demo_p[0] | (demo_p[1] << 8)); demo_p += 2;
+	cmd->pitch = (int16_t)(demo_p[0] | (demo_p[1] << 8)); demo_p += 2;
+	cmd->buttons = *demo_p++;
+	cmd->buttons2 = *demo_p++;
 }
 
 //
@@ -94,14 +92,14 @@ void G_WriteDemoTiccmd(ticcmd_t* cmd) {
 	angleturn = cmd->angleturn;
 	pitch = cmd->pitch;
 
-	*p++ = cmd->forwardmove;
-	*p++ = cmd->sidemove;
-	*p++ = angleturn & 0xff;
-	*p++ = (angleturn >> 8) & 0xff;
-	*p++ = pitch & 0xff;
-	*p++ = (pitch >> 8) & 0xff;
-	*p++ = cmd->buttons;
-	*p++ = cmd->buttons2;
+	*demo_p++ = (byte)cmd->forwardmove;        // int8
+	*demo_p++ = (byte)cmd->sidemove;           // int8
+	*demo_p++ = (byte)(cmd->angleturn & 0xff); // lo
+	*demo_p++ = (byte)(cmd->angleturn >> 8);   // hi
+	*demo_p++ = (byte)(cmd->pitch & 0xff);     // lo
+	*demo_p++ = (byte)(cmd->pitch >> 8);       // hi
+	*demo_p++ = (byte)cmd->buttons;
+	*demo_p++ = (byte)cmd->buttons2;
 
 	if (fwrite(buf, p - buf, 1, demofp) != 1) {
 		I_Error("G_WriteDemoTiccmd: error writing demo");

@@ -1106,7 +1106,7 @@ void G_Ticker(void) {
 		gameaction = ga_nothing;
 	}
 
-	if (paused & 2 || (!demoplayback && menuactive && !netgame)) {
+	if (paused || (menuactive && !netgame)) {
 		basetic++;    // For tracers and RNG -- we must maintain sync
 	}
 	else {
@@ -1115,10 +1115,22 @@ void G_Ticker(void) {
 		buf = (gametic / ticdup) % BACKUPTICS;
 
 		for (i = 0; i < MAXPLAYERS; i++) {
-			if (playeringame[i]) {
-				cmd = &players[i].cmd;
-
-				dmemcpy(cmd, &netcmds[i][buf], sizeof(ticcmd_t));
+			ticcmd_t * cmd = &players[i].cmd;
+			if (demoplayback) {
+				if (i == consoleplayer && gameaction == ga_nothing) {
+					G_ReadDemoTiccmd(cmd);
+					
+				}
+				else {
+					dmemset(cmd, 0, sizeof(*cmd)); // no phantom inputs for others
+					
+				}
+				
+			}
+			else {
+				*cmd = netcmds[i][buf];
+				
+			}
 
 				//
 				// 20120404 villsa - make sure gameaction isn't set to anything before
@@ -1151,7 +1163,6 @@ void G_Ticker(void) {
 				}
 			}
 		}
-	}
 
 	// check for special buttons
 	for (i = 0; i < MAXPLAYERS; i++) {
