@@ -608,12 +608,6 @@ mobj_t* P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type) {
 	mobj->tracer = NULL;
 	mobj->refcount = 0;    // init reference counter to 0
 
-	if (mobj->flags & MF_SOLID &&
-		compatflags & COMPATF_MOBJPASS &&
-		!(mobj->flags & (MF_NOCLIP | MF_SPECIAL))) {
-		mobj->blockflag |= BF_MOBJPASS;
-	}
-
 	if (gameskill != sk_nightmare) {
 		mobj->reactiontime = info->reactiontime;
 	}
@@ -1061,15 +1055,9 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	}
 
 	mobj = P_SpawnMobj(x, y, z, i);
-	mobj->z += INT2F(mthing->z);
-	mobj->spawnpoint = *mthing;
+	mobj->z += (mthing->z << FRACBITS);
+	mobj->angle = ANG45 * (mthing->angle / 45);
 	mobj->tid = mthing->tid;
-
-	if (mobj->flags & MF_SOLID &&
-		compatflags & COMPATF_MOBJPASS &&
-		!(mobj->flags & (MF_NOCLIP | MF_SPECIAL))) {
-		mobj->blockflag |= BF_MOBJPASS;
-	}
 
 	//
 	// [d64] check if spawn is valid

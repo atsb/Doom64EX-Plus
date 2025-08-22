@@ -148,7 +148,7 @@ NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE)
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS)
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP)
 NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM)
-NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS)
+NETCVAR_PARAM(compat_mobjpass, 0, compatflags, COMPATF_MOBJPASS)
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);

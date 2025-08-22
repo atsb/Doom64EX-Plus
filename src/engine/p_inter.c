@@ -794,8 +794,8 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 	}
 
 	// Init the random generator
-	srand((unsigned int)time(NULL));
-	int z = rand() % 500;
+	unsigned int seed = (unsigned int)((leveltime * 1664525u) ^ ((source ? source->type : 0) * 1013904223u) ^ 0x9E3779B9u);
+	int z = (int)((seed >> 16) % 500);
 
 	if (source != NULL) {
 		switch (source->type) {
