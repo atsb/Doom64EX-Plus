@@ -304,7 +304,7 @@ static CMD(Weapon) {
 
 	id = datoi(param[0]);
 
-	if ((id > NUMWEAPONS) || (id < 1)) {
+	if ((id > NUMWEAPONS && id < wp_onlyshotgun) || (id < 1)) {
 		return;
 	}
 

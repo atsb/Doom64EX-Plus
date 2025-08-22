@@ -664,7 +664,9 @@ void P_PlayerThink(player_t* player) {
                 newweapon = wp_fist;
             }
 
-            if (player->weaponowned[newweapon] && newweapon != player->readyweapon) {
+            if (player->weaponowned[newweapon] &&
+                newweapon != player->readyweapon &&
+                newweapon < NUMWEAPONS) {
                 player->pendingweapon = newweapon;
             }
         }
