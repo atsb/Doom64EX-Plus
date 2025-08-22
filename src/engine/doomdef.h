@@ -152,12 +152,14 @@ typedef enum {
 	wp_plasma,
 	wp_bfg,
 	wp_laser,
-	wp_onlyshotgun,
-	wp_onlyfist,
 	NUMWEAPONS,
 
 	// No pending weapon change.
-	wp_nochange
+	wp_nochange,
+
+	// Key bindings only.
+	wp_onlyshotgun,
+	wp_onlyfist,
 } weapontype_t;
 
 // Ammunition types defined.
