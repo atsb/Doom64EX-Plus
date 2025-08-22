@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <SDL3/SDL_stdinc.h>
-
+#include <limits.h>
 #include "doomdef.h"
 #include "doomstat.h"
 #include "d_main.h"
@@ -408,10 +408,8 @@ boolean dfcmp(float f1, float f2) {
 // D_abs
 //
 
-int D_abs(int x) {
-	fixed_t _t = (x), _s;
-	_s = _t >> (8 * sizeof _t - 1);
-	return (_t ^ _s) - _s;
+int D_abs(int v) {
+	return (v >= 0) ? v : (v == INT_MIN ? INT_MAX : -v);
 }
 
 //

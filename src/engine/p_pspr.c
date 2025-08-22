@@ -442,7 +442,7 @@ void A_Punch(player_t* player, pspdef_t* psp) {
 	}
 
 	angle = player->mo->angle;
-	angle += (angle_t)(P_Random() - P_Random()) << 18;
+	angle += (angle_t)((int32_t)P_SubRandom()) << 18;
 
 	slope = P_AimLineAttack(player->mo, angle, 0, MELEERANGE);
 
@@ -663,9 +663,9 @@ void A_FireShotgun2(player_t* player, pspdef_t* psp) {
 	for (i = 0; i < 20; i++) {
 		damage = (P_Random() % 3 + 1) * 5;
 		angle = player->mo->angle;
-		angle += (P_Random() - P_Random()) << 19;
+		angle += ((int32_t)P_SubRandom()) << 19;
 		P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope +
-			((P_Random() - P_Random()) << 5), damage);
+			(((int32_t)P_SubRandom()) << 5), damage);
 	}
 }
 

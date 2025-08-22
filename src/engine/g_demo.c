@@ -74,9 +74,9 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 	cmd->forwardmove = ((char)*demo_p++);
 	cmd->sidemove = ((char)*demo_p++);
 	lowbyte = (unsigned char)(*demo_p++);
-	cmd->angleturn = (((int)(*demo_p++)) << 8) + lowbyte;
+	cmd->angleturn = (((unsigned int)(unsigned char)(*demo_p++)) << 8) | lowbyte;
 	lowbyte = (unsigned char)(*demo_p++);
-	cmd->pitch = (((int)(*demo_p++)) << 8) + lowbyte;
+	cmd->pitch = (((unsigned int)(unsigned char)(*demo_p++)) << 8) | lowbyte;
 	cmd->buttons = (unsigned char)*demo_p++;
 	cmd->buttons2 = (unsigned char)*demo_p++;
 }

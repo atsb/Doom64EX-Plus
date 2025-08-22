@@ -43,7 +43,7 @@ float       datof(char* str);
 int         dhtoi(char* str);
 boolean		dfcmp(float f1, float f2);
 
-extern int D_abs(int x);
+extern int D_abs(int v);
 extern float D_fabs(float x);
 
 #define dcos(angle) finecosine[(angle) >> ANGLETOFINESHIFT]

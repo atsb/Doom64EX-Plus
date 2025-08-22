@@ -426,28 +426,25 @@ void AM_Ticker(void) {
 	float oldautomapx;
 	float oldautomapy;
 
-	if (!automapactive) {
+	if (!automapactive)
 		return;
-	}
 
 	AM_GetBounds();
 
 	if (am_flags & AF_ZOOMOUT) {
 		scale += 32.0f;
-		if (scale > 1500.0f) {
-			scale = 1500.0f;
-		}
+		if (scale > 1500.0f) scale = 1500.0f;
 	}
 	if (am_flags & AF_ZOOMIN) {
 		scale -= 32.0f;
-		if (scale < 200.0f) {
-			scale = 200.0f;
-		}
+		if (scale < 200.0f) scale = 200.0f;
 	}
 
 	speed = (scale / 16.0f) * FRACUNIT;
 	oldautomapx = automappanx;
 	oldautomapy = automappany;
+
+	bool updated_follow_target = false;
 
 	if (followplayer) {
 		if (am_flags & AF_PANMODE) {
@@ -471,14 +468,16 @@ void AM_Ticker(void) {
 			automapx = plr->mo->x;
 			automapy = plr->mo->y;
 			automapangle = plr->mo->angle;
+			updated_follow_target = true;
 		}
 	}
+
 	if (am_flags & AF_PANGAMEPAD) {
 		automappanx += mpanx;
 		automappany += mpany;
 		mpanx = mpany = 0;
 	}
-	else {
+	else if (!updated_follow_target) {
 		if (i_interpolateframes.value) {
 			automap_prev_x_interpolation = automapx;
 			automap_prev_y_interpolation = automapy;
@@ -487,63 +486,33 @@ void AM_Ticker(void) {
 		automapx = plr->mo->x;
 		automapy = plr->mo->y;
 		automapangle = plr->mo->angle;
+		updated_follow_target = true;
 	}
+
 	if ((!followplayer || (am_flags & AF_PANGAMEPAD)) &&
-		am_flags & (AF_PANLEFT | AF_PANRIGHT | AF_PANTOP | AF_PANBOTTOM)) {
-		if (am_flags & AF_PANTOP) {
-			automappany += speed;
-		}
-
-		if (am_flags & AF_PANLEFT) {
-			automappanx -= speed;
-		}
-
-		if (am_flags & AF_PANRIGHT) {
-			automappanx += speed;
-		}
-
-		if (am_flags & AF_PANBOTTOM) {
-			automappany -= speed;
-		}
+		(am_flags & (AF_PANLEFT | AF_PANRIGHT | AF_PANTOP | AF_PANBOTTOM))) {
+		if (am_flags & AF_PANTOP)    automappany += speed;
+		if (am_flags & AF_PANLEFT)   automappanx -= speed;
+		if (am_flags & AF_PANRIGHT)  automappanx += speed;
+		if (am_flags & AF_PANBOTTOM) automappany -= speed;
 	}
 
-	//
-	// check bounding box collision
-	//
-
-	if (am_box[BOXRIGHT] < (automappanx + automapx)) {
+	if (am_box[BOXRIGHT] < (automappanx + automapx) ||
+		(automappanx + automapx) < am_box[BOXLEFT]) {
 		automappanx = oldautomapx;
 	}
-	else if ((automappanx + automapx) < am_box[BOXLEFT]) {
-		automappanx = oldautomapx;
-	}
-
-	if (am_box[BOXTOP] < (automappany + automapy)) {
+	if (am_box[BOXTOP] < (automappany + automapy) ||
+		(automappany + automapy) < am_box[BOXBOTTOM]) {
 		automappany = oldautomapy;
 	}
-	else if ((automappany + automapy) < am_box[BOXBOTTOM]) {
-		automappany = oldautomapy;
-	}
-
-	//
-	// blinking tics
-	//
 
 	if (am_blink & 0x100) {
-		if ((am_blink & 0xff) == 0xff) {
-			am_blink = 0xff;
-		}
-		else {
-			am_blink += 0x10;
-		}
+		if ((am_blink & 0xff) == 0xff) am_blink = 0xff;
+		else am_blink += 0x10;
 	}
 	else {
-		if (am_blink < 0x5F) {
-			am_blink = 0x5F | 0x100;
-		}
-		else {
-			am_blink -= 0x10;
-		}
+		if (am_blink < 0x5F) am_blink = 0x5F | 0x100;
+		else am_blink -= 0x10;
 	}
 }
 

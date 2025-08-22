@@ -1169,9 +1169,9 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		x += ((P_Random() - P_Random()) << 12);
-		y += ((P_Random() - P_Random()) << 12);
-		z += ((P_Random() - P_Random()) << 11);
+		x += (((int32_t)P_SubRandom()) << 12);
+		y += (((int32_t)P_SubRandom()) << 12);
+		z += (((int32_t)P_SubRandom()) << 11);
 
 		th = P_SpawnMobj(x, y, z, MT_BLOOD);
 		th->momz = FRACUNIT * 2;
@@ -1198,9 +1198,9 @@ void P_SpawnBloodGreen(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		x += ((P_Random() - P_Random()) << 12);
-		y += ((P_Random() - P_Random()) << 12);
-		z += ((P_Random() - P_Random()) << 11);
+		x += (((int32_t)P_SubRandom()) << 12);
+		y += (((int32_t)P_SubRandom()) << 12);
+		z += (((int32_t)P_SubRandom()) << 11);
 
 		th = P_SpawnMobj(x, y, z, MT_BLOOD_GREEN);
 		th->momz = FRACUNIT * 2;
@@ -1227,9 +1227,9 @@ void P_SpawnBloodPurple(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		x += ((P_Random() - P_Random()) << 12);
-		y += ((P_Random() - P_Random()) << 12);
-		z += ((P_Random() - P_Random()) << 11);
+		x += (((int32_t)P_SubRandom()) << 12);
+		y += (((int32_t)P_SubRandom()) << 12);
+		z += (((int32_t)P_SubRandom()) << 11);
 
 		th = P_SpawnMobj(x, y, z, MT_BLOOD_PURPLE);
 		th->momz = FRACUNIT * 2;

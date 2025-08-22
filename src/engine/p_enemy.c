@@ -317,9 +317,9 @@ void T_MobjExplode(mobjexp_t* mexp) {
 	mexp->delay = mexp->delaymax;
 
 	if (mobj->state != (state_t*)S_NULL) {
-		x = (((P_Random() - P_Random()) << 14) + mobj->x);
-		y = (((P_Random() - P_Random()) << 14) + mobj->y);
-		z = (((P_Random() - P_Random()) << 14) + mobj->z);
+		x = ((((int32_t)P_SubRandom()) << 14) + mobj->x);
+		y = ((((int32_t)P_SubRandom()) << 14) + mobj->y);
+		z = ((((int32_t)P_SubRandom()) << 14) + mobj->z);
 
 		exp = P_SpawnMobj(x, y, z + (mobj->height << 1), MT_EXPLOSION2);
 
@@ -956,7 +956,7 @@ void A_SPosAttack(mobj_t* actor) {
 	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
 
 	for (i = 0; i < 3; i++) {
-		angle = bangle + ((P_Random() - P_Random()) << 20);
+		angle = bangle + (((int32_t)P_SubRandom()) << 20);
 		damage = ((P_Random() % 5) * 3) + 3;
 		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 	}
@@ -977,7 +977,7 @@ void A_CPosAttack(mobj_t* actor)
 	bangle = actor->angle;
 	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
 
-	angle = bangle + ((P_Random() - P_Random()) << 20);
+	angle = bangle + (((int32_t)P_SubRandom()) << 20);
 	damage = ((P_Random() % 5) * 3) + 3;
 	P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 }
@@ -1019,7 +1019,7 @@ void A_PlayAttack(mobj_t* actor) {
 
 	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
 
-	angle = bangle + ((P_Random() - P_Random()) << 20);
+	angle = bangle + (((int32_t)P_SubRandom()) << 20);
 	hitdice = (P_Random() % 5);
 	damage = ((hitdice << 2) - hitdice) + 3;
 	P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
@@ -1942,7 +1942,7 @@ void A_SpidAttack(mobj_t* actor)
 
 	for (i = 0; i < 3; i++)
 	{
-		angle = bangle + ((P_Random() - P_Random()) << 20);
+		angle = bangle + (((int32_t)P_SubRandom()) << 20);
 		damage = ((P_Random() & 5) * 3) + 3;
 		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 	}
@@ -2037,8 +2037,8 @@ boolean PIT_VileCheck(mobj_t* thing)
 
 	maxdist = thing->info->radius + mobjinfo[MT_VILE].radius;
 
-	if (abs(thing->x - viletryx) > maxdist
-		|| abs(thing->y - viletryy) > maxdist)
+	if (D_abs(thing->x - viletryx) > maxdist
+		|| D_abs(thing->y - viletryy) > maxdist)
 		return true;		// not actually touching
 
 	corpsehit = thing;
