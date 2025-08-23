@@ -65,14 +65,14 @@ extern int      starttime;
 void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 	unsigned int lowbyte;
 
-	if (demo_p >= demoend || *demo_p == DEMOMARKER) {
+	if (*demo_p == DEMOMARKER) {
 		// end of demo data stream
 		G_CheckDemoStatus();
 		return;
 	}
 
-	cmd->forwardmove = (int8_t)(*demo_p++);
-	cmd->sidemove = (int8_t)(*demo_p++);
+	cmd->forwardmove = (int8_t)*demo_p++;
+	cmd->sidemove = (int8_t)*demo_p++;
 	cmd->angleturn = (int16_t)(demo_p[0] | (demo_p[1] << 8)); demo_p += 2;
 	cmd->pitch = (int16_t)(demo_p[0] | (demo_p[1] << 8)); demo_p += 2;
 	cmd->buttons = *demo_p++;
@@ -84,16 +84,16 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 //
 
 void G_WriteDemoTiccmd(ticcmd_t* cmd) {
-	unsigned char buf[8];
+	char buf[8];
 	short angleturn;
 	short pitch;
-	unsigned char* p = buf;
+	char* p = buf;
 
 	angleturn = cmd->angleturn;
 	pitch = cmd->pitch;
 
-	*demo_p++ = (unsigned char)(int8_t)cmd->forwardmove;        // int8
-	*demo_p++ = (unsigned char)(int8_t)cmd->sidemove;           // int8
+	*demo_p++ = (byte)cmd->forwardmove;        // int8
+	*demo_p++ = (byte)cmd->sidemove;           // int8
 	*demo_p++ = (byte)(cmd->angleturn & 0xff); // lo
 	*demo_p++ = (byte)(cmd->angleturn >> 8);   // hi
 	*demo_p++ = (byte)(cmd->pitch & 0xff);     // lo
@@ -341,9 +341,7 @@ int D_RunDemo(char* name, skill_t skill, int map) // 8002B2D0
 	demo_p = Z_Malloc(16000, PU_STATIC, NULL);
 
 	lump = W_GetNumForName(name);
-	int len = W_LumpLength(lump);
 	W_ReadLump(lump, demo_p);
-	demoend = demo_p + len;
 	exit = G_PlayDemoPtr(skill, map);
 
 	return exit;
