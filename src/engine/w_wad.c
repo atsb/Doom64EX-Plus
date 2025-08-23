@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+﻿// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdint.h>   // for intptr_t
 #include <SDL3/SDL_stdinc.h>
 
 #include "w_wad.h"
@@ -34,18 +35,31 @@
 #include "m_misc.h"
 #include "md5.h"
 #include "i_swap.h"
-//
-// GLOBALS
-//
+#include "kpf.h"
+#include "i_png.h"
 
-// pack pragma is supported by MSVC, GCC, Clang
+#define KPF_PNG_CAP_BYTES (40 * 1024 * 1024)
+#define WADFILE_MEM ((wad_file_t*)(intptr_t)-1)
+
+typedef struct memlump_s {
+	unsigned char* data;
+	int size;
+	char name[8];
+} memlump_t;
+
+#ifndef MAX_MEMLUMPS
+#define MAX_MEMLUMPS 16
+#endif
+
+static memlump_t g_memlumps[MAX_MEMLUMPS];
+static int g_nmemlumps = 0;
+
 #pragma pack(push, 1)
 
 //
 // TYPES
 //
 typedef struct {
-	// Should be "IWAD" or "PWAD".
 	char        identification[4];
 	int            numlumps;
 	int            infotableofs;
@@ -334,6 +348,8 @@ void W_Init(void) {
 			}
 		}
 	}
+	I_Printf("W_KPFInit: Init KPFfiles.\n");
+	W_KPFInit();
 	W_HashLumps();
 }
 
@@ -467,7 +483,7 @@ int W_GetNumForName(const char* name) {
 	i = W_CheckNumForName(name);
 
 	if (i == -1) {
-		I_Error("W_GetNumForName: %s not found!", name);
+		I_Warning("W_GetNumForName: %s not found!", name);
 	}
 
 	return i;
@@ -492,7 +508,8 @@ int W_LumpLength(int lump) {
 //  which must be >= W_LumpLength().
 //
 
-void W_ReadLump(int lump, void* dest) {
+void W_ReadLump(int lump, void* dest)
+{
 	int c;
 	lumpinfo_t* l;
 
@@ -502,12 +519,121 @@ void W_ReadLump(int lump, void* dest) {
 
 	l = lumpinfo + lump;
 
+	if (l->wadfile == WADFILE_MEM) {
+		int idx = l->position;
+		if (idx < 0 || idx >= g_nmemlumps) {
+			I_Error("W_ReadLump: bad mem lump index %d", idx);
+		}
+		dmemcpy(dest, g_memlumps[idx].data, l->size);
+		return;
+	}
+
 	I_BeginRead();
-
 	c = W_Read(l->wadfile, l->position, dest, l->size);
-
 	if (c < l->size) {
 		I_Error("W_ReadLump: only read %i of %i on lump %i", c, l->size, lump);
+	}
+}
+
+static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
+{
+	if (g_nmemlumps >= MAX_MEMLUMPS || size <= 0 || data == NULL) 
+		return 0;
+
+	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, (numlumps + 1) * sizeof(lumpinfo_t));
+	if (!lumpinfo) {
+		free(data);
+		I_Error("W_AddMemoryLump: Couldn't realloc lumpinfo");
+		return 0;
+	}
+
+	// Stash
+	int idx = g_nmemlumps++;
+	dmemcpy(g_memlumps[idx].name, name8, 8);
+	g_memlumps[idx].data = data;
+	g_memlumps[idx].size = size;
+
+	lumpinfo_t* L = &lumpinfo[numlumps];
+	L->wadfile = WADFILE_MEM;
+	L->position = idx; // atsb: index of lump position
+	L->size = size;
+	dmemcpy(L->name, name8, 8);
+	L->cache = NULL;
+
+	numlumps++;
+	W_HashLumps();
+	return 1;
+}
+
+void W_KPFInit(void)
+{
+	static const char* kpf_candidates[] = { "Doom64.kpf", "doom64.kpf" };
+
+	struct override_item {
+		char name8[8];
+		const char* paths[4];
+		int  max_w, max_h;
+	};
+
+	// atsb: display at this res, saves time..  downscale these giant things.  Again, uses STB and zlib API
+	// we do this because for now, the lump names stay in the code, so we 'load these and fake them'
+	static const struct override_item items[] = {
+		{ "TITLE",   { "gfx/Doom64_HiRes.png", "gfx/doom64_hires.png", NULL }, 1920, 1080 },
+		{ "USLEGAL", { "gfx/legals.png", "gfx/Legals.png", NULL },              1920, 1080 },
+		{ "CURSOR",  { "cursor", "cursor.png", "gfx/cursor.png", NULL },        0, 0 },
+	};
+
+	for (size_t it = 0; it < sizeof(items) / sizeof(items[0]); ++it) {
+		const struct override_item* ov = &items[it];
+		int done = 0;
+
+		for (size_t k = 0; k < sizeof(kpf_candidates) / sizeof(kpf_candidates[0]) && !done; ++k) {
+			const char* kpf = kpf_candidates[k];
+
+			for (size_t p = 0; ov->paths[p] != NULL && !done; ++p) {
+				const char* inner = ov->paths[p];
+
+				unsigned char* data = NULL;
+				int size = 0;
+				if (!KPF_ExtractFileCapped(kpf, inner, &data, &size, KPF_PNG_CAP_BYTES)) {
+					continue;
+				}
+
+				if (ov->max_w > 0 && ov->max_h > 0) {
+					int w = 0, h = 0;
+					if (PNG_ReadDimensions(data, (size_t)size, &w, &h)) {
+						if (w > ov->max_w || h > ov->max_h) {
+							unsigned char* scaled = NULL; int scaled_sz = 0;
+							if (PNG_DownscaleToFit(data, size, ov->max_w, ov->max_h, &scaled, &scaled_sz)) {
+								free(data);
+								data = scaled;
+								size = scaled_sz;
+								I_Printf("KPF: %s too large (%dx%d) scaled to fit %dx%d\n",
+									ov->name8, w, h, ov->max_w, ov->max_h);
+							}
+							else
+							{
+								// skip KPF and keep WAD’s lump.
+								I_Printf("KPF: %s too large (%dx%d), keeping WAD version.\n", ov->name8, w, h);
+								free(data);
+								continue; // try next
+							}
+						}
+					}
+				}
+
+				if (W_AddMemoryLump(ov->name8, data, size)) {
+					I_Printf("KPF: Loading %s from %s (%s, %d bytes)\n",
+						ov->name8, kpf, inner, size);
+				}
+				else {
+					I_Printf("KPF: Failed to add in memory %s from %s (%s)\n",
+						ov->name8, kpf, inner);
+					free(data);
+				}
+				done = 1;
+			}
+		}
 	}
 }
 

@@ -50,5 +50,6 @@ void            W_FreeMapLump(void);
 int             W_MapLumpLength(int lump);
 void* W_CacheLumpNum(int lump, int tag);
 void* W_CacheLumpName(const char* name, int tag);
+void W_KPFInit(void);
 
 #endif

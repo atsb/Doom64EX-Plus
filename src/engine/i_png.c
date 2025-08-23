@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+﻿// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -22,6 +22,8 @@
 
 #include <math.h>
 #include <png.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "i_png.h"
 #include "doomdef.h"
@@ -34,6 +36,108 @@
 #include "gl_texture.h"
 #include "con_cvar.h"
 
+// STB API for downscaling images and compressing them (so we load faster)
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_RESIZE2_IMPLEMENTATION
+
+#define STBIW_PNG_COMPRESSION_LEVEL 1
+#define STBIW_PNG_FILTER 0
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image.h"
+#include "stb_image_resize2.h"
+#include "stb_image_write.h"
+
+int PNG_DownscaleToFit(unsigned char* in_png, int in_size,
+    int max_w, int max_h,
+    unsigned char** out_png, int* out_size)
+{
+    *out_png = NULL; *out_size = 0;
+    if (!in_png || in_size <= 0 || max_w <= 0 || max_h <= 0) 
+        return 0;
+
+    int w = 0, h = 0, comp = 0;
+    unsigned char* rgba = stbi_load_from_memory(in_png, in_size, &w, &h, &comp, 4);
+    if (!rgba)
+        return 0;
+
+    double sx = (double)max_w / (double)w;
+    double sy = (double)max_h / (double)h;
+    double s = sx < sy ? sx : sy;
+
+    if (s >= 1.0) {
+        unsigned char* out = (unsigned char*)malloc((size_t)in_size);
+        if (!out) { 
+            stbi_image_free(rgba); 
+            return 0; 
+        }
+        memcpy(out, in_png, (size_t)in_size);
+        *out_png = out; *out_size = in_size;
+        stbi_image_free(rgba);
+        return 1;
+    }
+
+    int nw = (int)(w * s + 0.5); if (nw < 1) nw = 1;
+    int nh = (int)(h * s + 0.5); if (nh < 1) nh = 1;
+
+    unsigned char* out_rgba = (unsigned char*)malloc((size_t)nw * nh * 4);
+    if (!out_rgba) { 
+        stbi_image_free(rgba); 
+        return 0; 
+    }
+
+    int okr = stbir_resize_uint8_linear(rgba, w, h, 0, out_rgba, nw, nh, 0, STBIR_RGBA);
+    stbi_image_free(rgba);
+    if (!okr) { 
+        free(out_rgba); 
+        return 0; 
+    }
+
+    size_t mem_size = 0;
+    unsigned char* mem = stbi_write_png_to_mem(out_rgba, 0, nw, nh, 4, &mem_size);
+    free(out_rgba);
+    if (!mem || mem_size <= 0) 
+        return 0;
+
+    unsigned char* out = (unsigned char*)malloc(mem_size);
+    if (!out) { 
+        STBIW_FREE(mem); 
+        return 0; 
+    }
+    memcpy(out, mem, mem_size);
+    STBIW_FREE(mem);
+
+    *out_png = out;
+    *out_size = (int)mem_size;
+    return 1;
+}
+
+int PNG_ReadDimensions(unsigned char* data, size_t size, int* out_w, int* out_h)
+{
+    if (!data || size < 24) 
+        return 0;
+
+    static const unsigned char sig[8] = { 
+        137,80,78,71,13,10,26,10 
+    };
+
+    if (SDL_memcmp(data, sig, 8) != 0) 
+        return 0; // not a PNG file
+
+    if (size < 24) 
+        return 0;
+
+    if (SDL_memcmp(data + 12, "IHDR", 4) != 0) 
+        return 0;
+
+    unsigned w = (data[16] << 24) | (data[17] << 16) | (data[18] << 8) | data[19];
+    unsigned h = (data[20] << 24) | (data[21] << 16) | (data[22] << 8) | data[23];
+    if (w == 0 || h == 0) 
+        return 0;
+    *out_w = (int)w; *out_h = (int)h;
+    return 1;
+}
 
 static byte* pngWriteData;
 static byte* pngReadData;
@@ -357,14 +461,12 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
     size_t      j = 0;
     size_t      row;
 
-    // setup png pointer
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (png_ptr == NULL) {
         I_Error("I_PNGCreate: Failed getting png_ptr");
         return NULL;
     }
 
-    // setup info pointer
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL) {
         png_destroy_write_struct(&png_ptr, NULL);
@@ -372,17 +474,14 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
         return NULL;
     }
 
-    // what does this do again?
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
         I_Error("I_PNGCreate: Failed on setjmp");
         return NULL;
     }
 
-    // setup custom data writing procedure
     png_set_write_fn(png_ptr, NULL, I_PNGWriteFunc, NULL);
 
-    // setup image
     png_set_IHDR(
         png_ptr,
         info_ptr,
@@ -394,7 +493,6 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
         PNG_COMPRESSION_TYPE_BASE,
         PNG_FILTER_TYPE_DEFAULT);
 
-    // add png info to data
     png_write_info(png_ptr, info_ptr);
 
     row_pointers = (byte**)Z_Malloc(sizeof(byte*) * height, PU_STATIC, 0);
@@ -414,8 +512,6 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
     Z_Free(data);
 
     png_write_image(png_ptr, row_pointers);
-
-    // cleanup
     png_write_end(png_ptr, info_ptr);
 
     for (i = 0; i < height; i++) {
@@ -427,7 +523,6 @@ byte* I_PNGCreate(int width, int height, byte* data, int* size) {
 
     png_destroy_write_struct(&png_ptr, &info_ptr);
 
-    // allocate output
     out = (byte*)Z_Malloc(pngWritePos, PU_STATIC, 0);
     dmemcpy(out, pngWriteData, pngWritePos);
     *size = pngWritePos;

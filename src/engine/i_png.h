@@ -27,4 +27,10 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
 byte* I_PNGCreate(int width, int height, byte* data, int* size);
 
+int PNG_DownscaleToFit(unsigned char* in_png, int in_size,
+    int max_w, int max_h,
+    unsigned char** out_png, int* out_size);
+
+int PNG_ReadDimensions(unsigned char* data, size_t size, int* out_w, int* out_h);
+
 #endif // __I_PNG_H__

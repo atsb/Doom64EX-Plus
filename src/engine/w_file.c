@@ -30,10 +30,6 @@
 #include "z_zone.h"
 #include "m_misc.h"
 
-// Array of locations to search for IWAD files
-//
-// "128 IWAD search directories should be enough for anybody".
-
 #define MAX_IWAD_DIRS 128
 
 static char* iwad_dirs[MAX_IWAD_DIRS];
@@ -42,12 +38,14 @@ static int num_iwad_dirs = 0;
 typedef struct {
 	wad_file_t wad;
 	FILE* fstream;
-} stdc_wad_file_t;
+} std_wad_file_t;
 
-extern wad_file_class_t stdc_wad_file;
 
-static wad_file_t* W_StdC_OpenFile(char* path) {
-	stdc_wad_file_t* result;
+// atsb: these are just overloads, we use the simpler ones and the then these take care of the rest.
+extern wad_file_class_t stdwadfile;
+
+static wad_file_t* W_WAD_OpenFile(char* path) {
+	std_wad_file_t* result;
 	FILE* fstream;
 
 	fstream = fopen(path, "rb");
@@ -56,10 +54,8 @@ static wad_file_t* W_StdC_OpenFile(char* path) {
 		return NULL;
 	}
 
-	// Create a new stdc_wad_file_t to hold the file handle.
-
-	result = (stdc_wad_file_t*)Z_Malloc(sizeof(stdc_wad_file_t), PU_STATIC, 0);
-	result->wad.file_class = &stdc_wad_file;
+	result = (std_wad_file_t*)Z_Malloc(sizeof(std_wad_file_t), PU_STATIC, 0);
+	result->wad.file_class = &stdwadfile;
 	result->wad.mapped = NULL;
 	result->wad.length = M_FileLength(fstream);
 	result->fstream = fstream;
@@ -67,44 +63,32 @@ static wad_file_t* W_StdC_OpenFile(char* path) {
 	return &result->wad;
 }
 
-static void W_StdC_CloseFile(wad_file_t* wad) {
-	stdc_wad_file_t* stdc_wad;
-
-	stdc_wad = (stdc_wad_file_t*)wad;
-
-	fclose(stdc_wad->fstream);
-	Z_Free(stdc_wad);
+static void W_WAD_CloseFile(wad_file_t* wad) {
+	std_wad_file_t* stdwad;
+	stdwad = (std_wad_file_t*)wad;
+	fclose(stdwad->fstream);
+	Z_Free(stdwad);
 }
 
-// Read data from the specified position in the file into the
-// provided buffer.  Returns the number of bytes read.
-
-unsigned int W_StdC_Read(wad_file_t* wad, unsigned int offset,
+unsigned int W_WAD_Read(wad_file_t* wad, unsigned int offset,
 	void* buffer, unsigned int buffer_len) {
-	stdc_wad_file_t* stdc_wad;
+	std_wad_file_t* stdwad;
 	unsigned int result;
-
-	stdc_wad = (stdc_wad_file_t*)wad;
-
-	// Jump to the specified position in the file.
-
-	fseek(stdc_wad->fstream, offset, SEEK_SET);
-
-	// Read into the buffer.
-
-	result = fread(buffer, 1, buffer_len, stdc_wad->fstream);
+	stdwad = (std_wad_file_t*)wad;
+	fseek(stdwad->fstream, offset, SEEK_SET);
+	result = fread(buffer, 1, buffer_len, stdwad->fstream);
 
 	return result;
 }
 
-wad_file_class_t stdc_wad_file = {
-	W_StdC_OpenFile,
-	W_StdC_CloseFile,
-	W_StdC_Read,
+wad_file_class_t stdwadfile = {
+	W_WAD_OpenFile,
+	W_WAD_CloseFile,
+	W_WAD_Read,
 };
 
 wad_file_t* W_OpenFile(char* path) {
-	return stdc_wad_file.OpenFile(path);
+	return stdwadfile.OpenFile(path);
 }
 
 void W_CloseFile(wad_file_t* wad) {

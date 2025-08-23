@@ -82,6 +82,7 @@
     <ClCompile Include="..\src\engine\net_server.c" />
     <ClCompile Include="..\src\engine\steam.c" />
     <ClCompile Include="..\src\engine\w_merge.c" />
+    <ClCompile Include="..\src\engine\kpf.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\dgl.h" />
@@ -164,6 +165,10 @@
     <ClInclude Include="..\src\engine\d_devstat.h" />
     <ClInclude Include="..\src\engine\sha1.h" />
     <ClInclude Include="..\src\engine\i_system_io.h" />
+    <ClInclude Include="..\src\engine\kpf.h" />
+    <ClInclude Include="..\src\engine\stb_image.h" />
+    <ClInclude Include="..\src\engine\stb_image_resize2.h" />
+    <ClInclude Include="..\src\engine\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />

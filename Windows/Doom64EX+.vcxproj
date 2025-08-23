@@ -177,6 +177,10 @@
     <ClCompile Include="..\src\engine\i_sdlinput.c" />
     <ClCompile Include="..\src\engine\i_system.c" />
     <ClCompile Include="..\src\engine\i_video.c" />
+    <ClCompile Include="..\src\engine\kpf.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</CompileAs>
+    </ClCompile>
     <ClCompile Include="..\src\engine\md5.c" />
     <ClCompile Include="..\src\engine\m_cheat.c" />
     <ClCompile Include="..\src\engine\m_fixed.c" />
@@ -268,6 +272,7 @@
     <ClInclude Include="..\src\engine\i_system.h" />
     <ClInclude Include="..\src\engine\i_system_io.h" />
     <ClInclude Include="..\src\engine\i_video.h" />
+    <ClInclude Include="..\src\engine\kpf.h" />
     <ClInclude Include="..\src\engine\md5.h" />
     <ClInclude Include="..\src\engine\m_cheat.h" />
     <ClInclude Include="..\src\engine\m_fixed.h" />
@@ -306,6 +311,9 @@
     <ClInclude Include="..\src\engine\sc_main.h" />
     <ClInclude Include="..\src\engine\sha1.h" />
     <ClInclude Include="..\src\engine\sounds.h" />
+    <ClInclude Include="..\src\engine\stb_image.h" />
+    <ClInclude Include="..\src\engine\stb_image_resize2.h" />
+    <ClInclude Include="..\src\engine\stb_image_write.h" />
     <ClInclude Include="..\src\engine\steam.h" />
     <ClInclude Include="..\src\engine\st_stuff.h" />
     <ClInclude Include="..\src\engine\s_sound.h" />
