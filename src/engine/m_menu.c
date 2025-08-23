@@ -3949,22 +3949,8 @@ static void M_DrawMenuSkull(int x, int y) {
 	vtx_t vtx[4];
 	const rcolor color = MENUCOLORWHITE;
 
-	parama = M_CheckParm("-alpha");
-	paramr = M_CheckParm("-reloaded");
-
-	if (parama)
-	{
-		pic = GL_BindGfxTexture("SKULLM", true);
-	}
-	else if (paramr)
-	{
-		pic = GL_BindGfxTexture("SKULLM", true);
-	}
-	else
-	{
-		pic = GL_BindGfxTexture("SYMBOLS", true);
-	}
-
+	pic = GL_BindGfxTexture("SYMBOLS", true);
+	
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -3981,10 +3967,13 @@ static void M_DrawMenuSkull(int x, int y) {
 	smbwidth = (float)gfxwidth[pic];
 	smbheight = (float)gfxheight[pic];
 
-	tx1 = ((float)symboldata[index].x / smbwidth) + 0.001f;
-	tx2 = (tx1 + (float)symboldata[index].w / smbwidth) - 0.001f;
-	ty1 = ((float)symboldata[index].y / smbheight) + 0.005f;
-	ty2 = (ty1 + (((float)symboldata[index].h / smbheight))) - 0.008f;
+	const float ueps = 0.5f / smbwidth;
+	const float veps = 0.5f / smbheight;
+
+	tx1 = ((float)symboldata[index].x / smbwidth) + ueps;
+	tx2 = ((float)(symboldata[index].x + symboldata[index].w) / smbwidth) - ueps;
+	ty1 = ((float)symboldata[index].y / smbheight) + veps;
+	ty2 = ((float)(symboldata[index].y + symboldata[index].h) / smbheight) - veps;
 
 	GL_Set2DQuad(
 		vtx,
@@ -3992,10 +3981,7 @@ static void M_DrawMenuSkull(int x, int y) {
 		vy1,
 		symboldata[index].w,
 		symboldata[index].h,
-		tx1,
-		tx2,
-		ty1,
-		ty2,
+		tx1, tx2, ty1, ty2,
 		color
 	);
 

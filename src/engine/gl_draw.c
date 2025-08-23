@@ -603,6 +603,9 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
 	smbwidth = (float)gfxwidth[pic];
 	smbheight = (float)gfxheight[pic];
 
+	const float ueps = 0.5f / smbwidth;
+	const float veps = 0.5f / smbheight;
+
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_hudFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
@@ -619,113 +622,56 @@ int Draw_BigText(int x, int y, rcolor color, const char* string) {
 
 		c = string[i];
 		if (c == '\n' || c == '\t') {
-			continue;    // villsa: safety check
+			continue;
 		}
 		else if (c == 0x20) {
 			x += 8;
 			continue;
 		}
 		else {
-			if (c >= '0' && c <= '9') {
-				index = (c - '0') + SM_NUMBERS;
-			}
-			if (c >= 'A' && c <= 'Z') {
-				index = (c - 'A') + SM_FONT1;
-			}
-			if (c >= 'a' && c <= 'z') {
-				index = (c - 'a') + SM_FONT2;
-			}
-			if (c == '-') {
-				index = SM_MISCFONT;
-			}
-			if (c == '%') {
-				index = SM_MISCFONT + 1;
-			}
-			if (c == '!') {
-				index = SM_MISCFONT + 2;
-			}
-			if (c == '.') {
-				index = SM_MISCFONT + 3;
-			}
-			if (c == '?') {
-				index = SM_MISCFONT + 4;
-			}
-			if (c == ':') {
-				index = SM_MISCFONT + 5;
-			}
+			if (c >= '0' && c <= '9') index = (c - '0') + SM_NUMBERS;
+			if (c >= 'A' && c <= 'Z') index = (c - 'A') + SM_FONT1;
+			if (c >= 'a' && c <= 'z') index = (c - 'a') + SM_FONT2;
+			if (c == '-') index = SM_MISCFONT;
+			if (c == '%') index = SM_MISCFONT + 1;
+			if (c == '!') index = SM_MISCFONT + 2;
+			if (c == '.') index = SM_MISCFONT + 3;
+			if (c == '?') index = SM_MISCFONT + 4;
+			if (c == ':') index = SM_MISCFONT + 5;
 
-			// [kex] use 'printf' style formating for special symbols
 			if (c == '/') {
 				c = string[++i];
-
 				switch (c) {
-					// up arrow
-				case 'u':
-					index = SM_MICONS + 17;
-					break;
-					// down arrow
-				case 'd':
-					index = SM_MICONS + 16;
-					break;
-					// right arrow
-				case 'r':
-					index = SM_MICONS + 18;
-					break;
-					// left arrow
-				case 'l':
-					index = SM_MICONS;
-					break;
-					// cursor box
-				case 'b':
-					index = SM_MICONS + 1;
-					break;
-					// thermbar
-				case 't':
-					index = SM_THERMO;
-					break;
-					// thermcursor
-				case 's':
-					index = SM_THERMO + 1;
-					break;
-				default:
-					return 0;
+				case 'u': index = SM_MICONS + 17; break; // up
+				case 'd': index = SM_MICONS + 16; break; // down
+				case 'r': index = SM_MICONS + 18; break; // right
+				case 'l': index = SM_MICONS + 0;  break; // left
+				case 'b': index = SM_MICONS + 1;  break; // box
+				case 't': index = SM_THERMO + 0;  break; // thermbar
+				case 's': index = SM_THERMO + 1;  break; // thermcursor
+				default: return 0;
 				}
 			}
 
 			vx2 = vx1 + symboldata[index].w;
 			vy2 = vy1 - symboldata[index].h;
 
-			tx1 = ((float)symboldata[index].x / smbwidth) + 0.001f;
-			tx2 = (tx1 + (float)symboldata[index].w / smbwidth) - 0.002f;
+			tx1 = ((float)symboldata[index].x / smbwidth) + ueps;
+			tx2 = ((float)(symboldata[index].x + symboldata[index].w) / smbwidth) - ueps;
+			ty1 = ((float)symboldata[index].y / smbheight) + veps;
+			ty2 = ((float)(symboldata[index].y + symboldata[index].h) / smbheight) - veps;
 
-			ty1 = ((float)symboldata[index].y / smbheight);
-			ty2 = ty1 + (((float)symboldata[index].h / smbheight));
-
-			vtxstring[vi + 0].x = vx1;
-			vtxstring[vi + 0].y = vy1;
-			vtxstring[vi + 0].tu = tx1;
-			vtxstring[vi + 0].tv = ty2;
-			vtxstring[vi + 1].x = vx2;
-			vtxstring[vi + 1].y = vy1;
-			vtxstring[vi + 1].tu = tx2;
-			vtxstring[vi + 1].tv = ty2;
-			vtxstring[vi + 2].x = vx2;
-			vtxstring[vi + 2].y = vy2;
-			vtxstring[vi + 2].tu = tx2;
-			vtxstring[vi + 2].tv = ty1;
-			vtxstring[vi + 3].x = vx1;
-			vtxstring[vi + 3].y = vy2;
-			vtxstring[vi + 3].tu = tx1;
-			vtxstring[vi + 3].tv = ty1;
+			vtxstring[vi + 0].x = vx1; vtxstring[vi + 0].y = vy1; vtxstring[vi + 0].tu = tx1; vtxstring[vi + 0].tv = ty2;
+			vtxstring[vi + 1].x = vx2; vtxstring[vi + 1].y = vy1; vtxstring[vi + 1].tu = tx2; vtxstring[vi + 1].tv = ty2;
+			vtxstring[vi + 2].x = vx2; vtxstring[vi + 2].y = vy2; vtxstring[vi + 2].tu = tx2; vtxstring[vi + 2].tv = ty1;
+			vtxstring[vi + 3].x = vx1; vtxstring[vi + 3].y = vy2; vtxstring[vi + 3].tu = tx1; vtxstring[vi + 3].tv = ty1;
 
 			dglSetVertexColor(vtxstring + vi, color, 4);
 
 			dglTriangle(vi + 2, vi + 1, vi + 0);
 			dglTriangle(vi + 3, vi + 2, vi + 0);
 
-			if (devparm) {
-				vertCount += 4;
-			}
+			if (devparm) { vertCount += 4; }
 
 			x += symboldata[index].w;
 		}
@@ -762,19 +708,21 @@ int Draw_SmallText(int x, int y, rcolor color, const char* string) {
 	float smbheight;
 	int pic;
 
-	// Scale factor for symbols
-	float scale_factor = 0.7f;
+	const float scale_factor = 0.7f;
 
 	if (x <= -1) {
 		x = Center_Text(string);
 	}
 
-	y += 14; // Adjust for smaller text
+	y += 14;
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
 
 	smbwidth = (float)gfxwidth[pic];
 	smbheight = (float)gfxheight[pic];
+
+	const float ueps = 0.5f / smbwidth;
+	const float veps = 0.5f / smbheight;
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -792,116 +740,58 @@ int Draw_SmallText(int x, int y, rcolor color, const char* string) {
 
 		c = string[i];
 		if (c == '\n' || c == '\t') {
-			continue; // villsa: safety check
+			continue;
 		}
 		else if (c == 0x20) {
-			x += 4; // Adjust for smaller spacing
+			x += 4;
 			continue;
 		}
 		else {
-			if (c >= '0' && c <= '9') {
-				index = (c - '0') + SM_NUMBERS;
-			}
-			if (c >= 'A' && c <= 'Z') {
-				index = (c - 'A') + SM_FONT1;
-			}
-			if (c >= 'a' && c <= 'z') {
-				index = (c - 'a') + SM_FONT2;
-			}
-			if (c == '-') {
-				index = SM_MISCFONT;
-			}
-			if (c == '%') {
-				index = SM_MISCFONT + 1;
-			}
-			if (c == '!') {
-				index = SM_MISCFONT + 2;
-			}
-			if (c == '.') {
-				index = SM_MISCFONT + 3;
-			}
-			if (c == '?') {
-				index = SM_MISCFONT + 4;
-			}
-			if (c == ':') {
-				index = SM_MISCFONT + 5;
-			}
+			if (c >= '0' && c <= '9') index = (c - '0') + SM_NUMBERS;
+			if (c >= 'A' && c <= 'Z') index = (c - 'A') + SM_FONT1;
+			if (c >= 'a' && c <= 'z') index = (c - 'a') + SM_FONT2;
+			if (c == '-') index = SM_MISCFONT;
+			if (c == '%') index = SM_MISCFONT + 1;
+			if (c == '!') index = SM_MISCFONT + 2;
+			if (c == '.') index = SM_MISCFONT + 3;
+			if (c == '?') index = SM_MISCFONT + 4;
+			if (c == ':') index = SM_MISCFONT + 5;
 
-			// [kex] use 'printf' style formatting for special symbols
 			if (c == '/') {
 				c = string[++i];
-
 				switch (c) {
-					// up arrow
-				case 'u':
-					index = SM_MICONS + 17;
-					break;
-					// down arrow
-				case 'd':
-					index = SM_MICONS + 16;
-					break;
-					// right arrow
-				case 'r':
-					index = SM_MICONS + 18;
-					break;
-					// left arrow
-				case 'l':
-					index = SM_MICONS;
-					break;
-					// cursor box
-				case 'b':
-					index = SM_MICONS + 1;
-					break;
-					// thermbar
-				case 't':
-					index = SM_THERMO;
-					break;
-					// thermcursor
-				case 's':
-					index = SM_THERMO + 1;
-					break;
-				default:
-					return 0;
+				case 'u': index = SM_MICONS + 17; break;
+				case 'd': index = SM_MICONS + 16; break;
+				case 'r': index = SM_MICONS + 18; break;
+				case 'l': index = SM_MICONS + 0;  break;
+				case 'b': index = SM_MICONS + 1;  break;
+				case 't': index = SM_THERMO + 0;  break;
+				case 's': index = SM_THERMO + 1;  break;
+				default: return 0;
 				}
 			}
 
-			// Scale the symbol dimensions
 			vx2 = vx1 + symboldata[index].w * scale_factor;
 			vy2 = vy1 - symboldata[index].h * scale_factor;
 
-			// Adjust texture coordinates for scaling
-			tx1 = (float)symboldata[index].x / smbwidth;
-			tx2 = (float)(symboldata[index].x + symboldata[index].w) / smbwidth;
-			ty1 = (float)symboldata[index].y / smbheight;
-			ty2 = (float)(symboldata[index].y + symboldata[index].h) / smbheight;
+			tx1 = ((float)symboldata[index].x / smbwidth) + ueps;
+			tx2 = ((float)(symboldata[index].x + symboldata[index].w) / smbwidth) - ueps;
+			ty1 = ((float)symboldata[index].y / smbheight) + veps;
+			ty2 = ((float)(symboldata[index].y + symboldata[index].h) / smbheight) - veps;
 
-			vtxstring[vi + 0].x = vx1;
-			vtxstring[vi + 0].y = vy1;
-			vtxstring[vi + 0].tu = tx1;
-			vtxstring[vi + 0].tv = ty2;
-			vtxstring[vi + 1].x = vx2;
-			vtxstring[vi + 1].y = vy1;
-			vtxstring[vi + 1].tu = tx2;
-			vtxstring[vi + 1].tv = ty2;
-			vtxstring[vi + 2].x = vx2;
-			vtxstring[vi + 2].y = vy2;
-			vtxstring[vi + 2].tu = tx2;
-			vtxstring[vi + 2].tv = ty1;
-			vtxstring[vi + 3].x = vx1;
-			vtxstring[vi + 3].y = vy2;
-			vtxstring[vi + 3].tu = tx1;
-			vtxstring[vi + 3].tv = ty1;
+			vtxstring[vi + 0].x = vx1; vtxstring[vi + 0].y = vy1; vtxstring[vi + 0].tu = tx1; vtxstring[vi + 0].tv = ty2;
+			vtxstring[vi + 1].x = vx2; vtxstring[vi + 1].y = vy1; vtxstring[vi + 1].tu = tx2; vtxstring[vi + 1].tv = ty2;
+			vtxstring[vi + 2].x = vx2; vtxstring[vi + 2].y = vy2; vtxstring[vi + 2].tu = tx2; vtxstring[vi + 2].tv = ty1;
+			vtxstring[vi + 3].x = vx1; vtxstring[vi + 3].y = vy2; vtxstring[vi + 3].tu = tx1; vtxstring[vi + 3].tv = ty1;
 
 			dglSetVertexColor(vtxstring + vi, color, 4);
 
 			dglTriangle(vi + 2, vi + 1, vi + 0);
 			dglTriangle(vi + 3, vi + 2, vi + 0);
 
-			if (devparm) {
-				vertCount += 4;
-			}
+			if (devparm) { vertCount += 4; }
 
-			x += symboldata[index].w * scale_factor;
+			x += (int)(symboldata[index].w * scale_factor);
 		}
 	}
 
@@ -914,8 +804,6 @@ int Draw_SmallText(int x, int y, rcolor color, const char* string) {
 
 	return x;
 }
-
-
 
 //
 // Draw_Number
