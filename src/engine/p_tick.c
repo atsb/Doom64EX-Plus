@@ -238,7 +238,7 @@ static void P_UpdateFrameStates(void) {
 		sector->frame_z1[0] = sector->floorheight;
 		sector->frame_z2[0] = sector->ceilingheight;
 		sector->frame_z1[1] = sector->frame_z1[0];
-		sector->frame_z2[1] = sector->frame_z1[0];
+		sector->frame_z2[1] = sector->frame_z2[0];
 	}
 
 	//
