@@ -20,7 +20,6 @@
 "bind Right \"+right\"\n"
 "bind Caps \"autorun\"\n"
 "bind mouse1 \"+fire\"\n"
-"bind mouse2 \"+jump\"\n"
 "bind MouseWheelUp \"nextweap\"\n"
 "bind MouseWheelDown \"prevweap\"\n"
 "bind KeyPad+ \"+automap_in\"\n"

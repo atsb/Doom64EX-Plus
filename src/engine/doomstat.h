@@ -170,7 +170,6 @@ typedef struct {
 	boolean    clearchts;
 	boolean    forcegodmode;
 	boolean    contmusexit;
-	int         allowjump;
 	int         allowfreelook;
 } mapdef_t;
 

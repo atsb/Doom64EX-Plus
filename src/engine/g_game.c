@@ -146,7 +146,6 @@ NETCVAR_PARAM(sv_lockmonsters, 0, gameflags, GF_LOCKMONSTERS)
 NETCVAR_PARAM(sv_allowcheats, 0, gameflags, GF_ALLOWCHEATS)
 NETCVAR_PARAM(sv_friendlyfire, 0, gameflags, GF_FRIENDLYFIRE)
 NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS)
-NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP)
 NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM)
 NETCVAR_PARAM(compat_mobjpass, 0, compatflags, COMPATF_MOBJPASS)
 
@@ -169,7 +168,6 @@ CVAR_EXTERNAL(m_extendedcast);
 //
 
 void G_RegisterCvars(void) {
-	CON_CvarRegister(&p_allowjump);
 	CON_CvarRegister(&p_autoaim);
 	CON_CvarRegister(&sv_nomonsters);
 	CON_CvarRegister(&sv_fastmonsters);
@@ -753,14 +751,6 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 		pc->flags &= ~(PCF_FDCLICK2 | PCF_SDCLICK2);
 	}
 
-	if (forcejump != 2) {
-		if (gameflags & GF_ALLOWJUMP || forcejump) {
-			if (pc->key[PCKEY_JUMP]) {
-				cmd->buttons2 |= BT2_JUMP;
-			}
-		}
-	}
-
 	if (pc->flags & PCF_NEXTWEAPON) {
 		cmd->buttons |= BT_CHANGE;
 		cmd->buttons2 |= BT2_NEXTWEAP;
@@ -932,7 +922,6 @@ static void G_SetGameFlags(void) {
 	if (sv_allowcheats.value > 0)   gameflags |= GF_ALLOWCHEATS;
 	if (sv_friendlyfire.value > 0)  gameflags |= GF_FRIENDLYFIRE;
 	if (sv_keepitems.value > 0)     gameflags |= GF_KEEPITEMS;
-	if (p_allowjump.value > 0)      gameflags |= GF_ALLOWJUMP;
 	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
 
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
@@ -973,7 +962,6 @@ void G_DoLoadLevel(void) {
 		return;
 	}
 
-	forcejump = map->allowjump;
 	forcefreelook = map->allowfreelook;
 
 	// This was quite messy with SPECIAL and commented parts.
@@ -1654,8 +1642,6 @@ void G_Init(void) {
 	G_AddCommand("-use", CMD_Button, PCKEY_USE | PCKF_UP);
 	G_AddCommand("+run", CMD_Button, PCKEY_RUN);
 	G_AddCommand("-run", CMD_Button, PCKEY_RUN | PCKF_UP);
-	G_AddCommand("+jump", CMD_Button, PCKEY_JUMP);
-	G_AddCommand("-jump", CMD_Button, PCKEY_JUMP | PCKF_UP);
 	G_AddCommand("weapon", CMD_Weapon, 0);
 	G_AddCommand("nextweap", CMD_NextWeapon, 0);
 	G_AddCommand("prevweap", CMD_PrevWeapon, 0);

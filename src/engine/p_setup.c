@@ -1132,16 +1132,6 @@ static void P_InitMapInfo(void) {
 							mapdef.music = (lump - ds_start);
 						}
 					}
-					else if (!dstricmp(sc_parser.token, "ALLOWJUMP")) {
-						if (datoi(sc_parser.getstring()) == 1) {
-							mapdef.allowjump = 1;
-						}
-						else if (datoi(sc_parser.getstring()) == 0) {
-							mapdef.allowjump = 2;
-						}
-
-						ok = true;
-					}
 					else if (!dstricmp(sc_parser.token, "ALLOWFREELOOK")) {
 						if (datoi(sc_parser.getstring()) == 1) {
 							mapdef.allowfreelook = 1;

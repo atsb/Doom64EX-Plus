@@ -67,7 +67,6 @@ boolean	window_mouse;
 #define GAMEPAD_KEY_MOVE_RIGHT    SDLK_D
 #define GAMEPAD_KEY_FIRE          KEY_CTRL
 #define GAMEPAD_KEY_USE           SDLK_E
-#define GAMEPAD_KEY_JUMP          SDLK_SPACE
 #define GAMEPAD_KEY_RUN			  KEY_SHIFT
 #define GAMEPAD_KEY_AUTOMAP		  SDLK_TAB
 #define GAMEPAD_KEY_NEXT_WEAPON   KEY_MWHEELUP
@@ -93,7 +92,7 @@ static struct {
 	SDL_JoystickID active_id;
 
 	bool player_forward, player_backwards, player_left, player_right;
-	bool player_fire, player_next_weapon, player_previous_weapon, player_jump, player_use, player_pause, player_run, player_automap;
+	bool player_fire, player_next_weapon, player_previous_weapon, player_use, player_pause, player_run, player_automap;
 
 	bool mouse_up, mouse_down, mouse_left, mouse_right;
 	bool mouse_accept, mouse_back, mouse_scroll_up, mouse_scroll_down;
@@ -163,7 +162,6 @@ static SDL_INLINE void I_GamepadKeyRelease(void) {
 	I_GamepadEdgeDetection(false, &gamepad64.player_fire, GAMEPAD_KEY_FIRE);
 	I_GamepadEdgeDetection(false, &gamepad64.player_next_weapon, GAMEPAD_KEY_NEXT_WEAPON);
 	I_GamepadEdgeDetection(false, &gamepad64.player_previous_weapon, GAMEPAD_KEY_PREV_WEAPON);
-	I_GamepadEdgeDetection(false, &gamepad64.player_jump, GAMEPAD_KEY_JUMP);
 	I_GamepadEdgeDetection(false, &gamepad64.player_use, GAMEPAD_KEY_USE);
 	I_GamepadEdgeDetection(false, &gamepad64.player_run, GAMEPAD_KEY_RUN);
 	I_GamepadEdgeDetection(false, &gamepad64.player_automap, GAMEPAD_KEY_AUTOMAP);
@@ -380,12 +378,11 @@ static void I_GamepadUpdate(void) {
 	}
 	bool fire = (rt >= GAMEPAD_TRIGGER_THRESHOLD);
 	bool alt = (lt >= GAMEPAD_TRIGGER_THRESHOLD);
-	bool nextw = false, prevw = false, jump = false, use = false, pausebtn = false, run = false, automap = false;
+	bool nextw = false, prevw = false, use = false, pausebtn = false, run = false, automap = false;
 
 	if (gamepad64.gamepad) {
 		nextw = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER) != 0;
 		prevw = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_LEFT_SHOULDER) != 0;
-		jump = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_EAST) != 0;
 		use = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_SOUTH) != 0;
 		run = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_WEST) != 0;
 		automap = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_NORTH) != 0;
@@ -394,7 +391,6 @@ static void I_GamepadUpdate(void) {
 	else if (gamepad64.joy) {
 		nextw = SDL_GetJoystickButton(gamepad64.joy, 5) != 0;
 		prevw = SDL_GetJoystickButton(gamepad64.joy, 4) != 0;
-		jump = SDL_GetJoystickButton(gamepad64.joy, 0) != 0;
 		use = SDL_GetJoystickButton(gamepad64.joy, 2) != 0;
 		run = SDL_GetJoystickButton(gamepad64.joy, 6) != 0;
 		automap = SDL_GetJoystickButton(gamepad64.joy, 7) != 0;
@@ -405,7 +401,6 @@ static void I_GamepadUpdate(void) {
 	I_GamepadEdgeDetection(fire, &gamepad64.player_fire, GAMEPAD_KEY_FIRE);
 	I_GamepadEdgeDetection(nextw, &gamepad64.player_next_weapon, GAMEPAD_KEY_NEXT_WEAPON);
 	I_GamepadEdgeDetection(prevw, &gamepad64.player_previous_weapon, GAMEPAD_KEY_PREV_WEAPON);
-	I_GamepadEdgeDetection(jump, &gamepad64.player_jump, GAMEPAD_KEY_JUMP);
 	I_GamepadEdgeDetection(use, &gamepad64.player_use, GAMEPAD_KEY_USE);
 	I_GamepadEdgeDetection(pausebtn, &gamepad64.player_pause, GAMEPAD_KEY_PAUSE);
 	I_GamepadEdgeDetection(run, &gamepad64.player_run, GAMEPAD_KEY_RUN);

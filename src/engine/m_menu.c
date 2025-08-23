@@ -775,7 +775,6 @@ void M_PlayerSetName(int choice);
 void M_DrawNetwork(void);
 
 CVAR_EXTERNAL(m_playername);
-CVAR_EXTERNAL(p_allowjump);
 //Andr�: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
 CVAR_EXTERNAL(sv_nomonsters);
 CVAR_EXTERNAL(sv_fastmonsters);
@@ -792,7 +791,6 @@ enum {
 	network_allowcheats,
 	network_friendlyfire,
 	network_keepitems,
-	network_allowjump,
 	network_header3,
 	network_nomonsters,
 	network_fastmonsters,
@@ -810,7 +808,6 @@ menuitem_t NetworkMenu[] = {
 	{2,"Allow Cheats:", M_NetworkChoice, 'c'},
 	{2,"Friendly Fire:", M_NetworkChoice, 'f'},
 	{2,"Keep Items:", M_NetworkChoice, 'k'},
-	{2,"Allow Jumping:", M_NetworkChoice, 'j'},
 	{-1,"Gameplay Rules",0 },
 	{2,"No Monsters:", M_NetworkChoice, 'n'},
 	{2,"Fast Monsters:", M_NetworkChoice, 'f'},
@@ -824,7 +821,6 @@ menudefault_t NetworkDefault[] = {
 	{ &sv_allowcheats, 0 },
 	{ &sv_friendlyfire, 0 },
 	{ &sv_keepitems, 0 },
-	{ &p_allowjump, 0 },
 	{ &sv_nomonsters, 0 },
 	{ &sv_fastmonsters, 0 },
 	{ &sv_respawn, 0 },
@@ -839,7 +835,6 @@ char* NetworkHints[network_end] = {
 	"allow clients and host to use cheats",
 	"allow players to damage other players",
 	"players keep items when respawned from death",
-	"allow players to jump",
 	NULL,
 	"no monsters will appear",
 	"increased speed for monsters and projectiles",
@@ -887,9 +882,6 @@ void M_NetworkChoice(int choice) {
 	case network_keepitems:
 		M_SetOptionValue(choice, 0, 1, 1, &sv_keepitems);
 		break;
-	case network_allowjump:
-		M_SetOptionValue(choice, 0, 1, 1, &p_allowjump);
-		break;
 	case network_nomonsters:
 		M_SetOptionValue(choice, 0, 1, 1, &sv_nomonsters);
 		break;
@@ -934,7 +926,6 @@ void M_DrawNetwork(void) {
 	DRAWNETWORKITEM(network_allowcheats, sv_allowcheats.value, msgNames);
 	DRAWNETWORKITEM(network_friendlyfire, sv_friendlyfire.value, msgNames);
 	DRAWNETWORKITEM(network_keepitems, sv_keepitems.value, msgNames);
-	DRAWNETWORKITEM(network_allowjump, p_allowjump.value, msgNames);
 	DRAWNETWORKITEM(network_nomonsters, sv_nomonsters.value, msgNames);
 	DRAWNETWORKITEM(network_fastmonsters, sv_fastmonsters.value, msgNames);
 	DRAWNETWORKITEM(network_respawnmonsters, sv_respawn.value, msgNames);
@@ -990,7 +981,6 @@ enum {
 	misc_cursorsize,
 	misc_empty2,
 	misc_header2,
-	misc_jump,
 	misc_autorun,
 	misc_context,
 	misc_header3,
@@ -1023,7 +1013,6 @@ menuitem_t MiscMenu[] = {
 	{3,"Cursor Scale:",M_MiscChoice,'u'},
 	{-1,"",0 },
 	{-1,"Gameplay",0 },
-	{2,"Jumping:",M_MiscChoice, 'j'},
 	{2,"Always Run:",M_MiscChoice, 'z' },
 	{2,"Use Context:",M_MiscChoice, 'u'},
 	{-1,"Misc",0 },
@@ -1055,7 +1044,6 @@ char* MiscHints[misc_end] = {
 	"set the size of the menu cursor",
 	NULL,
 	NULL,
-	"toggle the ability to jump",
 	"enable autorun",
 	"if enabled interactive objects will highlight when near",
 	NULL,
@@ -1083,7 +1071,6 @@ menudefault_t MiscDefault[] = {
 	{ &m_menufadetime, 0 },
 	{ &m_menumouse, 1 },
 	{ &m_cursorscale, 8 },
-	{ &p_allowjump, 0 },
 	{ &p_autorun, 1 },
 	{ &p_usecontext, 0 },
 	{ &r_wipe, 1 },
@@ -1172,10 +1159,6 @@ void M_MiscChoice(int choice) {
 
 	case misc_menumouse:
 		M_SetOptionValue(choice, 0, 1, 1, &m_menumouse);
-		break;
-
-	case misc_jump:
-		M_SetOptionValue(choice, 0, 1, 1, &p_allowjump);
 		break;
 
 	case misc_context:
@@ -1269,7 +1252,6 @@ void M_DrawMisc(void) {
     }
 
 	DRAWMISCITEM(misc_menumouse, m_menumouse.value, msgNames);
-	DRAWMISCITEM(misc_jump, p_allowjump.value, msgNames);
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
@@ -2476,7 +2458,6 @@ static menuaction_t mPlayerActionsDef[NUM_CONTROL_ITEMS] = {
 	{"Fire", "+fire"},
 	{"Use", "+use"},
 	{"Run", "+run"},
-	{"Jump", "+jump"},
 	{"Look Up", "+lookup"},
 	{"Look Down", "+lookdown"},
 	{"Center View", "+center"},
