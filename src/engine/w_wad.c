@@ -567,7 +567,7 @@ static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
 
 void W_KPFInit(void)
 {
-	static const char* kpf_candidates[] = { "Doom64.kpf", "doom64.kpf" };
+	static const char* kpf_candidates[] = { "Doom64.kpf" };
 
 	struct override_item {
 		char name8[8];
@@ -578,9 +578,9 @@ void W_KPFInit(void)
 	// atsb: display at this res, saves time..  downscale these giant things.  Again, uses STB and zlib API
 	// we do this because for now, the lump names stay in the code, so we 'load these and fake them'
 	static const struct override_item items[] = {
-		{ "TITLE",   { "gfx/Doom64_HiRes.png", "gfx/doom64_hires.png", NULL }, 1920, 1080 },
-		{ "USLEGAL", { "gfx/legals.png", "gfx/Legals.png", NULL },              1920, 1080 },
-		{ "CURSOR",  { "cursor", "cursor.png", "gfx/cursor.png", NULL },        0, 0 },
+		{ "TITLE",   { "gfx/Doom64_HiRes.png", NULL }, 1920, 1080 },
+		{ "USLEGAL", { "gfx/legals.png", NULL },              1920, 1080 },
+		{ "CURSOR",  { "gfx/cursor.png", NULL },        0, 0 },
 	};
 
 	for (size_t it = 0; it < sizeof(items) / sizeof(items[0]); ++it) {

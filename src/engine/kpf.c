@@ -30,48 +30,68 @@ static int str_ieq(const char* a, const char* b) {
     return *a == 0 && *b == 0;
 }
 
-// this grabs a buffer, inflates it and creates the size etc..  to store all the stuff
+// atsb: grabs a buffer and resizes it.  This also fixes a previous bug where I was discarding information
 static int KPF_InflateBuffer(FILE* f, long data_off, unsigned int csize,
-                       unsigned char* out, unsigned int usize)
+    unsigned char* out, unsigned int usize)
 {
     if (fseek(f, data_off, SEEK_SET) != 0) return 0;
 
     z_stream z;
     memset(&z, 0, sizeof(z));
-
-    const size_t chunk = 64 * 1024; // not a huge size, not a small one..  enough to grab hi-res images
-    unsigned char* inbuf = (unsigned char*)malloc(chunk);
-    if (!inbuf) 
-        return 0;
-
-    int ok = 0;
-
     if (inflateInit2(&z, -MAX_WBITS) != Z_OK) {
-        free(inbuf);
+        return 0;
+    }
+
+    const size_t CHUNK = 64 * 1024;
+    unsigned char* inbuf = (unsigned char*)malloc(CHUNK);
+    if (!inbuf) {
+        inflateEnd(&z);
         return 0;
     }
 
     z.next_out = out;
     z.avail_out = usize;
 
-    size_t remaining = csize;
-    while (remaining > 0) {
-        size_t take = remaining < chunk ? remaining : chunk;
-        if (fread(inbuf, 1, take, f) != take) 
-            break;
-        z.next_in = inbuf;
-        z.avail_in = (unsigned int)take;
+    unsigned int remaining = csize;
+    int ret = Z_OK;
+    int ok = 0;
 
-        int ret = inflate(&z, Z_NO_FLUSH);
+    while (z.avail_out > 0 && ret != Z_STREAM_END) {
+        if (z.avail_in == 0) {
+            if (remaining == 0) {
+                ret = Z_DATA_ERROR;
+                break;
+            }
+
+            size_t want = remaining < CHUNK ? remaining : CHUNK;
+            size_t got = fread(inbuf, 1, want, f);
+            if (got == 0) {
+                ret = Z_DATA_ERROR;
+                break;
+            }
+
+            remaining -= (unsigned int)got;
+            z.next_in = inbuf;
+            z.avail_in = (unsigned int)got;
+        }
+
+        ret = inflate(&z, Z_NO_FLUSH);
+
         if (ret == Z_STREAM_END) {
             ok = (z.total_out == usize);
             break;
-        } else if (ret != Z_OK) {
+        }
+        else if (ret == Z_OK) {
+        }
+        else if (ret == Z_BUF_ERROR) {
+        }
+        else {
             ok = 0;
             break;
         }
-
-        remaining -= take;
+    }
+    if (ret == Z_OK && z.avail_out == 0) {
+        ok = 1;
     }
 
     inflateEnd(&z);
