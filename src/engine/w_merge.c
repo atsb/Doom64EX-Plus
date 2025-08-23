@@ -115,10 +115,9 @@ static boolean SetupList(searchlist_t* list, searchlist_t* src_list,
 }
 
 // Sets up the sprite/flat search lists
-
-static void SetupLists(void) {
+static void SetupLists(void)
+{
 	// IWAD
-
 	if (!SetupList(&iwad_textures, &iwad, "T_START", "T_END", NULL, NULL)) {
 		I_Error("Textures section not found in IWAD");
 	}
@@ -136,12 +135,12 @@ static void SetupLists(void) {
 	}
 
 	// PWAD
-
 	SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
 	SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
 	SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", NULL, NULL);
 	SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", NULL, NULL);
 }
+
 
 // Initialise the replace list
 
@@ -276,8 +275,6 @@ static void AddSpriteLump(lumpinfo_t* lump) {
 	int angle_num;
 	int i;
 
-	// first angle
-
 	sprite = FindSpriteFrame(lump->name, lump->name[4]);
 	angle_num = lump->name[5] - '0';
 
@@ -289,10 +286,6 @@ static void AddSpriteLump(lumpinfo_t* lump) {
 	else {
 		sprite->angle_lumps[angle_num - 1] = lump;
 	}
-
-	// second angle
-
-	// no second angle?
 
 	if (lump->name[6] == '\0') {
 		return;
@@ -311,21 +304,14 @@ static void AddSpriteLump(lumpinfo_t* lump) {
 	}
 }
 
-// Generate the list.  Run at the start, before merging
-
 static void GenerateSpriteList(void) {
 	int i;
 
 	InitSpriteList();
 
-	// Add all sprites from the IWAD
-
 	for (i = 0; i < iwad_sprites.numlumps; ++i) {
 		AddSpriteLump(&iwad_sprites.lumps[i]);
 	}
-
-	// Add all sprites from the PWAD
-	// (replaces IWAD sprites)
 
 	for (i = 0; i < pwad_sprites.numlumps; ++i) {
 		AddSpriteLump(&pwad_sprites.lumps[i]);
@@ -333,36 +319,31 @@ static void GenerateSpriteList(void) {
 }
 
 // Perform the merge.
-//
-// The merge code creates a new lumpinfo list, adding entries from the
-// IWAD first followed by the PWAD.
-//
-// For the IWAD:
-//  * Flats are added.  If a flat with the same name is in the PWAD,
-//    it is ignored(deleted).  At the end of the section, all flats in the
-//    PWAD are inserted.  This is consistent with the behavior of
-//    deutex/deusf.
-//  * Sprites are added.  The "replace list" is generated before the merge
-//    from the list of sprites in the PWAD.  Any sprites in the IWAD found
-//    to match the replace list are removed.  At the end of the section,
-//    the sprites from the PWAD are inserted.
-//
-// For the PWAD:
-//  * All Sprites and Flats are ignored, with the assumption they have
-//    already been merged into the IWAD's sections.
+static int LumpLooksGraphic(const lumpinfo_t* li) {
+	return (li && li->size >= 8);
+}
 
-static void DoMerge(void) {
-	section_t current_section;
+static int FindInPWAD(const char* name) {
+	int i;
+	for (i = 0; i < pwad.numlumps; ++i) {
+		if (!dstrnicmp(pwad.lumps[i].name, name, 8))
+			return i;
+	}
+	return -1;
+}
+
+static void DoMerge(void)
+{
+	section_t    current_section;
 	lumpinfo_t* newlumps;
-	int num_newlumps;
-	int lumpindex;
-	int i, n;
+	int          num_newlumps;
+	int          lumpindex;
+	int          i, n;
 
-	// Can't ever have more lumps than we already have
 	newlumps = (lumpinfo_t*)malloc(sizeof(lumpinfo_t) * numlumps);
 	num_newlumps = 0;
 
-	// Add IWAD lumps
+	// IWAD LUMPS
 	current_section = SECTION_NORMAL;
 
 	for (i = 0; i < iwad.numlumps; ++i) {
@@ -372,150 +353,102 @@ static void DoMerge(void) {
 		case SECTION_NORMAL:
 			if (!dstrnicmp(lump->name, "T_START", 8)) {
 				current_section = SECTION_TEXTURES;
+				newlumps[num_newlumps++] = *lump;
 			}
 			else if (!dstrnicmp(lump->name, "S_START", 8)) {
 				current_section = SECTION_SPRITES;
+				newlumps[num_newlumps++] = *lump;
 			}
 			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
 				current_section = SECTION_GFX;
+
+				const int pw_sym = FindInPWAD("SYMBOLS");
+				if (pw_sym >= 0 && LumpLooksGraphic(&pwad.lumps[pw_sym])) {
+					newlumps[num_newlumps++] = pwad.lumps[pw_sym];
+				}
+				else if (LumpLooksGraphic(lump)) {
+					newlumps[num_newlumps++] = *lump;
+				}
 			}
 			else if (!dstrnicmp(lump->name, "DM_START", 8)) {
 				current_section = SECTION_SOUNDS;
+				newlumps[num_newlumps++] = *lump;
 			}
-
-			newlumps[num_newlumps++] = *lump;
-
+			else {
+				newlumps[num_newlumps++] = *lump;
+			}
 			break;
 
 		case SECTION_TEXTURES:
-
-			// Have we reached the end of the section?
-
 			if (!dstrnicmp(lump->name, "T_END", 8)) {
-				// Add all new flats from the PWAD to the end
-				// of the section
-
-				for (n = 0; n < pwad_textures.numlumps; ++n) {
+				for (n = 0; n < pwad_textures.numlumps; ++n)
 					newlumps[num_newlumps++] = pwad_textures.lumps[n];
-				}
 
 				newlumps[num_newlumps++] = *lump;
-
-				// back to normal reading
 				current_section = SECTION_NORMAL;
 			}
 			else {
-				// If there is a flat in the PWAD with the same name,
-				// do not add it now.  All PWAD flats are added to the
-				// end of the section. Otherwise, if it is only in the
-				// IWAD, add it now
-
 				lumpindex = FindInList(&pwad_textures, lump->name);
-
-				if (lumpindex < 0) {
+				if (lumpindex < 0)
 					newlumps[num_newlumps++] = *lump;
-				}
 			}
-
 			break;
 
 		case SECTION_SPRITES:
-
-			// Have we reached the end of the section?
-
 			if (!dstrnicmp(lump->name, "S_END", 8)) {
-				// add all the pwad sprites
-
-				for (n = 0; n < pwad_sprites.numlumps; ++n) {
-					if (SpriteLumpNeeded(&pwad_sprites.lumps[n])) {
+				for (n = 0; n < pwad_sprites.numlumps; ++n)
+					if (SpriteLumpNeeded(&pwad_sprites.lumps[n]))
 						newlumps[num_newlumps++] = pwad_sprites.lumps[n];
-					}
-				}
 
-				// copy the ending
 				newlumps[num_newlumps++] = *lump;
-
-				// back to normal reading
 				current_section = SECTION_NORMAL;
 			}
 			else {
-				// Is this lump holding a sprite to be replaced in the
-				// PWAD? If so, wait until the end to add it.
-
-				if (SpriteLumpNeeded(lump)) {
+				if (SpriteLumpNeeded(lump))
 					newlumps[num_newlumps++] = *lump;
-				}
 			}
-
 			break;
 
+			// if a marker ignore, else take from PWAD else take from IWAD
 		case SECTION_GFX:
-
-			// Have we reached the end of the section?
-
 			if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
-				// Add all new flats from the PWAD to the end
-				// of the section
-
-				for (n = 0; n < pwad_gfx.numlumps; ++n) {
+				for (n = 0; n < pwad_gfx.numlumps; ++n)
 					newlumps[num_newlumps++] = pwad_gfx.lumps[n];
+
+				const int pw_tail = FindInPWAD("MOUNTC");
+				if (pw_tail >= 0 && LumpLooksGraphic(&pwad.lumps[pw_tail])) {
+					newlumps[num_newlumps++] = pwad.lumps[pw_tail];
 				}
-
-				newlumps[num_newlumps++] = *lump;
-
-				// back to normal reading
+				else if (LumpLooksGraphic(lump)) {
+					newlumps[num_newlumps++] = *lump;
+				}
 				current_section = SECTION_NORMAL;
 			}
 			else {
-				// If there is a gfx in the PWAD with the same name,
-				// do not add it now.  All PWAD gfx are added to the
-				// end of the section. Otherwise, if it is only in the
-				// IWAD, add it now
-
 				lumpindex = FindInList(&pwad_gfx, lump->name);
-
-				if (lumpindex < 0) {
+				if (lumpindex < 0)
 					newlumps[num_newlumps++] = *lump;
-				}
 			}
-
 			break;
 
 		case SECTION_SOUNDS:
-
-			// Have we reached the end of the section?
-
 			if (!dstrnicmp(lump->name, "DM_END", 8)) {
-				// Add all new flats from the PWAD to the end
-				// of the section
-
-				for (n = 0; n < pwad_sounds.numlumps; ++n) {
+				for (n = 0; n < pwad_sounds.numlumps; ++n)
 					newlumps[num_newlumps++] = pwad_sounds.lumps[n];
-				}
 
 				newlumps[num_newlumps++] = *lump;
-
-				// back to normal reading
 				current_section = SECTION_NORMAL;
 			}
 			else {
-				// If there is a sound in the PWAD with the same name,
-				// do not add it now.  All PWAD sounds are added to the
-				// end of the section. Otherwise, if it is only in the
-				// IWAD, add it now
-
 				lumpindex = FindInList(&pwad_sounds, lump->name);
-
-				if (lumpindex < 0) {
+				if (lumpindex < 0)
 					newlumps[num_newlumps++] = *lump;
-				}
 			}
-
 			break;
 		}
 	}
 
-	// Add PWAD lumps
+	// PWAD
 	current_section = SECTION_NORMAL;
 
 	for (i = 0; i < pwad.numlumps; ++i) {
@@ -531,67 +464,44 @@ static void DoMerge(void) {
 				|| !dstrnicmp(lump->name, "SS_START", 8)) {
 				current_section = SECTION_SPRITES;
 			}
-			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)
-				|| !dstrnicmp(lump->name, "SYMBOLS", 8)) {
+			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
 				current_section = SECTION_GFX;
 			}
 			else if (!dstrnicmp(lump->name, "DM_START", 8)) {
 				current_section = SECTION_SOUNDS;
 			}
 			else {
-				// Don't include the headers of sections
-
 				newlumps[num_newlumps++] = *lump;
 			}
 			break;
 
 		case SECTION_TEXTURES:
-
-			// PWAD flats are ignored (already merged)
-
 			if (!dstrnicmp(lump->name, "TT_END", 8)
 				|| !dstrnicmp(lump->name, "T_END", 8)) {
-				// end of section
 				current_section = SECTION_NORMAL;
 			}
 			break;
 
 		case SECTION_SPRITES:
-
-			// PWAD sprites are ignored (already merged)
-
 			if (!dstrnicmp(lump->name, "SS_END", 8)
 				|| !dstrnicmp(lump->name, "S_END", 8)) {
-				// end of section
 				current_section = SECTION_NORMAL;
 			}
 			break;
 
 		case SECTION_GFX:
-
-			// PWAD gfx are ignored (already merged)
-
-			if (!dstrnicmp(lump->name, "MOUNTC", 8)
-				|| !dstrnicmp(lump->name, "MOUNTC", 8)) {
-				// end of section
+			if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
 				current_section = SECTION_NORMAL;
 			}
 			break;
 
 		case SECTION_SOUNDS:
-
-			// PWAD sounds are ignored (already merged)
-
 			if (!dstrnicmp(lump->name, "DM_END", 8)) {
-				// end of section
 				current_section = SECTION_NORMAL;
 			}
 			break;
 		}
 	}
-
-	// Switch to the new lumpinfo, and free the old one
-
 	free(lumpinfo);
 	lumpinfo = newlumps;
 	numlumps = num_newlumps;
