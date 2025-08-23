@@ -691,8 +691,8 @@ void A_FireCGun(player_t* player, pspdef_t* psp) {
 	psp->sx = (rand * FRACUNIT);
 
 	// randomize sy
-	rand = (((P_Random() & 1) << 1) - 1);
-	psp->sy = WEAPONTOP - (rand * (2 * FRACUNIT));
+	int rand_sy = (((player->ammo[weaponinfo[player->readyweapon].ammo] - 1) & 1) << 1) - 1;
+	psp->sy = WEAPONTOP - (rand_sy * (2 * FRACUNIT));
 	if (v_accessibility.value < 1)
 	{
 		player->psprites[ps_flash].alpha = 160;
