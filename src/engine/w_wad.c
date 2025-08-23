@@ -580,7 +580,7 @@ void W_KPFInit(void)
 	static const struct override_item items[] = {
 		{ "TITLE",   { "gfx/Doom64_HiRes.png", NULL }, 1920, 1080 },
 		{ "USLEGAL", { "gfx/legals.png", NULL },              1920, 1080 },
-		{ "CURSOR",  { "gfx/cursor.png", NULL },        0, 0 },
+		{ "CURSOR",  { "gfx/cursor.png", NULL },        32, 32 },
 	};
 
 	for (size_t it = 0; it < sizeof(items) / sizeof(items[0]); ++it) {
