@@ -289,6 +289,121 @@ int Draw_Text(int x, int y, rcolor color, float scale,
 	return x;
 }
 
+int Draw_TextSecret(int x, int y, rcolor color, float scale,
+	boolean wrap, const char* string, ...) {
+	int c;
+	int i;
+	int vi = 0;
+	int    col;
+	const float size = 0.03125f;
+	float fcol, frow;
+	int start = 0;
+	char msg[MAX_MESSAGE_SIZE];
+	va_list    va;
+	const int ix = x;
+	boolean fill = false;
+
+	va_start(va, string);
+	vsprintf(msg, string, va);
+	va_end(va);
+
+	GL_SetState(GLSTATE_BLEND, 1);
+
+	if (!r_fillmode.value) {
+		dglEnable(GL_TEXTURE_2D);
+		dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		r_fillmode.value = 1.0f;
+		fill = true;
+	}
+
+	GL_BindGfxTexture("SFONT", true);
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_hudFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_hudFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+
+	GL_SetOrthoScale(scale);
+	GL_SetOrtho(0);
+
+	dglSetVertex(vtxstring);
+
+	for (i = 0, vi = 0; i < dstrlen(msg); i++, vi += 4) {
+		c = SDL_toupper(msg[i]);
+		if (c == '\t') {
+			while (x % 64) {
+				x++;
+			}
+			continue;
+		}
+		if (c == '\n') {
+			y += ST_FONTWHSIZE;
+			x = ix;
+			continue;
+		}
+		if (c == 0x20) {
+			if (wrap) {
+				if (x > 192) {
+					y += ST_FONTWHSIZE;
+					x = ix;
+					continue;
+				}
+			}
+		}
+		else {
+			start = (c - ST_FONTSTART);
+			col = start & (ST_FONTNUMSET - 1);
+
+			fcol = (col * size);
+			frow = (start >= ST_FONTNUMSET) ? 0.5f : 0.0f;
+
+			vtxstring[vi + 0].x = (float)x;
+			vtxstring[vi + 0].y = (float)y;
+			vtxstring[vi + 0].tu = fcol + 0.0015f;
+			vtxstring[vi + 0].tv = frow + size;
+			vtxstring[vi + 1].x = (float)x + ST_FONTWHSIZE;
+			vtxstring[vi + 1].y = (float)y;
+			vtxstring[vi + 1].tu = (fcol + size) - 0.0015f;
+			vtxstring[vi + 1].tv = frow + size;
+			vtxstring[vi + 2].x = (float)x + ST_FONTWHSIZE;
+			vtxstring[vi + 2].y = (float)y + ST_FONTWHSIZE;
+			vtxstring[vi + 2].tu = (fcol + size) - 0.0015f;
+			vtxstring[vi + 2].tv = frow + 0.5f;
+			vtxstring[vi + 3].x = (float)x;
+			vtxstring[vi + 3].y = (float)y + ST_FONTWHSIZE;
+			vtxstring[vi + 3].tu = fcol + 0.0015f;
+			vtxstring[vi + 3].tv = frow + 0.5f;
+
+			dglSetVertexColor(vtxstring + vi, color, 4);
+
+			dglTriangle(vi + 0, vi + 1, vi + 2);
+			dglTriangle(vi + 0, vi + 2, vi + 3);
+
+			if (devparm) {
+				vertCount += 4;
+			}
+		}
+		x += ST_FONTWHSIZE;
+	}
+
+	if (vi) {
+		dglDrawGeometry(vi, vtxstring);
+	}
+
+	GL_ResetViewport();
+
+	if (fill) {
+		dglDisable(GL_TEXTURE_2D);
+		dglPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		r_fillmode.value = 0.0f;
+	}
+
+	GL_SetState(GLSTATE_BLEND, 0);
+	GL_SetOrthoScale(1.0f);
+
+	return x;
+}
+
 const symboldata_t symboldata[] = {  //0x5B9BC
 	{ 120, 14, 13, 13 },
 	{ 134, 14, 9, 13 },

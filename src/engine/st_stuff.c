@@ -872,7 +872,7 @@ void ST_Drawer(void) {
 	}
 	else if (st_msg && (int)m_messages.value && plyr->messagepic == 40 && hud_disablesecretmessages.value != 1) {
 		const int pos = stats_always_on ? 180 : 80;
-		Draw_Text(pos, pos, YELLOW, scale, false, st_msg);
+		Draw_TextSecret(pos, pos, YELLOW, scale, false, st_msg);
 	}
 
 	// Standard messages

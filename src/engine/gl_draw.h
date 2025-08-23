@@ -56,6 +56,8 @@ extern const symboldata_t symboldata[];
 
 int Draw_Text(int x, int y, rcolor color, float scale,
 	boolean wrap, const char* string, ...);
+int Draw_TextSecret(int x, int y, rcolor color, float scale,
+	boolean wrap, const char* string, ...);
 int Center_Text(const char* string);
 int Draw_BigText(int x, int y, rcolor color, const char* string);
 int Draw_SmallText(int x, int y, rcolor color, const char* string);
