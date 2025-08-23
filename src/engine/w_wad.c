@@ -537,32 +537,68 @@ void W_ReadLump(int lump, void* dest)
 
 static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
 {
-	if (g_nmemlumps >= MAX_MEMLUMPS || size <= 0 || data == NULL) 
-		return 0;
+    if (size <= 0 || data == NULL)
+        return 0;
 
-	lumpinfo = (lumpinfo_t*)realloc(lumpinfo, (numlumps + 1) * sizeof(lumpinfo_t));
-	if (!lumpinfo) {
-		free(data);
-		I_Error("W_AddMemoryLump: Couldn't realloc lumpinfo");
-		return 0;
-	}
+    int existing = W_CheckNumForName(name8);
+    if (existing >= 0) {
+        if (g_nmemlumps >= MAX_MEMLUMPS) {
+            free(data);
+            I_Warning("W_AddMemoryLump: out of memlump slots for %8.8s\n", name8);
+            return 0;
+        }
+        int idx = g_nmemlumps++;
+        dmemcpy(g_memlumps[idx].name, name8, 8);
+        g_memlumps[idx].data = data;
+        g_memlumps[idx].size = size;
 
-	// Stash
-	int idx = g_nmemlumps++;
-	dmemcpy(g_memlumps[idx].name, name8, 8);
-	g_memlumps[idx].data = data;
-	g_memlumps[idx].size = size;
+        lumpinfo_t* L = &lumpinfo[existing];
 
-	lumpinfo_t* L = &lumpinfo[numlumps];
-	L->wadfile = WADFILE_MEM;
-	L->position = idx; // atsb: index of lump position
-	L->size = size;
-	dmemcpy(L->name, name8, 8);
-	L->cache = NULL;
+        if (L->cache) {
+            Z_Free(L->cache);
+            L->cache = NULL;
+        }
 
-	numlumps++;
-	W_HashLumps();
-	return 1;
+        L->wadfile  = WADFILE_MEM;
+        L->position = idx;   // index
+        L->size     = size;
+        dmemcpy(L->name, name8, 8);
+
+        W_HashLumps();
+
+        I_Printf("KPF: Overrode %8.8s in-place with memory lump (%d bytes)\n", name8, size);
+        return 1;
+    }
+
+    if (g_nmemlumps >= MAX_MEMLUMPS) {
+        free(data);
+        I_Warning("W_AddMemoryLump: out of memlump slots for %8.8s\n", name8);
+        return 0;
+    }
+
+    lumpinfo = (lumpinfo_t*)realloc(lumpinfo, (numlumps + 1) * sizeof(lumpinfo_t));
+    if (!lumpinfo) {
+        free(data);
+        I_Error("W_AddMemoryLump: Couldn't realloc lumpinfo");
+        return 0;
+    }
+
+    int idx = g_nmemlumps++;
+    dmemcpy(g_memlumps[idx].name, name8, 8);
+    g_memlumps[idx].data = data;
+    g_memlumps[idx].size = size;
+
+    lumpinfo_t* L = &lumpinfo[numlumps];
+    L->wadfile  = WADFILE_MEM;
+    L->position = idx;
+    L->size     = size;
+    dmemcpy(L->name, name8, 8);
+    L->cache    = NULL;
+
+    numlumps++;
+    W_HashLumps();
+    I_Printf("KPF: Added new memory lump %8.8s (%d bytes)\n", name8, size);
+    return 1;
 }
 
 void W_KPFInit(void)
@@ -575,30 +611,35 @@ void W_KPFInit(void)
 		int  max_w, max_h;
 	};
 
-	// atsb: display at this res, saves time..  downscale these giant things.  Again, uses STB and zlib API
-	// we do this because for now, the lump names stay in the code, so we 'load these and fake them'
+	// atsb: let's be strict, if these aren't present, then we bail out at 30,000ft without a parachute!
 	static const struct override_item items[] = {
 		{ "TITLE",   { "gfx/Doom64_HiRes.png", NULL }, 1920, 1080 },
-		{ "USLEGAL", { "gfx/legals.png", NULL },              1920, 1080 },
-		{ "CURSOR",  { "gfx/cursor.png", NULL },        32, 32 },
+		{ "USLEGAL", { "gfx/legals.png",       NULL }, 1920, 1080 },
+		{ "CURSOR",  { "gfx/cursor.png",       NULL }, 33, 32 },
 	};
+
+	int need = (int)(sizeof(items) / sizeof(items[0]));
+	int loaded = 0;
+
+	char missing[256];
+	missing[0] = 0;
 
 	for (size_t it = 0; it < sizeof(items) / sizeof(items[0]); ++it) {
 		const struct override_item* ov = &items[it];
-		int done = 0;
+		int this_ok = 0;
 
-		for (size_t k = 0; k < sizeof(kpf_candidates) / sizeof(kpf_candidates[0]) && !done; ++k) {
+		for (int k = 0; k < (int)(sizeof(kpf_candidates) / sizeof(kpf_candidates[0])) && !this_ok; ++k) {
 			const char* kpf = kpf_candidates[k];
 
-			for (size_t p = 0; ov->paths[p] != NULL && !done; ++p) {
+			for (size_t p = 0; ov->paths[p] != NULL && !this_ok; ++p) {
 				const char* inner = ov->paths[p];
 
 				unsigned char* data = NULL;
 				int size = 0;
+
 				if (!KPF_ExtractFileCapped(kpf, inner, &data, &size, KPF_PNG_CAP_BYTES)) {
 					continue;
 				}
-
 				if (ov->max_w > 0 && ov->max_h > 0) {
 					int w = 0, h = 0;
 					if (PNG_ReadDimensions(data, (size_t)size, &w, &h)) {
@@ -608,32 +649,45 @@ void W_KPFInit(void)
 								free(data);
 								data = scaled;
 								size = scaled_sz;
-								I_Printf("KPF: %s too large (%dx%d) scaled to fit %dx%d\n",
+								I_Printf("W_KPFInit: %s too large (%dx%d) scaled to fit %dx%d\n",
 									ov->name8, w, h, ov->max_w, ov->max_h);
 							}
-							else
-							{
-								// skip KPF and keep WAD’s lump.
-								I_Printf("KPF: %s too large (%dx%d), keeping WAD version.\n", ov->name8, w, h);
+							else {
+								I_Printf("W_KPFInit: %s too large (%dx%d), keeping WAD version.\n",
+									ov->name8, w, h);
 								free(data);
-								continue; // try next
+								data = NULL;
+								size = 0;
 							}
 						}
 					}
 				}
-
-				if (W_AddMemoryLump(ov->name8, data, size)) {
-					I_Printf("KPF: Loading %s from %s (%s, %d bytes)\n",
-						ov->name8, kpf, inner, size);
+				if (data && size > 0) {
+					if (W_AddMemoryLump(ov->name8, data, size)) {
+						I_Printf("W_KPFInit: Loaded %s from %s (%s, %d bytes)\n", ov->name8, kpf, inner, size);
+						this_ok = 1;
+						loaded++;
+					}
+					else {
+						I_Printf("W_KPFInit: Failed to add in-memory %s from %s (%s)\n", ov->name8, kpf, inner);
+						free(data);
+						data = NULL;
+					}
 				}
-				else {
-					I_Printf("KPF: Failed to add in memory %s from %s (%s)\n",
-						ov->name8, kpf, inner);
-					free(data);
-				}
-				done = 1;
 			}
 		}
+		if (!this_ok) {
+			size_t cur = strlen(missing);
+			size_t left = sizeof(missing) - cur - 1;
+			if (left > 0) {
+				snprintf(missing + cur, left, "%s%s", cur ? "," : "", ov->name8);
+			}
+		}
+	}
+	// atsb: ONLY LOAD IF EVERYTHING IS FOUND!
+	if (loaded != need) {
+		I_Error("W_KPFInit: required assets missing or corrupt: %s. "
+			"Make sure Doom64.kpf is present and readable.", missing[0] ? missing : "(unknown)");
 	}
 }
 

@@ -36,63 +36,35 @@ static int KPF_InflateBuffer(FILE* f, long data_off, unsigned int csize,
 {
     if (fseek(f, data_off, SEEK_SET) != 0) return 0;
 
-    z_stream z;
-    memset(&z, 0, sizeof(z));
-    if (inflateInit2(&z, -MAX_WBITS) != Z_OK) {
-        return 0;
-    }
+    z_stream z; memset(&z, 0, sizeof(z));
+    if (inflateInit2(&z, -MAX_WBITS) != Z_OK) return 0;
 
     const size_t CHUNK = 64 * 1024;
     unsigned char* inbuf = (unsigned char*)malloc(CHUNK);
-    if (!inbuf) {
-        inflateEnd(&z);
-        return 0;
-    }
+    if (!inbuf) { inflateEnd(&z); return 0; }
 
     z.next_out = out;
     z.avail_out = usize;
 
     unsigned int remaining = csize;
     int ret = Z_OK;
-    int ok = 0;
 
-    while (z.avail_out > 0 && ret != Z_STREAM_END) {
+    while (ret != Z_STREAM_END && z.avail_out > 0) {
         if (z.avail_in == 0) {
-            if (remaining == 0) {
-                ret = Z_DATA_ERROR;
-                break;
-            }
-
+            if (remaining == 0) { ret = Z_DATA_ERROR; break; }
             size_t want = remaining < CHUNK ? remaining : CHUNK;
             size_t got = fread(inbuf, 1, want, f);
-            if (got == 0) {
-                ret = Z_DATA_ERROR;
-                break;
-            }
-
+            if (got == 0) { ret = Z_DATA_ERROR; break; }
             remaining -= (unsigned int)got;
             z.next_in = inbuf;
             z.avail_in = (unsigned int)got;
         }
 
         ret = inflate(&z, Z_NO_FLUSH);
+        if (ret != Z_OK && ret != Z_STREAM_END && ret != Z_BUF_ERROR) break;
+    }
 
-        if (ret == Z_STREAM_END) {
-            ok = (z.total_out == usize);
-            break;
-        }
-        else if (ret == Z_OK) {
-        }
-        else if (ret == Z_BUF_ERROR) {
-        }
-        else {
-            ok = 0;
-            break;
-        }
-    }
-    if (ret == Z_OK && z.avail_out == 0) {
-        ok = 1;
-    }
+    int ok = (ret == Z_STREAM_END && z.avail_out == 0);
 
     inflateEnd(&z);
     free(inbuf);
