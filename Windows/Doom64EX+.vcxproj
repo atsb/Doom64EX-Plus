@@ -141,7 +141,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\src\engine\3rdparty\Libs\x64</AdditionalLibraryDirectories>
