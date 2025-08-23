@@ -39,6 +39,7 @@ set(CMAKE_C_FLAGS_RELEASE "-s -O2")
 find_package(SDL3 REQUIRED)
 find_package(PNG REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(ZLIB REQUIRED)
 include_directories(
 	${libpng_INCLUDE_DIRS}
 	${OpenGL_INCLUDE_DIRS}
@@ -52,6 +53,7 @@ add_executable(
 	${SOURCE_DIR}/am_draw.c
 	${SOURCE_DIR}/am_map.c
 	${SOURCE_DIR}/info.c
+	${SOURCE_DIR}/kpf.c
 	${SOURCE_DIR}/md5.c
 	${SOURCE_DIR}/tables.c
 	${SOURCE_DIR}/con_console.c
@@ -139,5 +141,6 @@ target_link_libraries(
 	png
 	OpenGL
 	fmod
+	z
 	m
 )
