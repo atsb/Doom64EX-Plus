@@ -206,6 +206,7 @@
     <ClCompile Include="..\src\engine\p_lights.c" />
     <ClCompile Include="..\src\engine\p_macros.c" />
     <ClCompile Include="..\src\engine\p_map.c" />
+    <ClCompile Include="..\src\engine\p_mapinfo.c" />
     <ClCompile Include="..\src\engine\p_maputl.c" />
     <ClCompile Include="..\src\engine\p_mobj.c" />
     <ClCompile Include="..\src\engine\p_plats.c" />

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+﻿// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2005 Simon Howard
@@ -334,177 +334,230 @@ static int FindInPWAD(const char* name) {
 
 static void DoMerge(void)
 {
-	section_t    current_section;
-	lumpinfo_t* newlumps;
-	int          num_newlumps;
-	int          lumpindex;
-	int          i, n;
+    section_t    current_section;
+    lumpinfo_t* newlumps;
+    int          num_newlumps;
+    int          lumpindex;
+    int          i, n;
 
-	newlumps = (lumpinfo_t*)malloc(sizeof(lumpinfo_t) * numlumps);
-	num_newlumps = 0;
+    newlumps = (lumpinfo_t*)malloc(sizeof(lumpinfo_t) * numlumps);
+    num_newlumps = 0;
 
-	// IWAD LUMPS
-	current_section = SECTION_NORMAL;
+    // IWAD
+    current_section = SECTION_NORMAL;
 
-	for (i = 0; i < iwad.numlumps; ++i) {
-		lumpinfo_t* lump = &iwad.lumps[i];
+    for (i = 0; i < iwad.numlumps; ++i) {
+        lumpinfo_t* lump = &iwad.lumps[i];
 
-		switch (current_section) {
-		case SECTION_NORMAL:
-			if (!dstrnicmp(lump->name, "T_START", 8)) {
-				current_section = SECTION_TEXTURES;
-				newlumps[num_newlumps++] = *lump;
-			}
-			else if (!dstrnicmp(lump->name, "S_START", 8)) {
-				current_section = SECTION_SPRITES;
-				newlumps[num_newlumps++] = *lump;
-			}
-			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
-				current_section = SECTION_GFX;
+        if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
+            lump->name[3] >= '0' && lump->name[3] <= '9' &&
+            lump->name[4] >= '0' && lump->name[4] <= '9')
+        {
+            int pw = FindInPWAD(lump->name);
+            if (pw >= 0) {
+                int k = i + 1;
+                for (;;) {
+                    if (k >= iwad.numlumps) break;
+                    int is_sub = 0;
+                    const char* subs[] = {
+                        "THINGS","LINEDEFS","SIDEDEFS","VERTEXES","SEGS","SSECTORS",
+                        "NODES","SECTORS","REJECT","BLOCKMAP","BEHAVIOR","LEAFS","LIGHTS","MACROS"
+                    };
+                    for (int si = 0; si < (int)(sizeof(subs) / sizeof(subs[0])); ++si) {
+                        if (!dstrnicmp(iwad.lumps[k].name, subs[si], 8)) { is_sub = 1; break; }
+                    }
+                    if (!is_sub) break;
+                    ++k;
+                }
+                i = k - 1;
+                continue;
+            }
+        }
 
-				const int pw_sym = FindInPWAD("SYMBOLS");
-				if (pw_sym >= 0 && LumpLooksGraphic(&pwad.lumps[pw_sym])) {
-					newlumps[num_newlumps++] = pwad.lumps[pw_sym];
-				}
-				else if (LumpLooksGraphic(lump)) {
-					newlumps[num_newlumps++] = *lump;
-				}
-			}
-			else if (!dstrnicmp(lump->name, "DM_START", 8)) {
-				current_section = SECTION_SOUNDS;
-				newlumps[num_newlumps++] = *lump;
-			}
-			else {
-				newlumps[num_newlumps++] = *lump;
-			}
-			break;
+        switch (current_section) {
+        case SECTION_NORMAL:
+            if (!dstrnicmp(lump->name, "T_START", 8)) {
+                current_section = SECTION_TEXTURES;
+                newlumps[num_newlumps++] = *lump;
+            }
+            else if (!dstrnicmp(lump->name, "S_START", 8)) {
+                current_section = SECTION_SPRITES;
+                newlumps[num_newlumps++] = *lump;
+            }
+            else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
+                current_section = SECTION_GFX;
 
-		case SECTION_TEXTURES:
-			if (!dstrnicmp(lump->name, "T_END", 8)) {
-				for (n = 0; n < pwad_textures.numlumps; ++n)
-					newlumps[num_newlumps++] = pwad_textures.lumps[n];
+                const int pw_sym = FindInPWAD("SYMBOLS");
+                if (pw_sym >= 0 && LumpLooksGraphic(&pwad.lumps[pw_sym])) {
+                    newlumps[num_newlumps++] = pwad.lumps[pw_sym];
+                }
+                else if (LumpLooksGraphic(lump)) {
+                    newlumps[num_newlumps++] = *lump;
+                }
+            }
+            else if (!dstrnicmp(lump->name, "DM_START", 8)
+                || !dstrnicmp(lump->name, "DS_START", 8)) {
+                current_section = SECTION_SOUNDS;
+                newlumps[num_newlumps++] = *lump;
+            }
+            else {
+                newlumps[num_newlumps++] = *lump;
+            }
+            break;
 
-				newlumps[num_newlumps++] = *lump;
-				current_section = SECTION_NORMAL;
-			}
-			else {
-				lumpindex = FindInList(&pwad_textures, lump->name);
-				if (lumpindex < 0)
-					newlumps[num_newlumps++] = *lump;
-			}
-			break;
+        case SECTION_TEXTURES:
+            if (!dstrnicmp(lump->name, "T_END", 8)) {
+                for (n = 0; n < pwad_textures.numlumps; ++n)
+                    newlumps[num_newlumps++] = pwad_textures.lumps[n];
 
-		case SECTION_SPRITES:
-			if (!dstrnicmp(lump->name, "S_END", 8)) {
-				for (n = 0; n < pwad_sprites.numlumps; ++n)
-					if (SpriteLumpNeeded(&pwad_sprites.lumps[n]))
-						newlumps[num_newlumps++] = pwad_sprites.lumps[n];
+                newlumps[num_newlumps++] = *lump;
+                current_section = SECTION_NORMAL;
+            }
+            else {
+                lumpindex = FindInList(&pwad_textures, lump->name);
+                if (lumpindex < 0)
+                    newlumps[num_newlumps++] = *lump;
+            }
+            break;
 
-				newlumps[num_newlumps++] = *lump;
-				current_section = SECTION_NORMAL;
-			}
-			else {
-				if (SpriteLumpNeeded(lump))
-					newlumps[num_newlumps++] = *lump;
-			}
-			break;
+        case SECTION_SPRITES:
+            if (!dstrnicmp(lump->name, "S_END", 8)) {
+                for (n = 0; n < pwad_sprites.numlumps; ++n)
+                    if (SpriteLumpNeeded(&pwad_sprites.lumps[n]))
+                        newlumps[num_newlumps++] = pwad_sprites.lumps[n];
 
-			// if a marker ignore, else take from PWAD else take from IWAD
-		case SECTION_GFX:
-			if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
-				for (n = 0; n < pwad_gfx.numlumps; ++n)
-					newlumps[num_newlumps++] = pwad_gfx.lumps[n];
+                newlumps[num_newlumps++] = *lump;
+                current_section = SECTION_NORMAL;
+            }
+            else {
+                if (SpriteLumpNeeded(lump))
+                    newlumps[num_newlumps++] = *lump;
+            }
+            break;
 
-				const int pw_tail = FindInPWAD("MOUNTC");
-				if (pw_tail >= 0 && LumpLooksGraphic(&pwad.lumps[pw_tail])) {
-					newlumps[num_newlumps++] = pwad.lumps[pw_tail];
-				}
-				else if (LumpLooksGraphic(lump)) {
-					newlumps[num_newlumps++] = *lump;
-				}
-				current_section = SECTION_NORMAL;
-			}
-			else {
-				lumpindex = FindInList(&pwad_gfx, lump->name);
-				if (lumpindex < 0)
-					newlumps[num_newlumps++] = *lump;
-			}
-			break;
+        case SECTION_GFX:
+            if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
+                for (n = 0; n < pwad_gfx.numlumps; ++n)
+                    newlumps[num_newlumps++] = pwad_gfx.lumps[n];
 
-		case SECTION_SOUNDS:
-			if (!dstrnicmp(lump->name, "DM_END", 8)) {
-				for (n = 0; n < pwad_sounds.numlumps; ++n)
-					newlumps[num_newlumps++] = pwad_sounds.lumps[n];
+                const int pw_tail = FindInPWAD("MOUNTC");
+                if (pw_tail >= 0 && LumpLooksGraphic(&pwad.lumps[pw_tail])) {
+                    newlumps[num_newlumps++] = pwad.lumps[pw_tail];
+                }
+                else if (LumpLooksGraphic(lump)) {
+                    newlumps[num_newlumps++] = *lump;
+                }
+                current_section = SECTION_NORMAL;
+            }
+            else {
+                lumpindex = FindInList(&pwad_gfx, lump->name);
+                if (lumpindex < 0)
+                    newlumps[num_newlumps++] = *lump;
+            }
+            break;
 
-				newlumps[num_newlumps++] = *lump;
-				current_section = SECTION_NORMAL;
-			}
-			else {
-				lumpindex = FindInList(&pwad_sounds, lump->name);
-				if (lumpindex < 0)
-					newlumps[num_newlumps++] = *lump;
-			}
-			break;
-		}
-	}
+        case SECTION_SOUNDS:
+            if (!dstrnicmp(lump->name, "DM_END", 8)
+                || !dstrnicmp(lump->name, "DS_END", 8)) {
+                for (n = 0; n < pwad_sounds.numlumps; ++n)
+                    newlumps[num_newlumps++] = pwad_sounds.lumps[n];
 
-	// PWAD
-	current_section = SECTION_NORMAL;
+                newlumps[num_newlumps++] = *lump;
+                current_section = SECTION_NORMAL;
+            }
+            else {
+                lumpindex = FindInList(&pwad_sounds, lump->name);
+                if (lumpindex < 0)
+                    newlumps[num_newlumps++] = *lump;
+            }
+            break;
+        }
+    }
 
-	for (i = 0; i < pwad.numlumps; ++i) {
-		lumpinfo_t* lump = &pwad.lumps[i];
+    // PWAD
+    current_section = SECTION_NORMAL;
 
-		switch (current_section) {
-		case SECTION_NORMAL:
-			if (!dstrnicmp(lump->name, "T_START", 8)
-				|| !dstrnicmp(lump->name, "TT_START", 8)) {
-				current_section = SECTION_TEXTURES;
-			}
-			else if (!dstrnicmp(lump->name, "S_START", 8)
-				|| !dstrnicmp(lump->name, "SS_START", 8)) {
-				current_section = SECTION_SPRITES;
-			}
-			else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
-				current_section = SECTION_GFX;
-			}
-			else if (!dstrnicmp(lump->name, "DM_START", 8)) {
-				current_section = SECTION_SOUNDS;
-			}
-			else {
-				newlumps[num_newlumps++] = *lump;
-			}
-			break;
+    for (i = 0; i < pwad.numlumps; ++i) {
+        lumpinfo_t* lump = &pwad.lumps[i];
 
-		case SECTION_TEXTURES:
-			if (!dstrnicmp(lump->name, "TT_END", 8)
-				|| !dstrnicmp(lump->name, "T_END", 8)) {
-				current_section = SECTION_NORMAL;
-			}
-			break;
+        if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
+            lump->name[3] >= '0' && lump->name[3] <= '9' &&
+            lump->name[4] >= '0' && lump->name[4] <= '9')
+        {
+            newlumps[num_newlumps++] = *lump; // marker
 
-		case SECTION_SPRITES:
-			if (!dstrnicmp(lump->name, "SS_END", 8)
-				|| !dstrnicmp(lump->name, "S_END", 8)) {
-				current_section = SECTION_NORMAL;
-			}
-			break;
+            int j = i + 1;
+            for (;;) {
+                if (j >= pwad.numlumps) break;
+                int is_sub = 0;
+                const char* subs[] = {
+                    "THINGS","LINEDEFS","SIDEDEFS","VERTEXES","SEGS","SSECTORS",
+                    "NODES","SECTORS","REJECT","BLOCKMAP","BEHAVIOR","LEAFS","LIGHTS","MACROS"
+                };
+                for (int si = 0; si < (int)(sizeof(subs) / sizeof(subs[0])); ++si) {
+                    if (!dstrnicmp(pwad.lumps[j].name, subs[si], 8)) { is_sub = 1; break; }
+                }
+                if (!is_sub) break;
+                newlumps[num_newlumps++] = pwad.lumps[j++];
+            }
+            i = j - 1;
+            continue;
+        }
 
-		case SECTION_GFX:
-			if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
-				current_section = SECTION_NORMAL;
-			}
-			break;
+        switch (current_section) {
+        case SECTION_NORMAL:
+            if (!dstrnicmp(lump->name, "T_START", 8)
+                || !dstrnicmp(lump->name, "TT_START", 8)) {
+                current_section = SECTION_TEXTURES;
+            }
+            else if (!dstrnicmp(lump->name, "S_START", 8)
+                || !dstrnicmp(lump->name, "SS_START", 8)) {
+                current_section = SECTION_SPRITES;
+            }
+            else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
+                current_section = SECTION_GFX;
+            }
+            else if (!dstrnicmp(lump->name, "DM_START", 8)
+                || !dstrnicmp(lump->name, "DS_START", 8)) {
+                current_section = SECTION_SOUNDS;
+            }
+            else {
+                newlumps[num_newlumps++] = *lump;
+            }
+            break;
 
-		case SECTION_SOUNDS:
-			if (!dstrnicmp(lump->name, "DM_END", 8)) {
-				current_section = SECTION_NORMAL;
-			}
-			break;
-		}
-	}
-	free(lumpinfo);
-	lumpinfo = newlumps;
-	numlumps = num_newlumps;
+        case SECTION_TEXTURES:
+            if (!dstrnicmp(lump->name, "TT_END", 8)
+                || !dstrnicmp(lump->name, "T_END", 8)) {
+                current_section = SECTION_NORMAL;
+            }
+            break;
+
+        case SECTION_SPRITES:
+            if (!dstrnicmp(lump->name, "SS_END", 8)
+                || !dstrnicmp(lump->name, "S_END", 8)) {
+                current_section = SECTION_NORMAL;
+            }
+            break;
+
+        case SECTION_GFX:
+            if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
+                current_section = SECTION_NORMAL;
+            }
+            break;
+
+        case SECTION_SOUNDS:
+            if (!dstrnicmp(lump->name, "DM_END", 8)
+                || !dstrnicmp(lump->name, "DS_END", 8)) {
+                current_section = SECTION_NORMAL;
+            }
+            break;
+        }
+    }
+
+    free(lumpinfo);
+    lumpinfo = newlumps;
+    numlumps = num_newlumps;
 }
 
 void W_PrintDirectory(void) {

@@ -83,6 +83,7 @@
     <ClCompile Include="..\src\engine\steam.c" />
     <ClCompile Include="..\src\engine\w_merge.c" />
     <ClCompile Include="..\src\engine\kpf.c" />
+    <ClCompile Include="..\src\engine\p_mapinfo.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\dgl.h" />

@@ -171,6 +171,7 @@ typedef struct {
 	boolean    forcegodmode;
 	boolean    contmusexit;
 	int         allowfreelook;
+	int		 compat_collision;	
 } mapdef_t;
 
 typedef struct {

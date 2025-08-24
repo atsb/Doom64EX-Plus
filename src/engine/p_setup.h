@@ -36,6 +36,7 @@ mapdef_t* P_GetMapInfo(int map);
 clusterdef_t* P_GetCluster(int map);
 episodedef_t* P_GetEpisode(int episode);
 int P_GetNumEpisodes(void);
+void P_InitMapInfo(void);
 
 //
 // [kex] sky definitions
