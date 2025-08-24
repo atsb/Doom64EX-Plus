@@ -348,9 +348,11 @@ void W_Init(void) {
 			}
 		}
 	}
+
+	W_HashLumps();
+		
 	I_Printf("W_KPFInit: Init KPFfiles.\n");
 	W_KPFInit();
-	W_HashLumps();
 }
 
 static boolean nonmaplump = false;
