@@ -694,16 +694,36 @@ static void P_MapInfoLexerParseEpisodeBlock(mapinfo_lexer* mapinfo_lexer, int st
             break;
         }
 
+
+        // atsb: name and key need to be bounded as these are single char names (episode select) and can overflow
         if (!dstricmp(mapinfo_episode_value.mapinfo_string_value, "name")) {
             const char* v = P_MapInfoLexerParseStrAfterEq(mapinfo_lexer, "name");
-            dstrncpy(e.name, v, dstrlen(v));
-
+            {
+                size_t cap = sizeof(e.name);
+                size_t n = dstrlen(v);
+                if (cap) {
+                    if (n >= cap) n = cap - 1;
+                    dmemcpy(e.name, v, n);
+                    e.name[n] = 0;
+                }
+            }
             continue;
         }
+
         if (!dstricmp(mapinfo_episode_value.mapinfo_string_value, "key")) {
             const char* v = P_MapInfoLexerParseStrAfterEq(mapinfo_lexer, "key");
-            dstrncpy(e.key, v, dstrlen(v));
-
+            if (sizeof(e.key) == 1) {
+                ((unsigned char*)&e.key)[0] = (v && v[0]) ? (unsigned char)v[0] : 0;
+            }
+            else {
+                size_t cap = sizeof(e.key);
+                size_t n = dstrlen(v);
+                if (cap) {
+                    if (n >= cap) n = cap - 1;
+                    dmemcpy(e.key, v, n);
+                    ((char*)e.key)[n] = 0;
+                }
+            }
             continue;
         }
 
