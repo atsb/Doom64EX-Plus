@@ -1,4 +1,4 @@
-﻿// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -87,7 +87,7 @@ int PNG_DownscaleToFit(unsigned char* in_png, int in_size,
         return 0; 
     }
 
-    int okr = stbir_resize_uint8_linear(rgba, w, h, 0, out_rgba, nw, nh, 0, STBIR_RGBA);
+    unsigned char *okr = stbir_resize_uint8_linear(rgba, w, h, 0, out_rgba, nw, nh, 0, STBIR_RGBA);
     stbi_image_free(rgba);
     if (!okr) { 
         free(out_rgba); 

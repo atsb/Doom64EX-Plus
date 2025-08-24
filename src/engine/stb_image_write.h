@@ -1125,7 +1125,7 @@ static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int 
    }
 }
 
-STBIWDEF unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+STBIWDEF unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int stride_bytes, int x, int y, int n, size_t *out_len)
 {
    int force_filter = stbi_write_force_png_filter;
    int ctype[5] = { -1, 0, 4, 2, 6 };
@@ -1215,7 +1215,7 @@ STBIWDEF unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int s
 STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
 {
    FILE *f;
-   int len;
+   size_t len;
    unsigned char *png = stbi_write_png_to_mem((const unsigned char *) data, stride_bytes, x, y, comp, &len);
    if (png == NULL) return 0;
 
@@ -1230,7 +1230,7 @@ STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const 
 
 STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
 {
-   int len;
+   size_t len;
    unsigned char *png = stbi_write_png_to_mem((const unsigned char *) data, stride_bytes, x, y, comp, &len);
    if (png == NULL) return 0;
    func(context, png, len);
