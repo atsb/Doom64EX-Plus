@@ -637,9 +637,11 @@ void W_KPFInit(void)
 				unsigned char* data = NULL;
 				int size = 0;
 
-				if (!KPF_ExtractFileCapped(kpf, inner, &data, &size, KPF_PNG_CAP_BYTES)) {
-					continue;
-				}
+				char* path = I_FindDataFile((char *)kpf);
+				int ret = KPF_ExtractFileCapped(path, inner, &data, &size, KPF_PNG_CAP_BYTES);
+			    free(path);
+				if(!ret) continue;
+
 				if (ov->max_w > 0 && ov->max_h > 0) {
 					int w = 0, h = 0;
 					if (PNG_ReadDimensions(data, (size_t)size, &w, &h)) {
