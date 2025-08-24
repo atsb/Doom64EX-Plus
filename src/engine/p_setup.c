@@ -1182,22 +1182,15 @@ static void P_InitMapInfo(void) {
 					// get music track ID
 					//
 					if (!dstricmp(sc_parser.token, "MUSIC")) {
-						int ds_start;
-						int ds_end;
-						int lump;
+						const char* name = sc_parser.getstring();
+						int lump = W_CheckNumForName(name);
 
-						text = sc_parser.getstring();
-						ds_start = W_GetNumForName("DM_START") + 1;
-						ds_end = W_GetNumForName("DM_END") - 1;
-
-						lump = W_GetNumForName(text);
-
-						if (lump > ds_end && lump < ds_start) {
-							CON_Warnf("P_InitMapInfo: Invalid music name: %s\n", text);
+						if (lump == -1) {
+							CON_Warnf("P_InitMapInfo: Invalid music name: %s\n", name);
 							cluster.music = -1;
 						}
 						else {
-							cluster.music = (lump - ds_start);
+							cluster.music = lump;
 						}
 					}
 					//
