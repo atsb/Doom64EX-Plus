@@ -40,11 +40,15 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_RESIZE2_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 
+#define STBI_ONLY_PNG
+#define STBI_NO_STDIO
+
+#define STBI_WRITE_NO_STDIO
 #define STBIW_PNG_COMPRESSION_LEVEL 1
 #define STBIW_PNG_FILTER 0
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
 #include "stb_image_resize2.h"
 #include "stb_image_write.h"
