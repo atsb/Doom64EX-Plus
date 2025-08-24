@@ -638,6 +638,7 @@ void W_KPFInit(void)
 				int size = 0;
 
 				char* path = I_FindDataFile((char *)kpf);
+				if(!path) continue;
 				int ret = KPF_ExtractFileCapped(path, inner, &data, &size, KPF_PNG_CAP_BYTES);
 			    free(path);
 				if(!ret) continue;
