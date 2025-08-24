@@ -54,6 +54,8 @@ typedef struct memlump_s {
 static memlump_t g_memlumps[MAX_MEMLUMPS];
 static int g_nmemlumps = 0;
 
+extern int win_px_w, win_px_h;
+
 #pragma pack(push, 1)
 
 //
@@ -614,23 +616,23 @@ void W_KPFInit(void)
 	};
 
 	// atsb: let's be strict, if these aren't present, then we bail out at 30,000ft without a parachute!
-	static const struct override_item items[] = {
-		{ "TITLE",   { "gfx/Doom64_HiRes.png", NULL }, 1920, 1080 },
-		{ "USLEGAL", { "gfx/legals.png",       NULL }, 1920, 1080 },
+	const struct override_item items[] = {
+		{ "TITLE",   { "gfx/Doom64_HiRes.png", NULL }, win_px_w, win_px_h },
+		{ "USLEGAL", { "gfx/legals.png",       NULL }, win_px_w, win_px_h },
 		{ "CURSOR",  { "gfx/cursor.png",       NULL }, 33, 32 },
 	};
 
-	int need = (int)(sizeof(items) / sizeof(items[0]));
+	int need = SDL_arraysize(items);
 	int loaded = 0;
 
 	char missing[256];
 	missing[0] = 0;
 
-	for (size_t it = 0; it < sizeof(items) / sizeof(items[0]); ++it) {
+	for (size_t it = 0; it < need; ++it) {
 		const struct override_item* ov = &items[it];
 		int this_ok = 0;
 
-		for (int k = 0; k < (int)(sizeof(kpf_candidates) / sizeof(kpf_candidates[0])) && !this_ok; ++k) {
+		for (int k = 0; k < SDL_arraysize(kpf_candidates) && !this_ok; ++k) {
 			const char* kpf = kpf_candidates[k];
 
 			for (size_t p = 0; ov->paths[p] != NULL && !this_ok; ++p) {
