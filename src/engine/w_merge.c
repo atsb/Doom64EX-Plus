@@ -117,29 +117,28 @@ static boolean SetupList(searchlist_t* list, searchlist_t* src_list,
 // Sets up the sprite/flat search lists
 static void SetupLists(void)
 {
-	// IWAD
-	if (!SetupList(&iwad_textures, &iwad, "T_START", "T_END", NULL, NULL)) {
-		I_Error("Textures section not found in IWAD");
-	}
+    // IWAD
+    if (!SetupList(&iwad_textures, &iwad, "T_START", "T_END", NULL, NULL)) {
+        I_Error("Textures section not found in IWAD");
+    }
+    if (!SetupList(&iwad_sprites, &iwad, "S_START", "S_END", NULL, NULL)) {
+        I_Error("Sprites section not found in IWAD");
+    }
+    if (!SetupList(&iwad_gfx, &iwad, "SYMBOLS", "MOUNTC", NULL, NULL)) {
+        I_Error("GFX section not found in IWAD");
+    }
 
-	if (!SetupList(&iwad_sprites, &iwad, "S_START", "S_END", NULL, NULL)) {
-		I_Error("Sprites section not found in IWAD");
-	}
+    if (!SetupList(&iwad_sounds, &iwad, "DM_START", "DM_END", "DS_START", "DS_END")) {
+        I_Error("Sounds section not found in IWAD");
+    }
 
-	if (!SetupList(&iwad_gfx, &iwad, "SYMBOLS", "MOUNTC", NULL, NULL)) {
-		I_Error("GFX section not found in IWAD");
-	}
-
-	if (!SetupList(&iwad_sounds, &iwad, "DM_START", "DM_END", NULL, NULL)) {
-		I_Error("Sounds section not found in IWAD");
-	}
-
-	// PWAD
-	SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
-	SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
-	SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", NULL, NULL);
-	SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", NULL, NULL);
+    // PWAD
+    SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
+    SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
+    SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", NULL, NULL);
+    SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", "DS_START", "DS_END");
 }
+
 
 
 // Initialise the replace list
