@@ -132,6 +132,7 @@ void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 	sprframe = &sprdef->spriteframes[frame];
 
 	GL_BindSpriteTexture(sprframe->lump[rot], pal);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 
 	w = spritewidth[sprframe->lump[rot]];
 	h = spriteheight[sprframe->lump[rot]];

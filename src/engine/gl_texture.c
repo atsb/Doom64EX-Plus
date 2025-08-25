@@ -293,6 +293,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	if (textureptr[texnum][palettetranslation[texnum]]) {
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
 		APPLY_ALPHA_MODE_FOR_TEX(texnum);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -332,6 +333,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 		*width = w; if (height) *height = h;
 
 	GL_Env_RGB_Modulate_Alpha_FromTexture();
+	dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
 	APPLY_ALPHA_MODE_FOR_TEX(texnum);
 
 	Z_Free(png);
@@ -478,12 +480,14 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			dglDepthMask(GL_TRUE);
 			GL_Env_RGB_Modulate_Alpha_FromTexture();
+			dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 		}
 		else {
 			GL_SetState(GLSTATE_BLEND, 0);
 			dglDisable(GL_ALPHA_TEST);
 			dglDepthMask(GL_TRUE);
 			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 		}
 		return gfxid;
 	}
@@ -501,12 +505,14 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			dglDepthMask(GL_TRUE);
 			GL_Env_RGB_Modulate_Alpha_FromTexture();
+			dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 		}
 		else {
 			GL_SetState(GLSTATE_BLEND, 0);
 			dglDisable(GL_ALPHA_TEST);
 			dglDepthMask(GL_TRUE);
 			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 		}
 		return gfxid;
 	}
@@ -533,12 +539,14 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_TRUE);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 	}
 	else {
 		GL_SetState(GLSTATE_BLEND, 0);
 		dglDisable(GL_ALPHA_TEST);
 		dglDepthMask(GL_TRUE);
 		dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
 	}
 
 	if (devparm) glBindCalls++;
@@ -634,6 +642,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_TRUE);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
 		return;
 	}
 
@@ -650,6 +659,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
 
 		if (devparm) glBindCalls++;
 		return;
@@ -671,6 +681,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	dglDepthMask(GL_TRUE);
 	GL_Env_RGB_Modulate_Alpha_FromTexture();
+	dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 2);
 
 	spritewidth[spritenum] = w;
 	spriteheight[spritenum] = h;
