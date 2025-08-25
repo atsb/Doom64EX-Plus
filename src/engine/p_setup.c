@@ -82,12 +82,12 @@ macroinfo_t         macros;
 // [kex] mapinfo stuff
 //
 
-int                 nummapdef;
-mapdef_t* mapdefs;
-int                 numclusterdef;
-clusterdef_t* clusterdefs;
-int					numepisodedef;
-episodedef_t* episodedefs;
+extern int nummapdef;
+extern mapdef_t* mapdefs;
+extern int numclusterdef;
+extern clusterdef_t* clusterdefs;
+extern int numepisodedef;
+extern episodedef_t* episodedefs;
 
 //
 // [kex] cvars
