@@ -57,6 +57,7 @@ word* palettetranslation;
 int         g_start;
 int         g_end;
 int         numgfx;
+int*		gfx_lumpnum;
 dtexture* gfxptr;
 word* gfxwidth;
 word* gfxorigwidth;
@@ -275,34 +276,65 @@ static void SetTextureImage(byte* data, int bits, int* origwidth, int* origheigh
 //
 
 static void InitGfxTextures(void) {
-	int i = 0;
+	int i, j;
 
-	g_start = W_GetNumForName("SYMBOLS");
-	g_end = W_GetNumForName("MOUNTC");
-	numgfx = (g_end - g_start) + 1;
-	gfxptr = Z_Calloc(numgfx * sizeof(dtexture), PU_STATIC, NULL);
-	gfxwidth = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
-	gfxorigwidth = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
-	gfxheight = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
-	gfxorigheight = Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
+	int* png_indices = (int*)Z_Calloc(sizeof(int) * numlumps, PU_STATIC, NULL);
+	int  num_found = 0;
 
-	for (i = 0; i < numgfx; i++) {
-		byte* png;
-		int w;
-		int h;
+	for (i = numlumps - 1; i >= 0; --i) {
+		int len = W_LumpLength(i);
+		if (len < 8) 
+			continue;
 
-		png = I_PNGReadData(g_start + i, true, true, false, &w, &h, NULL, 0);
+		const unsigned char* p = (const unsigned char*)W_CacheLumpNum(i, PU_STATIC);
+		if (!p) 
+			continue;
 
-		gfxptr[i] = 0;
-		gfxwidth[i] = w;
-		gfxorigwidth[i] = w;
-		gfxorigheight[i] = h;
-		gfxheight[i] = h;
+		if (!(p[0] == 0x89 && p[1] == 0x50 && p[2] == 0x4E && p[3] == 0x47 &&
+			p[4] == 0x0D && p[5] == 0x0A && p[6] == 0x1A && p[7] == 0x0A)) {
+			continue;
+		}
 
-		Z_Free(png);
+		int dup = 0;
+		for (j = 0; j < num_found; ++j) {
+			if (!dstrncmp(lumpinfo[png_indices[j]].name, lumpinfo[i].name, 8)) { dup = 1; break; }
+		}
+		if (!dup) png_indices[num_found++] = i;
 	}
 
-	CON_DPrintf("%i generic textures initialized\n", numgfx);
+	for (i = 0, j = num_found - 1; i < j; ++i, --j) {
+		int t = png_indices[i]; png_indices[i] = png_indices[j]; png_indices[j] = t;
+	}
+
+	g_start = -1;
+	g_end = -1;
+
+	numgfx = num_found;
+	gfxptr = (dtexture*)Z_Calloc(numgfx * sizeof(dtexture), PU_STATIC, NULL);
+	gfxwidth = (int16_t*)Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
+	gfxorigwidth = (int16_t*)Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
+	gfxheight = (int16_t*)Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
+	gfxorigheight = (int16_t*)Z_Calloc(numgfx * sizeof(int16_t), PU_STATIC, NULL);
+	gfx_lumpnum = (int*)Z_Calloc(numgfx * sizeof(int), PU_STATIC, NULL);
+
+	for (i = 0; i < numgfx; ++i) {
+		int lumpnum = png_indices[i];
+		int w = 0, h = 0;
+		byte* png = I_PNGReadData(lumpnum, true, true, false, &w, &h, NULL, 0);
+
+		gfxptr[i] = 0;
+		gfxwidth[i] = (int16_t)w;
+		gfxorigwidth[i] = (int16_t)w;
+		gfxorigheight[i] = (int16_t)h;
+		gfxheight[i] = (int16_t)h;
+		gfx_lumpnum[i] = lumpnum;
+
+		if (png) 
+			Z_Free(png);
+	}
+
+	Z_Free(png_indices);
+	CON_DPrintf("%i generic PNG textures initialized (full WAD scan)\n", numgfx);
 }
 
 //
@@ -312,27 +344,33 @@ static void InitGfxTextures(void) {
 int GL_BindGfxTexture(const char* name, int alpha) {
 	byte* png;
 	int lump;
-	int width;
-	int height;
-	int format;
-	int type;
-	int gfxid;
+	int width, height;
+	int format, type;
+	int gfxid = -1;
 
-	lump = W_GetNumForName(name);
-	gfxid = (lump - g_start);
-
-	if (gfxid == curgfx) {
-		return gfxid;
+	lump = W_CheckNumForName(name);
+	if (lump < 0) {
+		CON_Warnf("GL_BindGfxTexture: '%s' not found\n", name);
+		return -1;
 	}
 
+	for (int i = 0; i < numgfx; ++i) {
+		if (gfx_lumpnum[i] == lump) { 
+			gfxid = i; 
+			break; 
+		}
+	}
+	if (gfxid < 0) {
+		CON_Warnf("GL_BindGfxTexture: '%s' is not a PNG gfx lump (skipping)\n", name);
+		return -1;
+	}
+
+	if (gfxid == curgfx) return gfxid;
 	curgfx = gfxid;
 
-	// if texture is already in video ram
 	if (gfxptr[gfxid]) {
 		dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
-		if (devparm) {
-			glBindCalls++;
-		}
+		if (devparm) glBindCalls++;
 		return gfxid;
 	}
 
@@ -341,20 +379,18 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 	dglGenTextures(1, &gfxptr[gfxid]);
 	dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
 
-	// if alpha is specified, setup the format for only RGBA pixels (4 bytes) per pixel
 	format = alpha ? GL_RGBA8 : GL_RGB8;
 	type = alpha ? GL_RGBA : GL_RGB;
 
 	SetTextureImage(png, (alpha ? 4 : 3), &width, &height, format, type);
 	Z_Free(png);
 
-	gfxwidth[gfxid] = width;
-	gfxheight[gfxid] = height;
+	gfxwidth[gfxid] = (int16_t)width;
+	gfxorigwidth[gfxid] = (int16_t)width;
+	gfxorigheight[gfxid] = (int16_t)height;
+	gfxheight[gfxid] = (int16_t)height;
 
-	if (devparm) {
-		glBindCalls++;
-	}
-
+	if (devparm) glBindCalls++;
 	return gfxid;
 }
 
