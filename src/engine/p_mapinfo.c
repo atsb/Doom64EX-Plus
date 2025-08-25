@@ -311,21 +311,21 @@ static mapinfo_token P_MapInfoLexerNextRaw(mapinfo_lexer* mapinfo_lexer) {
         return t;
     }
 
-    if (isalpha(c) || c == '_') {
+    if (SDL_isalpha(c) || c == '_') {
         const char* s = mapinfo_lexer->cur - 1;
-        while (mapinfo_lexer->cur < mapinfo_lexer->end && (isalnum((unsigned char)*mapinfo_lexer->cur) || *mapinfo_lexer->cur == '_')) 
+        while (mapinfo_lexer->cur < mapinfo_lexer->end && (SDL_isalnum((unsigned char)*mapinfo_lexer->cur) || *mapinfo_lexer->cur == '_')) 
             P_MapInfoLexerGet(mapinfo_lexer);
         t.kind = MI_IDENT;
         t.start = s;
         t.length = (int)(mapinfo_lexer->cur - s);
         t.mapinfo_string_value = (char*)Z_Malloc(t.length + 1, PU_STATIC, 0);
-        for (int i = 0; i < t.length; i++) t.mapinfo_string_value[i] = (char)tolower((unsigned char)s[i]);
+        for (int i = 0; i < t.length; i++) t.mapinfo_string_value[i] = (char)SDL_tolower((unsigned char)s[i]);
         t.mapinfo_string_value[t.length] = 0;
         return t;
     }
-    if (isdigit(c) || (c == '-' && isdigit(P_MapInfoLexerPeek(mapinfo_lexer)))) {
+    if (SDL_isdigit(c) || (c == '-' && SDL_isdigit(P_MapInfoLexerPeek(mapinfo_lexer)))) {
         const char* s = mapinfo_lexer->cur - 1;
-        while (isdigit(P_MapInfoLexerPeek(mapinfo_lexer))) P_MapInfoLexerGet(mapinfo_lexer);
+        while (SDL_isdigit(P_MapInfoLexerPeek(mapinfo_lexer))) P_MapInfoLexerGet(mapinfo_lexer);
         t.kind = MI_NUMBER;
         t.start = s;
         t.length = (int)(mapinfo_lexer->cur - s);
@@ -720,7 +720,7 @@ static void P_MapInfoLexerParseEpisodeBlock(mapinfo_lexer* mapinfo_lexer, int st
                 size_t n = dstrlen(v);
                 if (cap) {
                     if (n >= cap) n = cap - 1;
-                    dmemcpy(e.key, v, n);
+                    dmemcpy((char*)e.key, v, n);
                     ((char*)e.key)[n] = 0;
                 }
             }
