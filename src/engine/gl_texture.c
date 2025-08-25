@@ -463,9 +463,9 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 	}
 
 	for (int i = 0; i < numgfx; ++i) {
-		if (gfx_lumpnum[i] == lump) { 
-			gfxid = i; 
-			break; 
+		if (gfx_lumpnum[i] == lump) {
+			gfxid = i;
+			break;
 		}
 	}
 	if (gfxid < 0) {
@@ -495,9 +495,15 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 
 	if (gfxptr[gfxid]) {
 		dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 
-		// UI state 
-		if (devparm) 
+		// UI state
+		if (devparm)
 			glBindCalls++;
 		if (alpha) {
 			GL_SetState(GLSTATE_BLEND, 1);
@@ -521,6 +527,13 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 
 	dglGenTextures(1, &gfxptr[gfxid]);
 	dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+	dglPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	format = alpha ? GL_RGBA8 : GL_RGB8;
 	type = alpha ? GL_RGBA : GL_RGB;

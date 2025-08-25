@@ -3997,7 +3997,8 @@ static void M_DrawMenuSkull(int x, int y) {
 // M_DrawCursor
 //
 
-static void M_DrawCursor(float x, float y) {
+static void M_DrawCursor(float x, float y)
+{
 	if (m_menumouse.value) {
 		int gfxIdx;
 		float factor;
@@ -4005,17 +4006,32 @@ static void M_DrawCursor(float x, float y) {
 
 		scale = ((m_cursorscale.value + 25.0f) / 100.0f);
 		gfxIdx = GL_BindGfxTexture("CURSOR", true);
+		if (gfxIdx < 0) 
+			return;
+
 		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
 
+		// atsb: fixes cursor alpha
+		dglDisable(GL_COLOR_LOGIC_OP);
+		dglDisable(GL_DEPTH_TEST);
+		dglDepthMask(GL_FALSE);
+
+		GL_SetState(GLSTATE_BLEND, 1);
+		dglEnable(GL_BLEND);
+		dglDisable(GL_ALPHA_TEST);
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		GL_SetOrthoScale(scale);
-		GL_SetState(GLSTATE_BLEND, 1);
+
+		dglColor4ub(255, 255, 255, 255);
+
 		GL_SetupAndDraw2DQuad((float)x * factor, (float)y * factor,
 			gfxwidth[gfxIdx], gfxheight[gfxIdx], 0, 1.0f, 0, 1.0f, WHITE, 0);
 
 		GL_SetState(GLSTATE_BLEND, 0);
+		dglDepthMask(GL_TRUE);
 		GL_SetOrthoScale(1.0f);
 	}
 }

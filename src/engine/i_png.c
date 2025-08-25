@@ -268,6 +268,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         offset[0] = 0; offset[1] = 0;
         png_set_read_user_chunk_fn(png_ptr, offset, I_PNGFindChunk);
     }
+
     png_read_info(png_ptr, info_ptr);
     png_get_IHDR(png_ptr, info_ptr, &width, &height,
         &bit_depth, &color_type, &interlace_type, NULL, NULL);
@@ -277,14 +278,20 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         Z_Free(src);
         return NULL;
     }
+
     if (palette) {
         if (bit_depth == 4 && nopack) {
             png_set_packing(png_ptr);
         }
     }
     else {
+
         if (bit_depth == 16) {
             png_set_strip_16(png_ptr);
+        }
+
+        if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
+            png_set_expand_gray_1_2_4_to_8(png_ptr);
         }
 
         if (color_type == PNG_COLOR_TYPE_PALETTE) {
@@ -324,35 +331,48 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
             if (pal) I_TranslatePalette(pal);
             png_set_palette_to_rgb(png_ptr);
+            color_type = PNG_COLOR_TYPE_RGB;
         }
+
         if (usingGL && !alpha) {
             int num_trans = 0;
             png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
-            if (num_trans) {
+            if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
                 png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
                 Z_Free(src);
                 I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
                 return NULL;
             }
         }
+
         if (alpha) {
-            if (color_type == PNG_COLOR_TYPE_PALETTE) {
-                png_set_palette_to_rgb(png_ptr);
+            if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+                png_set_gray_to_rgb(png_ptr);
             }
+
             if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
                 png_set_tRNS_to_alpha(png_ptr);
             }
-            else {
-                png_set_filler(png_ptr, 0xFF, PNG_FILLER_AFTER);
+
+            if (!(color_type & PNG_COLOR_MASK_ALPHA)) {
+                png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+            }
+        }
+        else {
+            if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+                png_set_gray_to_rgb(png_ptr);
+            }
+            if (color_type & PNG_COLOR_MASK_ALPHA) {
+                png_set_strip_alpha(png_ptr);
             }
         }
     }
+
     png_read_update_info(png_ptr, info_ptr);
     png_get_IHDR(png_ptr, info_ptr, &width, &height,
         &bit_depth, &color_type, &interlace_type, NULL, NULL);
 
     png_size_t rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-
     if (rowbytes == 0 || height > (SIZE_MAX / rowbytes)) {
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         Z_Free(src);
@@ -370,6 +390,22 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
     /* Decode */
     png_read_image(png_ptr, row_pointers);
     png_read_end(png_ptr, info_ptr);
+
+    if (!palette && alpha) {
+        int channels = png_get_channels(png_ptr, info_ptr);
+        if (channels == 4) {
+            for (png_uint_32 y = 0; y < height; ++y) {
+                byte* p = out + y * rowbytes;
+                for (png_uint_32 x = 0; x < width; ++x) {
+                    byte a = p[3];
+                    if (a == 0) {
+                        p[0] = 0; p[1] = 0; p[2] = 0;
+                    }
+                    p += 4;
+                }
+            }
+        }
+    }
 
     if (w) 
         *w = (int)width;
