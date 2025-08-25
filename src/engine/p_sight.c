@@ -24,6 +24,7 @@
 #include "m_fixed.h"
 #include "p_local.h"
 #include "doomstat.h"
+#include "r_main.h"
 
 //
 // P_CheckSight
@@ -296,34 +297,84 @@ boolean P_CrossBSPNode(int bspnum) {
 // Uses REJECT.
 //
 
-boolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
-	int     s1;
-	int     s2;
-	int     pnum;
-	int     bytenum;
-	int     bitnum;
+boolean P_CheckSight(mobj_t* t1, mobj_t* t2)
+{
+	if (!t1 || !t2) 
+		return false;
 
-	// First check for trivial rejection.
-
-	// Determine subsector entries in REJECT table.
-	s1 = (t1->subsector->sector - sectors);
-	s2 = (t2->subsector->sector - sectors);
-	pnum = s1 * numsectors + s2;
-	bytenum = pnum >> 3;
-	bitnum = 1 << (pnum & 7);
-
-	// Check in REJECT table.
-	if (rejectmatrix[bytenum] & bitnum) {
-		sightcounts[0]++;
-
-		// can't possibly be connected
+	// atsb: cleaned up this awful crap with cleaner code
+	if (!t1->subsector ||
+		t1->subsector < subsectors ||
+		t1->subsector >= subsectors + numsubsectors)
+	{
+		t1->subsector = R_PointInSubsector(t1->x, t1->y);
+	}
+	if (!t1->subsector ||
+		t1->subsector < subsectors ||
+		t1->subsector >= subsectors + numsubsectors)
+	{
 		return false;
 	}
+	if (!t1->subsector->sector ||
+		t1->subsector->sector < sectors ||
+		t1->subsector->sector >= sectors + numsectors)
+	{
+		subsector_t* ss1 = R_PointInSubsector(t1->x, t1->y);
+		if (!ss1 || !ss1->sector ||
+			ss1 < subsectors || ss1 >= subsectors + numsubsectors ||
+			ss1->sector < sectors || ss1->sector >= sectors + numsectors)
+		{
+			return false;
+		}
+		t1->subsector = ss1;
+	}
 
-	// An unobstructed LOS is possible.
-	// Now look from eyes of t1 to any part of t2.
+	if (!t2->subsector ||
+		t2->subsector < subsectors ||
+		t2->subsector >= subsectors + numsubsectors)
+	{
+		t2->subsector = R_PointInSubsector(t2->x, t2->y);
+	}
+	if (!t2->subsector ||
+		t2->subsector < subsectors ||
+		t2->subsector >= subsectors + numsubsectors)
+	{
+		return false;
+	}
+	if (!t2->subsector->sector ||
+		t2->subsector->sector < sectors ||
+		t2->subsector->sector >= sectors + numsectors)
+	{
+		subsector_t* ss2 = R_PointInSubsector(t2->x, t2->y);
+		if (!ss2 || !ss2->sector ||
+			ss2 < subsectors || ss2 >= subsectors + numsubsectors ||
+			ss2->sector < sectors || ss2->sector >= sectors + numsectors)
+		{
+			return false;
+		}
+		t2->subsector = ss2;
+	}
+
+	// atsb: used to crash on s2 but now we validate all sectors before passing it
+	size_t s1 = (size_t)(t1->subsector->sector - sectors);
+	size_t s2 = (size_t)(t2->subsector->sector - sectors);
+	if (s1 >= (size_t)numsectors || s2 >= (size_t)numsectors) 
+		return false;
+
+	size_t pnum = s1 * (size_t)numsectors + s2;
+	size_t bytenum = pnum >> 3;
+	unsigned bitnum = 1u << (pnum & 7);
+
+	if (rejectmatrix) {
+		size_t reject_bytes = ((size_t)numsectors * (size_t)numsectors + 7) >> 3;
+		if (bytenum < reject_bytes && (rejectmatrix[bytenum] & bitnum)) {
+			sightcounts[0]++;
+			return false;
+		}
+	}
+
+	//atsb: further validating until passing it back
 	sightcounts[1]++;
-
 	validcount++;
 
 	sightzstart = t1->z + t1->height - (t1->height >> 2);
@@ -337,7 +388,8 @@ boolean P_CheckSight(mobj_t* t1, mobj_t* t2) {
 	strace.dx = t2->x - t1->x;
 	strace.dy = t2->y - t1->y;
 
-	// the head node is the last node output
+	if (numnodes <= 0) 
+		return false;
 	return P_CrossBSPNode(numnodes - 1);
 }
 
