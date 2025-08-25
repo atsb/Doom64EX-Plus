@@ -583,6 +583,7 @@ void GL_Init(void) {
 
     GL_SetTextureFilter();
     GL_SetDefaultCombiner();
+    GL_SetColorScale();
 
     r_fillmode.value = 1.0f;
 
