@@ -3945,7 +3945,7 @@ static void M_DrawMenuSkull(int x, int y) {
 	float ty2 = 0.0f;
 	float smbwidth;
 	float smbheight;
-	int pic, parama, paramr;
+	int pic;
 	vtx_t vtx[4];
 	const rcolor color = MENUCOLORWHITE;
 

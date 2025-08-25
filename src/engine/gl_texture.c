@@ -89,6 +89,25 @@ typedef struct {
 
 static gl_env_state_t gl_env_state[GL_MAX_TEX_UNITS];
 static int curunit = -1;
+static unsigned char* g_tex_is_masked = NULL;
+static unsigned char* g_tex_is_translucent = NULL;
+static int            g_tex_num_alloc = 0;
+static unsigned char* texture_need_blend = NULL;
+
+// atsb: Added a helper here because we need to do it in like 6 places..  better than pasting.  Helpers aren't in Pascal Case, functions are.
+static inline void GL_Env_RGB_Modulate_Alpha_FromTexture(void)
+{
+	dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PRIMARY_COLOR);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
+
+	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
+	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
+}
 
 CVAR_EXTERNAL(r_fillmode);
 CVAR_CMD(r_texturecombiner, 1) {
@@ -139,10 +158,8 @@ static void InitWorldTextures(void) {
 		int w;
 		int h;
 
-		// allocate at least one slot for each texture pointer
 		textureptr[i] = (dtexture*)Z_Malloc(1 * sizeof(dtexture), PU_STATIC, 0);
 
-		// get starting index for switch textures
 		if (!dstrnicmp(lumpinfo[t_start + i].name, "SWX", 3) && swx_start == -1) {
 			swx_start = i;
 		}
@@ -150,7 +167,6 @@ static void InitWorldTextures(void) {
 		texturetranslation[i] = i;
 		palettetranslation[i] = 0;
 
-		// read PNG and setup global width and heights
 		png = I_PNGReadData(t_start + i, true, true, false, &w, &h, NULL, 0);
 
 		textureptr[i][0] = 0;
@@ -163,78 +179,167 @@ static void InitWorldTextures(void) {
 	CON_DPrintf("%i world textures initialized\n", numtextures);
 }
 
+static void GL_WorldTexEnsureCapacity(void)
+{
+	if (g_tex_num_alloc == numtextures) return;
+	if (g_tex_num_alloc) {
+		if (g_tex_is_masked)      Z_Free(g_tex_is_masked);
+		if (g_tex_is_translucent) Z_Free(g_tex_is_translucent);
+	}
+	g_tex_is_masked = (unsigned char*)Z_Calloc(numtextures, PU_STATIC, NULL);
+	g_tex_is_translucent = (unsigned char*)Z_Calloc(numtextures, PU_STATIC, NULL);
+	g_tex_num_alloc = numtextures;
+}
+
+static void GL_WorldTexClassify(int texnum)
+{
+	if (!g_tex_is_masked || !g_tex_is_translucent) 
+		return;
+
+	if (g_tex_is_masked[texnum] || g_tex_is_translucent[texnum]) 
+		return;
+
+	int w = 0, h = 0;
+	byte* png = I_PNGReadData(t_start + texnum, false, true, true,
+		&w, &h, NULL, palettetranslation[texnum]);
+	if (!png || w <= 0 || h <= 0) {
+		if (png) 
+			Z_Free(png);
+		return; 
+	}
+
+	int has0 = 0, has255 = 0, hasMid = 0;
+	const unsigned char* a = png + 3;
+	const int pixels = w * h;
+	for (int i = 0; i < pixels; ++i, a += 4) {
+		unsigned char al = *a;
+		if (al == 0)        
+			has0 = 1;
+		else if (al == 255) 
+			has255 = 1;
+		else                
+			hasMid = 1;
+		if (hasMid && has0 && has255) 
+			break;
+	}
+	g_tex_is_translucent[texnum] = (unsigned char)hasMid;
+	g_tex_is_masked[texnum] = (unsigned char)(!hasMid && has0);
+
+	Z_Free(png);
+}
+
+void GL_WorldTextureEnsureClassified(int texnum)
+{
+	GL_WorldTexEnsureCapacity();
+	if (texnum >= 0 && texnum < numtextures) GL_WorldTexClassify(texnum);
+}
+
+int GL_WorldTextureIsTranslucent(int texnum)
+{
+	GL_WorldTextureEnsureClassified(texnum);
+	return (g_tex_is_translucent && texnum >= 0 && texnum < numtextures)
+		? g_tex_is_translucent[texnum] : 0;
+}
+
+int GL_WorldTextureIsMasked(int texnum)
+{
+	GL_WorldTextureEnsureClassified(texnum);
+	return (g_tex_is_masked && texnum >= 0 && texnum < numtextures)
+		? g_tex_is_masked[texnum] : 0;
+}
+
 //
 // GL_BindWorldTexture
 //
 
 void GL_BindWorldTexture(int texnum, int* width, int* height) {
-	byte* png;
-	int w;
-	int h;
-
-	if (r_fillmode.value <= 0) {
+	byte* png = NULL; int w = 0, h = 0;
+	if (r_fillmode.value <= 0) 
 		return;
-	}
 
-	// get translation index
 	texnum = texturetranslation[texnum];
-
-	if (width) {
+	if (width)  
 		*width = texturewidth[texnum];
-	}
-	if (height) {
+	if (height) 
 		*height = textureheight[texnum];
+
+	if (t_start <= 0 || t_start >= numlumps ||
+		dstrnicmp(lumpinfo[t_start - 1].name, "T_START", 7) != 0) {
+		int ts = W_GetNumForName("T_START");
+		if (ts >= 0) 
+			t_start = ts + 1;
 	}
+	GL_WorldTextureEnsureClassified(texnum);
 
-	if (curtexture == texnum) {
-		return;
-	}
+#define APPLY_ALPHA_MODE_FOR_TEX(_t)                                        \
+        do {                                                                    \
+            dglDisable(GL_ALPHA_TEST);                                          \
+            GL_SetState(GLSTATE_BLEND, false);                                  \
+            dglDepthMask(GL_TRUE);                                              \
+            if (g_tex_is_translucent && g_tex_is_translucent[_t]) {             \
+                /* translucency */												\
+                GL_SetState(GLSTATE_BLEND, true);                               \
+                dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);             \
+                dglDepthMask(GL_FALSE);                                         \
+            } else if (g_tex_is_masked && g_tex_is_masked[_t]) {                \
+                /* masked cutouts */											 \
+                GL_SetState(GLSTATE_BLEND, false);                              \
+                dglEnable(GL_ALPHA_TEST);                                       \
+                dglAlphaFunc(GL_GREATER, 0.5f);                                 \
+                dglDepthMask(GL_TRUE);                                          \
+            }                                                                   \
+        } while (0)
 
-	curtexture = texnum;
-
-	// if texture is already in video ram
 	if (textureptr[texnum][palettetranslation[texnum]]) {
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
-		GL_SetState(GLSTATE_BLEND, true);
+		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		APPLY_ALPHA_MODE_FOR_TEX(texnum);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		if (devparm) {
+		curtexture = texnum;
+		if (devparm) 
 			glBindCalls++;
-		}
 		return;
 	}
 
-	// create a new texture
 	png = I_PNGReadData(t_start + texnum, false, true, true,
 		&w, &h, NULL, palettetranslation[texnum]);
+	if (!png || w <= 0 || h <= 0 || w > 8192 || h > 8192) {
+		GL_BindDummyTexture();
+		texturewidth[texnum] = textureheight[texnum] = 1;
+		if (width)  
+			*width = 1; if (height) *height = 1;
+		if (png) 
+			Z_Free(png);
+		curtexture = -1;
+		return;
+	}
+	GL_WorldTexClassify(texnum);
 
+	dglPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
-	GL_SetState(GLSTATE_BLEND, true);
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
 	GL_CheckFillMode();
 	GL_SetTextureFilter();
 
-	// update global width and heights
 	texturewidth[texnum] = w;
 	textureheight[texnum] = h;
+	if (width)  
+		*width = w; if (height) *height = h;
 
-	if (width) {
-		*width = texturewidth[texnum];
-	}
-	if (height) {
-		*height = textureheight[texnum];
-	}
+	GL_Env_RGB_Modulate_Alpha_FromTexture();
+	APPLY_ALPHA_MODE_FOR_TEX(texnum);
 
 	Z_Free(png);
-
-	if (devparm) {
+	curtexture = texnum;
+	if (devparm) 
 		glBindCalls++;
-	}
+
+#undef APPLY_ALPHA_MODE_FOR_TEX
 }
 
 //
@@ -243,11 +348,6 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 void GL_SetNewPalette(int id, byte palID) {
 	palettetranslation[id] = palID;
-	/*if(textureptr[id])
-	{
-	dglDeleteTextures(1, &textureptr[id]);
-	textureptr[id] = 0;
-	}*/
 }
 
 //
@@ -255,20 +355,26 @@ void GL_SetNewPalette(int id, byte palID) {
 //
 
 static void SetTextureImage(byte* data, int bits, int* origwidth, int* origheight, int format, int type) {
-	dglTexImage2D(
-		GL_TEXTURE_2D,
-		0,
-		format,
-		*origwidth,
-		*origheight,
-		0,
-		type,
-		GL_UNSIGNED_BYTE,
-		data
-	);
+    
+	(void)bits;
 
-	GL_CheckFillMode();
-	GL_SetTextureFilter();
+    dglPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    dglTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        format,
+        *origwidth,
+        *origheight,
+        0,
+        type,
+        GL_UNSIGNED_BYTE,
+        data
+    );
+    dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    GL_CheckFillMode();
+    GL_SetTextureFilter();
 }
 
 //
@@ -365,12 +471,43 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 		return -1;
 	}
 
-	if (gfxid == curgfx) return gfxid;
+	if (gfxid == curgfx) {
+		if (alpha) {
+			GL_SetState(GLSTATE_BLEND, 1);
+			dglDisable(GL_ALPHA_TEST);
+			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			dglDepthMask(GL_TRUE);
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
+		}
+		else {
+			GL_SetState(GLSTATE_BLEND, 0);
+			dglDisable(GL_ALPHA_TEST);
+			dglDepthMask(GL_TRUE);
+			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		}
+		return gfxid;
+	}
 	curgfx = gfxid;
 
 	if (gfxptr[gfxid]) {
 		dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
-		if (devparm) glBindCalls++;
+
+		// UI state 
+		if (devparm) 
+			glBindCalls++;
+		if (alpha) {
+			GL_SetState(GLSTATE_BLEND, 1);
+			dglDisable(GL_ALPHA_TEST);
+			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			dglDepthMask(GL_TRUE);
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
+		}
+		else {
+			GL_SetState(GLSTATE_BLEND, 0);
+			dglDisable(GL_ALPHA_TEST);
+			dglDepthMask(GL_TRUE);
+			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		}
 		return gfxid;
 	}
 
@@ -389,6 +526,20 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 	gfxorigwidth[gfxid] = (int16_t)width;
 	gfxorigheight[gfxid] = (int16_t)height;
 	gfxheight[gfxid] = (int16_t)height;
+
+	if (alpha) {
+		GL_SetState(GLSTATE_BLEND, 1);
+		dglDisable(GL_ALPHA_TEST);
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		dglDepthMask(GL_TRUE);
+		GL_Env_RGB_Modulate_Alpha_FromTexture();
+	}
+	else {
+		GL_SetState(GLSTATE_BLEND, 0);
+		dglDisable(GL_ALPHA_TEST);
+		dglDepthMask(GL_TRUE);
+		dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	}
 
 	if (devparm) glBindCalls++;
 	return gfxid;
@@ -415,16 +566,14 @@ static void InitSpriteTextures(void) {
 	spriteptr = (dtexture**)Z_Malloc(sizeof(dtexture*) * numsprtex, PU_STATIC, 0);
 	spritecount = (word*)Z_Calloc(numsprtex * sizeof(word), PU_STATIC, 0);
 
-	// gather # of sprites per texture pointer
 	for (i = 0; i < numsprtex; i++) {
 		spritecount[i]++;
 
 		for (j = 0; j < NUMSPRITES; j++) {
-			// start looking for external palette lumps
 			if (!dstrncmp(lumpinfo[s_start + i].name, sprnames[j], 4)) {
 				char palname[9];
 
-				// increase the count if a palette lump is found
+				// increase count until a palette is found
 				for (p = 1; p < 10; p++) {
 					sprintf(palname, "PAL%s%i", sprnames[j], p);
 					if (W_CheckNumForName(palname) != -1) {
@@ -449,15 +598,12 @@ static void InitSpriteTextures(void) {
 		int h;
 		size_t x;
 
-		// allocate # of sprites per pointer
 		spriteptr[i] = (dtexture*)Z_Malloc(spritecount[i] * sizeof(dtexture), PU_STATIC, 0);
 
-		// reset references
 		for (x = 0; x < spritecount[i]; x++) {
 			spriteptr[i][x] = 0;
 		}
 
-		// read data and setup globals
 		png = I_PNGReadData(s_start + i, true, true, false, &w, &h, offset, 0);
 
 		spritewidth[i] = w;
@@ -472,36 +618,40 @@ static void InitSpriteTextures(void) {
 //
 // GL_BindSpriteTexture
 //
-
 void GL_BindSpriteTexture(int spritenum, int pal) {
 	byte* png;
-	int w;
-	int h;
+	int w, h;
 
-	if (r_fillmode.value <= 0) {
+	if (r_fillmode.value <= 0) 
 		return;
-	}
+
+	if (pal && pal >= spritecount[spritenum]) 
+		pal = 0;
 
 	if ((spritenum == cursprite) && (pal == curtrans)) {
+		GL_SetState(GLSTATE_BLEND, 1);
+		dglDisable(GL_ALPHA_TEST);
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		dglDepthMask(GL_TRUE);
+		GL_Env_RGB_Modulate_Alpha_FromTexture();
 		return;
-	}
-
-	// switch to default palette if pal is invalid
-	if (pal && pal >= spritecount[spritenum]) {
-		pal = 0;
 	}
 
 	cursprite = spritenum;
 	curtrans = pal;
 
-	// if texture is already in video ram
 	if (spriteptr[spritenum][pal]) {
 		dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
+
+		GL_SetState(GLSTATE_BLEND, 1);
+		dglDisable(GL_ALPHA_TEST);
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		dglDepthMask(GL_TRUE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		if (devparm) {
-			glBindCalls++;
-		}
+		GL_Env_RGB_Modulate_Alpha_FromTexture();
+
+		if (devparm) glBindCalls++;
 		return;
 	}
 
@@ -516,12 +666,16 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	SetTextureImage(png, 4, &w, &h, GL_RGBA8, GL_RGBA);
 	Z_Free(png);
 
+	GL_SetState(GLSTATE_BLEND, 1);
+	dglDisable(GL_ALPHA_TEST);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	dglDepthMask(GL_TRUE);
+	GL_Env_RGB_Modulate_Alpha_FromTexture();
+
 	spritewidth[spritenum] = w;
 	spriteheight[spritenum] = h;
 
-	if (devparm) {
-		glBindCalls++;
-	}
+	if (devparm) glBindCalls++;
 }
 
 //

@@ -75,5 +75,8 @@ void        GL_BindDummyTexture(void);
 void        GL_UpdateEnvTexture(rcolor color);
 void        GL_BindEnvTexture(void);
 dtexture    GL_ScreenToTexture(void);
+int			GL_WorldTextureIsTranslucent(int texnum);
+int			GL_WorldTextureIsMasked(int texnum);
+void		GL_WorldTextureEnsureClassified(int texnum);
 
 #endif
