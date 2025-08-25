@@ -121,8 +121,7 @@ static void GetNativeDisplayPixels(int* out_w, int* out_h, SDL_Window* window) {
 
 void I_InitScreen(void) {
     unsigned int  flags = 0;
-    char    title[256];
-    SDL_DisplayID displayid;
+    char          title[256];
 
     InWindow = (int)v_windowed.value;
     InWindowBorderless = (int)v_windowborderless.value;
@@ -136,6 +135,7 @@ void I_InitScreen(void) {
 
     usingGL = false;
 
+    // GL context attributes
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -151,82 +151,70 @@ void I_InitScreen(void) {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
-
+    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN;
 #ifndef SDL_PLATFORM_MACOS
     flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
 #endif
 
     if (!InWindow) {
-        flags |= SDL_WINDOW_FULLSCREEN;
+        flags |= SDL_WINDOW_BORDERLESS;
     }
-
-    if (InWindowBorderless) {
+    else if (InWindowBorderless) {
         flags |= SDL_WINDOW_BORDERLESS;
     }
 
-    if (glContext) {
-        SDL_GL_DestroyContext(glContext);
-        glContext = NULL;
-    }
-
-    if (window) {
-        SDL_DestroyWindow(window);
-        window = NULL;
-    }
+    if (glContext) { SDL_GL_DestroyContext(glContext); glContext = NULL; }
+    if (window) { SDL_DestroyWindow(window); window = NULL; }
 
     sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
-    window = SDL_CreateWindow(title,
-        video_width,
-        video_height,
-        flags);
-
+    window = SDL_CreateWindow(title, video_width, video_height, flags);
     if (window == NULL) {
         I_Error("I_InitScreen: Failed to create window");
         return;
     }
 
 #ifdef SDL_PLATFORM_LINUX
-    // NVIDIA Linux specific: fixes input lag with vsync on
-    // does not do anything if not running on NVIDIA card
-    SDL_Environment *env = SDL_GetEnvironment();
-    if(env) {
-        if(!SDL_SetEnvironmentVariable(env, "__GL_MaxFramesAllowed", "1", false)) {
+    // NVIDIA Linux specific: reduces input lag with vsync; harmless elsewhere
+    SDL_Environment* env = SDL_GetEnvironment();
+    if (env) {
+        if (!SDL_SetEnvironmentVariable(env, "__GL_MaxFramesAllowed", "1", false)) {
             I_Printf("SDL_SetEnvironmentVariable failed (%s)", SDL_GetError());
         }
-    } else {
+    }
+    else {
         I_Printf("SDL_GetEnvironment failed (%s)", SDL_GetError());
     }
 #endif
 
-    if ((glContext = SDL_GL_CreateContext(window)) == NULL) {
+    glContext = SDL_GL_CreateContext(window);
+    if (!glContext) {
         I_Error("I_InitScreen: Failed to create OpenGL context");
         return;
     }
-
+    SDL_GL_MakeCurrent(window, glContext);
     SDL_GetWindowSizeInPixels(window, &win_px_w, &win_px_h);
     GL_OnResize(win_px_w, win_px_h);
-
-    displayid = SDL_GetDisplayForWindow(window);
-    if (displayid) {
-        float f = SDL_GetDisplayContentScale(displayid);
-        if (f != 0) {
-            display_scale = f;
+    {
+        SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
+        if (displayid) {
+            float f = SDL_GetDisplayContentScale(displayid);
+            if (f != 0) display_scale = f;
+            else I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
         }
         else {
-            I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
+            I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
         }
     }
-    else {
-        I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
+    SDL_GL_SetSwapInterval((int)v_vsync.value);
+    {
+        glViewport(0, 0, win_px_w, win_px_h);
+        glScissor(0, 0, win_px_w, win_px_h);
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    SDL_GL_SetSwapInterval((int)v_vsync.value);
-
+    SDL_ShowWindow(window);
     SDL_GL_SwapWindow(window);
-
-    NVidiaGLFinishConditional();
-
     SDL_HideCursor();
 }
 
