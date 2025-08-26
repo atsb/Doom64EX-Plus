@@ -32,6 +32,7 @@
 #include "st_stuff.h"
 #include "r_wipe.h"
 #include "gl_draw.h"
+#include "w_wad.h"
 
 #define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
@@ -104,7 +105,7 @@ void WI_Start(void) {
 	wi_advance = 0;
 
 	// start music
-	S_StartMusic(mus_complete);
+	S_StartMusic(W_GetNumForName("MUSDONE"));
 
 	allowmenu = true;
 }

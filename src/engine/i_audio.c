@@ -1037,7 +1037,7 @@ static int Seq_RegisterSounds(void) {
         int is_compressed = 0;   /* OGG/MP3/FLAC/FSB/unknown compressed */
         FMOD_SOUND_TYPE hinted = FMOD_SOUND_TYPE_UNKNOWN;
 
-        if (!is_audio && len > 44 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
+        if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
             is_audio = 1; is_pcm = 1; hinted = FMOD_SOUND_TYPE_WAV;
         }
         if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "FORM", 4) &&
@@ -1081,23 +1081,26 @@ static int Seq_RegisterSounds(void) {
         FMOD_SOUND* snd = NULL;
 
         if (is_pcm) {
-            result = FMOD_System_CreateSound(
-                sound.fmod_studio_system,
-                (const char*)p,
-                FMOD_OPENMEMORY_POINT | mode,
-                &exinfo,
-                &snd
-            );
-            FMOD_ERROR_CHECK(result);
-            if (result != FMOD_OK) {
+            // exclude NOSOUND WAV lump as it cannot be created
+            if (!(hinted == FMOD_SOUND_TYPE_WAV && len <= 44)) {
                 result = FMOD_System_CreateSound(
                     sound.fmod_studio_system,
                     (const char*)p,
-                    FMOD_OPENMEMORY | mode,
+                    FMOD_OPENMEMORY_POINT | mode,
                     &exinfo,
                     &snd
                 );
                 FMOD_ERROR_CHECK(result);
+                if (result != FMOD_OK) {
+                    result = FMOD_System_CreateSound(
+                        sound.fmod_studio_system,
+                        (const char*)p,
+                        FMOD_OPENMEMORY | mode,
+                        &exinfo,
+                        &snd
+                    );
+                    FMOD_ERROR_CHECK(result);
+                }
             }
         }
         else {
