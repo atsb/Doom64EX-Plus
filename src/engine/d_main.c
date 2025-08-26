@@ -26,10 +26,6 @@
 //-----------------------------------------------------------------------------
 
 #include <SDL3/SDL.h>
-#ifdef _WIN32
-#define APIENTRY __stdcall
-#endif
-
 #include <stdlib.h>
 
 #include "d_main.h"
@@ -57,6 +53,33 @@
 #include "net_client.h"
 
 // ---- atsb: shader (no FBO) ----
+
+static GLuint(APIENTRY* pglCreateShader)(GLenum);
+static void   (APIENTRY* pglShaderSource)(GLuint, GLsizei, const GLchar* const*, const GLint*);
+static void   (APIENTRY* pglCompileShader)(GLuint);
+static void   (APIENTRY* pglGetShaderiv)(GLuint, GLenum, GLint*);
+static void   (APIENTRY* pglGetShaderInfoLog)(GLuint, GLsizei, GLsizei*, GLchar*);
+static GLuint(APIENTRY* pglCreateProgram)(void);
+static void   (APIENTRY* pglAttachShader)(GLuint, GLuint);
+static void   (APIENTRY* pglLinkProgram)(GLuint);
+static void   (APIENTRY* pglGetProgramiv)(GLuint, GLenum, GLint*);
+static void   (APIENTRY* pglGetProgramInfoLog)(GLuint, GLsizei, GLsizei*, GLchar*);
+static void   (APIENTRY* pglUseProgram)(GLuint);
+static GLint(APIENTRY* pglGetUniformLocation)(GLuint, const GLchar*);
+static void   (APIENTRY* pglUniform1i)(GLint, int);
+
+static void D_LoadGL(void) {
+#define GL_GET(fn) *(void**)(&p##fn) = SDL_GL_GetProcAddress(#fn)
+	GL_GET(glCreateShader);  GL_GET(glShaderSource);
+	GL_GET(glCompileShader); GL_GET(glGetShaderiv);
+	GL_GET(glGetShaderInfoLog);
+	GL_GET(glCreateProgram); GL_GET(glAttachShader);
+	GL_GET(glLinkProgram);   GL_GET(glGetProgramiv);
+	GL_GET(glGetProgramInfoLog);
+	GL_GET(glUseProgram);    GL_GET(glGetUniformLocation);
+	GL_GET(glUniform1i);
+#undef GL_GET
+}
 
 static const char* vertex_shader_combiner =
 "#version 120\n"
@@ -96,7 +119,7 @@ static GLuint D_ShaderCompile(GLenum type, const char* src) {
 static void D_ShaderInit(void) {
     if (shader_struct.initialised) 
 		return;
-    SIMPLE_LoadGL();
+    D_LoadGL();
 
     GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
     GLuint fragment_combiner_shader = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
