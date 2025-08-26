@@ -705,7 +705,7 @@ void ST_DrawCrosshair(int x, int y, int slot, byte scalefactor, rcolor color) {
 static void ST_DrawJMessage(int pic) {
 	int lump = st_jmessages[pic];
 
-	GL_BindGfxTexture(lumpinfo[lump].name, true);
+	int gfxid = GL_BindGfxTexture(lumpinfo[lump].name, true);
 	GL_SetState(GLSTATE_BLEND, 1);
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -716,8 +716,8 @@ static void ST_DrawJMessage(int pic) {
 	GL_SetupAndDraw2DQuad(
 		20,
 		20,
-		gfxwidth[lump - g_start],
-		gfxheight[lump - g_start],
+		gfxwidth[gfxid],
+		gfxheight[gfxid],
 		0,
 		1,
 		0,
@@ -1142,8 +1142,11 @@ void ST_Init(void) {
 	st_crosshairs = 0;
 	lump = W_CheckNumForName("CRSHAIRS");
 
-	if (!(lump <= -1)) {
-		st_crosshairs = (gfxwidth[lump - g_start] / ST_CROSSHAIRSIZE);
+	if (lump >= 0) {
+		int gfxid = GL_GetGfxIdForLump(lump);
+		if (gfxid != -1) {
+			st_crosshairs = (gfxwidth[gfxid] / ST_CROSSHAIRSIZE);
+		}
 	}
 
 	dmgmarkers.next = dmgmarkers.prev = &dmgmarkers;

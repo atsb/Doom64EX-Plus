@@ -445,6 +445,15 @@ static void InitGfxTextures(void) {
 	CON_DPrintf("%i generic PNG textures initialized (full WAD scan)\n", numgfx);
 }
 
+int GL_GetGfxIdForLump(int lump) {
+	for (int i = 0; i < numgfx; ++i) {
+		if (gfx_lumpnum[i] == lump) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 //
 // GL_BindGfxTexture
 //
@@ -454,7 +463,7 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 	int lump;
 	int width, height;
 	int format, type;
-	int gfxid = -1;
+	int gfxid;
 
 	lump = W_CheckNumForName(name);
 	if (lump < 0) {
@@ -462,12 +471,8 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 		return -1;
 	}
 
-	for (int i = 0; i < numgfx; ++i) {
-		if (gfx_lumpnum[i] == lump) {
-			gfxid = i;
-			break;
-		}
-	}
+	gfxid = GL_GetGfxIdForLump(lump);
+	
 	if (gfxid < 0) {
 		CON_Warnf("GL_BindGfxTexture: '%s' is not a PNG gfx lump (skipping)\n", name);
 		return -1;

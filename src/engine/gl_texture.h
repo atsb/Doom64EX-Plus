@@ -78,5 +78,6 @@ dtexture    GL_ScreenToTexture(void);
 int			GL_WorldTextureIsTranslucent(int texnum);
 int			GL_WorldTextureIsMasked(int texnum);
 void		GL_WorldTextureEnsureClassified(int texnum);
+int			GL_GetGfxIdForLump(int lump);
 
 #endif
