@@ -46,6 +46,7 @@
 #include "m_random.h"
 #include "z_zone.h"
 #include "sc_main.h"
+#include "kpf.h"
 
 //
 // [kex] mapinfo stuff
@@ -65,6 +66,211 @@ but nothing UMAPINFO has difficulty in parsing anyway.
 
 So behold, the beautiful parser for remastered MAPINFO lumps
 */
+
+// 0=English, 1=German, 2=Spanish, 3=French, 4=italian
+CVAR(p_language, 0);
+
+typedef struct { char* key; char* value; } loc_kv_t;
+static loc_kv_t* localisation_key_value = NULL;
+static int       localisation_count = 0;
+
+static void LOC_Add(const char* k, const char* v) {
+    size_t key = dstrlen(k);
+    size_t value = dstrlen(v);
+    loc_kv_t key_value;
+    key_value.key = (char*)Z_Malloc(key + 1, PU_STATIC, 0);
+    key_value.value = (char*)Z_Malloc(value + 1, PU_STATIC, 0);
+    for (size_t i = 0; i < key; ++i) {
+        unsigned char c = (unsigned char)k[i];
+        if (c >= 'A' && c <= 'Z') 
+            c = (unsigned char)(c - 'A' + 'a');
+        key_value.key[i] = (char)c;
+    }
+    key_value.key[key] = 0;
+    dmemcpy(key_value.value, v, value + 1);
+
+    localisation_key_value = (loc_kv_t*)Z_Realloc(localisation_key_value, sizeof(loc_kv_t) * (localisation_count + 1), PU_STATIC, 0);
+    localisation_key_value[localisation_count++] = key_value;
+}
+
+static const char* LOC_Find(const char* key) {
+    if (!key || !*key)
+        return NULL;
+
+    char tmp[256];
+    size_t n = dstrlen(key);
+    if (n >= sizeof(tmp)) 
+        n = sizeof(tmp) - 1;
+    for (size_t i = 0; i < n; ++i) {
+        unsigned char c = (unsigned char)key[i];
+        if (c >= 'A' && c <= 'Z') 
+            c = (unsigned char)(c - 'A' + 'a');
+        tmp[i] = (char)c;
+    }
+    tmp[n] = 0;
+
+    for (int i = 0; i < localisation_count; ++i) {
+        if (!dstricmp(localisation_key_value[i].key, tmp)) 
+            return localisation_key_value[i].value;
+    }
+    return NULL;
+}
+
+static const char* LOC_ExpandIfVar(const char* maybe) {
+    if (localisation_count == 0 || !maybe || maybe[0] != '$') 
+        return maybe;
+    const char* v = LOC_Find(maybe + 1);
+    if (!v) {
+        CON_Warnf("Localization: Missing key '%s'\n", maybe + 1);
+        return maybe;
+    }
+    return v;
+}
+
+static void LOC_SkipWS(const unsigned char** p, const unsigned char* end) {
+    while (*p < end) {
+        int c = **p;
+        if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+            (*p)++; 
+            continue; 
+        }
+        if (c == '/' && (*p + 1) < end && (*p)[1] == '/') {
+            (*p) += 2;
+            while (*p < end && **p != '\n') (*p)++;
+            continue;
+        }
+        break;
+    }
+}
+
+static int LOC_ReadIdent(const unsigned char** p, const unsigned char* end, char* out, size_t cap) {
+    const unsigned char* s = *p;
+    if (s >= end) 
+        return 0;
+    if (!(SDL_isalpha(*s) || *s == '_')) 
+        return 0;
+    size_t n = 0;
+    while (s < end && (SDL_isalnum(*s) || *s == '_')) {
+        if (n + 1 < cap) out[n++] = (char)*s;
+        s++;
+    }
+    out[n] = 0;
+    *p = s;
+    return n > 0;
+}
+
+static char* LOC_ReadQuoted(const unsigned char** p, const unsigned char* end) {
+    if (*p >= end || **p != '"') 
+        return NULL;
+    (*p)++;
+    char* out = NULL;
+    size_t cap = 0, n = 0;
+    while (*p < end) {
+        int c = *(*p)++;
+        if (c == '"') 
+            break;
+        if (c == '\\') {
+            if (*p >= end) 
+                break;
+            int e = *(*p)++;
+            switch (e) {
+            case 'n': c = '\n'; 
+                break;
+            case 'r': c = '\r'; 
+                break;
+            case 't': c = '\t'; 
+                break;
+            case '"': c = '"';  
+                break;
+            case '\\': c = '\\'; 
+                break;
+            default: c = e; 
+                break;
+            }
+        }
+        if (n + 1 >= cap) {
+            cap = cap ? cap * 2 : 64;
+            out = (char*)Z_Realloc(out, cap, PU_STATIC, 0);
+        }
+        out[n++] = (char)c;
+    }
+    if (n + 1 >= cap) {
+        cap = cap ? cap * 2 : 64;
+        out = (char*)Z_Realloc(out, cap, PU_STATIC, 0);
+    }
+    out[n] = 0;
+    return out ? out : (char*)"";
+}
+
+static void LOC_LoadFromBuffer(const unsigned char* buf, int len) {
+    const unsigned char* p = buf;
+    const unsigned char* end = buf + len;
+    char ident[256];
+
+    while (p < end) {
+        LOC_SkipWS(&p, end);
+        if (!LOC_ReadIdent(&p, end, ident, sizeof(ident))) {
+            while (p < end && *p != '\n') p++;
+            continue;
+        }
+        LOC_SkipWS(&p, end);
+        if (p >= end || *p != '=') {
+            while (p < end && *p != '\n') p++;
+            continue;
+        }
+        p++; // '='
+        LOC_SkipWS(&p, end);
+        char* str = LOC_ReadQuoted(&p, end);
+        if (str) 
+            LOC_Add(ident, str);
+        while (p < end && *p != '\n') p++;
+    }
+}
+
+static const char* LOC_LangPath(int lang) {
+    switch (lang) {
+    default: 
+    case 0: return "localization/loc_english.txt";
+    case 1: return "localization/loc_german.txt";
+    case 2: return "localization/loc_spanish.txt";
+    case 3: return "localization/loc_french.txt";
+    case 4: return "localization/loc_italian.txt";
+    }
+}
+
+static const char* kpf_file_array[] = {
+    "Doom64.kpf", "doom64.kpf", "DOOM64.kpf", NULL
+};
+
+static void LOC_Load(void) {
+    CON_CvarRegister(&p_language);
+
+    const char* want_inner = LOC_LangPath(p_language.value);
+    unsigned char* data = NULL; int size = 0;
+
+    for (int i = 0; kpf_file_array[i]; ++i) {
+        if (KPF_ExtractFile(kpf_file_array[i], want_inner, &data, &size)) {
+            LOC_LoadFromBuffer(data, size);
+            free(data);
+            I_Printf("Localization: Loaded %d entries from %s in %s\n",
+                localisation_count, want_inner, kpf_file_array[i]);
+            return;
+        }
+        if (p_language.value != 0) {
+            const char* eng = LOC_LangPath(0);
+            if (KPF_ExtractFile(kpf_file_array[i], eng, &data, &size)) {
+                I_Printf("Localization: '%s' not found; fell back to English in %s\n",
+                    want_inner, kpf_file_array[i]);
+                LOC_LoadFromBuffer(data, size);
+                free(data);
+                I_Printf("Localization: loaded %d entries from %s\n",
+                    localisation_count, eng);
+                return;
+            }
+        }
+    }
+    I_Printf("Localization: No localization file found in any Doom64.kpf; continuing without localization\n");
+}
 
 //
 // P_InitMapInfo
@@ -440,9 +646,11 @@ static void P_MapInfoLexerParseStringList(mapinfo_lexer* mapinfo_lexer, char* ou
             CON_Warnf("%s:%d:%d: expected string in list\n", mapinfo_lexer->filename, string_v.line, string_v.column);
             break;
         }
+        const char* s = LOC_ExpandIfVar(string_v.mapinfo_string_value);
         if (outBuf[0]) strncat(outBuf, "\n", outCap);
-        strncat(outBuf, string_v.mapinfo_string_value, outCap);
-        if (!P_MapInfoLexerAccept(mapinfo_lexer, MI_COMMA)) 
+        strncat(outBuf, s, outCap);
+
+        if (!P_MapInfoLexerAccept(mapinfo_lexer, MI_COMMA))
             break;
         if (P_MapInfoLexerPeekLong(mapinfo_lexer).kind != MI_STRING) {
             mapinfo_token comma = P_MapInfoLexerPeekLong(mapinfo_lexer);
@@ -486,7 +694,8 @@ static void P_MapInfoLexerParseMapBlock(mapinfo_lexer* mapinfo_lexer,
     mapdef.music = -1;
 
     if (title && *title) {
-        dstrncpy(mapdef.mapname, title, dstrlen(title));
+        const char* t = LOC_ExpandIfVar(title);     // <--- expand $map_name_xx
+        dstrncpy(mapdef.mapname, t, dstrlen(t));
     }
     else if (lumpName && *lumpName) {
         dstrncpy(mapdef.mapname, lumpName, dstrlen(lumpName));
@@ -819,6 +1028,8 @@ void P_InitMapInfo(void) {
     char* buf = (char*)Z_Malloc(length + 1, PU_STATIC, 0);
     dmemcpy(buf, raw, length);
     buf[length] = 0;
+
+    LOC_Load();
 
     mapinfo_lexer mapinfo_lexer;
     P_MapInfoLexerInit(&mapinfo_lexer, buf, length, "MAPINFO");
