@@ -52,6 +52,8 @@ void D_IncValidCount(void);
 extern boolean BusyDisk;
 
 // atsb: SHADERS
+void D_ShaderBind(void);
+
 typedef char GLchar;
 typedef unsigned int GLuint;
 typedef int GLint;

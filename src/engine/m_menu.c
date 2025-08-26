@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include <SDL3/SDL_platform_defines.h>
 
+#include "d_main.h"
 #include "m_menu.h"
 #include "doomdef.h"
 #include "i_sdlinput.h"
@@ -3041,6 +3042,7 @@ static void M_DoVideoReset(int choice) {
 	I_Init();
 	R_Init();
 	GL_Init();
+	D_ShaderBind();
 }
 
 //

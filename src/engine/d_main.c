@@ -117,8 +117,6 @@ static GLuint D_ShaderCompile(GLenum type, const char* src) {
 }
 
 static void D_ShaderInit(void) {
-    if (shader_struct.initialised) 
-		return;
     D_ShaderLoadGL();
 
     GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
@@ -140,7 +138,7 @@ static void D_ShaderInit(void) {
     shader_struct.initialised = 1;
 }
 
-static void D_ShaderBind(void) {
+void D_ShaderBind(void) {
     D_ShaderInit();
     pglUseProgram(shader_struct.prog);
     if (shader_struct.locTex >= 0) 
