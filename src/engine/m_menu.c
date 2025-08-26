@@ -1545,6 +1545,7 @@ char* DisplayHints[display_end] = {
 	"display level stats in-game",
 	"change the hud text colour",
 	"change the field of view",
+	NULL,
 	"toggle crosshair",
 	"change opacity for crosshairs",
 	NULL,
