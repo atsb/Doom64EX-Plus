@@ -567,7 +567,7 @@ static void Title_Start(void) {
 	paused = false;
 	allowclearmenu = false;
 
-	S_StartMusic(mus_title);
+	S_StartMusic(W_GetNumForName("MUSTITLE"));
 	M_StartMainMenu();
 }
 

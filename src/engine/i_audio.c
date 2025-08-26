@@ -1015,6 +1015,7 @@ static int Seq_RegisterSounds(void) {
     for (i = 0; i < numlumps; ++i) 
         g_sfx_index_for_lump[i] = -1;
     for (i = 0; i < numlumps; ++i) {
+
         if (num_sfx >= MAX_GAME_SFX) {
             CON_Warnf("Seq_RegisterSounds: Exceeded limit of %d. Further SFX ignored.\n", MAX_GAME_SFX);
             fail += (numlumps - i);
@@ -1032,7 +1033,7 @@ static int Seq_RegisterSounds(void) {
         }
 
         int is_audio = 0;
-        int is_pcm = 0;          /* WAV/AIFF */
+        int is_pcm = 0;          /* WAV/AIFF. WAV header size = 44 */
         int is_compressed = 0;   /* OGG/MP3/FLAC/FSB/unknown compressed */
         FMOD_SOUND_TYPE hinted = FMOD_SOUND_TYPE_UNKNOWN;
 
@@ -1080,23 +1081,26 @@ static int Seq_RegisterSounds(void) {
         FMOD_SOUND* snd = NULL;
 
         if (is_pcm) {
-            result = FMOD_System_CreateSound(
-                sound.fmod_studio_system,
-                (const char*)p,
-                FMOD_OPENMEMORY_POINT | mode,
-                &exinfo,
-                &snd
-            );
-            FMOD_ERROR_CHECK(result);
-            if (result != FMOD_OK) {
+            // exclude NOSOUND WAV lump as it cannot be created
+            if (!(hinted == FMOD_SOUND_TYPE_WAV && len <= 44)) {
                 result = FMOD_System_CreateSound(
                     sound.fmod_studio_system,
                     (const char*)p,
-                    FMOD_OPENMEMORY | mode,
+                    FMOD_OPENMEMORY_POINT | mode,
                     &exinfo,
                     &snd
                 );
                 FMOD_ERROR_CHECK(result);
+                if (result != FMOD_OK) {
+                    result = FMOD_System_CreateSound(
+                        sound.fmod_studio_system,
+                        (const char*)p,
+                        FMOD_OPENMEMORY | mode,
+                        &exinfo,
+                        &snd
+                    );
+                    FMOD_ERROR_CHECK(result);
+                }
             }
         }
         else {
