@@ -25,6 +25,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <SDL3/SDL.h>
+#ifdef _WIN32
+#define APIENTRY __stdcall
+#endif
+
 #include <stdlib.h>
 
 #include "d_main.h"
@@ -51,15 +56,81 @@
 #include "gl_draw.h"
 #include "net_client.h"
 
-//
-// D_DoomLoop()
-// Not a globally visible function,
-//  just included for source reference,
-//  called by D_DoomMain, never exits.
-// Manages timing and IO,
-//  calls all ?_Responder, ?_Ticker, and ?_Drawer,
-//  calls I_GetTime, and I_StartTic
-//
+// ---- atsb: shader (no FBO) ----
+
+static const char* vertex_shader_combiner =
+"#version 120\n"
+"varying vec2 vUV;\n"
+"varying vec4 vColor;\n"
+"void main(){\n"
+"  gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n"
+"  vUV = gl_MultiTexCoord0.xy;\n"
+"  vColor = gl_Color;\n"
+"}\n";
+
+static const char* fragment_shader_combiner =
+"#version 120\n"
+"uniform sampler2D uTex;\n"
+"varying vec2 vUV;\n"
+"varying vec4 vColor;\n"
+"void main(){\n"
+"  vec4 tex = texture2D(uTex, vUV);\n"
+"  gl_FragColor = tex * vColor;\n"
+"}\n";
+
+static GLuint D_ShaderCompile(GLenum type, const char* src) {
+    GLuint shader = pglCreateShader(type);
+	pglShaderSource(shader, 1, &src, NULL);
+	pglCompileShader(shader);
+    GLint ok = 0;
+    pglGetShaderiv(shader, GL_COMPILE_STATUS, &ok);
+    if (!ok) {
+        char log[1024]; GLsizei n = 0;
+        pglGetShaderInfoLog(shader, sizeof(log), &n, log);
+        fprintf(stderr, "D_ShaderCompile: %s compilation error:\\n%.*s\\n",
+                type == GL_VERTEX_SHADER ? "vertex" : "fragment", (int)n, log);
+    }
+    return shader;
+}
+
+static void D_ShaderInit(void) {
+    if (shader_struct.initialised) 
+		return;
+    SIMPLE_LoadGL();
+
+    GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
+    GLuint fragment_combiner_shader = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
+
+	shader_struct.prog = pglCreateProgram();
+    pglAttachShader(shader_struct.prog, vertex_combiner_shader);
+    pglAttachShader(shader_struct.prog, fragment_combiner_shader);
+    pglLinkProgram(shader_struct.prog);
+
+    GLint ok = 0; pglGetProgramiv(shader_struct.prog, GL_LINK_STATUS, &ok);
+    if (!ok) {
+        char log[1024]; GLsizei n = 0;
+        pglGetProgramInfoLog(shader_struct.prog, sizeof(log), &n, log);
+        fprintf(stderr, "D_ShaderInit: Linkage error:\\n%.*s\\n", (int)n, log);
+    }
+
+    shader_struct.locTex = pglGetUniformLocation(shader_struct.prog, "uTex");
+    shader_struct.initialised = 1;
+}
+
+static void D_ShaderBind(void) {
+    D_ShaderInit();
+    pglUseProgram(shader_struct.prog);
+    if (shader_struct.locTex >= 0) 
+		pglUniform1i(shader_struct.locTex, 0);
+}
+
+static void D_ShaderUnBind(void) {
+    if (!shader_struct.initialised) 
+		return;
+    pglUseProgram(0);
+}
+
+
 void D_DoomLoop(void);
 
 static int      pagetic;
@@ -196,6 +267,8 @@ static void D_FinishDraw(void) {
 	// send out any new accumulation
 	NetUpdate();
 
+	D_ShaderUnBind();
+
 	// normal update
 	I_FinishUpdate();
 
@@ -234,12 +307,14 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 			renderinframe = true;
 
 			if (I_StartDisplay()) {
+				D_ShaderBind();
 				if (draw && !action) {
 					draw();
 				}
 				D_DrawInterface();
-				D_FinishDraw();
-			}
+                D_ShaderUnBind();
+                D_FinishDraw();
+}
 
 			renderinframe = false;
 		}
@@ -328,12 +403,14 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 				renderinframe = true;
 
 				if (I_StartDisplay()) {
-					if (draw && !action) {
+					D_ShaderBind();
+                if (draw && !action) {
 						draw();
 					}
 					D_DrawInterface();
-					D_FinishDraw();
-				}
+                D_ShaderUnBind();
+                D_FinishDraw();
+}
 
 				renderinframe = false;
 			}
@@ -408,13 +485,14 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 			}
 		}
 
+		D_ShaderBind();
 		if (draw && !action) {
 			draw();
 		}
 		D_DrawInterface();
-		D_FinishDraw();
-
-	freealloc:
+                D_ShaderUnBind();
+                D_FinishDraw();
+freealloc:
 
 		// force garbage collection
 		Z_FreeAlloca();

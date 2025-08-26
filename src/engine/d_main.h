@@ -51,4 +51,52 @@ void D_IncValidCount(void);
 
 extern boolean BusyDisk;
 
+// atsb: SHADERS
+typedef char GLchar;
+typedef unsigned int GLuint;
+typedef int GLint;
+typedef unsigned int GLenum;
+typedef int GLsizei;
+
+static struct {
+    GLuint prog;
+    GLint  locTex;
+    int    initialised;
+} shader_struct = { 0, -1, 0 };
+
+#ifndef GL_VERTEX_SHADER
+#define GL_VERTEX_SHADER    0x8B31
+#define GL_FRAGMENT_SHADER  0x8B30
+#define GL_COMPILE_STATUS   0x8B81
+#define GL_LINK_STATUS      0x8B82
+#define GL_INFO_LOG_LENGTH  0x8B84
+#endif
+
+static GLuint(APIENTRY* pglCreateShader)(GLenum);
+static void   (APIENTRY* pglShaderSource)(GLuint, GLsizei, const GLchar* const*, const GLint*);
+static void   (APIENTRY* pglCompileShader)(GLuint);
+static void   (APIENTRY* pglGetShaderiv)(GLuint, GLenum, GLint*);
+static void   (APIENTRY* pglGetShaderInfoLog)(GLuint, GLsizei, GLsizei*, GLchar*);
+static GLuint(APIENTRY* pglCreateProgram)(void);
+static void   (APIENTRY* pglAttachShader)(GLuint, GLuint);
+static void   (APIENTRY* pglLinkProgram)(GLuint);
+static void   (APIENTRY* pglGetProgramiv)(GLuint, GLenum, GLint*);
+static void   (APIENTRY* pglGetProgramInfoLog)(GLuint, GLsizei, GLsizei*, GLchar*);
+static void   (APIENTRY* pglUseProgram)(GLuint);
+static GLint(APIENTRY* pglGetUniformLocation)(GLuint, const GLchar*);
+static void   (APIENTRY* pglUniform1i)(GLint, int);
+
+static void SIMPLE_LoadGL(void) {
+#define GL_GET(fn) *(void**)(&p##fn) = SDL_GL_GetProcAddress(#fn)
+    GL_GET(glCreateShader);  GL_GET(glShaderSource);
+    GL_GET(glCompileShader); GL_GET(glGetShaderiv);
+    GL_GET(glGetShaderInfoLog);
+    GL_GET(glCreateProgram); GL_GET(glAttachShader);
+    GL_GET(glLinkProgram);   GL_GET(glGetProgramiv);
+    GL_GET(glGetProgramInfoLog);
+    GL_GET(glUseProgram);    GL_GET(glGetUniformLocation);
+    GL_GET(glUniform1i);
+#undef GL_GET
+}
+
 #endif
