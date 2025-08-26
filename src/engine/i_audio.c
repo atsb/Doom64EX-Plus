@@ -1015,6 +1015,7 @@ static int Seq_RegisterSounds(void) {
     for (i = 0; i < numlumps; ++i) 
         g_sfx_index_for_lump[i] = -1;
     for (i = 0; i < numlumps; ++i) {
+
         if (num_sfx >= MAX_GAME_SFX) {
             CON_Warnf("Seq_RegisterSounds: Exceeded limit of %d. Further SFX ignored.\n", MAX_GAME_SFX);
             fail += (numlumps - i);
@@ -1032,11 +1033,11 @@ static int Seq_RegisterSounds(void) {
         }
 
         int is_audio = 0;
-        int is_pcm = 0;          /* WAV/AIFF */
+        int is_pcm = 0;          /* WAV/AIFF. WAV header size = 44 */
         int is_compressed = 0;   /* OGG/MP3/FLAC/FSB/unknown compressed */
         FMOD_SOUND_TYPE hinted = FMOD_SOUND_TYPE_UNKNOWN;
 
-        if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
+        if (!is_audio && len > 44 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
             is_audio = 1; is_pcm = 1; hinted = FMOD_SOUND_TYPE_WAV;
         }
         if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "FORM", 4) &&
