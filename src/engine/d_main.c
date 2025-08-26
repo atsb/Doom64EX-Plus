@@ -68,7 +68,7 @@ static void   (APIENTRY* pglUseProgram)(GLuint);
 static GLint(APIENTRY* pglGetUniformLocation)(GLuint, const GLchar*);
 static void   (APIENTRY* pglUniform1i)(GLint, int);
 
-static void D_LoadGL(void) {
+static void D_ShaderLoadGL(void) {
 #define GL_GET(fn) *(void**)(&p##fn) = SDL_GL_GetProcAddress(#fn)
 	GL_GET(glCreateShader);  GL_GET(glShaderSource);
 	GL_GET(glCompileShader); GL_GET(glGetShaderiv);
@@ -119,7 +119,7 @@ static GLuint D_ShaderCompile(GLenum type, const char* src) {
 static void D_ShaderInit(void) {
     if (shader_struct.initialised) 
 		return;
-    D_LoadGL();
+    D_ShaderLoadGL();
 
     GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
     GLuint fragment_combiner_shader = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
