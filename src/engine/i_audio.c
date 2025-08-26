@@ -1081,23 +1081,26 @@ static int Seq_RegisterSounds(void) {
         FMOD_SOUND* snd = NULL;
 
         if (is_pcm) {
-            result = FMOD_System_CreateSound(
-                sound.fmod_studio_system,
-                (const char*)p,
-                FMOD_OPENMEMORY_POINT | mode,
-                &exinfo,
-                &snd
-            );
-            FMOD_ERROR_CHECK(result);
-            if (result != FMOD_OK) {
+            // exclude NOSOUND WAV lump as it cannot be created
+            if (!(hinted == FMOD_SOUND_TYPE_WAV && len <= 44)) {
                 result = FMOD_System_CreateSound(
                     sound.fmod_studio_system,
                     (const char*)p,
-                    FMOD_OPENMEMORY | mode,
+                    FMOD_OPENMEMORY_POINT | mode,
                     &exinfo,
                     &snd
                 );
                 FMOD_ERROR_CHECK(result);
+                if (result != FMOD_OK) {
+                    result = FMOD_System_CreateSound(
+                        sound.fmod_studio_system,
+                        (const char*)p,
+                        FMOD_OPENMEMORY | mode,
+                        &exinfo,
+                        &snd
+                    );
+                    FMOD_ERROR_CHECK(result);
+                }
             }
         }
         else {
