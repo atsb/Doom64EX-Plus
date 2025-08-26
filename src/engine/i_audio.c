@@ -1037,7 +1037,7 @@ static int Seq_RegisterSounds(void) {
         int is_compressed = 0;   /* OGG/MP3/FLAC/FSB/unknown compressed */
         FMOD_SOUND_TYPE hinted = FMOD_SOUND_TYPE_UNKNOWN;
 
-        if (!is_audio && len > 44 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
+        if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
             is_audio = 1; is_pcm = 1; hinted = FMOD_SOUND_TYPE_WAV;
         }
         if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "FORM", 4) &&
