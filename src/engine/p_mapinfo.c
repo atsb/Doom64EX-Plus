@@ -19,31 +19,15 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <math.h>
 #include <stdlib.h>
+#include <SDL3/SDL_stdinc.h>
 
-#include "p_setup.h"
 #include "doomdef.h"
-#include "i_swap.h"
-#include "m_fixed.h"
-#include "g_game.h"
 #include "i_system.h"
 #include "w_wad.h"
-#include "p_local.h"
 #include "doomstat.h"
-#include "t_bsp.h"
-#include "p_macros.h"
-#include "info.h"
-#include "m_misc.h"
-#include "tables.h"
-#include "gl_texture.h"
-#include "r_sky.h"
-#include "r_main.h"
-#include "r_lights.h"
-#include "r_things.h"
 #include "con_console.h"
 #include "con_cvar.h"
-#include "m_random.h"
 #include "z_zone.h"
 #include "sc_main.h"
 #include "kpf.h"

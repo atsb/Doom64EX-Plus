@@ -74,7 +74,7 @@ char* M_StringDuplicate(const char* orig)
 {
 	char* result;
 
-	result = SDL_strdup(orig);
+	result = strdup(orig);
 
 	if (result == NULL)
 	{

@@ -271,7 +271,6 @@ void W_Init(void) {
 	}
 
 	wadfile = W_OpenFile(iwad);
-    free(iwad);
     
 	W_Read(wadfile, 0, &header, sizeof(header));
 
@@ -321,7 +320,6 @@ void W_Init(void) {
 
 	if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
 		W_MergeFile(doom64expluswad);
-		free(doom64expluswad);
 	}
 	else {
 		I_Error("W_Init: doom64ex-plus.wad not found");
@@ -644,7 +642,6 @@ void W_KPFInit(void)
 				char* path = I_FindDataFile((char *)kpf);
 				if(!path) continue;
 				int ret = KPF_ExtractFileCapped(path, inner, &data, &size, KPF_PNG_CAP_BYTES);
-			    free(path);
 				if(!ret) continue;
 
 				if (ov->max_w > 0 && ov->max_h > 0) {
