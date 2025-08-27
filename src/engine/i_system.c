@@ -34,7 +34,6 @@
 #include "m_misc.h"
 #include "i_video.h"
 #include "i_sdlinput.h"
-#include "d_net.h"
 #include "g_demo.h"
 #include "d_main.h"
 #include "con_console.h"
@@ -57,6 +56,14 @@ CVAR(v_fadein, 1);
 #endif
 
 ticcmd_t        emptycmd;
+
+typedef struct {
+	char* filename;
+	char* path;
+} datafile_t;
+
+static datafile_t** g_cached_datafiles = NULL;
+static int g_num_cached_datafiles = 0;
 
 //
 // I_Sleep
@@ -247,6 +254,7 @@ char* I_GetUserFile(char* file) {
     return path;
 }
 
+
 /**
  * @brief Find a regular read-only data file.
  *
@@ -254,7 +262,7 @@ char* I_GetUserFile(char* file) {
  */
 
 
-char* I_FindDataFile(char* file) {
+static char* FindDataFile(char* file) {
 	char *path = malloc(MAX_PATH);
 	const char* dir;
 	steamgame_t game;
@@ -331,6 +339,32 @@ char* I_FindDataFile(char* file) {
 	free(path);
 	return NULL;
 }
+
+// returned string is cached and must NOT be freed by caller
+char* I_FindDataFile(char* file) {
+
+	datafile_t* entry = NULL;
+
+	for (int i = 0; i < g_num_cached_datafiles; i++) {
+		if (!dstrcmp(file, g_cached_datafiles[i]->filename)) {
+			entry = g_cached_datafiles[i];
+			break;
+		}
+	}
+
+	if (!entry) {
+		entry = malloc(sizeof(datafile_t));
+		entry->filename = M_StringDuplicate(file);
+		entry->path = FindDataFile(file);
+
+		g_cached_datafiles = realloc(g_cached_datafiles, (g_num_cached_datafiles + 1) * sizeof(datafile_t *));
+		g_cached_datafiles[g_num_cached_datafiles] = entry;
+		g_num_cached_datafiles++;
+	}
+
+	return entry->path; // may be NULL
+}
+
 
 /**
  * @brief Checks to see if the given absolute path is a regular file.
