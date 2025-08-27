@@ -244,7 +244,7 @@ void CON_DPrintf(const char* s, ...) {
 static boolean shiftdown = false;
 
 void CON_ParseKey(unsigned char c) {
-	if (c < ' ') {
+	if (c < KEY_SPACEBAR || c > KEY_BACKSPACE) {
 		return;
 	}
 
