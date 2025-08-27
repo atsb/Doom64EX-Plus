@@ -662,7 +662,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		GL_SetState(GLSTATE_BLEND, 1);
 		dglDisable(GL_ALPHA_TEST);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		dglDepthMask(GL_TRUE);
+		dglDepthMask(GL_FALSE);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
 		return;
 	}
@@ -676,7 +676,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		GL_SetState(GLSTATE_BLEND, 1);
 		dglDisable(GL_ALPHA_TEST);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		dglDepthMask(GL_TRUE);
+		dglDepthMask(GL_FALSE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
@@ -699,7 +699,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	GL_SetState(GLSTATE_BLEND, 1);
 	dglDisable(GL_ALPHA_TEST);
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	dglDepthMask(GL_TRUE);
+	dglDepthMask(GL_FALSE);
 	GL_Env_RGB_Modulate_Alpha_FromTexture();
 
 	spritewidth[spritenum] = w;
