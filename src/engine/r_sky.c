@@ -678,7 +678,8 @@ static void R_FireTicker(void) {
 static void R_DrawFire(void) {
 	float pos1;
 	vtx_t v[4];
-	dtexture t = gfxptr[fireLump];
+	int fireLumpGfxId = GL_GetGfxIdForLump(fireLump);
+	dtexture t = gfxptr[fireLumpGfxId];
 	int i;
 
 	//
@@ -696,10 +697,10 @@ static void R_DrawFire(void) {
 	}
 
 	if (!t) {
-		dglGenTextures(1, &gfxptr[fireLump]);
+		dglGenTextures(1, &gfxptr[fireLumpGfxId]);
 	}
 
-	dglBindTexture(GL_TEXTURE_2D, gfxptr[fireLump]);
+	dglBindTexture(GL_TEXTURE_2D, gfxptr[fireLumpGfxId]);
 	GL_CheckFillMode();
 	GL_SetTextureFilter();
 
