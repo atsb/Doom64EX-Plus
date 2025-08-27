@@ -1,5 +1,3 @@
-#include <stddef.h>
-
 #define ZIP_SIG_EOCD   0x06054b50u
 #define ZIP_SIG_CDH    0x02014b50u
 #define ZIP_SIG_LFH    0x04034b50u

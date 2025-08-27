@@ -75,6 +75,9 @@ extern boolean    DigiJoy;
 #ifdef SDL_PLATFORM_WIN32
 #include <windows.h>
 boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars);
+
+#define strdup _strdup
+
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)

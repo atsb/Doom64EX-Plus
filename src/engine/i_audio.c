@@ -1081,8 +1081,10 @@ static int Seq_RegisterSounds(void) {
         FMOD_SOUND* snd = NULL;
 
         if (is_pcm) {
-            // exclude NOSOUND WAV lump as it cannot be created
-            if (!(hinted == FMOD_SOUND_TYPE_WAV && len <= 44)) {
+            if (hinted == FMOD_SOUND_TYPE_WAV && len <= 44) {
+                // exclude NOSOUND WAV lump as it cannot be created
+                result = FMOD_ERR_UNSUPPORTED;
+            } else {
                 result = FMOD_System_CreateSound(
                     sound.fmod_studio_system,
                     (const char*)p,
@@ -1739,7 +1741,6 @@ int FMOD_StartMusic(int mus_id) {
             &currentMidiSound
         );
         FMOD_ERROR_CHECK(result);
-        if (exinfo.dlsname) free((void*)exinfo.dlsname);
 
         if (result == FMOD_OK && currentMidiSound) {
             result = FMOD_System_PlaySound(sound.fmod_studio_system_music, currentMidiSound, 
@@ -1780,7 +1781,6 @@ int FMOD_StartMusic(int mus_id) {
             exinfo.dlsname = I_FindDataFile("DOOMSND.DLS");
             result = FMOD_System_CreateSound(sound.fmod_studio_system_music, (const char*)p, FMOD_OPENMEMORY | FMOD_LOOP_NORMAL | FMOD_2D, &exinfo, &currentMidiSound);
             FMOD_ERROR_CHECK(result);
-            if (exinfo.dlsname) free((void*)exinfo.dlsname);
             if (result == FMOD_OK && currentMidiSound) {
                 result = FMOD_System_PlaySound(sound.fmod_studio_system_music, currentMidiSound, sound.master_music, false, &sound.fmod_studio_channel_music);
                 FMOD_ERROR_CHECK(result);
@@ -1815,7 +1815,6 @@ int FMOD_StartMusic(int mus_id) {
                 exinfo.dlsname = I_FindDataFile("DOOMSND.DLS");
                 result = FMOD_System_CreateSound(sound.fmod_studio_system_music, (const char*)midip, FMOD_OPENMEMORY | FMOD_LOOP_NORMAL | FMOD_2D, &exinfo, &currentMidiSound);
                 FMOD_ERROR_CHECK(result);
-                if (exinfo.dlsname) free((void*)exinfo.dlsname);
                 if (result == FMOD_OK && currentMidiSound) {
                     result = FMOD_System_PlaySound(sound.fmod_studio_system_music, currentMidiSound, sound.master_music, false, &sound.fmod_studio_channel_music);
                     FMOD_ERROR_CHECK(result);
