@@ -119,12 +119,12 @@ static GLuint D_ShaderCompile(GLenum type, const char* src) {
 static void D_ShaderInit(void) {
     D_ShaderLoadGL();
 
-    GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
-    GLuint fragment_combiner_shader = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
+    //GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
+    //GLuint fragment_combiner_shader = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
 
 	shader_struct.prog = pglCreateProgram();
-    pglAttachShader(shader_struct.prog, vertex_combiner_shader);
-    pglAttachShader(shader_struct.prog, fragment_combiner_shader);
+    //pglAttachShader(shader_struct.prog, vertex_combiner_shader);
+    //pglAttachShader(shader_struct.prog, fragment_combiner_shader);
     pglLinkProgram(shader_struct.prog);
 
     GLint ok = 0; pglGetProgramiv(shader_struct.prog, GL_LINK_STATUS, &ok);
