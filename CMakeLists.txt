@@ -140,7 +140,7 @@ target_link_libraries(
 	${PROJECT_NAME}
 	SDL3::SDL3
 	png
-	OpenGL
+	${OPENGL_LIBRARY}
 	fmod
 	z
 	m
