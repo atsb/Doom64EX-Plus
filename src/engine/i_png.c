@@ -337,7 +337,11 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         if (usingGL && !alpha) {
             int num_trans = 0;
             png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
-            if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
+            if (num_trans == 1 && color_type == PNG_COLOR_TYPE_RGB) {
+                // hack for the "EVIL" lump (fading graphics at the end of the title map)
+                // found in BETA64 remastered WAD that is PNG_COLOR_TYPE_PALETTE but with a single color (black) for transparent
+                png_set_strip_alpha(png_ptr);
+            } else if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
                 png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
                 Z_Free(src);
                 I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
