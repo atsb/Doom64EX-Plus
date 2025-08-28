@@ -1735,7 +1735,6 @@ void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
 void M_ChangehudFilter(int choice);
-void M_ChangeWindowed(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
@@ -1744,7 +1743,6 @@ void M_DrawVideo(void);
 void M_ChangeVsync(int choice);
 
 CVAR_EXTERNAL(v_checkratio);
-CVAR_EXTERNAL(v_windowed);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
@@ -1764,7 +1762,6 @@ enum {
 	filter,
 	hud_filter,
 	anisotropic,
-	windowed,
 	interpolate_frames,
 	vsync,
 	accessibility,
@@ -1783,7 +1780,6 @@ menuitem_t VideoMenu[] = {
 	{2,"Filter:",M_ChangeFilter, 'f'},
 	{2,"HUD Filter:",M_ChangehudFilter, 't'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
-	{2,"Windowed:",M_ChangeWindowed, 'w'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
 	{2,"VSync:",M_ChangeVsync, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
@@ -1801,7 +1797,6 @@ char* VideoHints[video_end] = {
 	"toggle texture filtering",
 	"toggle texture filtering on hud and text",
 	"toggle blur reduction on textures",
-	"toggle windowed mode",
 	"toggle frame interpolation to\n achieve smooth framerates",
 	"toggle vsync on or off to prevent screen tearing",
 	"toggle accessibility to\n remove flashing lights",
@@ -1815,7 +1810,6 @@ menudefault_t VideoDefault[] = {
 	{ &r_filter, 0 },
 	{ &r_hudFilter, 0 },
 	{ &r_anisotropic, 1 },
-	{ &v_windowed, 0 },
 	{ &i_interpolateframes, 1 },
 	{ &v_vsync, 1 },
 	{ &v_accessibility, 0 },
@@ -1906,7 +1900,6 @@ void M_DrawVideo(void) {
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
 	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
-	DRAWVIDEOITEM2(windowed, v_windowed.value, msgNames);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
 	DRAWVIDEOITEM2(accessibility, v_accessibility.value, onofftype);
@@ -1993,10 +1986,6 @@ void M_ChangehudFilter(int choice) {
 
 void M_ChangeAnisotropic(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_anisotropic);
-}
-
-void M_ChangeWindowed(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &v_windowed);
 }
 
 void M_ChangeInterpolateFrames(int choice)
