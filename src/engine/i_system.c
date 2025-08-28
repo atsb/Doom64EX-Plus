@@ -374,7 +374,13 @@ char* I_FindDataFile(char* file) {
 boolean I_FileExists(const char* path)
 {
 	struct stat st;
-	return !stat(path, &st) && S_ISREG(st.st_mode);
+	return path && !stat(path, &st) && S_ISREG(st.st_mode);
+}
+
+boolean I_DirExists(const char* path)
+{
+	struct stat st;
+	return path && !stat(path, &st) && S_ISDIR(st.st_mode);
 }
 
 //

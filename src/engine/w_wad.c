@@ -25,12 +25,14 @@
 #include <stdbool.h>
 #include <stdint.h>   // for intptr_t
 #include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_timer.h>
 
 #include "w_wad.h"
 #include "w_merge.h"
 #include "w_file.h"
 #include "doomstat.h"
 #include "i_system.h"
+#include "i_system_io.h"
 #include "z_zone.h"
 #include "m_misc.h"
 #include "md5.h"
@@ -352,7 +354,9 @@ void W_Init(void) {
 	W_HashLumps();
 		
 	I_Printf("W_KPFInit: Init KPFfiles.\n");
+	Uint64 now = SDL_GetTicks();
 	W_KPFInit();
+	I_Printf("W_KPFInit: took %d ms\n", SDL_GetTicks() - now);
 }
 
 static boolean nonmaplump = false;
@@ -639,9 +643,9 @@ void W_KPFInit(void)
 				unsigned char* data = NULL;
 				int size = 0;
 
-				char* path = I_FindDataFile((char *)kpf);
-				if(!path) continue;
-				int ret = KPF_ExtractFileCapped(path, inner, &data, &size, KPF_PNG_CAP_BYTES);
+				char* kpf_path = I_FindDataFile((char *)kpf);
+				if(!kpf_path) continue;
+				int ret = KPF_ExtractFileCapped(kpf_path, inner, &data, &size, KPF_PNG_CAP_BYTES);
 				if(!ret) continue;
 
 				if (ov->max_w > 0 && ov->max_h > 0) {
@@ -649,19 +653,62 @@ void W_KPFInit(void)
 					if (PNG_ReadDimensions(data, (size_t)size, &w, &h)) {
 						if (w > ov->max_w || h > ov->max_h) {
 							unsigned char* scaled = NULL; int scaled_sz = 0;
-							if (PNG_DownscaleToFit(data, size, ov->max_w, ov->max_h, &scaled, &scaled_sz)) {
-								free(data);
-								data = scaled;
-								size = scaled_sz;
-								I_Printf("W_KPFInit: %s too large (%dx%d) scaled to fit %dx%d\n",
-									ov->name8, w, h, ov->max_w, ov->max_h);
+
+							boolean use_cache = true; // can be set to false to disable
+							boolean in_cache = false;
+							filepath_t cache_filepath;
+
+							if (use_cache) {
+
+								char* cache_dir = I_GetUserFile("kpf_cache");
+								if (!I_DirExists(cache_dir)) {
+									use_cache = M_CreateDir(cache_dir);
+								}
+
+								if (use_cache) {
+
+									SDL_snprintf(cache_filepath, MAX_PATH,
+										"%s/%s_%d_%d_%d",
+										cache_dir,
+										ov->name8,
+										ov->max_w, ov->max_h,
+										M_FileLengthFromPath(kpf_path));
+
+									if (I_FileExists(cache_filepath)) {
+
+										unsigned char* cache_data;
+										int cache_size = M_ReadFileEx(cache_filepath, &cache_data, true);
+										in_cache = cache_size > 0;
+										if (in_cache) {
+											I_Printf("W_KPFInit: %s read from %s\n", ov->name8, cache_filepath);
+											free(data);
+											data = cache_data;
+											size = cache_size;
+										}
+									}
+								}
+								free(cache_dir);
 							}
-							else {
-								I_Printf("W_KPFInit: %s too large (%dx%d), keeping WAD version.\n",
-									ov->name8, w, h);
-								free(data);
-								data = NULL;
-								size = 0;
+							
+							if (!use_cache || !in_cache) {
+								if (PNG_DownscaleToFit(data, size, ov->max_w, ov->max_h, &scaled, &scaled_sz)) {
+									free(data);
+									data = scaled;
+									size = scaled_sz;
+									I_Printf("W_KPFInit: %s too large (%dx%d) scaled to fit %dx%d\n",
+										ov->name8, w, h, ov->max_w, ov->max_h);
+
+									if (use_cache) {
+										M_WriteFile(cache_filepath, data, size);
+									}
+								}
+								else {
+									I_Printf("W_KPFInit: %s too large (%dx%d), keeping WAD version.\n",
+										ov->name8, w, h);
+									free(data);
+									data = NULL;
+									size = 0;
+								}
 							}
 						}
 					}

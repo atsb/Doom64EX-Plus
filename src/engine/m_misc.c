@@ -28,8 +28,16 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <SDL3/SDL_platform_defines.h>
 #include <SDL3/SDL_stdinc.h>
 #include <fcntl.h>
+
+// for mkdir/_mkdir
+#ifdef SDL_PLATFORM_WIN32
+#include <direct.h> 
+#else 
+#include <sys/stat.h>
+#endif
 
 #include "m_misc.h"
 #include "doomstat.h"
@@ -164,34 +172,44 @@ boolean M_WriteTextFile(char const* name, char* source, int length) {
 // M_ReadFile
 //
 
-int M_ReadFile(char const* name, byte** buffer) {
+
+int M_ReadFileEx(char const* name, byte** buffer, boolean use_malloc) {
 	FILE* fp;
+	int length = M_FileLengthFromPath(name);
 
-	errno = 0;
+	if (length == -1) return -1;
 
-	if ((fp = fopen(name, "rb"))) {
-		unsigned int length;
+	fp = fopen(name, "rb");
+	if (!fp) return -1;
+
+	*buffer = use_malloc ? malloc(length) : Z_Malloc(length, PU_STATIC, 0);
+	if (*buffer) {
 
 		I_BeginRead();
 
-		fseek(fp, 0, SEEK_END);
-		length = ftell(fp);
-		fseek(fp, 0, SEEK_SET);
-
-		*buffer = Z_Malloc(length, PU_STATIC, 0);
-
-		if (fread(*buffer, 1, length, fp) == length) {
-			fclose(fp);
-			return length;
+		if (fread(*buffer, 1, length, fp) != length) {
+			length = -1;
 		}
-
-		fclose(fp);
+	}
+	else {
+		length = -1;
 	}
 
-	//I_Error("M_ReadFile: Couldn't read file %s: %s", name,
-	//errno ? strerror(errno) : "(Unknown Error)");
+	if (length == -1) {
+		free(*buffer);
+	}
+	fclose(fp);
 
-	return -1;
+	return length;
+}
+
+int M_ReadFile(char const* name, byte** buffer) {
+	return M_ReadFileEx(name, buffer, false);
+}
+
+long M_FileLengthFromPath(char const* filepath) {
+	struct stat st;
+	return stat(filepath, &st) == 0 ? st.st_size : -1;
 }
 
 //
@@ -213,6 +231,17 @@ long M_FileLength(FILE* handle) {
 	fseek(handle, savedpos, SEEK_SET);
 
 	return length;
+}
+
+
+boolean M_CreateDir(char* dirname) {
+	int ret;
+#ifdef SDL_PLATFORM_WIN32
+	ret = _mkdir(dirname);
+#else 
+	ret = mkdir(dirname, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+#endif
+	return !ret;
 }
 
 //
@@ -318,7 +347,7 @@ void M_ScreenShot(void) {
 
 bool M_StringCopy(char* dest, const char* src, unsigned int dest_size)
 {
-	unsigned int len;
+	size_t len;
 
 	if (dest_size >= 1)
 	{
