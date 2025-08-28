@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+﻿// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -137,11 +137,21 @@ static void R_TitleSkyTicker(void) {
 // R_DrawSkyDome
 //
 
+// atsb: largely rewritten
+
+/* how this works now is that we draw a ring around the 'border' of the void
+we set it at the pitch angle and yaw of the camera and lock it steady
+we then push/pop from the depth buffer so that there is no fighting against geometry and skies
+after we finish writing, we turn the depth test off to restore the standard rendering
+
+skies are also 'only' GL_LINEAR.  GL_NEAREST skies do NOT look good
+*/
 static void R_DrawSkyDome(int tiles, float rows, int height,
 	int radius, float offset, float topoffs,
 	rcolor c1, rcolor c2) {
 	fixed_t x, y, z;
 	fixed_t lx, ly;
+	fixed_t rx, ry;
 	int i;
 	angle_t an;
 	float tu1, tu2;
@@ -153,15 +163,13 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 
 #define NUM_SKY_DOME_FACES  32
 
-	//
-	// hack to force ortho scale back to 1
-	//
 	GL_SetOrthoScale(1.0f);
 
 	//
 	// setup view projection
 	//
 	dglMatrixMode(GL_PROJECTION);
+	dglPushMatrix();
 	dglLoadIdentity();
 	dglViewFrustum(video_width, video_height, r_fov.value, 0.1f);
 	dglMatrixMode(GL_MODELVIEW);
@@ -169,14 +177,11 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 	dglPushMatrix();
 	dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
 	dglRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
+	dglTranslated(0.0f, 0.0f, -offset);
 
-	//
-	// try to center view to the dome
-	//
-	dglTranslated(
-		-((float)radius / ((float)NUM_SKY_DOME_FACES / 2.0f)),
-		-((float)radius / (M_PI / 2)),
-		-offset);
+	// atsb: prevents z-buffer fighting
+	dglDisable(GL_DEPTH_TEST);
+	dglDepthMask(GL_FALSE);
 
 	//
 	// front faces are drawn here, so cull the back faces
@@ -184,7 +189,21 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 	dglCullFace(GL_BACK);
 	GL_SetState(GLSTATE_BLEND, 1);
 
-	r = radius / (NUM_SKY_DOME_FACES / 4);
+	GLint old2DMin, old2DMag;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &old2DMin);
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &old2DMag);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#ifdef GL_TEXTURE_CUBE_MAP
+	GLint oldCubeMin, oldCubeMag;
+	glGetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, &oldCubeMin);
+	glGetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, &oldCubeMag);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#endif
+
+	// void radius of the sky
+	r = radius;
 
 	//
 	// set pointer for the main vertex list
@@ -203,8 +222,8 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     vtx++
 
 #define SKYDOME_RIGHT(v, h)                     \
-    x = lx + FixedMul(INT2F(r), dcos((angle))); \
-    y = ly + FixedMul(INT2F(r), dsin((angle))); \
+    x = rx;                                     \
+    y = ry;                                     \
     z = INT2F(h);                               \
     SKYDOME_UV(-(tu2 * (i + 1)), v);            \
     SKYDOME_VERTEX();                           \
@@ -218,7 +237,13 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 	// setup vertex data
 	//
 	for (i = 0; i < NUM_SKY_DOME_FACES; i++) {
-		angle_t angle = an * i;
+		angle_t a0 = an * i;
+		angle_t a1 = an * (i + 1);
+
+		lx = FixedMul(INT2F(r), dcos(a0));
+		ly = FixedMul(INT2F(r), dsin(a0));
+		rx = FixedMul(INT2F(r), dcos(a1));
+		ry = FixedMul(INT2F(r), dsin(a1));
 
 		dglSetVertexColor(&vtx[0], c2, 1);
 		dglSetVertexColor(&vtx[1], c1, 1);
@@ -229,9 +254,6 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 		SKYDOME_LEFT(topoffs, height);
 		SKYDOME_RIGHT(topoffs, height);
 		SKYDOME_RIGHT(rows, -height);
-
-		lx = x;
-		ly = y;
 
 		dglTriangle(0 + count, 1 + count, 2 + count);
 		dglTriangle(3 + count, 0 + count, 2 + count);
@@ -245,9 +267,23 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 	//
 	dglDrawGeometry(count, drawVertex);
 
-	dglPopMatrix();
-	dglCullFace(GL_FRONT);
+	// atsb: the below restore the renderer filter and also pops the depth test back
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, old2DMin);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, old2DMag);
+#ifdef GL_TEXTURE_CUBE_MAP
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, oldCubeMin);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, oldCubeMag);
+#endif
 
+	dglDepthMask(GL_TRUE);
+	dglEnable(GL_DEPTH_TEST);
+
+	dglPopMatrix();
+	dglMatrixMode(GL_PROJECTION);
+	dglPopMatrix();
+	dglMatrixMode(GL_MODELVIEW);
+
+	dglCullFace(GL_FRONT);
 	GL_SetState(GLSTATE_BLEND, 0);
 
 #undef SKYDOME_RIGHT
