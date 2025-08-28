@@ -79,6 +79,9 @@ static fixed_t automap_prev_x_interpolation = 0;
 static fixed_t automap_prev_y_interpolation = 0;
 static angle_t automap_prev_ang_interpolation = 0;
 
+static const float min_scale = 200.0f;
+static const float max_scale = 2000.0f;
+
 void AM_Start(void);
 
 // automap cvars
@@ -108,6 +111,7 @@ static CMD(Automap) {
 	}
 
 	if (!automapactive) {
+		if (menuactive) return;
 		AM_Start();
 	}
 	else {
@@ -307,8 +311,8 @@ static bool AM_HandleGamepadEvent(const SDL_Event* e)
 		float x = (fabsf(s_leftx) > dead) ? s_leftx : 0.0f;
 		float y = (fabsf(s_lefty) > dead) ? s_lefty : 0.0f;
 
-		float sx = x * 32767.0f * v_msensitivityx.value / (1500.0f / scale);
-		float sy = y * 32767.0f * v_msensitivityx.value / (1500.0f / scale);
+		float sx = x * 32767.0f * v_msensitivityx.value / (max_scale / scale);
+		float sy = y * 32767.0f * v_msensitivityx.value / (max_scale / scale);
 
 		mpanx = (fixed_t)(sx * (float)FRACUNIT);
 		mpany = (fixed_t)(sy * (float)FRACUNIT);
@@ -389,8 +393,8 @@ boolean AM_Responder(event_t* ev) {
 
 	if (am_flags & AF_PANMODE) {
 		if (ev->type == ev_mouse) {
-			mpanx = ev->data2;
-			mpany = ev->data3;
+			mpanx = (fixed_t)ev->data2;
+			mpany = (fixed_t)ev->data3;
 			rc = true;
 		}
 		else {
@@ -423,8 +427,8 @@ boolean AM_Responder(event_t* ev) {
 
 void AM_Ticker(void) {
 	float speed;
-	float oldautomapx;
-	float oldautomapy;
+	fixed_t oldautomapx;
+	fixed_t oldautomapy;
 
 	if (!automapactive)
 		return;
@@ -433,11 +437,11 @@ void AM_Ticker(void) {
 
 	if (am_flags & AF_ZOOMOUT) {
 		scale += 32.0f;
-		if (scale > 1500.0f) scale = 1500.0f;
+		if (scale > max_scale) scale = max_scale;
 	}
 	if (am_flags & AF_ZOOMIN) {
 		scale -= 32.0f;
-		if (scale < 200.0f) scale = 200.0f;
+		if (scale < min_scale) scale = min_scale;
 	}
 
 	speed = (scale / 16.0f) * FRACUNIT;
@@ -448,11 +452,11 @@ void AM_Ticker(void) {
 
 	if (followplayer) {
 		if (am_flags & AF_PANMODE) {
-			float panscalex = v_msensitivityx.value / (150.0f / scale);
-			float panscaley = v_msensitivityy.value / (150.0f / scale);
+			float panscalex = v_msensitivityx.value / ((max_scale / 2) / scale);
+			float panscaley = v_msensitivityy.value / ((max_scale / 2) / scale);
 
-			fixed_t dx = (fixed_t)((I_MouseAccel(mpanx) * panscalex) * (FRACUNIT / 128.0f));
-			fixed_t dy = (fixed_t)((I_MouseAccel(mpany) * panscaley) * (FRACUNIT / 128.0f));
+			fixed_t dx = (fixed_t)((I_MouseAccel((float)mpanx) * panscalex) * (FRACUNIT / 128.0f));
+			fixed_t dy = (fixed_t)((I_MouseAccel((float)mpany) * panscaley) * (FRACUNIT / 128.0f));
 
 			automappanx += dx;
 			automappany += dy;
@@ -491,10 +495,10 @@ void AM_Ticker(void) {
 
 	if ((!followplayer || (am_flags & AF_PANGAMEPAD)) &&
 		(am_flags & (AF_PANLEFT | AF_PANRIGHT | AF_PANTOP | AF_PANBOTTOM))) {
-		if (am_flags & AF_PANTOP)    automappany += speed;
-		if (am_flags & AF_PANLEFT)   automappanx -= speed;
-		if (am_flags & AF_PANRIGHT)  automappanx += speed;
-		if (am_flags & AF_PANBOTTOM) automappany -= speed;
+		if (am_flags & AF_PANTOP)    automappany += (fixed_t)speed;
+		if (am_flags & AF_PANLEFT)   automappanx -= (fixed_t)speed;
+		if (am_flags & AF_PANRIGHT)  automappanx += (fixed_t)speed;
+		if (am_flags & AF_PANBOTTOM) automappany -= (fixed_t)speed;
 	}
 
 	if (am_box[BOXRIGHT] < (automappanx + automapx) ||

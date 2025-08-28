@@ -90,8 +90,6 @@ extern  boolean    mainmenuactive;
 extern  boolean    allowclearmenu;
 extern  boolean    paused;             // Game Pause?
 
-extern  int    InWindow;
-extern  int    InWindowBorderless;
 extern  boolean    setWindow;
 extern  int         ViewHeight;
 extern  int         ViewWidth;

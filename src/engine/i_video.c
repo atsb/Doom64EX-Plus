@@ -36,8 +36,6 @@ SDL_GLContext   glContext = NULL;
 
 CVAR(r_trishader, 1);
 CVAR(v_checkratio, 0);
-CVAR(v_windowed, 1);
-CVAR(v_windowborderless, 0);
 
 CVAR_CMD(v_vsync, 1) {
     SDL_GL_SetSwapInterval((int)v_vsync.value);
@@ -123,9 +121,6 @@ void I_InitScreen(void) {
     unsigned int  flags = 0;
     char          title[256];
 
-    InWindow = (int)v_windowed.value;
-    InWindowBorderless = (int)v_windowborderless.value;
-
     int native_w = 0, native_h = 0;
     GetNativeDisplayPixels(&native_w, &native_h, window);
 
@@ -152,17 +147,18 @@ void I_InitScreen(void) {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN;
+    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN ;
+	
 #ifndef SDL_PLATFORM_MACOS
     flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
 #endif
 
-    if (!InWindow) {
-        flags |= SDL_WINDOW_BORDERLESS;
-    }
-    else if (InWindowBorderless) {
-        flags |= SDL_WINDOW_BORDERLESS;
-    }
+#ifdef SDL_PLATFORM_WINDOWS
+	flags |= SDL_WINDOW_BORDERLESS;
+#else
+    // fullscreen borderless is glitchy on Linux, at least on with i3wm
+    flags |= SDL_WINDOW_FULLSCREEN;
+#endif
 
     if (glContext) { SDL_GL_DestroyContext(glContext); glContext = NULL; }
     if (window) { SDL_DestroyWindow(window); window = NULL; }
@@ -260,7 +256,5 @@ void I_InitVideo(void) {
 void V_RegisterCvars(void) {
     CON_CvarRegister(&r_trishader);
     CON_CvarRegister(&v_checkratio);
-    CON_CvarRegister(&v_windowed);
-    CON_CvarRegister(&v_windowborderless);
     CON_CvarRegister(&v_vsync);
 }

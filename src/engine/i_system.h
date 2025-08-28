@@ -66,6 +66,7 @@ char* I_GetUserFile(char* file);
 char* I_FindDataFile(char* file);
 
 boolean I_FileExists(const char* path);
+boolean I_DirExists(const char* path);
 
 void I_RegisterCvars(void);
 

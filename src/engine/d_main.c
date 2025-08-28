@@ -160,8 +160,6 @@ static int      screenalphatext;
 static int      creditstage;
 static int      creditscreenstage;
 
-int        InWindow;
-int        InWindowBorderless;
 boolean        setWindow = true;
 int             validcount = 1;
 boolean        windowpause = false;
