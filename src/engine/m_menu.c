@@ -962,7 +962,6 @@ CVAR_EXTERNAL(am_showkeymarkers);
 CVAR_EXTERNAL(am_showkeycolors);
 CVAR_EXTERNAL(am_drawobjects);
 CVAR_EXTERNAL(am_overlay);
-CVAR_EXTERNAL(r_skybox);
 CVAR_EXTERNAL(r_weaponswitch);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
@@ -986,7 +985,6 @@ enum {
 	misc_context,
 	misc_header3,
 	misc_wipe,
-	misc_skybox,
 	misc_weaponswitch,
 	misc_header4,
 	misc_showkey,
@@ -1018,7 +1016,6 @@ menuitem_t MiscMenu[] = {
 	{2,"Use Context:",M_MiscChoice, 'u'},
 	{-1,"Misc",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
-	{2,"Skybox:",M_MiscChoice,'k'},
 	{2,"Weapon Switch:",M_MiscChoice, 'a'},
 	{-1,"Automap",0 },
 	{2,"Key Pickups:",M_MiscChoice },
@@ -1049,7 +1046,6 @@ char* MiscHints[misc_end] = {
 	"if enabled interactive objects will highlight when near",
 	NULL,
 	"enable the melt effect when completing a level",
-	"toggle skies to render either normally or as skyboxes",
 	"auto switch to a newly picked up weapon",
 	NULL,
 	"display key pickups in automap",
@@ -1075,7 +1071,6 @@ menudefault_t MiscDefault[] = {
 	{ &p_autorun, 1 },
 	{ &p_usecontext, 0 },
 	{ &r_wipe, 1 },
-	{ &r_skybox, 0 },
 	{ &r_weaponswitch, 1 },
 	{ &hud_disablesecretmessages, 0 },
 	{ &am_showkeymarkers, 0 },
@@ -1174,10 +1169,6 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &p_autorun);
 		break;
 
-	case misc_skybox:
-		M_SetOptionValue(choice, 0, 1, 1, &r_skybox);
-		break;
-
 	case misc_weaponswitch:
 		M_SetOptionValue(choice, 0, 1, 1, &r_weaponswitch);
 		break;
@@ -1256,7 +1247,6 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
-	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);
 	DRAWMISCITEM(misc_weaponswitch, r_weaponswitch.value, msgNames);
 	DRAWMISCITEM(misc_showkey, am_showkeymarkers.value, mapdisplaytype);
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);

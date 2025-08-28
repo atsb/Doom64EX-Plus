@@ -81,7 +81,6 @@ CVAR(r_fog, 1);
 CVAR(r_wipe, 1);
 CVAR(r_drawmobjbox, 0);
 CVAR(r_rendersprites, 1);
-CVAR(r_skybox, 0);
 CVAR(r_weaponswitch, 1);
 CVAR(hud_disablesecretmessages, 0);
 
@@ -800,7 +799,6 @@ void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_wipe);
 	CON_CvarRegister(&r_drawmobjbox);
     CON_CvarRegister(&r_rendersprites);
-	CON_CvarRegister(&r_skybox);
 	CON_CvarRegister(&r_weaponswitch);
 	CON_CvarRegister(&r_colorscale);
 	CON_CvarRegister(&r_texturecombiner);
