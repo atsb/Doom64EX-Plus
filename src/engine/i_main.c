@@ -211,6 +211,14 @@ char* dstrrchr(char* s, char c) {
 }
 
 //
+// dstrisempty
+//
+
+boolean dstrisempty(char *s) {
+	return !s || s[0] == '\0';
+}
+
+//
 // dstrcat
 //
 

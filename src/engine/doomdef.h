@@ -39,6 +39,7 @@ int         dstrlen(const char* string);
 char*		dstrrchr(char* s, char c);
 void        dstrcat(char* dest, const char* src);
 char*		dstrstr(char* s1, char* s2);
+boolean		dstrisempty(char* s);
 int         datoi(const char* str);
 float       datof(char* str);
 int         dhtoi(char* str);

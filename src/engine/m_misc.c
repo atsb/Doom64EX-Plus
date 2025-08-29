@@ -74,23 +74,9 @@ int M_CheckParm(const char* check) {
 	return 0;
 }
 
-// Safe version of strdup() that checks the string was successfully
-// allocated.
-//
-
-char* M_StringDuplicate(const char* orig)
+char* M_StringDuplicate(char* s)
 {
-	char* result;
-
-	result = strdup(orig);
-
-	if (result == NULL)
-	{
-		I_Error("Failed to duplicate string (length %i)\n",
-			strlen(orig));
-	}
-
-	return result;
+	return strdup(s);
 }
 
 //
@@ -125,13 +111,11 @@ void M_AddToBox(fixed_t* box, fixed_t x, fixed_t y) {
 // M_WriteFile
 //
 
-boolean M_WriteFile(char const* name, void* source, int length) {
+boolean M_WriteFile(char* filepath, void* source, int length) {
 	FILE* fp;
 	boolean result;
 
-	errno = 0;
-
-	if (!(fp = fopen(name, "wb"))) {
+	if (!(fp = fopen(filepath, "wb"))) {
 		return 0;
 	}
 
@@ -140,7 +124,7 @@ boolean M_WriteFile(char const* name, void* source, int length) {
 	fclose(fp);
 
 	if (!result) {
-		remove(name);
+		M_RemoveFile(filepath);
 	}
 
 	return result;
@@ -150,10 +134,10 @@ boolean M_WriteFile(char const* name, void* source, int length) {
 // M_WriteTextFile
 //
 
-boolean M_WriteTextFile(char const* name, char* source, int length) {
+boolean M_WriteTextFile(char* filepath, char* source, int length) {
 	int handle;
 	int count;
-	handle = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	handle = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 
 	if (handle == -1) {
 		return false;
@@ -173,13 +157,15 @@ boolean M_WriteTextFile(char const* name, char* source, int length) {
 //
 
 
-int M_ReadFileEx(char const* name, byte** buffer, boolean use_malloc) {
+int M_ReadFileEx(char* filepath, byte** buffer, boolean use_malloc) {
 	FILE* fp;
-	int length = M_FileLengthFromPath(name);
+	int length = M_FileLengthFromPath(filepath);
+
+	*buffer = NULL;
 
 	if (length == -1) return -1;
 
-	fp = fopen(name, "rb");
+	fp = fopen(filepath, "rb");
 	if (!fp) return -1;
 
 	*buffer = use_malloc ? malloc(length) : Z_Malloc(length, PU_STATIC, 0);
@@ -189,25 +175,62 @@ int M_ReadFileEx(char const* name, byte** buffer, boolean use_malloc) {
 
 		if (fread(*buffer, 1, length, fp) != length) {
 			length = -1;
+
+			if (use_malloc) {
+				free(*buffer);
+			}
+			else {
+				Z_Free(*buffer);
+			}
+			*buffer = NULL;
 		}
 	}
 	else {
 		length = -1;
 	}
 
-	if (length == -1) {
-		free(*buffer);
-	}
 	fclose(fp);
 
 	return length;
 }
 
-int M_ReadFile(char const* name, byte** buffer) {
+// move filename in src_dirpath to dst_dirpath
+// return false if file already exists or other error, true on success
+boolean M_MoveFile(char* filename, char* src_dirpath, char* dst_dirpath) {
+
+	filepath_t src_filepath, dst_filepath;
+	byte* data;
+	int data_len;
+	boolean ret;
+
+	SDL_snprintf(dst_filepath, MAX_PATH, "%s%s", dst_dirpath, filename);
+
+	if (I_FileExists(dst_filepath)) {
+		return false;
+	}
+
+	SDL_snprintf(src_filepath, MAX_PATH, "%s%s", src_dirpath, filename);
+
+	if ((data_len = M_ReadFileEx(src_filepath, &data, true)) == -1) {
+		return false;
+	}
+	
+	if (ret = M_WriteFile(dst_filepath, data, data_len)) {
+		M_RemoveFile(src_filepath);
+	}
+
+	free(data);
+
+	return ret;
+
+}
+
+
+int M_ReadFile(char* name, byte** buffer) {
 	return M_ReadFileEx(name, buffer, false);
 }
 
-long M_FileLengthFromPath(char const* filepath) {
+long M_FileLengthFromPath(char* filepath) {
 	struct stat st;
 	return stat(filepath, &st) == 0 ? st.st_size : -1;
 }
@@ -215,6 +238,10 @@ long M_FileLengthFromPath(char const* filepath) {
 //
 // M_FileLength
 //
+
+boolean M_RemoveFile(char* filepath) {
+	return remove(filepath) == 0;
+}
 
 long M_FileLength(FILE* handle) {
 	long savedpos;
@@ -234,12 +261,12 @@ long M_FileLength(FILE* handle) {
 }
 
 
-boolean M_CreateDir(char* dirname) {
+boolean M_CreateDir(char* dirpath) {
 	int ret;
 #ifdef SDL_PLATFORM_WIN32
-	ret = _mkdir(dirname);
+	ret = _mkdir(dirpath);
 #else 
-	ret = mkdir(dirname, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	ret = mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #endif
 	return !ret;
 }
@@ -249,10 +276,10 @@ boolean M_CreateDir(char* dirname) {
 // Check if a wad file exists
 //
 
-int M_FileExists(char* filename) {
+int M_FileExists(char* filepath) {
 	FILE* fstream;
 
-	fstream = fopen(filename, "r");
+	fstream = fopen(filepath, "r");
 
 	if (fstream != NULL) {
 		fclose(fstream);
@@ -270,6 +297,31 @@ int M_FileExists(char* filename) {
 	return 0;
 }
 
+// Returns full path to filename if filename exists within dir
+// Returns NULL if dirpath is NULL or empty string
+// Must be freed by caller
+char* M_FileExistsInDirectory(char* dirpath, char* filename, boolean log) {
+
+	filepath_t path;
+
+	if (!dstrisempty(dirpath)) {
+		// not strictly necessary but avoid funky looking paths in the console
+		char last_char = dirpath[dstrlen(dirpath) - 1];
+		char* separator = last_char == '/' || last_char == '\\' ? "" : "/";
+
+		SDL_snprintf(path, MAX_PATH, "%s%s%s", dirpath, separator, filename);
+		if (I_FileExists(path)) {
+			if (log) {
+				I_Printf("Found %s\n", path);
+			}
+			return M_StringDuplicate(path);
+		}
+	}
+
+	return NULL;
+}
+
+
 //
 // M_SaveDefaults
 //
@@ -277,9 +329,7 @@ int M_FileExists(char* filename) {
 void M_SaveDefaults(void) {
 	FILE* fh;
 
-    char *filename = G_GetConfigFileName();
-	fh = fopen(filename, "wt");
-    free(filename);
+	fh = fopen(G_GetConfigFileName(), "wt");
 	if (fh) {
         G_OutputBindings(fh);
 		fclose(fh);
@@ -299,53 +349,34 @@ void M_LoadDefaults(void) {
 //
 
 void M_ScreenShot(void) {
-	char    name[13];
-	int     shotnum = 0;
-	FILE* fh;
+	filepath_t name;
 	byte* buff;
 	byte* png;
-	int     size;
+	int size = 0;
 
-	while (shotnum < 1000) {
-		sprintf(name, "sshot%03d.png", shotnum);
-		if (access(name, 0) != 0)
-		{
-			break;
-		}
-		shotnum++;
-	}
-
-	if (shotnum >= 1000) {
-		return;
-	}
-
-	fh = fopen(name, "wb");
-	if (!fh) {
-		return;
-	}
-
-	if ((video_height % 2)) {  // height must be power of 2
-		return;
+	for (int i = 0; ; i++) {
+		if (i == 1000) return;
+		SDL_snprintf(name, MAX_PATH, "%ssshot%03d.png", I_GetUserDir(), i);
+		if (!I_FileExists(name)) break;
 	}
 
 	buff = GL_GetScreenBuffer(0, 0, video_width, video_height);
-	size = 0;
+	png = I_PNGCreate(video_width, video_height, buff, &size); // buff is freed by I_PNGCreate
 
-	// Get PNG image
-
-	png = I_PNGCreate(video_width, video_height, buff, &size);
-	fwrite(png, size, 1, fh);
+	if (png && M_WriteFile(name, png, size)) {
+		I_Printf("Saved screenshot: %s\n", name);
+	} else {
+		I_Printf("Failed to create screenshot\n");
+	}
 
 	Z_Free(png);
-	fclose(fh);
-
-	I_Printf("Saved Screenshot %s\n", name);
+	
 }
 
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-bool M_StringCopy(char* dest, const char* src, unsigned int dest_size)
+bool M_StringCopy(char* dest, char* src, unsigned int dest_size)
 {
 	size_t len;
 
