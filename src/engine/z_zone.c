@@ -127,6 +127,9 @@ void Z_Init(void) {
 //
 
 void (Z_Free)(void* ptr, const char* file, int line) {
+
+	if (!ptr) return; // to have the same semantics than free() which does nothing on NULL argument
+
 	memblock_t* block;
 
 	block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));

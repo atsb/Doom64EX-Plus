@@ -47,23 +47,7 @@ CVAR(i_interpolateframes, 1);
 CVAR(v_accessibility, 0);
 CVAR(v_fadein, 1);
 
-#ifdef SDL_PLATFORM_ANDROID
-#define GetBasePath()   SDL_GetAndroidInternalStoragePath();
-#elif defined(DOOM_UNIX_INSTALL)
-#define GetBasePath()	SDL_GetPrefPath("", "doom64ex-plus"); // returns allocated string
-#else 
-#define GetBasePath()	(char *)SDL_GetBasePath(); // not guaranteed to be writeable !
-#endif
-
 ticcmd_t        emptycmd;
-
-typedef struct {
-	char* filename;
-	char* path;
-} datafile_t;
-
-static datafile_t** g_cached_datafiles = NULL;
-static int g_num_cached_datafiles = 0;
 
 //
 // I_Sleep
@@ -213,107 +197,64 @@ ticcmd_t* I_BaseTiccmd(void) {
 	return &emptycmd;
 }
 
-/**
- * @brief Get the user-writeable directory.
- *
- * Assume this is the only user-writeable directory on the system.
- *
- * @return Fully-qualified path that ends with a separator or NULL if not found.
- */
-
+ 
+// return fully qualified non-NULL path that ends with a separator. Must not be freed by caller.
 char* I_GetUserDir(void) 
 {
-	return GetBasePath();
-}
+	static char* g_user_dir = NULL;
 
-/*
- * @brief Get the directory which contains this program.
- *
- * @return Fully-qualified path that ends with a separator or NULL if not 
+	if (!g_user_dir) {
+		g_user_dir = SDL_GetPrefPath("", "doom64ex-plus"); // string allocated by SDL
+		if (g_user_dir) {
+			I_Printf("User data dir: %s\n", g_user_dir);
+		} else {
+			I_Error("Failed to get user data dir\n");
+		}
+	}
 
- * @brief Find a regular file in the user-writeable directory.
- *
- * @return Fully-qualified path or NULL if not found.
- */
-
-char* I_GetUserFile(char* file) {
-	char* path, * userdir;
-
-	if (!(userdir = I_GetUserDir()))
-		return NULL;
-
-	path = malloc(MAX_PATH);
-
-	SDL_snprintf(path, MAX_PATH, "%s%s", userdir, file);
-
-#ifdef DOOM_UNIX_INSTALL
-    // SDL_GetPrefPath() returns an allocated string
-    SDL_free(userdir);
-#endif
-
-    return path;
+	return g_user_dir;
 }
 
 
-/**
- * @brief Find a regular read-only data file.
- *
- * @return Fully-qualified path or NULL if not found.
- */
 
+// return a fully qualified non-NULL file path. Must be freed by caller
+char* I_GetUserFile(char* filename) {
+	filepath_t path;
+	SDL_snprintf(path, MAX_PATH, "%s%s", I_GetUserDir(), filename);
+	return M_StringDuplicate(path);
+}
 
+// return a fully qualified path or NULL if not found. Must be freed by caller
 static char* FindDataFile(char* file) {
-	char *path = malloc(MAX_PATH);
-	const char* dir;
+	char* path;
 	steamgame_t game;
+	filepath_t gog_install_dir;
+
 	static boolean steam_install_dir_found = false;
 	static filepath_t steam_install_dir;
-    
-	if (path == NULL) {
-		return NULL;
-	}
 
-	if ((dir = SDL_GetBasePath())) {
-        SDL_snprintf(path, MAX_PATH, "%s%s", dir, file);
-		if (I_FileExists(path)) {
-			return path;
-		}
-	}
-
-#ifndef SDL_PLATFORM_WIN32
-
-#ifdef DOOM_UNIX_INSTALL
-	if ((dir = I_GetUserDir())) {
-		SDL_snprintf(path, MAX_PATH, "%s%s", dir, file);
-		if (I_FileExists(path)) {
-			return path;
-		}
-	}
-#endif    
-    
+	char* dirs[] = {
+		(char *)SDL_GetBasePath(), // install dir (where executable is located)
+		".", // cur dir from where executable is launched
+		I_GetUserDir(), 
 #ifdef DOOM_UNIX_SYSTEM_DATADIR
-	SDL_snprintf(path, MAX_PATH, "%s/%s", DOOM_UNIX_SYSTEM_DATADIR, file);
-	if (I_FileExists(path)) {
-		return path;
-	}
+		DOOM_UNIX_SYSTEM_DATADIR
+#else
+		NULL
 #endif
+	};
 
-	SDL_snprintf(path, MAX_PATH, "%s", file);
-	if (I_FileExists(path)) {
-		return path;
+	for (int i = 0; i < SDL_arraysize(dirs); i++) {
+		if (path = M_FileExistsInDirectory(dirs[i], file, true)) return path;
 	}
-#else // SDL_PLATFORM_WIN32
+
+#ifdef SDL_PLATFORM_WIN32
 
 	// detect GOG prior to Steam because it is faster
 
-	filepath_t install_dir;
 	if (I_GetRegistryString(HKEY_LOCAL_MACHINE,
-		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", install_dir, MAX_PATH)) {
-		SDL_snprintf(path, MAX_PATH, "%s/%s", install_dir, file);
-		if (I_FileExists(path)) {
-			I_Printf("I_FindDataFile: Adding GOG file %s\n", path);
-			return path;
-		}
+		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", gog_install_dir, MAX_PATH)) {
+		if (path = M_FileExistsInDirectory(gog_install_dir, file, true)) return path;
 	}
 
 #endif
@@ -327,27 +268,29 @@ static char* FindDataFile(char* file) {
             && Steam_ResolvePath(steam_install_dir, &game);
     }
 
-    if(steam_install_dir_found) {
-       SDL_snprintf(path, MAX_PATH, "%s/%s", steam_install_dir, file); 
-	   if (I_FileExists(path)) {
-		   I_Printf("I_FindDataFile: Adding Steam file %s\n", path);
-		   return path;
-	   }
-    }
+    if(steam_install_dir_found && (path = M_FileExistsInDirectory(steam_install_dir, file, true))) return path;
     
 #endif
-	free(path);
+
 	return NULL;
 }
 
-// returned string is cached and must NOT be freed by caller
+// return a full qualified path or NULL that is cached and that must NOT be freed by caller
 char* I_FindDataFile(char* file) {
+
+	typedef struct {
+		char* filename;
+		char* path;
+	} datafile_t;
+
+	static datafile_t** cached_datafiles = NULL;
+	static int num_cached_datafiles = 0;
 
 	datafile_t* entry = NULL;
 
-	for (int i = 0; i < g_num_cached_datafiles; i++) {
-		if (dstreq(file, g_cached_datafiles[i]->filename)) {
-			entry = g_cached_datafiles[i];
+	for (int i = 0; i < num_cached_datafiles; i++) {
+		if (dstreq(file, cached_datafiles[i]->filename)) {
+			entry = cached_datafiles[i];
 			break;
 		}
 	}
@@ -357,26 +300,24 @@ char* I_FindDataFile(char* file) {
 		entry->filename = M_StringDuplicate(file);
 		entry->path = FindDataFile(file);
 
-		g_cached_datafiles = realloc(g_cached_datafiles, (g_num_cached_datafiles + 1) * sizeof(datafile_t *));
-		g_cached_datafiles[g_num_cached_datafiles] = entry;
-		g_num_cached_datafiles++;
+		cached_datafiles = realloc(cached_datafiles, (num_cached_datafiles + 1) * sizeof(datafile_t *));
+		cached_datafiles[num_cached_datafiles] = entry;
+		num_cached_datafiles++;
 	}
 
-	return entry->path; // may be NULL
+	return entry->path; 
 }
 
 
-/**
- * @brief Checks to see if the given absolute path is a regular file.
- * @param path Absolute path to check.
- */
-
+ // return true if path is non-NULL and a regular file that exists
 boolean I_FileExists(const char* path)
 {
 	struct stat st;
 	return path && !stat(path, &st) && S_ISREG(st.st_mode);
 }
 
+
+// return true if path is non-NULL and a directory that exists
 boolean I_DirExists(const char* path)
 {
 	struct stat st;

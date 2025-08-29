@@ -43,7 +43,7 @@ static void SC_Open(const char* name) {
 	lump = W_CheckNumForName(name);
 
 	if (lump <= -1) {
-		sc_parser.buffsize = M_ReadFile(name, &sc_parser.buffer);
+		sc_parser.buffsize = M_ReadFile((char *)name, &sc_parser.buffer);
 
 		if (sc_parser.buffsize == -1) {
 			I_Error("SC_Open: %s not found", name);
