@@ -32,7 +32,7 @@ void I_ShaderBind(void);
 void I_ShaderUnBind(void);
 void I_ShaderSetTextureSize(int w, int h);
 void I_ShaderSetUseTexture(int on);
-int  I_ShaderOverlayIsReady(void);
+void I_OverlayTintShaderInit(void);
 void I_ShaderFullscreenTint(float r, float g, float b, float a);
 
 typedef char GLchar;

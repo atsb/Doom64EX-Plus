@@ -748,9 +748,7 @@ void ST_Drawer(void) {
 		const float bf = (float)st_flash_b * (1.0f / 255.0f);
 		const float af = (float)st_flash_a * (1.0f / 255.0f);
 
-		if (I_ShaderOverlayIsReady()) {
-			I_ShaderFullscreenTint(rf, gf, bf, af);
-		}
+		I_ShaderFullscreenTint(rf, gf, bf, af);
 	}
 
 	if (iwadDemo) {

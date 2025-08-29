@@ -196,18 +196,16 @@ static const char* s_fs =
 "uniform vec4 uColor;\n"
 "void main(){ gl_FragColor = uColor; }\n";
 
-static GLuint compile(GLenum tp, const char* src) {
+static GLuint I_OverlayTintShaderCompile(GLenum tp, const char* src) {
 	GLuint sh = pglCreateShader(tp);
 	pglShaderSource(sh, 1, &src, NULL);
 	pglCompileShader(sh);
 	return sh;
 }
 
-static void ensure_prog(void) {
-	if (generic_tint_overlay_prog) 
-		return;
-	GLuint vs = compile(GL_VERTEX_SHADER, s_vs);
-	GLuint fs = compile(GL_FRAGMENT_SHADER, s_fs);
+void I_OverlayTintShaderInit(void) {
+	GLuint vs = I_OverlayTintShaderCompile(GL_VERTEX_SHADER, s_vs);
+	GLuint fs = I_OverlayTintShaderCompile(GL_FRAGMENT_SHADER, s_fs);
 	generic_tint_overlay_prog = pglCreateProgram();
 	pglAttachShader(generic_tint_overlay_prog, vs);
 	pglAttachShader(generic_tint_overlay_prog, fs);
@@ -215,16 +213,11 @@ static void ensure_prog(void) {
 	generic_tint_overlay_colour = pglGetUniformLocation(generic_tint_overlay_prog, "uColor");
 }
 
-int I_ShaderOverlayIsReady(void) {
-	ensure_prog();
-	return generic_tint_overlay_prog != 0 && generic_tint_overlay_colour >= 0;
-}
-
 void I_ShaderFullscreenTint(float r, float g, float b, float a) {
 	if (a <= 0.0f) 
 		return;
 
-	ensure_prog();
+	I_OverlayTintShaderInit();
 
 	if (!(generic_tint_overlay_prog && generic_tint_overlay_colour >= 0)) 
 		return;
@@ -288,6 +281,7 @@ void I_ShaderFullscreenTint(float r, float g, float b, float a) {
 
 void I_ShaderBind(void) {
 	I_3PointShaderInit();
+	I_OverlayTintShaderInit();
 	pglUseProgram(shader_struct.prog);
 	if (shader_struct.locTex >= 0)
 		pglUniform1i(shader_struct.locTex, 0);
