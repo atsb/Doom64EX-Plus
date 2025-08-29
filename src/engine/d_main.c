@@ -68,6 +68,7 @@ static void   (APIENTRY* pglUseProgram)(GLuint);
 static GLint(APIENTRY* pglGetUniformLocation)(GLuint, const GLchar*);
 static void   (APIENTRY* pglUniform1i)(GLint, int);
 static void (APIENTRY* pglUniform2f)(GLint, float, float);
+static void (APIENTRY* pglUniform1f)(GLint, float);
 
 static void D_ShaderLoadGL(void) {
 #define GL_GET(fn) *(void**)(&p##fn) = SDL_GL_GetProcAddress(#fn)
@@ -80,6 +81,7 @@ static void D_ShaderLoadGL(void) {
 	GL_GET(glUseProgram);    GL_GET(glGetUniformLocation);
 	GL_GET(glUniform1i);
 	GL_GET(glUniform2f);
+	GL_GET(glUniform1f);
 #undef GL_GET
 }
 
@@ -97,27 +99,51 @@ static const char* vertex_shader_bilateral =
 static const char* fragment_shader_bilateral =
 "#version 120\n"
 "uniform sampler2D uTex;\n"
-"uniform vec2 uTexel; // (1/width, 1/height). If 0, falls back.\n"
+"uniform vec2  uTexel;\n"
+"uniform float uStrength;\n"
+"uniform float uBleed;\n"
+"uniform float uSeamFix;\n"
+"uniform float uSnap;\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
+"\n"
 "void main(){\n"
 "  if (uTexel.x <= 0.0 || uTexel.y <= 0.0) {\n"
 "    gl_FragColor = texture2D(uTex, vUV) * vColor; return;\n"
 "  }\n"
-"  vec2 halfTex = 0.5 * uTexel;\n"
-"  vec2 uvC = vUV - halfTex;              // sample at texel centers\n"
 "\n"
-"  vec4 c00 = texture2D(uTex, uvC);\n"
-"  vec4 c10 = texture2D(uTex, uvC + vec2(uTexel.x, 0.0));\n"
-"  vec4 c01 = texture2D(uTex, uvC + vec2(0.0, uTexel.y));\n"
-"  vec4 c11 = texture2D(uTex, uvC + uTexel);\n"
+"  vec2 texSize = 1.0 / uTexel;\n"
+"  vec2 p  = vUV * texSize - 0.5;\n"
+"  vec2 ip = floor(p);\n"
+"  vec2 f  = p - ip;\n"
+"  if (uSnap > 0.0) {\n"
+"    vec2 q = vec2(uSnap);\n"
+"    f = floor(f * q + 0.5) / q;\n"
+"  }\n"
+"  vec2 baseUV = (ip + 0.5) / texSize;\n"
 "\n"
-"  // fractional offset inside the current texel (safe for negatives)\n"
-"  vec2 f = fract(uvC / uTexel);\n"
+"  float S = (uStrength > 0.0) ? max(uStrength, 1.0) : 1.0;\n"
+"  vec2 stepX  = vec2(uTexel.x * S, 0.0);\n"
+"  vec2 stepY  = vec2(0.0,           uTexel.y * S);\n"
+"  vec2 stepXY = stepX + stepY;\n"
+"\n"
+"  vec4 c00 = texture2D(uTex, baseUV);\n"
+"  vec4 c10 = texture2D(uTex, baseUV + stepX);\n"
+"  vec4 c01 = texture2D(uTex, baseUV + stepY);\n"
+"  vec4 c11 = texture2D(uTex, baseUV + stepXY);\n"
+"\n"
 "  float s = f.x + f.y;\n"
 "  vec4 triA = c00 + f.x*(c10-c00) + f.y*(c01-c00);\n"
 "  vec4 triB = c11 + (1.0-f.x)*(c01-c11) + (1.0-f.y)*(c10-c11);\n"
-"  vec4 tex = (s < 1.0) ? triA : triB;\n"
+"\n"
+"  float eps = max(uSeamFix, 0.0);\n"
+"  float w   = (eps > 0.0) ? smoothstep(1.0 - eps, 1.0 + eps, s) : step(1.0, s);\n"
+"  vec4 tex  = mix(triA, triB, w);\n"
+"\n"
+"  if (uBleed > 0.0) {\n"
+"    vec4 avg = 0.25*(c00 + c10 + c01 + c11);\n"
+"    tex = mix(tex, avg, clamp(uBleed, 0.0, 1.0));\n"
+"  }\n"
 "\n"
 "  gl_FragColor = tex * vColor;\n"
 "}\n";
