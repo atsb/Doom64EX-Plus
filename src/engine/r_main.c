@@ -97,6 +97,10 @@ CVAR_CMD(r_hudFilter, 0) {
 	GL_DumpTextures();
 }
 
+CVAR_CMD(r_skyFilter, 0) {
+	GL_DumpTextures();
+}
+
 CVAR_CMD(r_anisotropic, 1) {
 	GL_DumpTextures();
 	GL_SetTextureFilter();
@@ -795,6 +799,7 @@ void R_RegisterCvars(void) {
 	CON_CvarRegister(&r_fog);
 	CON_CvarRegister(&r_filter);
 	CON_CvarRegister(&r_hudFilter);
+	CON_CvarRegister(&r_skyFilter);
 	CON_CvarRegister(&r_anisotropic);
 	CON_CvarRegister(&r_wipe);
 	CON_CvarRegister(&r_drawmobjbox);

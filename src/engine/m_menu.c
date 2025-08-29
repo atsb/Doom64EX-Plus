@@ -1725,7 +1725,8 @@ void M_ChangeHUDColor(int choice) {
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
-void M_ChangehudFilter(int choice);
+void M_ChangeHUDFilter(int choice);
+void M_ChangeSkyFilter(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
@@ -1739,6 +1740,7 @@ CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_hudFilter);
+CVAR_EXTERNAL(r_skyFilter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
@@ -1752,6 +1754,7 @@ enum {
 	video_empty2,
 	filter,
 	hud_filter,
+	sky_filter,
 	anisotropic,
 	interpolate_frames,
 	vsync,
@@ -1769,7 +1772,8 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
-	{2,"HUD Filter:",M_ChangehudFilter, 't'},
+	{2,"HUD Filter:",M_ChangeHUDFilter, 't'},
+	{2,"Sky Filter:",M_ChangeSkyFilter, 's'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
 	{2,"VSync:",M_ChangeVsync, 'v'},
@@ -1787,6 +1791,7 @@ char* VideoHints[video_end] = {
 	NULL,
 	"toggle texture filtering",
 	"toggle texture filtering on hud and text",
+	"toggle texture filtering on skies",
 	"toggle blur reduction on textures",
 	"toggle frame interpolation to\n achieve smooth framerates",
 	"toggle vsync on or off to prevent screen tearing",
@@ -1800,6 +1805,7 @@ menudefault_t VideoDefault[] = {
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
 	{ &r_hudFilter, 0 },
+	{ &r_skyFilter, 0 },
 	{ &r_anisotropic, 1 },
 	{ &i_interpolateframes, 1 },
 	{ &v_vsync, 1 },
@@ -1890,6 +1896,7 @@ void M_DrawVideo(void) {
 
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
 	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType);
+	DRAWVIDEOITEM2(sky_filter, r_skyFilter.value, filterType);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
@@ -1971,8 +1978,12 @@ void M_ChangeFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_filter);
 }
 
-void M_ChangehudFilter(int choice) {
+void M_ChangeHUDFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_hudFilter);
+}
+
+void M_ChangeSkyFilter(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &r_skyFilter);
 }
 
 void M_ChangeAnisotropic(int choice) {
