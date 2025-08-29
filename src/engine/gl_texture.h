@@ -80,6 +80,6 @@ int			GL_WorldTextureIsMasked(int texnum);
 void		GL_WorldTextureEnsureClassified(int texnum);
 int			GL_GetGfxIdForLump(int lump);
 void		GL_Env_RGB_Modulate_Alpha_FromTexture(void);
-void		D_ShaderBind(void);
-void		D_ShaderUnBind(void);
+void		I_ShaderBind(void);
+void		I_ShaderUnBind(void);
 #endif

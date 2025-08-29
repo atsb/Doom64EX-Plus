@@ -45,6 +45,7 @@
 #include "info.h"
 #include "r_lights.h"
 #include "r_main.h"
+#include "i_shaders.h"
 
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(r_weaponswitch);
@@ -342,6 +343,8 @@ boolean P_GivePower(player_t* player, int power) {
 	if (power == pw_strength) {
 		P_GiveBody(player, 100);
 		player->powers[power] = STRTICS;
+		if (&players[displayplayer] == player)
+			I_StartBerserkFlash();
 		return true;
 	}
 

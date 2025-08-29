@@ -50,7 +50,7 @@ CVAR_EXTERNAL(r_texturecombiner);
 
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 
-	D_ShaderUnBind();
+	I_ShaderUnBind();
 
 	am_viewangle = view;
 
@@ -79,7 +79,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 
 	R_FrustrumSetup();
 	GL_ResetTextures();
-	D_ShaderBind();
+	I_ShaderBind();
 }
 
 //
@@ -87,7 +87,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 //
 
 void AM_EndDraw(void) {
-	D_ShaderUnBind();
+	I_ShaderUnBind();
     dglPopMatrix();
     dglDepthRange(0.0f, 1.0f);
 
@@ -98,7 +98,7 @@ void AM_EndDraw(void) {
     }
 
     GL_SetDefaultCombiner();
-	D_ShaderBind();
+	I_ShaderBind();
 }
 
 //

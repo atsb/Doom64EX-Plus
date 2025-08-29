@@ -51,27 +51,4 @@ void D_IncValidCount(void);
 
 extern boolean BusyDisk;
 
-// atsb: SHADERS
-void D_ShaderBind(void);
-
-typedef char GLchar;
-typedef unsigned int GLuint;
-typedef int GLint;
-typedef unsigned int GLenum;
-typedef int GLsizei;
-
-static struct {
-    GLuint prog;
-    GLint  locTex;
-    int    initialised;
-} shader_struct = { 0, -1, 0 };
-
-#ifndef GL_VERTEX_SHADER
-#define GL_VERTEX_SHADER    0x8B31
-#define GL_FRAGMENT_SHADER  0x8B30
-#define GL_COMPILE_STATUS   0x8B81
-#define GL_LINK_STATUS      0x8B82
-#define GL_INFO_LOG_LENGTH  0x8B84
-#endif
-
 #endif

@@ -57,7 +57,7 @@ void WIPE_FadeScreen(int fadetics) {
 	vtx_t v[4];
 	float left, right, top, bottom;
 
-	D_ShaderUnBind();
+	I_ShaderUnBind();
 
 	allowmenu = false;
 
@@ -127,7 +127,7 @@ void WIPE_FadeScreen(int fadetics) {
 
 	allowmenu = true;
 
-	D_ShaderBind();
+	I_ShaderBind();
 }
 
 //
@@ -141,7 +141,7 @@ void WIPE_MeltScreen(void) {
 	float left, right, top, bottom;
 	int i = 0;
 
-	D_ShaderUnBind();
+	I_ShaderUnBind();
 
 	M_ClearMenus();
 	allowmenu = false;
@@ -230,5 +230,5 @@ void WIPE_MeltScreen(void) {
 	//
 	WIPE_FadeScreen(6);
 
-	D_ShaderBind();
+	I_ShaderBind();
 }

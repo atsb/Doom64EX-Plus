@@ -592,7 +592,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	vtx_t           v[4];
 
 	// atsb: this prevents the 3-point shader from hitting the player weapons
-	D_ShaderUnBind();
+	I_ShaderUnBind();
 
 	alpha = (player->mo->alpha * psp->alpha) / 0xff;
 
@@ -694,7 +694,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	GL_SetDefaultCombiner();
 	GL_SetState(GLSTATE_BLEND, 0);
-	D_ShaderBind();
+	I_ShaderBind();
 }
 
 //

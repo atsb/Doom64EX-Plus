@@ -3043,7 +3043,7 @@ static void M_DoVideoReset(int choice) {
 	I_Init();
 	R_Init();
 	GL_Init();
-	D_ShaderBind();
+	I_ShaderBind();
 }
 
 //
