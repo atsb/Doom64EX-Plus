@@ -59,6 +59,9 @@ static int g_nmemlumps = 0;
 
 extern int win_px_w, win_px_h;
 
+char* g_kpf_files[MAX_KPF_FILES];
+int g_num_kpf = 0;
+
 #pragma pack(push, 1)
 
 //
@@ -609,25 +612,19 @@ static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
     return 1;
 }
 
-// "8 kpf ought to be enough for anybody"
-#define MAX_KPF_FILES 8
-
 void W_KPFInit(void)
 {
-	char* kpf_candidates[MAX_KPF_FILES];
-	int num_kpf = 0;
-
 	int p = M_CheckParm("-kpf");
 	if (p) {
 		// the parms after p are kpf names,
 		// until end of parms or another - preceded parm
-		while (++p != myargc && myargv[p][0] != '-' && num_kpf < MAX_KPF_FILES) {
-			kpf_candidates[num_kpf++] = myargv[p];
+		while (++p != myargc && myargv[p][0] != '-' && g_num_kpf < MAX_KPF_FILES) {
+			g_kpf_files[g_num_kpf++] = myargv[p];
 		}
 	}
 
-	if (!num_kpf) {
-		kpf_candidates[num_kpf++] = "Doom64.kpf";
+	if (!g_num_kpf) {
+		g_kpf_files[g_num_kpf++] = "Doom64.kpf";
 	}
 
 	struct override_item {
@@ -653,8 +650,8 @@ void W_KPFInit(void)
 		const struct override_item* ov = &items[it];
 		int this_ok = 0;
 
-		for (int k = 0; k < num_kpf && !this_ok; ++k) {
-			const char* kpf = kpf_candidates[k];
+		for (int k = 0; k < g_num_kpf && !this_ok; ++k) {
+			const char* kpf = g_kpf_files[k];
 
 			for (size_t p = 0; ov->paths[p] != NULL && !this_ok; ++p) {
 				const char* inner = ov->paths[p];
@@ -704,7 +701,7 @@ void W_KPFInit(void)
 										int cache_size = M_ReadFileEx(cache_filepath, &cache_data, true);
 										in_cache = cache_size > 0;
 										if (in_cache) {
-											I_Printf("W_KPFInit: %s read from %s\n", ov->name8, cache_filepath);
+											I_Printf("W_KPFInit: %s loaded from %s\n", ov->name8, cache_filepath);
 											free(data);
 											data = cache_data;
 											size = cache_size;
@@ -721,12 +718,13 @@ void W_KPFInit(void)
 										matches = SDL_GlobStorageDirectory(storage, NULL, pattern, 0, &count);
 										if (matches) {
 											for (int i = 0; i < count; i++) {
-												if (dstrcmp(matches[i], cache_filename)) {
+												if (!dstreq(matches[i], cache_filename)) {
 													SDL_RemoveStoragePath(storage, matches[i]);
 												}
 											}
 											SDL_free(matches);
 										}
+										SDL_CloseStorage(storage);
 									}
 
 								}

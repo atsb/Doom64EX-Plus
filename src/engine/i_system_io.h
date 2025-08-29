@@ -3,7 +3,7 @@
 
 #include <SDL3/SDL_platform_defines.h>
 
-#ifdef SDL_PLATFORM_WINDOWS
+#ifdef SDL_PLATFORM_WIN32
 #include <windows.h> // for MAX_PATH
 #include <io.h>
 #define F_OK 0

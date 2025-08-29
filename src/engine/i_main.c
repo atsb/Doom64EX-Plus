@@ -103,6 +103,15 @@ int dstrcmp(const char* s1, const char* s2) {
 }
 
 //
+// dstreq
+//
+
+boolean dstreq(const char* s1, const char* s2) {
+	return dstrcmp(s1, s2) == 0;
+}
+
+
+//
 // dstrncmp
 //
 

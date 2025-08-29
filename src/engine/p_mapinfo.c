@@ -222,29 +222,29 @@ static const char* LOC_LangPath(int lang) {
     }
 }
 
-static const char* kpf_file_array[] = {
-    "Doom64.kpf", "doom64.kpf", "DOOM64.kpf", NULL
-};
-
 static void LOC_Load(void) {
     CON_CvarRegister(&p_language);
 
     const char* want_inner = LOC_LangPath(p_language.value);
     unsigned char* data = NULL; int size = 0;
 
-    for (int i = 0; kpf_file_array[i]; ++i) {
-        if (KPF_ExtractFile(kpf_file_array[i], want_inner, &data, &size)) {
+    for (int i = 0; i < g_num_kpf; ++i) {
+
+        char* kpf_path = I_FindDataFile(g_kpf_files[i]);
+        if (!kpf_path) continue;
+
+        if (KPF_ExtractFile(kpf_path, want_inner, &data, &size)) {
             LOC_LoadFromBuffer(data, size);
             free(data);
             I_Printf("Localization: Loaded %d entries from %s in %s\n",
-                localisation_count, want_inner, kpf_file_array[i]);
+                localisation_count, want_inner, kpf_path);
             return;
         }
         if (p_language.value != 0) {
             const char* eng = LOC_LangPath(0);
-            if (KPF_ExtractFile(kpf_file_array[i], eng, &data, &size)) {
+            if (KPF_ExtractFile(kpf_path, eng, &data, &size)) {
                 I_Printf("Localization: '%s' not found; fell back to English in %s\n",
-                    want_inner, kpf_file_array[i]);
+                    want_inner, kpf_path);
                 LOC_LoadFromBuffer(data, size);
                 free(data);
                 I_Printf("Localization: loaded %d entries from %s\n",

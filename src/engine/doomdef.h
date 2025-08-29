@@ -29,6 +29,7 @@ void*		dmemset(void* s, int c, unsigned int n);
 char*		dstrcpy(char* dest, const char* src);
 void        dstrncpy(char* dest, const char* src, int maxcount);
 int         dstrcmp(const char* s1, const char* s2);
+boolean     dstreq(const char* s1, const char* s2);
 int         dstrncmp(const char* s1, const char* s2, int len);
 int         dstricmp(const char* s1, const char* s2);
 int         dstrnicmp(const char* s1, const char* s2, int len);
