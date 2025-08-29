@@ -346,7 +346,7 @@ char* I_FindDataFile(char* file) {
 	datafile_t* entry = NULL;
 
 	for (int i = 0; i < g_num_cached_datafiles; i++) {
-		if (!dstrcmp(file, g_cached_datafiles[i]->filename)) {
+		if (dstreq(file, g_cached_datafiles[i]->filename)) {
 			entry = g_cached_datafiles[i];
 			break;
 		}
