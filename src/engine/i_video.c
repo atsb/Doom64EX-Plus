@@ -152,7 +152,7 @@ void I_InitScreen(void) {
     flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
 #endif
 
-#ifdef SDL_PLATFORM_WINDOWS
+#ifdef SDL_PLATFORM_WIN32
 	flags |= SDL_WINDOW_BORDERLESS;
 #else
     // fullscreen borderless is glitchy on Linux, at least on with i3wm
