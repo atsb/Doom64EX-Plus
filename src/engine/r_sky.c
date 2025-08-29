@@ -42,6 +42,8 @@
 #include "dgl.h"
 
 extern vtx_t drawVertex[MAXDLDRAWCOUNT];
+extern void D_ShaderSetTextureSize(int w, int h);
+extern void D_ShaderSetUseTexture(int on);
 
 skydef_t* sky;
 int         skypicnum = -1;
@@ -310,6 +312,9 @@ static void R_DrawSkyboxCloud(void) {
     rcolor color;
     vtx_t v[4];
 
+    D_ShaderSetUseTexture(1);
+    D_ShaderSetTextureSize(0, 0);
+
 #define SKYBOX_SETALPHA(c, x)           \
     c ^= (((c >> 24) & 0xff) << 24);    \
     c |= (x << 24)
@@ -401,6 +406,17 @@ static void R_DrawSkyboxCloud(void) {
     //
     GL_SetTextureUnit(0, true);
     GL_BindGfxTexture(lumpinfo[skypicnum].name, false);
+
+    D_ShaderSetUseTexture(1);
+
+    GLint tw = 0, th = 0;
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &tw);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &th);
+    D_ShaderSetTextureSize(tw, th);
+
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     GL_SetState(GLSTATE_BLEND, 1);
 
     //
@@ -469,6 +485,9 @@ static void R_DrawSkyboxCloud(void) {
 
     dglPopMatrix();
     GL_SetState(GLSTATE_BLEND, 0);
+
+    D_ShaderSetUseTexture(1);
+    D_ShaderSetTextureSize(0, 0);
 
 #undef SKYBOX_SETALPHA
 }

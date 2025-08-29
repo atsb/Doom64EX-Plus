@@ -93,10 +93,14 @@ static unsigned char* g_tex_is_masked = NULL;
 static unsigned char* g_tex_is_translucent = NULL;
 static int            g_tex_num_alloc = 0;
 static unsigned char* texture_need_blend = NULL;
+
 extern void D_ShaderSetTextureSize(int w, int h);
+extern void D_ShaderSetUseTexture(int on);
+extern void D_ShaderBind(void);
+extern void D_ShaderUnBind(void);
 
 // atsb: Added a helper here because we need to do it in like 6 places..  better than pasting.  Helpers aren't in Pascal Case, functions are.
-static inline void GL_Env_RGB_Modulate_Alpha_FromTexture(void)
+void GL_Env_RGB_Modulate_Alpha_FromTexture(void)
 {
 	dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
@@ -314,6 +318,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 	if (textureptr[texnum][palettetranslation[texnum]]) {
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(texturewidth[texnum], textureheight[texnum]);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -337,6 +342,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 	dglGenTextures(1, &textureptr[texnum][palettetranslation[texnum]]);
 	dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
+	D_ShaderSetUseTexture(1);
 	D_ShaderSetTextureSize(texturewidth[texnum], textureheight[texnum]);
 	APPLY_ALPHA_MODE_FOR_TEX(texnum);
 	dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png);
@@ -511,6 +517,7 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 
 	if (gfxptr[gfxid]) {
 		dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(0, 0);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -542,6 +549,7 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 
 	dglGenTextures(1, &gfxptr[gfxid]);
 	dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+	D_ShaderSetUseTexture(1);
 	D_ShaderSetTextureSize(0, 0);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -684,6 +692,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
 
 		if (devparm) glBindCalls++;
@@ -694,6 +703,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	dglGenTextures(1, &spriteptr[spritenum][pal]);
 	dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
+	D_ShaderSetUseTexture(1);
 	D_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -726,6 +736,7 @@ dtexture GL_ScreenToTexture(void) {
 
 	dglGenTextures(1, &id);
 	dglBindTexture(GL_TEXTURE_2D, id);
+	D_ShaderSetUseTexture(1);
 	D_ShaderSetTextureSize(0, 0);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -782,6 +793,7 @@ void GL_BindDummyTexture(void) {
 		dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(0, 0);
 
 		GL_CheckFillMode();
@@ -789,6 +801,7 @@ void GL_BindDummyTexture(void) {
 	}
 	else {
 		dglBindTexture(GL_TEXTURE_2D, dummytexture);
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(0, 0);
 	}
 }
@@ -811,6 +824,7 @@ void GL_BindEnvTexture(void) {
 	if (envtexture == 0) {
 		dglGenTextures(1, &envtexture);
 		dglBindTexture(GL_TEXTURE_2D, envtexture);
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(0, 0);
 		dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)rgb);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -821,6 +835,7 @@ void GL_BindEnvTexture(void) {
 	}
 	else {
 		dglBindTexture(GL_TEXTURE_2D, envtexture);
+		D_ShaderSetUseTexture(1);
 		D_ShaderSetTextureSize(0, 0);
 	}
 }
@@ -902,43 +917,40 @@ void GL_UnloadTexture(dtexture* texture) {
 //
 
 void GL_SetTextureUnit(int unit, int enable) {
-	if (!has_GL_ARB_multitexture) {
+	if (!has_GL_ARB_multitexture || r_fillmode.value <= 0 || unit > 3) 
 		return;
-	}
-
-	if (r_fillmode.value <= 0) {
+	if (curunit == unit) 
 		return;
-	}
-
-	if (unit > 3) {
-		return;
-	}
-
-	if (curunit == unit) {
-		return;
-	}
 
 	curunit = unit;
 
 	dglActiveTextureARB(GL_TEXTURE0_ARB + unit);
 	GL_SetState(GLSTATE_TEXTURE0 + unit, enable);
+
+	if (enable) {
+		if (unit != 0) {
+			D_ShaderUnBind();
+		}
+		else {
+			D_ShaderBind();
+		}
+	}
 }
+
 
 //
 // GL_SetTextureMode
 //
 
 void GL_SetTextureMode(int mode) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->mode == mode) {
+	gl_env_state_t* state = &gl_env_state[curunit];
+	if (state->mode == mode) 
 		return;
-	}
-
 	state->mode = mode;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, state->mode);
+
+	if (mode != GL_MODULATE) 
+		D_ShaderUnBind();
 }
 
 //
@@ -946,16 +958,13 @@ void GL_SetTextureMode(int mode) {
 //
 
 void GL_SetCombineState(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_rgb == combine) {
+	gl_env_state_t* state = &gl_env_state[curunit];
+	if (state->combine_rgb == combine) 
 		return;
-	}
-
 	state->combine_rgb = combine;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
+
+	D_ShaderUnBind();
 }
 
 //
@@ -963,16 +972,13 @@ void GL_SetCombineState(int combine) {
 //
 
 void GL_SetCombineStateAlpha(int combine) {
-	gl_env_state_t* state;
-
-	state = &gl_env_state[curunit];
-
-	if (state->combine_alpha == combine) {
+	gl_env_state_t* state = &gl_env_state[curunit];
+	if (state->combine_alpha == combine) 
 		return;
-	}
-
 	state->combine_alpha = combine;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
+
+	D_ShaderUnBind();
 }
 
 //

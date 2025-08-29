@@ -104,10 +104,13 @@ static const char* fragment_shader_bilateral =
 "uniform float uBleed;\n"
 "uniform float uSeamFix;\n"
 "uniform float uSnap;\n"
+"uniform int   uUseTex;\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
 "\n"
 "void main(){\n"
+"  if (uUseTex == 0) { gl_FragColor = vColor; return; }\n"
+"\n"
 "  if (uTexel.x <= 0.0 || uTexel.y <= 0.0) {\n"
 "    gl_FragColor = texture2D(uTex, vUV) * vColor; return;\n"
 "  }\n"
@@ -116,10 +119,7 @@ static const char* fragment_shader_bilateral =
 "  vec2 p  = vUV * texSize - 0.5;\n"
 "  vec2 ip = floor(p);\n"
 "  vec2 f  = p - ip;\n"
-"  if (uSnap > 0.0) {\n"
-"    vec2 q = vec2(uSnap);\n"
-"    f = floor(f * q + 0.5) / q;\n"
-"  }\n"
+"  if (uSnap > 0.0) { vec2 q = vec2(uSnap); f = floor(f*q + 0.5)/q; }\n"
 "  vec2 baseUV = (ip + 0.5) / texSize;\n"
 "\n"
 "  float S = (uStrength > 0.0) ? max(uStrength, 1.0) : 1.0;\n"
@@ -135,18 +135,13 @@ static const char* fragment_shader_bilateral =
 "  float s = f.x + f.y;\n"
 "  vec4 triA = c00 + f.x*(c10-c00) + f.y*(c01-c00);\n"
 "  vec4 triB = c11 + (1.0-f.x)*(c01-c11) + (1.0-f.y)*(c10-c11);\n"
-"\n"
 "  float eps = max(uSeamFix, 0.0);\n"
 "  float w   = (eps > 0.0) ? smoothstep(1.0 - eps, 1.0 + eps, s) : step(1.0, s);\n"
 "  vec4 tex  = mix(triA, triB, w);\n"
-"\n"
-"  if (uBleed > 0.0) {\n"
-"    vec4 avg = 0.25*(c00 + c10 + c01 + c11);\n"
-"    tex = mix(tex, avg, clamp(uBleed, 0.0, 1.0));\n"
-"  }\n"
-"\n"
+"  if (uBleed > 0.0) { vec4 avg = 0.25*(c00+c10+c01+c11); tex = mix(tex, avg, clamp(uBleed,0.0,1.0)); }\n"
 "  gl_FragColor = tex * vColor;\n"
 "}\n";
+
 
 static GLuint D_ShaderCompile(GLenum type, const char* src) {
     GLuint shader = pglCreateShader(type);
@@ -164,6 +159,7 @@ static GLuint D_ShaderCompile(GLenum type, const char* src) {
 }
 
 static GLint sLocTexel = -1;
+static GLint sLocUseTex = -1;
 
 static void D_ShaderInit(void) {
 	D_ShaderLoadGL();
@@ -180,6 +176,7 @@ static void D_ShaderInit(void) {
 	}
 	shader_struct.locTex = pglGetUniformLocation(shader_struct.prog, "uTex");
 	sLocTexel = pglGetUniformLocation(shader_struct.prog, "uTexel");
+	sLocUseTex = pglGetUniformLocation(shader_struct.prog, "uUseTex");
 	shader_struct.initialised = 1;
 }
 
@@ -190,20 +187,35 @@ void D_ShaderBind(void) {
 		pglUniform1i(shader_struct.locTex, 0);
 	if (sLocTexel >= 0)            
 		pglUniform2f(sLocTexel, 0.0f, 0.0f);
+
+	if (shader_struct.locTex >= 0) 
+		pglUniform1i(shader_struct.locTex, 0);
+
+	if (sLocUseTex >= 0) 
+		pglUniform1i(sLocUseTex, 1);
+	if (sLocTexel >= 0) 
+		pglUniform2f(sLocTexel, 0.0f, 0.0f);
 }
 
-static void D_ShaderUnBind(void) {
+void D_ShaderUnBind(void) {
     if (!shader_struct.initialised) 
 		return;
     pglUseProgram(0);
 }
 
 void D_ShaderSetTextureSize(int w, int h) {
-	if (!shader_struct.initialised || sLocTexel < 0) return;
+	if (!shader_struct.initialised || sLocTexel < 0) 
+		return;
 	if (w > 0 && h > 0) 
 		pglUniform2f(sLocTexel, 1.0f / (float)w, 1.0f / (float)h);
 	else                
 		pglUniform2f(sLocTexel, 0.0f, 0.0f);
+}
+
+void D_ShaderSetUseTexture(int on) {
+	if (!shader_struct.initialised || sLocUseTex < 0) 
+		return;
+	pglUniform1i(sLocUseTex, on ? 1 : 0);
 }
 
 void D_DoomLoop(void);

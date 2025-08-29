@@ -79,5 +79,6 @@ int			GL_WorldTextureIsTranslucent(int texnum);
 int			GL_WorldTextureIsMasked(int texnum);
 void		GL_WorldTextureEnsureClassified(int texnum);
 int			GL_GetGfxIdForLump(int lump);
+void		GL_Env_RGB_Modulate_Alpha_FromTexture(void);
 
 #endif
