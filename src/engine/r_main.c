@@ -341,6 +341,8 @@ void R_PrecacheLevel(void) {
 	int num;
 	mobj_t* mo;
 
+	D_ShaderUnBind();
+
 	CON_DPrintf("--------R_PrecacheLevel--------\n");
 	GL_DumpTextures();
 
@@ -440,6 +442,7 @@ void R_PrecacheLevel(void) {
 	}
 
 	GL_SetDefaultCombiner();
+	D_ShaderBind();
 }
 
 //

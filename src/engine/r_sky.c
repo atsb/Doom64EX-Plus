@@ -312,6 +312,8 @@ static void R_DrawSkyboxCloud(void) {
     rcolor color;
     vtx_t v[4];
 
+    D_ShaderUnBind();
+
     D_ShaderSetUseTexture(1);
     D_ShaderSetTextureSize(0, 0);
 
@@ -489,6 +491,8 @@ static void R_DrawSkyboxCloud(void) {
     D_ShaderSetUseTexture(1);
     D_ShaderSetTextureSize(0, 0);
 
+    D_ShaderBind();
+
 #undef SKYBOX_SETALPHA
 }
 
@@ -503,6 +507,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
     int lumpheight;
     int gfxLmp;
     float row;
+
+    D_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
     height = gfxheight[gfxLmp];
@@ -520,6 +526,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
     GL_SetupAndDraw2DQuad(0, (float)offset - lumpheight, SCREENWIDTH, lumpheight,
         pos1, width + pos1, 0.006f, row, WHITE, 1);
     GL_SetState(GLSTATE_BLEND, 0);
+
+    D_ShaderBind();
 }
 
 //
@@ -554,6 +562,7 @@ static void R_DrawClouds(void) {
     rfloat pos = 0.0f;
     vtx_t v[4];
 
+    D_ShaderUnBind();
     GL_SetTextureUnit(0, true);
     GL_BindGfxTexture(lumpinfo[skypicnum].name, false);
 
@@ -565,6 +574,7 @@ static void R_DrawClouds(void) {
     dglSetVertex(v);
 
     if (r_texturecombiner.value > 0 && gl_max_texture_units > 2) {
+        D_ShaderUnBind();
         dglSetVertexColor(&v[0], sky->skycolor[0], 2);
         dglSetVertexColor(&v[2], sky->skycolor[1], 2);
 
@@ -582,6 +592,7 @@ static void R_DrawClouds(void) {
         dglTexCombAdd(GL_PREVIOUS, GL_PRIMARY_COLOR);
     }
     else {
+        D_ShaderUnBind();
         GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120, 0, 0, 0, 0, 0);
         dglSetVertexColor(&v[0], sky->skycolor[0], 2);
         dglSetVertexColor(&v[2], sky->skycolor[1], 2);
@@ -628,6 +639,7 @@ static void R_DrawClouds(void) {
     dglDisable(GL_BLEND);
 
     GL_SetDefaultCombiner();
+    D_ShaderBind();
 }
 
 //
@@ -833,6 +845,7 @@ static void R_DrawFire(void) {
 //
 
 void R_DrawSky(void) {
+
     if (!sky) {
         return;
     }

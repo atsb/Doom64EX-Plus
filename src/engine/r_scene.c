@@ -294,6 +294,9 @@ void R_SetViewMatrix(void) {
 //
 
 void R_RenderWorld(void) {
+
+	D_ShaderUnBind();
+
     SetupFog();
 
     dglEnable(GL_DEPTH_TEST);
@@ -367,4 +370,6 @@ void R_RenderWorld(void) {
 
     // villsa 12152013 - make sure we're using the default blend function
     dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	D_ShaderBind();
 }
