@@ -67,6 +67,7 @@ static void   (APIENTRY* pglGetProgramInfoLog)(GLuint, GLsizei, GLsizei*, GLchar
 static void   (APIENTRY* pglUseProgram)(GLuint);
 static GLint(APIENTRY* pglGetUniformLocation)(GLuint, const GLchar*);
 static void   (APIENTRY* pglUniform1i)(GLint, int);
+static void (APIENTRY* pglUniform2f)(GLint, float, float);
 
 static void D_ShaderLoadGL(void) {
 #define GL_GET(fn) *(void**)(&p##fn) = SDL_GL_GetProcAddress(#fn)
@@ -78,9 +79,11 @@ static void D_ShaderLoadGL(void) {
 	GL_GET(glGetProgramInfoLog);
 	GL_GET(glUseProgram);    GL_GET(glGetUniformLocation);
 	GL_GET(glUniform1i);
+	GL_GET(glUniform2f);
 #undef GL_GET
 }
 
+/* N64 3-point filter (atsb) */
 static const char* vertex_shader_combiner =
 "#version 120\n"
 "varying vec2 vUV;\n"
@@ -94,10 +97,28 @@ static const char* vertex_shader_combiner =
 static const char* fragment_shader_combiner =
 "#version 120\n"
 "uniform sampler2D uTex;\n"
+"uniform vec2 uTexel; // (1/width, 1/height). If 0, falls back.\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
 "void main(){\n"
-"  vec4 tex = texture2D(uTex, vUV);\n"
+"  if (uTexel.x <= 0.0 || uTexel.y <= 0.0) {\n"
+"    gl_FragColor = texture2D(uTex, vUV) * vColor; return;\n"
+"  }\n"
+"  vec2 halfTex = 0.5 * uTexel;\n"
+"  vec2 uvC = vUV - halfTex;              // sample at texel centers\n"
+"\n"
+"  vec4 c00 = texture2D(uTex, uvC);\n"
+"  vec4 c10 = texture2D(uTex, uvC + vec2(uTexel.x, 0.0));\n"
+"  vec4 c01 = texture2D(uTex, uvC + vec2(0.0, uTexel.y));\n"
+"  vec4 c11 = texture2D(uTex, uvC + uTexel);\n"
+"\n"
+"  // fractional offset inside the current texel (safe for negatives)\n"
+"  vec2 f = fract(uvC / uTexel);\n"
+"  float s = f.x + f.y;\n"
+"  vec4 triA = c00 + f.x*(c10-c00) + f.y*(c01-c00);\n"
+"  vec4 triB = c11 + (1.0-f.x)*(c01-c11) + (1.0-f.y)*(c10-c11);\n"
+"  vec4 tex = (s < 1.0) ? triA : triB;\n"
+"\n"
 "  gl_FragColor = tex * vColor;\n"
 "}\n";
 
@@ -116,33 +137,33 @@ static GLuint D_ShaderCompile(GLenum type, const char* src) {
     return shader;
 }
 
+static GLint sLocTexel = -1;
+
 static void D_ShaderInit(void) {
-    D_ShaderLoadGL();
-
-    //GLuint vertex_combiner_shader = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
-    //GLuint fragment_combiner_shader = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
-
+	D_ShaderLoadGL();
+	GLuint vs = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
+	GLuint fs = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
 	shader_struct.prog = pglCreateProgram();
-    //pglAttachShader(shader_struct.prog, vertex_combiner_shader);
-    //pglAttachShader(shader_struct.prog, fragment_combiner_shader);
-    pglLinkProgram(shader_struct.prog);
-
-    GLint ok = 0; pglGetProgramiv(shader_struct.prog, GL_LINK_STATUS, &ok);
-    if (!ok) {
-        char log[1024]; GLsizei n = 0;
-        pglGetProgramInfoLog(shader_struct.prog, sizeof(log), &n, log);
-        fprintf(stderr, "D_ShaderInit: Linkage error:\\n%.*s\\n", (int)n, log);
-    }
-
-    shader_struct.locTex = pglGetUniformLocation(shader_struct.prog, "uTex");
-    shader_struct.initialised = 1;
+	pglAttachShader(shader_struct.prog, vs);
+	pglAttachShader(shader_struct.prog, fs);
+	pglLinkProgram(shader_struct.prog);
+	GLint ok = 0; pglGetProgramiv(shader_struct.prog, GL_LINK_STATUS, &ok);
+	if (!ok) {
+		char log[1024]; GLsizei n = 0; pglGetProgramInfoLog(shader_struct.prog, sizeof(log), &n, log);
+		fprintf(stderr, "D_ShaderInit: Linkage error:\n%.*s\n", (int)n, log);
+	}
+	shader_struct.locTex = pglGetUniformLocation(shader_struct.prog, "uTex");
+	sLocTexel = pglGetUniformLocation(shader_struct.prog, "uTexel");
+	shader_struct.initialised = 1;
 }
 
 void D_ShaderBind(void) {
-    D_ShaderInit();
-    pglUseProgram(shader_struct.prog);
-    if (shader_struct.locTex >= 0) 
+	D_ShaderInit();
+	pglUseProgram(shader_struct.prog);
+	if (shader_struct.locTex >= 0) 
 		pglUniform1i(shader_struct.locTex, 0);
+	if (sLocTexel >= 0)            
+		pglUniform2f(sLocTexel, 0.0f, 0.0f);
 }
 
 static void D_ShaderUnBind(void) {
@@ -151,6 +172,13 @@ static void D_ShaderUnBind(void) {
     pglUseProgram(0);
 }
 
+void D_ShaderSetTextureSize(int w, int h) {
+	if (!shader_struct.initialised || sLocTexel < 0) return;
+	if (w > 0 && h > 0) 
+		pglUniform2f(sLocTexel, 1.0f / (float)w, 1.0f / (float)h);
+	else                
+		pglUniform2f(sLocTexel, 0.0f, 0.0f);
+}
 
 void D_DoomLoop(void);
 
