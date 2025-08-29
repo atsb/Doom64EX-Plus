@@ -85,6 +85,8 @@ static void D_ShaderLoadGL(void) {
 #undef GL_GET
 }
 
+CVAR_EXTERNAL(r_filter);
+
 /* N64 3-point filter (atsb) */
 static const char* vertex_shader_bilateral =
 "#version 120\n"
@@ -96,7 +98,7 @@ static const char* vertex_shader_bilateral =
 "  vColor = gl_Color;\n"
 "}\n";
 
-static const char* fragment_shader_bilateral =
+static const char* fragment_shader_bilateral_3point =
 "#version 120\n"
 "uniform sampler2D uTex;\n"
 "uniform vec2  uTexel;\n"
@@ -142,6 +144,15 @@ static const char* fragment_shader_bilateral =
 "  gl_FragColor = tex * vColor;\n"
 "}\n";
 
+static const char* fragment_shader_bilateral =
+"#version 120\n"
+"uniform sampler2D uTex;\n"
+"varying vec2 vUV;\n"
+"varying vec4 vColor;\n"
+"\n"
+"void main(){\n"
+"  gl_FragColor = texture2D(uTex, vUV) * vColor;\n"
+"}\n";
 
 static GLuint D_ShaderCompile(GLenum type, const char* src) {
     GLuint shader = pglCreateShader(type);
@@ -162,9 +173,14 @@ static GLint sLocTexel = -1;
 static GLint sLocUseTex = -1;
 
 static void D_ShaderInit(void) {
+	GLuint fs;
 	D_ShaderLoadGL();
 	GLuint vs = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_bilateral);
-	GLuint fs = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_bilateral);
+	if (r_filter.value == 0) {
+		fs = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_bilateral_3point);
+	} else {
+		fs = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_bilateral);
+	}
 	shader_struct.prog = pglCreateProgram();
 	pglAttachShader(shader_struct.prog, vs);
 	pglAttachShader(shader_struct.prog, fs);

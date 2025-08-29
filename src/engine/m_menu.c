@@ -1725,6 +1725,7 @@ void M_ChangeHUDColor(int choice) {
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
+void M_ChangeWeaponFilter(int choice);
 void M_ChangeHUDFilter(int choice);
 void M_ChangeSkyFilter(int choice);
 void M_ChangeAnisotropic(int choice);
@@ -1739,6 +1740,7 @@ CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
+CVAR_EXTERNAL(r_weaponFilter);
 CVAR_EXTERNAL(r_hudFilter);
 CVAR_EXTERNAL(r_skyFilter);
 CVAR_EXTERNAL(r_anisotropic);
@@ -1753,6 +1755,7 @@ enum {
 	video_dgamma,
 	video_empty2,
 	filter,
+	weapon_filter,
 	hud_filter,
 	sky_filter,
 	anisotropic,
@@ -1772,6 +1775,7 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
+	{2,"Weapon Filter:",M_ChangeWeaponFilter, 't'},
 	{2,"HUD Filter:",M_ChangeHUDFilter, 't'},
 	{2,"Sky Filter:",M_ChangeSkyFilter, 's'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
@@ -1790,6 +1794,7 @@ char* VideoHints[video_end] = {
 	"adjust screen gamma",
 	NULL,
 	"toggle texture filtering",
+	"toggle texture filtering on the weapon",
 	"toggle texture filtering on hud and text",
 	"toggle texture filtering on skies",
 	"toggle blur reduction on textures",
@@ -1804,6 +1809,7 @@ menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
+	{ &r_weaponFilter, 0 },
 	{ &r_hudFilter, 0 },
 	{ &r_skyFilter, 0 },
 	{ &r_anisotropic, 1 },
@@ -1862,13 +1868,13 @@ static char gammamsg[21][28] = {
 };
 
 void M_Video(int choice) {
-
 	M_SetupNextMenu(&VideoDef);
 	m_ScreenSize = 1;
 }
 
 void M_DrawVideo(void) {
-	static const char* filterType[2] = { "Linear", "Nearest" };
+	static const char* filterType1[3] = { "N64", "Linear", "Nearest" };
+	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
 	int y;
 
@@ -1894,9 +1900,10 @@ void M_DrawVideo(void) {
 
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
-	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
-	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType);
-	DRAWVIDEOITEM2(sky_filter, r_skyFilter.value, filterType);
+	DRAWVIDEOITEM2(filter, r_filter.value, filterType1);
+	DRAWVIDEOITEM2(weapon_filter, r_weaponFilter.value, filterType2);
+	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType2);
+	DRAWVIDEOITEM2(sky_filter, r_skyFilter.value, filterType2);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
@@ -1975,7 +1982,11 @@ void M_ChangeGammaLevel(int choice)
 }
 
 void M_ChangeFilter(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &r_filter);
+	M_SetOptionValue(choice, 0, 2, 1, &r_filter);
+}
+
+void M_ChangeWeaponFilter(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &r_weaponFilter);
 }
 
 void M_ChangeHUDFilter(int choice) {

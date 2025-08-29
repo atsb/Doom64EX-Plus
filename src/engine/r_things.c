@@ -55,6 +55,7 @@ CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
 CVAR_EXTERNAL(r_rendersprites);
+CVAR_EXTERNAL(r_weaponFilter);
 
 static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 
@@ -629,6 +630,9 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	u2 = (rfloat)1 - flip;
 	v1 = (rfloat)flip;
 	v2 = (rfloat)1 - flip;
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
 	GL_SetOrtho(0);
 	GL_Set2DQuad(v, x, y, width, height, u1, u2, v1, v2, color);
