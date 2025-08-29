@@ -84,7 +84,7 @@ static void D_ShaderLoadGL(void) {
 }
 
 /* N64 3-point filter (atsb) */
-static const char* vertex_shader_combiner =
+static const char* vertex_shader_bilateral =
 "#version 120\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
@@ -94,7 +94,7 @@ static const char* vertex_shader_combiner =
 "  vColor = gl_Color;\n"
 "}\n";
 
-static const char* fragment_shader_combiner =
+static const char* fragment_shader_bilateral =
 "#version 120\n"
 "uniform sampler2D uTex;\n"
 "uniform vec2 uTexel; // (1/width, 1/height). If 0, falls back.\n"
@@ -141,8 +141,8 @@ static GLint sLocTexel = -1;
 
 static void D_ShaderInit(void) {
 	D_ShaderLoadGL();
-	GLuint vs = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_combiner);
-	GLuint fs = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_combiner);
+	GLuint vs = D_ShaderCompile(GL_VERTEX_SHADER, vertex_shader_bilateral);
+	GLuint fs = D_ShaderCompile(GL_FRAGMENT_SHADER, fragment_shader_bilateral);
 	shader_struct.prog = pglCreateProgram();
 	pglAttachShader(shader_struct.prog, vs);
 	pglAttachShader(shader_struct.prog, fs);
