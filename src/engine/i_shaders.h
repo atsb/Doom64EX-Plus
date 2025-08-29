@@ -32,16 +32,8 @@ void I_ShaderBind(void);
 void I_ShaderUnBind(void);
 void I_ShaderSetTextureSize(int w, int h);
 void I_ShaderSetUseTexture(int on);
-void I_ShaderBerserkRenderTint(float r, float g, float b, float a);
-
-#define BERSERK_FLASH_TICS   (3 * TICRATE)
-#define BERSERK_FADE_TICS    ((3 * TICRATE) / 2) // atsb: do your own math, divide by 2 :P
-
-extern int g_berserkFlashTics;
-
-int I_GetBerserkFlashTics(void);
-void I_TickBerserkFlash(void);
-void I_StartBerserkFlash(void);
+int  I_ShaderOverlayIsReady(void);
+void I_ShaderFullscreenTint(float r, float g, float b, float a);
 
 typedef char GLchar;
 typedef int GLint;

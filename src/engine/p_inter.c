@@ -343,8 +343,6 @@ boolean P_GivePower(player_t* player, int power) {
 	if (power == pw_strength) {
 		P_GiveBody(player, 100);
 		player->powers[power] = STRTICS;
-		if (&players[displayplayer] == player)
-			I_StartBerserkFlash();
 		return true;
 	}
 

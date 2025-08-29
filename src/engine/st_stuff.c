@@ -462,7 +462,6 @@ void ST_Ticker(void) {
 			}
 		}
 	}
-	I_TickBerserkFlash();
 }
 
 //
@@ -742,10 +741,16 @@ void ST_Drawer(void) {
 	// flash overlay
 	//
 
-	if ((st_flashoverlay.value ||
-		gl_max_texture_units <= 2 ||
-		r_texturecombiner.value <= 0) && flashcolor) {
-		ST_FlashingScreen(st_flash_r, st_flash_g, st_flash_b, st_flash_a);
+	// atsb: this one was easy, replace with a shader and point the values to the GLSL..  done
+	if (flashcolor && v_accessibility.value < 1) {
+		const float rf = (float)st_flash_r * (1.0f / 255.0f);
+		const float gf = (float)st_flash_g * (1.0f / 255.0f);
+		const float bf = (float)st_flash_b * (1.0f / 255.0f);
+		const float af = (float)st_flash_a * (1.0f / 255.0f);
+
+		if (I_ShaderOverlayIsReady()) {
+			I_ShaderFullscreenTint(rf, gf, bf, af);
+		}
 	}
 
 	if (iwadDemo) {
@@ -1006,19 +1011,6 @@ void ST_Drawer(void) {
 			"S:%i/%i", plyr->secretcount, totalsecret);
 		Draw_Text(520, 40, RED, 0.5f, false,
 			"T:%2.2d:%2.2d", (leveltime / TICRATE) / 60, (leveltime / TICRATE) % 60);
-	}
-	{
-		// ATSB: GO BERSERK!
-		int t = I_GetBerserkFlashTics();
-		if (t > 0) {
-			const float base = 0.40f;
-			float a = base;
-
-			if (t <= BERSERK_FADE_TICS) {
-				a = base * ((float)t / (float)BERSERK_FADE_TICS);
-			}
-			I_ShaderBerserkRenderTint(1.0f, 0.0f, 0.0f, a);
-		}
 	}
 }
 

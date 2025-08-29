@@ -29,7 +29,6 @@ CVAR_EXTERNAL(r_filter);
 
 static GLint sLocTexel = -1;
 static GLint sLocUseTex = -1;
-int g_berserkFlashTics = 0;
 
 /* this is where shaders are defined */
 
@@ -181,48 +180,54 @@ static void I_3PointShaderInit(void) {
 	shader_struct.initialised = 1;
 }
 
-/* BERSERK TINT OVERLAY SHADERS
+/* GENERIC TINT OVERLAY SHADERS
 ===============================
 */
 
-static GLuint berserk_overlay_prog = 0;
-static GLint  berserk_overlay_tint_colour = -1;
+static GLuint generic_tint_overlay_prog = 0;
+static GLint  generic_tint_overlay_colour = -1;
 
-static const char* vertex_berserk_tint =
+static const char* s_vs =
 "#version 120\n"
-"void main(){\n"
-"  gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n"
-"}\n";
+"void main(){ gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; }\n";
 
-static const char* fragment_berserk_tint =
+static const char* s_fs =
 "#version 120\n"
-"uniform vec4  uColor;   // rgba in 0..1, e.g. vec4(1,0,0,0.4)\n"
-"void main(){\n"
-"  gl_FragColor = uColor;\n"
-"}\n";
+"uniform vec4 uColor;\n"
+"void main(){ gl_FragColor = uColor; }\n";
 
-static GLuint I_ShaderBerserkCompile(GLenum tp, const char* src) {
-	GLuint sh = pglCreateShader(tp); pglShaderSource(sh, 1, &src, NULL);
-	pglCompileShader(sh); GLint ok = 0; pglGetShaderiv(sh, GL_COMPILE_STATUS, &ok);
+static GLuint compile(GLenum tp, const char* src) {
+	GLuint sh = pglCreateShader(tp);
+	pglShaderSource(sh, 1, &src, NULL);
+	pglCompileShader(sh);
 	return sh;
 }
 
-static void I_ShaderBerserkInit(void) {
-	if (berserk_overlay_prog) return;
-	GLuint vs = I_ShaderBerserkCompile(GL_VERTEX_SHADER, vertex_berserk_tint);
-	GLuint fs = I_ShaderBerserkCompile(GL_FRAGMENT_SHADER, fragment_berserk_tint);
-	berserk_overlay_prog = pglCreateProgram();
-	pglAttachShader(berserk_overlay_prog, vs);
-	pglAttachShader(berserk_overlay_prog, fs);
-	pglLinkProgram(berserk_overlay_prog);
-	berserk_overlay_tint_colour = pglGetUniformLocation(berserk_overlay_prog, "uColor");
+static void ensure_prog(void) {
+	if (generic_tint_overlay_prog) 
+		return;
+	GLuint vs = compile(GL_VERTEX_SHADER, s_vs);
+	GLuint fs = compile(GL_FRAGMENT_SHADER, s_fs);
+	generic_tint_overlay_prog = pglCreateProgram();
+	pglAttachShader(generic_tint_overlay_prog, vs);
+	pglAttachShader(generic_tint_overlay_prog, fs);
+	pglLinkProgram(generic_tint_overlay_prog);
+	generic_tint_overlay_colour = pglGetUniformLocation(generic_tint_overlay_prog, "uColor");
 }
 
-void I_ShaderBerserkRenderTint(float r, float g, float b, float a)
-{
-	if (a <= 0.0f) return;
+int I_ShaderOverlayIsReady(void) {
+	ensure_prog();
+	return generic_tint_overlay_prog != 0 && generic_tint_overlay_colour >= 0;
+}
 
-	I_ShaderBerserkInit();
+void I_ShaderFullscreenTint(float r, float g, float b, float a) {
+	if (a <= 0.0f) 
+		return;
+
+	ensure_prog();
+
+	if (!(generic_tint_overlay_prog && generic_tint_overlay_colour >= 0)) 
+		return;
 
 	GLint oldProg = 0; glGetIntegerv(GL_CURRENT_PROGRAM, &oldProg);
 
@@ -231,55 +236,50 @@ void I_ShaderBerserkRenderTint(float r, float g, float b, float a)
 	GLboolean wasDepthTest = glIsEnabled(GL_DEPTH_TEST);
 	GLboolean wasAlphaTest = glIsEnabled(GL_ALPHA_TEST);
 
-	GLint oldBlendSrc = 0, oldBlendDst = 0;
-	glGetIntegerv(GL_BLEND_SRC, &oldBlendSrc);
-	glGetIntegerv(GL_BLEND_DST, &oldBlendDst);
-
+	GLint oldSrc = 0, oldDst = 0; glGetIntegerv(GL_BLEND_SRC, &oldSrc);
+	glGetIntegerv(GL_BLEND_DST, &oldDst);
 	GLboolean oldDepthMask; glGetBooleanv(GL_DEPTH_WRITEMASK, &oldDepthMask);
 
-	pglUseProgram(berserk_overlay_prog);
-	if (berserk_overlay_tint_colour >= 0) pglUniform4f(berserk_overlay_tint_colour, r, g, b, a);
+	pglUseProgram(generic_tint_overlay_prog);
+	pglUniform4f(generic_tint_overlay_colour, r, g, b, a);
 
 	GL_SetOrtho(1);
-
 	if (!wasBlend) glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	if (wasTex2D)     glDisable(GL_TEXTURE_2D);
-	if (wasAlphaTest) glDisable(GL_ALPHA_TEST);
+	if (wasTex2D)     
+		glDisable(GL_TEXTURE_2D);
 
-	if (wasDepthTest) glDisable(GL_DEPTH_TEST);
+	if (wasAlphaTest) 
+		glDisable(GL_ALPHA_TEST);
+
+	if (wasDepthTest) 
+		glDisable(GL_DEPTH_TEST);
+
 	glDepthMask(GL_FALSE);
 
 	glColor4ub(255, 255, 255, 255);
 	dglRecti(SCREENWIDTH, SCREENHEIGHT, 0, 0);
 
 	glDepthMask(oldDepthMask);
-	if (wasDepthTest) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
-	if (wasAlphaTest) glEnable(GL_ALPHA_TEST);
-	if (wasTex2D)     glEnable(GL_TEXTURE_2D);
-	glBlendFunc(oldBlendSrc, oldBlendDst);
-	if (!wasBlend) glDisable(GL_BLEND);
 
+	if (wasDepthTest) 
+		glEnable(GL_DEPTH_TEST); 
+	else 
+		glDisable(GL_DEPTH_TEST);
+
+	if (wasAlphaTest) 
+		glEnable(GL_ALPHA_TEST);
+
+	if (wasTex2D)     
+		glEnable(GL_TEXTURE_2D);
+	glBlendFunc(oldSrc, oldDst);
+
+	if (!wasBlend) 
+		glDisable(GL_BLEND);
 	GL_ResetViewport();
 
 	pglUseProgram(oldProg);
-}
-
-/* BERSERK TINT OVERLAY FUNCTIONS
-=================================
-*/
-
-int I_GetBerserkFlashTics(void) {
-	return g_berserkFlashTics;
-}
-
-void I_TickBerserkFlash(void) {
-	if (g_berserkFlashTics > 0)
-		g_berserkFlashTics--;
-}
-void I_StartBerserkFlash(void) {
-	g_berserkFlashTics = BERSERK_FLASH_TICS;
 }
 
 /* SHADER FUNCTIONS USED THROUGHOUT THE CODE
