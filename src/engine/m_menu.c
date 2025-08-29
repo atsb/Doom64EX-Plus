@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include <SDL3/SDL_platform_defines.h>
 
+#include "d_main.h"
 #include "m_menu.h"
 #include "doomdef.h"
 #include "i_sdlinput.h"
@@ -961,7 +962,6 @@ CVAR_EXTERNAL(am_showkeymarkers);
 CVAR_EXTERNAL(am_showkeycolors);
 CVAR_EXTERNAL(am_drawobjects);
 CVAR_EXTERNAL(am_overlay);
-CVAR_EXTERNAL(r_skybox);
 CVAR_EXTERNAL(r_weaponswitch);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
@@ -985,7 +985,6 @@ enum {
 	misc_context,
 	misc_header3,
 	misc_wipe,
-	misc_skybox,
 	misc_weaponswitch,
 	misc_header4,
 	misc_showkey,
@@ -1017,7 +1016,6 @@ menuitem_t MiscMenu[] = {
 	{2,"Use Context:",M_MiscChoice, 'u'},
 	{-1,"Misc",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
-	{2,"Skybox:",M_MiscChoice,'k'},
 	{2,"Weapon Switch:",M_MiscChoice, 'a'},
 	{-1,"Automap",0 },
 	{2,"Key Pickups:",M_MiscChoice },
@@ -1048,7 +1046,6 @@ char* MiscHints[misc_end] = {
 	"if enabled interactive objects will highlight when near",
 	NULL,
 	"enable the melt effect when completing a level",
-	"toggle skies to render either normally or as skyboxes",
 	"auto switch to a newly picked up weapon",
 	NULL,
 	"display key pickups in automap",
@@ -1074,7 +1071,6 @@ menudefault_t MiscDefault[] = {
 	{ &p_autorun, 1 },
 	{ &p_usecontext, 0 },
 	{ &r_wipe, 1 },
-	{ &r_skybox, 0 },
 	{ &r_weaponswitch, 1 },
 	{ &hud_disablesecretmessages, 0 },
 	{ &am_showkeymarkers, 0 },
@@ -1173,10 +1169,6 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &p_autorun);
 		break;
 
-	case misc_skybox:
-		M_SetOptionValue(choice, 0, 1, 1, &r_skybox);
-		break;
-
 	case misc_weaponswitch:
 		M_SetOptionValue(choice, 0, 1, 1, &r_weaponswitch);
 		break;
@@ -1255,7 +1247,6 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
-	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);
 	DRAWMISCITEM(misc_weaponswitch, r_weaponswitch.value, msgNames);
 	DRAWMISCITEM(misc_showkey, am_showkeymarkers.value, mapdisplaytype);
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);
@@ -1734,7 +1725,9 @@ void M_ChangeHUDColor(int choice) {
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFilter(int choice);
-void M_ChangehudFilter(int choice);
+void M_ChangeWeaponFilter(int choice);
+void M_ChangeHUDFilter(int choice);
+void M_ChangeSkyFilter(int choice);
 void M_ChangeAnisotropic(int choice);
 void M_ChangeInterpolateFrames(int choice);
 void M_ChangeAccessibility(int choice);
@@ -1747,7 +1740,9 @@ CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(r_filter);
+CVAR_EXTERNAL(r_weaponFilter);
 CVAR_EXTERNAL(r_hudFilter);
+CVAR_EXTERNAL(r_skyFilter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
@@ -1760,7 +1755,9 @@ enum {
 	video_dgamma,
 	video_empty2,
 	filter,
+	weapon_filter,
 	hud_filter,
+	sky_filter,
 	anisotropic,
 	interpolate_frames,
 	vsync,
@@ -1778,7 +1775,9 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Filter:",M_ChangeFilter, 'f'},
-	{2,"HUD Filter:",M_ChangehudFilter, 't'},
+	{2,"Weapon Filter:",M_ChangeWeaponFilter, 't'},
+	{2,"HUD Filter:",M_ChangeHUDFilter, 't'},
+	{2,"Sky Filter:",M_ChangeSkyFilter, 's'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
 	{2,"Interpolation:",M_ChangeInterpolateFrames, 'i'},
 	{2,"VSync:",M_ChangeVsync, 'v'},
@@ -1795,7 +1794,9 @@ char* VideoHints[video_end] = {
 	"adjust screen gamma",
 	NULL,
 	"toggle texture filtering",
+	"toggle texture filtering on the weapon",
 	"toggle texture filtering on hud and text",
+	"toggle texture filtering on skies",
 	"toggle blur reduction on textures",
 	"toggle frame interpolation to\n achieve smooth framerates",
 	"toggle vsync on or off to prevent screen tearing",
@@ -1808,7 +1809,9 @@ menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
 	{ &r_filter, 0 },
+	{ &r_weaponFilter, 0 },
 	{ &r_hudFilter, 0 },
+	{ &r_skyFilter, 0 },
 	{ &r_anisotropic, 1 },
 	{ &i_interpolateframes, 1 },
 	{ &v_vsync, 1 },
@@ -1865,13 +1868,13 @@ static char gammamsg[21][28] = {
 };
 
 void M_Video(int choice) {
-
 	M_SetupNextMenu(&VideoDef);
 	m_ScreenSize = 1;
 }
 
 void M_DrawVideo(void) {
-	static const char* filterType[2] = { "Linear", "Nearest" };
+	static const char* filterType1[3] = { "N64", "Linear", "Nearest" };
+	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
 	int y;
 
@@ -1897,8 +1900,10 @@ void M_DrawVideo(void) {
 
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
-	DRAWVIDEOITEM2(filter, r_filter.value, filterType);
-	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType);
+	DRAWVIDEOITEM2(filter, r_filter.value, filterType1);
+	DRAWVIDEOITEM2(weapon_filter, r_weaponFilter.value, filterType2);
+	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType2);
+	DRAWVIDEOITEM2(sky_filter, r_skyFilter.value, filterType2);
 	DRAWVIDEOITEM2(anisotropic, r_anisotropic.value, msgNames);
 	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, onofftype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, onofftype);
@@ -1977,11 +1982,19 @@ void M_ChangeGammaLevel(int choice)
 }
 
 void M_ChangeFilter(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &r_filter);
+	M_SetOptionValue(choice, 0, 2, 1, &r_filter);
 }
 
-void M_ChangehudFilter(int choice) {
+void M_ChangeWeaponFilter(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &r_weaponFilter);
+}
+
+void M_ChangeHUDFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_hudFilter);
+}
+
+void M_ChangeSkyFilter(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &r_skyFilter);
 }
 
 void M_ChangeAnisotropic(int choice) {
@@ -3030,6 +3043,7 @@ static void M_DoVideoReset(int choice) {
 	I_Init();
 	R_Init();
 	GL_Init();
+	D_ShaderBind();
 }
 
 //

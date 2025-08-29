@@ -81,7 +81,6 @@ CVAR(r_fog, 1);
 CVAR(r_wipe, 1);
 CVAR(r_drawmobjbox, 0);
 CVAR(r_rendersprites, 1);
-CVAR(r_skybox, 0);
 CVAR(r_weaponswitch, 1);
 CVAR(hud_disablesecretmessages, 0);
 
@@ -94,7 +93,15 @@ CVAR_CMD(r_filter, 0) {
 	GL_SetTextureFilter();
 }
 
+CVAR_CMD(r_weaponFilter, 0) {
+	GL_DumpTextures();
+}
+
 CVAR_CMD(r_hudFilter, 0) {
+	GL_DumpTextures();
+}
+
+CVAR_CMD(r_skyFilter, 0) {
 	GL_DumpTextures();
 }
 
@@ -338,6 +345,8 @@ void R_PrecacheLevel(void) {
 	int num;
 	mobj_t* mo;
 
+	D_ShaderUnBind();
+
 	CON_DPrintf("--------R_PrecacheLevel--------\n");
 	GL_DumpTextures();
 
@@ -437,6 +446,7 @@ void R_PrecacheLevel(void) {
 	}
 
 	GL_SetDefaultCombiner();
+	D_ShaderBind();
 }
 
 //
@@ -795,12 +805,13 @@ void R_RegisterCvars(void) {
     CON_CvarRegister(&r_fillmode);
 	CON_CvarRegister(&r_fog);
 	CON_CvarRegister(&r_filter);
+	CON_CvarRegister(&r_weaponFilter);
 	CON_CvarRegister(&r_hudFilter);
+	CON_CvarRegister(&r_skyFilter);
 	CON_CvarRegister(&r_anisotropic);
 	CON_CvarRegister(&r_wipe);
 	CON_CvarRegister(&r_drawmobjbox);
     CON_CvarRegister(&r_rendersprites);
-	CON_CvarRegister(&r_skybox);
 	CON_CvarRegister(&r_weaponswitch);
 	CON_CvarRegister(&r_colorscale);
 	CON_CvarRegister(&r_texturecombiner);

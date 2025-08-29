@@ -27,7 +27,7 @@ extern int          skybackdropnum;
 extern int          thunderCounter;
 extern int          lightningCounter;
 extern int          thundertic;
-extern boolean     skyfadeback;
+extern bool			skyfadeback;
 
 // Needed to store the number of the dummy sky flat.
 // Used for rendering, as well as tracking projectiles etc.
