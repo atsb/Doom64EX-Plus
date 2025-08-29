@@ -612,24 +612,73 @@ static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
     return 1;
 }
 
+// kpf can point to a file or a directory
+// return true if data loaded successfully, false if kpf does not exist or failure to load (inner not found or other error)
+boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* size, int max_uncompressed, unsigned int *kpf_key) {
+
+	*data = NULL;
+	*size = 0;
+	if (kpf_key) {
+		*kpf_key = 0;
+	}
+
+	if (I_DirExists(kpf)) {
+		char* path = M_FileExistsInDirectory(kpf, (char *)inner, false);
+		if (path) {
+			unsigned char *tmp_data;
+			int tmp_size = M_ReadFileEx(path, &tmp_data, true);
+			if (tmp_size > 0) {
+				*size = tmp_size;
+				*data = tmp_data;
+				if (kpf_key) {
+					// not exactly hashing a lump but OK
+					*kpf_key = W_HashLumpName(path);
+				}
+			}
+			free(path);
+		}
+	}
+	else {
+		char* path = I_FindDataFile((char*)kpf);
+		if (path) {
+			int ret = max_uncompressed > 0 ?
+				KPF_ExtractFileCapped(path, inner, data, size, max_uncompressed) :
+				KPF_ExtractFile(path, inner, data, size);
+
+			if (ret && kpf_key) {
+				*kpf_key = M_FileLengthFromPath(path);
+			}
+		}
+	}
+
+	return *data && *size > 0;
+}
+
 void W_KPFInit(void)
 {
+	// this param be useful to disable kpf cache for benchmarking
+	boolean use_cache = !M_CheckParm("-no-kpf-cache"); 
+	
+	// -kpf can be followed with up to MAX_KPF_FILES argument pointing to a KPF file or a directory 
+	// root of a KPF arboresence with just overriden files:
+	// Some remaster mods (eg BETA64 Remastered, DOOM64 Reloaded) have such folder containing kpf override files that 
+	// are patched into the stock Doom64.kpf with a .BAT script that only works on Windows
 	int p = M_CheckParm("-kpf");
+
 	if (p) {
 		// the parms after p are kpf names,
 		// until end of parms or another - preceded parm
-		while (++p != myargc && myargv[p][0] != '-' && g_num_kpf < MAX_KPF_FILES) {
+		while (++p != myargc && myargv[p][0] != '-' && g_num_kpf < MAX_KPF_FILES - 1) {
 			g_kpf_files[g_num_kpf++] = myargv[p];
 		}
 	}
 
-	if (!g_num_kpf) {
-		g_kpf_files[g_num_kpf++] = "Doom64.kpf";
-	}
+	// always add stock KPF last as fallback
+	g_kpf_files[g_num_kpf++] = "Doom64.kpf";
 
 	struct override_item {
 		char name8[8];
-		const char* paths[4];
+		char* paths[4];
 		int  max_w, max_h;
 	};
 
@@ -651,18 +700,16 @@ void W_KPFInit(void)
 		int this_ok = 0;
 
 		for (int k = 0; k < g_num_kpf && !this_ok; ++k) {
-			const char* kpf = g_kpf_files[k];
+			char* kpf = g_kpf_files[k];
 
 			for (size_t p = 0; ov->paths[p] != NULL && !this_ok; ++p) {
 				const char* inner = ov->paths[p];
 
 				unsigned char* data = NULL;
 				int size = 0;
+				unsigned int kpf_key;
 
-				char* kpf_path = I_FindDataFile((char *)kpf);
-				if(!kpf_path) continue;
-				int ret = KPF_ExtractFileCapped(kpf_path, inner, &data, &size, KPF_PNG_CAP_BYTES);
-				if(!ret) continue;
+				if (!W_KPFLoadInner(kpf, inner, &data, &size, KPF_PNG_CAP_BYTES, &kpf_key)) continue; 
 
 				if (ov->max_w > 0 && ov->max_h > 0) {
 					int w = 0, h = 0;
@@ -670,7 +717,6 @@ void W_KPFInit(void)
 						if (w > ov->max_w || h > ov->max_h) {
 							unsigned char* scaled = NULL; int scaled_sz = 0;
 
-							boolean use_cache = true; // can be set to false to disable
 							boolean in_cache = false;
 							filepath_t cache_filepath;
 
@@ -685,13 +731,11 @@ void W_KPFInit(void)
 
 									filepath_t cache_filename;
 
-									int kpf_file_len = M_FileLengthFromPath(kpf_path);
-
 									SDL_snprintf(cache_filename, MAX_PATH,
 										"%s_%d_%d_%d_%d",
 										ov->name8,
 										ov->max_w, ov->max_h,
-										size, kpf_file_len);
+										size, kpf_key);
 
 									SDL_snprintf(cache_filepath, MAX_PATH, "%s/%s",	cache_dir, cache_filename);
 
@@ -714,7 +758,7 @@ void W_KPFInit(void)
 										int count;
 										char pattern[32];
 										char** matches;
-										SDL_snprintf(pattern, sizeof(pattern), "%s_*_%d", ov->name8, kpf_file_len);
+										SDL_snprintf(pattern, sizeof(pattern), "%s_*_%d", ov->name8, kpf_key);
 										matches = SDL_GlobStorageDirectory(storage, NULL, pattern, 0, &count);
 										if (matches) {
 											for (int i = 0; i < count; i++) {

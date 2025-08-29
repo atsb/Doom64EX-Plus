@@ -56,6 +56,7 @@ static uint64_t save_offset = 0;
 // P_GetSaveGameName
 //
 
+// must be freed by caller
 char* P_GetSaveGameName(int num) {
     char name[256];
 

@@ -56,5 +56,6 @@ int             W_MapLumpLength(int lump);
 void* W_CacheLumpNum(int lump, int tag);
 void* W_CacheLumpName(const char* name, int tag);
 void W_KPFInit(void);
+boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* size, int max_uncompressed, unsigned int* kpf_key);
 
 #endif
