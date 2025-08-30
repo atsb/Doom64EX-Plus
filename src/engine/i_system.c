@@ -239,8 +239,6 @@ static char* FindDataFile(char* file) {
 		I_GetUserDir(), 
 #ifdef DOOM_UNIX_SYSTEM_DATADIR
 		DOOM_UNIX_SYSTEM_DATADIR
-#else
-		NULL
 #endif
 	};
 
@@ -306,22 +304,6 @@ char* I_FindDataFile(char* file) {
 	}
 
 	return entry->path; 
-}
-
-
- // return true if path is non-NULL and a regular file that exists
-boolean I_FileExists(const char* path)
-{
-	struct stat st;
-	return path && !stat(path, &st) && S_ISREG(st.st_mode);
-}
-
-
-// return true if path is non-NULL and a directory that exists
-boolean I_DirExists(const char* path)
-{
-	struct stat st;
-	return path && !stat(path, &st) && S_ISDIR(st.st_mode);
 }
 
 //

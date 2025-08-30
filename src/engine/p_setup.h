@@ -38,6 +38,9 @@ episodedef_t* P_GetEpisode(int episode);
 int P_GetNumEpisodes(void);
 void P_InitMapInfo(void);
 
+// 
+void LOC_RegisterCvars(void);
+
 //
 // [kex] sky definitions
 //

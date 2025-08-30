@@ -175,6 +175,7 @@ void CON_CvarInit(void) {
 	M_RegisterCvars();
 	P_RegisterCvars();
 	G_RegisterCvars();
+	LOC_RegisterCvars();
 
 	G_AddCommand("listcvars", CMD_ListCvars, 0);
 }

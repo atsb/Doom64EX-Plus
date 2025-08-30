@@ -3433,14 +3433,13 @@ void M_QuickSave(void)
 
 void M_QuickLoad(void)
 {
-	if (M_FileExists(QUICKSAVEFILE))
-	{
-		G_LoadGame(QUICKSAVEFILE);
+	char *filepath = I_GetUserFile(QUICKSAVEFILE);
+	
+	if (M_FileExists(filepath))	{
+		G_LoadGame(filepath);
 	}
-	else
-	{
-		printf("no save file");
-	}
+
+	free(filepath);
 }
 
 //

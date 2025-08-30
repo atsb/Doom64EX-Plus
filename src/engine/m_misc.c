@@ -76,7 +76,17 @@ int M_CheckParm(const char* check) {
 
 char* M_StringDuplicate(char* s)
 {
-	return strdup(s);
+#ifdef _MSC_VER
+	return _strdup(s);
+#else
+	// don't use strdup because it requires > C 2011
+	// don't use SDL_strdup() because it must be free'd with SDL_Free() (not interchangeable with free()), which is confusing
+
+	size_t len = strlen(s) + 1; // include terminal NULL
+	char* dup = malloc(len);
+	memcpy(dup, s, len); 
+	return dup;
+#endif
 }
 
 //
@@ -205,7 +215,7 @@ boolean M_MoveFile(char* filename, char* src_dirpath, char* dst_dirpath) {
 
 	SDL_snprintf(dst_filepath, MAX_PATH, "%s%s", dst_dirpath, filename);
 
-	if (I_FileExists(dst_filepath)) {
+	if (M_FileExists(dst_filepath)) {
 		return false;
 	}
 
@@ -271,30 +281,19 @@ boolean M_CreateDir(char* dirpath) {
 	return !ret;
 }
 
-//
-// W_FileExists
-// Check if a wad file exists
-//
+// return true if path is non-NULL and a regular file that exists
+boolean M_FileExists(const char* path)
+{
+	struct stat st;
+	return path && !stat(path, &st) && S_ISREG(st.st_mode);
+}
 
-int M_FileExists(char* filepath) {
-	FILE* fstream;
 
-	fstream = fopen(filepath, "r");
-
-	if (fstream != NULL) {
-		fclose(fstream);
-		return 1;
-	}
-	else {
-		// If we can't open because the file is a directory, the
-		// "file" exists at least!
-
-		if (errno == 21) {
-			return 2;
-		}
-	}
-
-	return 0;
+// return true if path is non-NULL and a directory that exists
+boolean M_DirExists(const char* path)
+{
+	struct stat st;
+	return path && !stat(path, &st) && S_ISDIR(st.st_mode);
 }
 
 // Returns full path to filename if filename exists within dir
@@ -310,7 +309,7 @@ char* M_FileExistsInDirectory(char* dirpath, char* filename, boolean log) {
 		char* separator = last_char == '/' || last_char == '\\' ? "" : "/";
 
 		SDL_snprintf(path, MAX_PATH, "%s%s%s", dirpath, separator, filename);
-		if (I_FileExists(path)) {
+		if (M_FileExists(path)) {
 			if (log) {
 				I_Printf("Found %s\n", path);
 			}
@@ -357,7 +356,7 @@ void M_ScreenShot(void) {
 	for (int i = 0; ; i++) {
 		if (i == 1000) return;
 		SDL_snprintf(name, MAX_PATH, "%ssshot%03d.png", I_GetUserDir(), i);
-		if (!I_FileExists(name)) break;
+		if (!M_FileExists(name)) break;
 	}
 
 	buff = GL_GetScreenBuffer(0, 0, video_width, video_height);
@@ -371,27 +370,6 @@ void M_ScreenShot(void) {
 
 	Z_Free(png);
 	
-}
-
-// Safe string copy function that works like OpenBSD's strlcpy().
-// Returns true if the string was not truncated.
-
-bool M_StringCopy(char* dest, char* src, unsigned int dest_size)
-{
-	size_t len;
-
-	if (dest_size >= 1)
-	{
-		dest[dest_size - 1] = '\0';
-		strncpy(dest, src, dest_size - 1);
-	}
-	else
-	{
-		return false;
-	}
-
-	len = strlen(dest);
-	return src[len] == '\0';
 }
 
 //
