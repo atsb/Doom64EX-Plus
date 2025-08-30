@@ -30,10 +30,6 @@
 #include "z_zone.h"
 #include "m_misc.h"
 
-#define MAX_IWAD_DIRS 128
-
-static char* iwad_dirs[MAX_IWAD_DIRS];
-static int num_iwad_dirs = 0;
 
 typedef struct {
 	wad_file_t wad;
@@ -100,62 +96,6 @@ unsigned int W_Read(wad_file_t* wad, unsigned int offset,
 	return wad->file_class->Read(wad, offset, buffer, buffer_len);
 }
 
-//
-// W_FindWADByName
-// Searches WAD search paths for an WAD with a specific filename.
-//
-
-char* W_FindWADByName(char* name) {
-	char* buf;
-	int i;
-	boolean exists;
-
-	// Absolute path?
-	if (M_FileExists(name)) {
-		return name;
-	}
-
-	// Search through all IWAD paths for a file with the given name.
-
-	for (i = 0; i < num_iwad_dirs; ++i) {
-		// Construct a string for the full path
-
-		buf = malloc(strlen(iwad_dirs[i]) + strlen(name) + 5);
-		sprintf(buf, "%s%c%s", iwad_dirs[i], '/', name);
-
-		exists = M_FileExists(buf);
-
-		if (exists) {
-			return buf;
-		}
-
-		free(buf);
-	}
-
-	// File not found
-
-	return NULL;
-}
-
-//
-// W_TryFindWADByName
-//
-// Searches for a WAD by its filename, or passes through the filename
-// if not found.
-//
-
-char* W_TryFindWADByName(char* filename) {
-	char* result;
-
-	result = W_FindWADByName(filename);
-
-	if (result != NULL) {
-		return result;
-	}
-	else {
-		return filename;
-	}
-}
 
 //
 // W_FindIWAD

@@ -10,6 +10,7 @@
 
 #include "steam.h"
 #include "i_system.h"
+#include "m_misc.h"
 
 typedef struct vdbcontext_s vdbcontext_t;
 typedef void (*vdbcallback_t) (vdbcontext_t *ctx, const char *key, const char *value);
@@ -332,7 +333,7 @@ boolean Steam_IsValidPath (const char *path)
 	if(SDL_snprintf (libpath, MAX_PATH, "%s/config/libraryfolders.vdf", path) >= MAX_PATH)
         return false;
 
-	return I_FileExists(libpath); 
+	return M_FileExists(libpath); 
 }
 
 /*

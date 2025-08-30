@@ -49,7 +49,8 @@ boolean M_WriteFile(char* filepath, void* source, int length);
 int M_ReadFileEx(char* filepath, byte** buffer, boolean use_malloc);
 int M_ReadFile(char* filepath, byte** buffer);
 boolean M_RemoveFile(char* filepath);
-int M_FileExists(char* filepath);
+boolean M_FileExists(const char* path);
+boolean M_DirExists(const char* path);
 char* M_FileExistsInDirectory(char* dirpath, char* filename, boolean log);
 long M_FileLengthFromPath(char* filepath);
 long M_FileLength(FILE* handle);
@@ -60,7 +61,6 @@ void M_ScreenShot(void);
 int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
-bool M_StringCopy(char* dest, char* src, unsigned int dest_size);
 char* M_StringDuplicate(char* orig);
 
 //
