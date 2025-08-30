@@ -708,7 +708,7 @@ enum {
 	options_display,
 	options_video,
 	options_password,
-	options_network,
+	//options_network,
 	options_return,
 	opt_end
 } options_e;
@@ -720,7 +720,7 @@ menuitem_t OptionsMenu[] = {
 	{1,"HUD",M_Display, 'd'},
 	{1,"Video",M_Video, 'v'},
 	{1,"Password",M_Password, 'p'},
-	{1,"Network",M_Network, 'n'},
+	//{1,"Network",M_Network, 'n'},
 	{1,"/r Return",M_Return, 0x20}
 };
 
@@ -731,7 +731,7 @@ char* OptionHints[opt_end] = {
 	"settings for the heads-up display",
 	"configure video-specific options",
 	"enter a password to access a level",
-	"setup options for a hosted session",
+	//"setup options for a hosted session",
 	NULL
 };
 
