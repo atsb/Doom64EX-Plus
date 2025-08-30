@@ -52,7 +52,12 @@ static void (APIENTRY* pglUniform2f)(GLint, float, float);
 static void (APIENTRY* pglUniform3f)(GLint, float, float, float);
 static void (APIENTRY* pglUniform4f)(GLint, float, float, float, float);
 
+static int is_glsl_loaded = 0;
+static GLuint is_current_prog = 0;
+
 static void I_ShaderLoad(void) {
+	if (is_glsl_loaded) 
+		return;
 #define GL_GET(fn) *(void**)(&p##fn) = SDL_GL_GetProcAddress(#fn)
 	GL_GET(glCreateShader);  GL_GET(glShaderSource);
 	GL_GET(glCompileShader); GL_GET(glGetShaderiv);
@@ -67,6 +72,7 @@ static void I_ShaderLoad(void) {
 	GL_GET(glUniform3f);
 	GL_GET(glUniform4f);
 #undef GL_GET
+	is_glsl_loaded = 1;
 }
 
 /* BILATERAL AND N64 SHADERS
@@ -156,6 +162,8 @@ static GLuint I_3PointShaderCompile(GLenum type, const char* src) {
 }
 
 static void I_3PointShaderInit(void) {
+	if (shader_struct.initialised) 
+		return;
 	GLuint fs;
 	I_ShaderLoad();
 	GLuint vs = I_3PointShaderCompile(GL_VERTEX_SHADER, vertex_shader_bilateral);
@@ -204,6 +212,8 @@ static GLuint I_OverlayTintShaderCompile(GLenum tp, const char* src) {
 }
 
 void I_OverlayTintShaderInit(void) {
+	if (generic_tint_overlay_prog) 
+		return;
 	GLuint vs = I_OverlayTintShaderCompile(GL_VERTEX_SHADER, s_vs);
 	GLuint fs = I_OverlayTintShaderCompile(GL_FRAGMENT_SHADER, s_fs);
 	generic_tint_overlay_prog = pglCreateProgram();
@@ -214,12 +224,12 @@ void I_OverlayTintShaderInit(void) {
 }
 
 void I_ShaderFullscreenTint(float r, float g, float b, float a) {
-	if (a <= 0.0f) 
+	if (a <= 0.0f)
 		return;
 
 	I_OverlayTintShaderInit();
 
-	if (!(generic_tint_overlay_prog && generic_tint_overlay_colour >= 0)) 
+	if (!(generic_tint_overlay_prog && generic_tint_overlay_colour >= 0))
 		return;
 
 	GLint oldProg = 0; glGetIntegerv(GL_CURRENT_PROGRAM, &oldProg);
@@ -240,13 +250,13 @@ void I_ShaderFullscreenTint(float r, float g, float b, float a) {
 	if (!wasBlend) glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	if (wasTex2D)     
+	if (wasTex2D)
 		glDisable(GL_TEXTURE_2D);
 
-	if (wasAlphaTest) 
+	if (wasAlphaTest)
 		glDisable(GL_ALPHA_TEST);
 
-	if (wasDepthTest) 
+	if (wasDepthTest)
 		glDisable(GL_DEPTH_TEST);
 
 	glDepthMask(GL_FALSE);
@@ -256,19 +266,19 @@ void I_ShaderFullscreenTint(float r, float g, float b, float a) {
 
 	glDepthMask(oldDepthMask);
 
-	if (wasDepthTest) 
-		glEnable(GL_DEPTH_TEST); 
-	else 
+	if (wasDepthTest)
+		glEnable(GL_DEPTH_TEST);
+	else
 		glDisable(GL_DEPTH_TEST);
 
-	if (wasAlphaTest) 
+	if (wasAlphaTest)
 		glEnable(GL_ALPHA_TEST);
 
-	if (wasTex2D)     
+	if (wasTex2D)
 		glEnable(GL_TEXTURE_2D);
 	glBlendFunc(oldSrc, oldDst);
 
-	if (!wasBlend) 
+	if (!wasBlend)
 		glDisable(GL_BLEND);
 	GL_ResetViewport();
 
@@ -282,15 +292,12 @@ void I_ShaderFullscreenTint(float r, float g, float b, float a) {
 void I_ShaderBind(void) {
 	I_3PointShaderInit();
 	I_OverlayTintShaderInit();
-	pglUseProgram(shader_struct.prog);
+	if (is_current_prog != shader_struct.prog) {
+		pglUseProgram(shader_struct.prog);
+		is_current_prog = shader_struct.prog;
+	}
 	if (shader_struct.locTex >= 0)
 		pglUniform1i(shader_struct.locTex, 0);
-	if (sLocTexel >= 0)
-		pglUniform2f(sLocTexel, 0.0f, 0.0f);
-
-	if (shader_struct.locTex >= 0)
-		pglUniform1i(shader_struct.locTex, 0);
-
 	if (sLocUseTex >= 0)
 		pglUniform1i(sLocUseTex, 1);
 	if (sLocTexel >= 0)
@@ -300,7 +307,10 @@ void I_ShaderBind(void) {
 void I_ShaderUnBind(void) {
 	if (!shader_struct.initialised)
 		return;
-	pglUseProgram(0);
+	if (is_current_prog != 0) {
+		pglUseProgram(0);
+		is_current_prog = 0;
+	}
 }
 
 void I_ShaderSetTextureSize(int w, int h) {

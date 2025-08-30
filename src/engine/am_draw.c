@@ -55,6 +55,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 	am_viewangle = view;
 
 	    if(r_texturecombiner.value > 0 && am_overlay.value) {
+		I_ShaderUnBind();
         GL_SetState(GLSTATE_BLEND, 1);
 
         //
@@ -92,6 +93,7 @@ void AM_EndDraw(void) {
     dglDepthRange(0.0f, 1.0f);
 
     if(r_texturecombiner.value > 0 && am_overlay.value) {
+		I_ShaderUnBind();
         GL_SetState(GLSTATE_BLEND, 0);
         GL_SetTextureMode(GL_COMBINE);
         GL_SetColorScale();
@@ -115,6 +117,8 @@ static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 	int j;
 	int count;
 	subsector_t* sub;
+
+	I_ShaderUnBind();
 
 	sub = (subsector_t*)vl->data;
 	leaf = &leafs[sub->leaf];
@@ -188,6 +192,8 @@ static boolean DL_ProcessAutomap(vtxlist_t* vl, int* drawcount) {
 
 	*drawcount = count;
 
+	I_ShaderBind();
+
 	return true;
 }
 
@@ -200,6 +206,8 @@ void AM_DrawLeafs(float scale) {
 	drawlist_t* am_drawlist;
 	int i;
 	int j;
+
+	I_ShaderUnBind();
 
 	am_drawlist = &drawlist[DLT_AMAP];
 
@@ -254,6 +262,7 @@ void AM_DrawLeafs(float scale) {
     DL_BeginDrawList(!am_ssect.value && r_fillmode.value, 0);
 
     if(r_texturecombiner.value > 0) {
+		I_ShaderUnBind();
         if(!nolights) {
             dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
         }
@@ -271,6 +280,8 @@ void AM_DrawLeafs(float scale) {
     }
 
 	DL_ProcessDrawList(DLT_AMAP, DL_ProcessAutomap);
+
+	I_ShaderBind();
 }
 
 //
@@ -279,6 +290,8 @@ void AM_DrawLeafs(float scale) {
 
 void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
 	vtx_t v[2];
+
+	I_ShaderUnBind();
 
 	v[0].x = F2D3D(x1);
 	v[0].z = F2D3D(y1);
@@ -297,6 +310,8 @@ void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
 	dglVertex3f(v[1].x, v[1].z, -v[1].y);
 	dglEnd();
 	dglEnable(GL_TEXTURE_2D);
+
+	I_ShaderBind();
 }
 
 //
@@ -308,6 +323,8 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
 	fixed_t x;
 	fixed_t y;
 	angle_t angle;
+
+	I_ShaderUnBind();
 
 	if (mobj->flags & (MF_NOSECTOR | MF_RENDERLASER)) {
 		return;
@@ -359,6 +376,8 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
 	if (devparm) {
 		vertCount += 3;
 	}
+
+	I_ShaderBind();
 }
 
 //
@@ -387,6 +406,8 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	float cos;
 	float sin;
 	vtx_t vtx[4];
+
+	I_ShaderUnBind();
 
 	if (thing->flags & (MF_NOSECTOR | MF_RENDERLASER)) {
 		return;
@@ -500,4 +521,6 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 	dglDrawGeometry(4, vtx);
 
 	GL_SetState(GLSTATE_BLEND, 0);
+
+	I_ShaderBind();
 }
