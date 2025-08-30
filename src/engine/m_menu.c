@@ -856,7 +856,7 @@ menu_t NetworkDef = {
 	0,
 	false,
 	NetworkDefault,
-	15,
+	-1,
 	0,
 	0.5f,
 	NetworkHints,
