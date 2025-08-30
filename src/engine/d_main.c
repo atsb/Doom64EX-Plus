@@ -899,8 +899,9 @@ static void D_Init(void) {
 
 	p = M_CheckParm("-loadgame");
 	if (p && p < myargc - 1) {
-		// sprintf(file, SAVEGAMENAME"%c.dsg",myargv[p+1][0]);
-		G_LoadGame(P_GetSaveGameName(myargv[p + 1][0] - '0'));
+		char *filepath = P_GetSaveGameName(myargv[p + 1][0] - '0');
+		G_LoadGame(filepath);
+		free(filepath);
 		autostart = true; // 20120105 bkw: this was missing
 	}
 
