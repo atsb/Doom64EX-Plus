@@ -43,8 +43,6 @@ void W_CloseFile(wad_file_t* wad);
 unsigned int W_Read(wad_file_t* wad, unsigned int offset,
 	void* buffer, unsigned int buffer_len);
 
-char* W_FindWADByName(char* filename);
-char* W_TryFindWADByName(char* filename);
 char* W_FindIWAD(void);
 
 #endif /*__W_FILE__*/

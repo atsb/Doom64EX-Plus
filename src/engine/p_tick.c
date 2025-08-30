@@ -330,12 +330,12 @@ void P_Stop(void) {
 		ST_ClearDamageMarkers();
 	}
 
-	// free level tags
-	Z_FreeTags(PU_LEVEL, PU_PURGELEVEL - 1);
-
 	if (automapactive) {
 		AM_Stop();
 	}
+
+	// free level tags
+	Z_FreeTags(PU_LEVEL, PU_PURGELEVEL - 1);
 
 	// music continues on exit if defined
 	if (!P_GetMapInfo(gamemap)->contmusexit) {

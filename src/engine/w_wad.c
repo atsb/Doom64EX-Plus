@@ -338,23 +338,17 @@ void W_Init(void) {
 		// until end of parms or another - preceded parm
 		while (++p != myargc && myargv[p][0] != '-')
 		{
-			char* filename;
-			filename = W_TryFindWADByName(myargv[p]);
-			W_MergeFile(filename);
+			W_MergeFile(myargv[p]);
 		}
 	}
 	// 20120724 villsa - find drag & drop wad files
 	else {
 		for (i = 1; i < myargc; i++) {
 			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
-				char* filename;
-				if ((filename = W_TryFindWADByName(myargv[i]))) {
-					W_MergeFile(filename);
-				}
+				W_MergeFile(myargv[i]);
 			}
 		}
 	}
-
 
 	W_HashLumps();
 		
@@ -622,7 +616,7 @@ boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* 
 		*kpf_key = 0;
 	}
 
-	if (I_DirExists(kpf)) {
+	if (M_DirExists(kpf)) {
 		char* path = M_FileExistsInDirectory(kpf, (char *)inner, false);
 		if (path) {
 			unsigned char *tmp_data;
@@ -723,7 +717,7 @@ void W_KPFInit(void)
 							if (use_cache) {
 
 								char* cache_dir = I_GetUserFile("kpf_cache");
-								if (!I_DirExists(cache_dir)) {
+								if (!M_DirExists(cache_dir)) {
 									use_cache = M_CreateDir(cache_dir);
 								}
 
@@ -739,7 +733,7 @@ void W_KPFInit(void)
 
 									SDL_snprintf(cache_filepath, MAX_PATH, "%s/%s",	cache_dir, cache_filename);
 
-									if (I_FileExists(cache_filepath)) {
+									if (M_FileExists(cache_filepath)) {
 
 										unsigned char* cache_data;
 										int cache_size = M_ReadFileEx(cache_filepath, &cache_data, true);

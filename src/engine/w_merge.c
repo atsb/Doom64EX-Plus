@@ -573,7 +573,6 @@ void W_PrintDirectory(void) {
 }
 
 // Merge in a file by name
-
 void W_MergeFile(char* filename) {
 	int old_numlumps;
 

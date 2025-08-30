@@ -708,7 +708,7 @@ enum {
 	options_display,
 	options_video,
 	options_password,
-	options_network,
+	//options_network,
 	options_return,
 	opt_end
 } options_e;
@@ -720,7 +720,7 @@ menuitem_t OptionsMenu[] = {
 	{1,"HUD",M_Display, 'd'},
 	{1,"Video",M_Video, 'v'},
 	{1,"Password",M_Password, 'p'},
-	{1,"Network",M_Network, 'n'},
+	//{1,"Network",M_Network, 'n'},
 	{1,"/r Return",M_Return, 0x20}
 };
 
@@ -731,7 +731,7 @@ char* OptionHints[opt_end] = {
 	"settings for the heads-up display",
 	"configure video-specific options",
 	"enter a password to access a level",
-	"setup options for a hosted session",
+	//"setup options for a hosted session",
 	NULL
 };
 
@@ -856,7 +856,7 @@ menu_t NetworkDef = {
 	0,
 	false,
 	NetworkDefault,
-	15,
+	-1,
 	0,
 	0.5f,
 	NetworkHints,
@@ -3432,14 +3432,13 @@ void M_QuickSave(void)
 
 void M_QuickLoad(void)
 {
-	if (M_FileExists(QUICKSAVEFILE))
-	{
-		G_LoadGame(QUICKSAVEFILE);
+	char *filepath = I_GetUserFile(QUICKSAVEFILE);
+	
+	if (M_FileExists(filepath))	{
+		G_LoadGame(filepath);
 	}
-	else
-	{
-		printf("no save file");
-	}
+
+	free(filepath);
 }
 
 //

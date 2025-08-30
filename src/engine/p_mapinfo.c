@@ -243,9 +243,12 @@ static boolean LOC_LoadLang(int lang) {
 
 }
 
-static void LOC_Load(void) {
+void LOC_RegisterCvars(void) {
     CON_CvarRegister(&p_language);
+}
 
+static void LOC_Load(void) {
+    
     int lang = p_language.value;
 
     if (LOC_LoadLang(lang)) return;

@@ -65,9 +65,6 @@ char* I_GetUserDir(void);
 char* I_GetUserFile(char* file);
 char* I_FindDataFile(char* file);
 
-boolean I_FileExists(const char* path);
-boolean I_DirExists(const char* path);
-
 void I_RegisterCvars(void);
 
 extern FILE* DebugFile;
@@ -76,8 +73,6 @@ extern boolean    DigiJoy;
 #ifdef SDL_PLATFORM_WIN32
 #include <windows.h>
 boolean I_GetRegistryString (HKEY root, const wchar_t *dir, const wchar_t *keyname, char *out, size_t maxchars);
-
-#define strdup _strdup
 
 #endif
 
