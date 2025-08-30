@@ -34,6 +34,7 @@
 #include "doomstat.h"
 #include "i_system.h"
 #include "i_system_io.h"
+#include "i_video.h"
 #include "z_zone.h"
 #include "m_misc.h"
 #include "md5.h"
@@ -56,8 +57,6 @@ typedef struct memlump_s {
 
 static memlump_t g_memlumps[MAX_MEMLUMPS];
 static int g_nmemlumps = 0;
-
-extern int win_px_w, win_px_h;
 
 char* g_kpf_files[MAX_KPF_FILES];
 int g_num_kpf = 0;

@@ -347,6 +347,8 @@ void M_LoadDefaults(void) {
 // M_ScreenShot
 //
 
+#
+
 void M_ScreenShot(void) {
 	filepath_t name;
 	byte* buff;
@@ -364,8 +366,9 @@ void M_ScreenShot(void) {
 
 	if (png && M_WriteFile(name, png, size)) {
 		I_Printf("Saved screenshot: %s\n", name);
+		players[consoleplayer].message = "Saved screenshot";
 	} else {
-		I_Printf("Failed to create screenshot\n");
+		players[consoleplayer].message = "Failed to create screenshot";
 	}
 
 	Z_Free(png);

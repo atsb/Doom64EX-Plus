@@ -48,6 +48,7 @@
 #include "i_swap.h"
 #include "w_wad.h"
 #include "i_shaders.h"
+#include "i_video.h"
 
 void M_DrawXInputButton(int x, int y, int button);
 
@@ -691,6 +692,7 @@ void ST_DrawCrosshair(int x, int y, int slot, byte scalefactor, rcolor color) {
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	u = 1.0f / st_crosshairs;
+
 	scale = scalefactor == 0 ? ST_CROSSHAIRSIZE : (ST_CROSSHAIRSIZE / (1 << scalefactor));
 
 	GL_SetupAndDraw2DQuad((float)x, (float)y, scale, scale,
@@ -943,7 +945,13 @@ void ST_Drawer(void) {
 			alpha = 0;
 		}
 
-		ST_DrawCrosshair(x, y, (int)st_crosshair.value, 2, WHITEALPHA(alpha));
+		// nominal scale value for 1080p is 2
+		// for [1080p; 1620p[ => 2
+		// for [1620p; 2640p[ => 3
+
+		int scale = 1 + SDL_lroundf(win_px_h / 1080.f);
+
+		ST_DrawCrosshair(x, y, (int)st_crosshair.value, scale, WHITEALPHA(alpha));
 	}
 
 	//

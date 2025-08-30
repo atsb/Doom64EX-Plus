@@ -30,6 +30,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "i_system.h"
+#include "i_video.h"
 #include "z_zone.h"
 #include "r_main.h"
 #include "gl_texture.h"
@@ -63,8 +64,6 @@ CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(r_multisample);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(r_colorscale);
-
-extern int win_px_w, win_px_h;
 
 void GL_OnResize(int w, int h);
 

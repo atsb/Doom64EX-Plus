@@ -32,6 +32,9 @@
 #include "gl_draw.h"
 #include "i_system.h"
 #include "dgl.h"
+#include "i_video.h"
+#include "i_shaders.h"
+
 
 #define SDL_MAIN_HANDLED
 
@@ -454,8 +457,6 @@ boolean CON_Responder(event_t* ev) {
 //
 // CON_Draw
 //
-
-extern float display_scale; // set in i_video.c
 
 #define CONFONT_SCALE   ((display_scale * SCREENHEIGHT) / video_height)
 
