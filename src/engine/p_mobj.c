@@ -1058,6 +1058,9 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	mobj->z += (mthing->z << FRACBITS);
 	mobj->angle = ANG45 * (mthing->angle / 45);
 	mobj->tid = mthing->tid;
+	if (respawnmonsters) {
+		mobj->spawnpoint = *mthing;
+	}
 
 	//
 	// [d64] check if spawn is valid
