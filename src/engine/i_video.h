@@ -31,4 +31,7 @@ void I_InitScreen(void);
 void I_ShutdownVideo(void);
 void V_RegisterCvars();
 
+extern float display_scale;
+extern int win_px_w, win_px_h;
+
 #endif
