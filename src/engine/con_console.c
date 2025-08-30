@@ -467,6 +467,8 @@ void CON_Draw(void) {
 	float   x = 0;
 	float   inputlen;
 
+	I_ShaderUnBind();
+
 	if (!console_initialized) {
 		return;
 	}
@@ -509,4 +511,6 @@ void CON_Draw(void) {
 
 	inputlen = Draw_ConsoleText(x, y, WHITE, CONFONT_SCALE, "%s", console_inputbuffer);
 	Draw_ConsoleText(x + inputlen, y, WHITE, CONFONT_SCALE, "_");
+
+	I_ShaderBind();
 }
