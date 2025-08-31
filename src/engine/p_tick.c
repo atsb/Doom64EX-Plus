@@ -137,37 +137,52 @@ void P_UnlinkMobj(mobj_t* mobj) {
 // P_RunMobjs
 //
 
-void P_RunMobjs(void) {
-	for (currentmobj = mobjhead.next; currentmobj != &mobjhead; currentmobj = currentmobj->next) {
-		if (!currentmobj) {
+void P_RunMobjs(void)
+{
+	for (currentmobj = mobjhead.next; currentmobj != &mobjhead; )
+	{
+		mobj_t* mo = currentmobj;
+		mobj_t* next = mo->next;
+
+		if (!mo) {
 			CON_Warnf("P_RunMobjs: Null mobj in linked list!\n");
-			break;
+			currentmobj = next;
+			continue;
 		}
 
 		// Special case only
-		if (currentmobj->flags & MF_NOSECTOR) {
+		if (mo->flags & MF_NOSECTOR) {
+			currentmobj = next;
 			continue;
 		}
 
-		if (gameflags & GF_LOCKMONSTERS && !currentmobj->player && currentmobj->flags & MF_COUNTKILL) {
+		if ((gameflags & GF_LOCKMONSTERS) && !mo->player && (mo->flags & MF_COUNTKILL)) {
+			currentmobj = next;
 			continue;
 		}
 
-		if (!currentmobj->player) {
-			// [kex] don't bother if about to be removed
-			if (currentmobj->mobjfunc != P_SafeRemoveMobj) {
-				// [kex] don't clear callback if mobj is going to be respawning
-				if (currentmobj->mobjfunc != P_RespawnSpecials) {
-					currentmobj->mobjfunc = NULL;
-				}
-
-				P_MobjThinker(currentmobj);
+		if (!mo->player)
+		{
+			if (mo->mobjfunc == P_SafeRemoveMobj) {
+				void (*cb)(mobj_t*) = mo->mobjfunc;
+				mo->mobjfunc = NULL;
+				cb(mo);
+				currentmobj = next;
+				continue;
 			}
 
-			if (currentmobj->mobjfunc) {
-				currentmobj->mobjfunc(currentmobj);
+			if (mo->mobjfunc != P_RespawnSpecials) {
+				mo->mobjfunc = NULL;
+			}
+			P_MobjThinker(mo);
+
+			void (*cb)(mobj_t*) = mo->mobjfunc;
+			mo->mobjfunc = NULL;
+			if (cb) {
+				cb(mo);
 			}
 		}
+		currentmobj = next;
 	}
 }
 
