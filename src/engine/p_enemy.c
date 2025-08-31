@@ -1871,7 +1871,7 @@ void A_SkelMissile(mobj_t* actor, int direction)
 		true);
 	mo->x += mo->momx;
 	mo->y += mo->momy;
-	mo->tracer = actor->target;
+	P_SetTarget(&mo->tracer, actor->target);
 }
 
 //
@@ -2107,7 +2107,7 @@ void A_VileChase(mobj_t* actor)
 					corpsehit->height <<= 2;
 					corpsehit->flags = info->flags;
 					corpsehit->health = info->spawnhealth;
-					corpsehit->target = NULL;
+					P_SetTarget(&corpsehit->target, NULL);
 
 					return;
 				}
@@ -2145,9 +2145,9 @@ void A_VileTarget(mobj_t* actor)
 		actor->target->x,
 		actor->target->z, MT_FIRE);
 
-	actor->tracer = fog;
-	fog->target = actor;
-	fog->tracer = actor->target;
+	P_SetTarget(&actor->tracer, fog);
+	P_SetTarget(&fog->target, actor);
+	P_SetTarget(&fog->tracer, actor->target);
 	A_Fire(fog);
 }
 
