@@ -975,6 +975,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	fixed_t             x;
 	fixed_t             y;
 	fixed_t             z;
+	boolean				ismonster;
 
 	// count deathmatch start positions
 
@@ -1027,11 +1028,10 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		return NULL;
 	}
 
-	// don't spawn any monsters if -nomonsters
+	ismonster = (i == MT_SKULL || (mobjinfo[i].flags & MF_COUNTKILL));
 
-	if (nomonsters
-		&& (i == MT_SKULL
-			|| (mobjinfo[i].flags & MF_COUNTKILL))) {
+	// don't spawn any monsters if -nomonsters
+	if (ismonster && nomonsters) {
 		return NULL;
 	}
 
@@ -1058,9 +1058,6 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	mobj->z += (mthing->z << FRACBITS);
 	mobj->angle = ANG45 * (mthing->angle / 45);
 	mobj->tid = mthing->tid;
-	if (respawnmonsters) {
-		mobj->spawnpoint = *mthing;
-	}
 
 	//
 	// [d64] check if spawn is valid
@@ -1116,6 +1113,11 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	// At least set BF_MIDPOINTONLY if no flags exist..
 	if (mobj->flags == 0) {
 		mobj->blockflag |= BF_MIDPOINTONLY;
+	}
+	
+	// for nightmare difficulty (-skill 5) and any difficulty with -respawn
+	if (ismonster && respawnmonsters) {
+		mobj->spawnpoint = *mthing;
 	}
 
 	return mobj;
