@@ -22,6 +22,7 @@
 #include <SDL3/SDL_stdinc.h>
 
 #include "gl_texture.h"
+extern int g_psprite_scope;
 #include "doomstat.h"
 #include "i_png.h"
 #include "w_wad.h"
@@ -32,8 +33,11 @@
 #include "g_actions.h"
 #include "r_main.h"
 #include "dgl.h"
+#include "i_sectorcombiner.h"
 
 #define GL_MAX_TEX_UNITS    4
+
+extern int game_world_shader_scope;
 
 int         curtexture;
 int         cursprite;
@@ -98,6 +102,12 @@ extern void I_ShaderSetTextureSize(int w, int h);
 extern void I_ShaderSetUseTexture(int on);
 extern void I_ShaderBind(void);
 extern void I_ShaderUnBind(void);
+extern void I_SectorCombiner_SetCombineRGB(int mode);
+extern void I_SectorCombiner_SetCombineAlpha(int mode);
+extern void I_SectorCombiner_SetSourceRGB(int slot, int source);
+extern void I_SectorCombiner_SetOperandRGB(int slot, int operand);
+extern void I_SectorCombiner_SetEnvColor(float r, float g, float b, float a);
+
 
 // atsb: Added a helper here because we need to do it in like 6 places..  better than pasting.  Helpers aren't in Pascal Case, functions are.
 void GL_Env_RGB_Modulate_Alpha_FromTexture(void)
@@ -108,6 +118,12 @@ void GL_Env_RGB_Modulate_Alpha_FromTexture(void)
 	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
 	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PRIMARY_COLOR);
 	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
+
+	I_SectorCombiner_SetCombineRGB(GL_MODULATE);
+	I_SectorCombiner_SetSourceRGB(0, GL_TEXTURE);
+	I_SectorCombiner_SetOperandRGB(0, GL_SRC_COLOR);
+	I_SectorCombiner_SetSourceRGB(1, GL_PRIMARY_COLOR);
+	I_SectorCombiner_SetOperandRGB(1, GL_SRC_COLOR);
 
 	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
 	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
@@ -262,6 +278,8 @@ int GL_WorldTextureIsMasked(int texnum)
 // GL_BindWorldTexture
 //
 
+extern void I_SectorCombiner_Bind(int useTex, int w, int h);
+
 void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	byte* png;
 	int w;
@@ -299,7 +317,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
             GL_SetState(GLSTATE_BLEND, true);                                     \
             dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);                   \
             dglDepthMask(GL_TRUE);                                                \
-            GL_Env_RGB_Modulate_Alpha_FromTexture();                                \
+            if (!game_world_shader_scope) GL_Env_RGB_Modulate_Alpha_FromTexture();  \
         } else if (g_tex_is_masked && g_tex_is_masked[_t]) {                          \
             /* atsb: (0/255 alpha) */                                    \
             GL_SetState(GLSTATE_BLEND, false);                                    \
@@ -320,6 +338,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(texturewidth[texnum], textureheight[texnum]);
+		I_SectorCombiner_Bind(1, texturewidth[texnum], textureheight[texnum]);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		if (devparm)
@@ -424,9 +443,13 @@ static void InitGfxTextures(void) {
 
 		int dup = 0;
 		for (j = 0; j < num_found; ++j) {
-			if (!dstrncmp(lumpinfo[png_indices[j]].name, lumpinfo[i].name, 8)) { dup = 1; break; }
+			if (!dstrncmp(lumpinfo[png_indices[j]].name, lumpinfo[i].name, 8)) { 
+				dup = 1; 
+				break; 
+			}
 		}
-		if (!dup) png_indices[num_found++] = i;
+		if (!dup) 
+			png_indices[num_found++] = i;
 	}
 
 	for (i = 0, j = num_found - 1; i < j; ++i, --j) {
@@ -503,7 +526,8 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 			dglDisable(GL_ALPHA_TEST);
 			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			dglDepthMask(GL_TRUE);
-			GL_Env_RGB_Modulate_Alpha_FromTexture();
+			if (!game_world_shader_scope)
+				GL_Env_RGB_Modulate_Alpha_FromTexture();
 		}
 		else {
 			GL_SetState(GLSTATE_BLEND, 0);
@@ -511,16 +535,20 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 			dglDepthMask(GL_TRUE);
 			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		}
+		I_SectorCombiner_Unbind();
+		I_ShaderSetUseTexture(1);
+		I_ShaderSetTextureSize(0,0);
 		return gfxid;
 	}
 	curgfx = gfxid;
 
 	if (gfxptr[gfxid]) {
 		dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
+		I_SectorCombiner_Unbind();
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(0, 0);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -529,12 +557,14 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 		// UI state
 		if (devparm)
 			glBindCalls++;
+
 		if (alpha) {
 			GL_SetState(GLSTATE_BLEND, 1);
 			dglDisable(GL_ALPHA_TEST);
 			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			dglDepthMask(GL_TRUE);
-			GL_Env_RGB_Modulate_Alpha_FromTexture();
+			if (!game_world_shader_scope)
+				GL_Env_RGB_Modulate_Alpha_FromTexture();
 		}
 		else {
 			GL_SetState(GLSTATE_BLEND, 0);
@@ -542,6 +572,13 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 			dglDepthMask(GL_TRUE);
 			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		}
+		
+		I_SectorCombiner_Unbind();
+		I_ShaderSetUseTexture(1);
+		I_ShaderSetTextureSize(0, 0);
+		I_SectorCombiner_Unbind();
+		I_ShaderSetUseTexture(1);
+		I_ShaderSetTextureSize(0,0);
 		return gfxid;
 	}
 
@@ -550,9 +587,8 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 	dglGenTextures(1, &gfxptr[gfxid]);
 	dglBindTexture(GL_TEXTURE_2D, gfxptr[gfxid]);
 	I_ShaderSetUseTexture(1);
-	I_ShaderSetTextureSize(0, 0);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -575,7 +611,8 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 		dglDisable(GL_ALPHA_TEST);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_TRUE);
-		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		if (!game_world_shader_scope) 
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
 	}
 	else {
 		GL_SetState(GLSTATE_BLEND, 0);
@@ -584,7 +621,15 @@ int GL_BindGfxTexture(const char* name, int alpha) {
 		dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	}
 
-	if (devparm) glBindCalls++;
+	if (devparm) 
+		glBindCalls++;
+	
+	I_SectorCombiner_Unbind();
+	I_ShaderSetUseTexture(1);
+	I_ShaderSetTextureSize(0, 0);
+	I_SectorCombiner_Unbind();
+	I_ShaderSetUseTexture(1);
+	I_ShaderSetTextureSize(0,0);
 	return gfxid;
 }
 
@@ -662,6 +707,7 @@ static void InitSpriteTextures(void) {
 // GL_BindSpriteTexture
 //
 void GL_BindSpriteTexture(int spritenum, int pal) {
+    extern cvar_t r_spriteFilter;
 	byte* png;
 	int w, h;
 
@@ -676,7 +722,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		dglDisable(GL_ALPHA_TEST);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
-		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		if (!game_world_shader_scope)
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
 		return;
 	}
 
@@ -691,9 +738,15 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		dglDepthMask(GL_FALSE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		GL_Env_RGB_Modulate_Alpha_FromTexture();
+		if (!game_world_shader_scope)
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
+		I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+		if (game_world_shader_scope && !g_psprite_scope) { 
+			dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		} 
 
 		if (devparm) glBindCalls++;
 		return;
@@ -704,7 +757,15 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	dglGenTextures(1, &spriteptr[spritenum][pal]);
 	dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
 	I_ShaderSetUseTexture(1);
+	if (game_world_shader_scope && !g_psprite_scope) { 
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
 	I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -715,10 +776,14 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	dglDisable(GL_ALPHA_TEST);
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	dglDepthMask(GL_FALSE);
-	GL_Env_RGB_Modulate_Alpha_FromTexture();
+	if (!game_world_shader_scope)
+		GL_Env_RGB_Modulate_Alpha_FromTexture();
 
 	spritewidth[spritenum] = w;
 	spriteheight[spritenum] = h;
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 
 	if (devparm) glBindCalls++;
 }
@@ -737,7 +802,6 @@ dtexture GL_ScreenToTexture(void) {
 	dglGenTextures(1, &id);
 	dglBindTexture(GL_TEXTURE_2D, id);
 	I_ShaderSetUseTexture(1);
-	I_ShaderSetTextureSize(0, 0);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -793,6 +857,7 @@ void GL_BindDummyTexture(void) {
 		dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		I_SectorCombiner_Unbind();
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(0, 0);
 
@@ -801,6 +866,7 @@ void GL_BindDummyTexture(void) {
 	}
 	else {
 		dglBindTexture(GL_TEXTURE_2D, dummytexture);
+		I_SectorCombiner_Unbind();
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(0, 0);
 	}
@@ -824,6 +890,7 @@ void GL_BindEnvTexture(void) {
 	if (envtexture == 0) {
 		dglGenTextures(1, &envtexture);
 		dglBindTexture(GL_TEXTURE_2D, envtexture);
+		I_SectorCombiner_Unbind();
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(0, 0);
 		dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)rgb);
@@ -835,6 +902,7 @@ void GL_BindEnvTexture(void) {
 	}
 	else {
 		dglBindTexture(GL_TEXTURE_2D, envtexture);
+		I_SectorCombiner_Unbind();
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(0, 0);
 	}
@@ -917,9 +985,9 @@ void GL_UnloadTexture(dtexture* texture) {
 //
 
 void GL_SetTextureUnit(int unit, int enable) {
-	if (!has_GL_ARB_multitexture || r_fillmode.value <= 0 || unit > 3) 
+	if (!has_GL_ARB_multitexture || r_fillmode.value <= 0 || unit > 3)
 		return;
-	if (curunit == unit) 
+	if (curunit == unit)
 		return;
 
 	curunit = unit;
@@ -928,15 +996,11 @@ void GL_SetTextureUnit(int unit, int enable) {
 	GL_SetState(GLSTATE_TEXTURE0 + unit, enable);
 
 	if (enable) {
-		if (unit != 0) {
-			I_ShaderUnBind();
-		}
-		else {
+		// atsb: keep the main shader bound for all units so combiner uniforms apply.
+		if (game_world_shader_scope)
 			I_ShaderBind();
-		}
 	}
 }
-
 
 //
 // GL_SetTextureMode
@@ -948,9 +1012,6 @@ void GL_SetTextureMode(int mode) {
 		return;
 	state->mode = mode;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, state->mode);
-
-	if (mode != GL_MODULATE) 
-		I_ShaderUnBind();
 }
 
 //
@@ -964,7 +1025,7 @@ void GL_SetCombineState(int combine) {
 	state->combine_rgb = combine;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, state->combine_rgb);
 
-	I_ShaderUnBind();
+	I_SectorCombiner_SetCombineRGB(combine);
 }
 
 //
@@ -977,8 +1038,6 @@ void GL_SetCombineStateAlpha(int combine) {
 		return;
 	state->combine_alpha = combine;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, state->combine_alpha);
-
-	I_ShaderUnBind();
 }
 
 //
@@ -1007,6 +1066,7 @@ void GL_SetEnvColor(float* param) {
 	state->color[3] = f[3];
 
 	dglTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, f);
+	I_SectorCombiner_SetEnvColor(f[0], f[1], f[2], f[3]);
 }
 
 //
@@ -1024,6 +1084,7 @@ void GL_SetCombineSourceRGB(int source, int target) {
 
 	state->source_rgb[source] = target;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB + source, state->source_rgb[source]);
+	I_SectorCombiner_SetSourceRGB(source, target);
 }
 
 //
@@ -1058,6 +1119,7 @@ void GL_SetCombineOperandRGB(int operand, int target) {
 
 	state->operand_rgb[operand] = target;
 	dglTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB + operand, state->operand_rgb[operand]);
+	I_SectorCombiner_SetOperandRGB(operand, target);
 }
 
 //
@@ -1242,7 +1304,7 @@ static void GL_GfxEnsureClassified(int gfxid)
 			GL_SetState(GLSTATE_BLEND, 1);                                       \
 			dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);                  \
 			dglDepthMask(GL_FALSE);                                              \
-			GL_Env_RGB_Modulate_Alpha_FromTexture();                             \
+			if (!game_world_shader_scope) GL_Env_RGB_Modulate_Alpha_FromTexture();  \
 		} else if (g_gfx_is_masked && g_gfx_is_masked[_g]) {                     \
 			/* binary cutouts (0/255 alpha) */                                   \
 			GL_SetState(GLSTATE_BLEND, 0);                                       \
@@ -1259,8 +1321,7 @@ static void GL_GfxEnsureClassified(int gfxid)
 		}                                                                        \
 	} while (0)
 
-// Public helper: bind any PNG gfx lump by name and auto-handle transparency.
-// Returns gfx id on success, -1 on failure.
+
 int GL_BindGfxTextureAuto(const char* name)
 {
 	if (r_fillmode.value <= 0)
@@ -1278,18 +1339,14 @@ int GL_BindGfxTextureAuto(const char* name)
 		return -1;
 	}
 
-	// Make sure we know whether it is opaque/masked/translucent
 	GL_GfxEnsureClassified(gfxid);
 
-	// If it has any transparency at all, request RGBA upload/bind in the legacy path,
-	// then immediately re-apply the *correct* GL state based on masked vs translucent.
 	const int hasAnyAlpha =
 		((g_gfx_is_masked && g_gfx_is_masked[gfxid]) ||
 			(g_gfx_is_translucent && g_gfx_is_translucent[gfxid])) ? 1 : 0;
 
 	const int ret = GL_BindGfxTexture(name, hasAnyAlpha);
 
-	// Override state to match masked vs translucent precisely
 	APPLY_ALPHA_MODE_FOR_GFX(gfxid);
 
 	return ret;

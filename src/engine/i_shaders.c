@@ -25,10 +25,36 @@
 #include "i_shaders.h"
 #include "dgl.h"
 
+extern void I_SectorCombiner_Commit(void);
+
 CVAR_EXTERNAL(r_filter);
 
 static GLint sLocTexel = -1;
 static GLint sLocUseTex = -1;
+
+static GLuint generic_tint_overlay_prog = 0;
+
+static GLint sLocPassCount = -1;
+static GLint sLocPassMode[4] = { -1,-1,-1,-1 };
+static GLint sLocPassColor[4] = { -1,-1,-1,-1 };
+static GLint sLocPassFactor[4] = { -1,-1,-1,-1 };
+static GLint sLocFogEnabled = -1, sLocFogColor = -1, sLocFogFactor = -1;
+
+typedef struct {
+	int combine_rgb;
+	int combine_alpha;
+	int source_rgb[3];
+	int operand_rgb[3];
+	float env_color[4];
+	int pass_mode[4];
+	float pass_color[4][4];
+	float pass_factor[4];
+	int pass_count;
+	int fog_enabled; float fog_color[3]; float fog_factor;
+} comb_state_t;
+
+static comb_state_t gComb;
+static GLint  generic_tint_overlay_colour = -1;
 
 /* this is where shaders are defined */
 
@@ -83,7 +109,14 @@ static const char* vertex_shader_bilateral =
 "#version 120\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
-"void main(){\n"
+"uniform int   uPassCount;\n"
+"uniform int   uPassMode[4];\n"
+"uniform vec4  uPassColor[4];\n"
+"uniform float uPassFactor[4];\n"
+"uniform int   uFogEnabled;\n"
+"uniform vec3  uFogColor;\n"
+"uniform float uFogFactor;\n"
+"vec3 _applyPass(int mode, vec3 base, vec3 src, float f){\n""  if (mode==8448) return base*src;\n""  if (mode==260)  return base+src;\n""  if (mode==34165) return mix(base,src, clamp(f,0.0,1.0));\n""  if (mode==7681) return src;\n""  return base;\n""}\n""void main(){\n"
 "  gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n"
 "  vUV = gl_MultiTexCoord0.xy;\n"
 "  vColor = gl_Color;\n"
@@ -92,6 +125,7 @@ static const char* vertex_shader_bilateral =
 /* N64 3-point filter (atsb) */
 static const char* fragment_shader_bilateral_3point =
 "#version 120\n"
+"#define ADD_SCALE 0.60\n"
 "uniform sampler2D uTex;\n"
 "uniform vec2  uTexel;\n"
 "uniform float uStrength;\n"
@@ -101,14 +135,58 @@ static const char* fragment_shader_bilateral_3point =
 "uniform int   uUseTex;\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
+"float _lum(vec3 c){ return dot(c, vec3(0.2126,0.7152,0.0722)); }\n"
+"uniform int   uPassCount;\n"
+"uniform int   uPassMode[4];\n"
+"uniform vec4  uPassColor[4];\n"
+"uniform float uPassFactor[4];\n"
+"uniform int   uFogEnabled;\n"
+"uniform vec3  uFogColor;\n"
+"uniform float uFogFactor;\n"
+"\n"
+"vec3 apply_combiner(vec3 rgb){\n"
+"  for (int i=0;i<4;i++){\n"
+"    if (i>=uPassCount) break;\n"
+"    vec3  src = uPassColor[i].rgb;\n"
+"    float fac = uPassFactor[i];\n"
+"    int   mode= uPassMode[i];\n"
+"    if (fac < 0.0 && fac > -1.5) fac = _lum(vColor.rgb);\n"
+"    \n"
+"    if (mode == 8448) {                           // GL_MODULATE\n"
+"      rgb *= src;\n"
+"    } else if (mode == 260) {                     // GL_ADD\n"
+"      float amp = clamp(abs(fac),0.0,1.0)*ADD_SCALE;\n"
+"      amp = min(amp*0.3, max(0.0, 1.0 - _lum(rgb)) + 1e-5);\n"
+"      if (fac < -0.5) {                           // colored ADD\n"
+"        float m = max(max(vColor.r,vColor.g),vColor.b);\n"
+"        vec3 tint = (m > 1e-5) ? (vColor.rgb/m) : vColor.rgb;\n"
+"        rgb += tint * src * amp;\n"
+"      } else {\n"
+"        rgb += src * amp;                         // plain scaled ADD\n"
+"      }\n"
+"    } else if (mode == 34165) {                   // GL_INTERPOLATE\n"
+"      rgb = mix(rgb, src, clamp(fac,0.0,1.0));\n"
+"    } else if (mode == 7681) {                    // GL_REPLACE\n"
+"      rgb = src;\n"
+"    }\n"
+"  }\n"
+"  return rgb;\n"
+"}\n"
 "\n"
 "void main(){\n"
-"  if (uUseTex == 0) { gl_FragColor = vColor; return; }\n"
+"  // 1: no texture\n"
+"  if (uUseTex == 0) {\n"
+"    vec4 col = vColor; vec3 rgb = apply_combiner(col.rgb);\n"
+"    if (uFogEnabled!=0) rgb = mix(rgb, uFogColor, clamp(uFogFactor,0.0,1.0));\n"
+"    gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a); return; }\n"
 "\n"
+"  // 2: texture but no 3-point\n"
 "  if (uTexel.x <= 0.0 || uTexel.y <= 0.0) {\n"
-"    gl_FragColor = texture2D(uTex, vUV) * vColor; return;\n"
-"  }\n"
+"    vec4 col = texture2D(uTex, vUV) * vColor; vec3 rgb = apply_combiner(col.rgb);\n"
+"    if (uFogEnabled!=0) rgb = mix(rgb, uFogColor, clamp(uFogFactor,0.0,1.0));\n"
+"    gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a); return; }\n"
 "\n"
+"  // 3: N64 3-point\n"
 "  vec2 texSize = 1.0 / uTexel;\n"
 "  vec2 p  = vUV * texSize - 0.5;\n"
 "  vec2 ip = floor(p);\n"
@@ -133,17 +211,62 @@ static const char* fragment_shader_bilateral_3point =
 "  float w   = (eps > 0.0) ? smoothstep(1.0 - eps, 1.0 + eps, s) : step(1.0, s);\n"
 "  vec4 tex  = mix(triA, triB, w);\n"
 "  if (uBleed > 0.0) { vec4 avg = 0.25*(c00+c10+c01+c11); tex = mix(tex, avg, clamp(uBleed,0.0,1.0)); }\n"
-"  gl_FragColor = tex * vColor;\n"
+"\n"
+"  vec4 col = tex * vColor; vec3 rgb = apply_combiner(col.rgb);\n"
+"  if (uFogEnabled!=0) rgb = mix(rgb, uFogColor, clamp(uFogFactor,0.0,1.0));\n"
+"  gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a);\n"
 "}\n";
 
+/* atsb: bilinear */
 static const char* fragment_shader_bilateral =
 "#version 120\n"
+"#define ADD_SCALE 0.60\n"
 "uniform sampler2D uTex;\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\n"
+"float _lum(vec3 c){ return dot(c, vec3(0.2126,0.7152,0.0722)); }\n"
+"uniform int   uPassCount;\n"
+"uniform int   uPassMode[4];\n"
+"uniform vec4  uPassColor[4];\n"
+"uniform float uPassFactor[4];\n"
+"uniform int   uFogEnabled;\n"
+"uniform vec3  uFogColor;\n"
+"uniform float uFogFactor;\n"
+"\n"
+"vec3 apply_combiner(vec3 rgb){\n"
+"  for (int i=0;i<4;i++){\n"
+"    if (i>=uPassCount) break;\n"
+"    vec3  src = uPassColor[i].rgb;\n"
+"    float fac = uPassFactor[i];\n"
+"    int   mode= uPassMode[i];\n"
+"    if (fac < 0.0 && fac > -1.5) fac = _lum(vColor.rgb);\n"
+"    \n"
+"    if (mode == 8448) {                           // GL_MODULATE\n"
+"      rgb *= src;\n"
+"    } else if (mode == 260) {                     // GL_ADD\n"
+"      float amp = clamp(abs(fac),0.0,1.0)*ADD_SCALE;\n"
+"      amp = min(amp*0.3, max(0.0, 1.0 - _lum(rgb)) + 1e-5);\n"
+"      if (fac < -0.5) {                           // colored ADD\n"
+"        float m = max(max(vColor.r,vColor.g),vColor.b);\n"
+"        vec3 tint = (m > 1e-5) ? (vColor.rgb/m) : vColor.rgb;\n"
+"        rgb += tint * src * amp;\n"
+"      } else {\n"
+"        rgb += src * amp;                         // plain scaled ADD\n"
+"      }\n"
+"    } else if (mode == 34165) {                   // GL_INTERPOLATE\n"
+"      rgb = mix(rgb, src, clamp(fac,0.0,1.0));\n"
+"    } else if (mode == 7681) {                    // GL_REPLACE\n"
+"      rgb = src;\n"
+"    }\n"
+"  }\n"
+"  return rgb;\n"
+"}\n"
 "\n"
 "void main(){\n"
-"  gl_FragColor = texture2D(uTex, vUV) * vColor;\n"
+"  vec4 col = texture2D(uTex, vUV) * vColor;\n"
+"  vec3 rgb = apply_combiner(col.rgb);\n"
+"  if (uFogEnabled!=0) rgb = mix(rgb, uFogColor, clamp(uFogFactor,0.0,1.0));\n"
+"  gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a);\n"
 "}\n";
 
 static GLuint I_3PointShaderCompile(GLenum type, const char* src) {
@@ -185,15 +308,46 @@ static void I_3PointShaderInit(void) {
 	shader_struct.locTex = pglGetUniformLocation(shader_struct.prog, "uTex");
 	sLocTexel = pglGetUniformLocation(shader_struct.prog, "uTexel");
 	sLocUseTex = pglGetUniformLocation(shader_struct.prog, "uUseTex");
+	sLocPassCount = pglGetUniformLocation(shader_struct.prog, "uPassCount");
+	for (int i=0;i<4;i++) {
+		char n1[32], n2[32], n3[32];
+		SDL_snprintf(n1,sizeof(n1),"uPassMode[%d]",i);
+		SDL_snprintf(n2,sizeof(n2),"uPassColor[%d]",i);
+		SDL_snprintf(n3,sizeof(n3),"uPassFactor[%d]",i);
+		sLocPassMode[i]  = pglGetUniformLocation(shader_struct.prog, n1);
+		sLocPassColor[i] = pglGetUniformLocation(shader_struct.prog, n2);
+		sLocPassFactor[i]= pglGetUniformLocation(shader_struct.prog, n3);
+	}
+	sLocFogEnabled = pglGetUniformLocation(shader_struct.prog, "uFogEnabled");
+	sLocFogColor   = pglGetUniformLocation(shader_struct.prog, "uFogColor");
+	sLocFogFactor  = pglGetUniformLocation(shader_struct.prog, "uFogFactor");
+
 	shader_struct.initialised = 1;
+
+	// init combiner defaults
+	gComb.combine_rgb = 8448; gComb.combine_alpha = 8448;
+	for (int i=0;i<3;i++){ 
+		gComb.source_rgb[i]=0x1702; 
+		gComb.operand_rgb[i]=0x0300; 
+	}
+	gComb.env_color[0]=gComb.env_color[1]=gComb.env_color[2]=0.0f; gComb.env_color[3]=1.0f;
+	gComb.pass_count=0; gComb.fog_enabled=0; gComb.fog_color[0]=gComb.fog_color[1]=gComb.fog_color[2]=0.0f; gComb.fog_factor=0.0f;
+
+	// push combiner to shader
+	if (sLocPassCount>=0) 
+		pglUniform1i(sLocPassCount, 0);
+	if (sLocFogEnabled>=0) 
+		pglUniform1i(sLocFogEnabled, 0);
+	if (sLocFogColor>=0) 
+		pglUniform3f(sLocFogColor,0.0f,0.0f,0.0f);
+	if (sLocFogFactor>=0) 
+		pglUniform1f(sLocFogFactor,0.0f);
+
 }
 
 /* GENERIC TINT OVERLAY SHADERS
 ===============================
 */
-
-static GLuint generic_tint_overlay_prog = 0;
-static GLint  generic_tint_overlay_colour = -1;
 
 static const char* s_vs =
 "#version 120\n"
@@ -214,8 +368,13 @@ static GLuint I_OverlayTintShaderCompile(GLenum tp, const char* src) {
 void I_OverlayTintShaderInit(void) {
 	if (generic_tint_overlay_prog) 
 		return;
-	GLuint vs = I_OverlayTintShaderCompile(GL_VERTEX_SHADER, s_vs);
-	GLuint fs = I_OverlayTintShaderCompile(GL_FRAGMENT_SHADER, s_fs);
+	GLuint vs = I_OverlayTintShaderCompile(GL_VERTEX_SHADER,
+		"#version 120\n"
+		"void main(){ gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; }\n");
+	GLuint fs = I_OverlayTintShaderCompile(GL_FRAGMENT_SHADER,
+		"#version 120\n"
+		"uniform vec4 uColor;\n" 
+		"void main(){ gl_FragColor = uColor; }\n");
 	generic_tint_overlay_prog = pglCreateProgram();
 	pglAttachShader(generic_tint_overlay_prog, vs);
 	pglAttachShader(generic_tint_overlay_prog, fs);
@@ -302,6 +461,7 @@ void I_ShaderBind(void) {
 		pglUniform1i(sLocUseTex, 1);
 	if (sLocTexel >= 0)
 		pglUniform2f(sLocTexel, 0.0f, 0.0f);
+	I_SectorCombiner_Commit();
 }
 
 void I_ShaderUnBind(void) {
@@ -326,4 +486,102 @@ void I_ShaderSetUseTexture(int on) {
 	if (!shader_struct.initialised || sLocUseTex < 0)
 		return;
 	pglUniform1i(sLocUseTex, on ? 1 : 0);
+}
+
+static void I_CombinerBake(void) {
+    gComb.pass_count = 0;
+    float src0[3] = {1,1,1};
+    float src1[3] = {1,1,1};
+
+    if (gComb.source_rgb[0]==0x1702) { 
+	}
+    else if (gComb.source_rgb[0]==0x8577) {
+	}
+    else if (gComb.source_rgb[0]==0x8576) {
+        src0[0]=gComb.env_color[0]; 
+		src0[1]=gComb.env_color[1]; 
+		src0[2]=gComb.env_color[2];
+        if (gComb.operand_rgb[0]==0x0301) { 
+			src0[0]=1.0f-src0[0]; 
+			src0[1]=1.0f-src0[1]; 
+			src0[2]=1.0f-src0[2]; }
+    }
+    if (gComb.source_rgb[1]==0x1702) {
+	}
+    else if (gComb.source_rgb[1]==0x8577) {
+	}
+    else if (gComb.source_rgb[1]==0x8576) {
+        src1[0]=gComb.env_color[0]; 
+		src1[1]=gComb.env_color[1]; 
+		src1[2]=gComb.env_color[2];
+        if (gComb.operand_rgb[1]==0x0301) { 
+			src1[0]=1.0f-src1[0]; 
+			src1[1]=1.0f-src1[1];
+			src1[2]=1.0f-src1[2]; 
+		}
+    }
+
+	// MODULATE
+    int m = gComb.combine_rgb;
+    if (m==8448) { 
+        gComb.pass_mode[gComb.pass_count]=8448;
+        gComb.pass_color[gComb.pass_count][0]=src1[0];
+        gComb.pass_color[gComb.pass_count][1]=src1[1];
+        gComb.pass_color[gComb.pass_count][2]=src1[2];
+        gComb.pass_color[gComb.pass_count][3]=1.0f;
+        gComb.pass_factor[gComb.pass_count]=1.0f;
+        gComb.pass_count++;
+
+		// ADD
+    } else if (m==260) { 
+        gComb.pass_mode[gComb.pass_count]=260;
+        gComb.pass_color[gComb.pass_count][0]=src1[0];
+        gComb.pass_color[gComb.pass_count][1]=src1[1];
+        gComb.pass_color[gComb.pass_count][2]=src1[2];
+        gComb.pass_color[gComb.pass_count][3]=1.0f;
+        float average = (src1[0]+src1[1]+src1[2])/3.0f;
+        float _d0=fabsf(src1[0]-average), _d1=fabsf(src1[1]-average), _d2=fabsf(src1[2]-average);
+        gComb.pass_factor[gComb.pass_count] = (_d0<0.001f && _d1<0.001f && _d2<0.001f) ? (-1.0f - average) : average;
+        gComb.pass_count++;
+
+		// INTERPOLATE
+    } else if (m==34165) {
+        float fac = (src1[0]+src1[1]+src1[2])/3.0f;
+        if (gComb.env_color[3] < 0.0f) fac = -1.0f;
+        gComb.pass_mode[gComb.pass_count]=34165;
+        gComb.pass_color[gComb.pass_count][0]=src0[0];
+        gComb.pass_color[gComb.pass_count][1]=src0[1];
+        gComb.pass_color[gComb.pass_count][2]=src0[2];
+        gComb.pass_color[gComb.pass_count][3]=1.0f;
+        gComb.pass_factor[gComb.pass_count]=fac;
+        gComb.pass_count++;
+
+		// REPLACE
+    } else {
+        gComb.pass_mode[gComb.pass_count]=7681;
+        gComb.pass_color[gComb.pass_count][0]=src1[0];
+        gComb.pass_color[gComb.pass_count][1]=src1[1];
+        gComb.pass_color[gComb.pass_count][2]=src1[2];
+        gComb.pass_color[gComb.pass_count][3]=1.0f;
+        gComb.pass_factor[gComb.pass_count]=1.0f;
+        gComb.pass_count++;
+    }
+}
+
+static void I_CombinerCommit(void) {
+    if (sLocPassCount>=0) pglUniform1i(sLocPassCount, gComb.pass_count);
+    for (int i=0;i<gComb.pass_count && i<4;i++) {
+        if (sLocPassMode[i]>=0)   
+			pglUniform1i(sLocPassMode[i], gComb.pass_mode[i]);
+        if (sLocPassColor[i]>=0)  
+			pglUniform4f(sLocPassColor[i], gComb.pass_color[i][0], gComb.pass_color[i][1], gComb.pass_color[i][2], gComb.pass_color[i][3]);
+        if (sLocPassFactor[i]>=0) 
+			pglUniform1f(sLocPassFactor[i], gComb.pass_factor[i]);
+    }
+    if (sLocFogEnabled>=0) 
+		pglUniform1i(sLocFogEnabled, gComb.fog_enabled ? 1 : 0);
+    if (sLocFogColor>=0)   
+		pglUniform3f(sLocFogColor, gComb.fog_color[0], gComb.fog_color[1], gComb.fog_color[2]);
+    if (sLocFogFactor>=0)  
+		pglUniform1f(sLocFogFactor, gComb.fog_factor);
 }

@@ -38,6 +38,7 @@
 #include "m_misc.h"
 #include "g_actions.h"
 #include "dgl.h"
+#include "i_sectorcombiner.h"
 
 int ViewWindowX = 0;
 int ViewWindowY = 0;
@@ -617,4 +618,7 @@ void GL_Init(void) {
     usingGL = true;
 
     G_AddCommand("dumpglext", CMD_DumpGLExtensions, 0);
+
+    // atsb: initialise the glue!!!
+    I_SectorCombiner_Init();
 }

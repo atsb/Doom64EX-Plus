@@ -175,6 +175,7 @@
     <ClCompile Include="..\src\engine\i_main.c" />
     <ClCompile Include="..\src\engine\i_png.c" />
     <ClCompile Include="..\src\engine\i_sdlinput.c" />
+    <ClCompile Include="..\src\engine\i_sectorcombiner.c" />
     <ClCompile Include="..\src\engine\i_shaders.c" />
     <ClCompile Include="..\src\engine\i_system.c" />
     <ClCompile Include="..\src\engine\i_video.c" />
@@ -270,6 +271,7 @@
     <ClInclude Include="..\src\engine\i_audio.h" />
     <ClInclude Include="..\src\engine\i_png.h" />
     <ClInclude Include="..\src\engine\i_sdlinput.h" />
+    <ClInclude Include="..\src\engine\i_sectorcombiner.h" />
     <ClInclude Include="..\src\engine\i_shaders.h" />
     <ClInclude Include="..\src\engine\i_swap.h" />
     <ClInclude Include="..\src\engine\i_system.h" />

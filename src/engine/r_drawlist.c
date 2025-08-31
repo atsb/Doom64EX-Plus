@@ -189,6 +189,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
             if(r_texturecombiner.value > 0) {
                 envcolor[0] = envcolor[1] = envcolor[2] = ((float)head->params / 255.0f);
                 GL_SetEnvColor(envcolor);
+                dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
             }
             else {
                 int l = (head->params >> 1);

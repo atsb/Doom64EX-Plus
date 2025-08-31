@@ -39,6 +39,8 @@ CVAR_EXTERNAL(r_fog);
 CVAR_EXTERNAL(r_rendersprites);
 CVAR_EXTERNAL(st_flashoverlay);
 
+int game_world_shader_scope = 0;
+
 //
 // ProcessWalls
 //
@@ -208,6 +210,8 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 // The factor for fog density is based on values from the original N64 version.
 //
 
+extern void I_SectorCombiner_SetFog(int en, float r, float g, float b, float fac);
+
 static void SetupFog(void) {
 	dglFogi(GL_FOG_MODE, GL_LINEAR);
 
@@ -271,6 +275,8 @@ static void SetupFog(void) {
 
 		dglGetColorf(LONG(fogcolor), color);
 		dglFogfv(GL_FOG_COLOR, color);
+	
+	I_SectorCombiner_SetFog(1, color[0], color[1], color[2], (float)fogfactor/1000.0f);
 	}
 }
 
@@ -295,7 +301,9 @@ void R_SetViewMatrix(void) {
 
 void R_RenderWorld(void) {
 
-	I_ShaderUnBind();
+	game_world_shader_scope = 1;
+
+	I_ShaderBind();
 
     SetupFog();
 
@@ -343,6 +351,9 @@ void R_RenderWorld(void) {
     GL_SetState(GLSTATE_BLEND, 1);
     DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
 
+    /* BIND BEFORE SPRITES */
+	I_ShaderBind();
+	game_world_shader_scope = 1;
     // -------------- Draw things (sprites) ----------------------
 
     if(devparm) {
@@ -371,5 +382,5 @@ void R_RenderWorld(void) {
     // villsa 12152013 - make sure we're using the default blend function
     dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	I_ShaderBind();
+	I_ShaderUnBind();
 }

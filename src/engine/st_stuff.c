@@ -70,6 +70,8 @@ CVAR_EXTERNAL(v_accessibility);
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_hudFilter);
 
+extern int game_world_shader_scope;
+
 //
 // STATUS BAR DATA
 //
@@ -753,6 +755,9 @@ void ST_Drawer(void) {
 		I_ShaderFullscreenTint(rf, gf, bf, af);
 	}
 
+	I_ShaderUnBind();
+	game_world_shader_scope = 0;
+
 	if (iwadDemo) {
 		return;
 	}
@@ -1018,6 +1023,8 @@ void ST_Drawer(void) {
 		Draw_Text(520, 40, RED, 0.5f, false,
 			"T:%2.2d:%2.2d", (leveltime / TICRATE) / 60, (leveltime / TICRATE) % 60);
 	}
+	I_ShaderBind();
+	game_world_shader_scope = 1;
 }
 
 
