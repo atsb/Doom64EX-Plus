@@ -1137,7 +1137,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	target->reactiontime = 0; /* we're awake now...	 */
 	if (!target->threshold && source && (source->flags & MF_SHOOTABLE) && !(target->flags & MF_NOINFIGHTING))
 	{	/* if not intent on another player, chase after this one */
-		target->target = source;
+		P_SetTarget(&target->target, source);
 		target->threshold = BASETHRESHOLD;
 		if (target->state == &states[target->info->spawnstate] && target->info->seestate != S_NULL)
 		{
