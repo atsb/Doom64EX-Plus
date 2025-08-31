@@ -1783,7 +1783,6 @@ menuitem_t VideoMenu[] = {
 	{2,"VSync:",M_ChangeVsync, 'v'},
 	{2,"Accessibility:",M_ChangeAccessibility, 'y'},
 	{2,"Fade In:",M_ChangeFadeIn, 'd'},
-	{2,"Apply Settings",M_DoVideoReset, 's'},
 	{-2,"Default",M_DoDefaults, 'e'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1793,7 +1792,7 @@ char* VideoHints[video_end] = {
 	NULL,
 	"adjust screen gamma",
 	NULL,
-	"toggle texture filtering",
+	"toggle texture filtering - requires restart",
 	"toggle texture filtering on the weapon",
 	"toggle texture filtering on hud and text",
 	"toggle texture filtering on skies",
@@ -1801,8 +1800,7 @@ char* VideoHints[video_end] = {
 	"toggle frame interpolation to\n achieve smooth framerates",
 	"toggle vsync on or off to prevent screen tearing",
 	"toggle accessibility to\n remove flashing lights",
-	"toggle fade in animation that plays when starting a level",
-	"apply video settings"
+	"toggle fade in animation that plays when starting a level"
 };
 
 menudefault_t VideoDefault[] = {
@@ -3034,15 +3032,6 @@ static void M_DoDefaults(int choice) {
 	}
 
 	S_StartSound(NULL, sfx_switch2);
-}
-
-//
-// M_DoVideoReset
-//
-static void M_DoVideoReset(int choice) {
-	I_Init();
-	R_Init();
-	GL_Init();
 }
 
 //
