@@ -205,7 +205,6 @@ static void M_DrawSmbString(const char* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
 static void M_SetInputString(char* string, int len);
 static void M_Scroll(menu_t* menu, boolean up);
-static void M_DoVideoReset(int choice);
 
 static boolean M_SetThumbnail(int which);
 
@@ -1764,7 +1763,6 @@ enum {
 	accessibility,
 	fadein,
 	v_default,
-	v_videoreset,
 	video_return,
 	video_end
 } video_e;
