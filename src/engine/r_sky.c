@@ -190,6 +190,8 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     dglRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
     dglTranslated(0.0f, 0.0f, -offset);
 
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
     // atsb: prevents z-buffer fighting
     dglDisable(GL_DEPTH_TEST);
     dglDepthMask(GL_FALSE);
@@ -261,10 +263,10 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
         dglSetVertexColor(&vtx[2], c1, 1);
         dglSetVertexColor(&vtx[3], c2, 1);
 
-        SKYDOME_LEFT(rows, -height);
-        SKYDOME_LEFT(topoffs, height);
-        SKYDOME_RIGHT(topoffs, height);
-        SKYDOME_RIGHT(rows, -height);
+        SKYDOME_LEFT(1.0f, -height);
+        SKYDOME_LEFT(0.0f, height);
+        SKYDOME_RIGHT(0.0f, height);
+        SKYDOME_RIGHT(1.0f, -height);
 
         dglTriangle(0 + count, 1 + count, 2 + count);
         dglTriangle(3 + count, 0 + count, 2 + count);
@@ -309,7 +311,6 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 //
 
 static void R_DrawSkyboxCloud(void) {
-    rcolor color;
     vtx_t v[4];
 
     I_ShaderUnBind();
@@ -407,7 +408,7 @@ static void R_DrawSkyboxCloud(void) {
     // bind cloud texture and set blending
     //
     GL_SetTextureUnit(0, true);
-    GL_BindGfxTexture(lumpinfo[skypicnum].name, false);
+    GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
 
     I_ShaderSetUseTexture(1);
 
@@ -421,7 +422,14 @@ static void R_DrawSkyboxCloud(void) {
 
     GL_SetState(GLSTATE_BLEND, 1);
 
-    //
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PRIMARY_COLOR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
+
+
+    // atsb:
     // draw first cloud layer
     //
     v[0].tu = sky_cloudpan1;
@@ -445,15 +453,13 @@ static void R_DrawSkyboxCloud(void) {
     v[3].y = MAX_COORD;
     v[3].z = 768;
 
-    color = sky->skycolor[2];
-    SKYBOX_SETALPHA(color, 0x3f);
-    dglSetVertexColor(&v[0], color, 4);
+    dglSetVertexColor(&v[0], sky->skycolor[2], 4);
 
     dglTriangle(0, 1, 3);
     dglTriangle(2, 3, 1);
     dglDrawGeometry(4, v);
 
-    //
+    // atsb:
     // draw second cloud layer
     //
     // preserve color and xy and just update
@@ -474,19 +480,12 @@ static void R_DrawSkyboxCloud(void) {
     dglDrawGeometry(4, v);
 
     //
-    // add more contrast to the top cloud layer
-    // just draw a non-textured plane and blend it
-    //
-    dglDisable(GL_TEXTURE_2D);
-    SKYBOX_SETALPHA(color, 0x1f);
-    dglSetVertexColor(&v[0], color, 4);
-    dglTriangle(0, 1, 3);
-    dglTriangle(2, 3, 1);
-    dglDrawGeometry(4, v);
-    dglEnable(GL_TEXTURE_2D);
+
 
     dglPopMatrix();
     GL_SetState(GLSTATE_BLEND, 0);
+
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
     I_ShaderSetUseTexture(1);
     I_ShaderSetTextureSize(0, 0);
@@ -511,6 +510,13 @@ static void R_DrawSimpleSky(int lump, int offset) {
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.01f);
+
+
     height = gfxheight[gfxLmp];
     lumpheight = gfxorigheight[gfxLmp];
 
@@ -526,6 +532,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
     GL_SetupAndDraw2DQuad(0, (float)offset - lumpheight, SCREENWIDTH, lumpheight,
         pos1, width + pos1, 0.006f, row, WHITE, 1);
     GL_SetState(GLSTATE_BLEND, 0);
+
+    glDisable(GL_ALPHA_TEST);
 
     I_ShaderBind();
 }
@@ -564,7 +572,7 @@ static void R_DrawClouds(void) {
 
     I_ShaderUnBind();
     GL_SetTextureUnit(0, true);
-    GL_BindGfxTexture(lumpinfo[skypicnum].name, false);
+    GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
 
     pos = (TRUEANGLES(viewangle) / 360.0f) * 2.0f;
 
@@ -573,44 +581,40 @@ static void R_DrawClouds(void) {
 
     dglSetVertex(v);
 
-    if (r_texturecombiner.value > 0 && gl_max_texture_units > 2) {
-        I_ShaderUnBind();
-        dglSetVertexColor(&v[0], sky->skycolor[0], 2);
-        dglSetVertexColor(&v[2], sky->skycolor[1], 2);
+    I_ShaderUnBind();
+    GL_Set2DQuad(v, 0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0, 0, 0);
+    dglSetVertexColor(&v[0], sky->skycolor[0], 2); // top
+    dglSetVertexColor(&v[2], sky->skycolor[1], 2); // bottom
+    dglDisable(GL_TEXTURE_2D);
+    GL_Draw2DQuad(v, true);
+    dglEnable(GL_TEXTURE_2D);
 
-        GL_UpdateEnvTexture(WHITE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PRIMARY_COLOR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
 
-        // pass 1: texture * skycolor
-        dglTexCombColor(GL_TEXTURE, sky->skycolor[2], GL_MODULATE);
+    dglSetVertexColor(&v[0], sky->skycolor[2], 4);
 
-        // pass 2: result * const (though the original game uses the texture's alpha)
-        GL_SetTextureUnit(1, true);
-        dglTexCombColor(GL_PREVIOUS, 0xFF909090, GL_MODULATE);
+    I_ShaderUnBind();
+    GL_Set2DQuad(v, 0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0, 0, 0);
+    dglSetVertexColor(&v[0], sky->skycolor[0], 2);
+    dglSetVertexColor(&v[2], sky->skycolor[1], 2);
 
-        // pass 3: result + fragment color
-        GL_SetTextureUnit(2, true);
-        dglTexCombAdd(GL_PREVIOUS, GL_PRIMARY_COLOR);
-    }
-    else {
-        I_ShaderUnBind();
-        GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120, 0, 0, 0, 0, 0);
-        dglSetVertexColor(&v[0], sky->skycolor[0], 2);
-        dglSetVertexColor(&v[2], sky->skycolor[1], 2);
+    dglDisable(GL_TEXTURE_2D);
 
-        dglDisable(GL_TEXTURE_2D);
+    GL_Draw2DQuad(v, true);
 
-        GL_Draw2DQuad(v, true);
+    dglEnable(GL_TEXTURE_2D);
 
-        dglEnable(GL_TEXTURE_2D);
+    GL_SetTextureUnit(1, true);
+    GL_SetTextureMode(GL_ADD);
+    GL_UpdateEnvTexture(sky->skycolor[1]);
+    GL_SetTextureUnit(0, true);
 
-        GL_SetTextureUnit(1, true);
-        GL_SetTextureMode(GL_ADD);
-        GL_UpdateEnvTexture(sky->skycolor[1]);
-        GL_SetTextureUnit(0, true);
-
-        dglSetVertexColor(&v[0], sky->skycolor[2], 4);
-        v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
-    }
+    dglSetVertexColor(&v[0], sky->skycolor[2], 4);
+    v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
 
     v[3].x = v[1].x = 1.1025f;
     v[0].x = v[2].x = -1.1025f;
