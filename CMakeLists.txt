@@ -133,6 +133,7 @@ add_executable(
 	${SOURCE_DIR}/steam.c
 	${SOURCE_DIR}/p_mapinfo.c
 	${SOURCE_DIR}/i_shaders.c
+	${SOURCE_DIR}/i_sectorcombiner.c
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY BUILD_RPATH ".")
