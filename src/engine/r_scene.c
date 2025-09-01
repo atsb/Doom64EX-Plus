@@ -217,49 +217,49 @@ extern void I_SectorCombiner_SetFogParams(int mode, float start, float end, floa
 static void SetupFog(void) {
 	if (r_fillmode.value <= 0) {
 		I_SectorCombiner_SetFog(0, 0, 0, 0, 0);
-		I_SectorCombiner_SetFogParams(0, 0.0f, 0.0f, 0.0f);
+		I_SectorCombiner_SetFogParams(0, 0, 0, 0);
 		dglDisable(GL_FOG);
 		return;
 	}
 
-	if (!skyflatnum || !r_fog.value) {
+	if (!r_fog.value || !skyflatnum) {
 		dglDisable(GL_FOG);
 		I_SectorCombiner_SetFog(0, 0, 0, 0, 0);
-		I_SectorCombiner_SetFogParams(0, 0.0f, 0.0f, 0.0f);
+		I_SectorCombiner_SetFogParams(0, 0, 0, 0);
 		return;
 	}
 
-	rcolor fogcolor = sky ? sky->fogcolor : 0;
-	int fognear     = sky ? sky->fognear   : 985;
-	int fogfactor   = 1000 - fognear;
+	rfloat color[4] = { 0,0,0,1 };
+	rcolor fogcolor = 0;
+	int fognear = sky ? sky->fognear : 985;
+	int fogfactor = 1000 - fognear;
 	if (fogfactor <= 0) fogfactor = 1;
 
-	rfloat color[4];
-	color[0] = ((fogcolor >> 16) & 0xFF) / 255.0f;
-	color[1] = ((fogcolor >>  8) & 0xFF) / 255.0f;
-	color[2] = ((fogcolor >>  0) & 0xFF) / 255.0f;
-	color[3] = 1.0f;
-
 	dglEnable(GL_FOG);
-	dglFogfv(GL_FOG_COLOR, color);
 
 	if (sky && ((sky->fogcolor & 0xFFFFFF) == 0)) {
 		int minv = ((fognear - 500) * 256) / fogfactor;
 		int maxv = 128000 / fogfactor;
 		float density = 14.0f / (maxv + minv);
+		fogcolor = sky->fogcolor;
 		dglFogi(GL_FOG_MODE, GL_EXP);
 		dglFogf(GL_FOG_DENSITY, density);
 		I_SectorCombiner_SetFogParams(2, 0.0f, 0.0f, density);
-	} else {
-		float position = (float)fogfactor / 1000.0f;
+	}
+	else {
+		float position = ((float)fogfactor) / 1000.0f;
 		if (position <= 0.0f) position = 0.00001f;
 		float start = 5.0f / position;
-		float end   = 30.0f / position;
+		float end = 30.0f / position;
+		fogcolor = sky ? sky->fogcolor : 0;
 		dglFogi(GL_FOG_MODE, GL_LINEAR);
 		dglFogf(GL_FOG_START, start);
-		dglFogf(GL_FOG_END,   end);
+		dglFogf(GL_FOG_END, end);
 		I_SectorCombiner_SetFogParams(1, start, end, 0.0f);
 	}
+
+	dglGetColorf(LONG(fogcolor), color);
+	dglFogfv(GL_FOG_COLOR, color);
 
 	I_SectorCombiner_SetFog(1, color[0], color[1], color[2], (float)fogfactor / 1000.0f);
 }
@@ -290,6 +290,12 @@ void R_RenderWorld(void) {
 	I_ShaderBind();
 
 	SetupFog();
+
+	if (sky && (sky->flags & SKF_VOID)) {
+		byte* vb = (byte*)&sky->skycolor[2];
+		dglClearColor(vb[0] / 255.0f, vb[1] / 255.0f, vb[2] / 255.0f, 1.0f);
+		dglClear(GL_COLOR_BUFFER_BIT);
+	}
 
 	dglEnable(GL_DEPTH_TEST);
 
