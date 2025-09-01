@@ -30,6 +30,7 @@
 #include "d_englsh.h"
 #include "doomstat.h"
 #include "p_inter.h"
+#include "p_setup.h"
 #include "d_devstat.h"
 #include "w_wad.h"
 #include "m_password.h"
@@ -46,7 +47,6 @@ typedef struct {
 static void M_CheatFa(player_t* player, char dat[4]);
 static void M_CheatBerserk(player_t* player, char dat[4]);
 static void M_CheatWarp(player_t* player, char dat[4]);
-static void M_CheatWarpZero(player_t* player, char dat[4]);
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]);
 static void M_CheatMyPos(player_t* player, char dat[4]);
 static void M_CheatAllMap(player_t* player, char dat[4]);
@@ -57,7 +57,6 @@ cheatinfo_t cheat[] = {
 	{   "idkfa",    M_CheatKfa,         0   },
 	{   "idclip",   M_CheatClip,        0   },
 	{   "idclev",   M_CheatWarp,        -2  },
-	{   "idnull",   M_CheatWarpZero,    0  },
 	{   "exclev",   M_CheatWarpCarryOver, -2  },
 	{   "idpos",    M_CheatMyPos,       0   },
 	{   "exm",		M_CheatAllMap,      0   },
@@ -139,78 +138,30 @@ static void M_CheatBerserk(player_t* player, char dat[4]) {
 }
 
 CVAR_EXTERNAL(sv_skill);
-static void M_CheatWarp(player_t* player, char dat[4]) {
-	char	lumpname[14];
-	int		lumpnum = 0;
-	int map;
-	map = datoi(dat);
-	gameskill = (int)sv_skill.value;
-	gamemap = nextmap = map;
 
-	if (map < 1)
-	{
-		return;
-	}
-	if (map < 10)
-	{
-		sprintf(lumpname, "MAP0%i", map);
-	}
-	else {
-		sprintf(lumpname, "MAP%i", map);
-	}
-	if (map > 40) {
-		G_InitNew(gameskill, 33);
-		dmemset(passwordData, 0xff, 16);
-	}
-	else {
-		lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
-	}
+static void DoWarp(char dat[4], boolean carryover) {
 
-	if (lumpnum)
-	{
-		// So be it.
-		G_InitNew(gameskill, map);
+	int map = datoi(dat);
+
+	if (P_GetMapInfo(map)) {
+		int skill = (int)sv_skill.value;
+		gamemap = nextmap = map;
+		if (carryover) {
+			G_DeferedInitNew(skill, map);
+		}
+		else {
+			G_InitNew(skill, map);
+		}
 		dmemset(passwordData, 0xff, 16);
 	}
 }
 
-static void M_CheatWarpZero(player_t* player, char dat[4]) {
-	int map;
-	map = datoi(dat);
-	gameskill = (int)sv_skill.value;
-	gamemap = nextmap = map;
-
-	G_InitNew(gameskill, 00);
-	dmemset(passwordData, 0xff, 16);
+static void M_CheatWarp(player_t* player, char dat[4]) {
+	DoWarp(dat, false);
 }
 
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
-	char	lumpname[14];
-	int		lumpnum;
-	int map;
-	map = datoi(dat);
-	gameskill = (int)sv_skill.value;
-	gamemap = nextmap = map;
-
-	if (map < 1)
-	{
-		return;
-	}
-	if (map < 10)
-	{
-		sprintf(lumpname, "MAP0%i", map);
-	}
-	else {
-		sprintf(lumpname, "MAP%i", map);
-	}
-	lumpnum = map ? W_GetNumForName(lumpname) : W_CheckNumForName(lumpname);
-
-	if (lumpnum)
-	{
-		// So be it.
-		G_DeferedInitNew(gameskill, map);
-		dmemset(passwordData, 0xff, 16);
-	}
+	DoWarp(dat, true);
 }
 
 static void _dprintf(const char* s, ...) {

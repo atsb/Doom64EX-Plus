@@ -97,6 +97,9 @@ static boolean savenow = false;
 static int      savegameflags = 0;
 static int      savecompatflags = 0;
 
+const int title_map_num = 33;
+
+
 // for intermission
 boolean        precache = true;     // if true, load all graphics at start
 
@@ -1443,7 +1446,9 @@ void G_ExitLevel(void) {
 
 	P_SpawnDelayTimer(&junk, G_CompleteLevel);
 
-	nextmap = gamemap + 1;
+	if (gamemap != title_map_num) {
+		nextmap = gamemap + 1;
+	}
 }
 
 //
@@ -1469,27 +1474,14 @@ void G_SecretExitLevel(int map) {
 //
 
 void G_RunTitleMap(void) {
-	int alpha_title_map = M_CheckParm("-alpha");
-	// villsa 12092013 - abort if map doesn't exist in mapfino
-	if (!alpha_title_map && P_GetMapInfo(33) == NULL) {
-		return;
-	}
-	else if (alpha_title_map && P_GetMapInfo(30) == NULL) {
-		return;
-	}
 
+	if (!P_GetMapInfo(title_map_num)) return;
+	
 	demobuffer = (byte*)Z_Calloc(0x16000, PU_STATIC, NULL);
 	demo_p = demobuffer;
 	demobuffer[0x16000 - 1] = DEMOMARKER;
 
-	if (!alpha_title_map)
-	{
-		G_InitNew(sk_medium, 33);
-	}
-	else if (alpha_title_map)
-	{
-		G_InitNew(sk_medium, 30);
-	}
+	G_InitNew(sk_medium, title_map_num);
 
 	precache = true;
 	usergame = false;
@@ -1543,7 +1535,7 @@ void G_RunGame(void) {
 			next = D_MiniLoop(WI_Start, WI_Stop, WI_Drawer, WI_Ticker);
 		}
 
-		if (next == ga_victory) {
+		if (next == ga_victory && gamemap != title_map_num) {
 			next = D_MiniLoop(IN_Start, IN_Stop, IN_Drawer, IN_Ticker);
 
 			if (next == ga_finale) {
