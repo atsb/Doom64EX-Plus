@@ -350,7 +350,7 @@ static void DoMerge(void)
         lumpinfo_t* lump = &iwad.lumps[i];
 
         // will load it later from PWAD
-        if (dstreq(lump->name, "MAPINFO") && FindInPWAD(lump->name)) continue;
+        if (dstreq(lump->name, "MAPINFO") && FindInPWAD(lump->name) != -1) continue;
 
         if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
             lump->name[3] >= '0' && lump->name[3] <= '9' &&
