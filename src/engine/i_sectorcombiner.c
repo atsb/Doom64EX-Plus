@@ -74,6 +74,11 @@ static struct {
     float fog_color[3];
     float fog_factor;
 
+    int   fog_mode;
+    float fog_start;
+    float fog_end;
+    float fog_density;
+
     int   use_texture;
     int   tex_w, tex_h;
 } s;
@@ -169,7 +174,11 @@ static void I_SectorCombinerUniforms(void) {
     GLint locFogCol = pglGetUniformLocation(curProg, "uFogColor");
     GLint locFogFac = pglGetUniformLocation(curProg, "uFogFactor");
 
-    if (locUseTex != -1) 
+        GLint locFogMode = pglGetUniformLocation(curProg, "uFogMode");
+    GLint locFogStart = pglGetUniformLocation(curProg, "uFogStart");
+    GLint locFogEnd = pglGetUniformLocation(curProg, "uFogEnd");
+    GLint locFogDensity = pglGetUniformLocation(curProg, "uFogDensity");
+if (locUseTex != -1) 
         pglUniform1i(locUseTex, s.use_texture ? 1 : 0);
     if (locTexel != -1) {
         if (s.tex_w > 0 && s.tex_h > 0) 
@@ -199,7 +208,16 @@ static void I_SectorCombinerUniforms(void) {
         pglUniform3f(locFogCol, s.fog_color[0], s.fog_color[1], s.fog_color[2]);
     if (locFogFac != -1) 
         pglUniform1f(locFogFac, s.fog_factor);
+    if (locFogMode != -1)
+        pglUniform1i(locFogMode, s.fog_mode);
+    if (locFogStart != -1)
+        pglUniform1f(locFogStart, s.fog_start);
+    if (locFogEnd != -1)
+        pglUniform1f(locFogEnd, s.fog_end);
+    if (locFogDensity != -1)
+        pglUniform1f(locFogDensity, s.fog_density);
 }
+
 
 void I_SectorCombiner_Init(void) { 
     load_glsl_procs(); 
@@ -217,6 +235,10 @@ void I_SectorCombiner_Bind(int useTex, int w, int h) {
 }
 void I_SectorCombiner_Unbind(void) { /* no-op */ }
 
+void I_SectorCombiner_SetFogParams(int mode, float start, float end, float density) { 
+    s.fog_mode = mode; s.fog_start = start; s.fog_end = end; s.fog_density = density;
+    I_SectorCombinerUniforms();
+}
 void I_SectorCombiner_SetEnvColor(float r, float g, float b, float a) { 
     s.env_color[0] = r; 
     s.env_color[1] = g; 
