@@ -618,7 +618,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		if (!P_GiveAmmo(player, am_shell, 1)) {
 			return;
 		}
-		player->message = (gameskill == sk_baby) ? GOTSHELLS2 : GOTSHELLS;    //villsa
+		player->message = (gameskill == sk_baby || gameskill == sk_nightmare) ? GOTSHELLS2 : GOTSHELLS;    //villsa
 		player->messagepic = 13;
 		break;
 

@@ -342,11 +342,15 @@ static void DoMerge(void)
     newlumps = (lumpinfo_t*)malloc(sizeof(lumpinfo_t) * numlumps);
     num_newlumps = 0;
 
+
     // IWAD
     current_section = SECTION_NORMAL;
 
     for (i = 0; i < iwad.numlumps; ++i) {
         lumpinfo_t* lump = &iwad.lumps[i];
+
+        // will load it later from PWAD
+        if (dstreq(lump->name, "MAPINFO") && FindInPWAD(lump->name) != -1) continue;
 
         if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
             lump->name[3] >= '0' && lump->name[3] <= '9' &&
@@ -479,6 +483,12 @@ static void DoMerge(void)
     for (i = 0; i < pwad.numlumps; ++i) {
         lumpinfo_t* lump = &pwad.lumps[i];
 
+        if (dstreq(lump->name, "MAPINFO")) {
+            // might not be in SECTION_NORMAL so take care of it separately
+            newlumps[num_newlumps++] = *lump;
+            continue;
+        }
+
         if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
             lump->name[3] >= '0' && lump->name[3] <= '9' &&
             lump->name[4] >= '0' && lump->name[4] <= '9')
@@ -580,9 +590,7 @@ void W_MergeFile(char* filename) {
 
 	// Load PWAD
 
-	if (W_AddFile(filename) == NULL) {
-		return;
-	}
+	if (!W_AddFile(filename)) return;
 
 	// iwad is at the start, pwad was appended to the end
 

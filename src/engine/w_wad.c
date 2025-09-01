@@ -134,6 +134,27 @@ unsigned int W_HashLumpName(const char* str) {
 // W_HashLumps
 //
 
+//
+// W_CheckNumForName
+// Returns -1 if name not found.
+//
+
+int W_CheckNumForName(const char* name) {
+	int i = -1;
+
+	if (numlumps) {
+		i = lumpinfo[W_HashLumpName(name) % numlumps].index;
+	}
+
+	while (i >= 0 && dstrncmp(lumpinfo[i].name, name, 8)) {
+		i = lumpinfo[i].next;
+	}
+
+
+	return i;
+}
+
+
 static void W_HashLumps(void) {
 	int i;
 	unsigned int hash;
@@ -242,8 +263,6 @@ wad_file_t* W_AddFile(char* filename) {
 
 	Z_Free(fileinfo);
 
-	W_HashLumps();
-
 	return wadfile;
 }
 
@@ -349,6 +368,7 @@ void W_Init(void) {
 		}
 	}
 
+	// only need to hash lumps when they are all loaded and before W_KPFInit()
 	W_HashLumps();
 		
 	I_Printf("W_KPFInit: Init KPFfiles.\n");
@@ -457,24 +477,6 @@ void* W_GetMapLump(int lump) {
 	return (mapLumpData + LONG(mapLump[lump].filepos));
 }
 
-//
-// W_CheckNumForName
-// Returns -1 if name not found.
-//
-
-int W_CheckNumForName(const char* name) {
-	int i = -1;
-
-	if (numlumps) {
-		i = lumpinfo[W_HashLumpName(name) % numlumps].index;
-	}
-
-	while (i >= 0 && dstrncmp(lumpinfo[i].name, name, 8)) {
-		i = lumpinfo[i].next;
-	}
-
-	return i;
-}
 
 //
 // W_GetNumForName
