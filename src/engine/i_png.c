@@ -262,6 +262,8 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
         return NULL;
     }
 
+    png_set_crc_action(png_ptr, PNG_CRC_NO_CHANGE, PNG_CRC_QUIET_USE);
+
     png_set_read_fn(png_ptr, NULL, I_PNGReadFunc);
 
     if (offset) {

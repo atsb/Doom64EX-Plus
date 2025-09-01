@@ -48,4 +48,6 @@ void G_RegisterCvars(void);
 
 boolean G_Responder(event_t* ev);
 
+extern const int title_map_num;
+
 #endif
