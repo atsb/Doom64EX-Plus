@@ -52,7 +52,7 @@ int         skyflatnum = -1;
 int         thunderCounter = 0;
 int         lightningCounter = 0;
 int         thundertic = 1;
-bool        skyfadeback = false;
+boolean        skyfadeback = false;
 byte* fireBuffer;
 dPalette_t  firePal16[256];
 int         fireLump = -1;
@@ -68,7 +68,7 @@ static float sky_cloudpan2 = 0;
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fov);
 CVAR_EXTERNAL(r_skyFilter);
-CVAR(r_skybox, 1);
+int r_skybox = 1;
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
@@ -120,7 +120,7 @@ static void R_CloudTicker(void) {
     CloudOffsetX -= (dcos(viewangle) >> 10);
     CloudOffsetY += (dsin(viewangle) >> 9);
 
-    if (r_skybox.value) {
+    if (r_skybox) {
         sky_cloudpan1 += 0.00225f;
         sky_cloudpan2 += 0.00075f;
     }
@@ -187,6 +187,10 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     dglLoadIdentity();
     dglPushMatrix();
     dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
+
+    dglDisable(GL_DEPTH_TEST);
+    dglDepthMask(GL_FALSE);
+
     dglRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
     dglTranslated(0.0f, 0.0f, -offset);
 
@@ -207,6 +211,13 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &old2DMag);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+
+    GLint oldWrapS, oldWrapT;
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &oldWrapS);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, &oldWrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 #ifdef GL_TEXTURE_CUBE_MAP
     GLint oldCubeMin, oldCubeMag;
     glGetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, &oldCubeMin);
@@ -215,7 +226,6 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 #endif
 
-    // void radius of the sky
     r = radius;
 
     //
@@ -225,7 +235,7 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     vtx = drawVertex;
 
 #define SKYDOME_VERTEX() vtx->x = F2D3D(x); vtx->y = F2D3D(y); vtx->z = F2D3D(z)
-#define SKYDOME_UV(u, v) vtx->tu = u; vtx->tv = v
+#define SKYDOME_UV(u, v) vtx->tu = u; vtx->tv = (v > 0.5f ? (v - topoffs) : (v + topoffs))
 #define SKYDOME_LEFT(v, h)                      \
     x = lx;                                     \
     y = ly;                                     \
@@ -283,6 +293,9 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
     // atsb: the below restore the renderer filter and also pops the depth test back
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, old2DMin);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, old2DMag);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, oldWrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, oldWrapT);
+
 #ifdef GL_TEXTURE_CUBE_MAP
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, oldCubeMin);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, oldCubeMag);
@@ -337,6 +350,10 @@ static void R_DrawSkyboxCloud(void) {
     dglLoadIdentity();
     dglPushMatrix();
     dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
+
+    dglDisable(GL_DEPTH_TEST);
+    dglDepthMask(GL_FALSE);
+
 
     //
     // set vertex pointer
@@ -402,6 +419,10 @@ static void R_DrawSkyboxCloud(void) {
     //
     dglPushMatrix();
     dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
+
+    dglDisable(GL_DEPTH_TEST);
+    dglDepthMask(GL_FALSE);
+
     dglRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
 
     //
@@ -410,6 +431,18 @@ static void R_DrawSkyboxCloud(void) {
     GL_SetTextureUnit(0, true);
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
 
+    GLint oldWrapS_cloud = 0, oldWrapT_cloud = 0;
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &oldWrapS_cloud);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, &oldWrapT_cloud);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    GLint old2DMin_cloud = 0, old2DMag_cloud = 0;
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &old2DMin_cloud);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &old2DMag_cloud);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+
     I_ShaderSetUseTexture(1);
 
     GLint tw = 0, th = 0;
@@ -417,14 +450,12 @@ static void R_DrawSkyboxCloud(void) {
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &th);
     I_ShaderSetTextureSize(tw, th);
 
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
     GL_SetState(GLSTATE_BLEND, 1);
 
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PRIMARY_COLOR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PRIMARY_COLOR);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
 
@@ -487,6 +518,14 @@ static void R_DrawSkyboxCloud(void) {
 
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, oldWrapS_cloud);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, oldWrapT_cloud);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, old2DMin_cloud);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, old2DMag_cloud);
+    dglDepthMask(GL_TRUE);
+    dglEnable(GL_DEPTH_TEST);
+
     I_ShaderSetUseTexture(1);
     I_ShaderSetTextureSize(0, 0);
 
@@ -516,6 +555,11 @@ static void R_DrawSimpleSky(int lump, int offset) {
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.01f);
 
+    GL_SetOrtho(1);
+
+    dglMatrixMode(GL_MODELVIEW);
+    dglPushMatrix();
+    dglLoadIdentity();
 
     height = gfxheight[gfxLmp];
     lumpheight = gfxorigheight[gfxLmp];
@@ -534,6 +578,10 @@ static void R_DrawSimpleSky(int lump, int offset) {
     GL_SetState(GLSTATE_BLEND, 0);
 
     glDisable(GL_ALPHA_TEST);
+
+    dglPopMatrix();
+
+    GL_ResetViewport();
 
     I_ShaderBind();
 }
@@ -574,6 +622,18 @@ static void R_DrawClouds(void) {
     GL_SetTextureUnit(0, true);
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
 
+    GLint oldWrapS_cloud = 0, oldWrapT_cloud = 0;
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &oldWrapS_cloud);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, &oldWrapT_cloud);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    GLint old2DMin_cloud2 = 0, old2DMag_cloud2 = 0;
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &old2DMin_cloud2);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &old2DMag_cloud2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+
     pos = (TRUEANGLES(viewangle) / 360.0f) * 2.0f;
 
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -590,8 +650,9 @@ static void R_DrawClouds(void) {
     dglEnable(GL_TEXTURE_2D);
 
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PRIMARY_COLOR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PRIMARY_COLOR);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
 
@@ -627,7 +688,7 @@ static void R_DrawClouds(void) {
     v[0].tv = v[1].tv = F2D3D(CloudOffsetY);
     v[2].tv = v[3].tv = F2D3D(CloudOffsetY) + 2.0f;
 
-    GL_SetOrthoScale(1.0f); // force ortho mode to be set
+    GL_SetOrthoScale(1.0f);
 
     dglMatrixMode(GL_PROJECTION);
     dglLoadIdentity();
@@ -641,6 +702,11 @@ static void R_DrawClouds(void) {
     dglDrawGeometry(4, v);
     dglPopMatrix();
     dglDisable(GL_BLEND);
+
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, oldWrapS_cloud);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, oldWrapT_cloud);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, old2DMin_cloud2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, old2DMag_cloud2);
 
     GL_SetDefaultCombiner();
     I_ShaderBind();
@@ -823,7 +889,7 @@ static void R_DrawFire(void) {
         );
     }
 
-    if (r_skybox.value <= 0) {
+    if (r_skybox <= 0) {
         SKYVIEWPOS(viewangle, 4, pos1);
 
         //
@@ -850,6 +916,8 @@ static void R_DrawFire(void) {
 
 void R_DrawSky(void) {
 
+    int drewClouds = 0;
+
     if (!sky) {
         return;
     }
@@ -858,72 +926,68 @@ void R_DrawSky(void) {
         R_DrawVoidSky();
     }
     else if (skypicnum >= 0) {
+
+        if (skybackdropnum >= 0) {
+            if (sky->flags & SKF_FADEBACK) {
+                R_DrawTitleSky();
+            }
+            else if (sky->flags & SKF_BACKGROUND) {
+                // When using the skybox path, draw clouds first so the backdrop (mountains)
+                // renders on top, occluding the clouds along the horizon.
+                if (r_skybox > 0 && (sky->flags & SKF_CLOUD)) {
+                    R_DrawSkyboxCloud();
+                    drewClouds = 1;
+                }
+                if (r_skybox <= 0) {
+                    R_DrawSimpleSky(skybackdropnum, 170);
+                }
+                else {
+                    float h;
+                    float origh;
+                    int l;
+                    int domeheight;
+                    float offset;
+                    float base;
+
+                    GL_SetTextureUnit(0, true);
+                    l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
+
+                    //
+                    // handle the case for non-powers of 2 texture
+                    // dimensions. height and offset is adjusted
+                    // accordingly
+                    //
+                    origh = (float)gfxorigheight[l];
+                    h = (float)gfxheight[l];
+                    base = 160.0f - ((128 - origh) / 2.0f);
+                    domeheight = (int)(base / (origh / h));
+                    offset = (float)domeheight - base - 16.0f;
+
+                    R_DrawSkyDome(5, 1, domeheight, 768,
+                        offset, 0.005f, WHITE, WHITE);
+                }
+            }
+        }
+
         if (sky->flags & SKF_CLOUD) {
-            if (r_skybox.value <= 0) {
+            if (r_skybox <= 0) {
                 R_DrawClouds();
             }
-            else {
+            else if (!drewClouds) {
                 R_DrawSkyboxCloud();
             }
         }
         else {
-            if (r_skybox.value <= 0) {
-                R_DrawSimpleSky(skypicnum, 128);
-            }
-            else {
-                GL_SetTextureUnit(0, true);
-                GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
-
-                //
-                // drawer will assume that the texture's
-                // dimensions is already in powers of 2
-                //
-                R_DrawSkyDome(4, 2, 512, 1024,
-                    0, 0, WHITE, WHITE);
-            }
+            R_DrawSimpleSky(skypicnum, 128);
         }
-    }
 
-    if (sky->flags & SKF_FIRE) {
-        R_DrawFire();
-    }
-
-    if (skybackdropnum >= 0) {
-        if (sky->flags & SKF_FADEBACK) {
-            R_DrawTitleSky();
+        if (sky->flags & SKF_FIRE) {
+            R_DrawFire();
         }
-        else if (sky->flags & SKF_BACKGROUND) {
-            if (r_skybox.value <= 0) {
-                R_DrawSimpleSky(skybackdropnum, 170);
-            }
-            else {
-                float h;
-                float origh;
-                int l;
-                int domeheight;
-                float offset;
-                float base;
 
-                GL_SetTextureUnit(0, true);
-                l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
-
-                //
-                // handle the case for non-powers of 2 texture
-                // dimensions. height and offset is adjusted
-                // accordingly
-                //
-                origh = (float)gfxorigheight[l];
-                h = (float)gfxheight[l];
-                base = 160.0f - ((128 - origh) / 2.0f);
-                domeheight = (int)(base / (origh / h));
-                offset = (float)domeheight - base - 16.0f;
-
-                R_DrawSkyDome(5, 1, domeheight, 768,
-                    offset, 0.005f, WHITE, WHITE);
-            }
-        }
     }
 }
+
 
 //
 // R_SkyTicker
