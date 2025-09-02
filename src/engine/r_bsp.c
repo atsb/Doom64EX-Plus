@@ -165,6 +165,10 @@ static void AddSwitchQuad(seg_t* line) {
 		texid = line->sidedef->midtexture;
 	}
 
+	// ignore invalid textures on switches
+	if (texid <= 1)
+		return;
+
 	AddSegToDrawlist(&drawlist[DLT_WALL], line, texid, 3);
 }
 
