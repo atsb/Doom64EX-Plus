@@ -549,6 +549,9 @@ static void R_DrawSimpleSky(int lump, int offset) {
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
+    if (gfxLmp < 0) { 
+        return; 
+    }
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);

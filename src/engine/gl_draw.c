@@ -49,6 +49,9 @@ static void Draw_GfxImageInternal(int x, int y, const char* name,
 	rcolor color, boolean alpha) {
 	
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
+	if (gfxIdx < 0) { 
+		return; 
+	}
 	float imgWidth = gfxwidth[gfxIdx];
 	float imgHeight = gfxheight[gfxIdx];
 	float scale;
