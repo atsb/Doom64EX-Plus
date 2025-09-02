@@ -99,6 +99,9 @@ CVAR(p_sdoubleclick, 0);
 CVAR(p_usecontext, 0);
 CVAR(p_damageindicator, 0);
 
+// Remaster fog HEX compatibility swap R/G for fogcolor to support the remaster bug
+CVAR(p_compat_foghex, 0);
+
 //
 // [kex] sky definition stuff
 //
@@ -210,9 +213,9 @@ void P_LoadVertexes(int lump) {
 void P_LoadSegs(void)
 {
 	int			i;
-	mapseg_t*	ml;
-	seg_t*		li;
-	line_t*		ldef;
+	mapseg_t* ml;
+	seg_t* li;
+	line_t* ldef;
 	int			linedef, side;
 	float       x, y;
 
@@ -758,7 +761,7 @@ static void P_LoadBlockMap(void) {
 	int32_t	count;
 	int32_t	i;
 	int32_t length;
-	byte*	src;
+	byte* src;
 
 	length = W_MapLumpLength(ML_BLOCKMAP);
 	count = length / 2 >= 0x10000;
@@ -1152,6 +1155,11 @@ static void P_InitSkyDef(void) {
 
 			skydefs = Z_Realloc(skydefs,
 				sizeof(skydef_t) * ++numskydef, PU_STATIC, 0);
+			// atsb: if enabled emulate remaster fogcolor hex bug by swapping R and G
+			if (p_compat_foghex.value > 0) {
+				sky.fogcolor = (sky.fogcolor & 0xFF000000) | (sky.fogcolor & 0x00FF0000)
+					| ((sky.fogcolor & 0x000000FF) << 8) | ((sky.fogcolor & 0x0000FF00) >> 8);
+			}
 			dmemcpy(&skydefs[numskydef - 1], &sky, sizeof(skydef_t));
 		}
 		else {
@@ -1190,4 +1198,5 @@ void P_RegisterCvars(void) {
 	CON_CvarRegister(&p_sdoubleclick);
 	CON_CvarRegister(&p_usecontext);
 	CON_CvarRegister(&p_damageindicator);
+	CON_CvarRegister(&p_compat_foghex);
 }
