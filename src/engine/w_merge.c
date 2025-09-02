@@ -135,7 +135,7 @@ static void SetupLists(void)
     // PWAD
     SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
     SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
-    SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", "G_START", "G_END"); // Ethereal uses G_START / G_END, has SYMBOLS but no MOUNTC
+    SetupList(&pwad_gfx, &pwad, "G_START", "G_END", "SYMBOLS", "MOUNTC");
     SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", "DS_START", "DS_END");
 }
 
@@ -317,7 +317,6 @@ static void GenerateSpriteList(void) {
 	}
 }
 
-// Perform the merge.
 static int LumpLooksGraphic(const lumpinfo_t* li) {
 	return (li && li->size >= 8);
 }
@@ -331,6 +330,7 @@ static int FindInPWAD(const char* name) {
 	return -1;
 }
 
+// Perform the merge.
 static void DoMerge(void)
 {
     section_t    current_section;
@@ -348,9 +348,6 @@ static void DoMerge(void)
 
     for (i = 0; i < iwad.numlumps; ++i) {
         lumpinfo_t* lump = &iwad.lumps[i];
-
-        // will load it later from PWAD
-        if (W_LumpNameEq(lump, "MAPINFO") && FindInPWAD(lump->name) != -1) continue;
 
         if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
             lump->name[3] >= '0' && lump->name[3] <= '9' &&
@@ -481,12 +478,6 @@ static void DoMerge(void)
     for (i = 0; i < pwad.numlumps; ++i) {
         lumpinfo_t* lump = &pwad.lumps[i];
 
-        if (W_LumpNameEq(lump, "MAPINFO")) {
-            // might not be in SECTION_NORMAL so take care of it separately
-            newlumps[num_newlumps++] = *lump;
-            continue;
-        }
-
         if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
             lump->name[3] >= '0' && lump->name[3] <= '9' &&
             lump->name[4] >= '0' && lump->name[4] <= '9')
@@ -519,7 +510,7 @@ static void DoMerge(void)
             else if (W_LumpNameEq(lump, "S_START") || W_LumpNameEq(lump, "SS_START")) {
                 current_section = SECTION_SPRITES;
             }
-            else if (W_LumpNameEq(lump, "SYMBOLS")) {
+            else if (W_LumpNameEq(lump, "SYMBOLS") || W_LumpNameEq(lump, "G_START")) {
                 current_section = SECTION_GFX;
             }
             else if (W_LumpNameEq(lump, "DM_START") || W_LumpNameEq(lump, "DS_START")) {
@@ -543,7 +534,7 @@ static void DoMerge(void)
             break;
 
         case SECTION_GFX:
-            if (W_LumpNameEq(lump, "MOUNTC")) {
+            if (W_LumpNameEq(lump, "MOUNTC") || W_LumpNameEq(lump, "G_END")) {
                 current_section = SECTION_NORMAL;
             }
             break;
