@@ -613,7 +613,10 @@ static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
     return 1;
 }
 
-// kpf can point to a file or a directory
+// kpf can point to:
+//   - a file path (either absolute or releative) to a .kpf file 
+//   - a directory path containing kpf data with the same folder structure than a file .kpf
+//   - a filename (will be searched in the data dirs)
 // return true if data loaded successfully, false if kpf does not exist or failure to load (inner not found or other error)
 static boolean KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* size, int max_uncompressed, unsigned int *kpf_key) {
 
@@ -639,7 +642,7 @@ static boolean KPFLoadInner(char* kpf, const char* inner, unsigned char** data, 
 		}
 	}
 	else {
-		char* path = I_FindDataFile((char*)kpf);
+		char* path = M_FileExists(kpf) ? kpf : I_FindDataFile((char*)kpf);
 		if (path) {
 			int ret = max_uncompressed > 0 ?
 				KPF_ExtractFileCapped(path, inner, data, size, max_uncompressed) :
