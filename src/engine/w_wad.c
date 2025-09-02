@@ -58,8 +58,8 @@ typedef struct memlump_s {
 static memlump_t g_memlumps[MAX_MEMLUMPS];
 static int g_nmemlumps = 0;
 
-char* g_kpf_files[MAX_KPF_FILES];
-int g_num_kpf = 0;
+static char* g_kpf_files[8]; // "8 kpf ought to be enough for anybody"
+static int g_num_kpf = 0;
 
 #pragma pack(push, 1)
 
@@ -116,6 +116,12 @@ void ExtractFileBase(char* path, char* dest) {
 }
 
 //
+
+boolean W_LumpNameEq(lumpinfo_t* lump, const char* name) {
+	return dstrnicmp(lump->name, name, 8) == 0;
+}
+
+//
 // W_HashLumpName
 //
 
@@ -146,7 +152,7 @@ int W_CheckNumForName(const char* name) {
 		i = lumpinfo[W_HashLumpName(name) % numlumps].index;
 	}
 
-	while (i >= 0 && dstrncmp(lumpinfo[i].name, name, 8)) {
+	while (i >= 0 && !W_LumpNameEq(&lumpinfo[i], name)) {
 		i = lumpinfo[i].next;
 	}
 
@@ -397,7 +403,7 @@ void W_CacheMapLump(int map) {
 	lump = W_GetNumForName(name8);
 
 	// check if non-lump map, aka standard doom map storage
-	if (!((lump + 1) >= numlumps) && !dstrncmp(lumpinfo[lump + 1].name, "THINGS", 8)) {
+	if (!((lump + 1) >= numlumps) && W_LumpNameEq(&lumpinfo[lump + 1], "THINGS")) {
 		nonmaplump = true;
 		return;
 	}
@@ -609,7 +615,7 @@ static int W_AddMemoryLump(const char name8[8], unsigned char* data, int size)
 
 // kpf can point to a file or a directory
 // return true if data loaded successfully, false if kpf does not exist or failure to load (inner not found or other error)
-boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* size, int max_uncompressed, unsigned int *kpf_key) {
+static boolean KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* size, int max_uncompressed, unsigned int *kpf_key) {
 
 	*data = NULL;
 	*size = 0;
@@ -626,8 +632,7 @@ boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* 
 				*size = tmp_size;
 				*data = tmp_data;
 				if (kpf_key) {
-					// not exactly hashing a lump but OK
-					*kpf_key = W_HashLumpName(path);
+					*kpf_key = M_StringHash(path);
 				}
 			}
 			free(path);
@@ -649,6 +654,13 @@ boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* 
 	return *data && *size > 0;
 }
 
+boolean W_KPFLoadInner(const char* inner, unsigned char** data, int* size) {
+	for (int i = 0; i < g_num_kpf; i++) {
+		if (KPFLoadInner(g_kpf_files[i], inner, data, size, 0, NULL)) return true;
+	}
+	return false;
+}
+
 void W_KPFInit(void)
 {
 	// this param be useful to disable kpf cache for benchmarking
@@ -663,7 +675,7 @@ void W_KPFInit(void)
 	if (p) {
 		// the parms after p are kpf names,
 		// until end of parms or another - preceded parm
-		while (++p != myargc && myargv[p][0] != '-' && g_num_kpf < MAX_KPF_FILES - 1) {
+		while (++p != myargc && myargv[p][0] != '-' && g_num_kpf < SDL_arraysize(g_kpf_files) - 1) {
 			g_kpf_files[g_num_kpf++] = myargv[p];
 		}
 	}
@@ -704,7 +716,7 @@ void W_KPFInit(void)
 				int size = 0;
 				unsigned int kpf_key;
 
-				if (!W_KPFLoadInner(kpf, inner, &data, &size, KPF_PNG_CAP_BYTES, &kpf_key)) continue; 
+				if (!KPFLoadInner(kpf, inner, &data, &size, KPF_PNG_CAP_BYTES, &kpf_key)) continue; 
 
 				if (ov->max_w > 0 && ov->max_h > 0) {
 					int w = 0, h = 0;

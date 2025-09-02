@@ -62,6 +62,7 @@ int M_CacheThumbNail(byte** data);
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
 char* M_StringDuplicate(char* orig);
+unsigned int M_StringHash(char* str);
 
 //
 // DEFAULTS
