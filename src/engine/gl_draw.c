@@ -42,81 +42,53 @@ CVAR_EXTERNAL(r_hudFilter);
 //
 // Draw_GfxImage
 //
+static const int nominal_width = 320.0f;
 
-void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) {
+static void Draw_GfxImageInternal(int x, int y, const char* name, 
+	float max_w, float offset_width, float offset_height, 
+	rcolor color, boolean alpha) {
+	
 	int gfxIdx = GL_BindGfxTexture(name, alpha);
+	float imgWidth = gfxwidth[gfxIdx];
+	float imgHeight = gfxheight[gfxIdx];
+	float scale;
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+	if (max_w > 0.0f) {
+		float targetSize = fmin(max_w, fmin(imgWidth, imgHeight));
+		scale = targetSize / fmax(imgWidth, imgHeight);
+	} else {
+		scale = 1.0f;
+	}
+
 	GL_SetState(GLSTATE_BLEND, 1);
-	GL_SetupAndDraw2DQuad((float)x, (float)y,
-		gfxwidth[gfxIdx], gfxheight[gfxIdx], 0, 1.0f, 0, 1.0f, color, 0);
+	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
+		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
 
 	GL_SetState(GLSTATE_BLEND, 0);
+}
+
+
+void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) {
+	Draw_GfxImageInternal(x, y, name, -1.0f, 0.0f, 0.0f, color, alpha);
 }
 
 void Draw_GfxImageInter(int x, int y, const char* name, rcolor color, boolean alpha) {
-	int gfxIdx = GL_BindGfxTexture(name, alpha);
-
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	float imgWidth = gfxwidth[gfxIdx];
-	float imgHeight = gfxheight[gfxIdx];
-	float targetSize = fmin(250.0f, fmin(imgWidth, imgHeight));
-	float scale = targetSize / fmax(imgWidth, imgHeight);
-
-	float offset_width = 5.0f;
-	float offset_height = 5.0f;
-
-	GL_SetState(GLSTATE_BLEND, 1);
-	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
-		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
-
-	GL_SetState(GLSTATE_BLEND, 0);
+	Draw_GfxImageInternal(x, y, name, 250.0f, 5.0f, 5.0f, color, alpha);
 }
 
 void Draw_GfxImageLegal(int x, int y, const char* name, rcolor color, boolean alpha) {
-	int gfxIdx = GL_BindGfxTexture(name, alpha);
+	Draw_GfxImageInternal(x, y, name, nominal_width, 30.0f, 40.0f, color, alpha);
+}
 
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	float imgWidth = gfxwidth[gfxIdx];
-	float imgHeight = gfxheight[gfxIdx];
-	float targetSize = fmin(320.0f, fmin(imgWidth, imgHeight));
-	float scale = targetSize / fmax(imgWidth, imgHeight);
-
-	float offset_width = 30.0f;
-	float offset_height = 40.0f;
-
-	GL_SetState(GLSTATE_BLEND, 1);
-	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
-		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
-
-	GL_SetState(GLSTATE_BLEND, 0);
+void Draw_GfxImageIN(int x, int y, const char* name, rcolor color, boolean alpha) {
+	Draw_GfxImageInternal(x, y, name, nominal_width, 0.0f, 0.0f, color, alpha);
 }
 
 void Draw_GfxImageTitle(int x, int y, const char* name, rcolor color, boolean alpha) {
-	int gfxIdx = GL_BindGfxTexture(name, alpha);
-
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	float imgWidth = gfxwidth[gfxIdx];
-	float imgHeight = gfxheight[gfxIdx];
-	float targetSize = fmin(320.0f, fmin(imgWidth, imgHeight));
-	float scale = targetSize / fmax(imgWidth, imgHeight);
-
-	float offset_width = 60.0f;
-	float offset_height = 30.0f;
-
-	GL_SetState(GLSTATE_BLEND, 1);
-	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
-		imgWidth * scale, imgHeight * scale, 0, 1.0f, 0, 1.0f, color, 0);
-
-	GL_SetState(GLSTATE_BLEND, 0);
+	Draw_GfxImageInternal(x, y, name, nominal_width, 60.0f, 30.0f, color, alpha);
 }
 
 //

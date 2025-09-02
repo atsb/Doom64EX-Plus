@@ -98,7 +98,6 @@ CVAR(p_fdoubleclick, 0);
 CVAR(p_sdoubleclick, 0);
 CVAR(p_usecontext, 0);
 CVAR(p_damageindicator, 0);
-CVAR(p_regionmode, 0);
 
 //
 // [kex] sky definition stuff
@@ -1191,5 +1190,4 @@ void P_RegisterCvars(void) {
 	CON_CvarRegister(&p_sdoubleclick);
 	CON_CvarRegister(&p_usecontext);
 	CON_CvarRegister(&p_damageindicator);
-	CON_CvarRegister(&p_regionmode);
 }

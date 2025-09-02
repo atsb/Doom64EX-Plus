@@ -135,7 +135,7 @@ static void SetupLists(void)
     // PWAD
     SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
     SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
-    SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", NULL, NULL);
+    SetupList(&pwad_gfx, &pwad, "SYMBOLS", "MOUNTC", "G_START", "G_END"); // Ethereal uses G_START / G_END, has SYMBOLS but no MOUNTC
     SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", "DS_START", "DS_END");
 }
 
@@ -350,7 +350,7 @@ static void DoMerge(void)
         lumpinfo_t* lump = &iwad.lumps[i];
 
         // will load it later from PWAD
-        if (dstreq(lump->name, "MAPINFO") && FindInPWAD(lump->name) != -1) continue;
+        if (W_LumpNameEq(lump, "MAPINFO") && FindInPWAD(lump->name) != -1) continue;
 
         if (lump->name[0] == 'M' && lump->name[1] == 'A' && lump->name[2] == 'P' &&
             lump->name[3] >= '0' && lump->name[3] <= '9' &&
@@ -362,12 +362,12 @@ static void DoMerge(void)
                 for (;;) {
                     if (k >= iwad.numlumps) break;
                     int is_sub = 0;
-                    const char* subs[] = {
+                    char* subs[] = {
                         "THINGS","LINEDEFS","SIDEDEFS","VERTEXES","SEGS","SSECTORS",
                         "NODES","SECTORS","REJECT","BLOCKMAP","BEHAVIOR","LEAFS","LIGHTS","MACROS"
                     };
-                    for (int si = 0; si < (int)(sizeof(subs) / sizeof(subs[0])); ++si) {
-                        if (!dstrnicmp(iwad.lumps[k].name, subs[si], 8)) { is_sub = 1; break; }
+                    for (int si = 0; si < SDL_arraysize(subs); ++si) {
+                        if (W_LumpNameEq(&iwad.lumps[k], subs[si])) { is_sub = 1; break; }
                     }
                     if (!is_sub) break;
                     ++k;
@@ -379,15 +379,15 @@ static void DoMerge(void)
 
         switch (current_section) {
         case SECTION_NORMAL:
-            if (!dstrnicmp(lump->name, "T_START", 8)) {
+            if (W_LumpNameEq(lump, "T_START")) {
                 current_section = SECTION_TEXTURES;
                 newlumps[num_newlumps++] = *lump;
             }
-            else if (!dstrnicmp(lump->name, "S_START", 8)) {
+            else if (W_LumpNameEq(lump, "S_START")) {
                 current_section = SECTION_SPRITES;
                 newlumps[num_newlumps++] = *lump;
             }
-            else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
+            else if (W_LumpNameEq(lump, "SYMBOLS")) {
                 current_section = SECTION_GFX;
 
                 const int pw_sym = FindInPWAD("SYMBOLS");
@@ -398,8 +398,7 @@ static void DoMerge(void)
                     newlumps[num_newlumps++] = *lump;
                 }
             }
-            else if (!dstrnicmp(lump->name, "DM_START", 8)
-                || !dstrnicmp(lump->name, "DS_START", 8)) {
+            else if (W_LumpNameEq(lump, "DM_START") || W_LumpNameEq(lump, "DS_START")) {
                 current_section = SECTION_SOUNDS;
                 newlumps[num_newlumps++] = *lump;
             }
@@ -409,7 +408,7 @@ static void DoMerge(void)
             break;
 
         case SECTION_TEXTURES:
-            if (!dstrnicmp(lump->name, "T_END", 8)) {
+            if (W_LumpNameEq(lump, "T_END")) {
                 for (n = 0; n < pwad_textures.numlumps; ++n)
                     newlumps[num_newlumps++] = pwad_textures.lumps[n];
 
@@ -424,7 +423,7 @@ static void DoMerge(void)
             break;
 
         case SECTION_SPRITES:
-            if (!dstrnicmp(lump->name, "S_END", 8)) {
+            if (W_LumpNameEq(lump, "S_END")) {
                 for (n = 0; n < pwad_sprites.numlumps; ++n)
                     if (SpriteLumpNeeded(&pwad_sprites.lumps[n]))
                         newlumps[num_newlumps++] = pwad_sprites.lumps[n];
@@ -439,7 +438,7 @@ static void DoMerge(void)
             break;
 
         case SECTION_GFX:
-            if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
+            if (W_LumpNameEq(lump, "MOUNTC")) {
                 for (n = 0; n < pwad_gfx.numlumps; ++n)
                     newlumps[num_newlumps++] = pwad_gfx.lumps[n];
 
@@ -460,8 +459,7 @@ static void DoMerge(void)
             break;
 
         case SECTION_SOUNDS:
-            if (!dstrnicmp(lump->name, "DM_END", 8)
-                || !dstrnicmp(lump->name, "DS_END", 8)) {
+            if (W_LumpNameEq(lump, "DM_END") || W_LumpNameEq(lump, "DS_END")) {
                 for (n = 0; n < pwad_sounds.numlumps; ++n)
                     newlumps[num_newlumps++] = pwad_sounds.lumps[n];
 
@@ -483,7 +481,7 @@ static void DoMerge(void)
     for (i = 0; i < pwad.numlumps; ++i) {
         lumpinfo_t* lump = &pwad.lumps[i];
 
-        if (dstreq(lump->name, "MAPINFO")) {
+        if (W_LumpNameEq(lump, "MAPINFO")) {
             // might not be in SECTION_NORMAL so take care of it separately
             newlumps[num_newlumps++] = *lump;
             continue;
@@ -499,12 +497,12 @@ static void DoMerge(void)
             for (;;) {
                 if (j >= pwad.numlumps) break;
                 int is_sub = 0;
-                const char* subs[] = {
+                char* subs[] = {
                     "THINGS","LINEDEFS","SIDEDEFS","VERTEXES","SEGS","SSECTORS",
                     "NODES","SECTORS","REJECT","BLOCKMAP","BEHAVIOR","LEAFS","LIGHTS","MACROS"
                 };
                 for (int si = 0; si < (int)(sizeof(subs) / sizeof(subs[0])); ++si) {
-                    if (!dstrnicmp(pwad.lumps[j].name, subs[si], 8)) { is_sub = 1; break; }
+                    if (W_LumpNameEq(&pwad.lumps[j], subs[si])) { is_sub = 1; break; }
                 }
                 if (!is_sub) break;
                 newlumps[num_newlumps++] = pwad.lumps[j++];
@@ -515,19 +513,16 @@ static void DoMerge(void)
 
         switch (current_section) {
         case SECTION_NORMAL:
-            if (!dstrnicmp(lump->name, "T_START", 8)
-                || !dstrnicmp(lump->name, "TT_START", 8)) {
+            if (W_LumpNameEq(lump, "T_START") || W_LumpNameEq(lump, "TT_START")) {
                 current_section = SECTION_TEXTURES;
             }
-            else if (!dstrnicmp(lump->name, "S_START", 8)
-                || !dstrnicmp(lump->name, "SS_START", 8)) {
+            else if (W_LumpNameEq(lump, "S_START") || W_LumpNameEq(lump, "SS_START")) {
                 current_section = SECTION_SPRITES;
             }
-            else if (!dstrnicmp(lump->name, "SYMBOLS", 8)) {
+            else if (W_LumpNameEq(lump, "SYMBOLS")) {
                 current_section = SECTION_GFX;
             }
-            else if (!dstrnicmp(lump->name, "DM_START", 8)
-                || !dstrnicmp(lump->name, "DS_START", 8)) {
+            else if (W_LumpNameEq(lump, "DM_START") || W_LumpNameEq(lump, "DS_START")) {
                 current_section = SECTION_SOUNDS;
             }
             else {
@@ -536,28 +531,25 @@ static void DoMerge(void)
             break;
 
         case SECTION_TEXTURES:
-            if (!dstrnicmp(lump->name, "TT_END", 8)
-                || !dstrnicmp(lump->name, "T_END", 8)) {
+            if (W_LumpNameEq(lump, "TT_END") || W_LumpNameEq(lump, "T_END")) {
                 current_section = SECTION_NORMAL;
             }
             break;
 
         case SECTION_SPRITES:
-            if (!dstrnicmp(lump->name, "SS_END", 8)
-                || !dstrnicmp(lump->name, "S_END", 8)) {
+            if (W_LumpNameEq(lump, "SS_END") || W_LumpNameEq(lump, "S_END")) {
                 current_section = SECTION_NORMAL;
             }
             break;
 
         case SECTION_GFX:
-            if (!dstrnicmp(lump->name, "MOUNTC", 8)) {
+            if (W_LumpNameEq(lump, "MOUNTC")) {
                 current_section = SECTION_NORMAL;
             }
             break;
 
         case SECTION_SOUNDS:
-            if (!dstrnicmp(lump->name, "DM_END", 8)
-                || !dstrnicmp(lump->name, "DS_END", 8)) {
+            if (W_LumpNameEq(lump, "DM_END") || W_LumpNameEq(lump, "DS_END")) {
                 current_section = SECTION_NORMAL;
             }
             break;
