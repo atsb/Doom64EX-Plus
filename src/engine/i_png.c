@@ -213,6 +213,44 @@ static void I_TranslatePalette(png_colorp dest) {
     }
 }
 
+static int multiply_alpha(int alpha, int color) {
+    int  temp = (alpha * color) + 0x80;
+    return (temp + (temp >> 8)) >> 8;
+}
+
+// adapted from png_do_strip_channel()
+// https://github.com/pnggroup/libpng/blob/27de46c5a418d0cd8b2bded5a4430ff48deb2920/pngtrans.c#L494
+static void rgba_to_premult_rgb_transform(png_structp png, png_row_infop  row_info, png_bytep row)
+{
+	png_bytep sp = row; /* source pointer */
+	png_bytep dp = row; /* destination pointer */
+	png_bytep ep = row + row_info->rowbytes; /* One beyond end of row */
+
+	if (row_info->channels == 4 && row_info->bit_depth == 8) {
+
+		/* Note that the loop adds 3 to dp and 4 to sp each time. */
+		while (sp < ep)
+		{
+			int alpha = sp[3];
+			*dp++ = multiply_alpha(alpha, *sp++);
+			*dp++ = multiply_alpha(alpha, *sp++);
+			*dp++ = multiply_alpha(alpha, *sp);
+			sp += 2;
+		}
+
+		row_info->pixel_depth = 24;
+		row_info->channels = 3;
+
+		/* Finally fix the color type if it records an alpha channel */
+		if (row_info->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+			row_info->color_type = PNG_COLOR_TYPE_RGB;
+
+		/* Fix the rowbytes value. */
+		row_info->rowbytes = (size_t)(dp - row);
+	}
+}
+
+
 //
 // I_PNGReadData
 //
@@ -336,42 +374,55 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
             color_type = PNG_COLOR_TYPE_RGB;
         }
 
-        if (usingGL && !alpha) {
-            int num_trans = 0;
-            png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
-            if (num_trans == 1 && color_type == PNG_COLOR_TYPE_RGB) {
-                // hack for the "EVIL" lump (fading graphics at the end of the title map)
-                // found in BETA64 remastered WAD that is PNG_COLOR_TYPE_PALETTE but with a single color (black) for transparent
-                png_set_strip_alpha(png_ptr);
-            } else if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
-                png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-                Z_Free(src);
-                I_Error("I_PNGReadData: RGB8 PNG image (%s) has transparency", lumpinfo[lump].name);
-                return NULL;
-            }
-        }
+		if (alpha) {
+			if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+				png_set_gray_to_rgb(png_ptr);
+			}
 
-        if (alpha) {
-            if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-                png_set_gray_to_rgb(png_ptr);
+			if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
+				png_set_tRNS_to_alpha(png_ptr);
+			}
+
+			if (!(color_type & PNG_COLOR_MASK_ALPHA)) {
+				png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+			}
+		}
+		else {
+
+            boolean alpha_handled = false;
+
+            if (usingGL) {
+                int num_trans = 0;
+                png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
+                if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
+
+                    /* convert RGBA to premultiplied alpha RGB. At least found in:
+
+                       - BETA64 remastered WAD
+                       "EVIL" lump (fading graphics at the end of the title map) that is PNG_COLOR_TYPE_PALETTE
+                        with a single color (black) for transparent (num_trans = 1)
+                       - Ethereal WAD
+                       Credit graphics displayed before each map are PNG_COLOR_TYPE_PALETTE with 256 num_trans
+
+                    */
+
+                    png_set_user_transform_info(png_ptr, NULL, 8, 3);
+                    png_set_read_user_transform_fn(png_ptr, rgba_to_premult_rgb_transform);
+                    alpha_handled = true;
+                }
             }
 
-            if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
-                png_set_tRNS_to_alpha(png_ptr);
-            }
+            if(!alpha_handled) {
 
-            if (!(color_type & PNG_COLOR_MASK_ALPHA)) {
-                png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+                if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+                    png_set_gray_to_rgb(png_ptr);
+                }
+                if (color_type & PNG_COLOR_MASK_ALPHA) {
+                    png_set_strip_alpha(png_ptr);
+                }
             }
-        }
-        else {
-            if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-                png_set_gray_to_rgb(png_ptr);
-            }
-            if (color_type & PNG_COLOR_MASK_ALPHA) {
-                png_set_strip_alpha(png_ptr);
-            }
-        }
+		}
+
     }
 
     png_read_update_info(png_ptr, info_ptr);

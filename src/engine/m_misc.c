@@ -393,3 +393,14 @@ int M_CacheThumbNail(byte** data) {
 	*data = tbn;
 	return SAVEGAMETBSIZE;
 }
+
+
+unsigned int M_StringHash(char* str) {
+	unsigned int hash = 1315423911;
+
+	for ( ; *str != '\0'; str++) {
+		hash ^= ((hash << 5) + SDL_toupper((int)*str) + (hash >> 2));
+	}
+
+	return hash;
+}

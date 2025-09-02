@@ -226,21 +226,15 @@ static boolean LOC_LoadLang(int lang) {
     const char* want_inner = LOC_LangPath(lang);
     unsigned char* data = NULL; int size = 0;
 
-    for (int i = 0; i < g_num_kpf; ++i) {
-
-        char* kpf_path = g_kpf_files[i];
-
-        if (W_KPFLoadInner(kpf_path, want_inner, &data, &size, 0, NULL)) {
-            LOC_LoadFromBuffer(data, size);
-            free(data);
-            I_Printf("Localization: Loaded %d entries from %s in %s\n",
-                localisation_count, want_inner, kpf_path);
-            return true;
-        }
+    if (W_KPFLoadInner(want_inner, &data, &size)) {
+        LOC_LoadFromBuffer(data, size);
+        free(data);
+        I_Printf("Localization: Loaded %d entries from %s\n",
+            localisation_count, want_inner);
+        return true;
     }
 
     return false;
-
 }
 
 void LOC_RegisterCvars(void) {
@@ -249,7 +243,7 @@ void LOC_RegisterCvars(void) {
 
 static void LOC_Load(void) {
     
-    int lang = p_language.value;
+    int lang = (int)p_language.value;
 
     if (LOC_LoadLang(lang)) return;
 

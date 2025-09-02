@@ -484,53 +484,9 @@ static void Title_Stop(void) {
 	S_StopMusic();
 }
 
-//
-// Legal_Start
-//
-
-CVAR_EXTERNAL(p_regionmode);
-
-static char* legalpic = "USLEGAL";
-static int legal_x = 32;
-static int legal_y = 72;
-
-static void Legal_Start(void) {
-	int pllump;
-	int jllump;
-
-	pllump = W_CheckNumForName("PLLEGAL");
-	jllump = W_CheckNumForName("JPLEGAL");
-
-	if (pllump == -1 && jllump == -1) {
-		return;
-	}
-
-	if (p_regionmode.value >= 2 && jllump >= 0) {
-		legalpic = "JPLEGAL";
-		legal_x = 35;
-		legal_y = 45;
-	}
-	else if (p_regionmode.value >= 2 && jllump == -1) {
-		CON_CvarSetValue(p_regionmode.name, 1);
-	}
-
-	if (p_regionmode.value == 1 && pllump >= 0) {
-		legalpic = "PLLEGAL";
-		legal_x = 35;
-		legal_y = 50;
-	}
-	else if (p_regionmode.value == 1 && pllump == -1) {
-		CON_CvarSetValue(p_regionmode.name, 0);
-	}
-}
-
-//
-// Legal_Drawer
-//
-
 static void Legal_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImageLegal(legal_x, legal_y, legalpic, WHITE, true);
+	Draw_GfxImageLegal(32, 72, "USLEGAL", WHITE, true);
 }
 
 //
@@ -699,7 +655,7 @@ static void D_SplashScreen(void) {
 	pagetic = gametic;
 	gameaction = ga_nothing;
 
-	skip = D_MiniLoop(Legal_Start, NULL, Legal_Drawer, Legal_Ticker);
+	skip = D_MiniLoop(NULL, NULL, Legal_Drawer, Legal_Ticker);
 
 	if (skip != ga_title) {
 		G_RunTitleMap();
@@ -915,6 +871,10 @@ static void D_Init(void) {
 //
 
 static int D_CheckDemo(void) {
+
+	// Demo recording / playback is broken (crashes) so disable it for now
+
+	/*
 	int p;
 
 	// start the apropriate game based on parms
@@ -931,6 +891,7 @@ static int D_CheckDemo(void) {
 		G_PlayDemo(myargv[p + 1]);
 		return 1;
 	}
+	*/
 
 	return 0;
 }

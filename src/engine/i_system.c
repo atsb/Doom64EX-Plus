@@ -273,7 +273,7 @@ static char* FindDataFile(char* file) {
 	return NULL;
 }
 
-// return a full qualified path or NULL that is cached and that must NOT be freed by caller
+// return a full qualified path that is cached, or NULL if not found. Must NOT be freed by caller
 char* I_FindDataFile(char* file) {
 
 	typedef struct {

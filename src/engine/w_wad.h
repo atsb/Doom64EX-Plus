@@ -37,11 +37,6 @@ typedef struct {
 extern lumpinfo_t* lumpinfo;
 extern int numlumps;
 
-// "8 kpf ought to be enough for anybody"
-#define MAX_KPF_FILES 8
-extern char* g_kpf_files[MAX_KPF_FILES];
-extern int g_num_kpf;
-
 void            W_Init(void);
 wad_file_t* W_AddFile(char* filename);
 unsigned int    W_HashLumpName(const char* str);
@@ -55,7 +50,9 @@ void            W_FreeMapLump(void);
 int             W_MapLumpLength(int lump);
 void* W_CacheLumpNum(int lump, int tag);
 void* W_CacheLumpName(const char* name, int tag);
+boolean W_LumpNameEq(lumpinfo_t* lump, const char* name);
+
 void W_KPFInit(void);
-boolean W_KPFLoadInner(char* kpf, const char* inner, unsigned char** data, int* size, int max_uncompressed, unsigned int* kpf_key);
+boolean W_KPFLoadInner(const char* inner, unsigned char** data, int* size);
 
 #endif

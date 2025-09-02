@@ -28,6 +28,8 @@ void Draw_GfxImageInter(int x, int y, const char* name,
 	rcolor color, boolean alpha);
 void Draw_GfxImageLegal(int x, int y, const char* name,
 	rcolor color, boolean alpha);
+void Draw_GfxImageIN(int x, int y, const char* name,
+	rcolor color, boolean alpha);
 void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 	float scale, int pal, rcolor c);
 
