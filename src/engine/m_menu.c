@@ -1817,7 +1817,8 @@ menudefault_t VideoDefault[] = {
 };
 
 menuthermobar_t VideoBars[] = {
-	{ video_empty1, 20, &i_gamma },
+	{ video_empty1, 300, &i_brightness },
+	{ video_empty2, 20,  &i_gamma },
 	{ -1, 0 }
 };
 
