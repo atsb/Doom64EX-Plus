@@ -55,7 +55,7 @@ int         thundertic = 1;
 bool        skyfadeback = false;
 byte* fireBuffer;
 dPalette_t  firePal16[256];
-int         fireLump = -1;
+int         fireLumpGfxId;
 
 static word CloudOffsetY = 0;
 static word CloudOffsetX = 0;
@@ -726,8 +726,9 @@ static rcolor firetexture[FIRESKY_WIDTH * FIRESKY_HEIGHT];
 void R_InitFire(void) {
     int i;
 
-    fireLump = W_GetNumForName("FIRE") - g_start;
-    dmemset(&firePal16, 0, sizeof(dPalette_t) * 256);
+    int fireLump = W_GetNumForName("FIRE") - g_start;
+	fireLumpGfxId = GL_GetGfxIdForLump(fireLump);
+	dmemset(&firePal16, 0, sizeof(dPalette_t) * 256);
     for (i = 0; i < 16; i++) {
         firePal16[i].r = 16 * i;
         firePal16[i].g = 16 * i;
@@ -760,7 +761,7 @@ static void R_FireTicker(void) {
 static void R_DrawFire(void) {
     float pos1;
     vtx_t v[4];
-    dtexture t = gfxptr[fireLump];
+    dtexture t = gfxptr[fireLumpGfxId];
     int i;
 
     //
@@ -778,10 +779,10 @@ static void R_DrawFire(void) {
     }
 
     if (!t) {
-        dglGenTextures(1, &gfxptr[fireLump]);
+        dglGenTextures(1, &gfxptr[fireLumpGfxId]);
     }
 
-    dglBindTexture(GL_TEXTURE_2D, gfxptr[fireLump]);
+    dglBindTexture(GL_TEXTURE_2D, gfxptr[fireLumpGfxId]);
     GL_CheckFillMode();
     GL_SetTextureFilter();
 
