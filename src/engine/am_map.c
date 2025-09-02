@@ -390,15 +390,16 @@ static void AM_GetBounds(void) {
 
 boolean AM_Responder(event_t* ev) {
 	int rc = false;
+	bool useHeld = (plr && (plr->cmd.buttons & BT_USE));
 
-	if (am_flags & AF_PANMODE) {
+	if ((am_flags & AF_PANMODE) || useHeld) {
 		if (ev->type == ev_mouse) {
 			mpanx = (fixed_t)ev->data2;
 			mpany = (fixed_t)ev->data3;
 			rc = true;
 		}
 		else {
-			if (ev->type == ev_mousedown && ev->data1) {
+			if (!useHeld && ev->type == ev_mousedown && ev->data1) {
 				if (fmod(ev->data1, 2.0) != 0.0) {
 					am_flags &= ~AF_ZOOMOUT;
 					am_flags |= AF_ZOOMIN;
@@ -430,6 +431,8 @@ void AM_Ticker(void) {
 	fixed_t oldautomapx;
 	fixed_t oldautomapy;
 
+	bool useHeld = (plr && (plr->cmd.buttons & BT_USE));
+
 	if (!automapactive)
 		return;
 
@@ -451,7 +454,7 @@ void AM_Ticker(void) {
 	bool updated_follow_target = false;
 
 	if (followplayer) {
-		if (am_flags & AF_PANMODE) {
+		if ((am_flags & AF_PANMODE) || useHeld) {
 			float panscalex = v_msensitivityx.value / ((max_scale / 2) / scale);
 			float panscaley = v_msensitivityy.value / ((max_scale / 2) / scale);
 
