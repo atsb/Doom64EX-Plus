@@ -707,7 +707,7 @@ static void InitSpriteTextures(void) {
 // GL_BindSpriteTexture
 //
 void GL_BindSpriteTexture(int spritenum, int pal) {
-    extern cvar_t r_spriteFilter;
+	extern cvar_t r_spriteFilter;
 	byte* png;
 	int w, h;
 
@@ -719,7 +719,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	if ((spritenum == cursprite) && (pal == curtrans)) {
 		GL_SetState(GLSTATE_BLEND, 1);
-		dglDisable(GL_ALPHA_TEST);
+		dglEnable(GL_ALPHA_TEST);
+		dglAlphaFunc(GL_GREATER, 0.5f);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
 		if (!game_world_shader_scope)
@@ -733,7 +734,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	if (spriteptr[spritenum][pal]) {
 		dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
 		GL_SetState(GLSTATE_BLEND, 1);
-		dglDisable(GL_ALPHA_TEST);
+		dglEnable(GL_ALPHA_TEST);
+		dglAlphaFunc(GL_GREATER, 0.5f);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -743,12 +745,13 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
 		I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
-		if (game_world_shader_scope && !g_psprite_scope) { 
+		if (game_world_shader_scope && !g_psprite_scope) {
 			dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		} 
+		}
 
-		if (devparm) glBindCalls++;
+		if (devparm) 
+			glBindCalls++;
 		return;
 	}
 
@@ -757,8 +760,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	dglGenTextures(1, &spriteptr[spritenum][pal]);
 	dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
 	I_ShaderSetUseTexture(1);
-	if (game_world_shader_scope && !g_psprite_scope) { 
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+	if (game_world_shader_scope && !g_psprite_scope) {
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 	I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
@@ -773,7 +776,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	Z_Free(png);
 
 	GL_SetState(GLSTATE_BLEND, 1);
-	dglDisable(GL_ALPHA_TEST);
+	dglEnable(GL_ALPHA_TEST);
+	dglAlphaFunc(GL_GREATER, 0.5f);
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	dglDepthMask(GL_FALSE);
 	if (!game_world_shader_scope)
@@ -785,7 +789,8 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 
-	if (devparm) glBindCalls++;
+	if (devparm) 
+		glBindCalls++;
 }
 
 //
