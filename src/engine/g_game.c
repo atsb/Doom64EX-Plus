@@ -474,6 +474,37 @@ static CMD(Cheat) {
 	}
 }
 
+static CMD(Map) {
+
+	if (param[0]) {
+
+		int map = datoi(param[0]);
+
+		if (P_GetMapInfo(map)) {
+
+			if (gamestate == GS_LEVEL) {
+				M_CheatWarp(NULL, param[0]);
+			}
+			else {
+				// do the same thing than -warp
+				autostart = true;
+				startmap = map;
+				gameaction = ga_newgame;
+			}
+			CON_dismiss();
+			return;
+		}
+
+		CON_Printf(RED, "Invalid map\n\n");
+	}
+
+
+	CON_Printf(BLUE, "Syntax: map <num>\n\n");
+	CON_Printf(GREEN, "Maps:\n");
+	CON_Printf(GREEN, "-------------------------\n");
+	P_ListMaps();
+}
+
 //
 // G_CmdPause
 //
@@ -597,6 +628,12 @@ static CMD(PlayerCamera) {
 
 static CMD(EndDemo) {
 	endDemo = true;
+}
+
+//
+
+static CMD(ListMaps) {
+	P_ListMaps();
 }
 
 //
@@ -1082,7 +1119,6 @@ boolean G_Responder(event_t* ev) {
 void G_Ticker(void) {
 	int         i;
 	int         buf;
-	ticcmd_t* cmd;
 
 	G_ActionTicker();
 	CON_Ticker();
@@ -1671,6 +1707,7 @@ void G_Init(void) {
 	G_AddCommand("give", CMD_Cheat, 2);
 	G_AddCommand("killall", CMD_Cheat, 3);
 	G_AddCommand("mapall", CMD_Cheat, 4);
+	G_AddCommand("map", CMD_Map, 0);
 	G_AddCommand("pause", CMD_Pause, 0);
 	G_AddCommand("spawnthing", CMD_SpawnThing, 0);
 	G_AddCommand("exitlevel", CMD_ExitLevel, 0);
@@ -1678,6 +1715,8 @@ void G_Init(void) {
 	G_AddCommand("setcamerastatic", CMD_PlayerCamera, 0);
 	G_AddCommand("setcamerachase", CMD_PlayerCamera, 1);
 	G_AddCommand("enddemo", CMD_EndDemo, 0);
+	G_AddCommand("listmaps", CMD_ListMaps, 0);
+	
 }
 
 //

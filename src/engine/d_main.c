@@ -232,9 +232,9 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 					draw();
 				}
 				D_DrawInterface();
-                I_ShaderUnBind();
-                D_FinishDraw();
-}
+				I_ShaderUnBind();
+				D_FinishDraw();
+			}
 
 			renderinframe = false;
 		}
