@@ -174,8 +174,9 @@ boolean PIT_CheckLine(line_t* ld)
             return false;
     }
 
-    // [d64] don't cross mid-pegged lines; ML_BLOCKPROJECTILES blocks projectiles only
-    if (!(tmthing->flags & MF_SOLID) && (ld->flags & ML_BLOCKPROJECTILES)) {
+    // [d64] don't cross mid-pegged lines
+    // styd: fixes block projectile to not block things and only blocks projectiles
+    if (!(tmthing->flags & MF_SOLID) && ld->flags & ML_BLOCKPROJECTILES) {
         tmhitline = ld;
         return false;
     }
@@ -703,7 +704,8 @@ boolean PTR_ShootTraverse(intercept_t* in)
 
         lineside = P_PointOnLineSide(shootthing->x, shootthing->y, li);
 
-        if (li->special & MLU_SHOOT) {
+        // Styd: Fixes a vanilla bug or the switches that are in the floor it activates even if it is in the floor when the player shoots them
+        if (!hitplane && li->special & MLU_SHOOT) {
             P_UseSpecialLine(shootthing, li, lineside);
         }
 

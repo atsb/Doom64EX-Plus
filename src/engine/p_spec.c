@@ -811,6 +811,11 @@ static void P_AlertTaggedMobj(mobj_t* activator, int tid) {
 			continue;
 		}
 
+		// Styd: added a check if mobjs are dead to fix the bug where when a mobj is dead and alerted by the thing alert function, it returns to the "seestate" as if it was resurrected but in ghost mode, you do no damage to it, it cannot die, and you pass through it, but it continues to do damage to you
+		if (mo->health == 0) {
+			return;
+		}
+
 		st = &states[mo->info->seestate];
 
 		// 03022014 villsa - handle checks if activator is not a player
