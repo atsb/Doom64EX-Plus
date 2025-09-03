@@ -1029,6 +1029,17 @@ void P_SetupLevel(int map, int playermask, skill_t skill) {
 	CON_DPrintf("Used memory: %d kb\n", Z_FreeMemory() >> 10);
 }
 
+
+///
+
+void P_ListMaps(void) {
+	for (int i = 0; i < nummapdef; i++) {
+		mapdef_t* map = &mapdefs[i];
+		CON_Printf(AQUA, "%d: %s\n", 
+			map->mapid, dstrisempty(map->mapname) ? "Untitled" : map->mapname);
+	}
+}
+
 //
 // P_GetMapInfo
 //

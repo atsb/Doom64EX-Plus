@@ -46,7 +46,6 @@ typedef struct {
 
 static void M_CheatFa(player_t* player, char dat[4]);
 static void M_CheatBerserk(player_t* player, char dat[4]);
-static void M_CheatWarp(player_t* player, char dat[4]);
 static void M_CheatWarpCarryOver(player_t* player, char dat[4]);
 static void M_CheatMyPos(player_t* player, char dat[4]);
 static void M_CheatAllMap(player_t* player, char dat[4]);
@@ -143,24 +142,24 @@ static void DoWarp(char dat[4], boolean carryover) {
 
 	int map = datoi(dat);
 
-	if (P_GetMapInfo(map)) {
-		int skill = (int)sv_skill.value;
-		gamemap = nextmap = map;
-		if (carryover) {
-			G_DeferedInitNew(skill, map);
-		}
-		else {
-			G_InitNew(skill, map);
-		}
-		dmemset(passwordData, 0xff, 16);
+	if (!P_GetMapInfo(map)) return ;
+
+	int skill = (int)sv_skill.value;
+	gamemap = nextmap = map;
+	if (carryover) {
+		G_DeferedInitNew(skill, map);
 	}
+	else {
+		G_InitNew(skill, map);
+	}
+	dmemset(passwordData, 0xff, 16);
 }
 
-static void M_CheatWarp(player_t* player, char dat[4]) {
+void M_CheatWarp(player_t* player, char dat[4]) {
 	DoWarp(dat, false);
 }
 
-static void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
+void M_CheatWarpCarryOver(player_t* player, char dat[4]) {
 	DoWarp(dat, true);
 }
 

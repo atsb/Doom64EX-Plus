@@ -289,6 +289,11 @@ void CON_Ticker(void) {
 	}
 }
 
+void CON_dismiss(void) {
+	console_state = CST_UP;
+	console_enabled = false;
+}
+
 //
 // CON_Responder
 //
@@ -330,14 +335,9 @@ boolean CON_Responder(event_t* ev) {
 	case CST_LOWER:
 		if (ev->type == ev_keydown) {
 			switch (c) {
-			case '`':
-				console_state = CST_UP;
-				console_enabled = false;
-				break;
-
 			case '~':
-				console_state = CST_UP;
-				console_enabled = false;
+			case '`':
+				CON_dismiss();
 				break;
 
 			case KEY_ESCAPE:

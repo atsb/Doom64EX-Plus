@@ -37,6 +37,7 @@ clusterdef_t* P_GetCluster(int map);
 episodedef_t* P_GetEpisode(int episode);
 int P_GetNumEpisodes(void);
 void P_InitMapInfo(void);
+void P_ListMaps(void);
 
 // 
 void LOC_RegisterCvars(void);
