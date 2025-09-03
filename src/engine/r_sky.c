@@ -71,7 +71,7 @@ CVAR_EXTERNAL(r_fov);
 CVAR_EXTERNAL(r_skyFilter);
 int r_skybox = 1;
 
-GLint oldMin = 0, oldMag = 0;
+GLint oldMin = 0, oldMax = 0;
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
@@ -598,7 +598,7 @@ static void R_DrawSimpleSky(int lump, int offset) {
 
     // restore filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldMin);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldMag);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldMax);
     dglDepthMask(GL_TRUE);
     dglEnable(GL_DEPTH_TEST);
     dglPopMatrix();
@@ -652,7 +652,7 @@ static void R_DrawNamedSkyOnce(const char* lumpname, int offset, int drawHeight)
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &oldMin);
-    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &oldMag);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &oldMax);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -673,7 +673,7 @@ static void R_DrawNamedSkyOnce(const char* lumpname, int offset, int drawHeight)
     glDisable(GL_ALPHA_TEST);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldMin);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldMag);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldMax);
     dglDepthMask(GL_TRUE);
     dglEnable(GL_DEPTH_TEST);
     dglPopMatrix();
