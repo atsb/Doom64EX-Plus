@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
+#include <math.h>
 
 #include "doomstat.h"
 #include "r_lights.h"
@@ -69,6 +70,8 @@ CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fov);
 CVAR_EXTERNAL(r_skyFilter);
 int r_skybox = 1;
+
+GLint oldMin = 0, oldMag = 0;
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
@@ -326,6 +329,14 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 static void R_DrawSkyboxCloud(void) {
     vtx_t v[4];
 
+    // atsb: compute compensation for camera pitch.
+    float fovx = (float)r_fov.value;
+    float aspect = (float)SCREENWIDTH / (float)SCREENHEIGHT;
+    float fovx_rad = fovx * (float)M_PI / 180.0f;
+    float fovy_rad = 2.0f * atanf(tanf(fovx_rad * 0.5f) / aspect);
+    float pitch_rad = TRUEANGLES(viewpitch) * (float)M_PI / 180.0f;
+    int pitchBias = (int)(-(tanf(pitch_rad) / tanf(fovy_rad * 0.5f)) * (SCREENHEIGHT * 0.5f));
+
     I_ShaderUnBind();
 
     I_ShaderSetUseTexture(1);
@@ -549,8 +560,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
-    if (gfxLmp < 0) { 
-        return; 
+    if (gfxLmp < 0) {
+        return;
     }
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
@@ -563,6 +574,9 @@ static void R_DrawSimpleSky(int lump, int offset) {
     dglMatrixMode(GL_MODELVIEW);
     dglPushMatrix();
     dglLoadIdentity();
+    dglEnable(GL_TEXTURE_2D);
+    dglDisable(GL_DEPTH_TEST);
+    dglDepthMask(GL_FALSE);
 
     height = gfxheight[gfxLmp];
     lumpheight = gfxorigheight[gfxLmp];
@@ -582,6 +596,86 @@ static void R_DrawSimpleSky(int lump, int offset) {
 
     glDisable(GL_ALPHA_TEST);
 
+    // restore filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldMin);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldMag);
+    dglDepthMask(GL_TRUE);
+    dglEnable(GL_DEPTH_TEST);
+    dglPopMatrix();
+
+    GL_ResetViewport();
+
+    I_ShaderBind();
+}
+
+
+//
+// R_DrawNamedSkyOnce
+// Draw a backdrop by lump name exactly once across the screen,
+// vertically stretched to drawHeight and placed using "offset"
+
+static void R_DrawNamedSkyOnce(const char* lumpname, int offset, int drawHeight) {
+    const int yBias = (int)(SCREENHEIGHT * 0.5f);
+    float pos1;
+    int gfxLmp;
+    int height, lumpheight;
+    float row;
+    float width;
+
+    I_ShaderUnBind();
+
+    gfxLmp = GL_BindGfxTexture(lumpname, true);
+    if (gfxLmp < 0) {
+        return;
+    }
+
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.01f);
+
+    GL_SetOrtho(1);
+
+    dglMatrixMode(GL_MODELVIEW);
+    dglPushMatrix();
+    dglLoadIdentity();
+
+    dglEnable(GL_TEXTURE_2D);
+    dglDisable(GL_DEPTH_TEST);
+    dglDepthMask(GL_FALSE);
+
+    height = gfxheight[gfxLmp];
+    lumpheight = gfxorigheight[gfxLmp];
+
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &oldMin);
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &oldMag);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    SKYVIEWPOS(viewangle, 1, pos1);
+
+    // one cycle across the screen
+    width = 1.0f;
+    row = (float)lumpheight / (float)height;
+
+    while (pos1 >= 1.0f) pos1 -= 1.0f;
+    while (pos1 < 0.0f) pos1 += 1.0f;
+
+    GL_SetState(GLSTATE_BLEND, 1);
+    GL_SetupAndDraw2DQuad(0, -yBias, SCREENWIDTH, SCREENHEIGHT + yBias,
+        pos1, width + pos1, 0.006f, row, WHITE, 1);
+    GL_SetState(GLSTATE_BLEND, 0);
+
+    glDisable(GL_ALPHA_TEST);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldMin);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldMag);
+    dglDepthMask(GL_TRUE);
+    dglEnable(GL_DEPTH_TEST);
     dglPopMatrix();
 
     GL_ResetViewport();
@@ -620,6 +714,13 @@ static void R_DrawTitleSky(void) {
 static void R_DrawClouds(void) {
     rfloat pos = 0.0f;
     vtx_t v[4];
+
+    float fovx = (float)r_fov.value;
+    float aspect = (float)SCREENWIDTH / (float)SCREENHEIGHT;
+    float fovx_rad = fovx * (float)M_PI / 180.0f;
+    float fovy_rad = 2.0f * atanf(tanf(fovx_rad * 0.5f) / aspect);
+    float pitch_rad = TRUEANGLES(viewpitch) * (float)M_PI / 180.0f;
+    int pitchBias = (int)(-(tanf(pitch_rad) / tanf(fovy_rad * 0.5f)) * (SCREENHEIGHT * 0.5f));
 
     I_ShaderUnBind();
     GL_SetTextureUnit(0, true);
@@ -796,8 +897,8 @@ void R_InitFire(void) {
     int i;
 
     int fireLump = W_GetNumForName("FIRE") - g_start;
-	fireLumpGfxId = GL_GetGfxIdForLump(fireLump);
-	dmemset(&firePal16, 0, sizeof(dPalette_t) * 256);
+    fireLumpGfxId = GL_GetGfxIdForLump(fireLump);
+    dmemset(&firePal16, 0, sizeof(dPalette_t) * 256);
     for (i = 0; i < 16; i++) {
         firePal16[i].r = 16 * i;
         firePal16[i].g = 16 * i;
@@ -919,6 +1020,14 @@ static void R_DrawFire(void) {
 //
 
 void R_DrawSky(void) {
+    static int s_checkedMarshe2 = 0;
+    static int s_hasMarshe2 = 0;
+
+    if (!s_checkedMarshe2) {
+        int num = W_CheckNumForName("MARSHE2");
+        s_hasMarshe2 = (num >= 0);
+        s_checkedMarshe2 = 1;
+    }
 
     int drewClouds = 0;
 
@@ -935,61 +1044,103 @@ void R_DrawSky(void) {
             if (sky->flags & SKF_FADEBACK) {
                 R_DrawTitleSky();
             }
+
             else if (sky->flags & SKF_BACKGROUND) {
-                // When using the skybox path, draw clouds first so the backdrop (mountains)
-                // renders on top, occluding the clouds along the horizon.
-                if (r_skybox > 0 && (sky->flags & SKF_CLOUD)) {
-                    R_DrawSkyboxCloud();
-                    drewClouds = 1;
-                }
-                if (r_skybox <= 0) {
-                    R_DrawSimpleSky(skybackdropnum, 170);
-                }
-                else {
-                    float h;
-                    float origh;
-                    int l;
+                if (s_hasMarshe2) {
+                    float h, origh, base, offset;
                     int domeheight;
-                    float offset;
-                    float base;
+                    int l;
 
                     GL_SetTextureUnit(0, true);
-                    l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
+                    l = GL_BindGfxTexture("MARSHE2", true);
 
-                    //
-                    // handle the case for non-powers of 2 texture
-                    // dimensions. height and offset is adjusted
-                    // accordingly
-                    //
                     origh = (float)gfxorigheight[l];
                     h = (float)gfxheight[l];
                     base = 160.0f - ((128 - origh) / 2.0f);
                     domeheight = (int)(base / (origh / h));
                     offset = (float)domeheight - base - 16.0f;
 
-                    R_DrawSkyDome(5, 1, domeheight, 768,
-                        offset, 0.005f, WHITE, WHITE);
+                    R_DrawNamedSkyOnce("MARSHE2", (int)offset, domeheight);
+
+                    return;
+                }
+                else {
+                    if (r_skybox > 0 && (sky->flags & SKF_CLOUD)) {
+                        R_DrawSkyboxCloud();
+                        drewClouds = 1;
+                    }
+                    if (r_skybox <= 0) {
+                        R_DrawSimpleSky(skybackdropnum, 170);
+                    }
+                    else {
+                        float h;
+                        float origh;
+                        int l;
+                        int domeheight;
+                        float offset;
+                        float base;
+
+                        GL_SetTextureUnit(0, true);
+                        l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
+
+                        //
+                        // handle the case for non-powers of 2 texture
+                        // dimensions. height and offset is adjusted
+                        // accordingly
+                        //
+                        origh = (float)gfxorigheight[l];
+                        h = (float)gfxheight[l];
+                        base = 160.0f - ((128 - origh) / 2.0f);
+                        domeheight = (int)(base / (origh / h));
+                        offset = (float)domeheight - base - 16.0f;
+
+                        R_DrawSkyDome(5, 1, domeheight, 768,
+                            offset, 0.005f, WHITE, WHITE);
+                    }
                 }
             }
         }
-
-        if (sky->flags & SKF_CLOUD) {
-            if (r_skybox <= 0) {
-                R_DrawClouds();
-            }
-            else if (!drewClouds) {
-                R_DrawSkyboxCloud();
-            }
+        if (r_skybox <= 0) {
+            R_DrawSimpleSky(skybackdropnum, 170);
         }
         else {
-            R_DrawSimpleSky(skypicnum, 128);
-        }
+            float h;
+            float origh;
+            int l;
+            int domeheight;
+            float offset;
+            float base;
 
-        if (sky->flags & SKF_FIRE) {
-            R_DrawFire();
-        }
+            GL_SetTextureUnit(0, true);
+            l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
 
+            origh = (float)gfxorigheight[l];
+            h = (float)gfxheight[l];
+            base = 160.0f - ((128 - origh) / 2.0f);
+            domeheight = (int)(base / (origh / h));
+            offset = (float)domeheight - base - 16.0f;
+
+            R_DrawSkyDome(5, 1, domeheight, 768,
+                offset, 0.005f, WHITE, WHITE);
+        }
     }
+
+    if (sky->flags & SKF_CLOUD) {
+        if (r_skybox <= 0) {
+            R_DrawClouds();
+        }
+        else if (!drewClouds) {
+            R_DrawSkyboxCloud();
+        }
+    }
+    else {
+        R_DrawSimpleSky(skypicnum, 128);
+    }
+
+    if (sky->flags & SKF_FIRE) {
+        R_DrawFire();
+    }
+
 }
 
 
