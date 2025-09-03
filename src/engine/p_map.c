@@ -704,11 +704,6 @@ boolean PTR_ShootTraverse(intercept_t* in)
 
         lineside = P_PointOnLineSide(shootthing->x, shootthing->y, li);
 
-        // Styd: Fixes a vanilla bug or the switches that are in the floor it activates even if it is in the floor when the player shoots them
-        if (!hitplane && li->special & MLU_SHOOT) {
-            P_UseSpecialLine(shootthing, li, lineside);
-        }
-
         sidesector = lineside ? li->backsector : li->frontsector;
         dist = FixedMul(attackrange, in->frac);
         hitz = shootz + FixedMul(dcos(shootthing->pitch - ANG90), dist);
@@ -754,6 +749,11 @@ boolean PTR_ShootTraverse(intercept_t* in)
             x = trace.x + FixedMul(trace.dx, frac);
             y = trace.y + FixedMul(trace.dy, frac);
             z = shootz + FixedMul(aimslope, FixedMul(frac, attackrange));
+        }
+
+        // Styd: Fixes a vanilla bug or the switches that are in the floor it activates even if it is in the floor when the player shoots them
+        if (!hitplane && li->special & MLU_SHOOT) {
+            P_UseSpecialLine(shootthing, li, lineside);
         }
 
         if (sides[li->sidenum[0]].midtexture == 1
