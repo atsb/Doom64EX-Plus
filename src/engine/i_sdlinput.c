@@ -29,7 +29,7 @@
 #include "i_video.h"
 #include "d_main.h"
 #include "con_cvar.h"
-
+#include "dgl.h"
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -716,6 +716,7 @@ void I_StartTic(void) {
 void I_FinishUpdate(void) {
 	I_UpdateGrab();
 	SDL_GL_SwapWindow(window);
+	dglFinish();
 
 	BusyDisk = false;
 }
