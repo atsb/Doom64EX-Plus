@@ -1023,6 +1023,10 @@ void R_DrawSky(void) {
     static int s_checkedMarshe2 = 0;
     static int s_hasMarshe2 = 0;
 
+    // If your codebase doesn't expose 'gamemap', replace with your current map accessor.
+    extern int gamemap;            // <-- ensure this matches your port
+    const int MARSHE2_MAP = 24;    // the only slot that should use MARSHE2
+
     if (!s_checkedMarshe2) {
         int num = W_CheckNumForName("MARSHE2");
         s_hasMarshe2 = (num >= 0);
@@ -1046,7 +1050,8 @@ void R_DrawSky(void) {
             }
 
             else if (sky->flags & SKF_BACKGROUND) {
-                if (s_hasMarshe2) {
+                // >>> Only use MARSHE2 on MAP24 <<<
+                if (s_hasMarshe2 && gamemap == MARSHE2_MAP) {
                     float h, origh, base, offset;
                     int domeheight;
                     int l;
@@ -1062,7 +1067,7 @@ void R_DrawSky(void) {
 
                     R_DrawNamedSkyOnce("MARSHE2", (int)offset, domeheight);
 
-                    return;
+                    return; // keep the previous behavior of exiting after drawing MARSHE2
                 }
                 else {
                     if (r_skybox > 0 && (sky->flags & SKF_CLOUD)) {
@@ -1083,11 +1088,7 @@ void R_DrawSky(void) {
                         GL_SetTextureUnit(0, true);
                         l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
 
-                        //
-                        // handle the case for non-powers of 2 texture
-                        // dimensions. height and offset is adjusted
-                        // accordingly
-                        //
+                        // handle NPOT texture dimensions
                         origh = (float)gfxorigheight[l];
                         h = (float)gfxheight[l];
                         base = 160.0f - ((128 - origh) / 2.0f);
@@ -1140,9 +1141,7 @@ void R_DrawSky(void) {
     if (sky->flags & SKF_FIRE) {
         R_DrawFire();
     }
-
 }
-
 
 //
 // R_SkyTicker
