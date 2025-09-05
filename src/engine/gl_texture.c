@@ -249,7 +249,7 @@ static void GL_WorldTexClassify(int texnum)
 			break;
 	}
 	g_tex_is_translucent[texnum] = (unsigned char)hasMid;
-	g_tex_is_masked[texnum] = (unsigned char)(!hasMid && has0);
+	g_tex_is_masked[texnum] = (unsigned char)(!hasMid && (has0 || has255));
 
 	Z_Free(png);
 }
