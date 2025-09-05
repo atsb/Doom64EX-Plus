@@ -48,10 +48,9 @@ CVAR_CMD(v_mlook, 0) {
 	if (gamestate == GS_LEVEL) {
 		players[0].mo->pitch = 0;
 	}
-	// force autoaim if off
-	if (p_autoaim.value <= 0) {
-		CON_CvarSetValue("p_autoaim", 1.0f);
-	}
+
+	// force autoaim
+	gameflags |= GF_ALLOWAUTOAIM;
 };
 
 

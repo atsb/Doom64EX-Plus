@@ -968,7 +968,7 @@ static void G_SetGameFlags(void) {
 	if (sv_allowcheats.value > 0)   gameflags |= GF_ALLOWCHEATS;
 	if (sv_friendlyfire.value > 0)  gameflags |= GF_FRIENDLYFIRE;
 	if (sv_keepitems.value > 0)     gameflags |= GF_KEEPITEMS;
-	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
+	if (p_autoaim.value > 0 || v_mlook.value <= 0)  gameflags |= GF_ALLOWAUTOAIM; // force autoaim if mlook is disabled
 
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
 }
