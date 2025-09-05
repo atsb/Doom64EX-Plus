@@ -281,7 +281,6 @@ void P_CalcHeight(player_t* player) {
 //
 // P_MovePlayer
 //
-
 void P_MovePlayer(player_t* player) {
     ticcmd_t* cmd;
     int         mpitch;

@@ -483,6 +483,11 @@ static CMD(Map) {
 		if (P_GetMapInfo(map)) {
 
 			if (gamestate == GS_LEVEL) {
+
+				if (menuactive) {
+					M_ClearMenus();
+				}
+
 				M_CheatWarp(NULL, param[0]);
 			}
 			else {
@@ -740,11 +745,12 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 
 		cmd->angleturn -= pc->mousex * 0x4;
 
-		if (forcefreelook != 2) {
-			if ((int)v_mlook.value || forcefreelook) {
-				cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x4 : -(pc->mousey * 0x4);
-			}
+		
+		if (forcefreelook != 2 && ((int)v_mlook.value || forcefreelook)) {
+			cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x4 : -(pc->mousey * 0x4);
 		}
+		
+		
 	}
 
 	if ((int)v_yaxismove.value) {
@@ -962,7 +968,7 @@ static void G_SetGameFlags(void) {
 	if (sv_allowcheats.value > 0)   gameflags |= GF_ALLOWCHEATS;
 	if (sv_friendlyfire.value > 0)  gameflags |= GF_FRIENDLYFIRE;
 	if (sv_keepitems.value > 0)     gameflags |= GF_KEEPITEMS;
-	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
+	if (p_autoaim.value > 0 || v_mlook.value <= 0)  gameflags |= GF_ALLOWAUTOAIM; // force autoaim if mlook is disabled
 
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
 }

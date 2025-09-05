@@ -63,7 +63,7 @@ static conline_t** console_buffer;
 static int          console_head;
 static int          console_lineoffset;
 static int          console_minline;
-static boolean     console_enabled = false;
+boolean			    console_enabled = false;
 static char         console_linebuffer[CON_BUFFERSIZE];
 static int          console_linelength;
 static boolean     console_state = CST_UP;

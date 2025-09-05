@@ -187,7 +187,6 @@ extern menu_t ControlMenuDef;
 //------------------------------------------------------------------------
 
 void M_SetupNextMenu(menu_t* menudef);
-void M_ClearMenus(void);
 
 void M_QuickSave(void);
 void M_QuickLoad(void);

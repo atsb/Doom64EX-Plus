@@ -25,8 +25,7 @@
 #include "gl_texture.h"
 #include "doomstat.h"
 #include "dgl.h"
-
-void M_ClearMenus(void);    // from m_menu.c
+#include "m_menu.h"
 
 static dtexture wipeMeltTexture = 0;
 static int wipeFadeAlpha = 0;
