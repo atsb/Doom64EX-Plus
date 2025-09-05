@@ -30,7 +30,8 @@
 #define MAX_CONSOLE_INPUT_LEN    80
 extern char     console_inputbuffer[];
 extern int      console_inputlength;
-extern boolean console_initialized;
+extern boolean  console_initialized;
+extern boolean	console_enabled;
 
 #define CONCLEARINPUT() (dmemset(console_inputbuffer+1, 0, MAX_CONSOLE_INPUT_LEN-1))
 

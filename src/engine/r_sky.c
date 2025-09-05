@@ -1104,7 +1104,7 @@ void R_DrawSky(void) {
         if (r_skybox <= 0) {
             R_DrawSimpleSky(skybackdropnum, 170);
         }
-        else {
+        else if(skybackdropnum != -1) {
             float h;
             float origh;
             int l;

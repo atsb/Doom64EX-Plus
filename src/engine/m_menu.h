@@ -50,4 +50,6 @@ void M_StartMainMenu(void);
 
 void M_RegisterCvars(void);
 
+void M_ClearMenus(void);
+
 #endif

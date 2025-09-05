@@ -34,11 +34,26 @@
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
 CVAR(v_macceleration, 0);
-CVAR(v_mlook, 0);
 CVAR(v_mlookinvert, 0);
 CVAR(v_yaxismove, 0);
 CVAR(v_xaxismove, 0);
 CVAR_EXTERNAL(m_menumouse);
+CVAR_EXTERNAL(p_autoaim);
+
+CVAR_CMD(v_mlook, 0) {
+	if (cvar->value > 0) return;
+	// mlook is disabled
+
+	// center player view, resetting pitch
+	if (gamestate == GS_LEVEL) {
+		players[0].mo->pitch = 0;
+	}
+	// force autoaim if off
+	if (p_autoaim.value <= 0) {
+		CON_CvarSetValue("p_autoaim", 1.0f);
+	}
+};
+
 
 float mouse_accelfactor;
 

@@ -483,6 +483,11 @@ static CMD(Map) {
 		if (P_GetMapInfo(map)) {
 
 			if (gamestate == GS_LEVEL) {
+
+				if (menuactive) {
+					M_ClearMenus();
+				}
+
 				M_CheatWarp(NULL, param[0]);
 			}
 			else {
@@ -740,11 +745,12 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 
 		cmd->angleturn -= pc->mousex * 0x4;
 
-		if (forcefreelook != 2) {
-			if ((int)v_mlook.value || forcefreelook) {
-				cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x4 : -(pc->mousey * 0x4);
-			}
+		
+		if (forcefreelook != 2 && ((int)v_mlook.value || forcefreelook)) {
+			cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x4 : -(pc->mousey * 0x4);
 		}
+		
+		
 	}
 
 	if ((int)v_yaxismove.value) {

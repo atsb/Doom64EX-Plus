@@ -937,7 +937,7 @@ void ST_Drawer(void) {
 	// draw crosshairs
 	//
 
-	if (st_crosshairs && !automapactive) {
+	if (st_crosshairs && !(automapactive || menuactive || console_enabled)) {
 		int x = (SCREENWIDTH / 2) - (ST_CROSSHAIRSIZE / 8);
 		int y = (SCREENHEIGHT / 2) - (ST_CROSSHAIRSIZE / 8);
 		int alpha = (int)st_crosshairopacity.value;
