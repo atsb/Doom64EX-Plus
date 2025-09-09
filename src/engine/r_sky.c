@@ -555,7 +555,7 @@ static void R_DrawSimpleSky(int lump, int offset) {
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.5f);
+    glAlphaFunc(GL_GREATER, 0.2f);
 
 
     height = gfxheight[gfxLmp];
@@ -627,19 +627,20 @@ static void R_DrawClouds(void) {
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    GLboolean _wasAlphaTest = glIsEnabled(GL_ALPHA_TEST);
-    GLboolean _wasBlend = glIsEnabled(GL_BLEND);
-    GLint _oldBlendSrc = 0, _oldBlendDst = 0;
+    GLboolean wasAlphaTest = glIsEnabled(GL_ALPHA_TEST);
+    GLboolean wasBlend = glIsEnabled(GL_BLEND);
+    GLint previousBlendSrc = 0, previousBlendDst = 0;
 #ifdef GL_BLEND_SRC
-    glGetIntegerv(GL_BLEND_SRC, &_oldBlendSrc);
-    glGetIntegerv(GL_BLEND_DST, &_oldBlendDst);
+    glGetIntegerv(GL_BLEND_SRC, &previousBlendSrc);
+    glGetIntegerv(GL_BLEND_DST, &previousBlendDst);
 #else
-    _oldBlendSrc = GL_SRC_ALPHA;
-    _oldBlendDst = GL_ONE_MINUS_SRC_ALPHA;
+    previousBlendSrc = GL_SRC_ALPHA;
+    previousBlendDst = GL_ONE_MINUS_SRC_ALPHA;
 #endif
 
     dglDisable(GL_ALPHA_TEST);
     dglEnable(GL_BLEND);
+    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     dglSetVertex(v);
@@ -697,11 +698,12 @@ static void R_DrawClouds(void) {
     dglViewFrustum(SCREENWIDTH, SCREENHEIGHT, 45.0f, 0.1f);
     dglMatrixMode(GL_MODELVIEW);
     dglEnable(GL_BLEND);
+    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Draw the 3D overlay without touching depth, then restore.
-    GLboolean _wasDepth = glIsEnabled(GL_DEPTH_TEST);
-    GLboolean _oldDepthMask = GL_TRUE;
-    glGetBooleanv(GL_DEPTH_WRITEMASK, &_oldDepthMask);
+    GLboolean hadDepth = glIsEnabled(GL_DEPTH_TEST);
+    GLboolean previousDepth = GL_TRUE;
+    glGetBooleanv(GL_DEPTH_WRITEMASK, &previousDepth);
     dglDisable(GL_DEPTH_TEST);
     dglDepthMask(GL_FALSE);
 
@@ -712,15 +714,22 @@ static void R_DrawClouds(void) {
     dglDrawGeometry(4, v);
     dglPopMatrix();
 
-    dglDepthMask(_oldDepthMask);
-    if (_wasDepth) dglEnable(GL_DEPTH_TEST); else dglDisable(GL_DEPTH_TEST);
+    dglDepthMask(previousDepth);
+    if (hadDepth) 
+        dglEnable(GL_DEPTH_TEST);
+    else
+        dglDisable(GL_DEPTH_TEST);
 
     dglDisable(GL_BLEND);
 
     // Restore previous blend func and alpha/blend enable states.
-    glBlendFunc(_oldBlendSrc, _oldBlendDst);
-    if (_wasAlphaTest) dglEnable(GL_ALPHA_TEST); else dglDisable(GL_ALPHA_TEST);
-    if (_wasBlend) dglEnable(GL_BLEND); else dglDisable(GL_BLEND);
+    glBlendFunc(previousBlendSrc, previousBlendDst);
+    if (wasAlphaTest) dglEnable(GL_ALPHA_TEST);
+        else dglDisable(GL_ALPHA_TEST);
+    if (wasBlend)
+        dglEnable(GL_BLEND);
+    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    dglDisable(GL_BLEND);
 
     GL_SetDefaultCombiner();
     I_ShaderBind();
@@ -941,6 +950,7 @@ void R_DrawSky(void) {
     else if (skypicnum >= 0) {
         if (sky->flags & SKF_CLOUD) {
             if (r_skybox.value <= 0) {
+                R_DrawSimpleSky(skypicnum, 128);
                 R_DrawClouds();
             }
             else {
