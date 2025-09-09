@@ -72,6 +72,55 @@ CVAR(r_skybox, 1);
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
+static GLuint gCloudAlphaTex = 0;
+static int gCloudAlphaForLump = -1;
+
+static void R_BuildCloudAlphaTexture(int lumpNum)
+{
+    if (gCloudAlphaForLump == lumpNum && gCloudAlphaTex)
+        return;
+
+    GLint w = 0, h = 0;
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
+    if (w <= 0 || h <= 0)
+        return;
+
+    size_t n = (size_t)w * (size_t)h * 4;
+    unsigned char* src = (unsigned char*)Z_Malloc(n, PU_STATIC, 0);
+    unsigned char* dst = (unsigned char*)Z_Malloc(n, PU_STATIC, 0);
+    if (!src || !dst) { if (src) Z_Free(src); if (dst) Z_Free(dst); return; }
+
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, src);
+
+    for (int i = 0; i < w * h; ++i) {
+        unsigned char r = src[i * 4 + 0];
+        unsigned char g = src[i * 4 + 1];
+        unsigned char b = src[i * 4 + 2];
+        // luminance -> alpha
+        unsigned int a = (unsigned int)(0.2126f * r + 0.7152f * g + 0.0722f * b + 0.5f);
+        dst[i * 4 + 0] = r;
+        dst[i * 4 + 1] = g;
+        dst[i * 4 + 2] = b;
+        dst[i * 4 + 3] = (unsigned char)a;
+    }
+
+    if (!gCloudAlphaTex) {
+        dglGenTextures(1, &gCloudAlphaTex);
+    }
+    dglBindTexture(GL_TEXTURE_2D, gCloudAlphaTex);
+    dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, dst);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    Z_Free(src);
+    Z_Free(dst);
+
+    gCloudAlphaForLump = lumpNum;
+}
+
 //
 // R_CloudThunder
 // Loosely based on subroutine at 0x80026418
@@ -621,6 +670,10 @@ static void R_DrawClouds(void) {
     I_ShaderUnBind();
     GL_SetTextureUnit(0, true);
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
+
+    R_BuildCloudAlphaTexture(skypicnum);
+    if (gCloudAlphaTex)
+        dglBindTexture(GL_TEXTURE_2D, gCloudAlphaTex);
 
     pos = (TRUEANGLES(viewangle) / 360.0f) * 2.0f;
 
