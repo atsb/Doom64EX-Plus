@@ -715,21 +715,20 @@ static void R_DrawClouds(void) {
     dglPopMatrix();
 
     dglDepthMask(previousDepth);
-    if (hadDepth) 
+    if (hadDepth)
         dglEnable(GL_DEPTH_TEST);
     else
         dglDisable(GL_DEPTH_TEST);
 
-    dglDisable(GL_BLEND);
-
-    // Restore previous blend func and alpha/blend enable states.
     glBlendFunc(previousBlendSrc, previousBlendDst);
-    if (wasAlphaTest) dglEnable(GL_ALPHA_TEST);
-        else dglDisable(GL_ALPHA_TEST);
+    if (wasAlphaTest)
+        dglEnable(GL_ALPHA_TEST);
+    else
+        dglDisable(GL_ALPHA_TEST);
     if (wasBlend)
         dglEnable(GL_BLEND);
-    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    dglDisable(GL_BLEND);
+    else
+        dglDisable(GL_BLEND);
 
     GL_SetDefaultCombiner();
     I_ShaderBind();
