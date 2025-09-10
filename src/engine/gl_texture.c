@@ -322,7 +322,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
             /* atsb: (0/255 alpha) */                                    \
             GL_SetState(GLSTATE_BLEND, false);                                    \
             dglEnable(GL_ALPHA_TEST);                                             \
-            dglAlphaFunc(GL_GREATER, 0.5f);                                       \
+            dglAlphaFunc(GL_GREATER, 0.2f);                                       \
             dglDepthMask(GL_TRUE);                                                \
             dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);         \
         } else {                                                                  \
@@ -720,7 +720,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 	if ((spritenum == cursprite) && (pal == curtrans)) {
 		GL_SetState(GLSTATE_BLEND, 1);
 		dglEnable(GL_ALPHA_TEST);
-		dglAlphaFunc(GL_GREATER, 0.5f);
+		dglAlphaFunc(GL_GREATER, 0.2f);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
 		if (!game_world_shader_scope)
@@ -735,7 +735,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
 		GL_SetState(GLSTATE_BLEND, 1);
 		dglEnable(GL_ALPHA_TEST);
-		dglAlphaFunc(GL_GREATER, 0.5f);
+		dglAlphaFunc(GL_GREATER, 0.2f);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -777,7 +777,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	GL_SetState(GLSTATE_BLEND, 1);
 	dglEnable(GL_ALPHA_TEST);
-	dglAlphaFunc(GL_GREATER, 0.5f);
+	dglAlphaFunc(GL_GREATER, 0.2f);
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	dglDepthMask(GL_FALSE);
 	if (!game_world_shader_scope)
@@ -1314,7 +1314,7 @@ static void GL_GfxEnsureClassified(int gfxid)
 			/* binary cutouts (0/255 alpha) */                                   \
 			GL_SetState(GLSTATE_BLEND, 0);                                       \
 			dglEnable(GL_ALPHA_TEST);                                            \
-			dglAlphaFunc(GL_GREATER, 0.5f);                                      \
+			dglAlphaFunc(GL_GREATER, 0.2f);                                      \
 			dglDepthMask(GL_TRUE);                                               \
 			dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);        \
 		} else {                                                                 \
