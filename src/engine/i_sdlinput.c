@@ -100,22 +100,6 @@ extern void D_PostEvent(event_t*);
 extern boolean menuactive;
 extern gamestate_t gamestate;
 
-static struct {
-	SDL_Gamepad* gamepad;
-	SDL_Joystick* joy;
-	SDL_JoystickID active_id;
-
-	bool player_forward, player_backwards, player_left, player_right;
-	bool player_fire, player_next_weapon, player_previous_weapon, player_use, player_pause, player_run, player_automap;
-
-	bool mouse_up, mouse_down, mouse_left, mouse_right;
-	bool mouse_accept, mouse_back, mouse_scroll_up, mouse_scroll_down;
-	unsigned int right_arrow_key_up, right_arrow_key_down, right_arrow_key_left, right_arrow_key_right;
-	float gamepad_look_fx, gamepad_look_fy, gamepad_look_dx, gamepad_look_dy;
-
-	bool init;
-} gamepad64;
-
 static SDL_INLINE float I_GamepadClamp(float x) { return SDL_clamp(x, 0.f, 1.f); }
 
 static void I_GamepadRadialLookSmoothing(float x, float y,
