@@ -20,6 +20,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#ifndef __I_SDLINPUT__
+#define __I_SDLINPUT__
+
 #include <SDL3/SDL.h>
 
 #include "doomtype.h"
@@ -49,7 +52,7 @@ const char* I_KeycodeToName_All(int keycode);
 int I_NameToKeycode_All(const char* name);
 void I_RegisterGamepadKeyNames(void);
 
-struct {
+typedef struct {
 	SDL_Gamepad* gamepad;
 	SDL_Joystick* joy;
 	SDL_JoystickID active_id;
@@ -63,4 +66,6 @@ struct {
 	float gamepad_look_fx, gamepad_look_fy, gamepad_look_dx, gamepad_look_dy;
 
 	bool init;
-} gamepad64;
+} gamepad64_t;
+
+#endif
