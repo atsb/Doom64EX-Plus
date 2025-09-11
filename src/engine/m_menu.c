@@ -774,7 +774,7 @@ void M_PlayerSetName(int choice);
 void M_DrawNetwork(void);
 
 CVAR_EXTERNAL(m_playername);
-//Andr�: remove autoaim and use the normal aim instead.  CVAR_EXTERNAL(p_autoaim);
+CVAR_EXTERNAL(p_autoaim);
 CVAR_EXTERNAL(sv_nomonsters);
 CVAR_EXTERNAL(sv_fastmonsters);
 CVAR_EXTERNAL(sv_respawnitems);
@@ -1067,6 +1067,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_menumouse, 1 },
 	{ &m_cursorscale, 8 },
 	{ &p_autorun, 1 },
+	{ &p_autoaim, 1 },
 	{ &p_usecontext, 0 },
 	{ &r_wipe, 1 },
 	{ &r_weaponswitch, 1 },
@@ -1274,16 +1275,12 @@ void M_DrawMisc(void) {
 
 void M_ChangeSensitivity(int choice);
 void M_ChangeMouseAccel(int choice);
-void M_ChangeMouseLook(int choice);
-void M_ChangeMouseInvert(int choice);
 void M_ChangeYAxisMove(int choice);
 void M_ChangeXAxisMove(int choice);
 void M_DrawMouse(void);
 
 CVAR_EXTERNAL(v_msensitivityx);
 CVAR_EXTERNAL(v_msensitivityy);
-CVAR_EXTERNAL(v_mlook);
-CVAR_EXTERNAL(v_mlookinvert);
 CVAR_EXTERNAL(v_yaxismove);
 CVAR_EXTERNAL(v_xaxismove);
 CVAR_EXTERNAL(v_macceleration);
@@ -1295,8 +1292,6 @@ enum {
 	mouse_empty2,
 	mouse_accel,
 	mouse_empty3,
-	mouse_look,
-	mouse_invert,
 	mouse_yaxismove,
 	mouse_xaxismove,
 	mouse_default,
@@ -1311,8 +1306,6 @@ menuitem_t MouseMenu[] = {
 	{-1,"",0},
 	{3, "Mouse Acceleration",M_ChangeMouseAccel, 'a'},
 	{-1, "",0},
-	{2,"Mouse Look:",M_ChangeMouseLook,'l'},
-	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
 	{2,"Y-Axis Move:",M_ChangeYAxisMove, 'y'},
         {2, "X-Axis Move:", M_ChangeXAxisMove, 'x'},
 	{-2,"Default",M_DoDefaults,'d'},
@@ -1323,8 +1316,6 @@ menudefault_t MouseDefault[] = {
 	{ &v_msensitivityx, 5 },
 	{ &v_msensitivityy, 5 },
 	{ &v_macceleration, 0 },
-	{ &v_mlook, 0 },
-	{ &v_mlookinvert, 0 },
 	{ &v_yaxismove, 0 },
 	{ &v_xaxismove },
 	{ NULL, -1 }
@@ -1361,10 +1352,6 @@ void M_DrawMouse(void) {
 
 	M_DrawThermo(MouseDef.x, MouseDef.y + LINEHEIGHT * (mouse_accel + 1), 20, v_macceleration.value);
 
-	Draw_BigText(MouseDef.x + 144, MouseDef.y + LINEHEIGHT * mouse_look, MENUCOLORRED,
-		msgNames[(int)v_mlook.value]);
-	Draw_BigText(MouseDef.x + 144, MouseDef.y + LINEHEIGHT * mouse_invert, MENUCOLORRED,
-		msgNames[(int)v_mlookinvert.value]);
 	Draw_BigText(MouseDef.x + 144, MouseDef.y + LINEHEIGHT * mouse_yaxismove, MENUCOLORRED,
 		msgNames[(int)v_yaxismove.value]);
 	Draw_BigText(MouseDef.x + 144, MouseDef.y + LINEHEIGHT * mouse_xaxismove, MENUCOLORRED,
@@ -1439,14 +1426,6 @@ void M_ChangeMouseAccel(int choice)
 		break;
 	}
 	I_MouseAccelChange();
-}
-
-void M_ChangeMouseLook(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &v_mlook);
-}
-
-void M_ChangeMouseInvert(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &v_mlookinvert);
 }
 
 void M_ChangeYAxisMove(int choice) {

@@ -36,8 +36,6 @@ static boolean showstats = true;
 
 extern word statindice;
 
-CVAR_EXTERNAL(v_mlook);
-CVAR_EXTERNAL(v_mlookinvert);
 CVAR_EXTERNAL(sv_lockmonsters);
 
 //
@@ -229,31 +227,6 @@ boolean D_DevKeyResponder(event_t* ev) {
 				players[consoleplayer].message = "Demo Mode On";
 				players[consoleplayer].health = 100;
 				players[consoleplayer].mo->health = 100;
-				return true;
-
-			case KEY_F2:    // toggle spectator mode
-				if (!(players[consoleplayer].cheats & CF_SPECTATOR)) {
-					players[consoleplayer].cheats |= CF_SPECTATOR;
-					players[consoleplayer].message = "Spectator Mode On";
-
-					freelook = (int)v_mlook.value;
-					CON_CvarSetValue(v_mlook.name, 1);
-
-					players[consoleplayer].mo->flags |= MF_FLOAT;
-					players[consoleplayer].mo->flags |= MF_NOCLIP;
-					players[consoleplayer].mo->flags &= ~MF_GRAVITY;
-				}
-				else {
-					players[consoleplayer].cheats &= ~CF_SPECTATOR;
-					players[consoleplayer].message = "Spectator Mode Off";
-
-					CON_CvarSetValue(v_mlook.name, (float)freelook);
-					freelook = false;
-
-					players[consoleplayer].mo->flags &= ~MF_FLOAT;
-					players[consoleplayer].mo->flags &= ~MF_NOCLIP;
-					players[consoleplayer].mo->flags |= MF_GRAVITY;
-				}
 				return true;
 
 			case KEY_F3:    // freeze all mobj thinkers

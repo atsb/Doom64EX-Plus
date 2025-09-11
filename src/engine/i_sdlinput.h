@@ -49,7 +49,7 @@ const char* I_KeycodeToName_All(int keycode);
 int I_NameToKeycode_All(const char* name);
 void I_RegisterGamepadKeyNames(void);
 
-static struct {
+struct {
 	SDL_Gamepad* gamepad;
 	SDL_Joystick* joy;
 	SDL_JoystickID active_id;

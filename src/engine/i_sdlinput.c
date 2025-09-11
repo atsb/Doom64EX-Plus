@@ -34,25 +34,10 @@
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
 CVAR(v_macceleration, 0);
-CVAR(v_mlookinvert, 0);
 CVAR(v_yaxismove, 0);
 CVAR(v_xaxismove, 0);
 CVAR_EXTERNAL(m_menumouse);
 CVAR_EXTERNAL(p_autoaim);
-
-CVAR_CMD(v_mlook, 0) {
-	if (cvar->value > 0) return;
-	// mlook is disabled
-
-	// center player view, resetting pitch
-	if (gamestate == GS_LEVEL) {
-		players[0].mo->pitch = 0;
-	}
-
-	// force autoaim
-	gameflags |= GF_ALLOWAUTOAIM;
-};
-
 
 float mouse_accelfactor;
 
@@ -357,7 +342,6 @@ static void I_GamepadUpdate(void) {
 	}
 	const float sensx = v_msensitivityx.value > 0 ? v_msensitivityx.value : 1.f;
 	const float sensy = v_msensitivityy.value > 0 ? v_msensitivityy.value : 1.f;
-	const float inv = (v_mlookinvert.value ? -1.f : 1.f);
 
 	static float s_look_fx = 0.f, s_look_fy = 0.f;
 	const float dt = (1.0f / 35.0f);
@@ -365,7 +349,7 @@ static void I_GamepadUpdate(void) {
 	s_look_fy = I_GamepadLookSmoothing(s_look_fy, ry, dt, GAMEPAD_LOOK_SMOOTH_TC);
 
 	const float dx = s_look_fx * GAMEPAD_LOOK_BASE_SPEED * sensx * ads_scale;
-	const float dy = s_look_fy * GAMEPAD_LOOK_BASE_SPEED * sensy * ads_scale * inv;
+	const float dy = s_look_fy * GAMEPAD_LOOK_BASE_SPEED * sensy * ads_scale;
 
 	gamepad64.gamepad_look_dx += dx; gamepad64.gamepad_look_dy += dy;
 	const int sdx = (int)gamepad64.gamepad_look_dx;
@@ -737,8 +721,6 @@ void ISDL_RegisterKeyCvars(void) {
 	CON_CvarRegister(&v_msensitivityx);
 	CON_CvarRegister(&v_msensitivityy);
 	CON_CvarRegister(&v_macceleration);
-	CON_CvarRegister(&v_mlook);
-	CON_CvarRegister(&v_mlookinvert);
 	CON_CvarRegister(&v_yaxismove);
 	CON_CvarRegister(&v_xaxismove);
 }
