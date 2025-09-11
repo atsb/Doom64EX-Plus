@@ -40,6 +40,7 @@
 #include "con_cvar.h"
 #include "r_main.h"
 #include "dgl.h"
+#include "i_sectorcombiner.h"
 
 extern vtx_t drawVertex[MAXDLDRAWCOUNT];
 extern void I_ShaderSetTextureSize(int w, int h);
@@ -71,6 +72,15 @@ CVAR_EXTERNAL(r_skyFilter);
 CVAR(r_skybox, 1);
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
+
+
+// atsb: a small little function to not have to copy and paste so much
+static inline void R_NeutralizeShaders(void) {
+    I_ShaderUnBind();
+    I_SectorCombiner_Unbind();
+    I_ShaderSetUseTexture(1);
+    I_ShaderSetTextureSize(0, 0);
+}
 
 static GLuint gCloudAlphaTex = 0;
 static int gCloudAlphaForLump = -1;
@@ -110,8 +120,8 @@ static void R_BuildCloudAlphaTexture(int lumpNum)
     }
     dglBindTexture(GL_TEXTURE_2D, gCloudAlphaTex);
     dglTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, dst);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -478,7 +488,9 @@ static void R_DrawSkyboxCloud(void) {
     // bind cloud texture and set blending
     //
     GL_SetTextureUnit(0, true);
+    R_NeutralizeShaders();
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
+    GL_SetTextureFilter();
 
     GLint oldWrapS_cloud = 0, oldWrapT_cloud = 0;
     glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &oldWrapS_cloud);
@@ -597,6 +609,7 @@ static void R_DrawSimpleSky(int lump, int offset) {
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
+    GL_SetTextureFilter();
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
@@ -664,12 +677,16 @@ static void R_DrawTitleSky(void) {
 //
 
 static void R_DrawClouds(void) {
+
+    R_NeutralizeShaders();
     rfloat pos = 0.0f;
     vtx_t v[4];
 
     I_ShaderUnBind();
     GL_SetTextureUnit(0, true);
+    R_NeutralizeShaders();
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
+    GL_SetTextureFilter();
 
     R_BuildCloudAlphaTexture(skypicnum);
     if (gCloudAlphaTex)
@@ -726,9 +743,11 @@ static void R_DrawClouds(void) {
     dglEnable(GL_TEXTURE_2D);
 
     GL_SetTextureUnit(1, true);
+    R_NeutralizeShaders();
     GL_SetTextureMode(GL_ADD);
     GL_UpdateEnvTexture(sky->skycolor[1]);
     GL_SetTextureUnit(0, true);
+    R_NeutralizeShaders();
 
     dglSetVertexColor(&v[0], sky->skycolor[2], 4);
     v[0].a = v[1].a = v[2].a = v[3].a = 0x60;
@@ -1015,7 +1034,9 @@ void R_DrawSky(void) {
             }
             else {
                 GL_SetTextureUnit(0, true);
+                R_NeutralizeShaders();
                 GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
+                GL_SetTextureFilter();
 
                 //
                 // drawer will assume that the texture's
@@ -1048,7 +1069,9 @@ void R_DrawSky(void) {
                 float base;
 
                 GL_SetTextureUnit(0, true);
+                R_NeutralizeShaders();
                 l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
+                GL_SetTextureFilter();
 
                 //
                 // handle the case for non-powers of 2 texture
