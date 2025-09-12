@@ -341,7 +341,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
             if (pal && palindex) {
                 int i;
                 if (bit_depth == 4) {
-                    png_colorp dst_pal = pal;
+                    png_colorp src_pal = pal;
                     char palname[9];
                     int pallump;
 
@@ -351,12 +351,12 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
                     if(pallump != -1) {
                         // load palette separately as lump stored in doom64ex-plus.wad if it exists 
                         // for compatibility with libpng > 1.5.15 not supporting PNG with num_pal > 16 for bit_depth == 4
-                        pal = W_CacheLumpName(palname, PU_STATIC);
+                        src_pal = W_CacheLumpName(palname, PU_STATIC);
                         num_pal = lumpinfo[pallump].size / sizeof(png_color);
                     }
 
                     for (i = 0; i < 16 && (16 * palindex + i) < num_pal; i++) {
-                        dmemcpy(&dst_pal[i], &pal[(16 * palindex) + i], sizeof(png_color));
+                        dmemcpy(&pal[i], &src_pal[(16 * palindex) + i], sizeof(png_color));
                     }
                 }
                 else if (bit_depth >= 8) {
