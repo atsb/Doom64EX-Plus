@@ -38,10 +38,10 @@ FMOD_LIB_DIR=$(FMOD_STUDIO_SDK_ROOT)/api/core/lib/$(FMOD_ARCH)
 
 CC ?= gcc
 
-OPTFLAGS=-O2
+OPTFLAGS ?=-O2
 
 # -DDOOM_UNIX_INSTALL -DDOOM_UNIX_SYSTEM_DATADIR=\"/usr/share/games/doom64ex-plus\"
-CFLAGS += $(shell pkg-config --cflags $(libs)) -I$(FMOD_INC_DIR) $(OPTFLAGS) -Wunknown-pragmas -fwrapv -MD
+CFLAGS := $(shell pkg-config --cflags $(libs)) -I$(FMOD_INC_DIR) $(OPTFLAGS) -Wunknown-pragmas -fwrapv -MD $(CFLAGS)
 
 # put current directory (.) in the rpath so DOOM64Ex-Plus can also find libfmod.so.xx in the current directory
 LDFLAGS += $(shell pkg-config --libs $(libs)) -lm -L$(FMOD_LIB_DIR) -lfmod -lz -Wl,-rpath=.
@@ -69,5 +69,12 @@ appimage:
 
 appimage-clean:
 	(cd AppImage && ./build.sh clean)
+
+asan-build:
+	LDFLAGS="-fsanitize=address" CFLAGS="-fsanitize=address -fsanitize-recover=address -g -fno-omit-frame-pointer" make OPTFLAGS="-O0" -j
+
+asan-run: asan-build
+# __GL_CONSTANT_FRAME_RATE_HINT needed for NVIDIA to not explode with ASAN, do nothing otherwise
+	__GL_CONSTANT_FRAME_RATE_HINT=3 ./DOOM64EX-Plus
 
 -include $(OBJS_DEPS)
