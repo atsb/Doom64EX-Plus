@@ -202,10 +202,10 @@ SDL_INLINE static byte I_GetRGBGamma(int c) {
 // Increases the palette RGB based on gamma settings
 //
 
-static void I_TranslatePalette(png_colorp dest) {
+static void I_TranslatePalette(png_colorp dest, int num_pal) {
     int i = 0;
 
-    for (i = 0; i < 256; i++) {
+    for (i = 0; i < num_pal; i++) {
         dest[i].red = I_GetRGBGamma(dest[i].red);
         dest[i].green = I_GetRGBGamma(dest[i].green);
         dest[i].blue = I_GetRGBGamma(dest[i].blue);
@@ -382,7 +382,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
                 }
             }
 
-            if (pal) I_TranslatePalette(pal);
+            if (pal) I_TranslatePalette(pal, num_pal);
             png_set_palette_to_rgb(png_ptr);
             color_type = PNG_COLOR_TYPE_RGB;
         }
