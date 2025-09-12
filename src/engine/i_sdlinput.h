@@ -26,7 +26,6 @@
 #include <SDL3/SDL.h>
 
 #include "doomtype.h"
-////////////Input//////////////
 
 extern int UseMouse[2];
 extern int UseJoystick;
