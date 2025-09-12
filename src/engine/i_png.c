@@ -405,7 +405,7 @@ byte* I_PNGReadData(int lump, bool palette, bool nopack, bool alpha,
 
             boolean alpha_handled = false;
 
-            if (usingGL && !alpha) {
+            if (usingGL) {
                 int num_trans = 0;
                 png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, NULL);
                 if (num_trans || (color_type & PNG_COLOR_MASK_ALPHA)) {
