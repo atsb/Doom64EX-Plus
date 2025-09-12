@@ -37,6 +37,8 @@
 
 #define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
+extern gamepad64_t gamepad64;
+
 static int itempercent[MAXPLAYERS];
 static int itemvalue[MAXPLAYERS];
 

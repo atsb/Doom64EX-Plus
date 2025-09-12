@@ -1,4 +1,4 @@
-﻿// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -47,6 +47,8 @@ int	DualMouse;
 boolean	DigiJoy;
 boolean	MouseMode;
 boolean	window_mouse;
+
+gamepad64_t gamepad64;
 
 //
 // SDL3 Gamepad
