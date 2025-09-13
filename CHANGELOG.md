@@ -1,6 +1,6 @@
 ### Next version
 
-##New
+#### New
 
 * rendering overhaul with shaders (???)
 * better gamepad support (???)
@@ -12,11 +12,9 @@ Currently loads title and legal images, cursor graphic, localizations.
 Up to 7 alternate kpf files can be specified with the new `-kpf` command-line option:
 
 `-kpf <arg>...` where `<arg>` is:
-
 	* a filename (will be searched in the data dirs)
 	* a file path (either absolute or releative) to a .kpf file 
 	* a directory path containing kpf data with the same folder structure than a file .kpf
-
 The last choice allow to start a mod that would normally patch `Doom64.kpf` without patching it. For example, if you have Doom64 Reloaded installed in &lt;modfolder&gt;,
 you can start it with:
 
@@ -48,7 +46,7 @@ When updating from a previous version, all existing data files will be moved to 
 * user data directory and config file path are displayed in the console
 
 
-Fixes:
+#### Fixes
 
 * fix using the mouse on the bindings screen
 * fix some sounds possibly not playing
@@ -65,7 +63,7 @@ Fixes:
 * fix ceilings interpolation frame that was the same as the floor
 * fix secret percentage possibly higher than 100% on intermission screen
 
-## Changes
+#### Changes
 
 * improved support for discovering Steam (Windows, Linux) and GOG (Windows) DOOM64 Remaster data file folder. Notably, Steam install in non-standard folder is properly found
 * better scale default for crosshair on HiRes monitors
@@ -86,7 +84,7 @@ as new sky rendering does not support it. Mouse look can still be enabled via th
 * compat_mobjpass change from 0 to 1 (More vanilla additions) (???)
 * reverse engineered the original collision code back into the engine (???)
 
-## Build
+#### Build
 
 * Update to SDL 3.2.20 on Windows, 3.2.22 on Linux AppImage
 * (minor) fixed AppImage binaries not stripped
