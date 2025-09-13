@@ -334,6 +334,11 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
         }                                                                         \
     } while (0)
 
+	/* StevenSYS: Fixes old saves crashing the game, however the textures will be incorrect */
+	if (texnum > sizeof(dtexture*) * numtextures) {
+		return;
+	}
+
 	if (textureptr[texnum][palettetranslation[texnum]]) {
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 		I_ShaderSetUseTexture(1);
