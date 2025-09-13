@@ -5,30 +5,8 @@
 * rendering overhaul with shaders (???)
 * better gamepad support (???)
 * better support for loading mods targeting the Doom64 Nightdive remaster
-
-* support for loading data from the Remaster `Doom64.kpf` file:
-
-Currently loads title and legal images, cursor graphic, localizations.
-Up to 7 alternate kpf files can be specified with the new `-kpf` command-line option:
-
-`-kpf <arg>...` where `<arg>` is:
-	* a filename (will be searched in the data dirs)
-	* a file path (either absolute or releative) to a .kpf file 
-	* a directory path containing kpf data with the same folder structure than a file .kpf
-The last choice allow to start a mod that would normally patch `Doom64.kpf` without patching it. For example, if you have Doom64 Reloaded installed in &lt;modfolder&gt;,
-you can start it with:
-
-```
-DOOM64Ex-Plus -file <modfolder>;/DOOM64RR.wad -kpf <modfolder>/kpf/Doom64
-```
-
-When using the `-kpf` option it is not necessary to add the stock `Doom64.kpf` as it is always implicitely added last.
-
-* Windows user data files:
-
-The game was always storing its user files (config, screenshots, saves) in the installation folder where `DOOM64Ex-Plus.exe` is found, which was not always guaranteed to be writable and not best practice. Now these files are written in the user data directory, usually `C:\Users\<username>\AppData\Roaming\doom64ex-plus`. 
-When updating from a previous version, all existing data files will be moved to that new directory.
-
+* support for loading data from the Remaster `Doom64.kpf` file. Currently loads title and legal images, cursor graphic, localizations. Up to 7 alternate kpf files can be specified with the new `-kpf <arg>...` command-line option where `<arg>` can be a filename (will be searched in the data dirs), a file path (either absolute or releative) to a .kpf file, or a directory path containing kpf data with the same folder structure than a file .kpf. The last choice allows to start a mod that would otherwise normally require patching `Doom64.kpf`. For example, if you have Doom64 Reloaded installed in `<modfolder>`, you can start it with `DOOM64Ex-Plus -file <modfolder>/DOOM64RR.wad -kpf <modfolder>/kpf/Doom64`. When using the `-kpf` option it is not necessary to add the stock `Doom64.kpf` as it is always implicitely added last
+* **Windows user data files:** The game was always storing its user files (config, screenshots, saves) in the installation folder where `DOOM64Ex-Plus.exe` is found, which was not always guaranteed to be writable and not best practice. Now these files are written in the user data directory, usually `C:\Users\<username>\AppData\Roaming\doom64ex-plus`. When updating from a previous version, all existing data files will be moved to that new directory
 * add 3-point texture filtering (`N64` choice for `Filter` setting) 
 * add `Sky filter` setting to change sky texture filtering (mapped to `r_skyFilter` variable) 
 * add `Weapon Filter` setting to change weapon texture filtering (mapped to `r_weaponFilter` variable)
