@@ -18,7 +18,7 @@ zypper --no-refresh in -y SDL3-devel
 make clean
 
 # -fPIC and -pie are needed on aarch64 for linuxdeploy to work (otherwise ldd on DOOM64EX-Plus crashes)
-CFLAGS="$(rpm -E '%optflags') -fPIC -DDOOM_UNIX_INSTALL" LDFLAGS="-pie" $(rpm -E '%make_build')
+CFLAGS="-fPIC -DDOOM_UNIX_INSTALL" LDFLAGS="-pie" $(rpm -E '%make_build') OPTFLAGS="$(rpm -E '%optflags')"
 
 # remove debug info
 strip -s $GAME_BIN
