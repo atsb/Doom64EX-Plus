@@ -110,6 +110,10 @@ void(*menufadefunc)(void) = NULL;
 static char     MenuBindBuff[256];
 static char     MenuBindMessage[256];
 static boolean MenuBindActive = false;
+
+static int MenuBindIgnoreUntilTic = 0;
+static boolean MenuBindEntryWasMouse = false;
+static int MenuBindIgnoreMouseButtons = 0;
 static boolean showfullitemvalue[3] = { false, false, false };
 static int      thermowait = 0;
 static int      m_ScreenSize = 1;
@@ -665,7 +669,7 @@ void M_NewGame(int choice) {
 		M_SetupNextMenu(&MapSelectDef);
 		return;
 	}
-	
+
 	M_SetupNextMenu(&NewDef);
 }
 
@@ -841,7 +845,7 @@ char* NetworkHints[network_end] = {
 	"monsters will respawn after death",
 	"items will respawn after pickup",
 	NULL,
-//	NULL
+	//	NULL
 };
 
 menu_t NetworkDef = {
@@ -1323,7 +1327,7 @@ menuitem_t MouseMenu[] = {
 	{2,"Invert Look:",M_ChangeMouseInvert, 'i'},
 #endif
 	{2,"Y-Axis Move:",M_ChangeYAxisMove, 'y'},
-        {2, "X-Axis Move:", M_ChangeXAxisMove, 'x'},
+		{2, "X-Axis Move:", M_ChangeXAxisMove, 'x'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1468,7 +1472,7 @@ void M_ChangeYAxisMove(int choice) {
 }
 
 void M_ChangeXAxisMove(int choice) {
-        M_SetOptionValue(choice, 0, 1, 1, &v_xaxismove);
+	M_SetOptionValue(choice, 0, 1, 1, &v_xaxismove);
 }
 //------------------------------------------------------------------------
 //
@@ -1622,7 +1626,7 @@ void M_DrawDisplay(void) {
 
 	M_DrawThermo(DisplayDef.x, DisplayDef.y + LINEHEIGHT * (display_fov + 1),
 		255, r_fov.value);
-	
+
 	if (st_crosshair.value <= 0) {
 		Draw_BigText(DisplayDef.x + 140, DisplayDef.y + LINEHEIGHT * display_crosshair, MENUCOLORRED,
 			msgNames[0]);
@@ -2573,6 +2577,7 @@ void M_ChangeKeyBinding(int choice) {
 	messageBindCommand = MenuBindBuff;
 	sprintf(MenuBindMessage, "%s", PlayerActions[choice].name);
 	MenuBindActive = true;
+	MenuBindIgnoreUntilTic = gametic + 1;
 }
 
 void M_DrawControls(void) {
@@ -2921,9 +2926,9 @@ void M_LoadSelect(int choice) {
 
 	// sprintf(name, SAVEGAMENAME"%d.dsg", choice);
 	// G_LoadGame(name);
-    char *filename = P_GetSaveGameName(choice);
+	char* filename = P_GetSaveGameName(choice);
 	G_LoadGame(filename);
-    free(filename);
+	free(filename);
 	M_ClearMenus();
 }
 
@@ -2961,7 +2966,7 @@ void M_ReadSaveStrings(void) {
 		// sprintf(name, SAVEGAMENAME"%d.dsg", i);
 
 		// handle = open(name, O_RDONLY | 0, 0666);
-        char *filename = P_GetSaveGameName(i);
+		char* filename = P_GetSaveGameName(i);
 		handle = open(filename, O_RDONLY | 0, 0666);
 
 		free(filename);
@@ -3433,9 +3438,9 @@ void M_QuickSave(void)
 
 void M_QuickLoad(void)
 {
-	char *filepath = I_GetUserFile(QUICKSAVEFILE);
-	
-	if (M_FileExists(filepath))	{
+	char* filepath = I_GetUserFile(QUICKSAVEFILE);
+
+	if (M_FileExists(filepath)) {
 		G_LoadGame(filepath);
 	}
 
@@ -3470,10 +3475,10 @@ static boolean M_SetThumbnail(int which) {
 	// poke into savegame file and fetch
 	// date and stats
 	//
-    char *filename = P_GetSaveGameName(which);
-    boolean ret = P_QuickReadSaveHeader(filename, thumbnail_date, (int*)data,
-                                        &thumbnail_skill, &thumbnail_map);
-    free(filename);
+	char* filename = P_GetSaveGameName(which);
+	boolean ret = P_QuickReadSaveHeader(filename, thumbnail_date, (int*)data,
+		&thumbnail_skill, &thumbnail_map);
+	free(filename);
 	Z_Free(data);
 
 	return ret;
@@ -3617,7 +3622,23 @@ boolean M_Responder(event_t* ev) {
 		}
 	}
 
+	// atsb fixes a long time EX bug where the mouse didn't allow binding as it swallowed the inputs
 	if (MenuBindActive == true) { //key Bindings
+
+		if (gametic <= MenuBindIgnoreUntilTic) {
+			return true;
+		}
+		if (ev->type == ev_mouse) {
+			if (MenuBindEntryWasMouse) {
+				if ((ev->data1 & MenuBindIgnoreMouseButtons) == 0) {
+					MenuBindEntryWasMouse = false;
+				}
+			}
+			return true;
+		}
+		if (MenuBindEntryWasMouse && ev->type == ev_mousedown && (ev->data1 & MenuBindIgnoreMouseButtons)) {
+			return true;
+		}
 		if (ch == KEY_ESCAPE) {
 			MenuBindActive = false;
 			M_BuildControlMenu();
@@ -3817,6 +3838,14 @@ boolean M_Responder(event_t* ev) {
 				else {
 					if (currentMenu == &ControlsDef) {
 						// don't do the fade effect and jump straight to the next screen
+						if (ev->type == ev_mousedown) { 
+							MenuBindEntryWasMouse = true; 
+							MenuBindIgnoreMouseButtons = ev->data1; 
+						}
+						else { 
+							MenuBindEntryWasMouse = false; 
+							MenuBindIgnoreMouseButtons = 0; 
+						}
 						M_ChangeKeyBinding(itemOn);
 					}
 					else {
@@ -3953,7 +3982,7 @@ static void M_DrawMenuSkull(int x, int y) {
 	const rcolor color = MENUCOLORWHITE;
 
 	pic = GL_BindGfxTexture("SYMBOLS", true);
-	
+
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -4009,7 +4038,7 @@ static void M_DrawCursor(float x, float y)
 
 		scale = ((m_cursorscale.value + 25.0f) / 100.0f);
 		gfxIdx = GL_BindGfxTexture("CURSOR", true);
-		if (gfxIdx < 0) 
+		if (gfxIdx < 0)
 			return;
 
 		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
