@@ -490,7 +490,8 @@ static void R_DrawSkyboxCloud(void) {
     GL_SetTextureUnit(0, true);
     R_NeutralizeShaders();
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
-    GL_SetTextureFilter();
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
     GLint oldWrapS_cloud = 0, oldWrapT_cloud = 0;
     glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &oldWrapS_cloud);
@@ -609,7 +610,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
-    GL_SetTextureFilter();
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
@@ -686,7 +688,8 @@ static void R_DrawClouds(void) {
     GL_SetTextureUnit(0, true);
     R_NeutralizeShaders();
     GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
-    GL_SetTextureFilter();
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
     R_BuildCloudAlphaTexture(skypicnum);
     if (gCloudAlphaTex)
@@ -944,7 +947,8 @@ static void R_DrawFire(void) {
 
     dglBindTexture(GL_TEXTURE_2D, gfxptr[fireLumpGfxId]);
     GL_CheckFillMode();
-    GL_SetTextureFilter();
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
     if (devparm) {
         glBindCalls++;
@@ -1036,7 +1040,8 @@ void R_DrawSky(void) {
                 GL_SetTextureUnit(0, true);
                 R_NeutralizeShaders();
                 GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
-                GL_SetTextureFilter();
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
                 //
                 // drawer will assume that the texture's
@@ -1071,7 +1076,8 @@ void R_DrawSky(void) {
                 GL_SetTextureUnit(0, true);
                 R_NeutralizeShaders();
                 l = GL_BindGfxTexture(lumpinfo[skybackdropnum].name, true);
-                GL_SetTextureFilter();
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
                 //
                 // handle the case for non-powers of 2 texture
