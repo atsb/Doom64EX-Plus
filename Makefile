@@ -75,6 +75,6 @@ asan-build:
 
 asan-run: asan-build
 # __GL_CONSTANT_FRAME_RATE_HINT needed for NVIDIA to not explode with ASAN, do nothing otherwise
-	__GL_CONSTANT_FRAME_RATE_HINT=3 ./DOOM64EX-Plus
+	__GL_CONSTANT_FRAME_RATE_HINT=3 ./DOOM64EX-Plus $(GAME_OPTS) || true
 
 -include $(OBJS_DEPS)
