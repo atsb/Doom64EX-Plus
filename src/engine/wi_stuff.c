@@ -35,9 +35,9 @@
 #include "w_wad.h"
 #include "i_sdlinput.h"
 
-#define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
-
 extern gamepad64_t gamepad64;
+
+#define WIALPHARED      D_RGBA(0xC0, 0, 0, 0xFF)
 
 static int itempercent[MAXPLAYERS];
 static int itemvalue[MAXPLAYERS];
@@ -137,33 +137,62 @@ int WI_Ticker(void) {
 	player_t* player;
 	int         i;
 	boolean    next = false;
+	static boolean pad_attack_prev = false;
+	static boolean pad_use_prev = false;
 
 	if (wi_advance <= 3) {
-		// check for button presses to skip delays
 		for (i = 0, player = players; i < MAXPLAYERS; i++, player++) {
 			if (playeringame[i]) {
-				if (player->cmd.buttons & BT_ATTACK) {
-					if (!player->attackdown || !SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER)) {
-						S_StartSound(NULL, sfx_explode);
-						wi_advance++;
-					}
-					player->attackdown = true;
+				if ((player->cmd.buttons & BT_ATTACK) && !player->attackdown) {
+					S_StartSound(NULL, sfx_explode);
+					wi_advance++;
 				}
-				else {
-					player->attackdown = false;
-				}
+				player->attackdown = (player->cmd.buttons & BT_ATTACK) != 0;
 
-				if (player->cmd.buttons & BT_USE) {
-					if (!player->usedown || !SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_SOUTH)) {
-						S_StartSound(NULL, sfx_explode);
-						wi_advance++;
-					}
-					player->usedown = true;
+				if ((player->cmd.buttons & BT_USE) && !player->usedown) {
+					S_StartSound(NULL, sfx_explode);
+					wi_advance++;
 				}
-				else {
-					player->usedown = false;
-				}
+				player->usedown = (player->cmd.buttons & BT_USE) != 0;
 			}
+		}
+		{
+			const float TRIGGER_THRESH = 0.30f;
+			boolean pad_attack_now = false;
+			boolean pad_use_now = false;
+
+			if (gamepad64.gamepad) {
+				float rt = (float)SDL_GetGamepadAxis(gamepad64.gamepad, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER)
+					/ 32767.0f;
+				const boolean rt_pressed = (rt >= TRIGGER_THRESH);
+				const boolean rb_pressed = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER) != 0;
+				const boolean a_pressed = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_SOUTH) != 0;
+				const boolean start_btn = SDL_GetGamepadButton(gamepad64.gamepad, SDL_GAMEPAD_BUTTON_START) != 0;
+
+				pad_attack_now = (rt_pressed || rb_pressed);
+				pad_use_now = (a_pressed || start_btn);
+			}
+			else if (gamepad64.joy) {
+				// Generic joystick fallback
+				const boolean a_pressed = SDL_GetJoystickButton(gamepad64.joy, 0) != 0;   // A
+				const boolean start_btn = SDL_GetJoystickButton(gamepad64.joy, 9) != 0;   // Start
+				const boolean rt_pressed = SDL_GetJoystickButton(gamepad64.joy, 7) != 0;   // RT
+				const boolean rb_pressed = SDL_GetJoystickButton(gamepad64.joy, 5) != 0;   // RB
+
+				pad_attack_now = (rt_pressed || rb_pressed);
+				pad_use_now = (a_pressed || start_btn);
+			}
+
+			if (pad_attack_now && !pad_attack_prev) {
+				S_StartSound(NULL, sfx_explode);
+				wi_advance++;
+			}
+			if (pad_use_now && !pad_use_prev) {
+				S_StartSound(NULL, sfx_explode);
+				wi_advance++;
+			}
+			pad_attack_prev = pad_attack_now;
+			pad_use_prev = pad_use_now;
 		}
 	}
 
