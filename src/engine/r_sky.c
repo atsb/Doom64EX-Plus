@@ -922,6 +922,9 @@ static void R_FireTicker(void) {
 //
 
 static void R_DrawFire(void) {
+    R_NeutralizeShaders();
+    I_ShaderUnBind();
+    GL_SetTextureUnit(0, true);
     float pos1;
     vtx_t v[4];
     dtexture t = gfxptr[fireLumpGfxId];
@@ -950,6 +953,12 @@ static void R_DrawFire(void) {
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PRIMARY_COLOR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
     if (devparm) {
         glBindCalls++;
     }
@@ -1007,6 +1016,8 @@ static void R_DrawFire(void) {
         R_DrawSkyDome(16, 1, 1024, 4096, -896, 0.0075f,
             sky->skycolor[0], sky->skycolor[1]);
     }
+    GL_SetDefaultCombiner();
+    I_ShaderBind();
 }
 
 //
