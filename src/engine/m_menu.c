@@ -1740,6 +1740,7 @@ void M_ChangeHUDColor(int choice) {
 
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
+void M_ChangeFullscreen(int choice);
 void M_ChangeFilter(int choice);
 void M_ChangeWeaponFilter(int choice);
 void M_ChangeHUDFilter(int choice);
@@ -1755,6 +1756,7 @@ CVAR_EXTERNAL(v_checkratio);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
+CVAR_EXTERNAL(v_fullscreen);
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_weaponFilter);
 CVAR_EXTERNAL(r_hudFilter);
@@ -1770,6 +1772,7 @@ enum {
 	video_empty1,
 	video_dgamma,
 	video_empty2,
+	video_fullscreen,
 	filter,
 	weapon_filter,
 	hud_filter,
@@ -1789,6 +1792,7 @@ menuitem_t VideoMenu[] = {
 	{-1,"",0},
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
+	{2,"Fullscreen:",M_ChangeFullscreen, 'f'},
 	{2,"Filter:",M_ChangeFilter, 'f'},
 	{2,"Weapon Filter:",M_ChangeWeaponFilter, 't'},
 	{2,"HUD Filter:",M_ChangeHUDFilter, 't'},
@@ -1807,6 +1811,7 @@ char* VideoHints[video_end] = {
 	NULL,
 	"adjust screen gamma",
 	NULL,
+	"toggle fullscreen mode - requires restart",
 	"toggle texture filtering - requires restart",
 	"toggle texture filtering on the weapon",
 	"toggle texture filtering on hud and text",
@@ -1821,6 +1826,7 @@ char* VideoHints[video_end] = {
 menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
+	{ &v_fullscreen, 0 },
 	{ &r_filter, 0 },
 	{ &r_weaponFilter, 0 },
 	{ &r_hudFilter, 0 },
@@ -1914,6 +1920,7 @@ void M_DrawVideo(void) {
 
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
+	DRAWVIDEOITEM2(video_fullscreen, v_fullscreen.value, onofftype);
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType1);
 	DRAWVIDEOITEM2(weapon_filter, r_weaponFilter.value, filterType2);
 	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType2);
@@ -1993,6 +2000,10 @@ void M_ChangeGammaLevel(int choice)
 		players[consoleplayer].message = gammamsg[(int)i_gamma.value];
 		break;
 	}
+}
+
+void M_ChangeFullscreen(int choice) {
+	M_SetOptionValue(choice, 0, 1, 1, &v_fullscreen);
 }
 
 void M_ChangeFilter(int choice) {

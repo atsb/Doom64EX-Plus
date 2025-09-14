@@ -35,6 +35,7 @@ SDL_Window* window = NULL;
 SDL_GLContext   glContext = NULL;
 
 CVAR(r_trishader, 1);
+CVAR(v_fullscreen, 0);
 CVAR(v_checkratio, 0);
 
 CVAR_CMD(v_vsync, 1) {
@@ -131,7 +132,7 @@ void I_InitScreen(void) {
     usingGL = false;
 
     // GL context attributes
-// i_video.c  — I_InitScreen()
+// i_video.c   I_InitScreen()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -147,18 +148,13 @@ void I_InitScreen(void) {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN ;
-	
-#ifndef SDL_PLATFORM_MACOS
-    flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
-#endif
+    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
-#ifdef SDL_PLATFORM_WIN32
-	flags |= SDL_WINDOW_BORDERLESS;
-#else
-    // fullscreen borderless is glitchy on Linux, at least on with i3wm
-    flags |= SDL_WINDOW_FULLSCREEN;
-#endif
+    if ((int)v_fullscreen.value) {
+        flags |= SDL_WINDOW_FULLSCREEN;
+    } else {
+        flags |= SDL_WINDOW_BORDERLESS;
+    }
 
     if (glContext) { SDL_GL_DestroyContext(glContext); glContext = NULL; }
     if (window) { SDL_DestroyWindow(window); window = NULL; }
@@ -168,6 +164,31 @@ void I_InitScreen(void) {
     if (window == NULL) {
         I_Error("I_InitScreen: Failed to create window");
         return;
+    }
+
+    if ((int)v_fullscreen.value) {
+        SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
+        if (!displayid) displayid = SDL_GetPrimaryDisplay();
+
+        const SDL_DisplayMode *desk = displayid ? SDL_GetDesktopDisplayMode(displayid) : NULL;
+        SDL_DisplayMode disp_mode = {0};
+        if (desk) {
+            if (!SDL_GetClosestFullscreenDisplayMode(displayid, desk->w, desk->h, 0.0f, false, &disp_mode)) {
+                disp_mode.displayID = displayid;
+                disp_mode.w = video_width;
+                disp_mode.h = video_height;
+                disp_mode.refresh_rate = 0.0f;
+            }
+        } else {
+            disp_mode.displayID = displayid;
+            disp_mode.w = video_width;
+            disp_mode.h = video_height;
+            disp_mode.refresh_rate = 0.0f;
+        }
+
+        SDL_SetWindowFullscreenMode(window, &disp_mode);
+        SDL_SetWindowFullscreen(window, true);
+        SDL_SyncWindow(window);
     }
 
 #ifdef SDL_PLATFORM_LINUX
@@ -253,8 +274,11 @@ void I_InitVideo(void) {
 // V_RegisterCvars
 //
 
+
 void V_RegisterCvars(void) {
     CON_CvarRegister(&r_trishader);
     CON_CvarRegister(&v_checkratio);
     CON_CvarRegister(&v_vsync);
+    CON_CvarRegister(&v_fullscreen);
 }
+
