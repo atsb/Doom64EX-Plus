@@ -392,9 +392,9 @@ boolean AM_Responder(event_t* ev) {
 	int rc = false;
 	bool useHeld = (plr && (plr->cmd.buttons & BT_USE));
 
-	if ((am_flags & AF_PANMODE) || useHeld) {
+	if (automapactive && ((am_flags & AF_PANMODE) || useHeld)) {
 		if (ev->type == ev_mouse) {
-			mpanx = (fixed_t)ev->data2;
+ 			mpanx = (fixed_t)ev->data2;
 			mpany = (fixed_t)ev->data3;
 			rc = true;
 		}
