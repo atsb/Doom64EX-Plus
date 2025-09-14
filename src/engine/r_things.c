@@ -360,19 +360,32 @@ static boolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) 
 		offs = 0.0f;
 	}
 
+	int draw_alpha = thing->alpha;
+
+	if (thing->type == MT_DEMON2) {
+		if (draw_alpha < 0x60)
+			draw_alpha = 0x60;
+	}
+
+	if (thing->flags & MF_NIGHTMARE) {
+		draw_alpha = (draw_alpha * 5);
+		if (draw_alpha > 255)
+			draw_alpha = 255;
+	}
+
 	// [kex] nightmare things have a shade of dark green
 	if (thing->flags & MF_NIGHTMARE) {
-		dglSetVertexColor(vertex, D_RGBA(64, 255, 0, thing->alpha), 4);
+		dglSetVertexColor(vertex, D_RGBA(64, 255, 0, draw_alpha), 4);
 	}
 	else if ((thing->frame & FF_FULLBRIGHT)) {
-		dglSetVertexColor(vertex, D_RGBA(255, 255, 255, thing->alpha), 4);
+		dglSetVertexColor(vertex, D_RGBA(255, 255, 255, draw_alpha), 4);
 	}
 	else {
 		R_LightToVertex(vertex,
 			thing->subsector->sector->colors[LIGHT_THING], 4);
 	}
 
-	vertex[0].a = vertex[1].a = vertex[2].a = vertex[3].a = thing->alpha;
+	vertex[0].a = vertex[1].a = vertex[2].a = vertex[3].a = draw_alpha;
 
 	// setup texture mapping
 	vertex[0].tu = vertex[1].tu = offs;

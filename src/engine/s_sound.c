@@ -20,6 +20,7 @@
 //-----------------------------------------------------------------------------
 
 #include "s_sound.h"
+#include "sounds.h"
 #include "m_fixed.h"
 #include "doomdef.h"
 #include "p_local.h"
@@ -336,7 +337,7 @@ void S_UpdateSounds(void) {
 void S_StartSound(mobj_t* origin, int sfx_id) {
     int volume;
     int sep;
-    // int reverb_sound;
+    int reverb_sound;
 
     if (nosound) {
         return;
@@ -350,9 +351,15 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
     else {
         sep = NORM_SEP;
         volume = NORM_VOLUME;
+
+        if (origin == NULL && (sfx_id == sfx_itemup || sfx_id == sfx_powerup)) {
+            int boosted = volume + (volume / 50);
+            if (boosted > 255) boosted = 255;
+            volume = boosted;
+        }
     }
 
-    // reverb_sound = 0;
+    reverb_sound = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -360,10 +367,10 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         subsector = R_PointInSubsector(origin->x, origin->y);
 
         if (subsector->sector->flags & MS_REVERB) {
-            // reverb_sound = 16;
+            reverb_sound = 16;
         }
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
-            // reverb_sound = 32;
+            reverb_sound = 32;
         }
     }
 
@@ -476,7 +483,3 @@ void S_RegisterCvars(void) {
     CON_CvarRegister(&s_musvol);
     CON_CvarRegister(&s_gain);
 }
-
-
-
-
