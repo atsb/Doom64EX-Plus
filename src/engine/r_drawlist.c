@@ -39,6 +39,7 @@ static float envcolor[4] = { 0, 0, 0, 0 };
 drawlist_t drawlist[NUMDRAWLISTS];
 
 CVAR_EXTERNAL(r_texturecombiner);
+CVAR_EXTERNAL(r_objectFilter);
 
 //
 // DL_AddVertexList
@@ -103,6 +104,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 	vtxlist_t* head;
 	vtxlist_t* tail;
 	boolean checkNightmare = false;
+	boolean obj_nearest_bypass = false;
 
 	if (tag < 0 && tag >= NUMDRAWLISTS) {
 		return;
@@ -126,6 +128,8 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 			vtxlist_t* rover;
 
 			head = &dl->list[i];
+
+			obj_nearest_bypass = false;
 
 			// break if no data found in list
 			if (!head->data) {
@@ -160,6 +164,15 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				palette = head->texid >> 24;
 				head->texid = head->texid & 0xffff;
 				GL_BindSpriteTexture(head->texid, palette);
+                
+                // Non-monster objects obey r_objectFilter
+                if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value == 1)) {
+                    I_ShaderUnBind();
+                    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    obj_nearest_bypass = true;
+                }
+
 
 				// villsa 12152013 - change blend states for nightmare things
 				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
@@ -198,6 +211,11 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
             }
 
             dglDrawGeometry(drawcount, drawVertex);
+            
+            if (obj_nearest_bypass) {
+                I_ShaderBind();
+                obj_nearest_bypass = false;
+            }
 
 			// count vertex size
 			if (devparm) {
