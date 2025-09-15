@@ -99,45 +99,11 @@ GL_EXT_texture_env_combine_Define();
 GL_EXT_texture_filter_anisotropic_Define();
 
 //
-// FindExtension
-//
-
-static bool FindExtension(const char *ext) {
-    const char *extensions = NULL;
-    const char *start;
-    const char *where, *terminator;
-
-    // Extension names should not have spaces.
-    where = strrchr(ext, ' ');
-    if(where || *ext == '\0') {
-        return 0;
-    }
-
-    extensions = (const char *)dglGetString(GL_EXTENSIONS);
-
-    start = extensions;
-    for(;;) {
-        where = strstr(start, ext);
-        if(!where) {
-            break;
-        }
-        terminator = where + dstrlen(ext);
-        if(where == start || *(where - 1) == ' ') {
-            if(*terminator == ' ' || *terminator == '\0') {
-                return true;
-            }
-            start = terminator;
-        }
-    }
-    return false;
-}
-
-//
 // GL_CheckExtension
 //
 
 boolean GL_CheckExtension(const char *ext) {
-    if(FindExtension(ext)) {
+    if(SDL_GL_ExtensionSupported(ext)) {
         CON_Printf(WHITE, "GL Extension: %s = true\n", ext);
         return true;
     }
