@@ -57,23 +57,6 @@ int win_px_h = 0;
 
 void GL_OnResize(int w, int h);
 
-static void NVidiaGLFinishConditional(void) {
-    const char* vendor = (const char*)glGetString(GL_VENDOR);
-
-    if (vendor) {
-        if (strcmp(vendor, "NVIDIA Corporation") != 0) {
-            glFinish();
-            I_Printf("glFinish: Called for: %s\n", vendor);
-        }
-        else {
-            I_Printf("Vendor is NVIDIA! Skipping glFinish.\n");
-        }
-    }
-    else {
-        I_Printf("Error: Could not retrieve vendor.\n");
-    }
-}
-
 static void GetNativeDisplayPixels(int* out_w, int* out_h, SDL_Window* window) {
     *out_w = 0; *out_h = 0;
 
@@ -132,7 +115,6 @@ void I_InitScreen(void) {
     usingGL = false;
 
     // GL context attributes
-// i_video.c   I_InitScreen()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -209,7 +191,10 @@ void I_InitScreen(void) {
         I_Error("I_InitScreen: Failed to create OpenGL context");
         return;
     }
-    SDL_GL_MakeCurrent(window, glContext);
+    if(!SDL_GL_MakeCurrent(window, glContext)) {
+		I_Error("I_InitScreen: Failed to make OpenGL context current");
+        return;
+	}
     SDL_GetWindowSizeInPixels(window, &win_px_w, &win_px_h);
     GL_OnResize(win_px_w, win_px_h);
     {
@@ -260,6 +245,17 @@ void I_ShutdownVideo(void) {
 
 void I_InitVideo(void) {
     unsigned int f = SDL_INIT_VIDEO;
+
+#ifdef SDL_PLATFORM_LINUX
+	/*
+	   On Wayland, force program to run on XWayland by forcing the use of use SDL3 "x11" driver
+	   Native SDL3 Wayland ("wayland" driver) is problematic, with at least:
+	     - Intel: with SDL_GL_CONTEXT_MAJOR_VERSION=3 and SDL_GL_CONTEXT_MAJOR_VERSION=1, needed GL extensions are missing  and glGetString(GL_EXTENSIONS) returns null
+	     - NVIDIA: no extension problem but scaling is broken and in different ways weather FULLSCREEN or BORDERLESS is used...
+	   There is no benefit to native Wayland anyway, only problems
+	*/
+	SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "x11", SDL_HINT_OVERRIDE);
+#endif
 
     if (!SDL_Init(f)) {
         I_Error("ERROR - Failed to initialize SDL");
