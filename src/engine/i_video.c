@@ -127,14 +127,15 @@ static boolean NVAPI_IS_ERROR(NvAPI_Status status)
 static void setUseDXGISwapChainNVIDIA(boolean use) {
 
     NvAPI_Status status, createAppStatus;
-    NvDRSProfileHandle hProfile;
+    NvDRSProfileHandle hProfile = 0;
     NvDRSSessionHandle hSession = 0;
     NVDRS_PROFILE profile = { 0 };
     NVDRS_APPLICATION app = { 0 };
+    NVDRS_SETTING setting = { 0 };
 
     if(NVAPI_IS_ERROR(NvAPI_Initialize()) ||
         NVAPI_IS_ERROR(NvAPI_DRS_CreateSession(&hSession)) ||
-        NVAPI_IS_ERROR(NvAPI_DRS_LoadSettings(hSession))) return ;
+        NVAPI_IS_ERROR(NvAPI_DRS_LoadSettings(hSession))) goto cleanup;
 
     profile.version = NVDRS_PROFILE_VER;
     wmemcpy_s(profile.profileName, NVAPI_UNICODE_STRING_MAX, L"DOOM64EX+", 10);
@@ -146,16 +147,16 @@ static void setUseDXGISwapChainNVIDIA(boolean use) {
 	case NVAPI_OK:
 		break;
 	case NVAPI_PROFILE_NOT_FOUND:
-		if (NVAPI_IS_ERROR(NvAPI_DRS_CreateProfile(hSession, &profile, &hProfile))) return;
+		if (NVAPI_IS_ERROR(NvAPI_DRS_CreateProfile(hSession, &profile, &hProfile))) goto cleanup;
 		break;
 	default:
 		NVAPI_IS_ERROR(status);
-		return;
+        goto cleanup;
 	}
 
     if (!GetModuleFileNameW(NULL, app.appName, NVAPI_UNICODE_STRING_MAX)) {
         printf("GetModuleFileNameW error: %d\n", GetLastError());
-        return;
+        goto cleanup;
     }
 
     // try recreate app in case executable has moved to a new location
@@ -164,19 +165,22 @@ static void setUseDXGISwapChainNVIDIA(boolean use) {
     createAppStatus = NvAPI_DRS_CreateApplication(hSession, hProfile, &app);
     if (createAppStatus != NVAPI_OK && status == NVAPI_PROFILE_NOT_FOUND) {
         NVAPI_IS_ERROR(createAppStatus);
-        return;
+        goto cleanup;
     } // else app already exist, not an error
 
-    NVDRS_SETTING setting = { 0 };
     setting.version = NVDRS_SETTING_VER;
     setting.settingId = OGL_CPL_PREFER_DXPRESENT_ID;
     setting.settingType = NVDRS_DWORD_TYPE;
     setting.u32CurrentValue = use ? OGL_CPL_PREFER_DXPRESENT_PREFER_ENABLED : OGL_CPL_PREFER_DXPRESENT_PREFER_DISABLED;
 
-    if (NVAPI_IS_ERROR(NvAPI_DRS_SetSetting(hSession, hProfile, &setting)) ||
-        NVAPI_IS_ERROR(NvAPI_DRS_SaveSettings(hSession)) ||
-        NVAPI_IS_ERROR(NvAPI_DRS_DestroySession(hSession))) return;
+    if(NVAPI_IS_ERROR(NvAPI_DRS_SetSetting(hSession, hProfile, &setting))) goto cleanup;
 
+    NVAPI_IS_ERROR(NvAPI_DRS_SaveSettings(hSession));
+
+cleanup:
+    if (hSession) {
+        NVAPI_IS_ERROR(NvAPI_DRS_DestroySession(hSession));
+    }
 }
 
 
@@ -237,7 +241,7 @@ void I_InitScreen(void) {
 
     sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
     window = SDL_CreateWindow(title, video_width, video_height, flags);
-    if (window == NULL) {
+    if (!window) {
         I_Error("I_InitScreen: Failed to create window");
         return;
     }
