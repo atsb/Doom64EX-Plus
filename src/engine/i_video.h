@@ -34,4 +34,8 @@ void V_RegisterCvars();
 extern float display_scale;
 extern int win_px_w, win_px_h;
 
+#ifndef SDL_PLATFORM_LINUX
+#define HAS_FULLSCREEN_BORDERLESS
+#endif
+
 #endif
