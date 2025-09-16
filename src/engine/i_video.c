@@ -36,15 +36,15 @@
 #include "gl_main.h"
 #include "con_cvar.h"
 
-
-
-
 SDL_Window* window = NULL;
 SDL_GLContext   glContext = NULL;
 
 CVAR(r_trishader, 1);
-CVAR(v_fullscreen, 0);
 CVAR(v_checkratio, 0);
+#ifdef HAS_FULLSCREEN_BORDERLESS
+CVAR(v_fullscreen, 0);
+#endif
+
 
 CVAR_CMD(v_vsync, 1) {
     SDL_GL_SetSwapInterval((int)v_vsync.value);
@@ -217,11 +217,11 @@ void I_InitScreen(void) {
 
     flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
-    if ((int)v_fullscreen.value) {
-        flags |= SDL_WINDOW_FULLSCREEN;
-    } else {
-        flags |= SDL_WINDOW_BORDERLESS;
-    }
+#ifdef HAS_FULLSCREEN_BORDERLESS
+    flags |= (int)v_fullscreen.value ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_BORDERLESS;
+#else
+    flags |= SDL_WINDOW_FULLSCREEN;
+#endif
 
 #ifdef SDL_PLATFORM_WIN32
     /* if the window is borderless, the NVIDIA driver will make it fullscreen after the first SDL_GL_SwapWindow call :
@@ -242,7 +242,7 @@ void I_InitScreen(void) {
         return;
     }
 
-    if ((int)v_fullscreen.value) {
+    if (flags & SDL_WINDOW_FULLSCREEN) {
         SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
         if (!displayid) displayid = SDL_GetPrimaryDisplay();
 
@@ -369,6 +369,8 @@ void V_RegisterCvars(void) {
     CON_CvarRegister(&r_trishader);
     CON_CvarRegister(&v_checkratio);
     CON_CvarRegister(&v_vsync);
+#ifdef HAS_FULLSCREEN_BORDERLESS
     CON_CvarRegister(&v_fullscreen);
+#endif
 }
 

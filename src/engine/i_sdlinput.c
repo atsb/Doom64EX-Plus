@@ -564,7 +564,7 @@ boolean I_UpdateGrab(void) {
 	/* 
 		Don't grab the keyboard (SDL_SetWindowKeyboardGrab) because:
 			- we don't need it
-			- it mess up Alt-Tab (only works when not grabbed).
+			- it mess up Alt-Tab (only works when not grabbed). And Tab switches the automap modes
 			- on Linux KDE (Plasma) it prevents global shortcuts to work (brightness, sound, ...)
 			- finally, the SDL doc does not recommend it: "Normal games should not use keyboard grab"
 	*/
