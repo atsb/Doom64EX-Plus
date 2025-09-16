@@ -1779,7 +1779,9 @@ enum {
 	video_empty1,
 	video_dgamma,
 	video_empty2,
+#ifdef HAS_FULLSCREEN_BORDERLESS
 	video_fullscreen,
+#endif
 	filter,
 	weapon_filter,
 	object_filter,
