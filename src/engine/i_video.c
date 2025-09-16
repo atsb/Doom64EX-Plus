@@ -23,6 +23,11 @@
 #include <stdio.h>
 #include <SDL3/SDL_opengl.h>
 
+#ifdef SDL_PLATFORM_WIN32
+#include <nvapi/nvapi.h>
+#include <nvapi/NvApiDriverSettings.h>
+
+#endif
 #include "i_video.h"
 #include "doomdef.h"
 #include "doomstat.h"
@@ -30,6 +35,9 @@
 #include "i_sdlinput.h"
 #include "gl_main.h"
 #include "con_cvar.h"
+
+
+
 
 SDL_Window* window = NULL;
 SDL_GLContext   glContext = NULL;
@@ -97,6 +105,83 @@ static void GetNativeDisplayPixels(int* out_w, int* out_h, SDL_Window* window) {
     I_Printf("SDL3: SDL_DisplayMode falling back to %dx%d", *out_w, *out_h);
 }
 
+#ifdef SDL_PLATFORM_WIN32
+
+// returns true on error
+static boolean NVAPI_IS_ERROR(NvAPI_Status status)
+{
+    if (status == NVAPI_OK) return false;
+
+    if (status != NVAPI_LIBRARY_NOT_FOUND) {
+        NvAPI_ShortString szDesc = { 0 };
+        NvAPI_GetErrorMessage(status, szDesc);
+        I_Printf("NVAPI error: %s\n", szDesc);
+    } // else not a NVIDIA system, do not log error
+    return true;
+}
+
+// set the NVIDIA Control Panel "Vulkan/OpenGL present method" setting for custom profile "DOOM64EX+" 
+// to "Prefer layered on DXGI Swapchain" if "use" is true, or to "Prefer native" otherwise
+// "Prefer layered on DXGI Swapchain" is necessary for proper borderless
+// "Prefer native" (or "Auto" which is the default) is necessary for proper exclusive fullscreen
+static void setUseDXGISwapChainNVIDIA(boolean use) {
+
+    NvAPI_Status status, createAppStatus;
+    NvDRSProfileHandle hProfile;
+    NvDRSSessionHandle hSession = 0;
+    NVDRS_PROFILE profile = { 0 };
+    NVDRS_APPLICATION app = { 0 };
+
+    if(NVAPI_IS_ERROR(NvAPI_Initialize()) ||
+        NVAPI_IS_ERROR(NvAPI_DRS_CreateSession(&hSession)) ||
+        NVAPI_IS_ERROR(NvAPI_DRS_LoadSettings(hSession))) return ;
+
+    profile.version = NVDRS_PROFILE_VER;
+    wmemcpy_s(profile.profileName, NVAPI_UNICODE_STRING_MAX, L"DOOM64EX+", 10);
+    app.version = NVDRS_APPLICATION_VER;
+
+    status = NvAPI_DRS_FindProfileByName(hSession, profile.profileName, &hProfile);
+
+	switch (status) {
+	case NVAPI_OK:
+		break;
+	case NVAPI_PROFILE_NOT_FOUND:
+		if (NVAPI_IS_ERROR(NvAPI_DRS_CreateProfile(hSession, &profile, &hProfile))) return;
+		break;
+	default:
+		NVAPI_IS_ERROR(status);
+		return;
+	}
+
+    if (!GetModuleFileNameW(NULL, app.appName, NVAPI_UNICODE_STRING_MAX)) {
+        printf("GetModuleFileNameW error: %d\n", GetLastError());
+        return;
+    }
+
+    // try recreate app in case executable has moved to a new location
+    // all executable share the same "DOOM64Ex+" profile
+    // useful for Release, Debug not in the same location
+    createAppStatus = NvAPI_DRS_CreateApplication(hSession, hProfile, &app);
+    if (createAppStatus != NVAPI_OK && status == NVAPI_PROFILE_NOT_FOUND) {
+        NVAPI_IS_ERROR(createAppStatus);
+        return;
+    } // else app already exist, not an error
+
+    NVDRS_SETTING setting = { 0 };
+    setting.version = NVDRS_SETTING_VER;
+    setting.settingId = OGL_CPL_PREFER_DXPRESENT_ID;
+    setting.settingType = NVDRS_DWORD_TYPE;
+    setting.u32CurrentValue = use ? OGL_CPL_PREFER_DXPRESENT_PREFER_ENABLED : OGL_CPL_PREFER_DXPRESENT_PREFER_DISABLED;
+
+    if (NVAPI_IS_ERROR(NvAPI_DRS_SetSetting(hSession, hProfile, &setting)) ||
+        NVAPI_IS_ERROR(NvAPI_DRS_SaveSettings(hSession)) ||
+        NVAPI_IS_ERROR(NvAPI_DRS_DestroySession(hSession))) return;
+
+}
+
+
+#endif
+
 //
 // I_InitScreen
 //
@@ -137,6 +222,15 @@ void I_InitScreen(void) {
     } else {
         flags |= SDL_WINDOW_BORDERLESS;
     }
+
+#ifdef SDL_PLATFORM_WIN32
+    /* if the window is borderless, the NVIDIA driver will make it fullscreen after the first SDL_GL_SwapWindow call :
+       https://github.com/libsdl-org/SDL/issues/12791
+       Enabling use of the DXGI Swap Chain with NvAPI makes it proper borderless, with instant Alt-Tab, 
+       overlay popups displaying, working Auto-HDR...
+     */
+    setUseDXGISwapChainNVIDIA(flags & SDL_WINDOW_BORDERLESS);
+#endif
 
     if (glContext) { SDL_GL_DestroyContext(glContext); glContext = NULL; }
     if (window) { SDL_DestroyWindow(window); window = NULL; }
