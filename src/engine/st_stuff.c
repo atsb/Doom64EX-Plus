@@ -1091,6 +1091,14 @@ void ST_UpdateFlash(void) {
 			st_flash_a = r2;
 		}
 	}
+	// light amplification goggles
+	else if (p->powers[pw_infrared] > 61 || (p->powers[pw_infrared] & 8)) {
+		flashcolor = LONG(D_RGBA(64, 64, 64, 0xff));
+		st_flash_r = 255;
+		st_flash_g = 255;
+		st_flash_b = 255;
+		st_flash_a = 44;
+	}
 	// suit flash (green/yellow)
 	else if (p->powers[pw_ironfeet] > 61 || (p->powers[pw_ironfeet] & 8)) {
 		flashcolor = LONG(D_RGBA(0, 32, 4, 0xff));
