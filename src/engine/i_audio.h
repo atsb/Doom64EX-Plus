@@ -24,6 +24,8 @@
 #include "m_fixed.h"
 #include "tables.h"
 
+#define DLS_FILENAME "DOOMSND.DLS"
+
 typedef struct {
     fixed_t x;
     fixed_t y;

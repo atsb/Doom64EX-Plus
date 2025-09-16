@@ -104,5 +104,5 @@ unsigned int W_Read(wad_file_t* wad, unsigned int offset,
 
 char* W_FindIWAD(void)
 {
-	return I_FindDataFile("DOOM64.WAD");
+	return I_FindDataFile(IWAD_FILENAME);
 }

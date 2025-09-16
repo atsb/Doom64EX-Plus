@@ -29,6 +29,7 @@
 
 #include "i_system.h"
 #include "i_system_io.h"
+#include "i_audio.h"
 #include "doomstat.h"
 #include "doomdef.h"
 #include "m_misc.h"
@@ -40,6 +41,7 @@
 #include "con_cvar.h"
 #include "gl_draw.h"
 #include "steam.h"
+#include "w_file.h"
 
 extern void I_ShutdownSound(void);
 
@@ -243,7 +245,7 @@ static char* FindDataFile(char* file) {
 	};
 
 	// discard unsupported ROM DOOM64.WAD, by their size largely < 10 MB
-	long min_size = dstreq(file, "DOOM64.WAD") ? 10*1024*1014 : 0;
+	long min_size = dstreq(file, IWAD_FILENAME) ? 10*1024*1014 : 0;
 
 	for (int i = 0; i < SDL_arraysize(dirs); i++) {
 		if (path = M_FileExistsInDirectory(dirs[i], file, true)) {
@@ -309,6 +311,14 @@ char* I_FindDataFile(char* file) {
 		num_cached_datafiles++;
 	}
 
+	if (!entry->path && (dstreq(file, IWAD_FILENAME) || dstreq(file, DLS_FILENAME))) {
+		I_Error("Required game data file not found: %s.\n\nPlease install the DOOM 64 Remaster "
+			 "on GOG or Steam, or copy file %s to %s.",
+			file,
+			file,
+			I_GetUserDir());
+	}
+
 	return entry->path; 
 }
 
@@ -350,32 +360,14 @@ void I_Error(const char* string, ...) {
 	I_ShutdownSound();
 
 	va_start(va, string);
-	vsprintf(buff, string, va);
+	SDL_vsnprintf(buff, sizeof(buff), string, va);
 	va_end(va);
 
-	fprintf(stderr, "Error - %s\n", buff);
-	fflush(stderr);
+	I_Printf("ERROR: %s", buff);
 
-	I_Printf("\n********* ERROR *********\n");
-	I_Printf("%s", buff);
-
-	if (usingGL) {
-		while (1) {
-			GL_ClearView(0xFF000000);
-			Draw_Text(0, 0, WHITE, 1, 1, "Error - %s\n", buff);
-			GL_SwapBuffers();
-
-			if (I_ShutdownWait()) {
-				break;
-			}
-
-			I_Sleep(1);
-		}
-	}
-	else {
-		I_ShutdownVideo();
-	}
-	exit(0);    // just in case...
+	I_ShutdownVideo();
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERROR", buff, NULL);
+	exit(0);
 }
 
 void I_Warning(const char* string, ...) {
@@ -383,14 +375,10 @@ void I_Warning(const char* string, ...) {
 	va_list    va;
 
 	va_start(va, string);
-	vsprintf(buff, string, va);
+	SDL_vsnprintf(buff, sizeof(buff), string, va);
 	va_end(va);
 
-	fprintf(stderr, "Warning - %s\n", buff);
-	fflush(stderr);
-
-	I_Printf("\n********* WARNING *********\n");
-	I_Printf("%s", buff);
+	I_Printf("WARNING: %s", buff);
 
 	if (usingGL) {
 		while (1) {
@@ -427,12 +415,11 @@ void I_Printf(const char* string, ...) {
 	char buff[1024];
 	va_list    va;
 
-	dmemset(buff, 0, sizeof(buff));
-
 	va_start(va, string);
-	vsprintf(buff, string, va);
+	SDL_vsnprintf(buff, sizeof(buff), string, va);
 	va_end(va);
-	printf("%s", buff);
+	printf(buff);
+	fflush(stdout);
 	if (console_initialized) {
 		CON_AddText(buff);
 	}

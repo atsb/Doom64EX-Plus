@@ -1731,7 +1731,7 @@ int FMOD_StartMusic(int mus_id) {
         FMOD_CREATESOUNDEXINFO exinfo; dmemset(&exinfo, 0, sizeof(exinfo));
         exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
         exinfo.length = doomseq.songs[mus_id].length;
-        exinfo.dlsname = I_FindDataFile("DOOMSND.DLS");
+        exinfo.dlsname = I_FindDataFile(DLS_FILENAME);
 
         result = FMOD_System_CreateSound(
             sound.fmod_studio_system_music,
@@ -1778,7 +1778,7 @@ int FMOD_StartMusic(int mus_id) {
             FMOD_CREATESOUNDEXINFO exinfo; dmemset(&exinfo, 0, sizeof(exinfo));
             exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
             exinfo.length = len;
-            exinfo.dlsname = I_FindDataFile("DOOMSND.DLS");
+            exinfo.dlsname = I_FindDataFile(DLS_FILENAME);
             result = FMOD_System_CreateSound(sound.fmod_studio_system_music, (const char*)p, FMOD_OPENMEMORY | FMOD_LOOP_NORMAL | FMOD_2D, &exinfo, &currentMidiSound);
             FMOD_ERROR_CHECK(result);
             if (result == FMOD_OK && currentMidiSound) {
@@ -1812,7 +1812,7 @@ int FMOD_StartMusic(int mus_id) {
                 FMOD_CREATESOUNDEXINFO exinfo; dmemset(&exinfo, 0, sizeof(exinfo));
                 exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
                 exinfo.length = midilen;
-                exinfo.dlsname = I_FindDataFile("DOOMSND.DLS");
+                exinfo.dlsname = I_FindDataFile(DLS_FILENAME);
                 result = FMOD_System_CreateSound(sound.fmod_studio_system_music, (const char*)midip, FMOD_OPENMEMORY | FMOD_LOOP_NORMAL | FMOD_2D, &exinfo, &currentMidiSound);
                 FMOD_ERROR_CHECK(result);
                 if (result == FMOD_OK && currentMidiSound) {

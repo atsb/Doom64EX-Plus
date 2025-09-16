@@ -294,13 +294,12 @@ void W_Init(void) {
 	int             p;
 
 	// open the file and add to directory
-	iwad = W_FindIWAD();
+	iwad = W_FindIWAD(); // guaranteed non-NULL as we'll have exited app if cannot be found
 
-	if (iwad == NULL) {
-		I_Error("W_Init: IWAD not found");
+	wadfile = W_OpenFile(iwad); 
+	if (!wadfile) {
+		I_Error("W_Init: failed to open IWAD file");
 	}
-
-	wadfile = W_OpenFile(iwad);
     
 	W_Read(wadfile, 0, &header, sizeof(header));
 
