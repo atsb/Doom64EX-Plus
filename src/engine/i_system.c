@@ -242,8 +242,14 @@ static char* FindDataFile(char* file) {
 #endif
 	};
 
+	// discard unsupported ROM DOOM64.WAD, by their size largely < 10 MB
+	long min_size = dstreq(file, "DOOM64.WAD") ? 10*1024*1014 : 0;
+
 	for (int i = 0; i < SDL_arraysize(dirs); i++) {
-		if (path = M_FileExistsInDirectory(dirs[i], file, true)) return path;
+		if (path = M_FileExistsInDirectory(dirs[i], file, true)) {
+			if (min_size == 0 || M_FileLengthFromPath(path) > min_size)	return path;
+			I_Printf("Discarding not usable IWAD: %s\n", path);
+		}
 	}
 
 #ifdef SDL_PLATFORM_WIN32
