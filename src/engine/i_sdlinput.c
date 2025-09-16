@@ -561,16 +561,22 @@ boolean I_UpdateGrab(void) {
 		&& (gamestate == GS_LEVEL)
 		&& !demoplayback;
 
+	/* 
+		Don't grab the keyboard (SDL_SetWindowKeyboardGrab) because:
+			- we don't need it
+			- it mess up Alt-Tab (only works when not grabbed).
+			- on Linux KDE (Plasma) it prevents global shortcuts to work (brightness, sound, ...)
+			- finally, the SDL doc does not recommend it: "Normal games should not use keyboard grab"
+	*/
+
 	if (grab && !currently_grabbed) {
 		SDL_SetWindowRelativeMouseMode(window, 1);
 		SDL_SetWindowMouseGrab(window, 1);
-		SDL_SetWindowKeyboardGrab(window, 1);
 	}
 
 	if (!grab && currently_grabbed) {
 		SDL_SetWindowRelativeMouseMode(window, 0);
 		SDL_SetWindowMouseGrab(window, 0);
-		SDL_SetWindowKeyboardGrab(window, 0);
 	}
 
 	currently_grabbed = grab;
