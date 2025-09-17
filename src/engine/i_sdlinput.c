@@ -30,6 +30,7 @@
 #include "d_main.h"
 #include "con_cvar.h"
 #include "dgl.h"
+#include "g_settings.h"
 
 CVAR(v_msensitivityx, 5);
 CVAR(v_msensitivityy, 5);
@@ -42,7 +43,9 @@ CVAR_EXTERNAL(p_autoaim);
 
 CVAR_CMD(v_mlook, 0) {
 	if (cvar->value > 0) {
-		I_Printf("WARNING: mouse look: skies will not render properly with high pitch. Do not report.\n");
+		if(!g_in_load_settings) {
+			I_Printf("WARNING: mouse look: skies will not render properly with high pitch. Do not report.\n");
+		}
 		return;
 	}
 

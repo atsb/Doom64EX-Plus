@@ -160,6 +160,10 @@ void G_ExecuteFile(char* name) {
 // G_LoadSettings
 //
 
+boolean g_in_load_settings = false;
+
 void G_LoadSettings(void) {
+	g_in_load_settings = true;
 	G_ExecuteFile(G_GetConfigFileName());
+	g_in_load_settings = false;
 }
