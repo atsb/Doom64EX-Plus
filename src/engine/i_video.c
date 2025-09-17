@@ -42,7 +42,11 @@ SDL_GLContext   glContext = NULL;
 CVAR(r_trishader, 1);
 CVAR(v_checkratio, 0);
 #ifdef HAS_FULLSCREEN_BORDERLESS
-CVAR(v_fullscreen, 0);
+CVAR(v_fullscreen, 0) {
+	if(!g_in_load_settings) {
+		I_Printf("The game must be restarted for this change to take effect\n");
+	}
+}
 #endif
 
 
@@ -193,6 +197,7 @@ cleanup:
 void I_InitScreen(void) {
     unsigned int  flags = 0;
     char          title[256];
+	const char *video_driver;
 
     int native_w = 0, native_h = 0;
     GetNativeDisplayPixels(&native_w, &native_h, window);
@@ -204,9 +209,15 @@ void I_InitScreen(void) {
     usingGL = false;
 
     // GL context attributes
+	video_driver = SDL_GetCurrentVideoDriver();
+	if(!video_driver || !dstreq(video_driver, "wayland")) {
+		// do not set these on Wayland as they do not work (bunch of missing extensions)
+		// with at least Intel integrated UHD graphics
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+	}
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
@@ -299,7 +310,7 @@ void I_InitScreen(void) {
         SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
         if (displayid) {
             float f = SDL_GetDisplayContentScale(displayid);
-            if (f != 0) display_scale = f;
+            if (f != 0)	display_scale = f;
             else I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
         }
         else {
@@ -342,20 +353,21 @@ void I_ShutdownVideo(void) {
 //
 
 void I_InitVideo(void) {
-    unsigned int f = SDL_INIT_VIDEO;
 
 #ifdef SDL_PLATFORM_LINUX
+
 	/*
-	   On Wayland, force program to run on XWayland by forcing the use of use SDL3 "x11" driver
-	   Native SDL3 Wayland ("wayland" driver) is problematic, with at least:
-	     - Intel: with SDL_GL_CONTEXT_MAJOR_VERSION=3 and SDL_GL_CONTEXT_MAJOR_VERSION=1, needed GL extensions are missing  and glGetString(GL_EXTENSIONS) returns null
-	     - NVIDIA: no extension problem but scaling is broken and in different ways weather FULLSCREEN or BORDERLESS is used...
-	   There is no benefit to native Wayland anyway, only problems
+	  On Wayland, this hint is needed for proper expected window size and scaling.
+	  Without this hint, on a 4K display with 2x desktop scaling, reported fullscreen window size
+	  would be 1920x1080 with SDL_GetDisplayContentScale() = 1 (instead of expected 3840x2160, SDL_GetDisplayContentScale() = 2
+	  Must be done before SDL_Init()
 	*/
-	SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "x11", SDL_HINT_OVERRIDE);
+	
+	SDL_SetHintWithPriority(SDL_HINT_VIDEO_WAYLAND_SCALE_TO_DISPLAY, "1", SDL_HINT_OVERRIDE);
+
 #endif
 
-    if (!SDL_Init(f)) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
         I_Error("ERROR - Failed to initialize SDL");
         return;
     }

@@ -19,8 +19,12 @@
 #ifndef G_SETTINGS_H
 #define G_SETTINGS_H
 
+#include "doomtype.h"
+
 void G_LoadSettings(void);
 void G_ExecuteFile(char* name);
 char* G_GetConfigFileName(void);
+
+extern boolean g_in_load_settings;
 
 #endif
