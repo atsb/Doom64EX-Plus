@@ -166,7 +166,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				GL_BindSpriteTexture(head->texid, palette);
                 
                 // Non-monster objects obey r_objectFilter
-                if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value == 1)) {
+                if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value > 0)) {
                     I_ShaderUnBind();
                     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
