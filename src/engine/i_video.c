@@ -42,11 +42,7 @@ SDL_GLContext   glContext = NULL;
 CVAR(r_trishader, 1);
 CVAR(v_checkratio, 0);
 #ifdef HAS_FULLSCREEN_BORDERLESS
-CVAR(v_fullscreen, 0) {
-	if(!g_in_load_settings) {
-		I_Printf("The game must be restarted for this change to take effect\n");
-	}
-}
+CVAR(v_fullscreen, 0);
 #endif
 
 
