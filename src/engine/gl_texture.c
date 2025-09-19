@@ -340,10 +340,12 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	}
 
 	if (textureptr[texnum][palettetranslation[texnum]]) {
+		dglEnable(GL_TEXTURE_2D);
 		dglBindTexture(GL_TEXTURE_2D, textureptr[texnum][palettetranslation[texnum]]);
 		I_ShaderSetUseTexture(1);
 		I_ShaderSetTextureSize(texturewidth[texnum], textureheight[texnum]);
 		I_SectorCombiner_Bind(1, texturewidth[texnum], textureheight[texnum]);
+		APPLY_ALPHA_MODE_FOR_TEX(texnum);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		if (devparm)
@@ -724,12 +726,16 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	if ((spritenum == cursprite) && (pal == curtrans)) {
 		GL_SetState(GLSTATE_BLEND, 1);
+		dglEnable(GL_TEXTURE_2D);
 		dglEnable(GL_ALPHA_TEST);
 		dglAlphaFunc(GL_GREATER, 0.2f);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
 		if (!game_world_shader_scope)
 			GL_Env_RGB_Modulate_Alpha_FromTexture();
+		I_ShaderSetUseTexture(1);
+		I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
+		I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 		return;
 	}
 
@@ -1154,7 +1160,7 @@ void GL_SetCombineOperandAlpha(int operand, int target) {
 //
 
 void GL_InitTextures(void) {
-	CON_DPrintf("--------Initializing textures--------\n");
+	CON_DPrintf("--------Initializing textures--------\n", NULL);
 
 	InitWorldTextures();
 	InitGfxTextures();

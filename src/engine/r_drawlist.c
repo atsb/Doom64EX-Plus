@@ -161,8 +161,9 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				unsigned int flags = ((visspritelist_t*)head->data)->spr->flags;
 
 				// textid in sprites contains hack that stores palette index data
-				palette = head->texid >> 24;
-				head->texid = head->texid & 0xffff;
+				unsigned int __packed = (unsigned int)head->texid;
+				palette = (int)((__packed >> 24) & 0xFF);
+				head->texid = (int)(__packed & 0xFFFF);
 				GL_BindSpriteTexture(head->texid, palette);
                 
                 // Non-monster objects obey r_objectFilter

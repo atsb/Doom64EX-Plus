@@ -540,9 +540,9 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid) {
 	}
 
 	// hack to include info on palette indexes
-	list->texid =
-		(texid | ((mobj->player ? mobj->player->palette : mobj->info->palette) << 24)
-			| (list->flags << 16));
+	list->texid = (int)(( (unsigned int)texid )
+			| (((unsigned int)((mobj->player ? mobj->player->palette : mobj->info->palette) & 0xFF)) << 24)
+			| (((unsigned int)(list->flags & 0xFFFF)) << 16));
 }
 
 //
