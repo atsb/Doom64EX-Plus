@@ -262,7 +262,7 @@ static char* FindDataFile(char* file) {
 
 	if (I_GetRegistryString(HKEY_LOCAL_MACHINE,
 		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", gog_install_dir, MAX_PATH)) {
-		if (path = M_FileExistsInDirectory(gog_install_dir, file, true)) return path;
+		if ((path = M_FileExistsInDirectory(gog_install_dir, file, true))) return path;
 	}
 
 #endif
