@@ -180,12 +180,12 @@ static SDL_INLINE float I_GamepadAxisAlive(Sint16 v) {
 	f = SDL_clamp(f, -1.f, 1.f);
 	return f;
 }
-static SDL_INLINE float I_GamepadAxisDead(float v, float dz) {
+/*static SDL_INLINE float I_GamepadAxisDead(float v, float dz) {
 	float a = fabsf(v);
 	if (a <= dz) return 0.f;
 	float sign = (v < 0.f) ? -1.f : 1.f;
 	return sign * (a - dz) / (1.f - dz);
-}
+}*/
 static SDL_INLINE void I_MouseRelease(int dx, int dy) {
 	event_t ev; ev.type = ev_mouse;
 	ev.data1 = 0;
@@ -341,8 +341,6 @@ static void I_GamepadUpdate(void) {
 		I_GamepadEdgeDetection(lb, &gamepad64.mouse_scroll_up, KEY_PAGEUP);
 		I_GamepadEdgeDetection(rb, &gamepad64.mouse_scroll_down, KEY_PAGEDOWN);
 
-		static float s_look_fx = 0.f, s_look_fy = 0.f;
-		s_look_fx = s_look_fy = 0.f;
 		gamepad64.gamepad_look_dx = gamepad64.gamepad_look_dy = 0.f;
 		return;
 	}

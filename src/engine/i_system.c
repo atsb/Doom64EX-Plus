@@ -230,7 +230,9 @@ char* I_GetUserFile(char* filename) {
 static char* FindDataFile(char* file) {
 	char* path;
 	steamgame_t game;
+#ifdef SDL_PLATFORM_WIN32
 	filepath_t gog_install_dir;
+#endif
 
 	static boolean steam_install_dir_found = false;
 	static filepath_t steam_install_dir;
@@ -248,7 +250,7 @@ static char* FindDataFile(char* file) {
 	long min_size = dstreq(file, IWAD_FILENAME) ? 10*1024*1014 : 0;
 
 	for (int i = 0; i < SDL_arraysize(dirs); i++) {
-		if (path = M_FileExistsInDirectory(dirs[i], file, true)) {
+		if ((path = M_FileExistsInDirectory(dirs[i], file, true))) {
 			if (min_size == 0 || M_FileLengthFromPath(path) > min_size)	return path;
 			I_Printf("Discarding not usable IWAD: %s\n", path);
 		}
@@ -260,7 +262,7 @@ static char* FindDataFile(char* file) {
 
 	if (I_GetRegistryString(HKEY_LOCAL_MACHINE,
 		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", gog_install_dir, MAX_PATH)) {
-		if (path = M_FileExistsInDirectory(gog_install_dir, file, true)) return path;
+		if ((path = M_FileExistsInDirectory(gog_install_dir, file, true))) return path;
 	}
 
 #endif
@@ -418,7 +420,7 @@ void I_Printf(const char* string, ...) {
 	va_start(va, string);
 	SDL_vsnprintf(buff, sizeof(buff), string, va);
 	va_end(va);
-	printf(buff);
+	printf("%s", buff);
 	fflush(stdout);
 	if (console_initialized) {
 		CON_AddText(buff);

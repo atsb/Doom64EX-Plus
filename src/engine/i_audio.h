@@ -60,9 +60,9 @@ struct Sound {
     FMOD_CREATESOUNDEXINFO  extinfo;
 };
 
-struct Reverb {
+/*struct Reverb {
     FMOD_REVERB3D* fmod_reverb;
-};
+};*/
 
 int I_GetMaxChannels(void);
 int I_GetVoiceCount(void);

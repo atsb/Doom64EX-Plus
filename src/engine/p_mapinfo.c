@@ -1,4 +1,4 @@
-﻿// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2025 Gibbon
@@ -259,100 +259,6 @@ static void LOC_Load(void) {
 //
 // P_InitMapInfo
 //
-
-static scdatatable_t mapdatatable[] = {
-  {
-    "CLASSTYPE",
-    (int64_t) & ((mapdef_t*)0)->type,
-    'i'
-  },
-  {
-    "LEVELNUM",
-    (int64_t) & ((mapdef_t*)0)->mapid,
-    'i'
-  },
-  {
-    "CLUSTER",
-    (int64_t) & ((mapdef_t*)0)->cluster,
-    'i'
-  },
-  {
-    "EXITDELAY",
-    (int64_t) & ((mapdef_t*)0)->exitdelay,
-    'i'
-  },
-  {
-    "NOINTERMISSION",
-    (int64_t) & ((mapdef_t*)0)->nointermission,
-    'b'
-  },
-  {
-    "CLEARCHEATS",
-    (int64_t) & ((mapdef_t*)0)->clearchts,
-    'b'
-  },
-  {
-    "CONTINUEMUSICONEXIT",
-    (int64_t) & ((mapdef_t*)0)->contmusexit,
-    'b'
-  },
-  {
-    "FORCEGODMODE",
-    (int64_t) & ((mapdef_t*)0)->forcegodmode,
-    'b'
-  },
-  {
-    NULL,
-    0,
-    0
-  }
-};
-
-static scdatatable_t clusterdatatable[] = {
-  {
-    "PIC",
-    (int64_t) & ((clusterdef_t*)0)->pic,
-    'S'
-  },
-  {
-    "NOINTERMISSION",
-    (int64_t) & ((clusterdef_t*)0)->nointermission,
-    'b'
-  },
-  {
-    "SCROLLTEXTEND",
-    (int64_t) & ((clusterdef_t*)0)->scrolltextend,
-    'b'
-  },
-  {
-    "PIC_X",
-    (int64_t) & ((clusterdef_t*)0)->pic_x,
-    'i'
-  },
-  {
-    "PIC_Y",
-    (int64_t) & ((clusterdef_t*)0)->pic_y,
-    'i'
-  },
-  {
-    NULL,
-    0,
-    0
-  }
-};
-
-static scdatatable_t episodedatatable[] = {
-  {
-    "NAME",
-    (int64_t) & ((episodedef_t*)0)->name,
-    's'
-  },
-  {
-    "KEY",
-    (int64_t) & ((episodedef_t*)0)->key,
-    's'
-  }
-};
 
 // Strict MAPINFO/UMAPINFO
 

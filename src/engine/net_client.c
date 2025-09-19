@@ -1275,8 +1275,7 @@ void NET_CL_Disconnect(void)
 		{
 			// time out after 5 seconds
 
-			// WTF? : warning: implicit conversion from enumeration type 'net_connstate_t' to different enumeration type 'net_clientstate_t' [-Wenum-conversion]
-			client_state = NET_CONN_STATE_DISCONNECTED;
+			client_state = (net_clientstate_t)NET_CONN_STATE_DISCONNECTED;
 
 			fprintf(stderr, "NET_CL_Disconnect: Timeout while disconnecting from server\n");
 			break;
