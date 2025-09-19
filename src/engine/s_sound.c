@@ -33,7 +33,7 @@
 #include "r_main.h"
 
 extern struct Sound sound;
-extern struct Reverb fmod_reverb;
+// extern struct Reverb fmod_reverb;
 
 // Adjustable by menu.
 #define NORM_VOLUME     127
@@ -337,7 +337,7 @@ void S_UpdateSounds(void) {
 void S_StartSound(mobj_t* origin, int sfx_id) {
     int volume;
     int sep;
-    int reverb_sound;
+    // int reverb_sound;
 
     if (nosound) {
         return;
@@ -359,7 +359,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         }
     }
 
-    reverb_sound = 0;
+    /* reverb_sound = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -372,7 +372,7 @@ void S_StartSound(mobj_t* origin, int sfx_id) {
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
             reverb_sound = 32;
         }
-    }
+    }*/
 
     // Assigns the handle to one of the channels in the mix/output buffer.
     FMOD_StartSound(sfx_id, (sndsrc_t*)origin, volume, sep);
@@ -401,7 +401,7 @@ void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
         volume = NORM_VOLUME;
     }
 
-    // reverb_plasma = 0;
+    /* reverb_plasma = 0;
 
     if (origin) {
         subsector_t* subsector;
@@ -409,12 +409,12 @@ void S_StartPlasmaSound(mobj_t* origin, int sfx_id) {
         subsector = R_PointInSubsector(origin->x, origin->y);
 
         if (subsector->sector->flags & MS_REVERB) {
-            // reverb_plasma = 16;
+            reverb_plasma = 16;
         }
         else if (subsector->sector->flags & MS_REVERBHEAVY) {
-            // reverb_plasma = 32;
+            reverb_plasma = 32;
         }
-    }
+    }*/
 
     // Assigns the handle to one of the channels in the mix/output buffer.
     S_StartPlasmaGunLoop(origin, sfx_id, volume);

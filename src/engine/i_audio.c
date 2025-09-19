@@ -1,4 +1,4 @@
-﻿// Emacs style mode select   -*- C++ -*-
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -82,15 +82,15 @@ CVAR_EXTERNAL(s_musvol);
 static FMOD_SOUND* currentMidiSound = NULL;
 
 struct Sound sound;
-struct Reverb fmod_reverb;
+// struct Reverb fmod_reverb;
 
 // FMOD Studio
 static float INCHES_PER_METER = 39.3701f;
 int num_sfx;
 
-FMOD_REVERB_PROPERTIES reverb_prop = FMOD_PRESET_GENERIC;
+// FMOD_REVERB_PROPERTIES reverb_prop = FMOD_PRESET_GENERIC;
 
-FMOD_VECTOR fmod_reverb_position = { -8.0f, 2.0f, 2.0f };
+// FMOD_VECTOR fmod_reverb_position = { -8.0f, 2.0f, 2.0f };
 float min_dist = 1.0f;
 float max_dist = 15.0f;
 
@@ -1034,7 +1034,6 @@ static int Seq_RegisterSounds(void) {
 
         int is_audio = 0;
         int is_pcm = 0;          /* WAV/AIFF. WAV header size = 44 */
-        int is_compressed = 0;   /* OGG/MP3/FLAC/FSB/unknown compressed */
         FMOD_SOUND_TYPE hinted = FMOD_SOUND_TYPE_UNKNOWN;
 
         if (!is_audio && len >= 12 && !dstrncmp((const char*)p, "RIFF", 4) && !dstrncmp((const char*)p + 8, "WAVE", 4)) {
@@ -1046,7 +1045,7 @@ static int Seq_RegisterSounds(void) {
         }
         if (!is_audio && len >= 4 && (!dstrncmp((const char*)p, "OggS", 4) || !dstrncmp((const char*)p, "fLaC", 4) ||
                 !dstrncmp((const char*)p, "FSB5", 4) || !dstrncmp((const char*)p, "FSB4", 4))) {
-            is_audio = 1; is_compressed = 1;
+            is_audio = 1;
 
             if (!dstrncmp((const char*)p, "OggS", 4)) 
                 hinted = FMOD_SOUND_TYPE_OGGVORBIS;
@@ -1058,14 +1057,12 @@ static int Seq_RegisterSounds(void) {
         }
         if (!is_audio && len >= 3 && !dstrncmp((const char*)p, "ID3", 3)) { 
             is_audio = 1; 
-            is_compressed = 1; 
             hinted = FMOD_SOUND_TYPE_MPEG; 
         }
         if (!is_audio && len >= 2) {
             unsigned char b0 = p[0], b1 = p[1];
             if (b0 == 0xFF && (b1 & 0xE0) == 0xE0) { 
                 is_audio = 1; 
-                is_compressed = 1; 
                 hinted = FMOD_SOUND_TYPE_MPEG; 
             }
         }

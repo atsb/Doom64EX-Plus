@@ -41,12 +41,6 @@ typedef int GLsizei;
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
-static struct {
-    GLuint prog;
-    GLint  locTex;
-    int    initialised;
-} shader_struct = { 0, -1, 0 };
-
 #ifndef GL_VERTEX_SHADER
 #define GL_VERTEX_SHADER    0x8B31
 #define GL_FRAGMENT_SHADER  0x8B30

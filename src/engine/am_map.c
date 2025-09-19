@@ -241,6 +241,7 @@ void AM_Start(void) {
 	automapangle = plr->mo->angle;
 }
 
+/* StevenSYS: I don't know if this is going to be used at some point, so I've commented it out instead of removing it
 static bool AM_HandleGamepadEvent(const SDL_Event* e)
 {
 	if (!automapactive) return false;
@@ -322,6 +323,7 @@ static bool AM_HandleGamepadEvent(const SDL_Event* e)
 
 	return false;
 }
+*/
 
 //
 // AM_GetBounds

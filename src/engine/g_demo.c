@@ -63,8 +63,6 @@ extern int      starttime;
 //
 
 void G_ReadDemoTiccmd(ticcmd_t* cmd) {
-	unsigned int lowbyte;
-
 	if (*demo_p == DEMOMARKER) {
 		// end of demo data stream
 		G_CheckDemoStatus();
@@ -85,12 +83,7 @@ void G_ReadDemoTiccmd(ticcmd_t* cmd) {
 
 void G_WriteDemoTiccmd(ticcmd_t* cmd) {
 	char buf[8];
-	short angleturn;
-	short pitch;
 	char* p = buf;
-
-	angleturn = cmd->angleturn;
-	pitch = cmd->pitch;
 
 	*demo_p++ = (byte)cmd->forwardmove;        // int8
 	*demo_p++ = (byte)cmd->sidemove;           // int8

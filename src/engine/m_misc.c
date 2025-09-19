@@ -225,7 +225,7 @@ boolean M_MoveFile(char* filename, char* src_dirpath, char* dst_dirpath) {
 		return false;
 	}
 	
-	if (ret = M_WriteFile(dst_filepath, data, data_len)) {
+	if ((ret = M_WriteFile(dst_filepath, data, data_len))) {
 		M_RemoveFile(src_filepath);
 	}
 

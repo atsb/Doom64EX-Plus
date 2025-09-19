@@ -53,6 +53,12 @@ typedef struct {
 	int fog_enabled; float fog_color[3]; float fog_factor;
 } comb_state_t;
 
+static struct {
+	GLuint prog;
+	GLint  locTex;
+	int    initialised;
+} shader_struct = { 0, -1, 0 };
+
 static comb_state_t gComb;
 static GLint  generic_tint_overlay_colour = -1;
 
@@ -349,15 +355,6 @@ static void I_3PointShaderInit(void) {
 ===============================
 */
 
-static const char* s_vs =
-"#version 120\n"
-"void main(){ gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; }\n";
-
-static const char* s_fs =
-"#version 120\n"
-"uniform vec4 uColor;\n"
-"void main(){ gl_FragColor = uColor; }\n";
-
 static GLuint I_OverlayTintShaderCompile(GLenum tp, const char* src) {
 	GLuint sh = pglCreateShader(tp);
 	pglShaderSource(sh, 1, &src, NULL);
@@ -488,7 +485,7 @@ void I_ShaderSetUseTexture(int on) {
 	pglUniform1i(sLocUseTex, on ? 1 : 0);
 }
 
-static void I_CombinerBake(void) {
+/*static void I_CombinerBake(void) {
     gComb.pass_count = 0;
     float src0[3] = {1,1,1};
     float src1[3] = {1,1,1};
@@ -584,4 +581,4 @@ static void I_CombinerCommit(void) {
 		pglUniform3f(sLocFogColor, gComb.fog_color[0], gComb.fog_color[1], gComb.fog_color[2]);
     if (sLocFogFactor>=0)  
 		pglUniform1f(sLocFogFactor, gComb.fog_factor);
-}
+}*/
