@@ -1,14 +1,22 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.11)
 
 project(DOOM64EX-Plus LANGUAGES C VERSION 4.2.0.0)
+
+if (NOT DEFINED ENV{FMOD_STUDIO_SDK_ROOT})
+	message(
+		FATAL_ERROR
+		"FMOD_STUDIO_SDK_ROOT environment variable is not set.\n"
+		"Point it to the root of the FMOD studio SDK that can be downloaded on https://www.fmod.com/download#fmodstudio"
+	)
+endif()
 
 if(
 	CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64" OR
 	CMAKE_SYSTEM_PROCESSOR STREQUAL "EM64T" OR
 	CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64"
-)   
-	set(CPU_ARCH "x86_64")   
-elseif(   
+)
+	set(CPU_ARCH "x86_64")
+elseif(
 	CMAKE_SYSTEM_PROCESSOR STREQUAL "X86" OR
 	CMAKE_SYSTEM_PROCESSOR STREQUAL "i386" OR
 	CMAKE_SYSTEM_PROCESSOR STREQUAL "i686"
