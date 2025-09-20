@@ -107,6 +107,9 @@ extern void I_SectorCombiner_SetSourceRGB(int slot, int source);
 extern void I_SectorCombiner_SetOperandRGB(int slot, int operand);
 extern void I_SectorCombiner_SetEnvColor(float r, float g, float b, float a);
 
+static unsigned char* g_tex_is_gradient = NULL;
+static unsigned char* g_tex_is_additive = NULL;
+static unsigned char* g_tex_is_premultiplied = NULL;
 
 // atsb: Added a helper here because we need to do it in like 6 places..  better than pasting.  Helpers aren't in Pascal Case, functions are.
 void GL_Env_RGB_Modulate_Alpha_FromTexture(void)
@@ -306,32 +309,37 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 
 	GL_WorldTextureEnsureClassified(texnum);
 
-#define APPLY_ALPHA_MODE_FOR_TEX(_t)                                        \
-    do {                                                                          \
-        dglDisable(GL_ALPHA_TEST);                                                \
-        GL_SetState(GLSTATE_BLEND, false);                                        \
-        dglDepthMask(GL_TRUE);                                                    \
-        if (g_tex_is_translucent && g_tex_is_translucent[_t]) {                       \
-            /* atsb: translucency */                                             \
-            GL_SetState(GLSTATE_BLEND, true);                                     \
-            dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);                   \
-            dglDepthMask(GL_TRUE);                                                \
-            if (!game_world_shader_scope) GL_Env_RGB_Modulate_Alpha_FromTexture();  \
-        } else if (g_tex_is_masked && g_tex_is_masked[_t]) {                          \
-            /* atsb: (0/255 alpha) */                                    \
-            GL_SetState(GLSTATE_BLEND, false);                                    \
-            dglEnable(GL_ALPHA_TEST);                                             \
-            dglAlphaFunc(GL_GREATER, 0.2f);                                       \
-            dglDepthMask(GL_TRUE);                                                \
-            dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);         \
-        } else {                                                                  \
-            /* atsb: fully opaque */                                                    \
-            GL_SetState(GLSTATE_BLEND, false);                                    \
-            dglDisable(GL_ALPHA_TEST);                                            \
-            dglDepthMask(GL_TRUE);                                                \
-            dglTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);         \
-        }                                                                         \
-    } while (0)
+#define APPLY_ALPHA_MODE_FOR_TEX(_t) \
+do { \
+    dglDisable(GL_ALPHA_TEST); \
+    GL_SetState(GLSTATE_BLEND, false); \
+    dglDepthMask(GL_TRUE); \
+    \
+    if (g_tex_is_gradient && g_tex_is_gradient[_t]) { \
+        /* Textures with diagonal lines */ \
+        GL_SetState(GLSTATE_BLEND, true); \
+        dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); \
+        dglDepthMask(GL_FALSE); \
+        if (!game_world_shader_scope) GL_Env_RGB_Modulate_Alpha_FromTexture(); \
+    } else if (g_tex_is_translucent && g_tex_is_translucent[_t]) { \
+        /* Standard translucency */ \
+        GL_SetState(GLSTATE_BLEND, true); \
+        dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); \
+        dglDepthMask(GL_FALSE); \
+        if (!game_world_shader_scope) GL_Env_RGB_Modulate_Alpha_FromTexture(); \
+    } else if (g_tex_is_masked && g_tex_is_masked[_t]) { \
+        /* Textures with binary alpha */ \
+        GL_SetState(GLSTATE_BLEND, false); \
+        dglEnable(GL_ALPHA_TEST); \
+        dglAlphaFunc(GL_GREATER, 0.1f); \
+        dglDepthMask(GL_TRUE); \
+    } else { \
+        /* Fully opaque */ \
+        GL_SetState(GLSTATE_BLEND, false); \
+        dglDisable(GL_ALPHA_TEST); \
+        dglDepthMask(GL_TRUE); \
+    } \
+} while (0)
 
 	/* StevenSYS: Fixes old saves crashing the game, however the textures will be incorrect */
 	if (texnum > sizeof(dtexture*) * numtextures) {
@@ -729,7 +737,7 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 		GL_SetState(GLSTATE_BLEND, 1);
 		dglEnable(GL_TEXTURE_2D);
 		dglEnable(GL_ALPHA_TEST);
-		dglAlphaFunc(GL_GREATER, 0.2f);
+		dglAlphaFunc(GL_GREATER, 0.1f);
 		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dglDepthMask(GL_FALSE);
 		if (!game_world_shader_scope)
