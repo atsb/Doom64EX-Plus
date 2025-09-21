@@ -335,8 +335,7 @@ boolean CON_Responder(event_t* ev) {
 	case CST_LOWER:
 		if (ev->type == ev_keydown) {
 			switch (c) {
-			case '~':
-			case '`':
+			case KEY_CONSOLE:
 				CON_dismiss();
 				break;
 
@@ -436,11 +435,7 @@ boolean CON_Responder(event_t* ev) {
 
 	case CST_UP:
 	case CST_RAISE:
-		// AB (GIB) - Oh Kaiser...  you plumb! :)
-		// Why the hell do this?  It only works on UK/US keyboards
-		// Gibbon fixes it!
-		//if(c == '`') { <-- BOO!
-		if (c == '~' || c == '`') {
+		if (c == KEY_CONSOLE) {
 			if (ev->type == ev_keydown) {
 				console_state = CST_DOWN;
 				console_enabled = true;

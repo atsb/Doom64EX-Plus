@@ -417,9 +417,9 @@ static void I_GamepadUpdate(void) {
 //
 
 // Modernised, it was really needed!
-static int I_TranslateKey(const int key)
+static int I_TranslateKey(SDL_KeyboardEvent *key_event)
 {
-	struct { int sdl; int eng; } map[] = {
+	static struct { int sdl; int eng; } map[] = {
 		{ SDLK_LEFT,        KEY_LEFTARROW },
 		{ SDLK_RIGHT,       KEY_RIGHTARROW },
 		{ SDLK_UP,          KEY_UPARROW },
@@ -473,12 +473,23 @@ static int I_TranslateKey(const int key)
 		{ SDLK_KP_DIVIDE,   KEY_KEYPADDIVIDE },
 		{ SDLK_KP_PERIOD,   KEY_KEYPADPERIOD },
 	};
+
+	const int key = key_event->key;
+		
+	// key reserved for the console, independent of location on keyboard
+	// Located in the top left corner (on both ANSI and ISO keyboards).
+	if(key_event->scancode == SDL_SCANCODE_GRAVE) {
+		return KEY_CONSOLE;
+	}
+	
 	for (size_t i = 0; i < sizeof(map) / sizeof(map[0]); ++i) {
 		if (key == map[i].sdl) return map[i].eng;
 	}
+	
 	if (key >= 32 && key < 127) {
 		return key;
 	}
+	
 	return 0;
 }
 
@@ -602,7 +613,7 @@ void I_GetEvent(SDL_Event* Event) {
 			break;
 		}
 		event.type = ev_keydown;
-		event.data1 = I_TranslateKey(Event->key.key);
+		event.data1 = I_TranslateKey(&Event->key);
 		if(event.data1) {
 			D_PostEvent(&event);
 		}
@@ -610,7 +621,7 @@ void I_GetEvent(SDL_Event* Event) {
 
 	case SDL_EVENT_KEY_UP:
 		event.type = ev_keyup;
-		event.data1 = I_TranslateKey(Event->key.key);
+		event.data1 = I_TranslateKey(&Event->key);
 		if(event.data1) {
 			D_PostEvent(&event);
 		}
