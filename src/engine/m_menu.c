@@ -55,7 +55,6 @@
 #include "net_server.h"
 #include "dgl.h"
 
-
 //
 // definitions
 //
@@ -3681,6 +3680,10 @@ boolean M_Responder(event_t* ev) {
 		if (ch == KEY_ESCAPE) {
 			MenuBindActive = false;
 			M_BuildControlMenu();
+		}
+		else if (ch == KEY_CONSOLE) {
+			// cannot bind reserved console key
+			return false;
 		}
 		else if (G_BindActionByEvent(ev, messageBindCommand)) {
 			MenuBindActive = false;

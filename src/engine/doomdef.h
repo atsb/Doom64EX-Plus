@@ -291,7 +291,11 @@ extern boolean windowpause;
 #define KEY_MWHEELUP            (0x80 + 0x6b)
 #define KEY_MWHEELDOWN          (0x80 + 0x6c)
 
+#define KEY_CONSOLE				'`'
+
 //code assumes MOUSE_BUTTONS<10
 #define MOUSE_BUTTONS        9
+
+
 
 #endif          // __DOOMDEF__
