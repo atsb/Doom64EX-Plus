@@ -1576,7 +1576,7 @@ menudefault_t DisplayDefault[] = {
 
 menuthermobar_t DisplayBars[] = {
 	{ display_empty1, 255, &st_crosshairopacity },
-	{ display_empty2, 75, &r_fov },
+	{ display_empty2, 255, &r_fov },
 	{ -1, 0 }
 };
 

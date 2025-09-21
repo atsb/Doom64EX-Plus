@@ -165,14 +165,14 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				palette = (int)((__packed >> 24) & 0xFF);
 				head->texid = (int)(__packed & 0xFFFF);
 				GL_BindSpriteTexture(head->texid, palette);
-                
-                // Non-monster objects obey r_objectFilter
-                if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value > 0)) {
-                    I_ShaderUnBind();
-                    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    obj_nearest_bypass = true;
-                }
+
+				// Non-monster objects obey r_objectFilter
+				if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value > 0)) {
+					I_ShaderUnBind();
+					dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					obj_nearest_bypass = true;
+				}
 
 
 				// villsa 12152013 - change blend states for nightmare things
@@ -199,24 +199,24 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
 					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
 			}
-			
-            if(r_texturecombiner.value > 0) {
-                envcolor[0] = envcolor[1] = envcolor[2] = ((float)head->params / 255.0f);
-                GL_SetEnvColor(envcolor);
-                dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
-            }
-            else {
-                int l = (head->params >> 1);
 
-                GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-            }
+			if (r_texturecombiner.value > 0) {
+				envcolor[0] = envcolor[1] = envcolor[2] = ((float)head->params / 255.0f);
+				GL_SetEnvColor(envcolor);
+				dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
+			}
+			else {
+				int l = (head->params >> 1);
 
-            dglDrawGeometry(drawcount, drawVertex);
-            
-            if (obj_nearest_bypass) {
-                I_ShaderBind();
-                obj_nearest_bypass = false;
-            }
+				GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+			}
+
+			dglDrawGeometry(drawcount, drawVertex);
+
+			if (obj_nearest_bypass) {
+				I_ShaderBind();
+				obj_nearest_bypass = false;
+			}
 
 			// count vertex size
 			if (devparm) {
@@ -255,13 +255,13 @@ int DL_GetDrawListSize(int tag) {
 //
 
 void DL_BeginDrawList(boolean t, boolean a) {
-    dglSetVertex(drawVertex);
+	dglSetVertex(drawVertex);
 
-    GL_SetTextureUnit(0, t);
+	GL_SetTextureUnit(0, t);
 
-    if(a) {
-        dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
-    }
+	if (a) {
+		dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
+	}
 }
 
 //

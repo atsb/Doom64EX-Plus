@@ -540,9 +540,9 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid) {
 	}
 
 	// hack to include info on palette indexes
-	list->texid = (int)(( (unsigned int)texid )
-			| (((unsigned int)((mobj->player ? mobj->player->palette : mobj->info->palette) & 0xFF)) << 24)
-			| (((unsigned int)(list->flags & 0xFFFF)) << 16));
+	list->texid = (int)(((unsigned int)texid)
+		| (((unsigned int)((mobj->player ? mobj->player->palette : mobj->info->palette) & 0xFF)) << 24)
+		| (((unsigned int)(list->flags & 0xFFFF)) << 16));
 }
 
 //
@@ -597,8 +597,8 @@ void R_SetupSprites(void) {
 void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	int prev_scope = game_world_shader_scope;
 	if (prev_scope) {
-		I_ShaderUnBind(); 
-		game_world_shader_scope = 0; 
+		I_ShaderUnBind();
+		game_world_shader_scope = 0;
 	}
 	I_SectorCombiner_Unbind();
 
@@ -628,8 +628,9 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	sprframe = &sprdef->spriteframes[psp->state->info_frame & FF_FRAMEMASK];
 
 	if (nolights) {
-		color = D_RGBA(255,255,255,alpha);
-	} else {
+		color = D_RGBA(255, 255, 255, alpha);
+	}
+	else {
 		color = R_GetSectorLight(alpha, sector->colors[LIGHT_THING]);
 	}
 
@@ -679,51 +680,51 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 	GL_CheckFillMode();
 
-    //
-    // setup texture environment for effects
-    //
-    if(r_texturecombiner.value) {
-        float f[4];
+	//
+	// setup texture environment for effects
+	//
+	if (r_texturecombiner.value) {
+		float f[4];
 
-        f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
+		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-        dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+		dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
 
-        if(!nolights) {
-            GL_UpdateEnvTexture(WHITE);
-            GL_SetTextureUnit(1, true);
-            dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
-        }
+		if (!nolights) {
+			GL_UpdateEnvTexture(WHITE);
+			GL_SetTextureUnit(1, true);
+			dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+		}
 
-        if(st_flashoverlay.value <= 0) {
-            GL_SetTextureUnit(2, true);
-            dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
-        }
+		if (st_flashoverlay.value <= 0) {
+			GL_SetTextureUnit(2, true);
+			dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+		}
 
-        dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
 
-        GL_SetTextureUnit(0, true);
+		GL_SetTextureUnit(0, true);
 
-	// Apply weapon filter from menu (last touch before draw)
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-    }
-    else {
-        int l = (sector->lightlevel >> 1);
+		// Apply weapon filter from menu (last touch before draw)
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+	}
+	else {
+		int l = (sector->lightlevel >> 1);
 
-        GL_SetTextureUnit(1, true);
-        GL_SetTextureMode(GL_ADD);
-        GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-        GL_SetTextureUnit(0, true);
+		GL_SetTextureUnit(1, true);
+		GL_SetTextureMode(GL_ADD);
+		GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+		GL_SetTextureUnit(0, true);
 
-	// Apply weapon filter from menu (last touch before draw)
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+		// Apply weapon filter from menu (last touch before draw)
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_weaponFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
 
-        if(nolights) {
-            GL_SetTextureMode(GL_REPLACE);
-        }
-    }
+		if (nolights) {
+			GL_SetTextureMode(GL_REPLACE);
+		}
+	}
 
 	// render
 	dglSetVertex(v);
@@ -741,9 +742,9 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	GL_SetState(GLSTATE_BLEND, 0);
 	I_ShaderBind();
 
-	if (prev_scope) { 
-		I_ShaderBind(); 
-		game_world_shader_scope = 1; 
+	if (prev_scope) {
+		I_ShaderBind();
+		game_world_shader_scope = 1;
 	}
 }
 

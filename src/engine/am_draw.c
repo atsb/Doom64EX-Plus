@@ -61,7 +61,7 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
         // increase the rgb scale so the automap can look good while transparent (overlay mode)
         //
         GL_SetTextureMode(GL_COMBINE);
-        dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
+        dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
     }
 
 	dglDepthRange(0.0f, 0.0f);
