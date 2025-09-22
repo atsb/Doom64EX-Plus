@@ -72,6 +72,7 @@ extern int ViewWindowY;
 #define TESTALPHA(x)        ((byte)((x >> 24) & 0xff) < 0xff)
 
 extern boolean usingGL;
+extern boolean widescreen;
 
 boolean GL_CheckExtension(const char* ext);
 void* GL_RegisterProc(const char* address);

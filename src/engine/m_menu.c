@@ -1914,6 +1914,7 @@ void M_DrawVideo(void) {
 	static const char* filterType1[3] = { "N64", "Linear", "Nearest" };
 	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
+	static const char* fullscreenType[2] = { "Borderless", "Exclusive" };
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
@@ -1939,7 +1940,7 @@ void M_DrawVideo(void) {
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
 #ifdef HAS_FULLSCREEN_BORDERLESS
-	DRAWVIDEOITEM2(video_fullscreen, v_fullscreen.value, onofftype);
+	DRAWVIDEOITEM2(video_fullscreen, v_fullscreen.value, fullscreenType);
 #endif
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType1);
 	DRAWVIDEOITEM2(object_filter, r_objectFilter.value, filterType2);
@@ -3677,18 +3678,22 @@ boolean M_Responder(event_t* ev) {
 		if (MenuBindEntryWasMouse && ev->type == ev_mousedown && (ev->data1 & MenuBindIgnoreMouseButtons)) {
 			return true;
 		}
-		if (ch == KEY_ESCAPE) {
+
+		switch (ch) {
+		case KEY_ESCAPE:
 			MenuBindActive = false;
 			M_BuildControlMenu();
-		}
-		else if (ch == KEY_CONSOLE) {
+			break;
+		case KEY_CONSOLE:
 			// cannot bind reserved console key
-			return false;
+			break;
+		default:
+			if (G_BindActionByEvent(ev, messageBindCommand)) {
+				MenuBindActive = false;
+				M_BuildControlMenu();
+			}
 		}
-		else if (G_BindActionByEvent(ev, messageBindCommand)) {
-			MenuBindActive = false;
-			M_BuildControlMenu();
-		}
+
 		return true;
 	}
 
@@ -3961,6 +3966,14 @@ boolean M_Responder(event_t* ev) {
 	return false;
 }
 
+void M_CenterMouse() {
+	if (widescreen && m_menumouse.value) {
+		// center pointer so it is not at a random location depending of current in-game position
+		I_CenterMouseForMenu();
+	}
+}
+
+
 //
 // M_StartControlPanel
 //
@@ -3987,6 +4000,10 @@ void M_StartControlPanel(boolean forcenext) {
 	itemOn = currentMenu->lastOn;
 
 	S_PauseSound();
+
+	if (!forcenext) {
+		M_CenterMouse();
+	}
 }
 
 //
@@ -3999,7 +4016,7 @@ void M_StartMainMenu(void) {
 	allowmenu = true;
 	menuactive = true;
 	mainmenuactive = true;
-	M_StartControlPanel(false);
+	M_CenterMouse();
 }
 
 //

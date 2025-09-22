@@ -537,6 +537,12 @@ void I_CenterMouse(void) {
 	SDL_GetRelativeMouseState(NULL, NULL);
 }
 
+void I_CenterMouseForMenu(void) {
+	SDL_WarpMouseInWindow(window, (unsigned short)((video_width * 3 / 4) / 2), (unsigned short)(video_height / 2));
+	SDL_PumpEvents();
+	SDL_GetMouseState(&mouse_x, &mouse_y); // refresh new location
+}
+
 //
 // I_MouseAccelChange
 //
@@ -566,6 +572,7 @@ float I_MouseAccel(float val) {
 //
 
 boolean I_UpdateGrab(void) {
+
 	static boolean currently_grabbed = false;
 	boolean grab;
 
@@ -573,7 +580,7 @@ boolean I_UpdateGrab(void) {
 		&& (gamestate == GS_LEVEL)
 		&& !demoplayback;
 
-	/* 
+	/*
 		Don't grab the keyboard (SDL_SetWindowKeyboardGrab) because:
 			- we don't need it
 			- it mess up Alt-Tab (only works when not grabbed). And Tab switches the automap modes
@@ -582,7 +589,7 @@ boolean I_UpdateGrab(void) {
 	*/
 
 	if (grab && !currently_grabbed) {
-		SDL_SetWindowRelativeMouseMode(window, 1);
+		SDL_SetWindowRelativeMouseMode(window, 1); // this grabs the mouse and hide cursor
 		SDL_SetWindowMouseGrab(window, 1);
 	}
 
