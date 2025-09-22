@@ -537,8 +537,9 @@ void I_CenterMouse(void) {
 	SDL_GetRelativeMouseState(NULL, NULL);
 }
 
-void I_CenterMouseForMenu(void) {
-	SDL_WarpMouseInWindow(window, (unsigned short)((video_width * 3 / 4) / 2), (unsigned short)(video_height / 2));
+
+void I_SetMousePos(float x, float y) {
+	SDL_WarpMouseInWindow(window, (unsigned short)x, (unsigned short)y);
 	SDL_PumpEvents();
 	SDL_GetMouseState(&mouse_x, &mouse_y); // refresh new location
 }

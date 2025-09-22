@@ -45,7 +45,7 @@ void I_StartTic(void);
 void I_FinishUpdate(void);
 int I_ShutdownWait(void);
 void I_CenterMouse(void);
-void I_CenterMouseForMenu(void);
+void I_SetMousePos(float x, float y);
 boolean I_UpdateGrab(void);
 
 const char* I_KeycodeToName_All(int keycode);
