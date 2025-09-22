@@ -244,8 +244,6 @@ void R_Clipper_Clear(void) {
 // R_FrustumAngle
 //
 
-extern boolean widescreen;
-
 angle_t R_FrustumAngle(void) {
 	angle_t tilt;
 	float range;
