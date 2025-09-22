@@ -316,7 +316,7 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
             /* atsb: translucency */                                             \
             GL_SetState(GLSTATE_BLEND, true);                                     \
             dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);                   \
-            dglDepthMask(GL_TRUE);                                                \
+            dglDepthMask(GL_FALSE);                                                \
             if (!game_world_shader_scope) GL_Env_RGB_Modulate_Alpha_FromTexture();  \
         } else if (g_tex_is_masked && g_tex_is_masked[_t]) {                          \
             /* atsb: (0/255 alpha) */                                    \
