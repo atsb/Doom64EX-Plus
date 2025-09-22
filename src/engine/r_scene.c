@@ -338,7 +338,7 @@ void R_RenderWorld(void) {
 
 	// -------------- Draw floors/ceilings (leafs) ---------------
 
-	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetState(GLSTATE_BLEND, 0);
 	DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
 
 	/* BIND BEFORE SPRITES */

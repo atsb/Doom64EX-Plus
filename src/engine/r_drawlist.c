@@ -41,6 +41,8 @@ drawlist_t drawlist[NUMDRAWLISTS];
 CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_objectFilter);
 
+extern int GL_WorldTextureIsTranslucent(int texnum);
+
 //
 // DL_AddVertexList
 //
@@ -93,6 +95,13 @@ static int SortSprites(const void* a, const void* b) {
 	return xb->dist - xa->dist;
 }
 
+static inline int is_translucent_entry(int tag, const vtxlist_t* item) {
+	if (tag == DLT_SPRITE)
+		return 0;
+	const int world_tex = (item->texid & 0xffff);
+	return GL_WorldTextureIsTranslucent(world_tex) ? 1 : 0;
+}
+
 //
 // DL_ProcessDrawList
 //
@@ -124,10 +133,14 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
 		tail = &dl->list[dl->index];
 
+		/* -------------------- OPAQUE/ALPHA-TESTED -------------------- */
 		for (i = 0; i < dl->index; i++) {
 			vtxlist_t* rover;
 
 			head = &dl->list[i];
+
+			if (tag != DLT_SPRITE && is_translucent_entry(tag, head))
+				continue;
 
 			obj_nearest_bypass = false;
 
@@ -174,7 +187,6 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 					obj_nearest_bypass = true;
 				}
 
-
 				// villsa 12152013 - change blend states for nightmare things
 				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
 					if (!checkNightmare && (flags & MF_NIGHTMARE)) {
@@ -219,6 +231,104 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 			}
 
 			// count vertex size
+			if (devparm) {
+				vertCount += drawcount;
+			}
+
+			drawcount = 0;
+			head->data = NULL;
+		}
+
+		/* -------------------- TRANSLUCENT ----------------------------- */
+		for (i = 0; i < dl->index; i++) {
+			vtxlist_t* rover;
+
+			head = &dl->list[i];
+
+			if (tag != DLT_SPRITE && !is_translucent_entry(tag, head))
+				continue;
+
+			obj_nearest_bypass = false;
+
+			if (!head->data) {
+				break;
+			}
+
+			if (drawcount >= MAXDLDRAWCOUNT) {
+				I_Error("DL_ProcessDrawList: Draw overflow by %i, tag=%i", dl->index, tag);
+			}
+
+			if (procfunc) {
+				if (!procfunc(head, &drawcount)) {
+					continue;
+				}
+			}
+
+			rover = head + 1;
+
+			if (tag != DLT_SPRITE) {
+				if (rover != tail) {
+					if (head->texid == rover->texid && head->params == rover->params) {
+						continue;
+					}
+				}
+			}
+
+			if (tag == DLT_SPRITE) {
+				unsigned int flags = ((visspritelist_t*)head->data)->spr->flags;
+
+				unsigned int __packed = (unsigned int)head->texid;
+				palette = (int)((__packed >> 24) & 0xFF);
+				head->texid = (int)(__packed & 0xFFFF);
+				GL_BindSpriteTexture(head->texid, palette);
+
+				if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value > 0)) {
+					I_ShaderUnBind();
+					dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					obj_nearest_bypass = true;
+				}
+
+				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
+					if (!checkNightmare && (flags & MF_NIGHTMARE)) {
+						dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+						checkNightmare ^= 1;
+					}
+					else if (checkNightmare && !(flags & MF_NIGHTMARE)) {
+						dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+						checkNightmare ^= 1;
+					}
+				}
+			}
+			else {
+				head->texid = (head->texid & 0xffff);
+				GL_BindWorldTexture(head->texid, 0, 0);
+			}
+
+			if (tag == DLT_WALL) {
+				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+					head->flags & DLF_MIRRORS ? GL_MIRRORED_REPEAT : GL_REPEAT);
+				dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+					head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
+			}
+
+			if (r_texturecombiner.value > 0) {
+				envcolor[0] = envcolor[1] = envcolor[2] = ((float)head->params / 255.0f);
+				GL_SetEnvColor(envcolor);
+				dglTexCombColorf(GL_TEXTURE0_ARB, envcolor, GL_ADD);
+			}
+			else {
+				int l = (head->params >> 1);
+				GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+			}
+
+			dglDrawGeometry(drawcount, drawVertex);
+
+			if (obj_nearest_bypass) {
+				I_ShaderBind();
+				obj_nearest_bypass = false;
+			}
+
 			if (devparm) {
 				vertCount += drawcount;
 			}
