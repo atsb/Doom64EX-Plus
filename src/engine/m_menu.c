@@ -95,6 +95,9 @@ static boolean     inputEnter = false;
 static int          inputCharIndex;
 static int          inputMax = 0;
 
+static float cursor_x;
+static float cursor_y;
+
 //
 // fade-in/out stuff
 //
@@ -3966,10 +3969,11 @@ boolean M_Responder(event_t* ev) {
 	return false;
 }
 
-void M_CenterMouse() {
-	if (widescreen && m_menumouse.value) {
-		// center pointer so it is not at a random location depending of current in-game position
-		I_CenterMouseForMenu();
+// restore mouse position to current cursor position so cursor is not displayed at a random position depending of current in-game mouse position
+// cursor start initially centered
+static void M_SetCursorPos() {
+	if (m_menumouse.value) {
+		I_SetMousePos(cursor_x, cursor_y);
 	}
 }
 
@@ -4002,7 +4006,7 @@ void M_StartControlPanel(boolean forcenext) {
 	S_PauseSound();
 
 	if (!forcenext) {
-		M_CenterMouse();
+		M_SetCursorPos();
 	}
 }
 
@@ -4016,7 +4020,7 @@ void M_StartMainMenu(void) {
 	allowmenu = true;
 	menuactive = true;
 	mainmenuactive = true;
-	M_CenterMouse();
+	M_SetCursorPos();
 }
 
 //
@@ -4088,45 +4092,49 @@ static void M_DrawMenuSkull(int x, int y) {
 // M_DrawCursor
 //
 
-static void M_DrawCursor(float x, float y)
+static void M_DrawCursor()
 {
-	if (m_menumouse.value) {
-		int gfxIdx;
-		float factor;
-		float scale;
+	if (!m_menumouse.value) return;
 
-		scale = ((m_cursorscale.value + 25.0f) / 100.0f);
-		gfxIdx = GL_BindGfxTexture("CURSOR", true);
-		if (gfxIdx < 0)
-			return;
+	cursor_x = mouse_x;
+	cursor_y = mouse_y;
 
-		factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
+	int gfxIdx;
+	float factor;
+	float scale;
 
-		// atsb: fixes cursor alpha
-		dglDisable(GL_COLOR_LOGIC_OP);
-		dglDisable(GL_DEPTH_TEST);
-		dglDepthMask(GL_FALSE);
+	scale = ((m_cursorscale.value + 25.0f) / 100.0f);
+	gfxIdx = GL_BindGfxTexture("CURSOR", true);
+	if (gfxIdx < 0)
+		return;
 
-		GL_SetState(GLSTATE_BLEND, 1);
-		dglEnable(GL_BLEND);
-		dglDisable(GL_ALPHA_TEST);
-		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	factor = (((float)SCREENHEIGHT * video_ratio) / (float)video_width) / scale;
 
-		GL_SetOrthoScale(scale);
+	// atsb: fixes cursor alpha
+	dglDisable(GL_COLOR_LOGIC_OP);
+	dglDisable(GL_DEPTH_TEST);
+	dglDepthMask(GL_FALSE);
 
-		dglColor4ub(255, 255, 255, 255);
+	GL_SetState(GLSTATE_BLEND, 1);
+	dglEnable(GL_BLEND);
+	dglDisable(GL_ALPHA_TEST);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		GL_SetupAndDraw2DQuad((float)x * factor, (float)y * factor,
-			gfxwidth[gfxIdx], gfxheight[gfxIdx], 0, 1.0f, 0, 1.0f, WHITE, 0);
+	GL_SetOrthoScale(scale);
 
-		GL_SetState(GLSTATE_BLEND, 0);
-		dglDepthMask(GL_TRUE);
-		GL_SetOrthoScale(1.0f);
-	}
+	dglColor4ub(255, 255, 255, 255);
+
+	GL_SetupAndDraw2DQuad((float)cursor_x * factor, (float)cursor_y * factor,
+		gfxwidth[gfxIdx], gfxheight[gfxIdx], 0, 1.0f, 0, 1.0f, WHITE, 0);
+
+	GL_SetState(GLSTATE_BLEND, 0);
+	dglDepthMask(GL_TRUE);
+	GL_SetOrthoScale(1.0f);
+
 }
 
 //
@@ -4357,7 +4365,7 @@ void M_Drawer(void) {
 		GL_SetOrthoScale(1.0f);
 	}
 
-	M_DrawCursor(mouse_x, mouse_y);
+	M_DrawCursor();
 }
 
 //
@@ -4566,6 +4574,10 @@ void M_Init(void) {
 	menufadefunc = NULL;
 	nextmenu = NULL;
 	newmenu = false;
+
+	// cursor initially centered
+	cursor_x = ((float)video_width * SCREENHEIGHT / SCREENWIDTH) / 2;
+	cursor_y = video_height / 2.f;
 
 	for (i = 0; i < NUM_CONTROL_ITEMS; i++) {
 		ControlsItem[i].alphaKey = 0;
