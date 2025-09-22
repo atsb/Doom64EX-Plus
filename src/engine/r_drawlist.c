@@ -90,7 +90,14 @@ static int SortSprites(const void* a, const void* b) {
 }
 
 static inline int is_translucent_entry(int tag, const vtxlist_t* item) {
-    if (tag == DLT_SPRITE) return 0;
+    if (tag == DLT_SPRITE)
+        return 0;
+
+    if (tag != DLT_WALL) {
+        if (item->flags & DLF_WATER1)
+            return 1;
+    }
+
     const int world_tex = (item->texid & 0xffff);
     return GL_WorldTextureIsTranslucent(world_tex) ? 1 : 0;
 }
@@ -131,7 +138,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
     boolean checkNightmare = false;
     boolean obj_nearest_bypass = false;
 
-    if (tag < 0 && tag >= NUMDRAWLISTS) {
+    if (tag < 0 || tag >= NUMDRAWLISTS) {
         return;
     }
 
@@ -386,12 +393,18 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
                         head->flags & DLF_MIRRORS ? GL_MIRRORED_REPEAT : GL_REPEAT);
                     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
                         head->flags & DLF_MIRRORT ? GL_MIRRORED_REPEAT : GL_REPEAT);
+
+                    dglDepthMask(GL_FALSE);
+                    dglDepthFunc(GL_LESS);
+                    GL_SetState(GLSTATE_BLEND, 1);
+                    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                    dglDisable(GL_ALPHA_TEST);
                 }
                 else {
                     dglEnable(GL_POLYGON_OFFSET_FILL);
-                    dglPolygonOffset(-4.0f, -8.0f);
+                    dglPolygonOffset(4.0f, 8.0f);
                     dglDepthMask(GL_FALSE);
-                    dglDepthFunc(GL_LEQUAL);
+                    dglDepthFunc(GL_LESS);
                     GL_SetState(GLSTATE_BLEND, 1);
                     dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                     dglDisable(GL_ALPHA_TEST);
@@ -409,7 +422,13 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
                 dglDrawGeometry(drawcount, drawVertex);
 
-                if (tag == DLT_FLAT) {
+                if (tag == DLT_WALL) {
+                    dglEnable(GL_ALPHA_TEST);
+                    GL_SetState(GLSTATE_BLEND, 0);
+                    dglDepthFunc(GL_LESS);
+                    dglDepthMask(GL_TRUE);
+                }
+                else {
                     dglEnable(GL_ALPHA_TEST);
                     GL_SetState(GLSTATE_BLEND, 0);
                     dglDepthFunc(GL_LESS);

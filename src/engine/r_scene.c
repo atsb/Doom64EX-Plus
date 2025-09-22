@@ -332,14 +332,12 @@ void R_RenderWorld(void) {
 
 	// begin draw list loop
 
-	// -------------- Draw walls (segs) --------------------------
-
-	DL_ProcessDrawList(DLT_WALL, ProcessWalls);
-
 	// -------------- Draw floors/ceilings (leafs) ---------------
-
 	GL_SetState(GLSTATE_BLEND, 0);
 	DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
+
+	// -------------- Draw walls (segs) --------------------------
+	DL_ProcessDrawList(DLT_WALL, ProcessWalls);
 
 	/* BIND BEFORE SPRITES */
 	I_ShaderBind();
