@@ -74,8 +74,10 @@ int M_CheckParm(const char* check) {
 	return 0;
 }
 
+// NULL-safe
 char* M_StringDuplicate(char* s)
 {
+	if (!s) return NULL;
 #ifdef _MSC_VER
 	return _strdup(s);
 #else

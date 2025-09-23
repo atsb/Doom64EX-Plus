@@ -365,17 +365,16 @@ void W_Init(void) {
 			if (!M_DirExists(mod_dir)) {
 				mod_dir = I_FindDataFile(mod_dir);
 			}
+			if (!mod_dir) {
+				I_Error("W_Init: failed to find mod directory: %s", myargv[p]);
+			}
 		}
 	}
 
 	if (mod_dir) {
 
 		SDL_Storage* storage = SDL_OpenFileStorage(mod_dir);
-
-		char* kpf_dir = M_FileOrDirExistsInDirectory(mod_dir, "kpf/Doom64", false);
-		if (kpf_dir) {
-			g_kpf_files[g_num_kpf++] = kpf_dir;
-		}
+		char* kpf_dir;
 
 		if (storage) {
 			// find wad with larger size in mod dir
@@ -399,7 +398,6 @@ void W_Init(void) {
 							free(wad_filepath);
 							wad_filepath = M_StringDuplicate(filepath);
 						}
-
 					}
 					SDL_free(matches);
 				}
@@ -412,6 +410,15 @@ void W_Init(void) {
 				free(wad_filepath);
 			}
 		}
+		else {
+			// should never happen at this point, but the impossible is known to always happen anyway
+			I_Error("W_Init: failed to access mod directory: %s", mod_dir);
+		}
+
+		kpf_dir = M_FileOrDirExistsInDirectory(mod_dir, "kpf/Doom64", false);
+		if (kpf_dir) {
+			g_kpf_files[g_num_kpf++] = kpf_dir;
+		}
 	}
 
 	p = M_CheckParm("-file");
@@ -421,14 +428,40 @@ void W_Init(void) {
 		// until end of parms or another - preceded parm
 		while (++p != myargc && myargv[p][0] != '-')
 		{
-			W_MergeFile(myargv[p]);
+			char* argpath = myargv[p];
+			char* wad_filepath = NULL;
+
+			if (M_FileExists(argpath)) {
+				wad_filepath = M_StringDuplicate(argpath);
+			} else {
+				if (mod_dir) {
+					wad_filepath = M_FileOrDirExistsInDirectory(mod_dir, argpath, true);
+				}
+				if (!wad_filepath) {
+					wad_filepath = M_StringDuplicate(I_FindDataFile(argpath));
+				}
+			}
+			
+			if (wad_filepath) {
+				W_MergeFile(wad_filepath);
+				free(wad_filepath);
+			}
+			else {
+				I_Error("W_Init: failed to find file: %s", argpath);
+			}
 		}
 	}
 	// 20120724 villsa - find drag & drop wad files
 	else {
 		for (i = 1; i < myargc; i++) {
 			if (strstr(myargv[i], ".wad") || strstr(myargv[i], ".WAD")) {
-				W_MergeFile(myargv[i]);
+				char* argpath = myargv[i];
+				if (M_FileExists(argpath)) {
+					W_MergeFile(argpath);
+				}
+				else {
+					I_Error("W_Init: failed to find file: %s", argpath);
+				}
 			}
 		}
 	}
@@ -710,6 +743,9 @@ static boolean KPFLoadInner(char* kpf, const char* inner, unsigned char** data, 
 			if (ret && kpf_key) {
 				*kpf_key = M_FileLengthFromPath(path);
 			}
+		}
+		else {
+			I_Error("Failed to find kpf: %s", kpf);
 		}
 	}
 
