@@ -89,6 +89,8 @@ int            numlumps;
 #define CopyLumps(dest, src, count) dmemcpy(dest, src, (count)*sizeof(lumpinfo_t))
 #define CopyLump(dest, src) CopyLumps(dest, src, 1)
 
+static void W_KPFInit(void);
+
 void ExtractFileBase(char* path, char* dest) {
 	char* src;
 	int        length;
@@ -352,6 +354,65 @@ void W_Init(void) {
 	}
 	else {
 		I_Error("W_Init: doom64ex-plus.wad not found");
+	}
+
+
+	char* mod_dir = NULL;
+	int pos = M_CheckParm("-mod");
+	if (pos) {
+		pos++;
+		if (pos < myargc) {
+			mod_dir = myargv[pos];
+			if (!M_DirExists(mod_dir)) {
+				mod_dir = I_FindDataFile(mod_dir);
+			}
+		}
+	}
+
+	if (mod_dir) {
+
+		SDL_Storage* storage = SDL_OpenFileStorage(mod_dir);
+
+		char* kpf_dir = M_FileOrDirExistsInDirectory(mod_dir, "kpf/Doom64", false);
+		if (kpf_dir) {
+			g_kpf_files[g_num_kpf++] = kpf_dir;
+		}
+
+		if (storage) {
+			// find wad with larger size in mod dir
+
+			char* patterns[] = { "*.wad", "*.WAD" };
+
+			long maxsize = 0;
+			char* wad_filepath = NULL;
+
+			for (int i = 0; i < SDL_arraysize(patterns); i++) {
+				int count = 0;
+				char** matches = SDL_GlobStorageDirectory(storage, NULL, patterns[i], 0, &count);
+
+				if (matches) {
+					for (int i = 0; i < count; i++) {
+						filepath_t filepath;
+						SDL_snprintf(filepath, sizeof(filepath), "%s/%s", mod_dir, matches[i]);
+						long size = M_FileLengthFromPath(filepath);
+						if (size > maxsize) {
+							maxsize = size;
+							free(wad_filepath);
+							wad_filepath = M_StringDuplicate(filepath);
+						}
+
+					}
+					SDL_free(matches);
+				}
+			}
+
+			SDL_CloseStorage(storage);
+
+			if (wad_filepath) {
+				W_MergeFile(wad_filepath);
+				free(wad_filepath);
+			}
+		}
 	}
 
 	p = M_CheckParm("-file");
@@ -626,7 +687,7 @@ static boolean KPFLoadInner(char* kpf, const char* inner, unsigned char** data, 
 	}
 
 	if (M_DirExists(kpf)) {
-		char* path = M_FileExistsInDirectory(kpf, (char *)inner, false);
+		char* path = M_FileOrDirExistsInDirectory(kpf, (char *)inner, false);
 		if (path) {
 			unsigned char *tmp_data;
 			int tmp_size = M_ReadFileEx(path, &tmp_data, true);
@@ -663,12 +724,12 @@ boolean W_KPFLoadInner(const char* inner, unsigned char** data, int* size) {
 	return false;
 }
 
-void W_KPFInit(void)
+static void W_KPFInit(void)
 {
 	// this param be useful to disable kpf cache for benchmarking
 	boolean use_cache = !M_CheckParm("-no-kpf-cache"); 
-	
-	// -kpf can be followed with up to MAX_KPF_FILES argument pointing to a KPF file or a directory 
+
+	// -kpf can be followed with up to 7 argument pointing to a KPF file or a directory 
 	// root of a KPF arboresence with just overriden files:
 	// Some remaster mods (eg BETA64 Remastered, DOOM64 Reloaded) have such folder containing kpf override files that 
 	// are patched into the stock Doom64.kpf with a .BAT script that only works on Windows

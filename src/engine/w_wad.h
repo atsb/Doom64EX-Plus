@@ -52,7 +52,6 @@ void* W_CacheLumpNum(int lump, int tag);
 void* W_CacheLumpName(const char* name, int tag);
 boolean W_LumpNameEq(lumpinfo_t* lump, const char* name);
 
-void W_KPFInit(void);
 boolean W_KPFLoadInner(const char* inner, unsigned char** data, int* size);
 
 #endif
