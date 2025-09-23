@@ -51,7 +51,7 @@ int M_ReadFile(char* filepath, byte** buffer);
 boolean M_RemoveFile(char* filepath);
 boolean M_FileExists(const char* path);
 boolean M_DirExists(const char* path);
-char* M_FileExistsInDirectory(char* dirpath, char* filename, boolean log);
+char* M_FileOrDirExistsInDirectory(char* dirpath, char* filename, boolean log);
 long M_FileLengthFromPath(char* filepath);
 long M_FileLength(FILE* handle);
 boolean M_MoveFile(char* filename, char* src_dirpath, char* dst_dirpath);

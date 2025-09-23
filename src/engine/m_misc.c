@@ -296,10 +296,10 @@ boolean M_DirExists(const char* path)
 	return path && !stat(path, &st) && S_ISDIR(st.st_mode);
 }
 
-// Returns full path to filename if filename exists within dir
+// Returns full path to filename if filename (as a file or dir) exists within dir
 // Returns NULL if dirpath is NULL or empty string
 // Must be freed by caller
-char* M_FileExistsInDirectory(char* dirpath, char* filename, boolean log) {
+char* M_FileOrDirExistsInDirectory(char* dirpath, char* filename, boolean log) {
 
 	filepath_t path;
 
@@ -309,7 +309,7 @@ char* M_FileExistsInDirectory(char* dirpath, char* filename, boolean log) {
 		char* separator = last_char == '/' || last_char == '\\' ? "" : "/";
 
 		SDL_snprintf(path, MAX_PATH, "%s%s%s", dirpath, separator, filename);
-		if (M_FileExists(path)) {
+		if (M_FileExists(path) || M_DirExists(path)) {
 			if (log) {
 				I_Printf("Found %s\n", path);
 			}

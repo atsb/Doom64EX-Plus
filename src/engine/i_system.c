@@ -250,7 +250,7 @@ static char* FindDataFile(char* file) {
 	long min_size = dstreq(file, IWAD_FILENAME) ? 10*1024*1014 : 0;
 
 	for (int i = 0; i < SDL_arraysize(dirs); i++) {
-		if ((path = M_FileExistsInDirectory(dirs[i], file, true))) {
+		if ((path = M_FileOrDirExistsInDirectory(dirs[i], file, true))) {
 			if (min_size == 0 || M_FileLengthFromPath(path) > min_size)	return path;
 			I_Printf("Discarding not usable IWAD: %s\n", path);
 		}
@@ -262,7 +262,7 @@ static char* FindDataFile(char* file) {
 
 	if (I_GetRegistryString(HKEY_LOCAL_MACHINE,
 		L"SOFTWARE\\Wow6432Node\\GOG.com\\Games\\1456611261", L"path", gog_install_dir, MAX_PATH)) {
-		if ((path = M_FileExistsInDirectory(gog_install_dir, file, true))) return path;
+		if ((path = M_FileOrDirExistsInDirectory(gog_install_dir, file, true))) return path;
 	}
 
 #endif
@@ -276,7 +276,7 @@ static char* FindDataFile(char* file) {
             && Steam_ResolvePath(steam_install_dir, &game);
     }
 
-    if(steam_install_dir_found && (path = M_FileExistsInDirectory(steam_install_dir, file, true))) return path;
+    if(steam_install_dir_found && (path = M_FileOrDirExistsInDirectory(steam_install_dir, file, true))) return path;
     
 #endif
 
