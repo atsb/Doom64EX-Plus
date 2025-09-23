@@ -99,9 +99,6 @@ CVAR(p_sdoubleclick, 0);
 CVAR(p_usecontext, 0);
 CVAR(p_damageindicator, 0);
 
-// Remaster fog HEX compatibility swap R/G for fogcolor to support the remaster bug
-CVAR(p_compat_foghex, 0);
-
 //
 // [kex] sky definition stuff
 //
@@ -1096,7 +1093,7 @@ static scdatatable_t skydatatable[] = {
 	{   "PIC", (int64_t) & ((skydef_t*)0)->pic,          'S' },
 	{   "BACKPIC", (int64_t) & ((skydef_t*)0)->backdrop,     'S' },
 	{   "FOGFACTOR", (int64_t) & ((skydef_t*)0)->fognear,      'i' },
-	{   "FOGCOLOR", (int64_t) & ((skydef_t*)0)->fogcolor,     'c' },
+	{   "FOGCOLOR", (int64_t) & ((skydef_t*)0)->fogcolor,     'F' },
 	{   "BASECOLOR", (int64_t) & ((skydef_t*)0)->skycolor[2],  'c' },
 	{   "HIGHCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[0],  'c' },
 	{   "LOWCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[1],  'c' },
@@ -1166,11 +1163,6 @@ static void P_InitSkyDef(void) {
 
 			skydefs = Z_Realloc(skydefs,
 				sizeof(skydef_t) * ++numskydef, PU_STATIC, 0);
-			// atsb: if enabled emulate remaster fogcolor hex bug by swapping R and G
-			if (p_compat_foghex.value > 0) {
-				sky.fogcolor = (sky.fogcolor & 0xFF000000) | (sky.fogcolor & 0x00FF0000)
-					| ((sky.fogcolor & 0x000000FF) << 8) | ((sky.fogcolor & 0x0000FF00) >> 8);
-			}
 			dmemcpy(&skydefs[numskydef - 1], &sky, sizeof(skydef_t));
 		}
 		else {
@@ -1209,5 +1201,4 @@ void P_RegisterCvars(void) {
 	CON_CvarRegister(&p_sdoubleclick);
 	CON_CvarRegister(&p_usecontext);
 	CON_CvarRegister(&p_damageindicator);
-	CON_CvarRegister(&p_compat_foghex);
 }

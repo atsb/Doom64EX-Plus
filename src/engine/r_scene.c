@@ -258,7 +258,7 @@ static void SetupFog(void) {
 		I_SectorCombiner_SetFogParams(1, start, end, 0.0f);
 	}
 
-	dglGetColorf(LONG(fogcolor), color);
+	dglGetColorf(fogcolor, color);
 	dglFogfv(GL_FOG_COLOR, color);
 
 	I_SectorCombiner_SetFog(1, color[0], color[1], color[2], (float)fogfactor / 1000.0f);

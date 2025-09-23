@@ -32,6 +32,43 @@
 scparser_t sc_parser;
 
 //
+// SC_ParseColorValue - Parse color value as hex or decimal
+//
+static int SC_ParseColorValue(const char* token) {
+	int len = dstrlen(token);
+
+	// hex value that starts with a number
+	if (len >= 2 && token[0] >= '0' && token[0] <= '9') {
+		// if it contains hex letters
+		boolean hasHexLetters = false;
+		for (int i = 1; i < len; i++) {
+			char c = token[i];
+			if ((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) {
+				hasHexLetters = true;
+				break;
+			}
+		}
+
+		if (hasHexLetters) {
+			// only parse the first digit as decimal
+			char firstDigit[2] = { token[0], '\0' };
+			return datoi(firstDigit);
+		}
+	}
+
+	// pure hex letter
+	if (len == 1 && ((token[0] >= 'A' && token[0] <= 'F') || (token[0] >= 'a' && token[0] <= 'f'))) {
+		return dhtoi(token);
+	}
+
+	// normal hex case
+	if (token[0] >= 'A' && token[0] <= 'F' || token[0] >= 'a' && token[0] <= 'f') {
+		return dhtoi(token);
+	}
+	return datoi(token);
+}
+
+//
 // SC_Open
 //
 
@@ -154,21 +191,31 @@ static int SC_SetData(void* data, const scdatatable_t* table) {
 				*(boolean*)pointer = true;
 				break;
 			case 'c':
-				sc_parser.compare("="); // expect a '='
+				sc_parser.compare("=");
 				sc_parser.find(false);
-				rgb[0] = dhtoi(sc_parser.token);
+				rgb[0] = SC_ParseColorValue(sc_parser.token);
 				sc_parser.find(false);
-				rgb[1] = dhtoi(sc_parser.token);
+				rgb[1] = SC_ParseColorValue(sc_parser.token);
 				sc_parser.find(false);
-				rgb[2] = dhtoi(sc_parser.token);
+				rgb[2] = SC_ParseColorValue(sc_parser.token);
+
 				*(rcolor*)pointer = D_RGBA(rgb[0], rgb[1], rgb[2], 0xFF);
 				break;
-			}
+			case 'F':
+				sc_parser.compare("=");
+				sc_parser.find(false);
+				rgb[0] = SC_ParseColorValue(sc_parser.token);
+				sc_parser.find(false);
+				rgb[1] = SC_ParseColorValue(sc_parser.token);
+				sc_parser.find(false);
+				rgb[2] = SC_ParseColorValue(sc_parser.token);
 
+				*(rcolor*)pointer = rgb[0] | (rgb[1] << 8) | (rgb[2] << 16) | (0xFF << 24);
+				break;
+			}
 			break;
 		}
 	}
-
 	return ok;
 }
 
