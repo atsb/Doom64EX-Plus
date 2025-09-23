@@ -230,7 +230,9 @@ CVAR_CMD(m_menumouse, 1) {
 	if (cvar->value <= 0) {
 		itemSelected = -1;
 	}
+	I_SetMenuCursorMouseRect();
 }
+
 
 CVAR_CMD(m_cursorscale, 8) {
 	if (cvar->value < 0) {
