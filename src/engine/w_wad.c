@@ -294,6 +294,7 @@ void W_Init(void) {
 	filelump_t* fileinfo;
 	filelump_t* filerover;
 	int             p;
+	char* mod_dir = NULL;
 
 	// open the file and add to directory
 	iwad = W_FindIWAD(); // guaranteed non-NULL as we'll have exited app if cannot be found
@@ -356,13 +357,11 @@ void W_Init(void) {
 		I_Error("W_Init: doom64ex-plus.wad not found");
 	}
 
-
-	char* mod_dir = NULL;
-	int pos = M_CheckParm("-mod");
-	if (pos) {
-		pos++;
-		if (pos < myargc) {
-			mod_dir = myargv[pos];
+	p = M_CheckParm("-mod");
+	if (p) {
+		p++;
+		if (p < myargc) {
+			mod_dir = myargv[p];
 			if (!M_DirExists(mod_dir)) {
 				mod_dir = I_FindDataFile(mod_dir);
 			}
@@ -726,11 +725,14 @@ boolean W_KPFLoadInner(const char* inner, unsigned char** data, int* size) {
 
 static void W_KPFInit(void)
 {
+	
+	char* stock_kpf_filename = "Doom64.kpf";
+	
 	// this param be useful to disable kpf cache for benchmarking
 	boolean use_cache = !M_CheckParm("-no-kpf-cache"); 
 
 	// -kpf can be followed with up to 7 argument pointing to a KPF file or a directory 
-	// root of a KPF arboresence with just overriden files:
+	// root of a KPF arborescence with just overriden files:
 	// Some remaster mods (eg BETA64 Remastered, DOOM64 Reloaded) have such folder containing kpf override files that 
 	// are patched into the stock Doom64.kpf with a .BAT script that only works on Windows
 	int p = M_CheckParm("-kpf");
@@ -744,7 +746,7 @@ static void W_KPFInit(void)
 	}
 
 	// always add stock KPF last as fallback
-	g_kpf_files[g_num_kpf++] = "Doom64.kpf";
+	g_kpf_files[g_num_kpf++] = stock_kpf_filename;
 
 	struct override_item {
 		char name8[8];
@@ -753,19 +755,33 @@ static void W_KPFInit(void)
 	};
 
 	// atsb: let's be strict, if these aren't present, then we bail out at 30,000ft without a parachute!
-	const struct override_item items[] = {
+	struct override_item items[4] = {
 		{ "TITLE",   { "gfx/Doom64_HiRes.png", NULL }, win_px_w, win_px_h },
 		{ "USLEGAL", { "gfx/legals.png",       NULL }, win_px_w, win_px_h },
 		{ "CURSOR",  { "gfx/cursor.png",       NULL }, 33, 32 },
+		{ 0 }
 	};
 
-	int need = SDL_arraysize(items);
+	int num_items = SDL_arraysize(items) - 1;
+	int need = num_items;
+
+	boolean showstockwarning = false;
+
+	if (showstockwarning || g_num_kpf > 1) {
+		// this one is optional and only loaded if a custom kpf is specified
+		const struct override_item photosenw = { PHOTOSENSWARNING_LUMP, { "gfx/PhotosensitivityWarning.png", NULL }, win_px_w, win_px_h };
+		items[num_items++] = photosenw;
+		if (showstockwarning) {
+			need++;
+		}
+	}
+
 	int loaded = 0;
 
 	char missing[256];
 	missing[0] = 0;
 
-	for (size_t it = 0; it < need; ++it) {
+	for (size_t it = 0; it < num_items; ++it) {
 		const struct override_item* ov = &items[it];
 		int this_ok = 0;
 
@@ -891,9 +907,9 @@ static void W_KPFInit(void)
 		}
 	}
 	// atsb: ONLY LOAD IF EVERYTHING IS FOUND!
-	if (loaded != need) {
+	if (loaded < need) {
 		I_Error("W_KPFInit: required assets missing or corrupt: %s. "
-			"Make sure Doom64.kpf is present and readable.", missing[0] ? missing : "(unknown)");
+			"Make sure %s is present and readable.", missing[0] ? missing : "(unknown)", stock_kpf_filename);
 	}
 }
 
