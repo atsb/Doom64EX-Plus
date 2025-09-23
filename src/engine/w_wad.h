@@ -21,6 +21,8 @@
 
 #include "w_file.h"
 
+#define PHOTOSENSWARNING_LUMP "PHSENSW"
+
 //
 // WADFILE I/O related stuff.
 //
@@ -53,5 +55,7 @@ void* W_CacheLumpName(const char* name, int tag);
 boolean W_LumpNameEq(lumpinfo_t* lump, const char* name);
 
 boolean W_KPFLoadInner(const char* inner, unsigned char** data, int* size);
+
+
 
 #endif

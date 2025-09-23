@@ -60,6 +60,7 @@ static int      screenalpha;
 static int      screenalphatext;
 static int      creditstage;
 static int      creditscreenstage;
+static int		fadesplash;
 
 boolean        setWindow = true;
 int             validcount = 1;
@@ -489,13 +490,20 @@ static void Legal_Drawer(void) {
 	Draw_GfxImageLegal(32, 72, "USLEGAL", WHITE, true);
 }
 
+static void PhotoSensWarning_Drawer(void) {
+	GL_ClearView(0xFF000000);
+	Draw_GfxImageLegal(32, 72, PHOTOSENSWARNING_LUMP, WHITE, true);
+}
+
 //
 // Legal_Ticker
 //
 
 static int Legal_Ticker(void) {
 	if ((gametic - pagetic) >= (TICRATE * 5)) {
-		WIPE_FadeScreen(6);
+		if (fadesplash) {
+			WIPE_FadeScreen(6);
+		}
 		return 1;
 	}
 
@@ -640,12 +648,7 @@ static int D_RunDemos(void)
     return ga_nothing;
 }
 
-static void D_SplashScreen(void) {
-	int skip = 0;
-
-	if (gameaction || netgame) {
-		return;
-	}
+static int ShowSplash(void (*draw)(void), int(*tick)(void), bool fade) {
 
 	screenalpha = 0xff;
 	allowmenu = false;
@@ -654,8 +657,24 @@ static void D_SplashScreen(void) {
 	gamestate = GS_SKIPPABLE;
 	pagetic = gametic;
 	gameaction = ga_nothing;
+	fadesplash = fade;
 
-	skip = D_MiniLoop(NULL, NULL, Legal_Drawer, Legal_Ticker);
+	return D_MiniLoop(NULL, NULL, draw, tick);
+}
+
+static void D_SplashScreen(void) {
+
+	if (gameaction || netgame) {
+		return;
+	}
+
+	bool hasSecondSplash = W_CheckNumForName(PHOTOSENSWARNING_LUMP) != -1;
+
+	int skip = ShowSplash(Legal_Drawer, Legal_Ticker, !hasSecondSplash);
+
+	if (skip != ga_title && hasSecondSplash) {
+		skip = ShowSplash(PhotoSensWarning_Drawer, Legal_Ticker, true);
+	}
 
 	if (skip != ga_title) {
 		G_RunTitleMap();
