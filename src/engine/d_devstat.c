@@ -174,10 +174,10 @@ void D_DeveloperDisplay(void) {
 		y += 16;
 	}
 
-	Draw_Text(0, y, WHITE, 0.35f, false, "Active Sounds: %i", S_GetActiveSounds());
-	y += 16;
+	//Draw_Text(0, y, WHITE, 0.35f, false, "Active Sounds: %i", S_GetActiveSounds());
+	//y += 16;
 
-	Draw_Text(0, y, WHITE, 0.35f, false, "Mouse Cursor: %i, %i", mouse_x, mouse_y);
+	Draw_Text(0, y, WHITE, 0.35f, false, "Mouse Cursor: %d, %d", (int)mouse_x, (int)mouse_y);
 	y += 16;
 
 #ifdef INSTRUMENTED

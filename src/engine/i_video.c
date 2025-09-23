@@ -45,6 +45,7 @@ CVAR(v_checkratio, 0);
 CVAR(v_fullscreen, 0);
 #endif
 
+CVAR_EXTERNAL(m_menumouse);
 
 CVAR_CMD(v_vsync, 1) {
     SDL_GL_SetSwapInterval((int)v_vsync.value);
@@ -278,6 +279,8 @@ void I_InitScreen(void) {
         SDL_SyncWindow(window);
     }
 
+    I_SetMenuCursorMouseRect();
+
 #ifdef SDL_PLATFORM_LINUX
     // NVIDIA Linux specific: reduces input lag with vsync; harmless elsewhere
     SDL_Environment* env = SDL_GetEnvironment();
@@ -325,6 +328,20 @@ void I_InitScreen(void) {
     SDL_GL_SwapWindow(window);
     SDL_HideCursor();
 }
+
+void I_SetMenuCursorMouseRect() {
+    if (!window) return;
+    if (m_menumouse.value) {
+        // confine mouse positions to 4/3 portion of the window, taking into account max menu cursor width on the right side
+        // that's to prevent the cursor to disappear on the right side
+        SDL_Rect rect = { 0, 0, (video_width * SCREENHEIGHT) / SCREENWIDTH - 96, video_height };
+        SDL_SetWindowMouseRect(window, &rect);
+    }
+    else {
+        SDL_SetWindowMouseRect(window, NULL);
+    }
+}
+
 
 //
 // I_ShutdownVideo
