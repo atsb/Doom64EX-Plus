@@ -73,6 +73,49 @@ CVAR(r_skybox, 1);
 
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
+// atsb: crappy hack
+static rcolor PostProcessSkyColor(rcolor original_color, boolean is_cloud) {
+    int r = (original_color >> 0) & 0xFF;
+    int g = (original_color >> 8) & 0xFF;
+    int b = (original_color >> 16) & 0xFF;
+    int a = (original_color >> 24) & 0xFF;
+
+    if (g > r && g > b && g > 10) {
+        int brightness = 250;
+        r = (r * brightness) / 100;
+        g = (g * brightness) / 100;
+        b = (b * brightness) / 100;
+
+        g = (g * 120) / 100;
+    }
+    else {
+        int contrast = 250;
+        r = 128 + ((r - 128) * contrast) / 100;
+        g = 128 + ((g - 128) * contrast) / 100;
+        b = 128 + ((b - 128) * contrast) / 100;
+        a = is_cloud ? 0xFF : 0xE6;
+    }
+
+    if (r < 0) 
+        r = 0; 
+
+    if (r > 255) 
+        r = 255;
+
+    if (g < 0) 
+        g = 0; 
+
+    if (g > 255) 
+        g = 255;
+
+    if (b < 0) 
+        b = 0; 
+
+    if (b > 255) 
+        b = 255;
+
+    return r | (g << 8) | (b << 16) | (a << 24);
+}
 
 // atsb: a small little function to not have to copy and paste so much
 static inline void R_NeutralizeShaders(void) {
@@ -381,221 +424,6 @@ static void R_DrawSkyDome(int tiles, float rows, int height,
 }
 
 //
-// R_DrawSkyboxCloud
-//
-
-static void R_DrawSkyboxCloud(void) {
-    vtx_t v[4];
-
-    I_ShaderUnBind();
-
-    I_ShaderSetUseTexture(1);
-    I_ShaderSetTextureSize(0, 0);
-
-#define SKYBOX_SETALPHA(c, x)           \
-    c ^= (((c >> 24) & 0xff) << 24);    \
-    c |= (x << 24)
-
-    //
-    // hack to force ortho scale back to 1
-    //
-    GL_SetOrthoScale(1.0f);
-
-    //
-    // setup view projection
-    //
-    dglMatrixMode(GL_PROJECTION);
-    dglLoadIdentity();
-    dglViewFrustum(video_width, video_height, r_fov.value, 0.1f);
-    dglMatrixMode(GL_MODELVIEW);
-    dglLoadIdentity();
-    dglPushMatrix();
-    dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
-
-    dglDisable(GL_DEPTH_TEST);
-    dglDepthMask(GL_FALSE);
-
-    //
-    // set vertex pointer
-    //
-    dglSetVertex(v);
-
-    //
-    // disable textures for horizon effect
-    //
-    dglDisable(GL_TEXTURE_2D);
-
-    //
-    // draw horizon ceiling
-    //
-    v[0].x = -MAX_COORD;
-    v[0].y = -MAX_COORD;
-    v[0].z = 512;
-    v[1].x = MAX_COORD;
-    v[1].y = -MAX_COORD;
-    v[1].z = 512;
-    v[2].x = MAX_COORD;
-    v[2].y = MAX_COORD;
-    v[2].z = 512;
-    v[3].x = -MAX_COORD;
-    v[3].y = MAX_COORD;
-    v[3].z = 512;
-
-    dglSetVertexColor(&v[0], sky->skycolor[0], 4);
-
-    dglTriangle(0, 1, 3);
-    dglTriangle(2, 3, 1);
-    dglDrawGeometry(4, v);
-
-    //
-    // draw horizon wall
-    //
-    v[0].x = -MAX_COORD;
-    v[0].y = 512;
-    v[0].z = 12;
-    v[1].x = -MAX_COORD;
-    v[1].y = 512;
-    v[1].z = 512;
-    v[2].x = MAX_COORD;
-    v[2].y = 512;
-    v[2].z = 512;
-    v[3].x = MAX_COORD;
-    v[3].y = 512;
-    v[3].z = 12;
-
-    dglSetVertexColor(&v[0], sky->skycolor[1], 1);
-    dglSetVertexColor(&v[1], sky->skycolor[0], 1);
-    dglSetVertexColor(&v[2], sky->skycolor[0], 1);
-    dglSetVertexColor(&v[3], sky->skycolor[1], 1);
-
-    dglTriangle(0, 1, 2);
-    dglTriangle(3, 0, 2);
-    dglDrawGeometry(4, v);
-    dglEnable(GL_TEXTURE_2D);
-    dglPopMatrix();
-
-    //
-    // setup model matrix for clouds
-    //
-    dglPushMatrix();
-    dglRotatef(-TRUEANGLES(viewpitch), 1.0f, 0.0f, 0.0f);
-
-    dglDisable(GL_DEPTH_TEST);
-    dglDepthMask(GL_FALSE);
-    dglRotatef(-TRUEANGLES(viewangle) + 90.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    // bind cloud texture and set blending
-    //
-    GL_SetTextureUnit(0, true);
-    R_NeutralizeShaders();
-    GL_BindGfxTexture(lumpinfo[skypicnum].name, true);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-
-    GLint oldWrapS_cloud = 0, oldWrapT_cloud = 0;
-    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &oldWrapS_cloud);
-    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, &oldWrapT_cloud);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    GLint old2DMin_cloud = 0, old2DMag_cloud = 0;
-    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &old2DMin_cloud);
-    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, &old2DMag_cloud);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
-
-    I_ShaderSetUseTexture(1);
-
-    GLint tw = 0, th = 0;
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &tw);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &th);
-    I_ShaderSetTextureSize(tw, th);
-
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    GL_SetState(GLSTATE_BLEND, 1);
-    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PRIMARY_COLOR);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
-
-
-    // atsb:
-    // draw first cloud layer
-    //
-    v[0].tu = sky_cloudpan1;
-    v[0].tv = sky_cloudpan1;
-    v[1].tu = 16 + sky_cloudpan1;
-    v[1].tv = sky_cloudpan1;
-    v[2].tu = 16 + sky_cloudpan1;
-    v[2].tv = 16 + sky_cloudpan1;
-    v[3].tu = sky_cloudpan1;
-    v[3].tv = 16 + sky_cloudpan1;
-    v[0].x = -MAX_COORD;
-    v[0].y = -MAX_COORD;
-    v[0].z = 768;
-    v[1].x = MAX_COORD;
-    v[1].y = -MAX_COORD;
-    v[1].z = 768;
-    v[2].x = MAX_COORD;
-    v[2].y = MAX_COORD;
-    v[2].z = 768;
-    v[3].x = -MAX_COORD;
-    v[3].y = MAX_COORD;
-    v[3].z = 768;
-
-    dglSetVertexColor(&v[0], sky->skycolor[2], 4);
-
-    dglTriangle(0, 1, 3);
-    dglTriangle(2, 3, 1);
-    dglDrawGeometry(4, v);
-
-    // atsb:
-    // draw second cloud layer
-    //
-    // preserve color and xy and just update
-    // uv coords and z height
-    //
-    v[0].tu = sky_cloudpan2;
-    v[0].tv = sky_cloudpan2;
-    v[1].tu = 32 + sky_cloudpan2;
-    v[1].tv = sky_cloudpan2;
-    v[2].tu = 32 + sky_cloudpan2;
-    v[2].tv = 32 + sky_cloudpan2;
-    v[3].tu = sky_cloudpan2;
-    v[3].tv = 32 + sky_cloudpan2;
-    v[0].z = v[1].z = v[2].z = v[3].z = 1024;
-
-    dglTriangle(0, 1, 3);
-    dglTriangle(2, 3, 1);
-    dglDrawGeometry(4, v);
-
-    //
-
-
-    dglPopMatrix();
-    GL_SetState(GLSTATE_BLEND, 0);
-
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PRIMARY_COLOR);
-
-    I_ShaderSetUseTexture(1);
-    I_ShaderSetTextureSize(0, 0);
-
-    I_ShaderBind();
-
-#undef SKYBOX_SETALPHA
-}
-
-//
 // R_DrawSimpleSky
 //
 
@@ -720,8 +548,8 @@ static void R_DrawClouds(void) {
 
     I_ShaderUnBind();
     GL_Set2DQuad(v, 0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0, 0, 0);
-    dglSetVertexColor(&v[0], sky->skycolor[0], 2); // top
-    dglSetVertexColor(&v[2], sky->skycolor[1], 2); // bottom
+    dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[2], true), 4);
+    dglSetVertexColor(&v[2], PostProcessSkyColor(sky->skycolor[0], false), 2); // bottom
     dglDisable(GL_TEXTURE_2D);
     GL_Draw2DQuad(v, true);
     dglEnable(GL_TEXTURE_2D);
@@ -736,8 +564,8 @@ static void R_DrawClouds(void) {
 
     I_ShaderUnBind();
     GL_Set2DQuad(v, 0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0, 0, 0);
-    dglSetVertexColor(&v[0], sky->skycolor[0], 2);
-    dglSetVertexColor(&v[2], sky->skycolor[1], 2);
+    dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[2], true), 4);
+    dglSetVertexColor(&v[2], PostProcessSkyColor(sky->skycolor[0], false), 2);
 
     dglDisable(GL_TEXTURE_2D);
 
@@ -1007,8 +835,8 @@ static void R_DrawFire(void) {
         GL_Set2DQuad(v, 0, 0, SCREENWIDTH, 120,
             pos1, 5.0f + pos1, 0.0035f, 1.0f, 0);
 
-        dglSetVertexColor(&v[0], sky->skycolor[0], 2);
-        dglSetVertexColor(&v[2], sky->skycolor[1], 2);
+        dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[0], false), 2);
+        dglSetVertexColor(&v[2], PostProcessSkyColor(sky->skycolor[1], false), 2);
 
         GL_Draw2DQuad(v, 1);
     }
@@ -1038,9 +866,6 @@ void R_DrawSky(void) {
             if (r_skybox.value <= 0) {
                 R_DrawSimpleSky(skypicnum, 128);
                 R_DrawClouds();
-            }
-            else {
-                R_DrawSkyboxCloud();
             }
         }
         else {

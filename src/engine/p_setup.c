@@ -1161,7 +1161,6 @@ static void P_InitSkyDef(void) {
 				}
 			}
 
-			sky.skycolor[1] = (sky.skycolor[1] & 0x00FFFFFF) | (0xE6 << 24);
 			sky.skycolor[1] = sky.skycolor[0]; // atsb: swapping colours to match remaster
 
 			skydefs = Z_Realloc(skydefs,
