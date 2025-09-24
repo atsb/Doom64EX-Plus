@@ -131,7 +131,6 @@ static const char* vertex_shader_bilateral =
 /* N64 3-point filter (atsb) */
 static const char* fragment_shader_bilateral_3point =
 "#version 120\n"
-"#define ADD_SCALE 0.60\n"
 "uniform sampler2D uTex;\n"
 "uniform vec2  uTexel;\n"
 "uniform float uStrength;\n"
@@ -161,8 +160,8 @@ static const char* fragment_shader_bilateral_3point =
 "    if (mode == 8448) {                           // GL_MODULATE\n"
 "      rgb *= src;\n"
 "    } else if (mode == 260) {                     // GL_ADD\n"
-"      float amp = clamp(abs(fac),0.0,1.0)*ADD_SCALE;\n"
-"      amp = min(amp*0.8, max(0.0, 1.0 - _lum(rgb)) + 1e-5);\n"
+"      float amp = clamp(abs(fac),0.0,1.0);\n"
+"      amp = min(amp, max(0.0, 1.0 - _lum(rgb)) + 1e-5);\n"
 "      if (fac < -0.5) {                           // colored ADD\n"
 "        float m = max(max(vColor.r,vColor.g),vColor.b);\n"
 "        vec3 tint = (m > 1e-5) ? (vColor.rgb/m) : vColor.rgb;\n"
@@ -226,7 +225,6 @@ static const char* fragment_shader_bilateral_3point =
 /* atsb: bilinear */
 static const char* fragment_shader_bilateral =
 "#version 120\n"
-"#define ADD_SCALE 0.60\n"
 "uniform sampler2D uTex;\n"
 "varying vec2 vUV;\n"
 "varying vec4 vColor;\nvarying float vEyeDist;\n"
@@ -250,8 +248,8 @@ static const char* fragment_shader_bilateral =
 "    if (mode == 8448) {                           // GL_MODULATE\n"
 "      rgb *= src;\n"
 "    } else if (mode == 260) {                     // GL_ADD\n"
-"      float amp = clamp(abs(fac),0.0,1.0)*ADD_SCALE;\n"
-"      amp = min(amp*0.8, max(0.0, 1.0 - _lum(rgb)) + 1e-5);\n"
+"      float amp = clamp(abs(fac),0.0,1.0);\n"
+"      amp = min(amp, max(0.0, 1.0 - _lum(rgb)) + 1e-5);\n"
 "      if (fac < -0.5) {                           // colored ADD\n"
 "        float m = max(max(vColor.r,vColor.g),vColor.b);\n"
 "        vec3 tint = (m > 1e-5) ? (vColor.rgb/m) : vColor.rgb;\n"
