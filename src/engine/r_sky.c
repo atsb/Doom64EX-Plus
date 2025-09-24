@@ -420,8 +420,10 @@ static void R_DrawSimpleSky(int lump, int offset) {
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
+
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
     dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)r_skyFilter.value == 0 ? GL_LINEAR : GL_NEAREST);
+
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
@@ -430,7 +432,6 @@ static void R_DrawSimpleSky(int lump, int offset) {
     glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GL_TEXTURE);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.2f);
-
 
     height = gfxheight[gfxLmp];
     lumpheight = gfxorigheight[gfxLmp];
@@ -445,18 +446,15 @@ static void R_DrawSimpleSky(int lump, int offset) {
 
     GL_SetState(GLSTATE_BLEND, 1);
     dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     GL_SetupAndDraw2DQuad(0, (float)offset - lumpheight, SCREENWIDTH, lumpheight,
         pos1, width + pos1, 0.006f, row, WHITE, 1);
+
     GL_SetState(GLSTATE_BLEND, 0);
 
     glDisable(GL_ALPHA_TEST);
-
     dglPopMatrix();
-
     GL_ResetViewport();
-
     I_ShaderBind();
 }
 
