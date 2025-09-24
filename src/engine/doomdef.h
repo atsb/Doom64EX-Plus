@@ -296,6 +296,9 @@ extern boolean windowpause;
 //code assumes MOUSE_BUTTONS<10
 #define MOUSE_BUTTONS        9
 
-
+// all the required data files from the Remaster
+#define IWAD_FILENAME			"DOOM64.WAD"
+#define DLS_FILENAME			"DOOMSND.DLS"
+#define KPF_FILENAME			"Doom64.kpf"
 
 #endif          // __DOOMDEF__

@@ -45,6 +45,4 @@ unsigned int W_Read(wad_file_t* wad, unsigned int offset,
 
 char* W_FindIWAD(void);
 
-#define IWAD_FILENAME "DOOM64.WAD"
-
 #endif /*__W_FILE__*/

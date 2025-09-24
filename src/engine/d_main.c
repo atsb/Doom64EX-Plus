@@ -60,7 +60,7 @@ static int      screenalpha;
 static int      screenalphatext;
 static int      creditstage;
 static int      creditscreenstage;
-static int		fadesplash;
+static boolean	fadesplash;
 
 boolean        setWindow = true;
 int             validcount = 1;
@@ -492,14 +492,14 @@ static void Legal_Drawer(void) {
 
 static void PhotoSensWarning_Drawer(void) {
 	GL_ClearView(0xFF000000);
-	Draw_GfxImageLegal(32, 72, PHOTOSENSWARNING_LUMP, WHITE, true);
+	Draw_GfxImageLegal(32, 72, PHSENSW_LUMPNAME, WHITE, true);
 }
 
 //
-// Legal_Ticker
+// Splash_Ticker
 //
 
-static int Legal_Ticker(void) {
+static int Splash_Ticker(void) {
 	if ((gametic - pagetic) >= (TICRATE * 5)) {
 		if (fadesplash) {
 			WIPE_FadeScreen(6);
@@ -648,7 +648,7 @@ static int D_RunDemos(void)
     return ga_nothing;
 }
 
-static int ShowSplash(void (*draw)(void), int(*tick)(void), bool fade) {
+static int D_ShowSplash(void (*draw)(void), int(*tick)(void), boolean fade) {
 
 	screenalpha = 0xff;
 	allowmenu = false;
@@ -664,19 +664,10 @@ static int ShowSplash(void (*draw)(void), int(*tick)(void), bool fade) {
 
 static void D_SplashScreen(void) {
 
-	if (gameaction || netgame) {
-		return;
-	}
-
-	bool hasSecondSplash = W_CheckNumForName(PHOTOSENSWARNING_LUMP) != -1;
-
-	int skip = ShowSplash(Legal_Drawer, Legal_Ticker, !hasSecondSplash);
-
-	if (skip != ga_title && hasSecondSplash) {
-		skip = ShowSplash(PhotoSensWarning_Drawer, Legal_Ticker, true);
-	}
-
-	if (skip != ga_title) {
+	if (gameaction || netgame) return;
+	
+	if (D_ShowSplash(Legal_Drawer, Splash_Ticker, false) != ga_title &&
+		D_ShowSplash(PhotoSensWarning_Drawer, Splash_Ticker, true) != ga_title) {
 		G_RunTitleMap();
 		gameaction = ga_title;
 	}
@@ -915,11 +906,35 @@ static int D_CheckDemo(void) {
 	return 0;
 }
 
+void D_CheckDataFileFound(char* filename) {
+
+	char *path = I_FindDataFile(filename); // must not free
+
+	if (!path) {
+		I_Error("Required game data file not found: %s.\n\nPlease install the DOOM 64 Remaster "
+			"on GOG or Steam, or copy file %s to %s",
+			filename,
+			filename,
+			I_GetUserDir());
+	}
+}
+
+
+// check availability of data files and immediately exit with message box if not found
+void D_CheckDataFilesFound(void) {
+	D_CheckDataFileFound(IWAD_FILENAME);
+	D_CheckDataFileFound(KPF_FILENAME);
+	if (!M_CheckParm("-nosound") || !M_CheckParm("-nomusic")) {
+		D_CheckDataFileFound(DLS_FILENAME);
+	}
+}
+
 //
 // D_DoomMain
 //
 
 void D_DoomMain(void) {
+
 	devparm = M_CheckParm("-devparm");
 
 	// init subsystems
@@ -929,6 +944,8 @@ void D_DoomMain(void) {
 
 	I_Printf("CON_Init: Init Game Console\n");
 	CON_Init();
+
+	D_CheckDataFilesFound();
 
 	I_Printf("G_Init: Setting up game input and commands\n");
 	G_Init();

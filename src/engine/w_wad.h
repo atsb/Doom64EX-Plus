@@ -21,7 +21,7 @@
 
 #include "w_file.h"
 
-#define PHOTOSENSWARNING_LUMP "PHSENSW"
+#define PHSENSW_LUMPNAME "PHSENSW"
 
 //
 // WADFILE I/O related stuff.

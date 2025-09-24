@@ -247,7 +247,7 @@ static char* FindDataFile(char* file) {
 	};
 
 	// discard unsupported ROM DOOM64.WAD, by their size largely < 10 MB
-	long min_size = dstreq(file, IWAD_FILENAME) ? 10*1024*1014 : 0;
+	long min_size = dstreq(file, IWAD_FILENAME) ? 10*1024*1024 : 0;
 
 	for (int i = 0; i < SDL_arraysize(dirs); i++) {
 		if ((path = M_FileOrDirExistsInDirectory(dirs[i], file, true))) {
@@ -311,14 +311,6 @@ char* I_FindDataFile(char* file) {
 		cached_datafiles = realloc(cached_datafiles, (num_cached_datafiles + 1) * sizeof(datafile_t *));
 		cached_datafiles[num_cached_datafiles] = entry;
 		num_cached_datafiles++;
-	}
-
-	if (!entry->path && (dstreq(file, IWAD_FILENAME) || dstreq(file, DLS_FILENAME))) {
-		I_Error("Required game data file not found: %s.\n\nPlease install the DOOM 64 Remaster "
-			 "on GOG or Steam, or copy file %s to %s.",
-			file,
-			file,
-			I_GetUserDir());
 	}
 
 	return entry->path; 
