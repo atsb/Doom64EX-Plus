@@ -417,6 +417,9 @@ static void R_DrawSimpleSky(int lump, int offset) {
     int gfxLmp;
     float row;
 
+    float skyScaleX = 1.3f;
+    float skyScaleY = 1.0f;
+
     I_ShaderUnBind();
 
     gfxLmp = GL_BindGfxTexture(lumpinfo[lump].name, true);
@@ -441,8 +444,8 @@ static void R_DrawSimpleSky(int lump, int offset) {
 
     SKYVIEWPOS(viewangle, 1, pos1);
 
-    width = (float)SCREENWIDTH / (float)gfxwidth[gfxLmp];
-    row = (float)lumpheight / (float)height;
+    width = ((float)SCREENWIDTH / (float)gfxwidth[gfxLmp]) * skyScaleX;
+    row = ((float)lumpheight / (float)height) * skyScaleY;
 
     GL_SetState(GLSTATE_BLEND, 1);
     dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
