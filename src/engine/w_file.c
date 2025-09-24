@@ -26,6 +26,7 @@
 
 #include "w_file.h"
 #include "doomtype.h"
+#include "doomdef.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_misc.h"
