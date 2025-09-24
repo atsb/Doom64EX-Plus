@@ -58,12 +58,12 @@ static int SC_ParseColorValue(const char* token) {
 
 	// pure hex letter
 	if (len == 1 && ((token[0] >= 'A' && token[0] <= 'F') || (token[0] >= 'a' && token[0] <= 'f'))) {
-		return dhtoi(token);
+		return dhtoi((char *)token);
 	}
 
 	// normal hex case
 	if (token[0] >= 'A' && token[0] <= 'F' || token[0] >= 'a' && token[0] <= 'f') {
-		return dhtoi(token);
+		return dhtoi((char*)token);
 	}
 	return datoi(token);
 }
