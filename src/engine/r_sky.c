@@ -78,41 +78,23 @@ static rcolor PostProcessSkyColor(rcolor original_color, boolean is_cloud) {
     int r = (original_color >> 0) & 0xFF;
     int g = (original_color >> 8) & 0xFF;
     int b = (original_color >> 16) & 0xFF;
-    int a = (original_color >> 24) & 0xFF;
+    int a = 0xFF;
 
-    if (g > r && g > b && g > 10) {
-        int brightness = 250;
-        r = (r * brightness) / 100;
-        g = (g * brightness) / 100;
-        b = (b * brightness) / 100;
+    int brightness = 100;
+    r = (r * brightness) / 100;
+    g = (g * brightness) / 100;
+    b = (b * brightness) / 100;
 
-        g = (g * 120) / 100;
-    }
-    else {
-        int contrast = 250;
-        r = 128 + ((r - 128) * contrast) / 100;
-        g = 128 + ((g - 128) * contrast) / 100;
-        b = 128 + ((b - 128) * contrast) / 100;
-        a = is_cloud ? 0xFF : 0xE6;
-    }
+    g = (g * 120) / 100;
 
-    if (r < 0) 
-        r = 0; 
+    a = is_cloud ? 0xFF : 0xE6;
 
-    if (r > 255) 
-        r = 255;
-
-    if (g < 0) 
-        g = 0; 
-
-    if (g > 255) 
-        g = 255;
-
-    if (b < 0) 
-        b = 0; 
-
-    if (b > 255) 
-        b = 255;
+    if (r < 0) r = 0;
+    if (r > 255) r = 255;
+    if (g < 0) g = 0;
+    if (g > 255) g = 255;
+    if (b < 0) b = 0;
+    if (b > 255) b = 255;
 
     return r | (g << 8) | (b << 16) | (a << 24);
 }
@@ -548,7 +530,7 @@ static void R_DrawClouds(void) {
 
     I_ShaderUnBind();
     GL_Set2DQuad(v, 0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0, 0, 0);
-    dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[2], true), 4);
+    dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[1], true), 4);
     dglSetVertexColor(&v[2], PostProcessSkyColor(sky->skycolor[0], false), 2); // bottom
     dglDisable(GL_TEXTURE_2D);
     GL_Draw2DQuad(v, true);
@@ -564,7 +546,7 @@ static void R_DrawClouds(void) {
 
     I_ShaderUnBind();
     GL_Set2DQuad(v, 0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0, 0, 0);
-    dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[2], true), 4);
+    dglSetVertexColor(&v[0], PostProcessSkyColor(sky->skycolor[1], true), 4);
     dglSetVertexColor(&v[2], PostProcessSkyColor(sky->skycolor[0], false), 2);
 
     dglDisable(GL_TEXTURE_2D);

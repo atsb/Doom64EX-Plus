@@ -1090,14 +1090,14 @@ episodedef_t* P_GetEpisode(int episode) {
 //
 
 static scdatatable_t skydatatable[] = {
-	{   "PIC", (int64_t) & ((skydef_t*)0)->pic,          'S' },
-	{   "BACKPIC", (int64_t) & ((skydef_t*)0)->backdrop,     'S' },
-	{   "FOGFACTOR", (int64_t) & ((skydef_t*)0)->fognear,      'i' },
-	{   "FOGCOLOR", (int64_t) & ((skydef_t*)0)->fogcolor,     'F' },
-	{   "BASECOLOR", (int64_t) & ((skydef_t*)0)->skycolor[2],  'c' },
-	{   "HIGHCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[0],  'c' },
-	{   "LOWCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[1],  'c' },
-	{   NULL,           0,                                  0   }
+	{ "PIC",      (int64_t) & ((skydef_t*)0)->pic,          'S' },
+	{ "BACKPIC",  (int64_t) & ((skydef_t*)0)->backdrop,     'S' },
+	{ "FOGFACTOR",(int64_t) & ((skydef_t*)0)->fognear,      'i' },
+	{ "FOGCOLOR", (int64_t) & ((skydef_t*)0)->fogcolor,     'F' },
+	{ "BASECOLOR",(int64_t) & ((skydef_t*)0)->skycolor[2],  'c' },
+	{ "HIGHCOLOR",(int64_t) & ((skydef_t*)0)->skycolor[1],  'c' },
+	{ "LOWCOLOR", (int64_t) & ((skydef_t*)0)->skycolor[0],  'c' },
+	{ NULL, 0, 0 }
 };
 
 static void P_InitSkyDef(void) {
@@ -1160,8 +1160,6 @@ static void P_InitSkyDef(void) {
 					sky.flags |= SKF_BACKGROUND;
 				}
 			}
-
-			sky.skycolor[1] = sky.skycolor[0]; // atsb: swapping colours to match remaster
 
 			skydefs = Z_Realloc(skydefs,
 				sizeof(skydef_t) * ++numskydef, PU_STATIC, 0);
