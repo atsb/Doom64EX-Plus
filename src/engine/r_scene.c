@@ -41,6 +41,9 @@ CVAR_EXTERNAL(st_flashoverlay);
 
 int game_world_shader_scope = 0;
 
+extern void I_SectorCombiner_SetFog(int en, float r, float g, float b, float fac);
+extern void I_SectorCombiner_SetFogParams(int mode, float start, float end, float density);
+
 //
 // ProcessWalls
 //
@@ -204,16 +207,6 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 //
 // SetupFog
 //
-// Fog is handled via RGB colour combinations.  This includes
-// fog color.  Fog distance and density are included
-// but are not RGB values themselves, but integers.
-// The factor for fog density is based on values from the original N64 version.
-//
-
-extern void I_SectorCombiner_SetFog(int en, float r, float g, float b, float fac);
-extern void I_SectorCombiner_SetFogParams(int mode, float start, float end, float density);
-
-
 static void SetupFog(void) {
 	if (r_fillmode.value <= 0) {
 		I_SectorCombiner_SetFog(0, 0, 0, 0, 0);
@@ -222,7 +215,9 @@ static void SetupFog(void) {
 		return;
 	}
 
-	if (!r_fog.value || !skyflatnum) {
+	boolean has_fog = r_fog.value || (sky && sky->fogcolor != 0);
+
+	if (!has_fog) {
 		dglDisable(GL_FOG);
 		I_SectorCombiner_SetFog(0, 0, 0, 0, 0);
 		I_SectorCombiner_SetFogParams(0, 0, 0, 0);
@@ -233,34 +228,32 @@ static void SetupFog(void) {
 	rcolor fogcolor = 0;
 	int fognear = sky ? sky->fognear : 985;
 	int fogfactor = 1000 - fognear;
+
 	if (fogfactor <= 0) fogfactor = 1;
 
 	dglEnable(GL_FOG);
 
-	if (sky && ((sky->fogcolor & 0xFFFFFF) == 0)) {
-		int minv = ((fognear - 500) * 256) / fogfactor;
-		int maxv = 128000 / fogfactor;
-		float density = 14.0f / (maxv + minv);
+	if (sky) {
 		fogcolor = sky->fogcolor;
-		dglFogi(GL_FOG_MODE, GL_EXP);
-		dglFogf(GL_FOG_DENSITY, density);
-		I_SectorCombiner_SetFogParams(2, 0.0f, 0.0f, density);
-	}
-	else {
-		float position = ((float)fogfactor) / 1000.0f;
-		if (position <= 0.0f) position = 0.00001f;
-		float start = 5.0f / position;
-		float end = 30.0f / position;
-		fogcolor = sky ? sky->fogcolor : 0;
-		dglFogi(GL_FOG_MODE, GL_LINEAR);
-		dglFogf(GL_FOG_START, start);
-		dglFogf(GL_FOG_END, end);
-		I_SectorCombiner_SetFogParams(1, start, end, 0.0f);
 	}
 
-	dglGetColorf(fogcolor, color);
+	color[0] = ((fogcolor & 0xFF)) / 255.0f;
+	color[1] = ((fogcolor >> 8) & 0xFF) / 255.0f; 
+	color[2] = ((fogcolor >> 16) & 0xFF) / 255.0f;
+	color[3] = 1.0f;
+
+	float position = ((float)fogfactor) / 1000.0f;
+	if (position <= 0.0f) position = 0.00001f;
+
+	float start = 5.0f / position;
+	float end = 30.0f / position;
+
+	dglFogi(GL_FOG_MODE, GL_LINEAR);
+	dglFogf(GL_FOG_START, start);
+	dglFogf(GL_FOG_END, end);
+	I_SectorCombiner_SetFogParams(1, start, end, 0.0f);
+
 	dglFogfv(GL_FOG_COLOR, color);
-
 	I_SectorCombiner_SetFog(1, color[0], color[1], color[2], (float)fogfactor / 1000.0f);
 }
 

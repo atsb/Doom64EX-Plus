@@ -32,39 +32,24 @@
 scparser_t sc_parser;
 
 //
-// SC_ParseColorValue - Parse color value as hex or decimal
+// SC_ParseColorValue
 //
 static int SC_ParseColorValue(const char* token) {
 	int len = dstrlen(token);
 
-	// hex value that starts with a number
-	if (len >= 2 && token[0] >= '0' && token[0] <= '9') {
-		// if it contains hex letters
-		boolean hasHexLetters = false;
-		for (int i = 1; i < len; i++) {
-			char c = token[i];
-			if ((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) {
-				hasHexLetters = true;
-				break;
-			}
-		}
-
-		if (hasHexLetters) {
-			// only parse the first digit as decimal
-			char firstDigit[2] = { token[0], '\0' };
-			return datoi(firstDigit);
+	boolean hasHexLetters = false;
+	for (int i = 0; i < len; i++) {
+		char c = token[i];
+		if ((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) {
+			hasHexLetters = true;
+			break;
 		}
 	}
 
-	// pure hex letter
-	if (len == 1 && ((token[0] >= 'A' && token[0] <= 'F') || (token[0] >= 'a' && token[0] <= 'f'))) {
-		return dhtoi((char *)token);
-	}
-
-	// normal hex case
-	if (token[0] >= 'A' && token[0] <= 'F' || token[0] >= 'a' && token[0] <= 'f') {
+	if (hasHexLetters) {
 		return dhtoi((char*)token);
 	}
+
 	return datoi(token);
 }
 
