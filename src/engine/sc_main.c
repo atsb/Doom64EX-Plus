@@ -36,6 +36,15 @@ scparser_t sc_parser;
 //
 static int SC_ParseColorValue(const char* token) {
 	int len = dstrlen(token);
+	if (len >= 2 && token[0] >= '0' && token[0] <= '9') {
+		for (int i = 1; i < len; i++) {
+			char c = token[i];
+			if ((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) {
+				char firstDigit[2] = { token[0], '\0' };
+				return datoi(firstDigit);
+			}
+		}
+	}
 
 	boolean hasHexLetters = false;
 	for (int i = 0; i < len; i++) {
@@ -259,6 +268,15 @@ static int SC_Find(boolean forceupper) {
 
 			if (!string) {
 				if (c > ' ') {
+					if (havetoken && i > 0) {
+						char prev = sc_parser.token[i - 1];
+						if (prev >= '0' && prev <= '9' &&
+							((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'))) {
+							sc_parser.rewind();
+							return true;
+						}
+					}
+
 					havetoken = true;
 					sc_parser.token[i++] =
 						forceupper ? SDL_toupper(c) : c;
