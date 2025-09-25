@@ -80,36 +80,11 @@ static rcolor PostProcessSkyColor(rcolor original_color, boolean is_cloud) {
     int r = (original_color >> 0) & 0xFF;
     int g = (original_color >> 8) & 0xFF;
     int b = (original_color >> 16) & 0xFF;
-    int a = 0xFF;
+    int a = (original_color >> 24) & 0xFF;
 
-    if (i_sky_overbright.value != 0) {
-        float factor = 1.0f + 0.01f * i_sky_overbright.value;
-        if (factor < 0.0f) {
-            factor = 0.0f;
-        }
-        float rf = (float)r * factor;
-        float gf = (float)g * factor;
-        float bf = (float)b * factor;
-        float maxc = rf;
-        if (gf > maxc) maxc = gf;
-        if (bf > maxc) maxc = bf;
-        if (maxc > 255.0f) {
-            float s = 255.0f / maxc;
-            rf *= s; gf *= s; bf *= s;
-        }
-        r = (int)(rf + 0.5f);
-        g = (int)(gf + 0.5f);
-        b = (int)(bf + 0.5f);
-    }
-
-    int brightness = 100;
-    r = (r * brightness) / 100;
-    g = (g * brightness) / 100;
-    b = (b * brightness) / 100;
-
-    g = (g * 120) / 100;
-
-    a = is_cloud ? 0xFF : 0xE6;
+    r = (r * 120) / 100;
+    b = (b * 140) / 100;
+    g = (g * 160) / 100;
 
     if (r < 0) r = 0;
     if (r > 255) r = 255;
