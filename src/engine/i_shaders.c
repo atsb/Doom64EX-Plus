@@ -178,17 +178,30 @@ static const char* fragment_shader_bilateral_3point =
 "  return rgb;\n"
 "}\n"
 "\n"
+"vec3 enhance_colors(vec3 rgb){\n"
+"  float l = dot(rgb, vec3(0.2126, 0.7152, 0.0722));\n"
+"  rgb = mix(vec3(l), rgb, 1.2);  // Enhanced saturation\n"
+"  rgb = rgb / (rgb + vec3(0.5)) * vec3(1.4);  // S-curve contrast\n"
+"  rgb.r = rgb.r * 1.1;  // Warmth\n"
+"  rgb.b = rgb.b * 1.10;\n"
+"  rgb.g = rgb.g * 1.10;\n"
+"  rgb = pow(max(rgb, 0.0), vec3(1.2));  // Gamma\n"
+"  return rgb;\n"
+"}\n"
+"\n"
 "void main(){\n"
 "  // 1: no texture\n"
 "  if (uUseTex == 0) {\n"
 "    vec4 col = vColor; vec3 rgb = apply_combiner(col.rgb);\n"
 "    if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
+"    rgb = enhance_colors(rgb);\n"
 "    gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a); return; }\n"
 "\n"
 "  // 2: texture but no 3-point\n"
 "  if (uTexel.x <= 0.0 || uTexel.y <= 0.0) {\n"
 "    vec4 col = texture2D(uTex, vUV) * vColor; vec3 rgb = apply_combiner(col.rgb);\n"
 "    if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
+"    rgb = enhance_colors(rgb);\n"
 "    gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a); return; }\n"
 "\n"
 "  // 3: N64 3-point\n"
@@ -219,6 +232,7 @@ static const char* fragment_shader_bilateral_3point =
 "\n"
 "  vec4 col = tex * vColor; vec3 rgb = apply_combiner(col.rgb);\n"
 "  if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
+"  rgb = enhance_colors(rgb);\n"
 "  gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a);\n"
 "}\n";
 
@@ -266,10 +280,22 @@ static const char* fragment_shader_bilateral =
 "  return rgb;\n"
 "}\n"
 "\n"
+"vec3 enhance_colors(vec3 rgb){\n"
+"  float l = dot(rgb, vec3(0.2126, 0.7152, 0.0722));\n"
+"  rgb = mix(vec3(l), rgb, 1.2);  // Enhanced saturation\n"
+"  rgb = rgb / (rgb + vec3(0.5)) * vec3(1.4);  // S-curve contrast\n"
+"  rgb.r = rgb.r * 1.1;  // Warmth\n"
+"  rgb.b = rgb.b * 1.10;\n"
+"  rgb.g = rgb.g * 1.10;\n"
+"  rgb = pow(max(rgb, 0.0), vec3(1.2));  // Gamma\n"
+"  return rgb;\n"
+"}\n"
+"\n"
 "void main(){\n"
 "  vec4 col = texture2D(uTex, vUV) * vColor;\n"
 "  vec3 rgb = apply_combiner(col.rgb);\n"
 "  if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
+"  rgb = enhance_colors(rgb);\n"
 "  gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a);\n"
 "}\n";
 
@@ -482,101 +508,3 @@ void I_ShaderSetUseTexture(int on) {
 		return;
 	pglUniform1i(sLocUseTex, on ? 1 : 0);
 }
-
-/*static void I_CombinerBake(void) {
-    gComb.pass_count = 0;
-    float src0[3] = {1,1,1};
-    float src1[3] = {1,1,1};
-
-    if (gComb.source_rgb[0]==0x1702) { 
-	}
-    else if (gComb.source_rgb[0]==0x8577) {
-	}
-    else if (gComb.source_rgb[0]==0x8576) {
-        src0[0]=gComb.env_color[0]; 
-		src0[1]=gComb.env_color[1]; 
-		src0[2]=gComb.env_color[2];
-        if (gComb.operand_rgb[0]==0x0301) { 
-			src0[0]=1.0f-src0[0]; 
-			src0[1]=1.0f-src0[1]; 
-			src0[2]=1.0f-src0[2]; }
-    }
-    if (gComb.source_rgb[1]==0x1702) {
-	}
-    else if (gComb.source_rgb[1]==0x8577) {
-	}
-    else if (gComb.source_rgb[1]==0x8576) {
-        src1[0]=gComb.env_color[0]; 
-		src1[1]=gComb.env_color[1]; 
-		src1[2]=gComb.env_color[2];
-        if (gComb.operand_rgb[1]==0x0301) { 
-			src1[0]=1.0f-src1[0]; 
-			src1[1]=1.0f-src1[1];
-			src1[2]=1.0f-src1[2]; 
-		}
-    }
-
-	// MODULATE
-    int m = gComb.combine_rgb;
-    if (m==8448) { 
-        gComb.pass_mode[gComb.pass_count]=8448;
-        gComb.pass_color[gComb.pass_count][0]=src1[0];
-        gComb.pass_color[gComb.pass_count][1]=src1[1];
-        gComb.pass_color[gComb.pass_count][2]=src1[2];
-        gComb.pass_color[gComb.pass_count][3]=1.0f;
-        gComb.pass_factor[gComb.pass_count]=1.0f;
-        gComb.pass_count++;
-
-		// ADD
-    } else if (m==260) { 
-        gComb.pass_mode[gComb.pass_count]=260;
-        gComb.pass_color[gComb.pass_count][0]=src1[0];
-        gComb.pass_color[gComb.pass_count][1]=src1[1];
-        gComb.pass_color[gComb.pass_count][2]=src1[2];
-        gComb.pass_color[gComb.pass_count][3]=1.0f;
-        float average = (src1[0]+src1[1]+src1[2])/3.0f;
-        float _d0=fabsf(src1[0]-average), _d1=fabsf(src1[1]-average), _d2=fabsf(src1[2]-average);
-        gComb.pass_factor[gComb.pass_count] = (_d0<0.001f && _d1<0.001f && _d2<0.001f) ? (-1.0f - average) : average;
-        gComb.pass_count++;
-
-		// INTERPOLATE
-    } else if (m==34165) {
-        float fac = (src1[0]+src1[1]+src1[2])/3.0f;
-        if (gComb.env_color[3] < 0.0f) fac = -1.0f;
-        gComb.pass_mode[gComb.pass_count]=34165;
-        gComb.pass_color[gComb.pass_count][0]=src0[0];
-        gComb.pass_color[gComb.pass_count][1]=src0[1];
-        gComb.pass_color[gComb.pass_count][2]=src0[2];
-        gComb.pass_color[gComb.pass_count][3]=1.0f;
-        gComb.pass_factor[gComb.pass_count]=fac;
-        gComb.pass_count++;
-
-		// REPLACE
-    } else {
-        gComb.pass_mode[gComb.pass_count]=7681;
-        gComb.pass_color[gComb.pass_count][0]=src1[0];
-        gComb.pass_color[gComb.pass_count][1]=src1[1];
-        gComb.pass_color[gComb.pass_count][2]=src1[2];
-        gComb.pass_color[gComb.pass_count][3]=1.0f;
-        gComb.pass_factor[gComb.pass_count]=1.0f;
-        gComb.pass_count++;
-    }
-}
-
-static void I_CombinerCommit(void) {
-    if (sLocPassCount>=0) pglUniform1i(sLocPassCount, gComb.pass_count);
-    for (int i=0;i<gComb.pass_count && i<4;i++) {
-        if (sLocPassMode[i]>=0)   
-			pglUniform1i(sLocPassMode[i], gComb.pass_mode[i]);
-        if (sLocPassColor[i]>=0)  
-			pglUniform4f(sLocPassColor[i], gComb.pass_color[i][0], gComb.pass_color[i][1], gComb.pass_color[i][2], gComb.pass_color[i][3]);
-        if (sLocPassFactor[i]>=0) 
-			pglUniform1f(sLocPassFactor[i], gComb.pass_factor[i]);
-    }
-    if (sLocFogEnabled>=0) 
-		pglUniform1i(sLocFogEnabled, gComb.fog_enabled ? 1 : 0);
-    if (sLocFogColor>=0)   
-		pglUniform3f(sLocFogColor, gComb.fog_color[0], gComb.fog_color[1], gComb.fog_color[2]);
-    if (sLocFogFactor>=0)  
-		pglUniform1f(sLocFogFactor, gComb.fog_factor);
-}*/

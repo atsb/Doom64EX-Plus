@@ -82,9 +82,9 @@ static rcolor PostProcessSkyColor(rcolor original_color, boolean is_cloud) {
     int b = (original_color >> 16) & 0xFF;
     int a = (original_color >> 24) & 0xFF;
 
-    r = (r * 120) / 100;
-    b = (b * 140) / 100;
-    g = (g * 160) / 100;
+    r = (r * 130) / 100;
+    b = (b * 180) / 100;
+    g = (g * 140) / 100;
 
     if (r < 0) r = 0;
     if (r > 255) r = 255;
