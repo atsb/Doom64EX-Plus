@@ -445,6 +445,7 @@ void I_BeginRead(void) {
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_overbright);
+CVAR(i_sky_overbright, 0);
 CVAR_EXTERNAL(v_accessibility);
 CVAR_EXTERNAL(v_fadein);
 
@@ -452,6 +453,7 @@ void I_RegisterCvars(void) {
 	CON_CvarRegister(&i_gamma);
 	CON_CvarRegister(&i_brightness);
 	CON_CvarRegister(&i_overbright);
+    CON_CvarRegister(&i_sky_overbright);
 	CON_CvarRegister(&i_interpolateframes);
 	CON_CvarRegister(&v_accessibility);
 	CON_CvarRegister(&v_fadein);

@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
+#include <math.h>
 
 #include "doomstat.h"
 #include "r_lights.h"
@@ -71,6 +72,7 @@ CVAR_EXTERNAL(r_fov);
 CVAR_EXTERNAL(r_skyFilter);
 CVAR(r_skybox, 1);
 
+CVAR_EXTERNAL(i_sky_overbright);
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
 // atsb: crappy hack
@@ -79,6 +81,26 @@ static rcolor PostProcessSkyColor(rcolor original_color, boolean is_cloud) {
     int g = (original_color >> 8) & 0xFF;
     int b = (original_color >> 16) & 0xFF;
     int a = 0xFF;
+
+    if (i_sky_overbright.value != 0) {
+        float factor = 1.0f + 0.01f * i_sky_overbright.value;
+        if (factor < 0.0f) {
+            factor = 0.0f;
+        }
+        float rf = (float)r * factor;
+        float gf = (float)g * factor;
+        float bf = (float)b * factor;
+        float maxc = rf;
+        if (gf > maxc) maxc = gf;
+        if (bf > maxc) maxc = bf;
+        if (maxc > 255.0f) {
+            float s = 255.0f / maxc;
+            rf *= s; gf *= s; bf *= s;
+        }
+        r = (int)(rf + 0.5f);
+        g = (int)(gf + 0.5f);
+        b = (int)(bf + 0.5f);
+    }
 
     int brightness = 100;
     r = (r * brightness) / 100;
