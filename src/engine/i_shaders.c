@@ -193,15 +193,15 @@ static const char* fragment_shader_bilateral_3point =
 "  // 1: no texture\n"
 "  if (uUseTex == 0) {\n"
 "    vec4 col = vColor; vec3 rgb = apply_combiner(col.rgb);\n"
-"    if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "    rgb = enhance_colors(rgb);\n"
+"    if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "    gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a); return; }\n"
 "\n"
 "  // 2: texture but no 3-point\n"
 "  if (uTexel.x <= 0.0 || uTexel.y <= 0.0) {\n"
 "    vec4 col = texture2D(uTex, vUV) * vColor; vec3 rgb = apply_combiner(col.rgb);\n"
-"    if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "    rgb = enhance_colors(rgb);\n"
+"    if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "    gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a); return; }\n"
 "\n"
 "  // 3: N64 3-point\n"
@@ -231,8 +231,8 @@ static const char* fragment_shader_bilateral_3point =
 "  if (uBleed > 0.0) { vec4 avg = 0.25*(c00+c10+c01+c11); tex = mix(tex, avg, clamp(uBleed,0.0,1.0)); }\n"
 "\n"
 "  vec4 col = tex * vColor; vec3 rgb = apply_combiner(col.rgb);\n"
-"  if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "  rgb = enhance_colors(rgb);\n"
+"  if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "  gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a);\n"
 "}\n";
 
@@ -294,8 +294,8 @@ static const char* fragment_shader_bilateral =
 "void main(){\n"
 "  vec4 col = texture2D(uTex, vUV) * vColor;\n"
 "  vec3 rgb = apply_combiner(col.rgb);\n"
-"  if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "  rgb = enhance_colors(rgb);\n"
+"  if (uFogEnabled!=0) {\n    float fogF = 1.0;\n    if (uFogMode == 1) {\n        float denom = max(uFogEnd - uFogStart, 0.0001);\n        fogF = clamp((uFogEnd - vEyeDist) / denom, 0.0, 1.0);\n    } else if (uFogMode == 2) {\n        fogF = clamp(exp(-uFogDensity * vEyeDist), 0.0, 1.0);\n    } else if (uFogMode == 3) {\n        float d = uFogDensity * vEyeDist;\n        fogF = clamp(exp(-(d*d)), 0.0, 1.0);\n    } else {\n        fogF = clamp(1.0 - uFogFactor, 0.0, 1.0);\n    }\n    rgb = mix(uFogColor, rgb, fogF);\n}\n"
 "  gl_FragColor = vec4(clamp(rgb,0.0,1.0), col.a);\n"
 "}\n";
 
