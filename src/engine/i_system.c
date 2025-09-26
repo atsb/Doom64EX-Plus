@@ -134,7 +134,9 @@ boolean I_StartDisplay(void) {
 //
 
 void I_EndDisplay(void) {
-	displaytime = SDL_GetTicks() - start_displaytime;
+	if (i_interpolateframes.value) {
+		displaytime = SDL_GetTicks() - start_displaytime;
+	}
 	InDisplay = false;
 }
 
