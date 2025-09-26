@@ -275,7 +275,7 @@ wad_file_t* W_AddFile(char* filename) {
 }
 
 // return fully qualified mod directory if any or NULL otherwise. Must NOT be freed by caller
-// if a mod directory is specified an cannot be found exit proram with descriptive message box
+// if a mod directory is specified an cannot be found exit program with descriptive message box
 char * W_HandleModParam(void) {
 	char* mod_dir = NULL;
 
@@ -345,7 +345,7 @@ char * W_HandleModParam(void) {
 
 }
 
-// if a specified file cannot be found, exit proram with descriptive message box
+// if a specified file cannot be found, exit program with descriptive message box
 void W_HandleFileParam(char *mod_dir) {
 
 	int p = M_CheckParm("-file");

@@ -193,9 +193,8 @@ static void D_FinishDraw(void) {
 	// normal update
 	I_FinishUpdate();
 
-	if (i_interpolateframes.value) {
-		I_EndDisplay();
-	}
+	I_EndDisplay();
+
 }
 
 int D_MiniLoop(void (*start)(void), void (*stop)(void),
