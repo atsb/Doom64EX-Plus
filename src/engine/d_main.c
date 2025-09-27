@@ -94,6 +94,7 @@ CVAR_EXTERNAL(sv_fastmonsters);
 CVAR_EXTERNAL(sv_respawnitems);
 CVAR_EXTERNAL(sv_respawn);
 CVAR_EXTERNAL(sv_skill);
+CVAR_EXTERNAL(v_maxfps);
 
 //
 // EVENT HANDLING
@@ -324,13 +325,13 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 
 				if (I_StartDisplay()) {
 					I_ShaderBind();
-                if (draw && !action) {
+					if (draw && !action) {
 						draw();
 					}
 					D_DrawInterface();
-                I_ShaderUnBind();
-                D_FinishDraw();
-}
+					I_ShaderUnBind();
+					D_FinishDraw();
+				}
 
 				renderinframe = false;
 			}
@@ -342,10 +343,16 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 				goto drawframe;
 			}
 
-			I_Sleep(1);
+			if (!i_interpolateframes.value) {
+				// use this to not peg CPU with an active loop when interpolation is disabled.
+				// when interpolation is enabled, this is taken care of by fps limit (vsync off) or vsync on
+				// 
+				// interpolation disabled seem to always result in a constant framerate of 60 fps (2 * TICRATE)
+				SDL_Delay(1);
+			}
 		}
 
-		// run the count * ticdup dics
+		// run the count * ticdup tics
 		while (counts--) {
 			for (i = 0; i < ticdup; i++) {
 				// check that there are players in the game.  if not, we cannot
@@ -410,9 +417,9 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 			draw();
 		}
 		D_DrawInterface();
-                I_ShaderUnBind();
-                D_FinishDraw();
-freealloc:
+		I_ShaderUnBind();
+		D_FinishDraw();
+	freealloc:
 
 		// force garbage collection
 		Z_FreeAlloca();

@@ -3315,8 +3315,8 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 	bar = menu->thermobars;
 	x = menu->x;
 	y = menu->y;
-	mx = mouse_x;
-	my = mouse_y;
+	mx = cursor_x;
+	my = cursor_y;
 	scalex = ((float)video_width /
 		((float)SCREENHEIGHT * video_ratio)) * menu->scale;
 	scaley = ((float)video_height /
@@ -3386,8 +3386,8 @@ static boolean M_CursorHighlightItem(menu_t* menu) {
 	max = (menu->numpageitems == -1) ? menu->numitems : menu->numpageitems;
 	x = menu->x;
 	y = menu->y;
-	mx = (float)mouse_x;
-	my = (float)mouse_y;
+	mx = cursor_x;
+	my = cursor_y;
 	scalex = ((float)video_width /
 		((float)SCREENHEIGHT * video_ratio)) * menu->scale;
 	scaley = ((float)video_height /
@@ -3976,6 +3976,7 @@ boolean M_Responder(event_t* ev) {
 static void M_SetCursorPos() {
 	if (m_menumouse.value) {
 		I_SetMousePos(cursor_x, cursor_y);
+		itemSelected = -1; // remove mouse hover item menu
 	}
 }
 

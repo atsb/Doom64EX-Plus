@@ -41,6 +41,26 @@ SDL_GLContext   glContext = NULL;
 
 CVAR(r_trishader, 1);
 CVAR(v_checkratio, 0);
+CVAR_CMD(v_maxfps, 500) {
+
+    /*
+     This max fps limit is only enforced with vsync off and interpolation enabled
+
+     The default picked is 500 because it handles the case of maximizing fps on a 480Hz monitor
+     and it is not too CPU/GPU intensive when it can be reached
+
+	 limit max fps to 1000 because:
+
+	- more than 1000 is not really needed (until monitors reach that some day)
+	- very high refresh rates cause higher GPU/CPU wattage and more importantly
+	  can cause nasty GPU coil whine at 1500+ fps.
+	  A RTX 4080S can reach > 2000 fps, producing heavy coil whine and not good for the GPU
+	- RTSS, a well known external framerate limiter, cap max fps to 1000
+
+	*/
+
+	v_maxfps.value = SDL_clamp(v_maxfps.value, 60, 1000);
+}
 #ifdef HAS_FULLSCREEN_BORDERLESS
 CVAR(v_fullscreen, 0);
 #endif
@@ -50,6 +70,7 @@ CVAR_EXTERNAL(m_menumouse);
 CVAR_CMD(v_vsync, 1) {
     SDL_GL_SetSwapInterval((int)v_vsync.value);
 }
+
 
 float display_scale = 1.0f;
 SDL_Surface* screen;
@@ -398,6 +419,7 @@ void V_RegisterCvars(void) {
     CON_CvarRegister(&r_trishader);
     CON_CvarRegister(&v_checkratio);
     CON_CvarRegister(&v_vsync);
+    CON_CvarRegister(&v_maxfps);
 #ifdef HAS_FULLSCREEN_BORDERLESS
     CON_CvarRegister(&v_fullscreen);
 #endif
