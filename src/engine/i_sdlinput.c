@@ -38,8 +38,11 @@ CVAR(v_macceleration, 0);
 CVAR(v_mlookinvert, 0);
 CVAR(v_yaxismove, 0);
 CVAR(v_xaxismove, 0);
+CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(m_menumouse);
 CVAR_EXTERNAL(p_autoaim);
+CVAR_EXTERNAL(v_maxfps);
+CVAR_EXTERNAL(v_vsync);
 
 CVAR_CMD(v_mlook, 0) {
 	if (cvar->value > 0) {
@@ -739,14 +742,73 @@ void I_StartTic(void) {
 	I_GamepadUpdate();
 }
 
+void I_FPSLimit(void) {
+
+	if (v_maxfps.value <= 0) // normally not possible because clampled in [60, 1000] range
+		return;
+
+	static Uint64  fpsLimitNS = 0;
+
+	const Uint64 deadlineNS = 1000000; // 1ms
+	const Uint64 frameTimeNS = 1000000000 / (int)v_maxfps.value;
+
+	Uint64 targetWakeNS = fpsLimitNS + frameTimeNS;
+
+	while (true) {
+
+		fpsLimitNS = SDL_GetTicksNS();
+		Uint64 timeToWaitNS = targetWakeNS - fpsLimitNS;
+
+		if (timeToWaitNS > 1000000000 || timeToWaitNS <= 0)	{
+			break;
+		}
+
+		if (timeToWaitNS > deadlineNS) {
+			// Sleep, but try to wake before deadline.
+			SDL_DelayNS(timeToWaitNS - deadlineNS);
+		}
+		// Else we are too close to the deadline. OS sleep is not precise enough to wake us before it elapses.
+		// Go into active loop mode for the remainder of the deadline
+
+	}
+}
+
+
 //
 // I_FinishUpdate
 //
 
 void I_FinishUpdate(void) {
+
+	static int prev_swap_interval = -1;
+	// if the menu is displayed, limit framerate to the monitor's framerate by enabling vsync (swap interval = 1)
+	int swap_interval = menuactive ? 1 : (int)v_vsync.value;
+
 	I_UpdateGrab();
+
+	if (prev_swap_interval != swap_interval) {
+		SDL_GL_SetSwapInterval(swap_interval);
+		prev_swap_interval = swap_interval;
+	}
+
 	SDL_GL_SwapWindow(window);
-	dglFinish();
+
+	if(swap_interval > 0) {
+
+		// With vsync enabled, glFinish() is absolutely required to synchronize CPU and GPU to avoid input lag, 
+		// especially on 60 Hz monitors (maybe lag is less pronounced with high refresh rate monitors at >= 144Hz)
+		// Without using something more elaborate like fences, glFinish() is the best we have
+
+		// glFinish() is not necessary with vsync disabled and might even decrease max fps a bit, which might only be problematic
+		// with very low end GPUs such as integrated graphics in older laptops that can barely go over 60 fps.
+
+		dglFinish();
+	}
+	else if (i_interpolateframes.value > 0) {
+		// only limit fps with vsync disabled and interpolation enabled
+		// with vsync enabled, fps is limited by vsync (swap interval + glFinish())
+		I_FPSLimit();
+	}
 
 	BusyDisk = false;
 }
