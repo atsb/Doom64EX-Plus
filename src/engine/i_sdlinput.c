@@ -744,7 +744,7 @@ void I_StartTic(void) {
 
 void I_FPSLimit(void) {
 
-	if (v_maxfps.value <= 0) // normally not possible because clampled in [60, 1000] range
+	if (v_maxfps.value <= 0) // normally not possible because clamped in [60, 1000] range
 		return;
 
 	static Uint64  fpsLimitNS = 0;
