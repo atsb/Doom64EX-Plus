@@ -277,11 +277,8 @@ void R_SetViewMatrix(void) {
 //
 
 void R_RenderWorld(void) {
-
 	game_world_shader_scope = 1;
-
 	I_ShaderBind();
-
 	SetupFog();
 
 	if (sky && (sky->flags & SKF_VOID)) {
@@ -291,7 +288,6 @@ void R_RenderWorld(void) {
 	}
 
 	dglEnable(GL_DEPTH_TEST);
-
 	DL_BeginDrawList(r_fillmode.value >= 1, r_texturecombiner.value >= 1);
 
 	// setup texture environment for effects
@@ -301,67 +297,43 @@ void R_RenderWorld(void) {
 			GL_SetTextureUnit(1, true);
 			dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
 		}
-
 		if (st_flashoverlay.value <= 0) {
 			GL_SetTextureUnit(2, true);
 			dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
 		}
-
 		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
-
 		GL_SetTextureUnit(0, true);
-	}
-	else {
-		GL_SetTextureUnit(1, true);
-		GL_SetTextureMode(GL_ADD);
-		GL_SetTextureUnit(0, true);
-
-		if (nolights) {
-			GL_SetTextureMode(GL_REPLACE);
-		}
 	}
 
 	dglEnable(GL_ALPHA_TEST);
 
-	// begin draw list loop
-
-	// -------------- Draw floors/ceilings (leafs) ---------------
 	GL_SetState(GLSTATE_BLEND, 0);
 	DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
-
-	// -------------- Draw walls (segs) --------------------------
 	DL_ProcessDrawList(DLT_WALL, ProcessWalls);
 
-	/* BIND BEFORE SPRITES */
-	I_ShaderBind();
-	game_world_shader_scope = 1;
-	// -------------- Draw things (sprites) ----------------------
-
-	if (devparm) {
-		spriteRenderTic = I_GetTimeMS();
-	}
-
-	if (r_rendersprites.value) {
-		R_SetupSprites();
-	}
+	R_SetupSprites();
 
 	dglDepthMask(GL_FALSE);
+	dglDisable(GL_ALPHA_TEST);
+	GL_SetState(GLSTATE_BLEND, 1);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
 	DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
 
-	// -------------- Restore states -----------------------------
+	// Restore states
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GL_SetState(GLSTATE_BLEND, 0);
+	dglEnable(GL_ALPHA_TEST);
+	dglDepthMask(GL_TRUE);
 
 	dglDisable(GL_ALPHA_TEST);
 	dglDepthMask(GL_TRUE);
 	dglDisable(GL_FOG);
 	dglDisable(GL_DEPTH_TEST);
-
 	GL_SetOrthoScale(1.0f);
 	GL_SetState(GLSTATE_BLEND, 0);
 	GL_SetState(GLSTATE_CULL, 1);
 	GL_SetDefaultCombiner();
-
-	// villsa 12152013 - make sure we're using the default blend function
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	I_ShaderUnBind();
 }
