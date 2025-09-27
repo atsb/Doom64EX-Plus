@@ -1060,8 +1060,10 @@ static int Seq_RegisterSounds(void) {
             hinted = FMOD_SOUND_TYPE_MPEG; 
         }
         if (!is_audio && len >= 2) {
-            unsigned char b0 = p[0], b1 = p[1];
-            if (b0 == 0xFF && (b1 & 0xE0) == 0xE0) { 
+
+            // FF FB, FF F3, FF F2 : MPEG - 1 Layer 3 file without an ID3 tag or with an ID3v1 tag (which is appended at the end of the file)
+            byte b0 = p[0], b1 = p[1];
+            if (b0 == 0xFF && (b1 == 0xFB || b1 == 0xF3 || b1 == 0xF2)) {
                 is_audio = 1; 
                 hinted = FMOD_SOUND_TYPE_MPEG; 
             }
