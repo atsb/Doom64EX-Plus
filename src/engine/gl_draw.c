@@ -73,13 +73,35 @@ static void Draw_GfxImageInternal(int x, int y, const char* name,
 	GL_SetState(GLSTATE_BLEND, 0);
 }
 
+static void Draw_GfxImageInternalInter(int x, int y, const char* name,
+	float max_w, float offset_width, float offset_height,
+	rcolor color, boolean alpha) {
+
+	int gfxIdx = GL_BindGfxTexture(name, alpha);
+	if (gfxIdx < 0) {
+		return;
+	}
+	float imgWidth = gfxwidth[gfxIdx];
+	float imgHeight = gfxheight[gfxIdx];
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	float targetWidth = 196.0f;
+	float targetHeight = 192.0f;
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	GL_SetupAndDraw2DQuad((float)x - offset_width, (float)y - offset_height,
+		targetWidth, targetHeight, 0, 1.0f, 0, 1.0f, color, 0);
+	GL_SetState(GLSTATE_BLEND, 0);
+}
 
 void Draw_GfxImage(int x, int y, const char* name, rcolor color, boolean alpha) {
 	Draw_GfxImageInternal(x, y, name, -1.0f, 0.0f, 0.0f, color, alpha);
 }
 
 void Draw_GfxImageInter(int x, int y, const char* name, rcolor color, boolean alpha) {
-	Draw_GfxImageInternal(x, y, name, 250.0f, 5.0f, 5.0f, color, alpha);
+	Draw_GfxImageInternalInter(x, y, name, 250.0f, 5.0f, 5.0f, color, alpha);
 }
 
 void Draw_GfxImageLegal(int x, int y, const char* name, rcolor color, boolean alpha) {
