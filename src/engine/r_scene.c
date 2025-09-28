@@ -306,34 +306,34 @@ void R_RenderWorld(void) {
 	}
 
 	dglEnable(GL_ALPHA_TEST);
-
+	dglAlphaFunc(GL_GREATER, 0.5f);
 	GL_SetState(GLSTATE_BLEND, 0);
 	DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
 	DL_ProcessDrawList(DLT_WALL, ProcessWalls);
 
-	R_SetupSprites();
-
-	dglDepthMask(GL_FALSE);
 	dglDisable(GL_ALPHA_TEST);
+	dglDepthMask(GL_FALSE);
 	GL_SetState(GLSTATE_BLEND, 1);
-	dglBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
+	DL_ProcessDrawList(DLT_FLAT, ProcessFlats);
+	DL_ProcessDrawList(DLT_WALL, ProcessWalls);
+
+	if (r_rendersprites.value) {
+		R_SetupSprites();
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		GL_SetState(GLSTATE_BLEND, 1);
+		DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
+	}
 
 	// Restore states
 	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	GL_SetState(GLSTATE_BLEND, 0);
 	dglEnable(GL_ALPHA_TEST);
 	dglDepthMask(GL_TRUE);
-
-	dglDisable(GL_ALPHA_TEST);
-	dglDepthMask(GL_TRUE);
 	dglDisable(GL_FOG);
 	dglDisable(GL_DEPTH_TEST);
 	GL_SetOrthoScale(1.0f);
-	GL_SetState(GLSTATE_BLEND, 0);
-	GL_SetState(GLSTATE_CULL, 1);
 	GL_SetDefaultCombiner();
-	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	I_ShaderUnBind();
 }
