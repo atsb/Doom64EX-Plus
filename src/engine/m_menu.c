@@ -120,6 +120,7 @@ static int MenuBindIgnoreMouseButtons = 0;
 static boolean showfullitemvalue[3] = { false, false, false };
 static int      thermowait = 0;
 static int      m_ScreenSize = 1;
+static int      levelwarp = 0;
 
 //------------------------------------------------------------------------
 //
@@ -210,6 +211,7 @@ static void M_ReturnToOptions(int choice);
 static void M_SetCvar(cvar_t* cvar, float value);
 static void M_SetOptionValue(int choice, float min, float max, float inc, cvar_t* cvar);
 static void M_DrawSmbString(const char* text, menu_t* menu, int item);
+static void M_DrawSmbStringSmall(const char* text, menu_t* menu, int item);
 static void M_DrawSaveGameFrontend(menu_t* def);
 static void M_SetInputString(char* string, int len);
 static void M_Scroll(menu_t* menu, boolean up);
@@ -2344,6 +2346,8 @@ void M_DrawFeaturesMenu(void);
 CVAR_EXTERNAL(sv_lockmonsters);
 
 enum {
+	features_levels = 0,
+	features_newline,
 	features_invulnerable,
 	features_healthboost,
 	features_securitykeys,
@@ -2355,6 +2359,8 @@ enum {
 } features_e;
 
 menuitem_t FeaturesMenu[] = {
+	{2,"Warp To Level " ,M_DoFeature,'l'},
+	{2, NULL },
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
@@ -2389,6 +2395,21 @@ void M_Features(int choice) {
 }
 
 void M_DrawFeaturesMenu(void) {
+	mapdef_t* map = P_GetMapInfo(levelwarp + 1);
+
+	/*Warp To Level*/
+	char levelDisplay[64];
+	char mapNameDisplay[64];
+
+	sprintf(levelDisplay, "MAP%02d", map->mapid);
+	sprintf(mapNameDisplay, "%s", map->mapname);
+
+	M_DrawSmbString(levelDisplay, &featuresDef, features_levels);
+
+	menu_t secondLine = featuresDef;
+	secondLine.y += 10;
+	M_DrawSmbStringSmall(mapNameDisplay, &secondLine, features_levels);
+
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);
 
@@ -2417,6 +2438,27 @@ void M_DoFeature(int choice) {
 	int i = 0;
 
 	switch (itemOn) {
+
+	case features_levels:
+		if (choice) {
+			int testWarp = levelwarp + 1;
+			mapdef_t* testMap = P_GetMapInfo(testWarp + 1);
+
+			if (testMap) {
+				levelwarp = testWarp;
+			}
+			else {
+				if (choice == 2) {
+					levelwarp = 0;
+				}
+			}
+		}
+		else {
+			if (levelwarp > 0) {
+				levelwarp--;
+			}
+		}
+		break;
 
 	case features_invulnerable:
 		if (choice) {
@@ -3162,6 +3204,15 @@ static void M_DrawSmbString(const char* text, menu_t* menu, int item) {
 	Draw_Text(x, y, MENUCOLORWHITE, 1.0f, false, text);
 }
 
+static void M_DrawSmbStringSmall(const char* text, menu_t* menu, int item) {
+	int x;
+	int y;
+
+	x = menu->x + 206;
+	y = menu->y + 28;
+	Draw_Text(x, y, MENUCOLORWHITE, 0.7f, false, text);
+}
+
 //
 // M_StringWidth
 // Find string width from hu_font chars
@@ -3883,21 +3934,23 @@ boolean M_Responder(event_t* ev) {
 				}
 
 				currentMenu->lastOn = itemOn;
-				if (currentMenu->menuitems[itemOn].status >= 2 ||
+				if (currentMenu == &featuresDef) {
+					if (currentMenu->menuitems[itemOn].routine == M_DoFeature &&
+						itemOn == features_levels) {
+						gameaction = ga_warplevel;
+						gamemap = nextmap = levelwarp + 1;
+						M_ClearMenus();
+						dmemset(passwordData, 0xff, 16);
+						return true;
+					}
+				}
+				else if (currentMenu->menuitems[itemOn].status >= 2 ||
 					currentMenu->menuitems[itemOn].status == -2) {
 					currentMenu->menuitems[itemOn].routine(2);
 				}
 				else {
 					if (currentMenu == &ControlsDef) {
 						// don't do the fade effect and jump straight to the next screen
-						if (ev->type == ev_mousedown) { 
-							MenuBindEntryWasMouse = true; 
-							MenuBindIgnoreMouseButtons = ev->data1; 
-						}
-						else { 
-							MenuBindEntryWasMouse = false; 
-							MenuBindIgnoreMouseButtons = 0; 
-						}
 						M_ChangeKeyBinding(itemOn);
 					}
 					else {
