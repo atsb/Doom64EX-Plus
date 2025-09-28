@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(DOOM64EX-Plus LANGUAGES C VERSION 4.2.0.0)
+project(DOOM64_x64 LANGUAGES C VERSION 4.2.0.0)
 
 if (NOT DEFINED ENV{FMOD_STUDIO_SDK_ROOT})
 	message(
