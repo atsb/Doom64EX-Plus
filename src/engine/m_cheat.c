@@ -36,6 +36,7 @@
 #include "m_password.h"
 #include "st_stuff.h"
 #include "con_cvar.h"
+#include "i_system.h"
 
 typedef struct {
 	const char* cheat;
@@ -139,10 +140,12 @@ static void M_CheatBerserk(player_t* player, char dat[4]) {
 CVAR_EXTERNAL(sv_skill);
 
 static void DoWarp(char dat[4], boolean carryover) {
-
 	int map = datoi(dat);
 
-	if (!P_GetMapInfo(map)) return ;
+	if (!P_GetMapInfo(map)) {
+		I_Printf("Map %02d does not exist\n", map);
+		return;
+	}
 
 	int skill = (int)sv_skill.value;
 	gamemap = nextmap = map;

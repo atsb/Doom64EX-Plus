@@ -962,11 +962,11 @@ void D_DoomMain(void) {
 	I_Printf("I_Init: Setting up machine state.\n");
 	I_Init();
 
-	I_Printf("D_Init: Init DOOM parameters\n");
-	D_Init();
-
 	I_Printf("W_Init: Init WADfiles.\n");
 	W_Init();
+
+	I_Printf("D_Init: Init DOOM parameters\n");
+	D_Init();
 
 	I_Printf("R_Init: Init DOOM refresh daemon.\n");
 	R_Init();
