@@ -3951,7 +3951,14 @@ boolean M_Responder(event_t* ev) {
 				else {
 					if (currentMenu == &ControlsDef) {
 						// don't do the fade effect and jump straight to the next screen
-						M_ChangeKeyBinding(itemOn);
+						if (ev->type == ev_mousedown) {
+							MenuBindEntryWasMouse = true;
+							MenuBindIgnoreMouseButtons = ev->data1;
+						}
+						else {
+							MenuBindEntryWasMouse = false;
+							MenuBindIgnoreMouseButtons = 0;
+						}
 					}
 					else {
 						currentMenu->menuitems[itemOn].routine(itemOn);
