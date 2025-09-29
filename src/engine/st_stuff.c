@@ -72,6 +72,15 @@ CVAR_EXTERNAL(r_hudFilter);
 
 extern int game_world_shader_scope;
 
+static float st_flash_target_r = 1.0f;
+static float st_flash_target_g = 1.0f;
+static float st_flash_target_b = 1.0f;
+static float st_flash_target_a = 0.0f;
+static float st_flash_smooth_r = 1.0f;
+static float st_flash_smooth_g = 1.0f;
+static float st_flash_smooth_b = 1.0f;
+static float st_flash_smooth_a = 0.0f;
+
 //
 // STATUS BAR DATA
 //
@@ -746,13 +755,17 @@ void ST_Drawer(void) {
 	//
 
 	// atsb: this one was easy, replace with a shader and point the values to the GLSL..  done
-	if (flashcolor && v_accessibility.value < 1) {
-		const float rf = (float)st_flash_r * (1.0f / 255.0f);
-		const float gf = (float)st_flash_g * (1.0f / 255.0f);
-		const float bf = (float)st_flash_b * (1.0f / 255.0f);
-		const float af = (float)st_flash_a * (1.0f / 255.0f);
+	if (v_accessibility.value < 1) {
+		float smoothing = 0.90;
 
-		I_ShaderFullscreenTint(rf, gf, bf, af);
+		st_flash_smooth_r = st_flash_smooth_r * smoothing + st_flash_target_r * (1.0f - smoothing);
+		st_flash_smooth_g = st_flash_smooth_g * smoothing + st_flash_target_g * (1.0f - smoothing);
+		st_flash_smooth_b = st_flash_smooth_b * smoothing + st_flash_target_b * (1.0f - smoothing);
+		st_flash_smooth_a = st_flash_smooth_a * smoothing + st_flash_target_a * (1.0f - smoothing);
+
+		if (st_flash_smooth_a > 0.012f) {
+			I_ShaderFullscreenTint(st_flash_smooth_r, st_flash_smooth_g, st_flash_smooth_b, st_flash_smooth_a);
+		}
 	}
 
 	I_ShaderUnBind();
@@ -1041,89 +1054,90 @@ void ST_UpdateFlash(void) {
 
 	flashcolor = 0;
 
+	st_flash_target_a = 0.0f;
+
 	// invulnerability flash (white)
 	if (p->powers[pw_invulnerability] > 61 || (p->powers[pw_invulnerability] & 8)) {
 		flashcolor = LONG(D_RGBA(128, 128, 128, 0xff));
-		st_flash_r = 255;
-		st_flash_g = 255;
-		st_flash_b = 255;
-		st_flash_a = 64;
+		st_flash_target_r = 1.0f;
+		st_flash_target_g = 1.0f;
+		st_flash_target_b = 1.0f;
+		st_flash_target_a = 64.0f / 255.0f;
 	}
 	// bfg flash (green)
 	else if (p->bfgcount) {
 		flashcolor = LONG(D_RGBA(0, p->bfgcount & 0xff, 0, 0xff));
-		st_flash_r = 0;
-		st_flash_g = 255;
-		st_flash_b = 0;
-		st_flash_a = p->bfgcount;
+		st_flash_target_r = 0.0f;
+		st_flash_target_g = 1.0f;
+		st_flash_target_b = 0.0f;
+
+		float raw_alpha = (float)p->bfgcount / 255.0f;
+
+		if (raw_alpha > 0.0f) {
+			float min_flash = 0.08f;
+			float max_flash = 0.6f;
+
+			st_flash_target_a = min_flash + (raw_alpha * (max_flash - min_flash));
+		}
+		else {
+			st_flash_target_a = 0.0f;
+		}
 	}
 	// damage and strength flash (red)
 	else if (p->damagecount || (p->powers[pw_strength] > 1)) {
 		int r1 = p->damagecount;
 		int r2 = p->powers[pw_strength];
 
-		if (r1) {
-			if (r1 > ST_MAXDMGCOUNT) {
-				r1 = ST_MAXDMGCOUNT;
-			}
-		}
+		if (r1 > ST_MAXDMGCOUNT) r1 = ST_MAXDMGCOUNT;
+		if (r2 == 1) r2 = 0;
+		else if (r2 > ST_MAXSTRCOUNT) r2 = ST_MAXSTRCOUNT;
 
-		if (r2 == 1) {
-			r2 = 0;
-		}
-		else if (r2 > ST_MAXSTRCOUNT) {
-			r2 = ST_MAXSTRCOUNT;
-		}
-
-		// take priority based on value
 		if (r1 > r2) {
 			flashcolor = LONG(D_RGBA(r1 & 0xff, 0, 0, 0xff));
-			st_flash_r = 255;
-			st_flash_g = 0;
-			st_flash_b = 0;
-			st_flash_a = r1;
+			st_flash_target_a = (float)r1 / 255.0f;
 		}
 		else {
 			flashcolor = LONG(D_RGBA(r2 & 0xff, 0, 0, 0xff));
-			st_flash_r = 255;
-			st_flash_g = 0;
-			st_flash_b = 0;
-			st_flash_a = r2;
+			st_flash_target_a = (float)r2 / 255.0f;
 		}
+		st_flash_target_r = 1.0f;
+		st_flash_target_g = 0.0f;
+		st_flash_target_b = 0.0f;
 	}
 	// light amplification goggles
 	else if (p->powers[pw_infrared] > 61 || (p->powers[pw_infrared] & 8)) {
 		flashcolor = LONG(D_RGBA(64, 64, 64, 0xff));
-		st_flash_r = 255;
-		st_flash_g = 255;
-		st_flash_b = 255;
-		st_flash_a = 44;
+		st_flash_target_r = 1.0f;
+		st_flash_target_g = 1.0f;
+		st_flash_target_b = 1.0f;
+		st_flash_target_a = 44.0f / 255.0f;
 	}
 	// suit flash (green/yellow)
 	else if (p->powers[pw_ironfeet] > 61 || (p->powers[pw_ironfeet] & 8)) {
 		flashcolor = LONG(D_RGBA(0, 32, 4, 0xff));
-		st_flash_r = 0;
-		st_flash_g = 255;
-		st_flash_b = 31;
-		st_flash_a = 64;
+		st_flash_target_r = 0.0f;
+		st_flash_target_g = 1.0f;
+		st_flash_target_b = 31.0f / 255.0f;
+		st_flash_target_a = 64.0f / 255.0f;
 	}
 	// bonus flash (yellow)
 	else if (p->bonuscount) {
 		int c1 = (p->bonuscount + 8) >> 3;
 		int c2;
 
-		if (c1 > ST_MAXBONCOUNT) {
-			c1 = ST_MAXBONCOUNT;
-		}
-
+		if (c1 > ST_MAXBONCOUNT) c1 = ST_MAXBONCOUNT;
 		c2 = (((c1 << 2) + c1) << 1);
 
 		flashcolor = LONG(D_RGBA(c2 & 0xff, c2 & 0xff, c1 & 0xff, 0xff));
-		st_flash_r = 255;
-		st_flash_g = 255;
-		st_flash_b = 0;
-		st_flash_a = (p->bonuscount + 8) << 1;
+		st_flash_target_r = 1.0f;
+		st_flash_target_g = 1.0f;
+		st_flash_target_b = 0.0f;
+		st_flash_target_a = (float)((p->bonuscount + 8) << 1) / 255.0f;
 	}
+	st_flash_r = (byte)(st_flash_target_r * 255.0f);
+	st_flash_g = (byte)(st_flash_target_g * 255.0f);
+	st_flash_b = (byte)(st_flash_target_b * 255.0f);
+	st_flash_a = (byte)(st_flash_target_a * 255.0f);
 }
 
 //
