@@ -700,6 +700,7 @@ void D_DoomLoop(void) {
 			G_RunGame();
 		}
 		else {
+			/*  Don't run demos as they do not play properly and crash the game
         {
             int demoexit = D_RunDemos();
             if (demoexit == ga_exitdemo) {
@@ -709,6 +710,7 @@ void D_DoomLoop(void) {
                 continue;
             }
         }
+			*/
     
 			D_MiniLoop(Credits_Start, NULL, Credits_Drawer, Credits_Ticker);
 
