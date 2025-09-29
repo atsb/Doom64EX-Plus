@@ -2360,7 +2360,7 @@ enum {
 
 menuitem_t FeaturesMenu[] = {
 	{2,"Warp To Level " ,M_DoFeature,'l'},
-	{2, NULL },
+	{2, "" },
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
