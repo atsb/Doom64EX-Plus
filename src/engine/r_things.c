@@ -384,7 +384,7 @@ static boolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) 
 		R_LightToVertex(vertex,
 			thing->subsector->sector->colors[LIGHT_THING], 4);
 
-		float brightness_multiplier = 1.8f;
+		float brightness_multiplier = 1.6f;
 		for (int i = 0; i < 4; i++) {
 			vertex[i].r = (byte)fmin(255.0f, (float)vertex[i].r * brightness_multiplier);
 			vertex[i].g = (byte)fmin(255.0f, (float)vertex[i].g * brightness_multiplier);
@@ -639,6 +639,14 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	}
 	else {
 		color = R_GetSectorLight(alpha, sector->colors[LIGHT_THING]);
+
+		float weapon_brightness = 1.4f;
+		byte r = (byte)fmin(255.0f, ((color >> 0) & 0xFF) * weapon_brightness);
+		byte g = (byte)fmin(255.0f, ((color >> 8) & 0xFF) * weapon_brightness);
+		byte b = (byte)fmin(255.0f, ((color >> 16) & 0xFF) * weapon_brightness);
+		byte a = (color >> 24) & 0xFF;
+
+		color = D_RGBA(r, g, b, a);
 	}
 
 	spritenum = sprframe->lump[0];
