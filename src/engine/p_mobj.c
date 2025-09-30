@@ -977,16 +977,6 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	fixed_t             z;
 	boolean				ismonster;
 
-	// count deathmatch start positions
-
-	if (mthing->type == 11) {
-		if (deathmatch_p < &deathmatchstarts[10]) {
-			dmemcpy(deathmatch_p, mthing, sizeof(*mthing));
-			deathmatch_p++;
-		}
-		return NULL;
-	}
-
 	// check for players specially
 
 	if (mthing->type <= 4 && mthing->type > 0) {

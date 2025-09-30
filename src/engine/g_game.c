@@ -1371,34 +1371,6 @@ boolean G_CheckSpot(int playernum, mapthing_t* mthing) {
 }
 
 //
-// G_DeathMatchSpawnPlayer
-// Spawns a player at one of the random death match spots
-// called at level load and each death
-//
-
-void G_DeathMatchSpawnPlayer(int playernum) {
-	int i, j;
-	int selections;
-
-	selections = deathmatch_p - deathmatchstarts;
-	if (selections < 4) {
-		I_Error("G_DeathMatchSpawnPlayer: Only %i deathmatch spots, 4 required", selections);
-	}
-
-	for (j = 0; j < 20; j++) {
-		i = P_Random() % selections;
-		if (G_CheckSpot(playernum, &deathmatchstarts[i])) {
-			deathmatchstarts[i].type = playernum + 1;
-			P_SpawnPlayer(&deathmatchstarts[i]);
-			return;
-		}
-	}
-
-	// no good spot, so the player will probably get stuck
-	P_SpawnPlayer(&playerstarts[playernum]);
-}
-
-//
 // G_DoReborn
 //
 
@@ -1416,12 +1388,6 @@ void G_DoReborn(int playernum) {
 
 		players[playernum].mo->player = NULL;
 
-		// spawn at random spot if in death match
-		if (deathmatch) {
-			G_DeathMatchSpawnPlayer(playernum);
-			return;
-		}
-
 		if (G_CheckSpot(playernum, &playerstarts[playernum])) {
 			P_SpawnPlayer(&playerstarts[playernum]);
 			return;
@@ -1430,12 +1396,14 @@ void G_DoReborn(int playernum) {
 		// try to spawn at one of the other players spots
 		for (i = 0; i < MAXPLAYERS; i++) {
 			if (G_CheckSpot(playernum, &playerstarts[i])) {
-				mapthing_t tmp = playerstarts[i];
-				tmp.type = playernum + 1;    // fake as other player
-				P_SpawnPlayer(&tmp);
+				playerstarts[i].type = playernum + 1;    // fake as other player
+				P_SpawnPlayer(&playerstarts[i]);
+				playerstarts[i].type = i + 1;            // restore
 				return;
 			}
+			// he's going to be inside something.  Too bad.
 		}
+		P_SpawnPlayer(&playerstarts[playernum]);
 	}
 }
 

@@ -30,7 +30,6 @@ extern boolean sendpause;
 void G_Init(void);
 void G_ReloadDefaults(void);
 void G_SaveDefaults(void);
-void G_DeathMatchSpawnPlayer(int playernum);
 void G_InitNew(skill_t skill, int map);
 void G_DeferedInitNew(skill_t skill, int map);
 void G_LoadGame(const char* name);
