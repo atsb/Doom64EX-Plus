@@ -1430,14 +1430,12 @@ void G_DoReborn(int playernum) {
 		// try to spawn at one of the other players spots
 		for (i = 0; i < MAXPLAYERS; i++) {
 			if (G_CheckSpot(playernum, &playerstarts[i])) {
-				playerstarts[i].type = playernum + 1;    // fake as other player
-				P_SpawnPlayer(&playerstarts[i]);
-				playerstarts[i].type = i + 1;            // restore
+				mapthing_t tmp = playerstarts[i];
+				tmp.type = playernum + 1;    // fake as other player
+				P_SpawnPlayer(&tmp);
 				return;
 			}
-			// he's going to be inside something.  Too bad.
 		}
-		P_SpawnPlayer(&playerstarts[playernum]);
 	}
 }
 
