@@ -3,7 +3,8 @@
 
 set -xe
 
-GAME_BIN=DOOM64EX-Plus
+GAME_BIN=DOOM64
+BASENAME=DOOM64EX-Plus
 
 patch_appimage_elf_header() {
     # replace bytes 8-10 of the ELF header with zeros
@@ -17,8 +18,8 @@ zypper --no-refresh in -y SDL3-devel
 
 make clean
 
-# -fPIC and -pie are needed on aarch64 for linuxdeploy to work (otherwise ldd on DOOM64EX-Plus crashes)
-CFLAGS="-fPIC -DDOOM_UNIX_INSTALL" LDFLAGS="-pie" $(rpm -E '%make_build') OPTFLAGS="$(rpm -E '%optflags')"
+# -fPIC and -pie are needed on aarch64 for linuxdeploy to work (otherwise ldd on DOOM64 crashes)
+CFLAGS="-fPIC" LDFLAGS="-pie" $(rpm -E '%make_build') OPTFLAGS="$(rpm -E '%optflags')"
 
 # remove debug info
 strip -s $GAME_BIN
@@ -56,10 +57,10 @@ cp ../doom64ex-plus.wad "${APPDIR}/usr/bin"
 # for running linuxdeploy AppImage without needing FUSE
 export APPIMAGE_EXTRACT_AND_RUN=1
 
-./$DEPLOYBIN --appdir "$APPDIR" --executable ../$GAME_BIN --desktop-file DOOM64EX-Plus.desktop  --icon-file DOOM64EX-Plus.png --output appimage
+./$DEPLOYBIN --appdir "$APPDIR" --executable ../$GAME_BIN --desktop-file $BASENAME.desktop  --icon-file $BASENAME.png --output appimage
 
 # normalize AppImage filename, including version
 VERSION=$(grep "FileVersion" ../src/engine/doom64ex-plus.rc | cut -d ' ' -f 3 | tr -d '"')
-mv $GAME_BIN-$ARCH.AppImage doom64ex-plus-$VERSION-linux-$ARCH.AppImage 
+mv $BASENAME-$ARCH.AppImage doom64ex-plus-$VERSION-linux-$ARCH.AppImage
 
 
