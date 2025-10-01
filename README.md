@@ -18,8 +18,10 @@ Doom 64 EX+ is a community-driven continuation of Samuel "Kaiser" Villarreal's o
 * **Modernized Codebase:**
     * **SDL3 Integration:** As one of the first *Doom* source ports to standardize on SDL3, it leverages the latest in cross-platform library support.
     * **Simplified Internals:** The KEX-related code has been largely removed to align the project more closely with the structure of other popular *Doom* source ports, simplifying development and code portability.
-* **Remaster Support:** Full KPF support and remaster PWAD support!  Just install a mod and play, no changes required.
-* **Shaders:** Shader support for that lovely 3-point N64 texture look!
+* **Remaster Support:**
+   * **Full KPF support:** and remaster PWAD support!  Just install a mod and play, no changes required.
+* **Shaders:**
+   * **Shader support:** for that lovely 3-point N64 texture look!
 
 ## License
 
