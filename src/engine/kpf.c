@@ -99,9 +99,10 @@ static int KPF_ExtractInternalData(const char* kpf_path,
     for (long pos = scan_from; pos >= min_scan; --pos) {
         if (fseek(f, pos, SEEK_SET) != 0) 
             break;
-        unsigned int sig = 0;
-        if (fread(&sig, 1, 4, f) != 4) 
+        unsigned char buf[4];
+        if (fread(buf, 1, 4, f) != 4)
             break;
+        unsigned int sig = rd32(buf);
         if (sig == ZIP_SIG_EOCD) {
             unsigned char eocd[22];
             if (fseek(f, pos, SEEK_SET) != 0) 
