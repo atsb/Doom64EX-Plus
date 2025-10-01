@@ -12,23 +12,14 @@ Doom 64 EX+ is a community-driven continuation of Samuel "Kaiser" Villarreal's o
 * **Optimized Performance:** Delivers superior performance, running smoother than even the official Nightdive remaster in many cases.
 * **Quality of Life Fixes:**
     * Secrets now trigger a notification message upon discovery.
-    * Expanded map support up to the `MAP40` slot.
+    * Expanded map support past the `MAP40` slot.
     * Restored the "Medkit you REALLY need!" message.
     * Numerous bug fixes for a more stable experience.
 * **Modernized Codebase:**
     * **SDL3 Integration:** As one of the first *Doom* source ports to standardize on SDL3, it leverages the latest in cross-platform library support.
     * **Simplified Internals:** The KEX-related code has been largely removed to align the project more closely with the structure of other popular *Doom* source ports, simplifying development and code portability.
-
-### A Note on Modding
-
-For modders looking to adapt existing work or create new content for Doom 64 EX+, please be aware of the following changes from older versions of EX:
-
-* Map markers now use `DM_START` and `DM_END` and `DS_START` and `DS_END` (in line with the remaster).
-* The old `G_START` and `G_END` graphic lump markers are no longer used. Instead, graphic assets are identified as follows:
-    * The **first** graphic marker in a WAD **must** be named `SYMBOLS`.
-    * The **last** graphic marker in a WAD **must** be named `MOUNTC`.
-
-You can find PWADs that have been specifically adapted for EX+ on [ModDB](https://www.moddb.com/games/doom-64/downloads/). Look for files designated for "EX+" or "EX Plus".
+    * **Remaster Support:** Full KPF support and remaster PWAD support!  Just install a mod and play, no changes required.
+    * **Shaders:** Shader support for that lovely 3-point N64 texture look!
 
 ## License
 
@@ -73,21 +64,8 @@ On startup, Doom 64 EX+ will try to automatically locate asset files from your D
 
 The repository includes build scripts for easy compilation. Ensure all dependencies, including the manually downloaded FMOD libraries, are installed and accessible to your compiler first.
 
-* **Linux:**
     ```
     make -j
-    ```
-* **FreeBSD:**
-    ```bash
-    ./build_freebsd.sh
-    ```
-* **OpenBSD:**
-    ```bash
-    ./build_openbsd.sh
-    ```
-* **Raspberry Pi 3 (Raspbian):**
-    ```bash
-    ./build_rpi3_raspbian.sh
     ```
 
 **Data File Paths (Linux/BSD):** The engine searches for asset files in the following order:
