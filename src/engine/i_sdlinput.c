@@ -742,37 +742,43 @@ void I_StartTic(void) {
 	I_GamepadUpdate();
 }
 
-void I_FPSLimit(void) {
-
-	if (v_maxfps.value <= 0) // normally not possible because clamped in [60, 1000] range
-		return;
-
-	static Uint64  fpsLimitNS = 0;
-
-	const Uint64 deadlineNS = 1000000; // 1ms
-	const Uint64 frameTimeNS = 1000000000 / (int)v_maxfps.value;
-
-	Uint64 targetWakeNS = fpsLimitNS + frameTimeNS;
-
-	while (true) {
-
-		fpsLimitNS = SDL_GetTicksNS();
-		Uint64 timeToWaitNS = targetWakeNS - fpsLimitNS;
-
-		if (timeToWaitNS > 1000000000 || timeToWaitNS <= 0)	{
-			break;
+static float GetDisplayRefreshRate(void) {
+	SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
+	if (displayid) {
+		const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayid);
+		if (mode && mode->refresh_rate > 0) {
+			return mode->refresh_rate;
 		}
-
-		if (timeToWaitNS > deadlineNS) {
-			// Sleep, but try to wake before deadline.
-			SDL_DelayNS(timeToWaitNS - deadlineNS);
-		}
-		// Else we are too close to the deadline. OS sleep is not precise enough to wake us before it elapses.
-		// Go into active loop mode for the remainder of the deadline
-
 	}
+	return 60.0f; // not happy, return to 60
 }
 
+void I_FPSLimit(void) {
+	static Uint64 lastFrameTime = 0;
+	static float displayRefreshRate = 0.0f;
+
+	static int refreshCheckCounter = 0;
+	if (refreshCheckCounter++ % 60 == 0) {
+		displayRefreshRate = GetDisplayRefreshRate();
+	}
+
+	float targetFPS = (v_maxfps.value > 0) ? v_maxfps.value : displayRefreshRate;
+	const Uint64 targetFrameTimeNS = (Uint64)(1000000000.0f / targetFPS);
+
+	Uint64 currentTime = SDL_GetTicksNS();
+	if (lastFrameTime > 0) {
+		Uint64 elapsed = currentTime - lastFrameTime;
+		if (elapsed < targetFrameTimeNS) {
+			Uint64 sleepTime = targetFrameTimeNS - elapsed;
+			if (sleepTime > 500000) {
+				SDL_DelayNS(sleepTime - 100000);
+			}
+			while (SDL_GetTicksNS() - lastFrameTime < targetFrameTimeNS) {
+			}
+		}
+	}
+	lastFrameTime = SDL_GetTicksNS();
+}
 
 //
 // I_FinishUpdate
@@ -781,8 +787,7 @@ void I_FPSLimit(void) {
 void I_FinishUpdate(void) {
 
 	static int prev_swap_interval = -1;
-	// if the menu is displayed, limit framerate to the monitor's framerate by enabling vsync (swap interval = 1)
-	int swap_interval = menuactive ? 1 : (int)v_vsync.value;
+	int swap_interval = (int)v_vsync.value;
 
 	I_UpdateGrab();
 
@@ -793,20 +798,10 @@ void I_FinishUpdate(void) {
 
 	SDL_GL_SwapWindow(window);
 
-	if(swap_interval > 0) {
-
-		// With vsync enabled, glFinish() is absolutely required to synchronize CPU and GPU to avoid input lag, 
-		// especially on 60 Hz monitors (maybe lag is less pronounced with high refresh rate monitors at >= 144Hz)
-		// Without using something more elaborate like fences, glFinish() is the best we have
-
-		// glFinish() is not necessary with vsync disabled and might even decrease max fps a bit, which might only be problematic
-		// with very low end GPUs such as integrated graphics in older laptops that can barely go over 60 fps.
-
-		dglFinish();
+	if (swap_interval > 0) {
+		glFinish();
 	}
 	else if (i_interpolateframes.value > 0) {
-		// only limit fps with vsync disabled and interpolation enabled
-		// with vsync enabled, fps is limited by vsync (swap interval + glFinish())
 		I_FPSLimit();
 	}
 
