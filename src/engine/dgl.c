@@ -93,10 +93,7 @@ void dglSetVertex(vtx_t* vtx) {
 		return;
 	}
 
-	dglTexCoordPointer(2, GL_FLOAT, sizeof(vtx_t), &vtx->tu);
-	dglVertexPointer(3, GL_FLOAT, sizeof(vtx_t), vtx);
-	dglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(vtx_t), &vtx->r);
-
+	dglInterleavedArrays(GL_T2F_C4UB_V3F, 8, vtx);
 	dgl_prevptr = vtx;
 }
 
@@ -106,15 +103,15 @@ void dglSetVertex(vtx_t* vtx) {
 
 void dglTriangle(int v0, int v1, int v2) {
 #ifdef LOG_GLFUNC_CALLS
-    I_Printf("dglTriangle(v0=%i, v1=%i, v2=%i)\n", v0, v1, v2);
+	I_Printf("dglTriangle(v0=%i, v1=%i, v2=%i)\n", v0, v1, v2);
 #endif
-    if(indicecnt + 3 >= MAXINDICES) {
-        I_Error("Triangle indice overflow");
-    }
+	if (indicecnt + 3 >= MAXINDICES) {
+		I_Error("Triangle indice overflow");
+	}
 
-    drawIndices[indicecnt++] = v0;
-    drawIndices[indicecnt++] = v1;
-    drawIndices[indicecnt++] = v2;
+	drawIndices[indicecnt++] = v0;
+	drawIndices[indicecnt++] = v1;
+	drawIndices[indicecnt++] = v2;
 }
 
 //

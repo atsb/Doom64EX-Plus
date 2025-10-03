@@ -34,4 +34,20 @@ typedef unsigned short		word;
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))
 #endif
 
+#if defined(_MSC_VER)
+#define ALIGNED(x) __declspec(align(x))
+#define ALIGNOF(x) __alignof(x)
+#else
+
+#if defined(__GNUC__) || defined(__clang__)
+#include <stdalign.h>
+#define ALIGNED(x) __attribute__((aligned(x)))
+#if ((__STDC_VERSION__ >= 202000) || defined (__alignof_is_defined))
+#define ALIGNOF(x) __alignof__(x)
+#else
+#error "Unknown compiler can't define ALIGN/ALIGNOF"
+#endif
+#endif
+#endif
+
 #endif
