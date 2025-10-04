@@ -22,35 +22,38 @@
 #include "doomtype.h"
 
 typedef GLuint        dtexture;
-typedef GLfloat        rfloat;
-typedef GLuint        rcolor;
-typedef GLuint        rbuffer;
+typedef GLfloat         rfloat;
+typedef GLuint          rcolor;
+typedef GLuint         rbuffer;
 typedef GLhandleARB    rhandle;
 
 extern int gl_max_texture_units;
 extern int gl_max_texture_size;
 extern boolean gl_has_combiner;
 
-typedef struct {
-	rfloat    x;
-	rfloat    y;
-	rfloat    z;
+#define MAXSPRPALSETS       4
+
+#pragma pack(push,1)
+typedef struct ALIGNED(4) {
+union { struct { byte r,g,b,a; }; rcolor rgba; };
+} dPalette_t;
+#pragma pack(pop)
+
+#pragma pack(push,1)
+typedef struct ALIGNED(32) {
 	rfloat    tu;
 	rfloat    tv;
 	byte r;
 	byte g;
 	byte b;
 	byte a;
+	rfloat     x;
+	rfloat     y;
+	rfloat     z;
+	dPalette_t light0;
+	dPalette_t light1;
 } vtx_t;
-
-#define MAXSPRPALSETS       4
-
-typedef struct {
-	byte r;
-	byte g;
-	byte b;
-	byte a;
-} dPalette_t;
+#pragma pack(pop)
 
 #define GLSTATE_BLEND       0
 #define GLSTATE_CULL        1
