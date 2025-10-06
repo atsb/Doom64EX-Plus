@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{f7595469-0b54-4529-b8fd-b73f4c061494}</ProjectGuid>
+    <RootNamespace>Doom64EX+</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>DOOM64</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>true</VcpkgEnabled>
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+    <VcpkgXUseBuiltInApplocalDeps>false</VcpkgXUseBuiltInApplocalDeps>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;USESYSCONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src\engine\3rdparty\Includes</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\src\engine\3rdparty\Libs\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;libfluidsynth.lib;zlib.lib;libpng16.lib;SDL2main.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\vcpkg\SDL3-3.2.22\include;C:\vcpkg\packages\zlib_x64-windows\include;C:\vcpkg\packages\libpng_x64-windows\include;$(ProjectDir)..\thirdparty\Includes</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libpng16.lib;zlib.lib;SDL3.lib;nvapi64.lib;fmod_vc.lib;opengl32.lib;wsock32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\vcpkg\SDL3-3.2.22\lib\x64;C:\vcpkg\packages\libpng_x64-windows\lib;C:\vcpkg\packages\zlib_x64-windows\lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\thirdparty\Libs\x64</AdditionalLibraryDirectories>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>true</MapExports>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64\fmod.dll" $(OutputPath)
+copy ..\doom64ex-plus.wad $(OutputPath)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\vcpkg\SDL3-3.2.22\include;C:\vcpkg\packages\zlib_x64-windows\include;C:\vcpkg\packages\libpng_x64-windows\include;$(ProjectDir)..\thirdparty\Includes</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <Optimization>Disabled</Optimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\vcpkg\SDL3-3.2.22\lib\x64;C:\vcpkg\packages\libpng_x64-windows\lib;C:\vcpkg\packages\zlib_x64-windows\lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\thirdparty\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libpng16.lib;zlib.lib;SDL3.lib;nvapi64.lib;fmod_vc.lib;opengl32.lib;wsock32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkErrorReporting>NoErrorReport</LinkErrorReporting>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64\fmod.dll" $(OutputPath)
+copy ..\doom64ex-plus.wad $(OutputPath)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\engine\am_draw.c" />
+    <ClCompile Include="..\src\engine\am_map.c" />
+    <ClCompile Include="..\src\engine\con_console.c" />
+    <ClCompile Include="..\src\engine\con_cvar.c" />
+    <ClCompile Include="..\src\engine\dgl.c" />
+    <ClCompile Include="..\src\engine\d_devstat.c" />
+    <ClCompile Include="..\src\engine\d_main.c" />
+    <ClCompile Include="..\src\engine\d_net.c" />
+    <ClCompile Include="..\src\engine\f_finale.c" />
+    <ClCompile Include="..\src\engine\gl_draw.c" />
+    <ClCompile Include="..\src\engine\gl_main.c" />
+    <ClCompile Include="..\src\engine\gl_texture.c" />
+    <ClCompile Include="..\src\engine\g_actions.c" />
+    <ClCompile Include="..\src\engine\g_demo.c" />
+    <ClCompile Include="..\src\engine\g_game.c" />
+    <ClCompile Include="..\src\engine\g_settings.c" />
+    <ClCompile Include="..\src\engine\info.c" />
+    <ClCompile Include="..\src\engine\in_stuff.c" />
+    <ClCompile Include="..\src\engine\i_audio.c">
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\i_main.c" />
+    <ClCompile Include="..\src\engine\i_png.c" />
+    <ClCompile Include="..\src\engine\i_sdlinput.c" />
+    <ClCompile Include="..\src\engine\i_sectorcombiner.c" />
+    <ClCompile Include="..\src\engine\i_shaders.c" />
+    <ClCompile Include="..\src\engine\i_system.c" />
+    <ClCompile Include="..\src\engine\i_video.c" />
+    <ClCompile Include="..\src\engine\kpf.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\md5.c" />
+    <ClCompile Include="..\src\engine\m_cheat.c" />
+    <ClCompile Include="..\src\engine\m_fixed.c" />
+    <ClCompile Include="..\src\engine\m_keys.c" />
+    <ClCompile Include="..\src\engine\m_menu.c" />
+    <ClCompile Include="..\src\engine\m_misc.c" />
+    <ClCompile Include="..\src\engine\m_password.c" />
+    <ClCompile Include="..\src\engine\m_random.c" />
+    <ClCompile Include="..\src\engine\m_shift.c" />
+    <ClCompile Include="..\src\engine\net_client.c" />
+    <ClCompile Include="..\src\engine\net_common.c" />
+    <ClCompile Include="..\src\engine\net_io.c" />
+    <ClCompile Include="..\src\engine\net_loop.c" />
+    <ClCompile Include="..\src\engine\net_packet.c" />
+    <ClCompile Include="..\src\engine\net_query.c" />
+    <ClCompile Include="..\src\engine\net_server.c" />
+    <ClCompile Include="..\src\engine\net_structure.c" />
+    <ClCompile Include="..\src\engine\p_ceilng.c" />
+    <ClCompile Include="..\src\engine\p_doors.c" />
+    <ClCompile Include="..\src\engine\p_enemy.c" />
+    <ClCompile Include="..\src\engine\p_floor.c" />
+    <ClCompile Include="..\src\engine\p_inter.c" />
+    <ClCompile Include="..\src\engine\p_lights.c" />
+    <ClCompile Include="..\src\engine\p_macros.c" />
+    <ClCompile Include="..\src\engine\p_map.c" />
+    <ClCompile Include="..\src\engine\p_mapinfo.c" />
+    <ClCompile Include="..\src\engine\p_maputl.c" />
+    <ClCompile Include="..\src\engine\p_mobj.c" />
+    <ClCompile Include="..\src\engine\p_plats.c" />
+    <ClCompile Include="..\src\engine\p_pspr.c" />
+    <ClCompile Include="..\src\engine\p_saveg.c" />
+    <ClCompile Include="..\src\engine\p_setup.c" />
+    <ClCompile Include="..\src\engine\p_sight.c" />
+    <ClCompile Include="..\src\engine\p_spec.c" />
+    <ClCompile Include="..\src\engine\p_switch.c" />
+    <ClCompile Include="..\src\engine\p_telept.c" />
+    <ClCompile Include="..\src\engine\p_tick.c" />
+    <ClCompile Include="..\src\engine\p_user.c" />
+    <ClCompile Include="..\src\engine\r_bsp.c" />
+    <ClCompile Include="..\src\engine\r_clipper.c" />
+    <ClCompile Include="..\src\engine\r_drawlist.c" />
+    <ClCompile Include="..\src\engine\r_lights.c" />
+    <ClCompile Include="..\src\engine\r_main.c" />
+    <ClCompile Include="..\src\engine\r_scene.c" />
+    <ClCompile Include="..\src\engine\r_sky.c" />
+    <ClCompile Include="..\src\engine\r_things.c" />
+    <ClCompile Include="..\src\engine\r_wipe.c" />
+    <ClCompile Include="..\src\engine\sc_main.c" />
+    <ClCompile Include="..\src\engine\sha1.c" />
+    <ClCompile Include="..\src\engine\steam.c" />
+    <ClCompile Include="..\src\engine\st_stuff.c" />
+    <ClCompile Include="..\src\engine\s_sound.c" />
+    <ClCompile Include="..\src\engine\tables.c" />
+    <ClCompile Include="..\src\engine\wi_stuff.c" />
+    <ClCompile Include="..\src\engine\w_file.c" />
+    <ClCompile Include="..\src\engine\w_merge.c" />
+    <ClCompile Include="..\src\engine\w_wad.c" />
+    <ClCompile Include="..\src\engine\z_zone.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\engine\am_draw.h" />
+    <ClInclude Include="..\src\engine\am_map.h" />
+    <ClInclude Include="..\src\engine\con_console.h" />
+    <ClInclude Include="..\src\engine\con_cvar.h" />
+    <ClInclude Include="..\src\engine\dgl.h" />
+    <ClInclude Include="..\src\engine\doomdata.h" />
+    <ClInclude Include="..\src\engine\doomdef.h" />
+    <ClInclude Include="..\src\engine\doomstat.h" />
+    <ClInclude Include="..\src\engine\doomtype.h" />
+    <ClInclude Include="..\src\engine\d_devstat.h" />
+    <ClInclude Include="..\src\engine\d_main.h" />
+    <ClInclude Include="..\src\engine\d_net.h" />
+    <ClInclude Include="..\src\engine\d_player.h" />
+    <ClInclude Include="..\src\engine\d_think.h" />
+    <ClInclude Include="..\src\engine\d_ticcmd.h" />
+    <ClInclude Include="..\src\engine\f_finale.h" />
+    <ClInclude Include="..\src\engine\gl_draw.h" />
+    <ClInclude Include="..\src\engine\gl_main.h" />
+    <ClInclude Include="..\src\engine\gl_texture.h" />
+    <ClInclude Include="..\src\engine\g_actions.h" />
+    <ClInclude Include="..\src\engine\g_controls.h" />
+    <ClInclude Include="..\src\engine\g_demo.h" />
+    <ClInclude Include="..\src\engine\g_game.h" />
+    <ClInclude Include="..\src\engine\g_settings.h" />
+    <ClInclude Include="..\src\engine\info.h" />
+    <ClInclude Include="..\src\engine\i_audio.h" />
+    <ClInclude Include="..\src\engine\i_png.h" />
+    <ClInclude Include="..\src\engine\i_sdlinput.h" />
+    <ClInclude Include="..\src\engine\i_sectorcombiner.h" />
+    <ClInclude Include="..\src\engine\i_shaders.h" />
+    <ClInclude Include="..\src\engine\i_swap.h" />
+    <ClInclude Include="..\src\engine\i_system.h" />
+    <ClInclude Include="..\src\engine\i_system_io.h" />
+    <ClInclude Include="..\src\engine\i_video.h" />
+    <ClInclude Include="..\src\engine\kpf.h" />
+    <ClInclude Include="..\src\engine\md5.h" />
+    <ClInclude Include="..\src\engine\m_cheat.h" />
+    <ClInclude Include="..\src\engine\m_fixed.h" />
+    <ClInclude Include="..\src\engine\m_keys.h" />
+    <ClInclude Include="..\src\engine\m_menu.h" />
+    <ClInclude Include="..\src\engine\m_misc.h" />
+    <ClInclude Include="..\src\engine\m_password.h" />
+    <ClInclude Include="..\src\engine\m_random.h" />
+    <ClInclude Include="..\src\engine\m_shift.h" />
+    <ClInclude Include="..\src\engine\net_client.h" />
+    <ClInclude Include="..\src\engine\net_common.h" />
+    <ClInclude Include="..\src\engine\net_defs.h" />
+    <ClInclude Include="..\src\engine\net_io.h" />
+    <ClInclude Include="..\src\engine\net_loop.h" />
+    <ClInclude Include="..\src\engine\net_packet.h" />
+    <ClInclude Include="..\src\engine\net_query.h" />
+    <ClInclude Include="..\src\engine\net_server.h" />
+    <ClInclude Include="..\src\engine\net_structure.h" />
+    <ClInclude Include="..\src\engine\p_inter.h" />
+    <ClInclude Include="..\src\engine\p_local.h" />
+    <ClInclude Include="..\src\engine\p_macros.h" />
+    <ClInclude Include="..\src\engine\p_mobj.h" />
+    <ClInclude Include="..\src\engine\p_pspr.h" />
+    <ClInclude Include="..\src\engine\p_saveg.h" />
+    <ClInclude Include="..\src\engine\p_setup.h" />
+    <ClInclude Include="..\src\engine\p_spec.h" />
+    <ClInclude Include="..\src\engine\p_tick.h" />
+    <ClInclude Include="..\src\engine\resource.h" />
+    <ClInclude Include="..\src\engine\r_clipper.h" />
+    <ClInclude Include="..\src\engine\r_drawlist.h" />
+    <ClInclude Include="..\src\engine\r_lights.h" />
+    <ClInclude Include="..\src\engine\r_main.h" />
+    <ClInclude Include="..\src\engine\r_sky.h" />
+    <ClInclude Include="..\src\engine\r_things.h" />
+    <ClInclude Include="..\src\engine\r_wipe.h" />
+    <ClInclude Include="..\src\engine\sc_main.h" />
+    <ClInclude Include="..\src\engine\sha1.h" />
+    <ClInclude Include="..\src\engine\sounds.h" />
+    <ClInclude Include="..\src\engine\stb_image.h" />
+    <ClInclude Include="..\src\engine\stb_image_resize2.h" />
+    <ClInclude Include="..\src\engine\stb_image_write.h" />
+    <ClInclude Include="..\src\engine\steam.h" />
+    <ClInclude Include="..\src\engine\st_stuff.h" />
+    <ClInclude Include="..\src\engine\s_sound.h" />
+    <ClInclude Include="..\src\engine\tables.h" />
+    <ClInclude Include="..\src\engine\t_bsp.h" />
+    <ClInclude Include="..\src\engine\wi_stuff.h" />
+    <ClInclude Include="..\src\engine\w_file.h" />
+    <ClInclude Include="..\src\engine\w_merge.h" />
+    <ClInclude Include="..\src\engine\w_wad.h" />
+    <ClInclude Include="..\src\engine\z_zone.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\engine\doom64ex-plus.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\engine\doom64ex-plus.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\engine\defconfig.inc" />
+    <None Include="vcpkg-configuration.json" />
+    <None Include="vcpkg.json" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

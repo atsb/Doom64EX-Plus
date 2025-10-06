@@ -1,174 +1,107 @@
 # Doom 64 EX+
 
-Doom 64 EX+ is a continuation project of Samuel "Kaiser" Villarreal's Doom 64 EX aimed to recreate DOOM 64 as closely as possible with additional modding features.
+Doom 64 EX+ is a community-driven continuation of Samuel "Kaiser" Villarreal's original Doom 64 EX project. The primary goal of Doom 64 EX+ is to faithfully recreate the classic Nintendo 64 experience while incorporating modern features, extensive modding capabilities, and performance enhancements.
 
-## Differences from Kaiser's C++ version of EX on GitHub:
+## Key Features and Differences from Legacy Doom 64 EX
 
-* Support for the IWAD from Nightdive Studios' official remaster
-* Support for the Alpha Version of the game
-* Support for the Lost Levels campaign
-* Support for loading PWADs
-* Better performance (especially when compared to Nightdive Studios' official version (which is slow as hell)
-* Messages for discovering secret areas
-* Support of MAP slots up to MAP40
-* The "medkit you REALLY need!" message fix
-* Many bugfixes
-* KEX - This is pretty much removed.  The only remnants are some comments with [kex] and the rendering stuff that is used in later versions. I wanted to keep Doom 64 EX+ very close in format to other source ports for familiarity purposes and for ease of porting code from Erick's DOOM64-RE project.
+* **Modern IWAD Support:** Full, native support for the IWAD file from Nightdive Studios' official 2020 remaster of *DOOM 64*. Please note that the old ROM dump-based IWADs from older EX versions are **not** supported.
+* **The Lost Levels:** Includes support for the "Lost Levels" campaign content introduced in the official remaster.
+* **Enhanced Modding:**
+    * **PWAD Support:** Load custom PWAD files to play user-created maps and content.
+* **Upgraded Audio Engine:** Replaced the legacy FluidSynth with FMOD Studio for higher-quality, more reliable audio playback.
+* **Optimized Performance:** Delivers superior performance, running smoother than even the official Nightdive remaster in many cases.
+* **Quality of Life Fixes:**
+    * Secrets now trigger a notification message upon discovery.
+    * Expanded map support past the `MAP40` slot.
+    * Restored the "Medkit you REALLY need!" message.
+    * Numerous bug fixes for a more stable experience.
+* **Modernized Codebase:**
+    * **SDL3 Integration:** As one of the first *Doom* source ports to standardize on SDL3, it leverages the latest in cross-platform library support.
+    * **Simplified Internals:** The KEX-related code has been largely removed to align the project more closely with the structure of other popular *Doom* source ports, simplifying development and code portability.
+* **Remaster Support:**
+   * **Full KPF support:** and remaster PWAD support!  Just install a mod and play, no changes required.
+* **Shaders:**
+   * **Shader support:** for that lovely 3-point N64 texture look!
 
-There are a few bugs still present, which I am slowly fixing.
+## License
 
-This GitHub repo is the same as: https://sourceforge.net/projects/doom64ex-plus/ but if any contributors wish to help, then GitHub is a better place for it.
-
-## Mod Support
-
-For modders wanting to make their mods work with EX+, there are a few things that deviate from ancient EX:
-
-1. DM_START and DM_END tags are used (like the remaster) instead of DS_START and DS_END.
-2. G_START and G_END graphics tags aren't implemented (like the remaster).
-
-Instead:
-
-* The **first** tag for graphics **MUST BE** called SYMBOLS.
-* The **last** tag for graphics **MUST BE** called MOUNTC.
-
-They can either be a tag or a graphic.  This is due to me not flat-out reading all PNGs in a WAD but instead, to support the official IWAD, I read the content like this to catch all the graphics that EX+ needs from the IWAD.
-
-No other changes are needed.
-
-## Where are the PWADs?
-
-Since most EX PWADS would be incompatible with EX+ for many reasons, I have been adapting them one-by-one for use on EX+
-You can find them on moddb, just look for the EX+ / EX Plus wads:
-https://www.moddb.com/games/doom-64/downloads/
-
-## Dehacked Support
-
-For modders interested in dehacked for DOOM64EX+, please refer to the 'modding' directory for reference.
-
-## [Discord server](https://discord.gg/Ktxz8nz)
+The source code for Doom 64 EX+ is released under the terms of the original **Doom Source License**.
 
 ## Dependencies
 
-* SDL2 and SDL2_net
-* ZLib
-* LibPNG
-* FluidSynth
-* OpenGL
+Before compiling from source, you must have the necessary development libraries installed on your system.
 
-## System Requirements - 32 or 64bit
+#### Core Dependencies:
 
-Linux Single Board Computer
+* **SDL3:** The core framework for windowing, input, and graphics.
+* **ZLib:** A library for data compression.
+* **LibPNG:** A library for reading and writing PNG image files.
+* **OpenGL:** A graphics API for rendering.
+* **FMOD Studio:** The audio engine.
+    * **Note for Linux and BSD Users:** FMOD is a **proprietary, closed-source audio API**. Due to its licensing, it is not available in the official software repositories of most distributions and operating systems. You must download the FMOD Studio SDK manually from the [FMOD website](https://www.fmod.com/download). Please be aware of the FMOD licensing terms, which are free for non-commercial projects but have restrictions.
 
-- Raspberry Pi 3B
+#### Launcher Dependency (Windows Only):
 
-*others may work but are untested*
+* **Microsoft .NET 6.0 (or higher):** The optional launcher application requires the .NET runtime to function. You can download it from the [official Microsoft website](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
 
-Linux / *BSD Desktop / Laptop
+## Installation and Compiling
 
-- 1.8GHz Dual Core CPU
-- 2GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Compliant Video Chip / Card
+### Step 1: Get the Source Code
 
-Windows
+First, clone the official repository to your local machine:
 
-- 1.8GHz Dual Core CPU
-- 4GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Compliant Video Chip / Card
+```bash
+git clone https://github.com/atsb/Doom64EX-Plus
+```
 
-macOS
+### Step 2: Acquire Game Data
 
-- mid-2013 macbook air or better (also arm64 systems)
-- 4GB RAM
-- 80MB Disk Space
-- OpenGL 2.1+ Compliant Video Chip / Card
+Doom 64 EX+ requires asset files from your legally owned copy of the official *DOOM 64* remaster (e.g., from Steam or GOG).
 
-## Installation
+On startup, Doom 64 EX+ will try to automatically locate asset files from your DOOM 64 installation from GOG (Windows) and Steam (Windows, Linux), in that order.
 
-Windows
+### Step 3: Compile for Your Platform
 
-- Windows does not yet support installing the software, however you are able to manually put the software in any directory
-	of your choosing and it will work fine.
+#### GNU/Linux & BSD
 
-GNU/Linux / BSD
+The repository includes build scripts for easy compilation. Ensure all dependencies, including the manually downloaded FMOD libraries, are installed and accessible to your compiler first.
 
-- GNU/Linux and BSD supports system installations using the compile-time macro *-DDOOM_UNIX_INSTALL*
-	this will force the software to look for all IWAD and supporting files inside ~/.local/share/doom64ex-plus
+    ```
+    make -j
+    ```
 
-Without the macro, it will look inside the current directory that the binary is in.
+**Data File Paths (Linux/BSD):** The engine searches for asset files in the following order:
+1.  `~/.local/share/doom64ex-plus/` (if compiled with `-DDOOM_UNIX_INSTALL`)
+2.  A system-wide directory like `/usr/share/games/doom64ex-plus` (if specified with `-DDOOM_UNIX_SYSTEM_DATADIR` at compile time).
+3.  The current directory where the executable is located.
 
-Packaging will not be done by myself, but any contributor is welcome to package the software for GNU/Linux or macOS.
+Save data is stored in the executable's directory.
 
-## Compiling
+#### macOS
 
-Clone this repo
+The recommended method is to install the pre-compiled version from [MacSourcePorts](https://macsourceports.com/game/doom64).
 
-    $ git clone https://github.com/atsb/Doom64EX-Plus
+For manual compilation, you must install the dependencies via a package manager like MacPorts. Then, use the provided **XCode project file**, which is the only supported method.
 
-## Linux
+**Data File Path (macOS):** Place your asset files in:
+`/Users/your_username/Library/Application Support/doom64ex-plus/`
 
-Use the `build.sh` script for a native build.
+#### Windows
 
-## macOS
-Install it from MacSourcePorts:
-https://macsourceports.com/game/doom64
+For Windows, use the Visual Studio solution file provided in the `Windows` directory of the repository to compile for either 32-bit or 64-bit systems.
 
-Or if you feel adventurous, read below:
-Install MacPorts and get the dependencies.
-
-Then use the XCode project file, which is the only supported way to compile on macOS.  Everything is already defined.
-The IWAD needs to be placed in: /Users/*user*/Library/Application Support/doom64ex-plus directory along with the files found within the Resources directory inside the bundle (.wad and .sf2).
-
-## Raspberry Pi 3
-
-Use `build_rpi3_raspbian.sh` for a native build of Raspberry Pi 3B
-
-## FreeBSD
-
-Use the `build_freebsd.sh` script for a native build of FreeBSD
-
-## OpenBSD
-
-Use the `build_openbsd.sh` script for a native build of OpenBSD
-
-## Windows
-
-Use the Visual Studio solution and project files provided in the `Windows` directory of the repository for both 32-bit or 64-bit builds.
-
-## Nintendo Switch
-
-Use the Makefile.ns to build the nso and nro files.
+**Data File Path (Windows):** Place the three asset files (`DOOM64.wad`, `doom64ex-plus.wad`, `DOOMSND.DLS`) in the **same directory** as the compiled `DOOM64EX+.exe`.
+ These data files are retrieved from the DOOM64 Remaster on GOG or Steam.
 
 ## Usage
 
-Doom 64 EX+ needs the DOOM 64 asset data files to be present for you to be able to play the game. The data files are:
+Once compiled and your asset files are in the correct location, simply run the executable:
 
-* `DOOM64.wad`
-* `doom64ex-plus.wad`
-* `doomsnd.sf2`
+* **Windows:** Double-click `DOOM64EX+.exe`. You may also use the optional `DOOM64EX+ Launcher.exe` for more configuration options.
+    * **NVIDIA Users:** If you experience stuttering, it is highly recommended to disable VSync for this application in your NVIDIA Control Panel.
+* **Linux/BSD/macOS:** Launch the executable from your terminal:
+    ```bash
+    ./doom64ex-plus
+    ```
 
-## Linux, FreeBSD/OpenBSD and Raspberry pi3
-
-You can place the asset data described above to any of the following directories:
-
-* The directory in which `doom64ex-plus` resides
-* `/usr/local/share/doom64ex-plus` or `/usr/share/games/doom64ex-plus`
-
-## macOS
-
-You can place the asset data described above to:
-
-* `/Users/*user*/Library/Application Support/doom64ex-plus`
-
-Then, you can start playing:
-
- $ DOOM64EX+
-
-**NOTE for Linux and FreeBSD/OpenBSD users:** As of Nov. 5, 2022, the save data is located in the same directory as the Linux executable and not in 
-`~/.local/share/doom64ex-plus`. The files can be securely moved into their new place.  Note: This assumes you have not compiled the software with the *-DDOOM_UNIX_INSTALL*
-
-### Windows
-
-The asset data files need to be located in the same directory as `DOOM64EX+.exe`.
-Then, you can start playing by launching `DOOM64EX+.exe` (or optionally by using `DOOM64EX+ Launcher.exe` instead).
+Enjoy the game! For support or to join the community, check out the official Discord server.
