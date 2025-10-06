@@ -119,13 +119,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\vcpkg\SDL3-3.2.22\include;C:\vcpkg\packages\zlib_x64-windows\include;C:\vcpkg\packages\libpng_x64-windows\include;$(ProjectDir)..\thirdparty\Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(ProjectDir)\SDL3-3.2.24\include;C:\vcpkg\packages\zlib_x64-windows\include;C:\vcpkg\packages\libpng_x64-windows\include;$(ProjectDir)..\thirdparty\Includes</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libpng16.lib;zlib.lib;SDL3.lib;nvapi64.lib;fmod_vc.lib;opengl32.lib;wsock32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\vcpkg\SDL3-3.2.22\lib\x64;C:\vcpkg\packages\libpng_x64-windows\lib;C:\vcpkg\packages\zlib_x64-windows\lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\thirdparty\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\SDL3-3.2.24\lib\x64;C:\vcpkg\packages\libpng_x64-windows\lib;C:\vcpkg\packages\zlib_x64-windows\lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\thirdparty\Libs\x64</AdditionalLibraryDirectories>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>true</MapExports>
     </Link>
@@ -142,7 +142,7 @@ copy ..\doom64ex-plus.wad $(OutputPath)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;WINDOWS;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\vcpkg\SDL3-3.2.22\include;C:\vcpkg\packages\zlib_x64-windows\include;C:\vcpkg\packages\libpng_x64-windows\include;$(ProjectDir)..\thirdparty\Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(ProjectDir)\SDL3-3.2.24\include;C:\vcpkg\packages\zlib_x64-windows\include;C:\vcpkg\packages\libpng_x64-windows\include;$(ProjectDir)..\thirdparty\Includes</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>Disabled</Optimization>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -153,7 +153,7 @@ copy ..\doom64ex-plus.wad $(OutputPath)</Command>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vcpkg\SDL3-3.2.22\lib\x64;C:\vcpkg\packages\libpng_x64-windows\lib;C:\vcpkg\packages\zlib_x64-windows\lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\thirdparty\Libs\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\SDL3-3.2.24\lib\x64;C:\vcpkg\packages\libpng_x64-windows\lib;C:\vcpkg\packages\zlib_x64-windows\lib;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(ProjectDir)..\thirdparty\Libs\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>libpng16.lib;zlib.lib;SDL3.lib;nvapi64.lib;fmod_vc.lib;opengl32.lib;wsock32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <LinkErrorReporting>NoErrorReport</LinkErrorReporting>
       <OptimizeReferences>true</OptimizeReferences>
