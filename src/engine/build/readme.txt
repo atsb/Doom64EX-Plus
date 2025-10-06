@@ -1,1 +1,0 @@
-André: This template.png is a image that can be used on ports that supports icons loading like 3ds, wii and etc.
