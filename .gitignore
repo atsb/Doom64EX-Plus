@@ -79,4 +79,6 @@ Windows/DOOM64EX+/x64/Debug/Doom64EX+.vcxproj.FileListAbsolute.txt
 
 # CMake build directory
 build*/
+
+# Zip files
 *.zip

@@ -1921,7 +1921,9 @@ void M_DrawVideo(void) {
 	static const char* filterType1[3] = { "N64", "Linear", "Nearest" };
 	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
+#ifdef HAS_FULLSCREEN_BORDERLESS
 	static const char* fullscreenType[2] = { "Borderless", "Exclusive" };
+#endif
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&

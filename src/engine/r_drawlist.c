@@ -38,6 +38,7 @@ static float envcolor[4] = { 0, 0, 0, 0 };
 drawlist_t drawlist[NUMDRAWLISTS];
 
 CVAR_EXTERNAL(r_texturecombiner);
+CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_objectFilter);
 
 extern int GL_WorldTextureIsTranslucent(int texnum);
@@ -149,7 +150,6 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
     vtxlist_t* head;
     vtxlist_t* tail;
     boolean checkNightmare = false;
-    boolean obj_nearest_bypass = false;
 
     if (tag < 0 || tag >= NUMDRAWLISTS) {
         return;
@@ -177,8 +177,6 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
             if (tag != DLT_SPRITE && is_translucent_entry(tag, head)) {
                 continue;
             }
-
-            obj_nearest_bypass = false;
 
             // break if no data found in list
             if (!head->data) {
@@ -224,13 +222,8 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
                 GL_BindSpriteTexture(head->texid, palette);
 
-                // Non-monster objects obey r_objectFilter
-                if (!(flags & MF_COUNTKILL) && ((int)r_objectFilter.value > 0)) {
-                    I_ShaderUnBind();
-                    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                    dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    obj_nearest_bypass = true;
-                }
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)(r_objectFilter.value == 0 && r_filter.value > 0) ? GL_LINEAR : GL_NEAREST);
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)(r_objectFilter.value == 0 && r_filter.value > 0) ? GL_LINEAR : GL_NEAREST);
 
                 // change blend states for nightmare things
                 if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
@@ -257,10 +250,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
             dglDrawGeometry(drawcount, drawVertex);
 
-            if (obj_nearest_bypass) {
-                I_ShaderBind();
-                obj_nearest_bypass = false;
-            }
+            I_ShaderBind();
 
             // count vertex size
             if (devparm) {
