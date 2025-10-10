@@ -56,12 +56,14 @@ typedef struct {
 	fixed_t        z;
 } degenmobj_t;
 
-typedef struct {
+#pragma pack(push, 1)
+typedef struct ALIGNED(16) {
 	fixed_t a;
 	fixed_t b;
 	fixed_t c;
 	fixed_t d;
 } plane_t;
+#pragma pack(pop)
 
 //
 // The SECTORS record, at runtime.
