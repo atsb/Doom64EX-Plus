@@ -93,9 +93,7 @@ void dglSetVertex(vtx_t* vtx) {
 		return;
 	}
 
-	dglTexCoordPointer(2, GL_FLOAT, sizeof(vtx_t), &vtx->tu);
-	dglVertexPointer(3, GL_FLOAT, sizeof(vtx_t), vtx);
-	dglColorPointer(4, GL_UNSIGNED_BYTE, sizeof(vtx_t), &vtx->r);
+	dglInterleavedArrays(GL_T2F_C4UB_V3F, sizeof(vtx_t), (GLvoid*)vtx);
 
 	dgl_prevptr = vtx;
 }
