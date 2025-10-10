@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(DOOM64 LANGUAGES C VERSION 5.0.0.0)
 
-if (NOT DEFINED ENV{FMOD_STUDIO_SDK_ROOT})
+if(NOT DEFINED ENV{FMOD_STUDIO_SDK_ROOT})
 	message(
 		FATAL_ERROR
 		"FMOD_STUDIO_SDK_ROOT environment variable is not set.\n"

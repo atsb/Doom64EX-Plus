@@ -81,8 +81,6 @@ static void Draw_GfxImageInternalInter(int x, int y, const char* name,
 	if (gfxIdx < 0) {
 		return;
 	}
-	float imgWidth = gfxwidth[gfxIdx];
-	float imgHeight = gfxheight[gfxIdx];
 
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

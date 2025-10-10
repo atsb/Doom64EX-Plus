@@ -96,7 +96,6 @@ static int curunit = -1;
 static unsigned char* g_tex_is_masked = NULL;
 static unsigned char* g_tex_is_translucent = NULL;
 static int            g_tex_num_alloc = 0;
-static unsigned char* texture_need_blend = NULL;
 
 extern void I_ShaderSetTextureSize(int w, int h);
 extern void I_ShaderSetUseTexture(int on);
@@ -358,10 +357,15 @@ void GL_BindWorldTexture(int texnum, int* width, int* height) {
 	if (!png || w <= 0 || h <= 0 || w > 8192 || h > 8192) {
 		GL_BindDummyTexture();
 		texturewidth[texnum] = textureheight[texnum] = 1;
-		if (width)
-			*width = 1; if (height) *height = 1;
-		if (png)
+		if (width) {
+			*width = 1;
+			if (height) {
+				*height = 1;
+			}
+		}
+		if (png) {
 			Z_Free(png);
+		}
 		curtexture = -1;
 		return;
 	}
@@ -714,7 +718,6 @@ static void InitSpriteTextures(void) {
 // GL_BindSpriteTexture
 //
 void GL_BindSpriteTexture(int spritenum, int pal) {
-	extern cvar_t r_spriteFilter;
 	byte* png;
 	int w, h;
 

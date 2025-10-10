@@ -620,40 +620,6 @@ static void Credits_Start(void) {
 // D_SplashScreen
 //
 
-
-//
-// D_RunDemos
-//
-static int D_RunDemos(void)
-{
-    const char* candidates[][3] = {
-        { "DEMO1LMP", "DEMO1", NULL },
-        { "DEMO2LMP", "DEMO2", NULL },
-        { "DEMO3LMP", "DEMO3", NULL },
-    };
-    const int maps[] = { 3, 9, 17 };
-    int i;
-
-    for (i = 0; i < 3; i++)
-    {
-        const char* name0 = candidates[i][0];
-        const char* name1 = candidates[i][1];
-        
-		if (W_CheckNumForName(name0) >= 0 || W_CheckNumForName(name1) >= 0)
-        {
-            const char* pick = (W_CheckNumForName(name0) >= 0) ? name0 : name1;
-            int exit = D_RunDemo((char*)pick, sk_medium, maps[i]);
-            if (exit == ga_exitdemo)
-                return exit;
-
-            if (gameaction != ga_nothing)
-                return gameaction;
-        }
-    }
-
-    return ga_nothing;
-}
-
 static int D_ShowSplash(void (*draw)(void), int(*tick)(void), boolean fade) {
 
 	screenalpha = 0xff;
