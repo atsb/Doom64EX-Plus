@@ -1036,9 +1036,9 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	}
 
 	if (mthing->options & MTF_SPAWN) {
-		mthing->options &= ~MTF_SPAWN;
-		dmemcpy(&spawnlist[numspawnlist++], mthing, sizeof(mapthing_t));
-
+		mapthing_t temp = *mthing;
+		temp.options &= ~MTF_SPAWN;
+		dmemcpy(&spawnlist[numspawnlist++], &temp, sizeof(mapthing_t));
 		return NULL;
 	}
 
