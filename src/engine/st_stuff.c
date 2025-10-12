@@ -97,10 +97,10 @@ static keyflash_t flashCards[NUMCARDS];    /* INFO FOR FLASHING CARDS & SKULLS *
 #define    FLASHDELAY      8       /* # of tics delay (1/30 sec) */
 #define FLASHTIMES      6       /* # of times to flash new frag amount (EVEN!) */
 
-#define ST_HEALTHTEXTX  29
+#define ST_HEALTHTEXTX  32
 #define ST_HEALTHTEXTY  203
 
-#define ST_ARMORTEXTX   253
+#define ST_ARMORTEXTX   232
 #define ST_ARMORTEXTY   203
 
 #define ST_KEYX         78
