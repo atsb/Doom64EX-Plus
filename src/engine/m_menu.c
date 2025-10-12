@@ -2254,14 +2254,14 @@ menuitem_t SoundMenu[] = {
 };
 
 menudefault_t SoundDefault[] = {
-	{ &s_sfxvol, 80 },
-	{ &s_musvol, 80 },
+	{ &s_sfxvol, 120 },
+	{ &s_musvol, 180 },
 	{ NULL, -1 }
 };
 
 menuthermobar_t SoundBars[] = {
-	{ sfx_empty1, 100, &s_sfxvol },
-	{ sfx_empty2, 100, &s_musvol },
+	{ sfx_empty1, 255, &s_sfxvol },
+	{ sfx_empty2, 255, &s_musvol },
 	{ -1, 0 }
 };
 
@@ -2288,8 +2288,8 @@ void M_Sound(int choice) {
 }
 
 void M_DrawSound(void) {
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 100, s_sfxvol.value);
-	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 100, s_musvol.value);
+	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 255, s_sfxvol.value);
+	M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 255, s_musvol.value);
 }
 
 void M_SfxVol(int choice)
@@ -2304,11 +2304,11 @@ void M_SfxVol(int choice)
 		}
 		break;
 	case 1:
-		if (s_sfxvol.value < 100.0f) {
+		if (s_sfxvol.value < 255.0f) {
 			M_SetCvar(&s_sfxvol, s_sfxvol.value + 1);
 		}
 		else {
-			CON_CvarSetValue(s_sfxvol.name, 100);
+			CON_CvarSetValue(s_sfxvol.name, 255);
 		}
 		break;
 	}
@@ -2326,11 +2326,11 @@ void M_MusicVol(int choice)
 		}
 		break;
 	case 1:
-		if (s_musvol.value < 100.0f) {
+		if (s_musvol.value < 255.0f) {
 			M_SetCvar(&s_musvol, s_musvol.value + 1);
 		}
 		else {
-			CON_CvarSetValue(s_musvol.name, 100);
+			CON_CvarSetValue(s_musvol.name, 255);
 		}
 		break;
 	}
