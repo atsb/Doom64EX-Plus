@@ -22,14 +22,16 @@
 #include <stdarg.h>
 #include <SDL3/SDL_stdinc.h>
 
-#include "gl_draw.h"
 extern void I_ShaderUnBind(void);
 extern void I_ShaderBind(void);
+
 extern int game_world_shader_scope;
+
 extern void I_SectorCombiner_Unbind(void);
 extern void I_ShaderSetUseTexture(int);
 extern void I_ShaderSetTextureSize(int,int);
 
+#include "gl_draw.h"
 #include "doomtype.h"
 #include "doomstat.h"
 #include "dgl.h"
