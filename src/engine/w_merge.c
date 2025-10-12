@@ -61,7 +61,8 @@ static searchlist_t pwad;
 static searchlist_t pwad_sprites;
 static searchlist_t pwad_textures;
 static searchlist_t pwad_gfx;
-static searchlist_t pwad_sounds;
+static searchlist_t pwad_dm_sounds;
+static searchlist_t pwad_ds_sounds;
 
 // lumps with these sprites must be replaced in the IWAD
 static sprite_frame_t* sprite_frames;
@@ -127,7 +128,6 @@ static void SetupLists(void)
     if (!SetupList(&iwad_gfx, &iwad, "SYMBOLS", "MOUNTC", NULL, NULL)) {
         I_Error("GFX section not found in IWAD");
     }
-
     if (!SetupList(&iwad_sounds, &iwad, "DM_START", "DM_END", "DS_START", "DS_END")) {
         I_Error("Sounds section not found in IWAD");
     }
@@ -136,10 +136,9 @@ static void SetupLists(void)
     SetupList(&pwad_textures, &pwad, "T_START", "T_END", "TT_START", "TT_END");
     SetupList(&pwad_sprites, &pwad, "S_START", "S_END", "SS_START", "SS_END");
     SetupList(&pwad_gfx, &pwad, "G_START", "G_END", "SYMBOLS", "MOUNTC");
-    SetupList(&pwad_sounds, &pwad, "DM_START", "DM_END", "DS_START", "DS_END");
+    SetupList(&pwad_dm_sounds, &pwad, "DM_START", "DM_END", NULL, NULL);
+    SetupList(&pwad_ds_sounds, &pwad, "DS_START", "DS_END", NULL, NULL);
 }
-
-
 
 // Initialise the replace list
 
@@ -456,37 +455,30 @@ static void DoMerge(void)
             break;
 
         case SECTION_SOUNDS:
-            if (W_LumpNameEq(lump, "DM_END") || W_LumpNameEq(lump, "DS_END")) {
-                for (n = 0; n < pwad_sounds.numlumps; ++n)
-                    newlumps[num_newlumps++] = pwad_sounds.lumps[n];
+            if (W_LumpNameEq(lump, "DM_END")) {
+                for (n = 0; n < pwad_dm_sounds.numlumps; ++n)
+                    newlumps[num_newlumps++] = pwad_dm_sounds.lumps[n];
+
+                newlumps[num_newlumps++] = *lump;
+                current_section = SECTION_NORMAL;
+            }
+            else if (W_LumpNameEq(lump, "DS_END")) {
+                for (n = 0; n < pwad_ds_sounds.numlumps; ++n)
+                    newlumps[num_newlumps++] = pwad_ds_sounds.lumps[n];
 
                 newlumps[num_newlumps++] = *lump;
                 current_section = SECTION_NORMAL;
             }
             else {
-                lumpindex = FindInList(&pwad_sounds, lump->name);
+                lumpindex = FindInList(&pwad_dm_sounds, lump->name);
+                if (lumpindex < 0) {
+                    lumpindex = FindInList(&pwad_ds_sounds, lump->name);
+                }
                 if (lumpindex < 0) {
                     newlumps[num_newlumps++] = *lump;
                 }
             }
             break;
-        }
-    }
-
-    if (pwad_sounds.numlumps > 0) {
-        int j;
-        for (j = 0; j < pwad_sounds.numlumps; ++j) {
-            int already = 0;
-            int k;
-            for (k = 0; k < num_newlumps; ++k) {
-                if (!dstrnicmp(newlumps[k].name, pwad_sounds.lumps[j].name, 8)) {
-                    already = 1;
-                    break;
-                }
-            }
-            if (!already) {
-                newlumps[num_newlumps++] = pwad_sounds.lumps[j];
-            }
         }
     }
 
