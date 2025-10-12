@@ -35,16 +35,4 @@ void V_RegisterCvars();
 extern float display_scale;
 extern int win_px_w, win_px_h;
 
-/*
-SDL_WINDOW_BORDERLESS does not work at all on Linux:
-- on GNOME and KDE (Plasma) the top bar and taskbar (respectively) are always drawn on top of the window
-- on i3 window manager, the game does not draw over the area for the title bar
-On the other side, SDL_WINDOW_FULLSCREEN works properly.
-Note that on Linux,  the Windows distinction between fullscreen borderless and exclusive fullscreen does not exist.
-Always create window as SDL_WINDOW_FULLSCREEN on Linux
-*/
-#ifndef SDL_PLATFORM_LINUX
-#define HAS_FULLSCREEN_BORDERLESS
-#endif
-
 #endif
