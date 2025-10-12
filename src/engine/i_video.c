@@ -124,7 +124,6 @@ static void GetNativeDisplayPixels(int* out_w, int* out_h, SDL_Window* window) {
 
 #ifdef SDL_PLATFORM_WIN32
 
-// returns true on error
 static boolean NVAPI_IS_ERROR(NvAPI_Status status)
 {
     if (status == NVAPI_OK) return false;
@@ -133,7 +132,7 @@ static boolean NVAPI_IS_ERROR(NvAPI_Status status)
         NvAPI_ShortString szDesc = { 0 };
         NvAPI_GetErrorMessage(status, szDesc);
         I_Printf("NVAPI error: %s\n", szDesc);
-    } // else not a NVIDIA system, do not log error
+    }
     return true;
 }
 
@@ -176,14 +175,11 @@ static void setUseDXGISwapChainNVIDIA(boolean use) {
         goto cleanup;
     }
 
-    // try recreate app in case executable has moved to a new location
-    // all executable share the same "DOOM64Ex+" profile
-    // useful for Release, Debug not in the same location
     createAppStatus = NvAPI_DRS_CreateApplication(hSession, hProfile, &app);
     if (createAppStatus != NVAPI_OK && status == NVAPI_PROFILE_NOT_FOUND) {
         NVAPI_IS_ERROR(createAppStatus);
         goto cleanup;
-    } // else app already exist, not an error
+    }
 
     setting.version = NVDRS_SETTING_VER;
     setting.settingId = OGL_CPL_PREFER_DXPRESENT_ID;
@@ -199,7 +195,6 @@ cleanup:
         NVAPI_IS_ERROR(NvAPI_DRS_DestroySession(hSession));
     }
 }
-
 
 #endif
 
@@ -231,7 +226,6 @@ void I_InitScreen(void) {
 
     usingGL = false;
 
-    // GL context attributes (same as before)
     video_driver = SDL_GetCurrentVideoDriver();
     if (!video_driver || !dstreq(video_driver, "wayland")) {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
