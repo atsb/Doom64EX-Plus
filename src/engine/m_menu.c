@@ -1747,9 +1747,7 @@ void M_ChangeHUDColor(int choice) {
 
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
-#ifdef HAS_FULLSCREEN_BORDERLESS
 void M_ChangeFullscreen(int choice);
-#endif
 void M_ChangeFilter(int choice);
 void M_ChangeWeaponFilter(int choice);
 void M_ChangeObjectFilter(int choice);
@@ -1766,9 +1764,7 @@ CVAR_EXTERNAL(v_checkratio);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
-#ifdef HAS_FULLSCREEN_BORDERLESS
 CVAR_EXTERNAL(v_fullscreen);
-#endif
 CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_weaponFilter);
 CVAR_EXTERNAL(r_hudFilter);
@@ -1785,9 +1781,7 @@ enum {
 	video_empty1,
 	video_dgamma,
 	video_empty2,
-#ifdef HAS_FULLSCREEN_BORDERLESS
 	video_fullscreen,
-#endif
 	filter,
 	weapon_filter,
 	object_filter,
@@ -1808,9 +1802,7 @@ menuitem_t VideoMenu[] = {
 	{-1,"",0},
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
-#ifdef HAS_FULLSCREEN_BORDERLESS
 	{2,"Fullscreen:",M_ChangeFullscreen, 'f'},
-#endif
 	{2,"Filter:",M_ChangeFilter, 'f'},
 	{2,"Weapon Filter:",M_ChangeWeaponFilter, 't'},
 	{2,"Object Filter:",M_ChangeObjectFilter, 't'},
@@ -1830,9 +1822,7 @@ char* VideoHints[video_end] = {
 	NULL,
 	"adjust screen gamma",
 	NULL,
-#ifdef HAS_FULLSCREEN_BORDERLESS
 	"toggle fullscreen mode - requires restart",
-#endif
 	"toggle texture filtering - requires restart",
 	"toggle texture filtering on the weapon",
 	"toggle texture filtering on world objects",
@@ -1848,9 +1838,7 @@ char* VideoHints[video_end] = {
 menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
-#ifdef HAS_FULLSCREEN_BORDERLESS
 	{ &v_fullscreen, 0 },
-#endif
 	{ &r_filter, 0 },
 	{ &r_weaponFilter, 0 },
 	{ &r_objectFilter, 0 },
@@ -1921,9 +1909,7 @@ void M_DrawVideo(void) {
 	static const char* filterType1[3] = { "N64", "Linear", "Nearest" };
 	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
-#ifdef HAS_FULLSCREEN_BORDERLESS
-	static const char* fullscreenType[2] = { "Borderless", "Exclusive" };
-#endif
+	static const char* fullscreenType[2] = { "Resizable Window", "Exclusive" };
 	int y;
 
 	if (currentMenu->menupageoffset <= video_dbrightness + 1 &&
@@ -1948,9 +1934,7 @@ void M_DrawVideo(void) {
 
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
-#ifdef HAS_FULLSCREEN_BORDERLESS
 	DRAWVIDEOITEM2(video_fullscreen, v_fullscreen.value, fullscreenType);
-#endif
 	DRAWVIDEOITEM2(filter, r_filter.value, filterType1);
 	DRAWVIDEOITEM2(object_filter, r_objectFilter.value, filterType2);
 	DRAWVIDEOITEM2(weapon_filter, r_weaponFilter.value, filterType2);
@@ -2033,11 +2017,9 @@ void M_ChangeGammaLevel(int choice)
 	}
 }
 
-#ifdef HAS_FULLSCREEN_BORDERLESS
 void M_ChangeFullscreen(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_fullscreen);
 }
-#endif
 
 void M_ChangeFilter(int choice) {
 	M_SetOptionValue(choice, 0, 2, 1, &r_filter);

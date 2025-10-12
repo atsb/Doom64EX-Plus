@@ -61,16 +61,11 @@ CVAR_CMD(v_maxfps, 500) {
 
 	v_maxfps.value = SDL_clamp(v_maxfps.value, 60, 1000);
 }
-#ifdef HAS_FULLSCREEN_BORDERLESS
 CVAR(v_fullscreen, 0);
-#endif
-
 CVAR_EXTERNAL(m_menumouse);
-
 CVAR_CMD(v_vsync, 1) {
     SDL_GL_SetSwapInterval((int)v_vsync.value);
 }
-
 
 float display_scale = 1.0f;
 SDL_Surface* screen;
@@ -129,7 +124,6 @@ static void GetNativeDisplayPixels(int* out_w, int* out_h, SDL_Window* window) {
 
 #ifdef SDL_PLATFORM_WIN32
 
-// returns true on error
 static boolean NVAPI_IS_ERROR(NvAPI_Status status)
 {
     if (status == NVAPI_OK) return false;
@@ -138,7 +132,7 @@ static boolean NVAPI_IS_ERROR(NvAPI_Status status)
         NvAPI_ShortString szDesc = { 0 };
         NvAPI_GetErrorMessage(status, szDesc);
         I_Printf("NVAPI error: %s\n", szDesc);
-    } // else not a NVIDIA system, do not log error
+    }
     return true;
 }
 
@@ -181,14 +175,11 @@ static void setUseDXGISwapChainNVIDIA(boolean use) {
         goto cleanup;
     }
 
-    // try recreate app in case executable has moved to a new location
-    // all executable share the same "DOOM64Ex+" profile
-    // useful for Release, Debug not in the same location
     createAppStatus = NvAPI_DRS_CreateApplication(hSession, hProfile, &app);
     if (createAppStatus != NVAPI_OK && status == NVAPI_PROFILE_NOT_FOUND) {
         NVAPI_IS_ERROR(createAppStatus);
         goto cleanup;
-    } // else app already exist, not an error
+    }
 
     setting.version = NVDRS_SETTING_VER;
     setting.settingId = OGL_CPL_PREFER_DXPRESENT_ID;
@@ -205,7 +196,6 @@ cleanup:
     }
 }
 
-
 #endif
 
 //
@@ -215,83 +205,82 @@ cleanup:
 void I_InitScreen(void) {
     unsigned int  flags = 0;
     char          title[256];
-	const char *video_driver;
+    const char* video_driver;
+    int initial_w, initial_h;
 
     int native_w = 0, native_h = 0;
     GetNativeDisplayPixels(&native_w, &native_h, window);
 
-    video_width = native_w;
-    video_height = native_h;
+    if ((int)v_fullscreen.value) {
+        initial_w = native_w;
+        initial_h = native_h;
+    }
+    else {
+        initial_w = (int)(native_w * 0.8f);
+        initial_h = (int)(native_h * 0.8f);
+    }
+
+    video_width = initial_w;
+    video_height = initial_h;
     video_ratio = (float)video_width / (float)video_height;
 
     usingGL = false;
 
-    // GL context attributes
-	video_driver = SDL_GetCurrentVideoDriver();
-	if(!video_driver || !dstreq(video_driver, "wayland")) {
-		// do not set these on Wayland as they do not work (bunch of missing extensions)
-		// with at least Intel integrated UHD graphics
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-	}
+    video_driver = SDL_GetCurrentVideoDriver();
+    if (!video_driver || !dstreq(video_driver, "wayland")) {
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+    flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
-#ifdef HAS_FULLSCREEN_BORDERLESS
-    flags |= (int)v_fullscreen.value ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_BORDERLESS;
-#else
-    flags |= SDL_WINDOW_FULLSCREEN;
-#endif
+    if ((int)v_fullscreen.value) {
+        flags |= SDL_WINDOW_FULLSCREEN;
+    }
+    else {
+        flags |= SDL_WINDOW_RESIZABLE;
+    }
 
 #ifdef SDL_PLATFORM_WIN32
-    /* if the window is borderless, the NVIDIA driver will make it fullscreen after the first SDL_GL_SwapWindow call :
-       https://github.com/libsdl-org/SDL/issues/12791
-       Enabling use of the DXGI Swap Chain with NvAPI makes it proper borderless, with instant Alt-Tab, 
-       overlay popups displaying, working Auto-HDR...
-     */
-    setUseDXGISwapChainNVIDIA(flags & SDL_WINDOW_BORDERLESS);
+    setUseDXGISwapChainNVIDIA(flags & SDL_WINDOW_RESIZABLE);
 #endif
 
     if (glContext) { SDL_GL_DestroyContext(glContext); glContext = NULL; }
     if (window) { SDL_DestroyWindow(window); window = NULL; }
 
-    sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
-    window = SDL_CreateWindow(title, video_width, video_height, flags);
+    sprintf(title, "Doom64EX-Plus compiled on: %s", version_date);
+    window = SDL_CreateWindow(title, initial_w, initial_h, flags);
     if (!window) {
         I_Error("I_InitScreen: Failed to create window");
         return;
+    }
+
+    if (!(flags & SDL_WINDOW_FULLSCREEN)) {
+        SDL_SetWindowBordered(window, true);
     }
 
     if (flags & SDL_WINDOW_FULLSCREEN) {
         SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
         if (!displayid) displayid = SDL_GetPrimaryDisplay();
 
-        const SDL_DisplayMode *desk = displayid ? SDL_GetDesktopDisplayMode(displayid) : NULL;
-        SDL_DisplayMode disp_mode = {0};
+        const SDL_DisplayMode* desk = displayid ? SDL_GetDesktopDisplayMode(displayid) : NULL;
+        SDL_DisplayMode disp_mode = { 0 };
         if (desk) {
             if (!SDL_GetClosestFullscreenDisplayMode(displayid, desk->w, desk->h, 0.0f, false, &disp_mode)) {
                 disp_mode.displayID = displayid;
-                disp_mode.w = video_width;
-                disp_mode.h = video_height;
+                disp_mode.w = native_w;
+                disp_mode.h = native_h;
                 disp_mode.refresh_rate = 0.0f;
             }
-        } else {
+        }
+        else {
             disp_mode.displayID = displayid;
-            disp_mode.w = video_width;
-            disp_mode.h = video_height;
+            disp_mode.w = native_w;
+            disp_mode.h = native_h;
             disp_mode.refresh_rate = 0.0f;
         }
 
@@ -303,15 +292,9 @@ void I_InitScreen(void) {
     I_SetMenuCursorMouseRect();
 
 #ifdef SDL_PLATFORM_LINUX
-    // NVIDIA Linux specific: reduces input lag with vsync; harmless elsewhere
     SDL_Environment* env = SDL_GetEnvironment();
     if (env) {
-        if (!SDL_SetEnvironmentVariable(env, "__GL_MaxFramesAllowed", "1", false)) {
-            I_Printf("SDL_SetEnvironmentVariable failed (%s)", SDL_GetError());
-        }
-    }
-    else {
-        I_Printf("SDL_GetEnvironment failed (%s)", SDL_GetError());
+        SDL_SetEnvironmentVariable(env, "__GL_MaxFramesAllowed", "1", false);
     }
 #endif
 
@@ -320,30 +303,23 @@ void I_InitScreen(void) {
         I_Error("I_InitScreen: Failed to create OpenGL context");
         return;
     }
-    if(!SDL_GL_MakeCurrent(window, glContext)) {
-		I_Error("I_InitScreen: Failed to make OpenGL context current");
-        return;
-	}
+    SDL_GL_MakeCurrent(window, glContext);
+
     SDL_GetWindowSizeInPixels(window, &win_px_w, &win_px_h);
     GL_OnResize(win_px_w, win_px_h);
-    {
-        SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
-        if (displayid) {
-            float f = SDL_GetDisplayContentScale(displayid);
-            if (f != 0)	display_scale = f;
-            else I_Printf("SDL_GetDisplayContentScale failed (%s)", SDL_GetError());
-        }
-        else {
-            I_Printf("SDL_GetDisplayForWindow failed (%s)", SDL_GetError());
-        }
+
+    SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
+    if (displayid) {
+        float f = SDL_GetDisplayContentScale(displayid);
+        if (f != 0) display_scale = f;
     }
+
     SDL_GL_SetSwapInterval((int)v_vsync.value);
-    {
-        glViewport(0, 0, win_px_w, win_px_h);
-        glScissor(0, 0, win_px_w, win_px_h);
-        glClearColor(0.f, 0.f, 0.f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
+
+    glViewport(0, 0, win_px_w, win_px_h);
+    glScissor(0, 0, win_px_w, win_px_h);
+    glClearColor(0.f, 0.f, 0.f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     SDL_ShowWindow(window);
     SDL_GL_SwapWindow(window);
@@ -353,8 +329,6 @@ void I_InitScreen(void) {
 void I_SetMenuCursorMouseRect() {
     if (!window) return;
     if (m_menumouse.value) {
-        // confine mouse positions to 4/3 portion of the window, taking into account max menu cursor width on the right side
-        // that's to prevent the cursor to disappear on the right side
         SDL_Rect rect = { 0, 0, (video_width * SCREENHEIGHT) / SCREENWIDTH - 96, video_height };
         SDL_SetWindowMouseRect(window, &rect);
     }
@@ -362,7 +336,6 @@ void I_SetMenuCursorMouseRect() {
         SDL_SetWindowMouseRect(window, NULL);
     }
 }
-
 
 //
 // I_ShutdownVideo
@@ -414,14 +387,11 @@ void I_InitVideo(void) {
 // V_RegisterCvars
 //
 
-
 void V_RegisterCvars(void) {
     CON_CvarRegister(&r_trishader);
     CON_CvarRegister(&v_checkratio);
     CON_CvarRegister(&v_vsync);
     CON_CvarRegister(&v_maxfps);
-#ifdef HAS_FULLSCREEN_BORDERLESS
     CON_CvarRegister(&v_fullscreen);
-#endif
 }
 

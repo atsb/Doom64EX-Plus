@@ -1,6 +1,5 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include <windows.h> // include for version info constants
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -14,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -57,22 +54,40 @@ END
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "doom64ex-plus.ico"
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
 1 VERSIONINFO
-FILEVERSION 5, 0, 0, 0
-PRODUCTVERSION 5, 0, 0, 0
-FILETYPE VFT_APP
-{
-	BLOCK "StringFileInfo"
-	{
-		BLOCK "040904E4"
-		{
-			VALUE "CompanyName", ""
-				VALUE "FileVersion", "5.0.0.0"
-				VALUE "ProductVersion", "5.0.0.0"
-		}
-	}
-}
-#endif    // English (U.S.) resources
+ FILEVERSION 5,1,0,0
+ PRODUCTVERSION 5,1,0,0
+ FILEFLAGSMASK 0x0L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x0L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "FileVersion", "5.1.0.0"
+            VALUE "ProductVersion", "5.1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
