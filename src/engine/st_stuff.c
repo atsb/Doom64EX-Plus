@@ -756,7 +756,15 @@ void ST_Drawer(void) {
 
 	// atsb: this one was easy, replace with a shader and point the values to the GLSL..  done
 	if (v_accessibility.value < 1) {
-		float smoothing = 0.90;
+		float alpha_diff = fabs(st_flash_target_a - st_flash_smooth_a);
+		float smoothing;
+
+		if (st_flash_target_a < 0.3f || alpha_diff > 0.2f) {
+			smoothing = 0.7f;
+		}
+		else {
+			smoothing = 0.5f;
+		}
 
 		st_flash_smooth_r = st_flash_smooth_r * smoothing + st_flash_target_r * (1.0f - smoothing);
 		st_flash_smooth_g = st_flash_smooth_g * smoothing + st_flash_target_g * (1.0f - smoothing);
@@ -1053,7 +1061,6 @@ void ST_UpdateFlash(void) {
 	player_t* p = &players[consoleplayer];
 
 	flashcolor = 0;
-
 	st_flash_target_a = 0.0f;
 
 	// invulnerability flash (white)
@@ -1073,11 +1080,8 @@ void ST_UpdateFlash(void) {
 
 		float raw_alpha = (float)p->bfgcount / 255.0f;
 
-		if (raw_alpha > 0.0f) {
-			float min_flash = 0.08f;
-			float max_flash = 0.6f;
-
-			st_flash_target_a = min_flash + (raw_alpha * (max_flash - min_flash));
+		if (raw_alpha > 0.05f) {
+			st_flash_target_a = raw_alpha;
 		}
 		else {
 			st_flash_target_a = 0.0f;
@@ -1134,6 +1138,7 @@ void ST_UpdateFlash(void) {
 		st_flash_target_b = 0.0f;
 		st_flash_target_a = (float)((p->bonuscount + 8) << 1) / 255.0f;
 	}
+
 	st_flash_r = (byte)(st_flash_target_r * 255.0f);
 	st_flash_g = (byte)(st_flash_target_g * 255.0f);
 	st_flash_b = (byte)(st_flash_target_b * 255.0f);
