@@ -465,10 +465,28 @@ static void DoMerge(void)
             }
             else {
                 lumpindex = FindInList(&pwad_sounds, lump->name);
-                if (lumpindex < 0)
+                if (lumpindex < 0) {
                     newlumps[num_newlumps++] = *lump;
+                }
             }
             break;
+        }
+    }
+
+    if (pwad_sounds.numlumps > 0) {
+        int j;
+        for (j = 0; j < pwad_sounds.numlumps; ++j) {
+            int already = 0;
+            int k;
+            for (k = 0; k < num_newlumps; ++k) {
+                if (!dstrnicmp(newlumps[k].name, pwad_sounds.lumps[j].name, 8)) {
+                    already = 1;
+                    break;
+                }
+            }
+            if (!already) {
+                newlumps[num_newlumps++] = pwad_sounds.lumps[j];
+            }
         }
     }
 
