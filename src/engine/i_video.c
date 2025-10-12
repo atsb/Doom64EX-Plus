@@ -329,8 +329,6 @@ void I_InitScreen(void) {
 void I_SetMenuCursorMouseRect() {
     if (!window) return;
     if (m_menumouse.value) {
-        // confine mouse positions to 4/3 portion of the window, taking into account max menu cursor width on the right side
-        // that's to prevent the cursor to disappear on the right side
         SDL_Rect rect = { 0, 0, (video_width * SCREENHEIGHT) / SCREENWIDTH - 96, video_height };
         SDL_SetWindowMouseRect(window, &rect);
     }
@@ -338,7 +336,6 @@ void I_SetMenuCursorMouseRect() {
         SDL_SetWindowMouseRect(window, NULL);
     }
 }
-
 
 //
 // I_ShutdownVideo
@@ -389,7 +386,6 @@ void I_InitVideo(void) {
 //
 // V_RegisterCvars
 //
-
 
 void V_RegisterCvars(void) {
     CON_CvarRegister(&r_trishader);
