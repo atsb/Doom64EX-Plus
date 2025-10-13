@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(DOOM64 LANGUAGES C VERSION 5.0.0.0)
+project(DOOM64 LANGUAGES C VERSION 5.1.0.0)
 
 if(NOT DEFINED ENV{FMOD_STUDIO_SDK_ROOT})
 	message(
@@ -39,7 +39,7 @@ set(FMOD_LIB_DIR "$ENV{FMOD_STUDIO_SDK_ROOT}/api/core/lib/${CPU_ARCH}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${FMOD_INC_DIR} -Wunknown-pragmas -fwrapv -MD")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunknown-pragmas -fwrapv -MD")
 set(CMAKE_EXE_LINKER_FLAGS "-L${FMOD_LIB_DIR}")
 
 set(CMAKE_C_FLAGS_DEBUG "-g -Wall")
@@ -52,6 +52,7 @@ find_package(ZLIB REQUIRED)
 include_directories(
 	${libpng_INCLUDE_DIRS}
 	${OpenGL_INCLUDE_DIRS}
+	${FMOD_INC_DIR}
 )
 
 set(SOURCE_DIR "src/engine")
