@@ -12,7 +12,6 @@
 		2A44CD3E2930B13E005B23CA /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3D2930B13E005B23CA /* CoreAudio.framework */; };
 		2A44CD402930B145005B23CA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A44CD3F2930B145005B23CA /* OpenGL.framework */; };
 		2A44CE282930B570005B23CA /* doom64ex-plus.wad in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE212930B56F005B23CA /* doom64ex-plus.wad */; };
-		2A44CE292930B570005B23CA /* doomsnd.sf2 in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE222930B56F005B23CA /* doomsnd.sf2 */; };
 		2A44CE2A2930B570005B23CA /* AUTHORS in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE232930B56F005B23CA /* AUTHORS */; };
 		2A44CE2B2930B570005B23CA /* doom64ex-plus.6 in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE242930B56F005B23CA /* doom64ex-plus.6 */; };
 		2A44CE2C2930B570005B23CA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A44CE252930B570005B23CA /* README.md */; };
@@ -68,7 +67,6 @@
 		2A44CF2B2930B717005B23CA /* i_video.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEA42930B70E005B23CA /* i_video.c */; };
 		2A44CF2C2930B717005B23CA /* p_macros.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEA72930B70E005B23CA /* p_macros.c */; };
 		2A44CF2D2930B717005B23CA /* p_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEA82930B70E005B23CA /* p_map.c */; };
-		2A44CF2E2930B717005B23CA /* i_opndir.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEAA2930B70E005B23CA /* i_opndir.c */; };
 		2A44CF302930B717005B23CA /* d_net.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEAC2930B70F005B23CA /* d_net.c */; };
 		2A44CF312930B717005B23CA /* m_cheat.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEB02930B70F005B23CA /* m_cheat.c */; };
 		2A44CF322930B717005B23CA /* m_keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A44CEB32930B70F005B23CA /* m_keys.c */; };
@@ -106,6 +104,10 @@
 		A128FE6C2E036A75001199BD /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AF38EC92DF1F51D00663723 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A128FE6D2E036A75001199BD /* libSDL3.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AF38ECA2DF1F51D00663723 /* libSDL3.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A128FE6E2E036A75001199BD /* libz.1.3.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2AF38ECB2DF1F51D00663723 /* libz.1.3.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A16C1E9D2E9DA42D000CD1F2 /* i_sectorcombiner.c in Sources */ = {isa = PBXBuildFile; fileRef = A16C1E9A2E9DA42D000CD1F2 /* i_sectorcombiner.c */; };
+		A16C1E9E2E9DA42D000CD1F2 /* i_shaders.c in Sources */ = {isa = PBXBuildFile; fileRef = A16C1E9C2E9DA42D000CD1F2 /* i_shaders.c */; };
+		A16C1EA12E9DA461000CD1F2 /* kpf.c in Sources */ = {isa = PBXBuildFile; fileRef = A16C1EA02E9DA461000CD1F2 /* kpf.c */; };
+		A16C1EA32E9DA4AC000CD1F2 /* p_mapinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = A16C1EA22E9DA4AC000CD1F2 /* p_mapinfo.c */; };
 		AB5A81D31A8DAEB600AF539F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5A81D21A8DAEB600AF539F /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -131,7 +133,6 @@
 		2A44CD3D2930B13E005B23CA /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		2A44CD3F2930B145005B23CA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		2A44CE212930B56F005B23CA /* doom64ex-plus.wad */ = {isa = PBXFileReference; lastKnownFileType = file; name = "doom64ex-plus.wad"; path = "../doom64ex-plus.wad"; sourceTree = "<group>"; };
-		2A44CE222930B56F005B23CA /* doomsnd.sf2 */ = {isa = PBXFileReference; lastKnownFileType = file; name = doomsnd.sf2; path = ../doomsnd.sf2; sourceTree = "<group>"; };
 		2A44CE232930B56F005B23CA /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; name = AUTHORS; path = ../AUTHORS; sourceTree = "<group>"; };
 		2A44CE242930B56F005B23CA /* doom64ex-plus.6 */ = {isa = PBXFileReference; lastKnownFileType = text; name = "doom64ex-plus.6"; path = "../doom64ex-plus.6"; sourceTree = "<group>"; };
 		2A44CE252930B570005B23CA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -152,7 +153,6 @@
 		2A44CE432930B707005B23CA /* s_sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = s_sound.h; path = ../src/engine/s_sound.h; sourceTree = "<group>"; };
 		2A44CE442930B707005B23CA /* am_map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = am_map.c; path = ../src/engine/am_map.c; sourceTree = "<group>"; };
 		2A44CE452930B707005B23CA /* wi_stuff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = wi_stuff.c; path = ../src/engine/wi_stuff.c; sourceTree = "<group>"; };
-		2A44CE462930B707005B23CA /* g_local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = g_local.h; path = ../src/engine/g_local.h; sourceTree = "<group>"; };
 		2A44CE482930B707005B23CA /* s_sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = s_sound.c; path = ../src/engine/s_sound.c; sourceTree = "<group>"; };
 		2A44CE492930B708005B23CA /* r_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = r_main.h; path = ../src/engine/r_main.h; sourceTree = "<group>"; };
 		2A44CE4A2930B708005B23CA /* con_cvar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = con_cvar.h; path = ../src/engine/con_cvar.h; sourceTree = "<group>"; };
@@ -197,13 +197,11 @@
 		2A44CE782930B70B005B23CA /* p_pspr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = p_pspr.h; path = ../src/engine/p_pspr.h; sourceTree = "<group>"; };
 		2A44CE792930B70B005B23CA /* p_setup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_setup.c; path = ../src/engine/p_setup.c; sourceTree = "<group>"; };
 		2A44CE7A2930B70B005B23CA /* m_keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = m_keys.h; path = ../src/engine/m_keys.h; sourceTree = "<group>"; };
-		2A44CE7B2930B70B005B23CA /* i_opndir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = i_opndir.h; path = ../src/engine/i_opndir.h; sourceTree = "<group>"; };
 		2A44CE7C2930B70B005B23CA /* p_user.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_user.c; path = ../src/engine/p_user.c; sourceTree = "<group>"; };
 		2A44CE7E2930B70B005B23CA /* r_sky.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = r_sky.h; path = ../src/engine/r_sky.h; sourceTree = "<group>"; };
 		2A44CE7F2930B70B005B23CA /* w_merge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = w_merge.c; path = ../src/engine/w_merge.c; sourceTree = "<group>"; };
 		2A44CE812930B70B005B23CA /* g_demo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = g_demo.h; path = ../src/engine/g_demo.h; sourceTree = "<group>"; };
 		2A44CE822930B70C005B23CA /* m_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = m_random.h; path = ../src/engine/m_random.h; sourceTree = "<group>"; };
-		2A44CE842930B70C005B23CA /* r_local.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = r_local.h; path = ../src/engine/r_local.h; sourceTree = "<group>"; };
 		2A44CE852930B70C005B23CA /* w_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = w_file.h; path = ../src/engine/w_file.h; sourceTree = "<group>"; };
 		2A44CE862930B70C005B23CA /* wi_stuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wi_stuff.h; path = ../src/engine/wi_stuff.h; sourceTree = "<group>"; };
 		2A44CE872930B70C005B23CA /* r_clipper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = r_clipper.h; path = ../src/engine/r_clipper.h; sourceTree = "<group>"; };
@@ -221,7 +219,6 @@
 		2A44CE942930B70D005B23CA /* g_controls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = g_controls.h; path = ../src/engine/g_controls.h; sourceTree = "<group>"; };
 		2A44CE962930B70D005B23CA /* g_game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = g_game.c; path = ../src/engine/g_game.c; sourceTree = "<group>"; };
 		2A44CE972930B70D005B23CA /* d_think.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = d_think.h; path = ../src/engine/d_think.h; sourceTree = "<group>"; };
-		2A44CE982930B70D005B23CA /* d_keywds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = d_keywds.h; path = ../src/engine/d_keywds.h; sourceTree = "<group>"; };
 		2A44CE992930B70D005B23CA /* m_menu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m_menu.c; path = ../src/engine/m_menu.c; sourceTree = "<group>"; };
 		2A44CE9A2930B70D005B23CA /* net_io.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = net_io.c; path = ../src/engine/net_io.c; sourceTree = "<group>"; };
 		2A44CE9B2930B70D005B23CA /* m_misc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = m_misc.c; path = ../src/engine/m_misc.c; sourceTree = "<group>"; };
@@ -237,7 +234,6 @@
 		2A44CEA72930B70E005B23CA /* p_macros.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_macros.c; path = ../src/engine/p_macros.c; sourceTree = "<group>"; };
 		2A44CEA82930B70E005B23CA /* p_map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = p_map.c; path = ../src/engine/p_map.c; sourceTree = "<group>"; };
 		2A44CEA92930B70E005B23CA /* info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = info.h; path = ../src/engine/info.h; sourceTree = "<group>"; };
-		2A44CEAA2930B70E005B23CA /* i_opndir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = i_opndir.c; path = ../src/engine/i_opndir.c; sourceTree = "<group>"; };
 		2A44CEAC2930B70F005B23CA /* d_net.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = d_net.c; path = ../src/engine/d_net.c; sourceTree = "<group>"; };
 		2A44CEAE2930B70F005B23CA /* w_merge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = w_merge.h; path = ../src/engine/w_merge.h; sourceTree = "<group>"; };
 		2A44CEAF2930B70F005B23CA /* f_finale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = f_finale.h; path = ../src/engine/f_finale.h; sourceTree = "<group>"; };
@@ -306,6 +302,13 @@
 		2AF38ECF2DF1F5B200663723 /* libfmod.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libfmod.dylib; sourceTree = "<group>"; };
 		2AF38ED12DF2155600663723 /* i_audio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_audio.h; path = ../src/engine/i_audio.h; sourceTree = SOURCE_ROOT; };
 		2AF38ED22DF2155600663723 /* i_audio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_audio.c; path = ../src/engine/i_audio.c; sourceTree = SOURCE_ROOT; };
+		A16C1E992E9DA42D000CD1F2 /* i_sectorcombiner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_sectorcombiner.h; path = ../src/engine/i_sectorcombiner.h; sourceTree = SOURCE_ROOT; };
+		A16C1E9A2E9DA42D000CD1F2 /* i_sectorcombiner.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_sectorcombiner.c; path = ../src/engine/i_sectorcombiner.c; sourceTree = SOURCE_ROOT; };
+		A16C1E9B2E9DA42D000CD1F2 /* i_shaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = i_shaders.h; path = ../src/engine/i_shaders.h; sourceTree = SOURCE_ROOT; };
+		A16C1E9C2E9DA42D000CD1F2 /* i_shaders.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = i_shaders.c; path = ../src/engine/i_shaders.c; sourceTree = SOURCE_ROOT; };
+		A16C1E9F2E9DA461000CD1F2 /* kpf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = kpf.h; path = ../src/engine/kpf.h; sourceTree = SOURCE_ROOT; };
+		A16C1EA02E9DA461000CD1F2 /* kpf.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = kpf.c; path = ../src/engine/kpf.c; sourceTree = SOURCE_ROOT; };
+		A16C1EA22E9DA4AC000CD1F2 /* p_mapinfo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = p_mapinfo.c; path = ../src/engine/p_mapinfo.c; sourceTree = SOURCE_ROOT; };
 		AB5A80C21A8DABE100AF539F /* DOOM64EXPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOOM64EXPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5A81D21A8DAEB600AF539F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -346,7 +349,6 @@
 				2A44CE272930B570005B23CA /* COPYING */,
 				2A44CE242930B56F005B23CA /* doom64ex-plus.6 */,
 				2A44CE212930B56F005B23CA /* doom64ex-plus.wad */,
-				2A44CE222930B56F005B23CA /* doomsnd.sf2 */,
 				2A44CE252930B570005B23CA /* README.md */,
 			);
 			name = Resources;
@@ -363,8 +365,6 @@
 				2AB7DECC293BD825009A3CA3 /* i_sdlinput.h */,
 				2A44CF782930FA00005B23CA /* DOOM64EX--Info.plist */,
 				2A44CF4F2930F32E005B23CA /* doom64explus.entitlements */,
-				2AF38ED12DF2155600663723 /* i_audio.h */,
-				2AF38ED22DF2155600663723 /* i_audio.c */,
 				2A44CEEE2930B717005B23CA /* am_draw.c */,
 				2A44CEBA2930B70F005B23CA /* am_draw.h */,
 				2A44CE442930B707005B23CA /* am_map.c */,
@@ -377,7 +377,6 @@
 				2A44CEA32930B70E005B23CA /* d_devstat.h */,
 				2A44CE582930B709005B23CA /* d_englsh.h */,
 				2A44CE4D2930B708005B23CA /* d_event.h */,
-				2A44CE982930B70D005B23CA /* d_keywds.h */,
 				2A44CE362930B706005B23CA /* d_main.c */,
 				2A44CE9E2930B70E005B23CA /* d_main.h */,
 				2A44CEAC2930B70F005B23CA /* d_net.c */,
@@ -400,7 +399,6 @@
 				2A44CE812930B70B005B23CA /* g_demo.h */,
 				2A44CE962930B70D005B23CA /* g_game.c */,
 				2A44CED02930B711005B23CA /* g_game.h */,
-				2A44CE462930B707005B23CA /* g_local.h */,
 				2A44CE6D2930B70A005B23CA /* g_settings.c */,
 				2A44CE3D2930B707005B23CA /* g_settings.h */,
 				2A44CE3E2930B707005B23CA /* gl_draw.c */,
@@ -409,11 +407,15 @@
 				2A44CEC72930B710005B23CA /* gl_main.h */,
 				2A44CEDE2930B713005B23CA /* gl_texture.c */,
 				2A44CE9F2930B70E005B23CA /* gl_texture.h */,
+				2AF38ED22DF2155600663723 /* i_audio.c */,
+				2AF38ED12DF2155600663723 /* i_audio.h */,
 				2A44CE3A2930B706005B23CA /* i_main.c */,
-				2A44CEAA2930B70E005B23CA /* i_opndir.c */,
-				2A44CE7B2930B70B005B23CA /* i_opndir.h */,
 				2A44CE8D2930B70C005B23CA /* i_png.c */,
 				2A44CEC12930B710005B23CA /* i_png.h */,
+				A16C1E9A2E9DA42D000CD1F2 /* i_sectorcombiner.c */,
+				A16C1E992E9DA42D000CD1F2 /* i_sectorcombiner.h */,
+				A16C1E9C2E9DA42D000CD1F2 /* i_shaders.c */,
+				A16C1E9B2E9DA42D000CD1F2 /* i_shaders.h */,
 				2A44CEDC2930B712005B23CA /* i_swap.h */,
 				2A44CE352930B706005B23CA /* i_system.c */,
 				2A44CECE2930B711005B23CA /* i_system.h */,
@@ -422,6 +424,8 @@
 				2A44CE5F2930B709005B23CA /* in_stuff.c */,
 				2A44CE3B2930B706005B23CA /* info.c */,
 				2A44CEA92930B70E005B23CA /* info.h */,
+				A16C1EA02E9DA461000CD1F2 /* kpf.c */,
+				A16C1E9F2E9DA461000CD1F2 /* kpf.h */,
 				2A44CEB02930B70F005B23CA /* m_cheat.c */,
 				2A44CEB12930B70F005B23CA /* m_cheat.h */,
 				2A44CEC62930B710005B23CA /* m_fixed.c */,
@@ -468,6 +472,7 @@
 				2A44CEA72930B70E005B23CA /* p_macros.c */,
 				2A44CE762930B70B005B23CA /* p_macros.h */,
 				2A44CEA82930B70E005B23CA /* p_map.c */,
+				A16C1EA22E9DA4AC000CD1F2 /* p_mapinfo.c */,
 				2A44CEE22930B714005B23CA /* p_maputl.c */,
 				2A44CE652930B70A005B23CA /* p_mobj.c */,
 				2A44CE8A2930B70C005B23CA /* p_mobj.h */,
@@ -493,7 +498,6 @@
 				2A44CEBD2930B710005B23CA /* r_drawlist.h */,
 				2A44CE6F2930B70A005B23CA /* r_lights.c */,
 				2A44CEC22930B710005B23CA /* r_lights.h */,
-				2A44CE842930B70C005B23CA /* r_local.h */,
 				2A44CE522930B708005B23CA /* r_main.c */,
 				2A44CE492930B708005B23CA /* r_main.h */,
 				2A44CE4F2930B708005B23CA /* r_scene.c */,
@@ -601,7 +605,6 @@
 			files = (
 				2A44CE302930B5B8005B23CA /* doom64ex-plus.icns in Resources */,
 				2A44CE282930B570005B23CA /* doom64ex-plus.wad in Resources */,
-				2A44CE292930B570005B23CA /* doomsnd.sf2 in Resources */,
 				2A44CE2A2930B570005B23CA /* AUTHORS in Resources */,
 				2A44CE2B2930B570005B23CA /* doom64ex-plus.6 in Resources */,
 				2A44CE2C2930B570005B23CA /* README.md in Resources */,
@@ -620,6 +623,8 @@
 				2A28028629E0652C00230288 /* net_structure.h in Sources */,
 				2AB7DECE293BD848009A3CA3 /* i_sdlinput.c in Sources */,
 				2A44CF382930B717005B23CA /* p_switch.c in Sources */,
+				A16C1E9D2E9DA42D000CD1F2 /* i_sectorcombiner.c in Sources */,
+				A16C1E9E2E9DA42D000CD1F2 /* i_shaders.c in Sources */,
 				2A44CEF12930B717005B23CA /* i_main.c in Sources */,
 				2A44CF022930B717005B23CA /* d_devstat.c in Sources */,
 				2A44CF412930B717005B23CA /* gl_main.c in Sources */,
@@ -642,6 +647,7 @@
 				2A44CF3B2930B717005B23CA /* st_stuff.c in Sources */,
 				2A44CEF32930B717005B23CA /* gl_draw.c in Sources */,
 				2A44CF222930B717005B23CA /* con_cvar.c in Sources */,
+				A16C1EA32E9DA4AC000CD1F2 /* p_mapinfo.c in Sources */,
 				2A44CF332930B717005B23CA /* w_wad.c in Sources */,
 				2A44CF262930B717005B23CA /* net_io.c in Sources */,
 				2A44CF372930B717005B23CA /* z_zone.c in Sources */,
@@ -653,6 +659,7 @@
 				2A44CF122930B717005B23CA /* r_drawlist.c in Sources */,
 				2A44CF352930B717005B23CA /* md5.c in Sources */,
 				2A44CF2C2930B717005B23CA /* p_macros.c in Sources */,
+				A16C1EA12E9DA461000CD1F2 /* kpf.c in Sources */,
 				2A44CF1D2930B717005B23CA /* sc_main.c in Sources */,
 				2A44CF342930B717005B23CA /* net_common.c in Sources */,
 				2A44CF492930B717005B23CA /* sha1.c in Sources */,
@@ -681,7 +688,6 @@
 				2A44CF0C2930B717005B23CA /* net_client.c in Sources */,
 				2A44CEF02930B717005B23CA /* d_main.c in Sources */,
 				2A44CF4D2930B717005B23CA /* am_draw.c in Sources */,
-				2A44CF2E2930B717005B23CA /* i_opndir.c in Sources */,
 				2A44CF162930B717005B23CA /* p_ceilng.c in Sources */,
 				2A44CF012930B717005B23CA /* f_finale.c in Sources */,
 				2A44CEF22930B717005B23CA /* info.c in Sources */,
@@ -842,9 +848,10 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/../src/engine/3rdparty/includes",
 					"\"/Applications/FMOD Programmers API/api/core/inc\"",
+					/usr/local/include,
 				);
 				INFOPLIST_FILE = "DOOM64EX--Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
+				INFOPLIST_KEY_CFBundleDisplayName = DOOM64EXPlus;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.action-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -856,7 +863,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 4.1.0.0;
+				MARKETING_VERSION = 5.1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-I",
@@ -864,7 +871,7 @@
 					"-DDOOM_UNIX_INSTALL",
 				);
 				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = "DOOM64EX+";
+				PRODUCT_BUNDLE_IDENTIFIER = DOOM64EXPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -888,9 +895,10 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/../src/engine/3rdparty/includes",
 					"\"/Applications/FMOD Programmers API/api/core/inc\"",
+					/usr/local/include,
 				);
 				INFOPLIST_FILE = "DOOM64EX--Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
+				INFOPLIST_KEY_CFBundleDisplayName = DOOM64EXPlus;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.action-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -902,7 +910,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 4.1.0.0;
+				MARKETING_VERSION = 5.1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-I",
@@ -911,7 +919,7 @@
 				);
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				"OTHER_CODE_SIGN_FLAGS[sdk=*]" = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = "DOOM64EX+";
+				PRODUCT_BUNDLE_IDENTIFIER = DOOM64EXPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
