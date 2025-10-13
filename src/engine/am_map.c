@@ -67,7 +67,7 @@ static player_t* plr;                       // the player represented by an arro
 static boolean stopped = true;
 static word     am_blink = 0;        // player arrow blink tics
 static angle_t  automapangle = 0;
-static float    scale = 640.0f;   // todo: reset scale after changing levels
+float    scale = 640.0f;   // todo: reset scale after changing levels
 static fixed_t  am_box[4];                  // automap bounding box of level
 static byte     am_flags;                   // action flags for automap. Mostly for controls
 static fixed_t  mpanx = 0;

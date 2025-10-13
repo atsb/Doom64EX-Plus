@@ -49,37 +49,38 @@ CVAR_EXTERNAL(r_texturecombiner);
 //
 
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
+	float fov;
+	extern float scale;
 
 	I_ShaderUnBind();
-
 	am_viewangle = view;
 
-	    if(r_texturecombiner.value > 0 && am_overlay.value) {
+	if (r_texturecombiner.value > 0 && am_overlay.value) {
 		GL_SetState(GLSTATE_BLEND, 1);
-
-        //
-        // increase the rgb scale so the automap can look good while transparent (overlay mode)
-        //
-        GL_SetTextureMode(GL_COMBINE);
-        dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
-    }
+		GL_SetTextureMode(GL_COMBINE);
+		dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 1);
+	}
 
 	dglDepthRange(0.0f, 0.0f);
 	dglMatrixMode(GL_PROJECTION);
 	dglLoadIdentity();
-	dglViewFrustum(video_width, video_height, 45.0f, 0.1f);
+
+	fov = 45.0f * (scale / 200.0f);
+	if (fov > 170.0f) {
+		fov = 170.0f;
+	}
+
+	dglViewFrustum(video_width, video_height, fov, 0.1f);
 	dglMatrixMode(GL_MODELVIEW);
 	dglLoadIdentity();
 	dglPushMatrix();
 	dglTranslatef(-F2D3D(automappanx), -F2D3D(automappany), 0);
 	dglRotatef(-(float)TRUEANGLES(am_viewangle), 0.0f, 0.0f, 1.0f);
 	dglTranslatef(-F2D3D(x), -F2D3D(y), 0);
-
 	drawlist[DLT_AMAP].index = 0;
-
 	R_FrustrumSetup();
 	GL_ResetTextures();
-	}
+}
 
 //
 // AM_EndDraw
@@ -277,26 +278,36 @@ void AM_DrawLeafs(float scale) {
 
 void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c) {
 	vtx_t v[2];
+	float linewidth;
+
+	linewidth = 1.0f;
+	if (video_width >= 3840) {
+		linewidth = 3.0f;
+	}
+	else if (video_width >= 2560) {
+		linewidth = 2.0f;
+	}
+	else if (video_width >= 1920) {
+		linewidth = 1.5f;
+	}
 
 	v[0].x = F2D3D(x1);
 	v[0].z = F2D3D(y1);
 	v[1].x = F2D3D(x2);
 	v[1].z = F2D3D(y2);
-
 	v[0].y = v[1].y = (scale * 2);
-
 	dglSetVertexColor(v, c, 2);
-
 	dglDisable(GL_TEXTURE_2D);
+	dglLineWidth(linewidth);  // Add this line
 	dglBegin(GL_LINES);
 	dglColor4ub(v[0].r, v[0].g, v[0].b, v[0].a);
 	dglVertex3f(v[0].x, v[0].z, -v[0].y);
 	dglColor4ub(v[1].r, v[1].g, v[1].b, v[1].a);
 	dglVertex3f(v[1].x, v[1].z, -v[1].y);
 	dglEnd();
+	dglLineWidth(1.0f);  // Reset to default
 	dglEnable(GL_TEXTURE_2D);
-
-	}
+}
 
 //
 // AM_DrawTriangle
