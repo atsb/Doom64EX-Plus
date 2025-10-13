@@ -71,8 +71,6 @@ CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(r_fov);
 CVAR_EXTERNAL(r_skyFilter);
 CVAR(r_skybox, 1);
-
-CVAR_EXTERNAL(i_sky_overbright);
 #define SKYVIEWPOS(angle, amount, x) x = -(angle / (float)ANG90 * amount); while(x < 1.0f) x += 1.0f
 
 // atsb: crappy hack

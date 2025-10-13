@@ -383,13 +383,6 @@ static boolean R_GenerateSpritePlane(visspritelist_t* vissprite, vtx_t* vertex) 
 	else {
 		R_LightToVertex(vertex,
 			thing->subsector->sector->colors[LIGHT_THING], 4);
-
-		float brightness_multiplier = 1.6f;
-		for (int i = 0; i < 4; i++) {
-			vertex[i].r = (byte)fmin(255.0f, (float)vertex[i].r * brightness_multiplier);
-			vertex[i].g = (byte)fmin(255.0f, (float)vertex[i].g * brightness_multiplier);
-			vertex[i].b = (byte)fmin(255.0f, (float)vertex[i].b * brightness_multiplier);
-		}
 	}
 
 	vertex[0].a = vertex[1].a = vertex[2].a = vertex[3].a = draw_alpha;
