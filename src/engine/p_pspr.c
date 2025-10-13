@@ -268,6 +268,8 @@ void P_FireWeapon(player_t* player) {
 	if (player->refire && player->readyweapon == wp_pistol) {
 		newstate++;
 	}
+	if (player->refire && player->readyweapon == wp_shotgun)
+		newstate++;
 	P_SetPsprite(player, ps_weapon, newstate);
 	P_NoiseAlert(player->mo, player->mo);
 }
