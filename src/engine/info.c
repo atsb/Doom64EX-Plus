@@ -1418,7 +1418,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_PLAY_XDIE1,        //xdeathstate
 		sfx_plrdie,        //deathsound
 		16,        //speed
-		47 * FRACUNIT,        //radius
+		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1446,7 +1446,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_PLAY_XDIE1,        //xdeathstate
 		sfx_plrdie,        //deathsound
 		16,        //speed
-		47 * FRACUNIT,        //radius
+		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1474,7 +1474,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_PLAY_XDIE1,        //xdeathstate
 		sfx_plrdie,        //deathsound
 		0,        //speed
-		47 * FRACUNIT,        //radius
+		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1502,7 +1502,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_sargdie,        //deathsound
 		12,        //speed
-		59 * FRACUNIT,        //radius
+		44 * FRACUNIT,        //radius
 		100 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
@@ -1531,7 +1531,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_sargdie,        //deathsound
 		12,        //speed
-		65 * FRACUNIT,        //radius
+		50 * FRACUNIT,        //radius
 		100 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
@@ -1560,7 +1560,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_fattdie,        //deathsound
 		8,        //speed
-		75 * FRACUNIT,        //radius
+		60 * FRACUNIT,        //radius
 		108 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
@@ -1589,7 +1589,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_POSS1_XDIE1,        //xdeathstate
 		sfx_posdie1,        //deathsound
 		8,        //speed
-		47 * FRACUNIT,        //radius
+		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1618,7 +1618,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_POSS2_XDIE1,        //xdeathstate
 		sfx_posdie2,        //deathsound
 		8,        //speed
-		47 * FRACUNIT,        //radius
+		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1647,7 +1647,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_TROO_XDIE1,        //xdeathstate
 		sfx_impdth1,        //deathsound
 		8,        //speed
-		57 * FRACUNIT,        //radius
+		42 * FRACUNIT,        //radius
 		94 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1676,7 +1676,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_TROO_XDIE1,        //xdeathstate
 		sfx_impdth1,        //deathsound
 		16,        //speed
-		57 * FRACUNIT,        //radius
+		42 * FRACUNIT,        //radius
 		94 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -1705,7 +1705,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_headdie,        //deathsound
 		8,        //speed
-		70 * FRACUNIT,        //radius
+		55 * FRACUNIT,        //radius
 		90 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
@@ -1734,7 +1734,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_bos1die,        //deathsound
 		8,        //speed
-		39 * FRACUNIT,        //radius
+		24 * FRACUNIT,        //radius
 		100 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
@@ -1763,7 +1763,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_bos2die,        //deathsound
 		8,        //speed
-		39 * FRACUNIT,        //radius
+		24 * FRACUNIT,        //radius
 		100 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
@@ -1792,7 +1792,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_implod,        //deathsound
 		8,        //speed
-		33 * FRACUNIT,        //radius
+		28 * FRACUNIT,        //radius
 		64 * FRACUNIT,        //height
 		50,        //mass
 		3,        //damage
@@ -1820,7 +1820,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_bspidie,        //deathsound
 		12,        //speed
-		79 * FRACUNIT,        //radius
+		64 * FRACUNIT,        //radius
 		80 * FRACUNIT,        //height
 		600,        //mass
 		0,        //damage
@@ -1849,7 +1849,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_cybdth,        //deathsound
 		16,        //speed
-		85 * FRACUNIT,        //radius
+		70 * FRACUNIT,        //radius
 		170 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
@@ -1877,7 +1877,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		55 * FRACUNIT,        //radius
+		40 * FRACUNIT,        //radius
 		110 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
@@ -1905,7 +1905,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_pedie,        //deathsound
 		8,        //speed
-		75 * FRACUNIT,        //radius
+		60 * FRACUNIT,        //radius
 		112 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
@@ -1933,7 +1933,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_rectdie,        //deathsound
 		30,        //speed
-		95 * FRACUNIT,        //radius
+		80 * FRACUNIT,        //radius
 		150 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
@@ -2100,7 +2100,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_ROCKET_DIE1,        //deathstate
 		S_NULL,        //xdeathstate
 		sfx_explode,        //deathsound
-		35 * FRACUNIT,        //speed
+		30 * FRACUNIT,        //speed
 		11 * FRACUNIT,        //radius
 		8 * FRACUNIT,        //height
 		100,        //mass
@@ -2717,7 +2717,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2745,7 +2745,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2773,7 +2773,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2801,7 +2801,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2829,7 +2829,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2857,7 +2857,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2885,7 +2885,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2913,7 +2913,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2941,7 +2941,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2969,7 +2969,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -2997,7 +2997,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3025,7 +3025,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3053,7 +3053,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3081,7 +3081,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3109,7 +3109,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3137,7 +3137,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3165,7 +3165,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3193,7 +3193,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3221,7 +3221,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3249,7 +3249,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3277,7 +3277,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3305,7 +3305,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3333,7 +3333,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3361,7 +3361,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3389,7 +3389,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3417,7 +3417,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3445,7 +3445,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3473,7 +3473,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3501,7 +3501,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3529,7 +3529,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3557,7 +3557,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3585,7 +3585,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3613,7 +3613,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3641,7 +3641,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3669,7 +3669,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3697,7 +3697,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3725,7 +3725,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3753,7 +3753,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3781,7 +3781,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3809,7 +3809,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3921,7 +3921,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
@@ -3949,7 +3949,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_None/*sfx_000*/,        //deathsound
 		0,        //speed
-		35 * FRACUNIT,        //radius
+		20 * FRACUNIT,        //radius
 		16 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
