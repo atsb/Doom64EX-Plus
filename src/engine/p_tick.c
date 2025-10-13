@@ -235,10 +235,10 @@ static void P_UpdateFrameStates(void) {
 	for (i = 0; i < numsectors; i++) {
 		sector_t* sector = &sectors[i];
 
-		sector->frame_z1[0] = sector->floorheight;
-		sector->frame_z2[0] = sector->ceilingheight;
-		sector->frame_z1[1] = sector->frame_z1[0];
-		sector->frame_z2[1] = sector->frame_z2[0];
+		sector->frame_z1[0] = sector->frame_z1[1];
+		sector->frame_z2[0] = sector->frame_z2[1];
+		sector->frame_z1[1] = sector->floorheight;
+		sector->frame_z2[1] = sector->ceilingheight;
 	}
 
 	//
