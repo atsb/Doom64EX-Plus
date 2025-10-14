@@ -207,17 +207,28 @@ void I_InitScreen(void) {
     usingGL = false;
 
     video_driver = SDL_GetCurrentVideoDriver();
+    
+#if defined __arm__ || defined __aarch64__ || defined __APPLE__ || defined __LEGACYGL__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#else
+    
     if (!video_driver || !dstreq(video_driver, "wayland")) {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+#endif
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+    flags = SDL_WINDOW_OPENGL;
 
+#ifndef __APPLE__
+    flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
+#endif
+    
     if ((int)v_fullscreen.value) {
         flags |= SDL_WINDOW_FULLSCREEN;
     }
