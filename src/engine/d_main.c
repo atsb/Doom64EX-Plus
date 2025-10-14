@@ -94,7 +94,6 @@ CVAR_EXTERNAL(sv_fastmonsters);
 CVAR_EXTERNAL(sv_respawnitems);
 CVAR_EXTERNAL(sv_respawn);
 CVAR_EXTERNAL(sv_skill);
-CVAR_EXTERNAL(v_maxfps);
 
 //
 // EVENT HANDLING
@@ -339,17 +338,7 @@ int D_MiniLoop(void (*start)(void), void (*stop)(void),
 			// Don't stay in this loop forever.  The menu is still running,
 			// so return to update the screen
 
-			if (I_GetTime() / ticdup - entertic > 0) {
-				goto drawframe;
-			}
-
-			if (!i_interpolateframes.value) {
-				// use this to not peg CPU with an active loop when interpolation is disabled.
-				// when interpolation is enabled, this is taken care of by fps limit (vsync off) or vsync on
-				// 
-				// interpolation disabled seem to always result in a constant framerate of 60 fps (2 * TICRATE)
-				SDL_Delay(1);
-			}
+			I_Sleep(1);
 		}
 
 		// run the count * ticdup tics

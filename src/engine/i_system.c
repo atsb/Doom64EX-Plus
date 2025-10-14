@@ -63,8 +63,19 @@ static Uint64 basetime = 0;
 //
 // I_GetTimeNormal: returns time elapsed in number of ticks: 1s -> TICRATE, 2s -> 2*TICRATE, ...
 //
-SDL_INLINE static int I_GetTimeNormal(void) {
-	return (I_GetTimeMS() * TICRATE) / 1000;
+static int I_GetTimeNormal(void) {
+	Uint64 ticks;
+	Uint64 tic_division = 1000;
+
+	ticks = SDL_GetTicks();
+
+	if (basetime == 0) {
+		basetime = ticks;
+	}
+
+	ticks -= basetime;
+
+	return (ticks * TICRATE) / tic_division;
 }
 
 //
@@ -98,7 +109,7 @@ fixed_t         rendertic_frac = 0;
 Uint64			rendertic_start;
 Uint64			rendertic_step;
 Uint64			rendertic_next;
-const float     rendertic_msec = TICRATE / 1000.0f;
+const float     rendertic_msec = 100 * TICRATE / 100000.0f;
 
 //
 // I_StartDisplay

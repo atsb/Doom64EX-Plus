@@ -38,11 +38,8 @@ CVAR(v_macceleration, 0);
 CVAR(v_mlookinvert, 0);
 CVAR(v_yaxismove, 0);
 CVAR(v_xaxismove, 0);
-CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(m_menumouse);
 CVAR_EXTERNAL(p_autoaim);
-CVAR_EXTERNAL(v_maxfps);
-CVAR_EXTERNAL(v_vsync);
 
 CVAR_CMD(v_mlook, 0) {
 	if (cvar->value > 0) {
@@ -753,58 +750,14 @@ static float GetDisplayRefreshRate(void) {
 	return 60.0f; // not happy, return to 60
 }
 
-void I_FPSLimit(void) {
-	static Uint64 lastFrameTime = 0;
-	static float displayRefreshRate = 0.0f;
-
-	static int refreshCheckCounter = 0;
-	if (refreshCheckCounter++ % 60 == 0) {
-		displayRefreshRate = GetDisplayRefreshRate();
-	}
-
-	float targetFPS = (v_maxfps.value > 0) ? v_maxfps.value : displayRefreshRate;
-	const Uint64 targetFrameTimeNS = (Uint64)(1000000000.0f / targetFPS);
-
-	Uint64 currentTime = SDL_GetTicksNS();
-	if (lastFrameTime > 0) {
-		Uint64 elapsed = currentTime - lastFrameTime;
-		if (elapsed < targetFrameTimeNS) {
-			Uint64 sleepTime = targetFrameTimeNS - elapsed;
-			if (sleepTime > 500000) {
-				SDL_DelayNS(sleepTime - 100000);
-			}
-			while (SDL_GetTicksNS() - lastFrameTime < targetFrameTimeNS) {
-			}
-		}
-	}
-	lastFrameTime = SDL_GetTicksNS();
-}
-
 //
 // I_FinishUpdate
 //
 
 void I_FinishUpdate(void) {
-
-	static int prev_swap_interval = -1;
-	int swap_interval = (int)v_vsync.value;
-
 	I_UpdateGrab();
-
-	if (prev_swap_interval != swap_interval) {
-		SDL_GL_SetSwapInterval(swap_interval);
-		prev_swap_interval = swap_interval;
-	}
-
 	SDL_GL_SwapWindow(window);
-
-	if (swap_interval > 0) {
-		glFinish();
-	}
-	else if (i_interpolateframes.value > 0) {
-		I_FPSLimit();
-	}
-
+	dglFinish();
 	BusyDisk = false;
 }
 
