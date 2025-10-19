@@ -61,8 +61,8 @@ IDI_ICON1               ICON                    "doom64ex-plus.ico"
 //
 
 1 VERSIONINFO
- FILEVERSION 5,1,0,0
- PRODUCTVERSION 5,1,0,0
+ FILEVERSION 5,2,0,0
+ PRODUCTVERSION 5,2,0,0
  FILEFLAGSMASK 0x0L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -77,8 +77,8 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "FileVersion", "5.1.0.0"
-            VALUE "ProductVersion", "5.1.0.0"
+            VALUE "FileVersion", "5.2.0.0"
+            VALUE "ProductVersion", "5.2.0.0"
         END
     END
     BLOCK "VarFileInfo"

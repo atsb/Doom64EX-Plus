@@ -1782,7 +1782,6 @@ enum {
 	video_dgamma,
 	video_empty2,
 	video_fullscreen,
-	filter,
 	weapon_filter,
 	object_filter,
 	hud_filter,
@@ -1803,7 +1802,6 @@ menuitem_t VideoMenu[] = {
 	{3,"Gamma Correction",M_ChangeGammaLevel, 'g'},
 	{-1,"",0},
 	{2,"Fullscreen:",M_ChangeFullscreen, 'f'},
-	{2,"Filter:",M_ChangeFilter, 'f'},
 	{2,"Weapon Filter:",M_ChangeWeaponFilter, 't'},
 	{2,"Object Filter:",M_ChangeObjectFilter, 't'},
 	{2,"HUD Filter:",M_ChangeHUDFilter, 't'},
@@ -1823,7 +1821,6 @@ char* VideoHints[video_end] = {
 	"adjust screen gamma",
 	NULL,
 	"toggle fullscreen mode - requires restart",
-	"toggle texture filtering - requires restart",
 	"toggle texture filtering on the weapon",
 	"toggle texture filtering on world objects",
 	"toggle texture filtering on hud and text",
@@ -1839,7 +1836,6 @@ menudefault_t VideoDefault[] = {
 	{ &i_brightness, 0 },
 	{ &i_gamma, 0 },
 	{ &v_fullscreen, 0 },
-	{ &r_filter, 0 },
 	{ &r_weaponFilter, 0 },
 	{ &r_objectFilter, 0 },
 	{ &r_hudFilter, 0 },
@@ -1906,7 +1902,6 @@ void M_Video(int choice) {
 }
 
 void M_DrawVideo(void) {
-	static const char* filterType1[3] = { "N64"};
 	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
 	static const char* fullscreenType[2] = { "Resizable Window", "Exclusive" };
@@ -1935,7 +1930,6 @@ void M_DrawVideo(void) {
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
 	DRAWVIDEOITEM2(video_fullscreen, v_fullscreen.value, fullscreenType);
-	DRAWVIDEOITEM2(filter, r_filter.value, filterType1);
 	DRAWVIDEOITEM2(object_filter, r_objectFilter.value, filterType2);
 	DRAWVIDEOITEM2(weapon_filter, r_weaponFilter.value, filterType2);
 	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType2);
