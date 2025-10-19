@@ -30,6 +30,7 @@ void I_InitVideo(void);
 void I_InitScreen(void);
 void I_ShutdownVideo(void);
 void I_SetMenuCursorMouseRect();
+void I_ToggleFullscreen(void);
 void V_RegisterCvars();
 
 extern float display_scale;

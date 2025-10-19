@@ -375,6 +375,77 @@ void I_InitVideo(void) {
 }
 
 //
+// I_ToggleFullscreen
+//
+
+void I_ToggleFullscreen(void) {
+    if (!window) return;
+
+    int native_w = 0, native_h = 0;
+    GetNativeDisplayPixels(&native_w, &native_h, window);
+
+    v_fullscreen.value = v_fullscreen.value ? 0 : 1;
+
+    if ((int)v_fullscreen.value) {
+        SDL_DisplayID displayid = SDL_GetDisplayForWindow(window);
+        if (!displayid) displayid = SDL_GetPrimaryDisplay();
+
+        const SDL_DisplayMode* desk = displayid ? SDL_GetDesktopDisplayMode(displayid) : NULL;
+        SDL_DisplayMode disp_mode = { 0 };
+
+        if (desk) {
+            if (!SDL_GetClosestFullscreenDisplayMode(displayid, desk->w, desk->h, 0.0f, false, &disp_mode)) {
+                disp_mode.displayID = displayid;
+                disp_mode.w = native_w;
+                disp_mode.h = native_h;
+                disp_mode.refresh_rate = 0.0f;
+            }
+        }
+        else {
+            disp_mode.displayID = displayid;
+            disp_mode.w = native_w;
+            disp_mode.h = native_h;
+            disp_mode.refresh_rate = 0.0f;
+        }
+
+        SDL_SetWindowFullscreenMode(window, &disp_mode);
+        SDL_SetWindowFullscreen(window, true);
+        SDL_SyncWindow(window);
+
+        video_width = native_w;
+        video_height = native_h;
+
+#ifdef SDL_PLATFORM_WIN32
+        setUseDXGISwapChainNVIDIA(false);
+#endif
+    }
+    else {
+        SDL_SetWindowFullscreen(window, false);
+        SDL_SetWindowBordered(window, true);
+
+        int windowed_w = (int)(native_w * 0.8f);
+        int windowed_h = (int)(native_h * 0.8f);
+
+        SDL_SetWindowSize(window, windowed_w, windowed_h);
+        SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+        video_width = windowed_w;
+        video_height = windowed_h;
+
+#ifdef SDL_PLATFORM_WIN32
+        setUseDXGISwapChainNVIDIA(true);
+#endif
+    }
+
+    video_ratio = (float)video_width / (float)video_height;
+
+    SDL_GetWindowSizeInPixels(window, &win_px_w, &win_px_h);
+    GL_OnResize(win_px_w, win_px_h);
+
+    I_SetMenuCursorMouseRect();
+}
+
+//
 // V_RegisterCvars
 //
 
