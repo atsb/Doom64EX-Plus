@@ -621,8 +621,7 @@ void I_GetEvent(SDL_Event* Event) {
 			break;
 		}
 
-		if ((Event->key.key == SDLK_RETURN && (Event->key.mod & SDL_KMOD_ALT)) ||
-			(Event->key.key == SDLK_F11)) {
+		if ((Event->key.key == SDLK_RETURN && (Event->key.mod & SDL_KMOD_ALT))) {
 			I_ToggleFullscreen();
 			break;
 		}
