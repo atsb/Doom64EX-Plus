@@ -1906,7 +1906,7 @@ void M_Video(int choice) {
 }
 
 void M_DrawVideo(void) {
-	static const char* filterType1[3] = { "N64", "Linear", "Nearest" };
+	static const char* filterType1[3] = { "N64"};
 	static const char* filterType2[2] = { "Linear", "Nearest" };
 	static const char* onofftype[2] = { "Off", "On" };
 	static const char* fullscreenType[2] = { "Resizable Window", "Exclusive" };

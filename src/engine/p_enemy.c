@@ -235,6 +235,10 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		angle = actor->angle;
 	}
 
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		actor->flags |= MF_NIGHTMARE;
+	}
+
 	angle >>= ANGLETOFINESHIFT;
 
 	switch (actor->type) {
@@ -819,6 +823,12 @@ void A_Tracer(mobj_t* actor) {
 	mobj_t* dest;
 	mobj_t* th;
 
+	if ((gametic & 3)) {
+		return;
+	}
+
+	P_SpawnPuff(actor->x, actor->y, actor->z);
+
 	th = P_SpawnMobj(actor->x - actor->momx,
 		actor->y - actor->momy, actor->z, MT_SMOKE_RED);
 
@@ -826,6 +836,10 @@ void A_Tracer(mobj_t* actor) {
 	th->tics -= P_Random() & 3;
 	if (th->tics < 1) {
 		th->tics = 1;
+	}
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		th->flags |= MF_NIGHTMARE;
 	}
 
 	if (actor->threshold-- < -100) {
@@ -863,6 +877,7 @@ void A_Tracer(mobj_t* actor) {
 
 	// change slope
 	dist = P_AproxDistance(dest->x - actor->x, dest->y - actor->y);
+
 	dist = dist / actor->info->speed;
 
 	if (dist < 1) {
@@ -1268,11 +1283,15 @@ void A_RectMissile(mobj_t* actor) {
 	}
 
 	// Arm 1
-
 	an = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
 	x = FixedMul(68 * FRACUNIT, finecosine[an]);
 	y = FixedMul(68 * FRACUNIT, finesine[an]);
 	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 68 * FRACUNIT, MT_PROJ_RECT);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	P_SetTarget(&mo->tracer, actor->target);
 	mo->threshold = 5;
@@ -1283,11 +1302,15 @@ void A_RectMissile(mobj_t* actor) {
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 
 	// Arm2
-
 	an = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
 	x = FixedMul(50 * FRACUNIT, finecosine[an]);
 	y = FixedMul(50 * FRACUNIT, finesine[an]);
 	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 139 * FRACUNIT, MT_PROJ_RECT);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	P_SetTarget(&mo->tracer, actor->target);
 	mo->threshold = 1;
@@ -1298,11 +1321,15 @@ void A_RectMissile(mobj_t* actor) {
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 
 	// Arm3
-
 	an = (actor->angle + ANG90) >> ANGLETOFINESHIFT;
 	x = FixedMul(68 * FRACUNIT, finecosine[an]);
 	y = FixedMul(68 * FRACUNIT, finesine[an]);
 	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 68 * FRACUNIT, MT_PROJ_RECT);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	P_SetTarget(&mo->tracer, actor->target);
 	mo->threshold = 5;
@@ -1313,11 +1340,15 @@ void A_RectMissile(mobj_t* actor) {
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 
 	// Arm4
-
 	an = (actor->angle + ANG90) >> ANGLETOFINESHIFT;
 	x = FixedMul(50 * FRACUNIT, finecosine[an]);
 	y = FixedMul(50 * FRACUNIT, finesine[an]);
 	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 139 * FRACUNIT, MT_PROJ_RECT);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	P_SetTarget(&mo->tracer, actor->target);
 	mo->threshold = 1;
@@ -1356,6 +1387,11 @@ void A_RectGroundFire(mobj_t* actor) {
 	A_FaceTarget(actor);
 
 	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	an = actor->angle + R_PointToAngle2(actor->x, actor->y, mo->target->x, mo->target->y);
 
@@ -1366,6 +1402,11 @@ void A_RectGroundFire(mobj_t* actor) {
 	mo->angle = an;
 
 	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	mo->angle = an - ANG45;
 	mo->angle >>= ANGLETOFINESHIFT;
@@ -1374,6 +1415,11 @@ void A_RectGroundFire(mobj_t* actor) {
 	mo->angle = an - ANG45;
 
 	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_SetTarget(&mo->target, actor);
 	mo->angle = an + ANG45;
 	mo->angle >>= ANGLETOFINESHIFT;
@@ -1396,6 +1442,11 @@ void A_MoveGroundFire(mobj_t* fire) {
 	}
 
 	mo = P_SpawnMobj(fire->x, fire->y, fire->floorz, MT_PROP_FIRE);
+
+	if (fire && fire->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	P_FadeMobj(mo, -8, 0, 0);
 }
 
@@ -1605,12 +1656,14 @@ void A_PainShootSkull(mobj_t* actor, angle_t angle) {
 
 	newmobj = P_SpawnMobj(x, y, z, MT_SKULL);
 
-	// Check for movements
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		newmobj->flags |= MF_NIGHTMARE;
+	}
 
+	// Check for movements
 	if ((!P_TryMove(newmobj, newmobj->x, newmobj->y)) ||
 		(!P_PathTraverse(actor->x, actor->y, newmobj->x, newmobj->y, PT_ADDLINES, PIT_PainCheckLine))) {
 		// kill it immediately
-
 		P_DamageMobj(newmobj, actor, actor, 10000);
 		P_RadiusAttack(newmobj, newmobj, 128);
 		return;
@@ -1862,6 +1915,10 @@ void A_SkelMissile(mobj_t* actor, int direction)
 	}
 	angle >>= ANGLETOFINESHIFT;
 
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		actor->flags |= MF_NIGHTMARE;
+	}
+
 	mo = P_SpawnMissile(actor,
 		actor->target,
 		MT_PROJ_UNDEAD,
@@ -1972,18 +2029,23 @@ void A_SpidDeathEvent(mobj_t* actor)
 //
 // A_Fire
 //
-void A_Fire(mobj_t* actor)
-{
+void A_Fire(mobj_t* actor) {
 	mobj_t* dest;
-	unsigned	an;
+	unsigned int an;
 
 	dest = actor->tracer;
-	if (!dest)
+	if (!dest) {
 		return;
+	}
+
+	if (actor->target && actor->target->flags & MF_NIGHTMARE) {
+		actor->flags |= MF_NIGHTMARE;
+	}
 
 	// don't move it if the vile lost sight
-	if (!P_CheckSight(actor->target, dest))
+	if (!P_CheckSight(actor->target, dest)) {
 		return;
+	}
 
 	an = dest->angle >> ANGLETOFINESHIFT;
 
@@ -2006,11 +2068,15 @@ void A_StartFire(mobj_t* actor)
 //
 // A_FireCrackle
 //
-void A_FireCrackle(mobj_t* actor)
-{
+void A_FireCrackle(mobj_t* actor) {
+	if (actor->target && actor->target->flags & MF_NIGHTMARE) {
+		actor->flags |= MF_NIGHTMARE;
+	}
+
 	S_StartSound(actor, sfx_flame);
 	A_Fire(actor);
 }
+
 
 //
 // PIT_VileCheck
@@ -2132,22 +2198,27 @@ void A_VileStart(mobj_t* actor)
 // A_VileTarget
 //
 
-void A_VileTarget(mobj_t* actor)
-{
+void A_VileTarget(mobj_t* actor) {
 	mobj_t* fog;
 
-	if (!actor->target)
+	if (!actor->target) {
 		return;
+	}
 
 	A_FaceTarget(actor);
 
 	fog = P_SpawnMobj(actor->target->x,
-		actor->target->x,
+		actor->target->y,
 		actor->target->z, MT_FIRE);
 
-	P_SetTarget(&actor->tracer, fog);
-	P_SetTarget(&fog->target, actor);
-	P_SetTarget(&fog->tracer, actor->target);
+	actor->tracer = fog;
+	fog->target = actor;
+	fog->tracer = actor->target;
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		fog->flags |= MF_NIGHTMARE;
+	}
+
 	A_Fire(fog);
 }
 
@@ -2177,6 +2248,10 @@ void A_VileAttack(mobj_t* actor)
 
 	if (!fire)
 		return;
+
+	if (actor && actor->flags & MF_NIGHTMARE) {
+		actor->flags |= MF_NIGHTMARE;
+	}
 
 	// move the fire between the vile and the player
 	fire->x = actor->target->x - FixedMul(24 * FRACUNIT, finecosine[an]);

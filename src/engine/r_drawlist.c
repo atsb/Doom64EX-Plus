@@ -222,18 +222,25 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
                 GL_BindSpriteTexture(head->texid, palette);
 
-                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)(r_objectFilter.value == 0 && r_filter.value > 0) ? GL_LINEAR : GL_NEAREST);
-                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)(r_objectFilter.value == 0 && r_filter.value > 0) ? GL_LINEAR : GL_NEAREST);
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    (int)(r_objectFilter.value == 0 && r_filter.value > 0) ? GL_LINEAR : GL_NEAREST);
+                dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                    (int)(r_objectFilter.value == 0 && r_filter.value > 0) ? GL_LINEAR : GL_NEAREST);
 
                 // change blend states for nightmare things
-                if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
-                    if (!checkNightmare && (flags & MF_NIGHTMARE)) {
-                        dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
-                        checkNightmare ^= 1;
+                if (flags & MF_NIGHTMARE) {
+                    if (!checkNightmare) {
+                        dglDisable(GL_ALPHA_TEST);
+                        GL_SetState(GLSTATE_BLEND, 1);
+                        checkNightmare = 1;
                     }
-                    else if (checkNightmare && !(flags & MF_NIGHTMARE)) {
-                        dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                        checkNightmare ^= 1;
+                    dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+                }
+                else {
+                    if (checkNightmare) {
+                        GL_SetState(GLSTATE_BLEND, 0);
+                        dglEnable(GL_ALPHA_TEST);
+                        checkNightmare = 0;
                     }
                 }
             }
