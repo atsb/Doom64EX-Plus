@@ -91,21 +91,27 @@ static int P_CheckThingCollision(mobj_t* thing)
 
     const fixed_t blockdist = thing->radius + tmthing->radius;
 
-    fixed_t dx = D_abs(thing->x - tmx);
-    fixed_t dy = D_abs(thing->y - tmy);
+    fixed_t x = D_abs(thing->x - tmx);
+    fixed_t y = D_abs(thing->y - tmy);
 
-    if (dx >= blockdist || dy >= blockdist) {
+    // Quick bounding box check
+    if (x >= blockdist || y >= blockdist) {
         return true;
     }
 
-    fixed_t dist_squared = FixedMul(dx, dx) + FixedMul(dy, dy);
-    fixed_t radius_squared = FixedMul(blockdist, blockdist);
+    fixed_t rx = blockdist - x;
+    fixed_t ry = blockdist - y;
 
-    if (dist_squared >= radius_squared) {
-        return true;
+    if (x < y) {
+        if (((ry - x) + (x >> 1)) <= 0)
+            return true; // no collision
+    }
+    else {
+        if (((rx - y) + (y >> 1)) <= 0)
+            return true; // no collision
     }
 
-    return false;
+    return false; // collision detected
 }
 
 //
