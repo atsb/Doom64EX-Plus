@@ -252,8 +252,6 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 
             dglDrawGeometry(drawcount, drawVertex);
 
-            I_ShaderBind();
-
             // count vertex size
             if (devparm) {
                 vertCount += drawcount;

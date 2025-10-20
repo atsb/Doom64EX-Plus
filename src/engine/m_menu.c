@@ -1748,9 +1748,7 @@ void M_ChangeHUDColor(int choice) {
 void M_ChangeBrightness(int choice);
 void M_ChangeGammaLevel(int choice);
 void M_ChangeFullscreen(int choice);
-void M_ChangeFilter(int choice);
 void M_ChangeWeaponFilter(int choice);
-void M_ChangeObjectFilter(int choice);
 void M_ChangeHUDFilter(int choice);
 void M_ChangeSkyFilter(int choice);
 void M_ChangeAnisotropic(int choice);
@@ -1765,10 +1763,8 @@ CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(i_gamma);
 CVAR_EXTERNAL(i_brightness);
 CVAR_EXTERNAL(v_fullscreen);
-CVAR_EXTERNAL(r_filter);
 CVAR_EXTERNAL(r_weaponFilter);
 CVAR_EXTERNAL(r_hudFilter);
-CVAR_EXTERNAL(r_objectFilter);
 CVAR_EXTERNAL(r_skyFilter);
 CVAR_EXTERNAL(r_anisotropic);
 CVAR_EXTERNAL(i_interpolateframes);
@@ -1783,7 +1779,6 @@ enum {
 	video_empty2,
 	video_fullscreen,
 	weapon_filter,
-	object_filter,
 	hud_filter,
 	sky_filter,
 	anisotropic,
@@ -1803,7 +1798,6 @@ menuitem_t VideoMenu[] = {
 	{-1,"",0},
 	{2,"Fullscreen:",M_ChangeFullscreen, 'f'},
 	{2,"Weapon Filter:",M_ChangeWeaponFilter, 't'},
-	{2,"Object Filter:",M_ChangeObjectFilter, 't'},
 	{2,"HUD Filter:",M_ChangeHUDFilter, 't'},
 	{2,"Sky Filter:",M_ChangeSkyFilter, 's'},
 	{2,"Anisotropy:",M_ChangeAnisotropic, 'a'},
@@ -1822,7 +1816,6 @@ char* VideoHints[video_end] = {
 	NULL,
 	"toggle fullscreen mode - requires restart",
 	"toggle texture filtering on the weapon",
-	"toggle texture filtering on world objects",
 	"toggle texture filtering on hud and text",
 	"toggle texture filtering on skies",
 	"toggle blur reduction on textures",
@@ -1837,7 +1830,6 @@ menudefault_t VideoDefault[] = {
 	{ &i_gamma, 0 },
 	{ &v_fullscreen, 0 },
 	{ &r_weaponFilter, 0 },
-	{ &r_objectFilter, 0 },
 	{ &r_hudFilter, 0 },
 	{ &r_skyFilter, 0 },
 	{ &r_anisotropic, 1 },
@@ -1930,7 +1922,6 @@ void M_DrawVideo(void) {
 #define DRAWVIDEOITEM2(a, b, c) DRAWVIDEOITEM(a, c[(int)b])
 
 	DRAWVIDEOITEM2(video_fullscreen, v_fullscreen.value, fullscreenType);
-	DRAWVIDEOITEM2(object_filter, r_objectFilter.value, filterType2);
 	DRAWVIDEOITEM2(weapon_filter, r_weaponFilter.value, filterType2);
 	DRAWVIDEOITEM2(hud_filter, r_hudFilter.value, filterType2);
 	DRAWVIDEOITEM2(sky_filter, r_skyFilter.value, filterType2);
@@ -2015,16 +2006,8 @@ void M_ChangeFullscreen(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &v_fullscreen);
 }
 
-void M_ChangeFilter(int choice) {
-	M_SetOptionValue(choice, 0, 2, 1, &r_filter);
-}
-
 void M_ChangeWeaponFilter(int choice) {
 	M_SetOptionValue(choice, 0, 1, 1, &r_weaponFilter);
-}
-
-void M_ChangeObjectFilter(int choice) {
-	M_SetOptionValue(choice, 0, 1, 1, &r_objectFilter);
 }
 
 void M_ChangeHUDFilter(int choice) {
